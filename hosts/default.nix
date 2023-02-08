@@ -7,6 +7,7 @@ in {
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
+      ./vm # vm specific configuration, including hardware
 
       home-manager.nixosModules.home-manager
       {

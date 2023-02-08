@@ -15,18 +15,16 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager }:
+  outputs = inputs @ { self, nixpkgs, home-manager, hyprland, ... }:
     let
       user = "iynaix";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      lib = nixpkgs.lib;
     in {
-      nixosConfigurations = (import ./hosts { # imports ./hosts/default.nix
-        inherit (nixpkgs) lib;
-        inherit inputs nixpkgs home-manager user hyprland;
-      });
+      nixosConfigurations = (
+        # imports ./hosts/default.nix
+        import ./hosts {
+          inherit (nixpkgs) lib;
+          inherit inputs nixpkgs home-manager user hyprland;
+        }
+      );
     };
 }
