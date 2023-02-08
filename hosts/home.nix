@@ -1,16 +1,13 @@
 { config, pkgs, ... }:
 
 {
+  imports = (import ../modules);
+
   home = {
     username = "iynaix";
     homeDirectory = "/home/iynaix";
-    
-    packages = with pkgs; [
-        catppuccin-gtk
-        cinnamon.nemo
-        neofetch
-        nixfmt
-    ];
+
+    packages = with pkgs; [ catppuccin-gtk cinnamon.nemo neofetch nixfmt ];
 
     # gtk = {
     #   enable = true;
@@ -31,12 +28,8 @@
     stateVersion = "22.11";
   };
 
-
   # Let Home Manager install and manage itself.
-  programs = {
-    home-manager.enable = true;
-  };
-
+  programs = { home-manager.enable = true; };
 
   programs.neovim = {
     enable = true;
