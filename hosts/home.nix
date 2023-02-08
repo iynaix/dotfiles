@@ -1,13 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  imports = (import ../modules);
+  imports = [ ../modules ];
 
   home = {
     username = "iynaix";
     homeDirectory = "/home/iynaix";
 
-    packages = with pkgs; [ catppuccin-gtk cinnamon.nemo neofetch nixfmt ];
+    packages = with pkgs; [
+      catppuccin-gtk
+      cinnamon.nemo
+      neofetch
+    ];
 
     # gtk = {
     #   enable = true;

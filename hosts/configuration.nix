@@ -47,9 +47,8 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iynaix = {
     isNormalUser = true;
-    description = "Xianyi Lin";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
+    shell = pkgs.zsh;
   };
 
   # Enable automatic login for the user.
@@ -58,12 +57,21 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Allow using flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ alacritty git neovim vscode brave ];
+  environment = {
+    variables = {
+      TERMINAL = "alacritty";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
+    systemPackages = with pkgs; [ 
+      git 
+      neovim 
+      ripgrep 
+      tree 
+    ];
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -95,9 +103,36 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.11"; # Did you read the comment?
 
+  # setup fonts
+  fonts = {
+    fonts = with pkgs; [
+      font-awesome
+      (nerdfonts.override {
+        fonts = [
+          "FiraCode"
+          "JetBrainsMono"
+          "Ubuntu"
+        ];
+      })
+    ];
+  };
+
+  environment = {
+    shells = with pkgs; [ zsh ];
+  };
+
   # enable flakes
   nix = {
-    package = pkgs.nixFlakes;
+    settings ={
+      auto-optimise-store = true;           # Optimise syslinks
+    };
+    gc = {                                  # Automatic garbage collection
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 2d";
+    };
+    package = pkgs.nixVersions.unstable;
+    # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
 }

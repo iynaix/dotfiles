@@ -2,6 +2,7 @@
   home = {
     packages = with pkgs; [
       alacritty
+      brave
       bspwm
       dunst
       git
@@ -11,13 +12,13 @@
       sxiv
       sxhkd
       tmux
+      vscode
       yt-dlp
       zathura
-      powerlevel10k
-      zsh
+      zsh-powerlevel10k
     ];
 
-    # TODO: bash?
+    # TODO: bash .profile 
     # TODO: xorg
     # TODO: neovim
 
@@ -89,6 +90,33 @@
   };
 
   programs = {
-
+    alacritty = {
+      enable = true;
+      settings = {
+        window.padding = {
+          x = 20;
+          y = 12;
+        };
+        font = {
+          normal = {
+            family = "JetBrainsMono Nerd Font";
+            style = "Medium";
+          };
+          bold = {
+            style = "Bold";
+          };
+          italic = {
+            style = "Italic";
+          };
+          bold_italic = {
+            style = "Bold Italic";
+          };
+          size = 11;
+        };
+        selection.save_to_clipboard = true;
+        # window.opacity = 0.5;
+        import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.yml"];
+      };
+    };
   };
 }
