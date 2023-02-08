@@ -13,7 +13,9 @@ in {
       {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.users.${user} = { imports = [ ./vm/home.nix ]; };
+        home-manager.users.${user} = {
+          imports = [ (import ./home.nix) ] ++ [ (import ./vm/home.nix) ];
+        };
       }
     ];
   };
