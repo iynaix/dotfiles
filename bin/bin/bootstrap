@@ -1,0 +1,180 @@
+#! /bin/bash
+
+# this script is meant to be run after an OS install, assumes yay is already installed on the system
+# portions of this script have been adapted from Luke Smith's LARBS:
+# https://github.com/LukeSmithxyz/LARBS
+
+set -e
+
+# elevate sudo as needed
+[ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
+
+base_packages=(
+    "arc-gtk-theme"
+    "bat"
+    "broot"
+    "bspwm"
+    "clipmenu"
+    "clipnotify"
+    "code"
+    "curl"
+    "docker"
+    "docker-compose"
+    "docker-machine"
+    "dunst"
+    "exa"
+    "feh"
+    "filezilla"
+    "firefox-developer-edition"
+    "flake8"
+    "fzf"
+    "gimp"
+    "gnome-system-monitor"
+    "go"
+    "gvfs-smb"
+    "highlight"
+    "htop"
+    "ipython"
+    "lazygit"
+    "libreoffice-fresh"
+    "maim"
+    "mpd"
+    "mpv"
+    "mtpfs"
+    "ncmpcpp"
+    "nemo"
+    "nemo-fileroller"
+    "neofetch"
+    "neovim"
+    "net-tools"
+    "network-manager-applet"
+    "nodejs"
+    "noto-fonts"
+    "noto-fonts-cjk"
+    "noto-fonts-emoji"
+    "npm"
+    "ntfs-3g"
+    "nvidia"
+    "nvidia-settings"
+    "openssh"
+    "pavucontrol"
+    "peek"
+    "picom"
+    "pipewire"
+    "pipewire-pulse"
+    "postgresql"
+    "python-black"
+    "python-pip"
+    "python-pipenv"
+    "python-q"
+    "python-virtualenvwrapper"
+    "ranger"
+    "ripgrep"
+    "rofi"
+    "samba"
+    "smplayer"
+    "smplayer-skins"
+    "smplayer-themes"
+    "stow"
+    "sxhkd"
+    "sxiv"
+    "the_silver_searcher"
+    "tmux"
+    "tmuxp"
+    "transmission-gtk"
+    "ttf-freefont"
+    "ttf-hack"
+    "udiskie"
+    "vifm"
+    "vit"
+    "vlc"
+    "x11-ssh-askpass"
+    "xcape"
+    "xclip"
+    "xorg-xbacklight"
+    "xorg-xsetroot"
+    "xwallpaper"
+    "yarn"
+    "yt-dlp"
+    "zathura"
+    "zathura-pdf-poppler"
+    "zsh"
+)
+
+aur_packages=(
+    "bazarr",
+    "betterlockscreen"
+    "brave-bin"
+    "dragon-drag-and-drop-git"
+    "dust"
+    "gitflow-avh"
+    "google-chrome"
+    "gotop-bin"
+    "gron-bin"
+    # fix color emojis crashing st:
+    # https://gitlab.freedesktop.org/xorg/lib/libxft/merge_requests/1
+    "libxft-bgra"
+    "lf"
+    "neovim-plug-git"
+    "nerd-fonts-fira-code"
+    "nerd-fonts-jetbrains-mono"
+    "nerd-fonts-ubuntu-mono"
+    "numix-icon-theme-git"
+    "polybar"
+    "rar"
+    "rofi-power-menu"
+    "sonarr",
+    "stacer",
+    "stylua"
+    "subliminal"
+    "tdrop-git"
+    "ttf-clear-sans"
+    "ttf-font-awesome-4"
+    "ttf-ubuntu-font-family"
+    "typescript-language-server"
+    "visual-studio-code-bin"
+    "vivaldi"
+    "xst"
+    "xtitle"
+)
+
+echo "## Installing Base Packages..."
+yay -S --noconfirm --needed ${base_packages[@]}
+
+echo "## Installing AUR Packages..."
+yay -S --noconfirm --needed ${aur_packages[@]}
+
+# Make pacman and yay colorful and adds eye candy on the progress bar because why not.
+grep "^Color" /etc/pacman.conf >/dev/null || sudo sed -i "s/^#Color/Color/" /etc/pacman.conf
+grep "ILoveCandy" /etc/pacman.conf >/dev/null || sudo sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Bootstrapping oh-my-zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
+
+# declare ZSH_CUSTOM as it isnt defined in bash
+ZSH_CUSTOM=~/.oh-my-zsh/custom
+if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]; then
+    echo "Bootstrapping spaceship-prompt..."
+    git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+fi
+
+if command -v nvim >/dev/null 2>&1; then
+    echo "Bootstrapping Vim..."
+    nvim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+fi
+
+# Autologin
+# if [ ! -d "/etc/systemd/system/getty@tty1.service.d/override.conf" ]; then
+#     echo "Setting up auto login..."
+#     sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
+
+#     echo "[Service]" > tee /etc/systemd/system/getty@tty1.service.d/override.conf
+#     echo "ExecStart=-/usr/bin/agetty --autologin username --noclear %I $TERM" >> tee -a /etc/systemd/system/getty@tty1.service.d/override.conf
+# fi
+
+# TODO: bootstrap vscode?
+# TODO: reminder about .ssh folder

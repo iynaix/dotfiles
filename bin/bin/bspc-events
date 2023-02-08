@@ -1,0 +1,214 @@
+#!/usr/bin/env python
+
+import sys
+from bspc import ULTRAWIDE_ID, VERTICAL_ID, PACKEDPIXEL_ID, rget
+import bspc
+from bspc.utils import cmd
+
+
+def split_ratio(width, height, width_ratio=16, height_ratio=9):
+    MIN_SIZE = 100
+    BORDER_WIDTH = int(bspc.config("border_width"))
+    WINDOW_GAP = int(bspc.config("window_gap"))
+
+    if width >= height:
+        padding = int(bspc.config("left_padding"))
+        target_width = (height / 9) * 16 - WINDOW_GAP + BORDER_WIDTH * 2 - padding
+        # existing window should at least 100 pixels wide
+        if width - target_width < MIN_SIZE:
+            return
+        return {"split_dir": "east", "split_ratio": 1 - target_width / width}
+    else:
+        padding = int(bspc.config("bottom_padding"))
+        target_height = (width / 16) * 9 + BORDER_WIDTH * 2  # - WINDOW_GAP - padding
+        # existing window should at least 100 pixels tall
+        if height - target_height < MIN_SIZE:
+            return
+        return {"split_dir": "south", "split_ratio": 1 - target_height / height}
+
+
+def get_leaves(*, desktop=None, node=""):
+    if desktop is None:
+        desktop = "focused"
+
+    return bspc.query(
+        "--nodes",
+        "--desktop",
+        desktop,
+        "--node",
+        f".leaf.window.!hidden.!floating{node}",
+    )
+
+
+def balance_nodes(desk_id=None, *, equalize=False):
+    desk_id = "@/" if desk_id is None else f"{desk_id}:"
+    cmd = [desk_id, "--balance"]
+    if equalize:
+        cmd.append("--equalize")
+
+    bspc.node(*cmd)
+
+
+def node_add_third_window(ev, ev_args):
+    [mon_id, desk_id, win_id] = ev_args[:3]
+
+    desktop_nodes = get_leaves()
+
+    if mon_id == ULTRAWIDE_ID or mon_id == VERTICAL_ID:
+        if len(desktop_nodes) == 3:
+            balance_nodes()
+
+
+def node_remove_third_window(ev, ev_args):
+    [mon_id, desk_id, win_id] = ev_args[:3]
+
+    desktop_nodes = get_leaves()
+
+    if mon_id == ULTRAWIDE_ID or mon_id == VERTICAL_ID:
+        if len(desktop_nodes) == 3 or len(desktop_nodes) == 2:
+            balance_nodes()
+
+
+def node_transfer_third_window(ev, ev_args):
+    [
+        src_mon_id,
+        src_desk_id,
+        src_node_id,
+        dest_mon_id,
+        dest_desk_id,
+        dest_node_id,
+    ] = ev_args
+
+    if src_mon_id == ULTRAWIDE_ID or src_mon_id == VERTICAL_ID:
+        src_nodes = get_leaves(desktop=src_desk_id)
+
+        # same as node add
+        if len(src_nodes) == 3 or len(src_nodes) == 2:
+            balance_nodes(src_desk_id)
+
+    if dest_mon_id == ULTRAWIDE_ID or dest_mon_id == VERTICAL_ID:
+        dest_nodes = get_leaves(desktop=dest_desk_id)
+
+        # same as node remove
+        if len(dest_nodes) == 3:
+            balance_nodes(dest_desk_id)
+
+
+def node_add_video_window(ev, ev_args):
+    [mon_id, desk_id, parent_id, win_id] = ev_args
+
+    parent = bspc.tree("--node", parent_id)
+    win = bspc.tree("--node", win_id)
+
+    if rget(win, "client.className", "").lower() in ("mpv", "vlc", "smplayer"):
+        parent_geom = rget(parent, "client.tiledRectangle")
+        # the floating rectangle of the video window is the aspect ratio we want!
+        win_geom = rget(win, "client.floatingRectangle")
+
+        new_ratio = split_ratio(
+            parent_geom["width"],
+            parent_geom["height"],
+            width_ratio=win_geom["width"],
+            height_ratio=win_geom["height"],
+        )
+
+        # set the new ratio and direction
+        bspc.node("@parent", "--ratio", new_ratio["split_ratio"], debug=True)
+
+
+if __name__ == "__main__":
+    # begin event processing loop
+    while 1:
+        line = sys.stdin.readline()
+        [ev, *ev_args] = line.split()
+
+        # if ev == "node_add":
+        #     if node_add_video_window(ev, ev_args):
+        #         continue
+
+        # setup auto balancing for 3 windows if ultrawide or vertical
+        try:
+            if ULTRAWIDE_ID or VERTICAL_ID:
+                if ev == "node_add":
+                    node_add_third_window(ev, ev_args)
+
+                if ev == "node_remove":
+                    node_remove_third_window(ev, ev_args)
+
+                if ev == "node_transfer":
+                    node_transfer_third_window(ev, ev_args)
+
+            # monitors turned on / off
+            if ev == "monitor_geometry":
+                connected = set()
+                disconnected = set()
+
+                for line in cmd("xrandr", output=True).splitlines():
+                    if " connected " in line:
+                        connected.add(line.split()[0])
+                    if " disconnected " in line:
+                        disconnected.add(line.split()[0])
+
+                ultrawide_mon = "DP-2"
+                vertical_mon = "DP-0.8"
+                packedpixel_mon = "HDMI-0"
+
+                # do nothing if ultrawide disconnected
+                if ultrawide_mon in disconnected:
+                    continue
+
+                ultrawide_workspaces = [1, 2, 3, 4, 5]
+                vertical_workspaces = []
+                packpixel_workspaces = []
+
+                mon2_workspaces = [6, 7, 8]
+                mon3_workspaces = [9, 10]
+
+                if vertical_mon in disconnected and packedpixel_mon in disconnected:
+                    ultrawide_workspaces.extend(mon2_workspaces)
+                    ultrawide_workspaces.extend(mon3_workspaces)
+                elif packedpixel_mon in disconnected:
+                    vertical_workspaces.extend(mon2_workspaces)
+                    vertical_workspaces.extend(mon3_workspaces)
+                elif vertical_mon in disconnected:
+                    ultrawide_workspaces.extend(mon2_workspaces)
+                    packpixel_workspaces.extend(mon3_workspaces)
+
+                bspc.monitor(ultrawide_mon, "-d", *ultrawide_workspaces)
+                if vertical_workspaces:
+                    bspc.monitor(vertical_mon, "-d", *vertical_workspaces)
+                if packpixel_workspaces:
+                    bspc.monitor(packedpixel_mon, "-d", *packpixel_workspaces)
+
+                """
+                mon2 = VERTICAL_ID
+                mon3 = PACKEDPIXEL_ID
+
+                if vertical_mon in disconnected and packedpixel_mon in disconnected:
+                    mon2 = ULTRAWIDE_ID
+                    mon3 = ULTRAWIDE_ID
+
+                elif packedpixel_mon in disconnected:
+                    mon3 = VERTICAL_ID
+
+                elif vertical_mon in disconnected:
+                    mon2 = ULTRAWIDE_ID
+
+                print({"mon1": ULTRAWIDE_ID, "mon2": mon2, "mon3": mon3})
+
+                # mon3 is None
+                # monitor event monitor_geometry ['0x00C00004', '1920x1080+1754+0']
+
+                bspc.desktop(6, "-m", mon2)
+                bspc.desktop(7, "-m", mon2)
+                bspc.desktop(8, "-m", mon2)
+                bspc.desktop(9, "-m", mon3)
+                bspc.desktop(10, "-m", mon3)
+
+            if ev.startswith("monitor_"):
+                print(ev, ev_args)
+                """
+        except:
+            pass
+
+        # q(int(time()), ev, ev_args)

@@ -1,0 +1,123 @@
+/* vim: set ft=css: */
+
+/************************************************
+ * ROFI Color theme
+ * User: leofa
+ * Copyright: 2017 leofa
+ * modified by iynaix, based on Arc-Dark
+ ***********************************************/
+
+* {
+    selected-normal-foreground:  rgba ( 249, 249, 249, 100 % );
+    foreground:                  rgba ( 214, 222, 235, 100 % );
+    normal-foreground:           @foreground;
+    alternate-normal-background: rgba ( 64, 69, 82, 59 % );
+    red:                         rgba ( 220, 50, 47, 100 % );
+    selected-urgent-foreground:  rgba ( 249, 249, 249, 100 % );
+    blue:                        rgba ( 38, 139, 210, 100 % );
+    urgent-foreground:           rgba ( 204, 102, 102, 100 % );
+    alternate-urgent-background: rgba ( 75, 81, 96, 90 % );
+    active-foreground:           rgba ( 101, 172, 255, 100 % );
+    lightbg:                     rgba ( 238, 232, 213, 100 % );
+    selected-active-foreground:  rgba ( 249, 249, 249, 100 % );
+    alternate-active-background: rgba ( 75, 81, 96, 89 % );
+    background:                  rgba ( 1, 22, 39, 80 % );
+    alternate-normal-foreground: @foreground;
+    normal-background:           @background;
+    lightfg:                     rgba ( 88, 104, 117, 100 % );
+    selected-normal-background:  rgba ( 64, 132, 214, 100 % );
+    border-color:                rgba ( 124, 131, 137, 100 % );
+    spacing:                     2;
+    separatorcolor:              @background;
+    urgent-background:           rgba ( 29, 31, 33, 17 % );
+    selected-urgent-background:  rgba ( 165, 66, 66, 100 % );
+    alternate-urgent-foreground: @urgent-foreground;
+    background-color:            rgba ( 0, 0, 0, 0 % );
+    alternate-active-foreground: @active-foreground;
+    active-background:           rgba ( 29, 31, 33, 17 % );
+    selected-active-background:  rgba ( 68, 145, 237, 100 % );
+}
+
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+}
+element-icon {
+    vertical-align: 0.5;
+    padding: 0 8px 0 0;
+}
+#window {
+    background-color: @background;
+    border:           0;
+    width: 800;
+}
+#mainbox {
+    border:  0;
+    padding: 0;
+}
+#message {
+    border:       0;
+    border-color: @separatorcolor;
+    padding:      1px ;
+}
+#textbox {
+    text-color: @foreground;
+}
+#listview {
+    fixed-height: 0;
+    border:       0;
+    border-color: @separatorcolor;
+    spacing:      2px ;
+    scrollbar:    false;
+    padding:      2px 0px 0px ;
+    lines: 10;
+}
+#element {
+    border:  0;
+    padding: 10px 20px;
+    text-color:       @normal-foreground;
+}
+#element.normal.normal {
+    background-color: @normal-background;
+    text-color:       @normal-foreground;
+}
+/*
+#element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+#element.normal.active {
+    background-color: @active-background;
+    text-color:       @actilive-foreground;
+}
+*/
+#element.selected.normal {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+#element.selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color:       @selected-urgent-foreground;
+}
+#element.selected.active {
+    background-color: @selected-active-background;
+    text-color:       @selected-active-foreground;
+}
+#button {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+#button.selected {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+#inputbar {
+    children:   [ entry ];
+    margin: 15px 20px;
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+#entry {
+    spacing:    0;
+    text-color: @normal-foreground;
+}

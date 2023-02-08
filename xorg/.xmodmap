@@ -1,0 +1,3 @@
+remove Lock = Caps_Lock
+keysym Caps_Lock = Super_R
+add Lock = Caps_Lock

@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+
+from subprocess import check_output
+import sys
+
+# import q
+from bspc import VERTICAL_ID
+import bspc
+
+MIN_SIZE = 100
+WIDTH_RATIO = 16
+HEIGHT_RATIO = 9
+
+
+def horizontal_split(
+    width, height, *, width_ratio=WIDTH_RATIO, height_ratio=HEIGHT_RATIO
+):
+    BORDER_WIDTH = int(check_output(("bspc", "config", "border_width")))
+    WINDOW_GAP = int(check_output(("bspc", "config", "window_gap")))
+
+    padding = int(check_output(("bspc", "config", "left_padding")))
+    target_width = (
+        (height / height_ratio) * width_ratio - WINDOW_GAP + BORDER_WIDTH * 2 - padding
+    )
+    # existing window should at least 100 pixels wide
+    if width - target_width < MIN_SIZE:
+        return
+    return {"split_dir": "east", "split_ratio": 1 - target_width / width}
+
+
+def vertical_split(
+    width, height, *, width_ratio=WIDTH_RATIO, height_ratio=HEIGHT_RATIO
+):
+    BORDER_WIDTH = int(check_output(("bspc", "config", "border_width")))
+
+    # padding = int(check_output(("bspc", "config", "bottom_padding")))
+    target_height = (
+        width / width_ratio
+    ) * height_ratio + BORDER_WIDTH * 2  # - WINDOW_GAP - padding
+    # existing window should at least 100 pixels tall
+    if height - target_height < MIN_SIZE:
+        return
+    return {"split_dir": "south", "split_ratio": 1 - target_height / height}
+
+
+def get_split_ratio(width, height, width_ratio=WIDTH_RATIO, height_ratio=HEIGHT_RATIO):
+    hori_split = horizontal_split(
+        width, height, width_ratio=width_ratio, height_ratio=height_ratio
+    )
+    vert_split = vertical_split(
+        width, height, width_ratio=width_ratio, height_ratio=height_ratio
+    )
+
+    if width >= height:
+        return hori_split if hori_split else vert_split
+    else:
+        return vert_split if vert_split else hori_split
+
+
+NEW_RULES = {}
+
+if __name__ == "__main__":
+    [_, wid, window_class, instance_name, original_rules] = sys.argv
+
+    # if a preselection exists, use it
+    # has_presel = bspc.query(("--nodes", "--node" ".!automatic"))
+    # if has_presel:
+    #     exit(0)
+
+    # debugging information
+    # q(original_rules)
+
+    # try to open media files at 16:9
+    if window_class.lower() in ("mpv", "vlc", "smplayer"):
+        geometry = bspc.window_geometry()
+
+        t = bspc.tree("--node", "focused")
+
+        # TODO: mpv gives aspect ratio hints
+        # WM_HINT
+        # aspect ratio
+        # bspc tree floatingRectangle?
+        NEW_RULES.update(get_split_ratio(geometry["w"], geometry["h"]))
+
+    else:
+        # third window on vertical monitor splits vertically
+        focused_mon = bspc.query("-M", "-m")
+        if focused_mon == VERTICAL_ID:
+            third_win_id = bspc.query("-N", "-d", "-n", f"@{VERTICAL_ID}:/2/1")
+            if not third_win_id:
+                NEW_RULES["split_dir"] = "south"
+
+    # handle android emulator
+    if not window_class and not instance_name:
+        win_title = check_output(["xtitle", wid]).decode("utf-8")
+        if "Emulator" in win_title:
+            NEW_RULES["state"] = "pseudo_tiled"
+
+    # echo out new rules if any
+    if NEW_RULES:
+        rules_str = " ".join(f"{k}={v}" for k, v in NEW_RULES.items())
+        # this is the return, don not delete!
+        print(rules_str)

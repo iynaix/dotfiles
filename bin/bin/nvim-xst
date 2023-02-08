@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec xst -e nvim $@

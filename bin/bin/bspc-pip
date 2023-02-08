@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+import subprocess
+import time
+import q
+
+import bspc
+
+
+def is_browser(node_info):
+    clsname = node_info["client"]["className"].lower()
+    return any(w in clsname for w in ("brave", "chrome", "firefox"))
+
+
+def sendkey(wid, key):
+    cmd = [
+        "xdotool",
+        "windowactivate",
+        "--sync",
+        # hex(node_info["id"]),
+        wid,
+        "key",
+        "--",
+        key,
+    ]
+
+    q(" ".join(cmd))
+    subprocess.run(cmd, check=True)
+
+
+node_info = bspc.tree("--node", "focused")
+
+bspc.node("--state", "~floating", "--flag", "sticky=off", "--layer", "normal")
+
+# reset window back to normal tiling status
+if node_info["client"]["state"] == "floating" and node_info["sticky"]:
+    bspc.node("--state", "~floating", "--flag", "sticky=off", "--layer", "normal")
+
+else:
+    if is_browser(node_info):
+        # set browser fullscreen
+        time.sleep(1)
+        sendkey(hex(node_info["id"]), "f")
+        # set and unset fullscreen
+        bspc.node("--state", "fullscreen")
+        bspc.node("--state", "~fullscreen")
+
+    # set window to picture in picture mode
+    bspc.node("--state", "floating", "--flag", "sticky=on", "--layer", "above")
+
+    # set dimensions of pip window
+    bspc.resize_window(0.2, 0.2)
+
+    # move window to bottom right
+    bspc.move_window_to_corner("bottom-right", pad_x=20, pad_y=20)

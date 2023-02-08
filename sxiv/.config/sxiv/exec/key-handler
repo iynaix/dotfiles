@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+while read file
+do
+    case "$1" in
+    "C-c")
+        xclip -selection clipboard "$file" -t image/png ;;
+    "C-d")
+        mv -f "$file" /tmp ;;
+    esac
+done

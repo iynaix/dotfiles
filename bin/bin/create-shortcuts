@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+
+from os.path import expanduser
+
+SHORTCUTS = expanduser("~/bin/shortcuts.txt")
+SHELL_SHORTCUTS_PATH = "~/.shortcutrc"
+RANGER_SHORTCUTS_PATH = "~/.config/ranger/shortcuts.conf"
+LF_SHORTCUTS_PATH = "~/.config/lf/shortcutrc"
+
+
+def load_shortcuts():
+    ret = {}
+    with open(SHORTCUTS) as fp:
+        for line in fp.readlines():
+            if line.startswith("#"):
+                continue
+            shortcut, folder = line.strip().split("=")
+            if shortcut in ret:
+                print(f"Duplicate shortcut: {shortcut}!")
+                raise SystemExit()
+            ret[shortcut] = folder
+    return ret
+
+
+def comment_block(lines):
+    comment = f"{'#'*8} AUTO-GENERATED SHORTCUTS, DO NOT EDIT {'#'*8}"
+    return "\n".join([comment] + lines + [comment])
+
+
+def shell_shortcuts(shortcuts):
+    ret = []
+    for name, dest in shortcuts.items():
+        ret.append(f'alias {name}="cd {dest}"')
+    return comment_block(ret)
+
+
+def ranger_shortcuts(shortcuts):
+    ret = []
+    for name, dest in shortcuts.items():
+        ret.append(f"map g{name} cd {dest}")
+        ret.append(f"map t{name} tab_new {dest}")
+        ret.append(f"map m{name} shell mv -v {dest}")
+        ret.append(f"map Y{name} shell cp -rv {dest}")
+    return comment_block(ret)
+
+
+def lf_shortcuts(shortcuts):
+    ret = []
+    for name, dest in shortcuts.items():
+        ret.append(f"map g{name} cd {dest}")
+        # ret.append(f"map t{name} tab_new {dest}")
+        ret.append(f"map m{name} mv -v {dest}")
+        ret.append(f"map Y{name} cp -rv {dest}")
+    return comment_block(ret)
+
+
+def vifm_shortcuts(shortcuts):
+    ret = []
+    for name, dest in shortcuts.items():
+        ret.append(f'map g" {name}, ":cd", {dest} "<CR>')
+        ret.append(f'map t" {name}, "<tab>:cd", {dest} "<CR><tab>')
+        ret.append(f'map M" {name}, "<tab>:cd", {dest} "<CR><tab>:mo<CR>')
+        ret.append(f'map Y" {name}, "<tab>:cd", {dest} "<CR><tab>:co<CR>')
+    return comment_block(ret)
+
+
+def write_shortcuts(path, shortcuts, shortcuts_func):
+    with open(expanduser(path), "w") as fp:
+        fp.write(shortcuts_func((shortcuts)))
+
+
+if __name__ == "__main__":
+    shortcuts = load_shortcuts()
+
+    write_shortcuts(SHELL_SHORTCUTS_PATH, shortcuts, shell_shortcuts)
+    write_shortcuts(RANGER_SHORTCUTS_PATH, shortcuts, ranger_shortcuts)
+    write_shortcuts(LF_SHORTCUTS_PATH, shortcuts, lf_shortcuts)
+
+    print("Successfully updated shortcuts.")
