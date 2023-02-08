@@ -5,8 +5,10 @@
       brave
       bspwm
       dunst
+      exa
       git
       mpv
+      picom
       polybar
       rofi
       sxiv
@@ -18,9 +20,9 @@
       zsh-powerlevel10k
     ];
 
-    # TODO: bash .profile 
-    # TODO: xorg
+    # TODO: bspwm
     # TODO: neovim
+    # TODO: picom
 
     file."bin" = {
       source = ./bin;
@@ -42,13 +44,13 @@
       recursive = true;
     };
 
-    file."." = {
-      source = ./gitconfig;
+    file.".config/mpv" = {
+      source = ./mpv;
       recursive = true;
     };
 
-    file.".config/mpv" = {
-      source = ./mpv;
+    file.".config/neovim" = {
+      source = ./nvim;
       recursive = true;
     };
 
@@ -82,11 +84,26 @@
       recursive = true;
     };
 
-    file.".config/zsh" = {
-      source = ./zsh;
-      recursive = true;
+    # recursive doesn't seem to work on the root of the home directory?
+    file.".gitconfig" = {
+      source = ./gitconfig/.gitconfig;
     };
 
+    file.".gitignore" = {
+      source = ./gitconfig/.gitignore;
+    };
+
+    file.".zshrc" = {
+      source = ./zsh/.zshrc;
+    };
+
+    file.".zshenv" = {
+      source = ./zsh/.zshenv;
+    };
+
+    file.".p10k.zsh" = {
+      source = ./zsh/.p10k.zsh;
+    };
   };
 
   programs = {
