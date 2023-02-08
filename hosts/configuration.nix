@@ -5,11 +5,6 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -54,7 +49,7 @@
     isNormalUser = true;
     description = "Xianyi Lin";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   # Enable automatic login for the user.
@@ -68,13 +63,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-     alacritty
-     git
-     neovim
-     vscode
-     brave
-  ];
+  environment.systemPackages = with pkgs; [ alacritty git neovim vscode brave ];
 
   services.qemuGuest.enable = true;
 
@@ -89,7 +78,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   services.xserver.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
@@ -114,4 +103,3 @@
     extraOptions = "experimental-features = nix-command flakes";
   };
 }
-
