@@ -8,7 +8,6 @@
     homeDirectory = "/home/iynaix";
 
     packages = with pkgs; [
-      catppuccin-gtk
       cinnamon.nemo
       neofetch
     ];
@@ -33,14 +32,16 @@
   };
 
   # Let Home Manager install and manage itself.
-  programs = { home-manager.enable = true; };
+  programs = { 
+    home-manager.enable = true; 
 
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    withNodeJs = true;
-    withPython3 = true;
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+      viAlias = true;
+      vimAlias = true;
+      withNodeJs = true;
+      withPython3 = true;
+    };
   };
 }

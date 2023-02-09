@@ -1,4 +1,6 @@
 { pkgs, ... }: {
+  imports = [ (import ./desktop/gtk.nix) ];
+
   home = {
     packages = with pkgs; [
       alacritty
@@ -22,7 +24,6 @@
     ];
 
     # TODO: bspwm
-    # TODO: neovim
     # TODO: picom
 
     file."bin" = {
@@ -86,25 +87,15 @@
     };
 
     # recursive doesn't seem to work on the root of the home directory?
-    file.".gitconfig" = {
-      source = ./gitconfig/.gitconfig;
-    };
+    file.".gitconfig" = { source = ./gitconfig/.gitconfig; };
 
-    file.".gitignore" = {
-      source = ./gitconfig/.gitignore;
-    };
+    file.".gitignore" = { source = ./gitconfig/.gitignore; };
 
-    file.".zshrc" = {
-      source = ./zsh/.zshrc;
-    };
+    file.".zshrc" = { source = ./zsh/.zshrc; };
 
-    file.".zshenv" = {
-      source = ./zsh/.zshenv;
-    };
+    file.".zshenv" = { source = ./zsh/.zshenv; };
 
-    file.".p10k.zsh" = {
-      source = ./zsh/.p10k.zsh;
-    };
+    file.".p10k.zsh" = { source = ./zsh/.p10k.zsh; };
   };
 
   programs = {
@@ -120,20 +111,14 @@
             family = "JetBrainsMono Nerd Font";
             style = "Medium";
           };
-          bold = {
-            style = "Bold";
-          };
-          italic = {
-            style = "Italic";
-          };
-          bold_italic = {
-            style = "Bold Italic";
-          };
+          bold = { style = "Bold"; };
+          italic = { style = "Italic"; };
+          bold_italic = { style = "Bold Italic"; };
           size = 11;
         };
         selection.save_to_clipboard = true;
         # window.opacity = 0.5;
-        import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.yml"];
+        import = [ "~/.config/alacritty/catppuccin/catppuccin-mocha.yml" ];
       };
     };
     neovim = {
