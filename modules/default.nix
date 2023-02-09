@@ -4,6 +4,7 @@
       alacritty
       brave
       bspwm
+      curl
       dunst
       exa
       git
@@ -49,7 +50,7 @@
       recursive = true;
     };
 
-    file.".config/neovim" = {
+    file.".config/nvim" = {
       source = ./nvim;
       recursive = true;
     };
@@ -134,6 +135,10 @@
         # window.opacity = 0.5;
         import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.yml"];
       };
+    };
+    neovim = {
+      enable = true;
+      extraPackages = with pkgs; [ fzf gcc ];
     };
   };
 }
