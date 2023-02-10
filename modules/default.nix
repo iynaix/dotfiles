@@ -4,6 +4,7 @@
     ./programs/alacritty.nix
     ./programs/mpv.nix
     ./desktop/gtk.nix
+    ./desktop/sxhkd.nix
     # ./desktop/dunst.nix
   ];
 
@@ -15,7 +16,6 @@
       polybar
       rofi
       sxiv
-      sxhkd
       vscode
       zathura
     ];

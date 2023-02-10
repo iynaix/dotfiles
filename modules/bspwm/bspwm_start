@@ -35,10 +35,10 @@ else
 fi
 
 # (re)load sxhkd for keybinds
-if hash sxhkd >/dev/null 2>&1; then
-	pkill sxhkd
-	sxhkd -c "$HOME/.config/bspwm/sxhkdrc" "$HOME/.config/bspwm/bspwm_sxhkdrc" &
-fi
+# if hash sxhkd >/dev/null 2>&1; then
+# 	pkill sxhkd
+# 	sxhkd -c "$HOME/.config/bspwm/sxhkdrc" "$HOME/.config/bspwm/bspwm_sxhkdrc" &
+# fi
 
 # init keyring
 gnome-keyring-daemon --start &
