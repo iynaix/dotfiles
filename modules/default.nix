@@ -1,8 +1,8 @@
 { pkgs, ... }: {
   imports = [
     ./shell
-    ./programs/alacritty
-    ./programs/mpv
+    ./programs/alacritty.nix
+    ./programs/mpv.nix
     ./desktop/gtk.nix 
   ];
 

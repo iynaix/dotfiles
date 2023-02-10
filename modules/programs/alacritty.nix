@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   home = {
-    file.".config/alacritty/catppuccin" = {
-      source = ./catppuccin;
+    file.".config/alacritty" = {
+      source = ./alacritty;
       recursive = true;
     };
   };
@@ -26,7 +26,7 @@
           };
           selection.save_to_clipboard = true;
           # window.opacity = 0.5;
-          import = [ "~/.config/alacritty/catppuccin/catppuccin-mocha.yml" ];
+          import = [ "~/.config/alacritty/catppuccin-mocha.yml" ];
       };
     };
   };
