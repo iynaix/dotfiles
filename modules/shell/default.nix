@@ -8,6 +8,7 @@
       curl
       exa
       git
+      neofetch
       ranger
       tmux
       wget

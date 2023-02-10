@@ -9,16 +9,7 @@
 
     packages = with pkgs; [
       cinnamon.nemo
-      neofetch
     ];
-
-    # gtk = {
-    #   enable = true;
-    #   theme = {
-    #     name = "Catppuccin-Mocha";
-    #     package = pkgs.catppuccin-gtk;
-    #   };
-    # };
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

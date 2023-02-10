@@ -66,6 +66,7 @@
       TERMINAL = "alacritty";
       EDITOR = "nvim";
       VISUAL = "nvim";
+      XDG_CONFIG_HOME = "$HOME/.config";
       ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     };
     systemPackages = with pkgs; [ 
