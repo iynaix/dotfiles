@@ -19,4 +19,21 @@ in {
       }
     ];
   };
+  desktop = lib.nixosSystem {
+    inherit system;
+
+    modules = [
+      ./configuration.nix # shared nixos configuration across all hosts
+      ./desktop # desktop specific configuration, including hardware
+
+      home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.users.${user} = {
+          imports = [ (import ./home.nix) ] ++ [ (import ./desktop/home.nix) ];
+        };
+      }
+    ];
+  };
 }
