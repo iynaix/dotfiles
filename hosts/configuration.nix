@@ -10,7 +10,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "iynaix"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -45,7 +45,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.iynaix = {...}: {
+  users.users.iynaix = { ... }: {
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [ "networkmanager" "wheel" ];
@@ -69,11 +69,15 @@
       XDG_CONFIG_HOME = "$HOME/.config";
       ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     };
-    systemPackages = with pkgs; [ 
-      git 
-      neovim 
-      ripgrep 
-      tree 
+    systemPackages = with pkgs; [
+      curl
+      git
+      exa
+      neovim
+      ntfs3g
+      ripgrep
+      tree
+      wget
     ];
   };
 
@@ -92,6 +96,7 @@
 
   services.xserver.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.windowManager.bspwm.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -111,22 +116,19 @@
   fonts = {
     fonts = with pkgs; [
       font-awesome
-      (nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "JetBrainsMono"
-          "Ubuntu"
-        ];
-      })
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Ubuntu" ]; })
     ];
   };
 
   # enable flakes
   nix = {
-    settings ={
-      auto-optimise-store = true;           # Optimise syslinks
+    settings = {
+      auto-optimise-store = true; # Optimise syslinks
     };
-    gc = {                                  # Automatic garbage collection
+    gc = { # Automatic garbage collection
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 2d";

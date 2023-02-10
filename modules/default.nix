@@ -4,24 +4,11 @@
     ./programs/alacritty.nix
     ./programs/mpv.nix
     ./desktop/gtk.nix
-    ./desktop/sxhkd.nix
-    # ./desktop/dunst.nix
+    ./desktop/bspwm.nix
   ];
 
   home = {
-    packages = with pkgs; [
-      brave
-      bspwm
-      picom
-      polybar
-      rofi
-      sxiv
-      vscode
-      zathura
-    ];
-
-    # TODO: bspwm
-    # TODO: picom
+    packages = with pkgs; [ brave udiskie vscode zathura ];
 
     file."bin" = {
       source = ./bin;

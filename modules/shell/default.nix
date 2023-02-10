@@ -1,18 +1,8 @@
 { pkgs, ... }: {
-  imports = [
-    ./zsh.nix
-  ];
+  imports = [ ./zsh.nix ];
 
   home = {
-    packages = with pkgs; [
-      curl
-      exa
-      git
-      neofetch
-      ranger
-      tmux
-      wget
-    ];
+    packages = with pkgs; [ bat htop lazygit neofetch ranger rar tmux ];
 
     file.".config/git" = {
       source = ./gitconfig;
