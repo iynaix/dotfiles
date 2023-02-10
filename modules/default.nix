@@ -1,12 +1,12 @@
 { pkgs, ... }: {
   imports = [
-     ./shell
-     ./desktop/gtk.nix 
+    ./shell
+    ./programs/alacritty
+    ./desktop/gtk.nix 
   ];
 
   home = {
     packages = with pkgs; [
-      alacritty
       brave
       bspwm
       dunst
@@ -25,11 +25,6 @@
 
     file."bin" = {
       source = ./bin;
-      recursive = true;
-    };
-
-    file.".config/alacritty" = {
-      source = ./alacritty;
       recursive = true;
     };
 
@@ -76,28 +71,28 @@
   };
 
   programs = {
-    alacritty = {
-      enable = true;
-      settings = {
-        window.padding = {
-          x = 20;
-          y = 12;
-        };
-        font = {
-          normal = {
-            family = "JetBrainsMono Nerd Font";
-            style = "Medium";
-          };
-          bold = { style = "Bold"; };
-          italic = { style = "Italic"; };
-          bold_italic = { style = "Bold Italic"; };
-          size = 11;
-        };
-        selection.save_to_clipboard = true;
-        # window.opacity = 0.5;
-        import = [ "~/.config/alacritty/catppuccin/catppuccin-mocha.yml" ];
-      };
-    };
+    # alacritty = {
+    #   enable = true;
+    #   settings = {
+    #     window.padding = {
+    #       x = 20;
+    #       y = 12;
+    #     };
+    #     font = {
+    #       normal = {
+    #         family = "JetBrainsMono Nerd Font";
+    #         style = "Medium";
+    #       };
+    #       bold = { style = "Bold"; };
+    #       italic = { style = "Italic"; };
+    #       bold_italic = { style = "Bold Italic"; };
+    #       size = 11;
+    #     };
+    #     selection.save_to_clipboard = true;
+    #     # window.opacity = 0.5;
+    #     import = [ "~/.config/alacritty/catppuccin/catppuccin-mocha.yml" ];
+    #   };
+    # };
     neovim = {
       enable = true;
       extraPackages = with pkgs; [ fzf gcc ];
