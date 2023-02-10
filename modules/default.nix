@@ -2,6 +2,7 @@
   imports = [
     ./shell
     ./programs/alacritty
+    ./programs/mpv
     ./desktop/gtk.nix 
   ];
 
@@ -10,7 +11,6 @@
       brave
       bspwm
       dunst
-      mpv
       picom
       polybar
       rofi
@@ -35,11 +35,6 @@
 
     file.".config/dunst" = {
       source = ./dunst;
-      recursive = true;
-    };
-
-    file.".config/mpv" = {
-      source = ./mpv;
       recursive = true;
     };
 
