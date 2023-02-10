@@ -61,6 +61,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment = {
+    shells = [ pkgs.zsh ];
     variables = {
       TERMINAL = "alacritty";
       EDITOR = "nvim";
@@ -117,10 +118,6 @@
         ];
       })
     ];
-  };
-
-  environment = {
-    shells = with pkgs; [ zsh ];
   };
 
   # enable flakes

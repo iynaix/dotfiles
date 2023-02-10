@@ -1,4 +1,8 @@
 { pkgs, ... }: {
+  imports = [
+    ./zsh.nix
+  ];
+
   home = {
     packages = with pkgs; [
       curl
@@ -7,7 +11,6 @@
       ranger
       tmux
       wget
-      zsh-powerlevel10k
     ];
 
     file.".config/git" = {
@@ -17,11 +20,6 @@
 
     file.".config/tmux" = {
       source = ./tmux;
-      recursive = true;
-    };
-
-    file.".config/zsh" = {
-      source = ./zsh;
       recursive = true;
     };
   };
