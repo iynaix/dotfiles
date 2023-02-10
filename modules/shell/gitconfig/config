@@ -1,6 +1,8 @@
 [core]
     editor=nvim
-    excludesfile = ~/.gitignore
+
+[init]
+    defaultBranch = main
 
 [user]
     name = Lin Xianyi

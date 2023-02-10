@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, user, ... }:
 
 {
   # Bootloader.
@@ -47,6 +47,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iynaix = {
     isNormalUser = true;
+    initialPassword = "password";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
   };
@@ -64,6 +65,7 @@
       TERMINAL = "alacritty";
       EDITOR = "nvim";
       VISUAL = "nvim";
+      ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     };
     systemPackages = with pkgs; [ 
       git 

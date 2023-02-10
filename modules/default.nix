@@ -1,26 +1,23 @@
 { pkgs, ... }: {
-  imports = [ (import ./desktop/gtk.nix) ];
+  imports = [
+     ./shell
+     ./desktop/gtk.nix 
+  ];
 
   home = {
     packages = with pkgs; [
       alacritty
       brave
       bspwm
-      curl
       dunst
-      exa
-      git
       mpv
       picom
       polybar
       rofi
       sxiv
       sxhkd
-      tmux
       vscode
-      yt-dlp
       zathura
-      zsh-powerlevel10k
     ];
 
     # TODO: bspwm
@@ -71,31 +68,11 @@
       recursive = true;
     };
 
-    file.".config/tmux" = {
-      source = ./tmux;
-      recursive = true;
-    };
-
-    file.".config/yt-dlp" = {
-      source = ./yt-dlp;
-      recursive = true;
-    };
-
     file.".config/zathura" = {
       source = ./zathura;
       recursive = true;
     };
 
-    # recursive doesn't seem to work on the root of the home directory?
-    file.".gitconfig" = { source = ./gitconfig/.gitconfig; };
-
-    file.".gitignore" = { source = ./gitconfig/.gitignore; };
-
-    file.".zshrc" = { source = ./zsh/.zshrc; };
-
-    file.".zshenv" = { source = ./zsh/.zshenv; };
-
-    file.".p10k.zsh" = { source = ./zsh/.p10k.zsh; };
   };
 
   programs = {
