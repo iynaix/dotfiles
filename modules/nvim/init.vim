@@ -54,7 +54,7 @@ Plug 'mhartington/formatter.nvim'
 
 " File Management
 Plug 'nvim-telescope/telescope.nvim'
-" Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
 
@@ -381,10 +381,10 @@ local symbols = {error = " ", warning = " ", info = " "}
 require("bufferline").setup {
     highlights = {
         fill = {
-            guifg = "#011627",
+            fg = "#011627",
         },
         -- separator = {
-        --     guifg = "#ffffff",
+        --     fg = "#ffffff",
         -- },
     },
     options = {
@@ -444,7 +444,7 @@ nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 " nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 " noremap <silent> gR    <cmd>lua vim.lsp.buf.references()<CR>
 
-lua require 'lspsaga'.init_lsp_saga()
+lua require 'lspsaga'.setup({})
 nnoremap <silent> gH <cmd>lua require'lspsaga.provider'.lsp_finder()<CR>
 nnoremap <silent><leader>ca <cmd>lua require('lspsaga.codeaction').code_action()<CR>
 vnoremap <silent><leader>ca :<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>

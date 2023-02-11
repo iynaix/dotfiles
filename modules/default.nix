@@ -10,16 +10,6 @@
   home = {
     packages = with pkgs; [ brave udiskie vscode zathura ];
 
-    file."bin" = {
-      source = ./bin;
-      recursive = true;
-    };
-
-    file.".config/bspwm" = {
-      source = ./bspwm;
-      recursive = true;
-    };
-
     file.".config/nvim" = {
       source = ./nvim;
       recursive = true;
