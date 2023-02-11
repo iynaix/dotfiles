@@ -21,7 +21,7 @@ in {
   imports = [ ./dunst.nix ./sxhkd.nix ];
 
   xsession.windowManager.bspwm = {
-    enable = false;
+    enable = true;
     settings = {
       automatic_scheme = "longest_side";
 
@@ -69,7 +69,6 @@ in {
       "Transmission-gtk" = { desktop = dldesktop; };
       "Zathura" = { state = "tiled"; };
     };
-    extraConfigEarly = "# TODO: wallpapers here";
     # uses one shot rules for startup
     startupPrograms = [
       # web browsers
@@ -103,5 +102,19 @@ in {
     ];
   };
 
-  home = { packages = with pkgs; [ picom polybar rofi rofi-power-menu sxiv ]; };
+  home = {
+    packages = with pkgs; [
+      picom
+      polybar
+      rofi
+      rofi-power-menu
+      sxiv
+      xwallpaper
+    ];
+
+    file."Pictures/Wallpapers" = {
+      source = ./wallpapers;
+      recursive = true;
+    };
+  };
 }

@@ -1,4 +1,6 @@
-{ pkgs, ... }: {
+{ pkgs, host, ... }:
+let mod = if host.hostName == "vm" then "alt" else "super";
+in {
   services = {
     sxhkd = {
       enable = true;
@@ -8,27 +10,27 @@
         ############################
 
         # terminal emulator
-        "super + Return" = "$TERMINAL";
+        "${mod} + Return" = "$TERMINAL";
 
         # program launcher
-        "super + shift + Return" = "rofi -show drun";
+        "${mod} + shift + Return" = "rofi -show drun";
 
         # rofi shutdown actions menu
         "ctrl + alt + Delete" = ''
           rofi -show power-menu -font "JetBrainsMono Nerd Font Regular 10" -modi power-menu:rofi-power-menu'';
 
         # screenshots
-        "super + shift + backslash" = "rofi-screenshot";
+        "${mod} + shift + backslash" = "rofi-screenshot";
 
         # browser
-        "super + {_, shift + }w" = "brave {_,--incognito}";
-        "super + {_, shift + }v" = ''"{$TERMINAL -e nvim,code}"'';
+        "${mod} + {_, shift + }w" = "brave {_,--incognito}";
+        "${mod} + {_, shift + }v" = ''"{$TERMINAL -e nvim,code}"'';
 
         # clipboard via clipmenu
-        "super + ctrl + v" = "CM_LAUNCHER=rofi clipmenu";
+        "${mod} + ctrl + v" = "CM_LAUNCHER=rofi clipmenu";
 
         # file browser
-        "super + {_, shift + }e" =
+        "${mod} + {_, shift + }e" =
           ''"{$TERMINAL -e ranger ~/Downloads,nemo ~/Downloads}"'';
 
         # special keys
@@ -48,114 +50,114 @@
           "pkill -USR1 -x sxhkd & ~/.config/bspwm/bspwmrc";
 
         # close and kill
-        "super + BackSpace" = "bspc node -c";
+        "${mod} + BackSpace" = "bspc node -c";
 
         # alternate between the tiled and monocle layout
-        "super + z" = "bspc desktop -l next";
+        "${mod} + z" = "bspc desktop -l next";
 
         # send the newest marked node to the newest preselected node
-        "super + y" =
+        "${mod} + y" =
           "bspc node newest.marked.local -n newest.!automatic.local";
 
         # swap the current node and the biggest node
-        "super + b" = "bspc node -s biggest.local";
+        "${mod} + b" = "bspc node -s biggest.local";
 
         # equalize size of windows at parent / root level
-        "super + {_,ctrl + }equal" = "bspc node {@parent,@/} --balance";
+        "${mod} + {_,ctrl + }equal" = "bspc node {@parent,@/} --balance";
 
         # set the window state
-        "super + {space,f}" = "bspc node -t '~{floating,fullscreen}'";
+        "${mod} + {space,f}" = "bspc node -t '~{floating,fullscreen}'";
 
         # set the node flags
-        "super + ctrl + {m,y}" = "bspc node -g {marked,sticky}";
+        "${mod} + ctrl + {m,y}" = "bspc node -g {marked,sticky}";
 
         # picture in picture mode
-        "super + shift + p" = "bspc-pip";
+        "${mod} + shift + p" = "bspc-pip";
 
         # focus the node in the given direction
-        "super + {_,shift + }{h,j,k,l}" =
+        "${mod} + {_,shift + }{h,j,k,l}" =
           "bspc node -f {_,-s} {west,south,north,east}";
 
         # focus the node in the given direction, handles wraparound for monitors
-        # super + {h,l}
+        # ${mod} + {h,l}
         #     {WINDOW=left;DESKTOP=prev;,WINDOW=right;DESKTOP=next;} \
         #     if ! bspc window -f $WINDOW; then \
         #         bspc desktop -f $DESKTOP; \
         #     fi
 
         # focus the node for the given path jump
-        # super + {p,b,comma,period}
+        # ${mod} + {p,b,comma,period}
         # 	bspc node -f @{parent,brother,first,second}
 
         # focus the next/previous node in the current desktop
-        "alt + {_,shift + }Tab" = "bspc node -f {next,prev}.local";
+        # "alt + {_,shift + }Tab" = "bspc node -f {next,prev}.local";
 
         # focus the next/previous node of the same class
-        "super + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";
+        "${mod} + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";
 
         # focus the previous / next monitor
-        "super + bracket{left,right}" = "bspc monitor -f {prev,next}";
+        "${mod} + bracket{left,right}" = "bspc monitor -f {prev,next}";
 
         # move to the previous / next monitor, retains node focus
-        "super + shift + bracket{left,right}" =
+        "${mod} + shift + bracket{left,right}" =
           "bspc node -m {prev,next} --follow";
 
         # focus the previous / next desktop in the current monitor (DE style)
         "ctrl + alt + {Left,Right}" = "bspc desktop -f {prev,next}.local";
 
         # focus the last node/desktop
-        # super + {grave,Tab}
+        # ${mod} + {grave,Tab}
         # 	bspc {node,desktop} -f last
-        "super + grave" = "bspc node -f last";
+        "${mod} + grave" = "bspc node -f last";
 
         # focus the older or newer node in the focus history
-        "super + {o,i}" = ''
+        "${mod} + {o,i}" = ''
           bspc wm -h off; \
           	bspc node {older,newer} -f; \
           	bspc wm -h on'';
 
         # focus given desktop, also does i3 inspired workspace back and forth
-        "super + {1-9,0}" = ''
+        "${mod} + {1-9,0}" = ''
           desktop='{1-9,10}'; \
           	bspc query -D -d "$desktop.focused" && bspc desktop -f last.local || bspc desktop -f "$desktop"'';
 
         # send to given desktop, retains node focus
-        "super + shift + {1-9,0}" = "bspc node -d '{1-9,10}' --follow";
+        "${mod} + shift + {1-9,0}" = "bspc node -d '{1-9,10}' --follow";
 
         # rotate parent / root
-        "super + {_, ctrl + }{_,shift + }r" =
+        "${mod} + {_, ctrl + }{_,shift + }r" =
           "bspc node {@parent,@/} -R {90,270}";
 
         # preselect the direction
-        # super + ctrl + {h,j,k,l}
+        # ${mod} + ctrl + {h,j,k,l}
         # 	bspc node -p {west,south,north,east}
 
         # preselect the ratio
-        # super + ctrl + {1-9}
+        # ${mod} + ctrl + {1-9}
         # 	bspc node -o 0.{1-9}
 
         # cancel the preselection for the focused node
-        # super + Escape
+        # ${mod} + Escape
         # 	bspc node -p cancel
 
         # expand a window by moving one of its side outward
-        "super + alt + {h,j,k,l}" =
+        "${mod} + alt + {h,j,k,l}" =
           "bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}";
 
         # contract a window by moving one of its side inward
-        "super + alt + shift + {h,j,k,l}" =
+        "${mod} + alt + shift + {h,j,k,l}" =
           "bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}";
 
         # move a floating window / pip window
-        "super + {Left,Down,Up,Right}" = "bspc-smartmove {left,down,up,right}";
+        "${mod} + {Left,Down,Up,Right}" = "bspc-smartmove {left,down,up,right}";
 
         # adjust inner gaps
-        "super + slash : {k,j}" = ''
+        "${mod} + slash : {k,j}" = ''
           new_gap=$(( $(bspc config window_gap) {+,-} 5 )); \
           	bspc config window_gap $((new_gap >= 0 ? new_gap : 0))'';
 
         # adjust outer gaps
-        "super + slash : {h,l}" = ''
+        "${mod} + slash : {h,l}" = ''
           bar_height=30; \
           	padding=$(( $(bspc config left_padding) {+,-} 5 )); \
           	bspc config left_padding $((padding >= 0 ? padding : 0)); \
@@ -164,7 +166,7 @@
           	bspc config top_padding $((padding >= 0 ? bar_height + padding : bar_height));'';
 
         # toggle default gaps / gapless
-        "super + shift + slash" = ''
+        "${mod} + shift + slash" = ''
           curr_gap=$(bspc config window_gap); \
               if [ $curr_gap -eq 0 ]; then; \
                   window_gap=10; \
@@ -187,3 +189,4 @@
     };
   };
 }
+

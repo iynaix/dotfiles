@@ -1,9 +1,29 @@
 { lib, inputs, nixpkgs, home-manager, user, hyprland, ... }:
 
-let system = "x86_64-linux";
+let
+  system = "x86_64-linux";
+  vmInfo = {
+    hostName = "vm";
+    monitor1 = "Virtual-1";
+  };
+  desktopInfo = {
+    hostName = "desktop";
+    monitor1 = "DP-2";
+    monitor2 = "DP-0.8";
+    monitor3 = "HDMI-0";
+  };
+  laptopInfo = {
+    hostName = "laptop";
+    monitor1 = "eDP-1";
+  };
 in {
   vm = lib.nixosSystem {
     inherit system;
+
+    specialArgs = {
+      inherit system;
+      host = vmInfo;
+    };
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
@@ -13,6 +33,10 @@ in {
       {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit user;
+          host = vmInfo;
+        };
         home-manager.users.${user} = {
           imports = [ (import ./home.nix) ] ++ [ (import ./vm/home.nix) ];
         };
@@ -22,6 +46,11 @@ in {
   desktop = lib.nixosSystem {
     inherit system;
 
+    specialArgs = {
+      inherit system;
+      host = desktopInfo;
+    };
+
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./desktop # desktop specific configuration, including hardware
@@ -30,8 +59,38 @@ in {
       {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit user;
+          host = desktopInfo;
+        };
         home-manager.users.${user} = {
           imports = [ (import ./home.nix) ] ++ [ (import ./desktop/home.nix) ];
+        };
+      }
+    ];
+  };
+  laptop = lib.nixosSystem {
+    inherit system;
+
+    specialArgs = {
+      inherit system;
+      host = laptopInfo;
+    };
+
+    modules = [
+      ./configuration.nix # shared nixos configuration across all hosts
+      ./laptop # desktop specific configuration, including hardware
+
+      home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit user;
+          host = laptopInfo;
+        };
+        home-manager.users.${user} = {
+          imports = [ (import ./home.nix) ] ++ [ (import ./laptop/home.nix) ];
         };
       }
     ];
