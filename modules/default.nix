@@ -15,11 +15,6 @@
       recursive = true;
     };
 
-    file.".config/polybar" = {
-      source = ./polybar;
-      recursive = true;
-    };
-
     file.".config/rofi" = {
       source = ./rofi;
       recursive = true;

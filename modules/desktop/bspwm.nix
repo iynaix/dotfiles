@@ -18,7 +18,7 @@ let
   chatdesktop = "^9";
   dldesktop = "^10";
 in {
-  imports = [ ./dunst.nix ./sxhkd.nix ];
+  imports = [ ./dunst.nix ./polybar.nix ./sxhkd.nix ];
 
   xsession.windowManager.bspwm = {
     enable = true;

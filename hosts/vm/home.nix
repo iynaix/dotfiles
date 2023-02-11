@@ -10,4 +10,6 @@
     extraConfig =
       "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png";
   };
+
+  services.polybar = { script = "polybar laptop &"; };
 }

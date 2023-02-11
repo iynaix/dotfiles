@@ -10,26 +10,24 @@
     alacritty = {
       enable = true;
       settings = {
-          window.padding = {
+        window.padding = {
           x = 20;
           y = 12;
-          };
-          font = {
+        };
+        font = {
           normal = {
-              family = "JetBrainsMono Nerd Font";
-              style = "Medium";
+            family = "JetBrainsMono Nerd Font";
+            style = "Medium";
           };
           bold = { style = "Bold"; };
           italic = { style = "Italic"; };
           bold_italic = { style = "Bold Italic"; };
           size = 11;
-          };
-          selection.save_to_clipboard = true;
-          # window.opacity = 0.5;
-          import = [ "~/.config/alacritty/catppuccin-mocha.yml" ];
+        };
+        selection.save_to_clipboard = true;
+        # window.opacity = 0.5;
+        import = [ "~/.config/alacritty/catppuccin-mocha.yml" ];
       };
     };
   };
 }
-
-       

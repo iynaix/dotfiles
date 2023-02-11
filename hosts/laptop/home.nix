@@ -11,5 +11,6 @@
       "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
   };
 
+  services.polybar = { script = "polybar laptop &"; };
   # TODO: xmodmap and xcape
 }

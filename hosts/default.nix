@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, home-manager, user, hyprland, ... }:
+{ lib, inputs, nixpkgs, home-manager, user, theme, hyprland, ... }:
 
 let
   system = "x86_64-linux";
@@ -34,7 +34,7 @@ in {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
-          inherit user;
+          inherit user theme;
           host = vmInfo;
         };
         home-manager.users.${user} = {
@@ -60,7 +60,7 @@ in {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
-          inherit user;
+          inherit user theme;
           host = desktopInfo;
         };
         home-manager.users.${user} = {
@@ -86,7 +86,7 @@ in {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
-          inherit user;
+          inherit user theme;
           host = laptopInfo;
         };
         home-manager.users.${user} = {

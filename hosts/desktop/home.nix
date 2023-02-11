@@ -17,5 +17,7 @@
       + " --output '${host.monitor3}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
   };
 
-  # TODO: xmodmap and xcape
+  services.polybar = {
+    script = "polybar primary &; polybar secondary &; polybar tertiary &;";
+  };
 }

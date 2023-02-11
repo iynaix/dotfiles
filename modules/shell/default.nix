@@ -9,6 +9,14 @@
       recursive = true;
     };
 
+    # ranger
+    file.".shortcutrc" = { source = ./ranger/.shortcutrc; };
+
+    file.".config/ranger" = {
+      source = ./ranger/ranger;
+      recursive = true;
+    };
+
     file.".config/tmux" = {
       source = ./tmux;
       recursive = true;
