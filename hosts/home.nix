@@ -7,9 +7,7 @@
     username = "iynaix";
     homeDirectory = "/home/iynaix";
 
-    packages = with pkgs; [
-      cinnamon.nemo
-    ];
+    packages = with pkgs; [ cinnamon.nemo ];
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -23,8 +21,8 @@
   };
 
   # Let Home Manager install and manage itself.
-  programs = { 
-    home-manager.enable = true; 
+  programs = {
+    home-manager.enable = true;
 
     neovim = {
       enable = true;

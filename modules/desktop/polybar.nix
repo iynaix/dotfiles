@@ -59,12 +59,20 @@
       };
       "bar/laptop" = {
         "inherit" = "bar/base";
+        # modules-right = "battery volume mpd date";
         monitor = "${host.monitor1}";
 
         modules-left = "bspwm_mode";
         modules-center = "bspwm";
         modules-right = "wlan volume backlight battery date";
-        # modules-right = "battery volume mpd date";
+      };
+      "bar/vm" = {
+        "inherit" = "bar/base";
+        monitor = "${host.monitor1}";
+
+        modules-left = "bspwm_mode";
+        modules-center = "bspwm";
+        modules-right = "date";
       };
 
       # MODULES
@@ -129,7 +137,7 @@
         label-fullscreen = "";
         label-fullscreen-padding = 4;
         label-floating = "";
-        label-floating-padding = "";
+        label-floating-padding = 4;
         # label-pseudotiled = "P";
         label-locked = "";
         label-locked-padding = 4;

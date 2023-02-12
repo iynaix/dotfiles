@@ -8,8 +8,9 @@
     extraConfigEarly =
       "xrandr --output '${host.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal";
     extraConfig =
-      "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png";
+      "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png;"
+      + "systemctl --user restart polybar";
   };
 
-  services.polybar = { script = "polybar laptop &"; };
+  services.polybar = { script = "polybar vm &"; };
 }

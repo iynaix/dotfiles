@@ -70,36 +70,40 @@ in {
       "Zathura" = { state = "tiled"; };
     };
     # uses one shot rules for startup
-    # startupPrograms = [
-    #   # web browsers
-    #   ''bspc rule -a ${chromeclass} -o desktop="${webdesktop}"''
-    #   "brave --profile-directory=Default"
-    #   ''bspc rule -a ${chromeclass} -o desktop="${webdesktop}" follow=on''
-    #   "brave --incognito"
+    startupPrograms = [
+      # web browsers
+      ''bspc rule -a ${chromeclass} -o desktop="${webdesktop}"''
+      "brave --profile-directory=Default"
+      ''bspc rule -a ${chromeclass} -o desktop="${webdesktop}" follow=on''
+      "brave --incognito"
 
-    #   # nemo
-    #   ''bspc rule -a Nemo:nemo -o desktop="${nemodesktop}"''
-    #   "nemo"
+      # nemo
+      ''bspc rule -a Nemo:nemo -o desktop="${nemodesktop}"''
+      "nemo"
 
-    #   # terminals
-    #   ''bspc rule -a ${termclass}:ranger -o desktop="${filedesktop}"''
-    #   "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
-    #   ''
-    #     bspc rule -a ${termclass}:initialterm -o desktop="${secondarytermdesktop}" follow=on''
-    #   "$TERMINAL --class ${termclass},initialterm"
+      # terminals
+      ''bspc rule -a ${termclass}:ranger -o desktop="${filedesktop}"''
+      "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
+      ''
+        bspc rule -a ${termclass}:initialterm -o desktop="${secondarytermdesktop}" follow=on''
+      "$TERMINAL --class ${termclass},initialterm"
 
-    #   # chat
-    #   "firefox-developer-edition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
+      # chat
+      "firefox-devedition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
 
-    #   # download stuff
-    #   ''bspc rule -a ${termclass}:dltxt -o desktop="${dldesktop}"''
-    #   "$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
-    #   ''bspc rule -a ${termclass}:dlterm -o desktop="${dldesktop}"''
-    #   "$TERMINAL --class ${termclass},dlterm"
+      # download stuff
+      ''bspc rule -a ${termclass}:dltxt -o desktop="${dldesktop}"''
+      "$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
+      ''bspc rule -a ${termclass}:dlterm -o desktop="${dldesktop}"''
+      "$TERMINAL --class ${termclass},dlterm"
 
-    #   # must be the last line in the file
-    #   "bspc subscribe all | bspc-events"
-    # ];
+      # force polybar to start, see:
+      # https://www.reddit.com/r/NixOS/comments/v8ikwq/polybar_doesnt_start_at_launch
+      "systemctl --user restart polybar"
+
+      # must be the last line in the file
+      "bspc subscribe all | bspc-events"
+    ];
   };
 
   services.clipmenu = {
@@ -109,6 +113,7 @@ in {
 
   home = {
     packages = with pkgs; [
+      maim
       picom
       polybar
       rofi

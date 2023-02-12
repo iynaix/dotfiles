@@ -73,6 +73,7 @@
       curl
       git
       exa
+      killall
       neovim
       ntfs3g
       ripgrep
@@ -94,9 +95,21 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  services.xserver.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  # services.xserver.windowManager.bspwm.enable = true;
+  services.xserver = {
+    enable = true;
+    # desktopManager.gnome.enable = true;
+    windowManager.bspwm.enable = true;
+  };
+
+  # setup audio
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+  };
+
+  # keyring for all users
+  services.gnome.gnome-keyring.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
