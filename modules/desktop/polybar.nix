@@ -41,10 +41,8 @@
       };
       "bar/secondary" = {
         "inherit" = "bar/base";
-        monitor = "${if builtins.hasAttr "monitor2" host then
-          host.monitor2
-        else
-          host.monitor1}";
+        monitor =
+          "${if host ? "monitor2" then host.monitor2 else host.monitor1}";
 
         modules-left = "bspwm_mode";
         modules-center = "bspwm";
@@ -52,10 +50,8 @@
       };
       "bar/tertiary" = {
         "inherit" = "bar/base";
-        monitor = "${if builtins.hasAttr "monitor3" host then
-          host.monitor3
-        else
-          host.monitor1}";
+        monitor =
+          "${if host ? "monitor3" then host.monitor3 else host.monitor1}";
 
         modules-left = "bspwm_mode";
         modules-center = "bspwm";

@@ -27,7 +27,7 @@ in {
         "${mod} + {_, shift + }v" = ''"{$TERMINAL -e nvim,code}"'';
 
         # clipboard via clipmenu
-        "${mod} + ctrl + v" = "CM_LAUNCHER=rofi clipmenu";
+        "${mod} + ctrl + v" = "clipmenu";
 
         # file browser
         "${mod} + {_, shift + }e" =
@@ -189,4 +189,3 @@ in {
     };
   };
 }
-

@@ -1,14 +1,14 @@
 { pkgs, ... }: {
-  imports = [
-    ./shell
-    ./programs/alacritty.nix
-    ./programs/mpv.nix
-    ./desktop/gtk.nix
-    ./desktop/bspwm.nix
-  ];
+  imports = [ ./shell ./programs ./desktop/gtk.nix ./desktop/bspwm.nix ];
+
+  services.udiskie = {
+    enable = true;
+    automount = true;
+    notify = true;
+  };
 
   home = {
-    packages = with pkgs; [ brave udiskie vscode zathura ];
+    packages = with pkgs; [ brave vscode zathura ];
 
     file.".config/nvim" = {
       source = ./nvim;
