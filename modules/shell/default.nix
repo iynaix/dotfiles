@@ -4,13 +4,8 @@
   home = {
     packages = with pkgs; [ bat htop lazygit neofetch ranger rar tmux ];
 
-    file.".config/git" = {
-      source = ./gitconfig;
-      recursive = true;
-    };
-
     # ranger
-    file.".shortcutrc" = { source = ./ranger/.shortcutrc; };
+    file.".shortcutrc".source = ./ranger/.shortcutrc;
 
     file.".config/ranger" = {
       source = ./ranger/ranger;
@@ -24,6 +19,26 @@
   };
 
   programs = {
+    git = {
+      enable = true;
+      userName = "Lin Xianyi";
+      userEmail = "iynaix@gmail.com";
+      extraConfig = {
+        init = { defaultBranch = "main"; };
+        "branch.master" = { merge = "refs/heads/master"; };
+        "branch.main" = { merge = "refs/heads/main"; };
+        format = {
+          pretty =
+            "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+        };
+        diff = {
+          tool = "nvimdiff";
+          guitool = "code";
+        };
+        push = { default = "simple"; };
+      };
+      aliases = { reword = "!sh ~/bin/git-reword.sh"; };
+    };
     yt-dlp = {
       enable = true;
       settings = {
