@@ -10,7 +10,7 @@
     };
 
     hyprland = { # Official Hyprland flake
-      url = "github:vaxerski/Hyprland";
+      url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

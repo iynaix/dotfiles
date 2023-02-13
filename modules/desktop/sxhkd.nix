@@ -24,14 +24,14 @@ in {
 
         # browser
         "${mod} + {_, shift + }w" = "brave {_,--incognito}";
-        "${mod} + {_, shift + }v" = ''"{$TERMINAL -e nvim,code}"'';
+        "${mod} + {_, shift + }v" = "{$TERMINAL -e nvim,code}";
 
         # clipboard via clipmenu
         "${mod} + ctrl + v" = "clipmenu";
 
         # file browser
         "${mod} + {_, shift + }e" =
-          ''"{$TERMINAL -e ranger ~/Downloads,nemo ~/Downloads}"'';
+          "{$TERMINAL -e ranger ~/Downloads,nemo ~/Downloads}";
 
         # special keys
         "XF86AudioLowerVolume" = "volume-change 5%-";
