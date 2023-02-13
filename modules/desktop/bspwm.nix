@@ -21,7 +21,8 @@ in {
   imports = [ ./dunst.nix ./polybar.nix ./sxhkd.nix ];
 
   xsession.windowManager.bspwm = {
-    enable = true;
+    # the window manager is enabled in hosts/configuration.nix via
+    # an import of bspwm.nix
     settings = {
       automatic_scheme = "longest_side";
 

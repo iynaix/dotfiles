@@ -21,7 +21,7 @@ in {
     inherit system;
 
     specialArgs = {
-      inherit system;
+      inherit system user;
       host = vmInfo;
     };
 
@@ -47,7 +47,7 @@ in {
     inherit system;
 
     specialArgs = {
-      inherit system;
+      inherit system user;
       host = desktopInfo;
     };
 
@@ -73,7 +73,7 @@ in {
     inherit system;
 
     specialArgs = {
-      inherit system;
+      inherit system user;
       host = laptopInfo;
     };
 

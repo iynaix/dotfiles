@@ -54,11 +54,9 @@
         transparent = "#FF00000";
       };
     in {
-      nixosConfigurations = (
-        # imports ./hosts/default.nix
-        import ./hosts {
-          inherit (nixpkgs) lib;
-          inherit inputs nixpkgs home-manager user theme hyprland;
-        });
+      nixosConfigurations = (import ./hosts {
+        inherit (nixpkgs) lib;
+        inherit inputs nixpkgs home-manager user theme hyprland;
+      });
     };
 }

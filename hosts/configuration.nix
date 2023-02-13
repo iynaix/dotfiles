@@ -95,18 +95,15 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  services.xserver = {
-    enable = true;
-    # desktopManager.gnome.enable = true;
-    windowManager.bspwm.enable = true;
-  };
+  # see bottom of file to enable a desktop environment / window manager
 
-  # setup audio
+  # setup pipewire for audio
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     pulse.enable = true;
   };
+  hardware.pulseaudio.enable = false;
 
   # keyring for all users
   services.gnome.gnome-keyring.enable = true;
@@ -150,4 +147,11 @@
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
+
+  # handle desktop / window manager
+  # NOTE: only one desktop can be enabled at a time!
+  imports = [
+    # ./gnome.nix
+    ./bspwm.nix
+  ];
 }

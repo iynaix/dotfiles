@@ -1,4 +1,4 @@
-{ config, pkgs, host, ... }:
+{ config, pkgs, lib, host, ... }:
 
 {
   xsession.windowManager.bspwm = {
@@ -11,13 +11,13 @@
       "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png;"
       + "systemctl --user restart polybar";
     # just edit nix config on startup
-    startupPrograms = pkgs.lib.mkOverride 0 [
+    startupPrograms = lib.mkForce [
       # vscode on desktop 1
       ''bspc rule -a Code -o desktop="^1"''
       "code"
       # terminal on desktop 2
       ''bspc rule -a Alacritty -o desktop="^2"''
-      "alacritty"
+      "$TERMINAL"
     ];
   };
 
