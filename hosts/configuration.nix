@@ -10,7 +10,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  networking.hostName = "iynaix-${host.hostName}"; # Define your hostname.
+  networking.hostName = "${user}-${host.hostName}"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -45,7 +45,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.iynaix = { ... }: {
+  users.users."${user}" = { ... }: {
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [ "networkmanager" "wheel" ];
@@ -53,7 +53,7 @@
   };
 
   # Enable automatic login for the user.
-  services.getty.autologinUser = "iynaix";
+  services.getty.autologinUser = user;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -105,8 +105,17 @@
   };
   hardware.pulseaudio.enable = false;
 
-  # keyring for all users
+  # enable gnome-keyring for all users
   services.gnome.gnome-keyring.enable = true;
+  # security.pam.services.gdm.enableGnomeKeyring = true;
+
+  # auto login
+  services.xserver.displayManager = {
+    autoLogin = {
+      enable = true;
+      user = user;
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

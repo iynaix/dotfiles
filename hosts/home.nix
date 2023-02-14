@@ -7,7 +7,7 @@
     username = "iynaix";
     homeDirectory = "/home/iynaix";
 
-    packages = with pkgs; [ cinnamon.nemo ];
+    packages = with pkgs; [ cinnamon.nemo gcr ];
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -19,6 +19,12 @@
     # changes in each release.
     stateVersion = "22.11";
   };
+
+  # xsession.profileExtra = ''
+  #   xsetroot -cursor_name left_ptr
+  #   eval $(gnome-keyring-daemon --start)
+  # '';
+  # export SSH_AUTH_SOCK
 
   # Let Home Manager install and manage itself.
   programs = {
