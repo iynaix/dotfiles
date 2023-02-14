@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  imports = [ ./alacritty.nix ./mpv.nix ];
+  imports = [ ./alacritty.nix ../media/mpv.nix ];
 
   home = { packages = with pkgs; [ libreoffice ]; };
 

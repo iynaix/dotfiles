@@ -1,9 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ../../modules/media/download.nix # torrenting stuff
+  ];
 
   # enable clipboard and file sharing
+  services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
   services.spice-webdavd.enable = true;
 
