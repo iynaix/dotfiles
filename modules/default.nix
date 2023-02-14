@@ -25,11 +25,6 @@
       recursive = true;
     };
 
-    file.".config/zathura" = {
-      source = ./zathura;
-      recursive = true;
-    };
-
   };
 
   programs = {
