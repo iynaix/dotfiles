@@ -13,5 +13,21 @@
   };
 
   services.polybar = { script = "polybar laptop &"; };
-  # TODO: xmodmap and xcape
+
+  # for remapping capslock to super
+  home = {
+    file.".xmodmap".text = ''
+      remove Lock = Caps_Lock
+      keysym Caps_Lock = Super_R
+      add Lock = Caps_Lock
+    '';
+
+    packages = with pkgs; [ xorg.xmodmap ];
+  };
+
+  services.xcape = {
+    enable = true;
+    mapExpression = { Super_R = "Escape"; };
+    timeout = 200;
+  };
 }
