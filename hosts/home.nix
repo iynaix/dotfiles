@@ -7,7 +7,11 @@
     username = "iynaix";
     homeDirectory = "/home/iynaix";
 
-    packages = with pkgs; [ cinnamon.nemo gcr ];
+    packages = with pkgs;
+      [
+        # stops errors with copilot login?
+        gcr
+      ];
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

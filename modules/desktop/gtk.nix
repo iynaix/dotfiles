@@ -30,5 +30,5 @@
     };
   };
 
-  home.packages = with pkgs; [ dconf ];
+  home = { packages = with pkgs; [ dconf ]; };
 }
