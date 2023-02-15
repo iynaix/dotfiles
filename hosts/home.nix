@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [ ../modules ];
@@ -20,11 +20,12 @@
     stateVersion = "22.11";
   };
 
-  # xsession.profileExtra = ''
-  #   xsetroot -cursor_name left_ptr
-  #   eval $(gnome-keyring-daemon --start)
-  # '';
-  # export SSH_AUTH_SOCK
+  xsession.profileExtra = lib.concatStringsSep "\n" [
+    # fix the cursor
+    "xsetroot -cursor_name left_ptr"
+    # $(gnome-keyring-daemon --start)
+    # export SSH_AUTH_SOCK
+  ];
 
   # Let Home Manager install and manage itself.
   programs = {
