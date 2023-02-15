@@ -32,7 +32,7 @@
             "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
         };
         diff = {
-          tool = "nvimdiff";
+          tool = "nvim -d";
           guitool = "code";
         };
         push = { default = "simple"; };
