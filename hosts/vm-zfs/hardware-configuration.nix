@@ -4,22 +4,37 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ ];
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   boot.initrd.availableKernelModules =
     [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/NIXOS";
-    fsType = "ext4";
+    device = "zroot/local/root";
+    fsType = "zfs";
   };
 
-  fileSystems."/boot/efi" = {
+  fileSystems."/boot" = {
     device = "/dev/disk/by-label/NIXBOOT";
     fsType = "vfat";
+  };
+
+  fileSystems."/nix" = {
+    device = "zroot/local/nix";
+    fsType = "zfs";
+  };
+
+  fileSystems."/home" = {
+    device = "zroot/safe/home";
+    fsType = "zfs";
+  };
+
+  fileSystems."/persist" = {
+    device = "zroot/safe/persist";
+    fsType = "zfs";
   };
 
   swapDevices = [ ];
@@ -30,7 +45,7 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
-  networking.hostId = "89eaa833"; # required for zfs
+  networking.hostId = "5f43c101"; # required for zfs
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode =

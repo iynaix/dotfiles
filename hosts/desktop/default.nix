@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../zfs.nix
     ./hardware-configuration.nix
     ../../modules/media/download.nix # torrenting stuff
   ];

@@ -27,8 +27,6 @@
   xsession.profileExtra = lib.concatStringsSep "\n" [
     # fix the cursor
     "xsetroot -cursor_name left_ptr"
-    # $(gnome-keyring-daemon --start)
-    # export SSH_AUTH_SOCK
   ];
 
   # Let Home Manager install and manage itself.
