@@ -9,18 +9,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    impermanence = { url = "github:nix-community/impermanence"; };
+
     hyprland = { # Official Hyprland flake
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, hyprland, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, ... }:
     let user = "iynaix";
     in {
       nixosConfigurations = (import ./hosts {
         inherit (nixpkgs) lib;
-        inherit inputs nixpkgs home-manager user hyprland;
+        inherit inputs nixpkgs home-manager user impermanence hyprland;
       });
     };
 }
