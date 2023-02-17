@@ -9,6 +9,7 @@
     };
     "org/nemo/preferences/menu-config" = {
       selection-menu-make-link = true;
+      selection-menu-copy-to = true;
       selection-menu-move-to = true;
     };
   };

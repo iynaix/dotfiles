@@ -1,6 +1,4 @@
-{ config, pkgs, ... }:
-
-{
+{ config, pkgs, ... }: {
   imports = [
     ./hardware-configuration.nix
     ../../modules/impermanence/configuration.nix
@@ -26,5 +24,5 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [ nixfmt ];
+  environment.systemPackages = with pkgs; [ nixfmt rnix-lsp nixpkgs-fmt ];
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, user, host, lib, ... }: {
+{ config, pkgs, user, host, lib, inputs, ... }: {
   # root filesystem is destroyed and rebuilt on every boot:
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
@@ -17,4 +17,13 @@
   users.users.${user}.passwordFile = "/persist/passwords/${user}";
 
   security.sudo.extraConfig = "Defaults lecture=never"; # shut sudo up
+
+  # persist files on root filesystem
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    files = [ "/etc/machine-id" ];
+
+    # persist for home directory
+    users.${user} = { directories = [ ".local/share/keyrings" ]; };
+  };
 }
