@@ -73,7 +73,7 @@ in {
           host = vmInfo;
         };
         home-manager.users.${user} = {
-          imports = [ (import ./home.nix) ] ++ [ (import ./vm/home.nix) ];
+          imports = [ ./home.nix ./vm/home.nix ];
         };
       }
     ];
@@ -99,7 +99,7 @@ in {
           host = vmInfo;
         };
         home-manager.users.${user} = {
-          imports = [ (import ./home.nix) ] ++ [ (import ./vm-zfs/home.nix) ];
+          imports = [ ./home.nix ./vm-zfs/home.nix ];
         };
       }
     ];
@@ -125,7 +125,7 @@ in {
           host = desktopInfo;
         };
         home-manager.users.${user} = {
-          imports = [ (import ./home.nix) ] ++ [ (import ./desktop/home.nix) ];
+          imports = [ ./home.nix ./desktop/home.nix ];
         };
       }
     ];
@@ -151,7 +151,7 @@ in {
           host = laptopInfo;
         };
         home-manager.users.${user} = {
-          imports = [ (import ./home.nix) ] ++ [ (import ./laptop/home.nix) ];
+          imports = [ import ./home.nix ./laptop/home.nix ];
         };
       }
     ];
