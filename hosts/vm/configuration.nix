@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/media/download.nix # torrenting stuff
+    ../../modules/impermanence/configuration.nix
   ];
 
   # enable clipboard and file sharing

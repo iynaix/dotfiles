@@ -62,7 +62,7 @@ in {
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
-      ./vm # vm specific configuration, including hardware
+      ./vm/configuration.nix # vm specific configuration, including hardware
 
       home-manager.nixosModules.home-manager
       {
@@ -88,7 +88,7 @@ in {
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
-      ./desktop # desktop specific configuration, including hardware
+      ./desktop/configuration.nix # desktop specific configuration, including hardware
 
       home-manager.nixosModules.home-manager
       {
@@ -114,7 +114,7 @@ in {
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
-      ./laptop # desktop specific configuration, including hardware
+      ./laptop/configuration.nix # desktop specific configuration, including hardware
 
       home-manager.nixosModules.home-manager
       {
