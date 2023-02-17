@@ -1,12 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/media/download.nix # torrenting stuff
   ];
-
-  boot.loader.efi.efiSysMountPoint = lib.mkForce "/boot/efi";
 
   # enable clipboard and file sharing
   services.qemuGuest.enable = true;

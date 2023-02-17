@@ -78,32 +78,6 @@ in {
       }
     ];
   };
-  vm-zfs = lib.nixosSystem {
-    inherit system;
-
-    specialArgs = {
-      inherit system user;
-      host = vmInfo;
-    };
-
-    modules = [
-      ./configuration.nix # shared nixos configuration across all hosts
-      ./vm-zfs # vm specific configuration, including hardware
-
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit user theme;
-          host = vmInfo;
-        };
-        home-manager.users.${user} = {
-          imports = [ ./home.nix ./vm-zfs/home.nix ];
-        };
-      }
-    ];
-  };
   desktop = lib.nixosSystem {
     inherit system;
 
