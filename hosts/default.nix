@@ -63,6 +63,7 @@ in {
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./vm/configuration.nix # vm specific configuration, including hardware
+      inputs.impermanence.nixosModules.impermanence # impermanence module
 
       home-manager.nixosModules.home-manager
       {
@@ -89,6 +90,7 @@ in {
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./desktop/configuration.nix # desktop specific configuration, including hardware
+      inputs.impermanence.nixosModules.impermanence # impermanence module
 
       home-manager.nixosModules.home-manager
       {
@@ -115,6 +117,7 @@ in {
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./laptop/configuration.nix # desktop specific configuration, including hardware
+      inputs.impermanence.nixosModules.impermanence # impermanence module
 
       home-manager.nixosModules.home-manager
       {

@@ -99,8 +99,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # see bottom of file to enable a desktop environment / window manager
-
   # setup pipewire for audio
   services.pipewire = {
     enable = true;
