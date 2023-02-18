@@ -54,7 +54,7 @@
 
       # persist for home directory
       users.${user} = {
-        files = [ ".local/share/keyrings" ] ++ config.iynaix.persist.home.files;
+        files = config.iynaix.persist.home.files;
         directories = config.iynaix.persist.home.directories;
       };
     };

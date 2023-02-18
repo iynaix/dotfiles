@@ -1,301 +1,305 @@
-{ pkgs, host, theme, ... }: {
-  services.polybar = {
-    enable = true;
-    config = let monitor1 = host.monitor2;
-    in {
-      # BARS
-      "bar/base" = {
-        width = "100%";
-        height = 30;
-        offset-x = 0;
-        offset-y = 0;
+{ pkgs, host, user, theme, ... }: {
+  home-manager.users.${user} = {
+    services.polybar = {
+      enable = true;
+      config =
+        let monitor1 = host.monitor2;
+        in
+        {
+          # BARS
+          "bar/base" = {
+            width = "100%";
+            height = 30;
+            offset-x = 0;
+            offset-y = 0;
 
-        background = "${theme.base}";
-        foreground = "${theme.text}";
+            background = "${theme.base}";
+            foreground = "${theme.text}";
 
-        underline-size = 2;
-        underline-color = "${theme.text}";
+            underline-size = 2;
+            underline-color = "${theme.text}";
 
-        padding-left = 0;
-        padding-right = 0;
-        module-margin-left = 0;
-        module-margin-right = 0;
+            padding-left = 0;
+            padding-right = 0;
+            module-margin-left = 0;
+            module-margin-right = 0;
 
-        font-0 = "Noto Sans:size=10;0";
-        font-1 = "JetBrainsMono Nerd Font:size=10;1";
+            font-0 = "Noto Sans:size=10;0";
+            font-1 = "JetBrainsMono Nerd Font:size=10;1";
 
-        # tray-position = "right";
-        # tray-padding = 2;
-        # tray-background = "#66333333";
+            # tray-position = "right";
+            # tray-padding = 2;
+            # tray-background = "#66333333";
 
-        wm-restack = "bspwm";
-      };
-      "bar/primary" = {
-        "inherit" = "bar/base";
-        monitor = "${host.monitor1}";
+            wm-restack = "bspwm";
+          };
+          "bar/primary" = {
+            "inherit" = "bar/base";
+            monitor = "${host.monitor1}";
 
-        modules-left = "bspwm_mode";
-        modules-center = "bspwm";
-        # modules-right = "battery volume mpd date";
-        modules-right = "lan volume date";
-      };
-      "bar/secondary" = {
-        "inherit" = "bar/base";
-        monitor =
-          "${if host ? "monitor2" then host.monitor2 else host.monitor1}";
+            modules-left = "bspwm_mode";
+            modules-center = "bspwm";
+            # modules-right = "battery volume mpd date";
+            modules-right = "lan volume date";
+          };
+          "bar/secondary" = {
+            "inherit" = "bar/base";
+            monitor =
+              "${if host ? "monitor2" then host.monitor2 else host.monitor1}";
 
-        modules-left = "bspwm_mode";
-        modules-center = "bspwm";
-        modules-right = "date";
-      };
-      "bar/tertiary" = {
-        "inherit" = "bar/base";
-        monitor =
-          "${if host ? "monitor3" then host.monitor3 else host.monitor1}";
+            modules-left = "bspwm_mode";
+            modules-center = "bspwm";
+            modules-right = "date";
+          };
+          "bar/tertiary" = {
+            "inherit" = "bar/base";
+            monitor =
+              "${if host ? "monitor3" then host.monitor3 else host.monitor1}";
 
-        modules-left = "bspwm_mode";
-        modules-center = "bspwm";
-        modules-right = "date";
-      };
-      "bar/laptop" = {
-        "inherit" = "bar/base";
-        # modules-right = "battery volume mpd date";
-        monitor = "${host.monitor1}";
+            modules-left = "bspwm_mode";
+            modules-center = "bspwm";
+            modules-right = "date";
+          };
+          "bar/laptop" = {
+            "inherit" = "bar/base";
+            # modules-right = "battery volume mpd date";
+            monitor = "${host.monitor1}";
 
-        modules-left = "bspwm_mode";
-        modules-center = "bspwm";
-        modules-right = "wlan volume backlight battery date";
-      };
-      "bar/vm" = {
-        "inherit" = "bar/base";
-        monitor = "${host.monitor1}";
+            modules-left = "bspwm_mode";
+            modules-center = "bspwm";
+            modules-right = "wlan volume backlight battery date";
+          };
+          "bar/vm" = {
+            "inherit" = "bar/base";
+            monitor = "${host.monitor1}";
 
-        modules-left = "bspwm_mode";
-        modules-center = "bspwm";
-        modules-right = "date";
-      };
+            modules-left = "bspwm_mode";
+            modules-center = "bspwm";
+            modules-right = "date";
+          };
 
-      # MODULES
+          # MODULES
 
-      "module/title" = { type = "internal/xwindow"; };
-      "module/bspwm" = {
-        type = "internal/bspwm";
+          "module/title" = { type = "internal/xwindow"; };
+          "module/bspwm" = {
+            type = "internal/bspwm";
 
-        pin-workspaces = true;
-        enable-click = true;
-        enable-scroll = false;
+            pin-workspaces = true;
+            enable-click = true;
+            enable-scroll = false;
 
-        # ws-icon-0 = "1;";
-        # ws-icon-1 = "2;";
-        # ws-icon-2 = "3;";
-        # ws-icon-3 = "4;";
-        # ws-icon-4 = "5;";
-        # ws-icon-5 = "6;";
-        # ws-icon-6 = "7;";
-        # ws-icon-7 = "8;";
-        # ws-icon-8 = "9;";
-        # ws-icon-9 = "10;";
+            # ws-icon-0 = "1;";
+            # ws-icon-1 = "2;";
+            # ws-icon-2 = "3;";
+            # ws-icon-3 = "4;";
+            # ws-icon-4 = "5;";
+            # ws-icon-5 = "6;";
+            # ws-icon-6 = "7;";
+            # ws-icon-7 = "8;";
+            # ws-icon-8 = "9;";
+            # ws-icon-9 = "10;";
 
-        # ws-icon-0 = "1;";
-        # ws-icon-1 = "2;";
-        # ws-icon-2 = "3;";
-        # ws-icon-3 = "4;";
-        # ws-icon-4 = "5;";
-        # ws-icon-5 = "6;";
-        # ws-icon-6 = "7;";
-        # ws-icon-7 = "8;";
-        # ws-icon-8 = "9;";
-        # ws-icon-9 = "10;";
+            # ws-icon-0 = "1;";
+            # ws-icon-1 = "2;";
+            # ws-icon-2 = "3;";
+            # ws-icon-3 = "4;";
+            # ws-icon-4 = "5;";
+            # ws-icon-5 = "6;";
+            # ws-icon-6 = "7;";
+            # ws-icon-7 = "8;";
+            # ws-icon-8 = "9;";
+            # ws-icon-9 = "10;";
 
-        format = "<label-state>";
+            format = "<label-state>";
 
-        # label-focused = "";
-        label-focused-background = "${theme.surface2}";
-        label-focused-underline = "${theme.surface2}";
-        label-focused-padding = 4;
+            # label-focused = "";
+            label-focused-background = "${theme.surface2}";
+            label-focused-underline = "${theme.surface2}";
+            label-focused-padding = 4;
 
-        # label-occupied = "";
-        label-occupied-padding = 4;
+            # label-occupied = "";
+            label-occupied-padding = 4;
 
-        # label-urgent = "%icon%";
-        label-urgent-background = "${theme.pink}";
-        label-urgent-underline = "${theme.pink}";
-        label-urgent-padding = 4;
+            # label-urgent = "%icon%";
+            label-urgent-background = "${theme.pink}";
+            label-urgent-underline = "${theme.pink}";
+            label-urgent-padding = 4;
 
-        # label-empty = "%icon%";
-        label-empty-foreground = "${theme.surface1}";
-        label-empty-padding = 4;
-      };
+            # label-empty = "%icon%";
+            label-empty-foreground = "${theme.surface1}";
+            label-empty-padding = 4;
+          };
 
-      "module/bspwm_mode" = {
-        type = "internal/bspwm";
+          "module/bspwm_mode" = {
+            type = "internal/bspwm";
 
-        format = "<label-mode>";
+            format = "<label-mode>";
 
-        label-monocle = "";
-        label-monocle-padding = 4;
-        label-fullscreen = "";
-        label-fullscreen-padding = 4;
-        label-floating = "";
-        label-floating-padding = 4;
-        # label-pseudotiled = "P";
-        label-locked = "";
-        label-locked-padding = 4;
-        label-locked-foreground = "#bd2c40";
-        label-sticky = "";
-        label-sticky-padding = 4;
-        label-sticky-foreground = "#fba922";
-        # label-private = "";
-        # label-private-foreground = "#bd2c40";
-        # label-marked = "M";
-      };
-      "module/date" = {
-        type = "internal/date";
+            label-monocle = "";
+            label-monocle-padding = 4;
+            label-fullscreen = "";
+            label-fullscreen-padding = 4;
+            label-floating = "";
+            label-floating-padding = 4;
+            # label-pseudotiled = "P";
+            label-locked = "";
+            label-locked-padding = 4;
+            label-locked-foreground = "#bd2c40";
+            label-sticky = "";
+            label-sticky-padding = 4;
+            label-sticky-foreground = "#fba922";
+            # label-private = "";
+            # label-private-foreground = "#bd2c40";
+            # label-marked = "M";
+          };
+          "module/date" = {
+            type = "internal/date";
 
-        # Seconds to sleep between updates
-        interval = 1;
+            # Seconds to sleep between updates
+            interval = 1;
 
-        # See "man date" for details on how to format the date string
-        # NOTE: if you want to use syntax tags here you need to use %%{...}
-        date = "%a %b %d";
+            # See "man date" for details on how to format the date string
+            # NOTE: if you want to use syntax tags here you need to use %%{...}
+            date = "%a %b %d";
 
-        # Optional time format
-        time = "%H:%M";
+            # Optional time format
+            time = "%H:%M";
 
-        # if `date-alt` or `time-alt` is defined, clicking
-        # the module will toggle between formats
-        # date-alt = "%A, %d %B %Y";
-        time-alt = "%a %b %d";
+            # if `date-alt` or `time-alt` is defined, clicking
+            # the module will toggle between formats
+            # date-alt = "%A, %d %B %Y";
+            time-alt = "%a %b %d";
 
-        # label = "%date% %time%";
-        label = "%time%";
-        format = "  <label>";
-        format-padding = 3;
-      };
-      "module/battery" = {
-        type = "internal/battery";
+            # label = "%date% %time%";
+            label = "%time%";
+            format = "  <label>";
+            format-padding = 3;
+          };
+          "module/battery" = {
+            type = "internal/battery";
 
-        full-at = 99;
+            full-at = 99;
 
-        battery = "BAT0";
-        adapter = "AC0";
+            battery = "BAT0";
+            adapter = "AC0";
 
-        poll-interval = 5;
+            poll-interval = 5;
 
-        format-charging = "<animation-charging>  <label-charging>";
-        format-discharging = "<ramp-capacity>  <label-discharging>";
-        format-full = "<ramp-capacity>  <label-full>";
-        label-charging = "%percentage%";
-        label-discharging = "%percentage%";
-        label-full = "%percentage%";
-        format-charging-padding = 3;
-        format-discharging-padding = 3;
-        format-full-padding = 3;
+            format-charging = "<animation-charging>  <label-charging>";
+            format-discharging = "<ramp-capacity>  <label-discharging>";
+            format-full = "<ramp-capacity>  <label-full>";
+            label-charging = "%percentage%";
+            label-discharging = "%percentage%";
+            label-full = "%percentage%";
+            format-charging-padding = 3;
+            format-discharging-padding = 3;
+            format-full-padding = 3;
 
-        ramp-capacity-0 = "";
-        ramp-capacity-1 = "";
-        ramp-capacity-2 = "";
-        ramp-capacity-3 = "";
-        ramp-capacity-4 = "";
+            ramp-capacity-0 = "";
+            ramp-capacity-1 = "";
+            ramp-capacity-2 = "";
+            ramp-capacity-3 = "";
+            ramp-capacity-4 = "";
 
-        animation-charging-0 = "";
-        animation-charging-1 = "";
-        animation-charging-2 = "";
-        animation-charging-3 = "";
-        animation-charging-4 = "";
-        animation-charging-framerate = 750;
-      };
-      "module/backlight" = {
-        type = "internal/backlight";
+            animation-charging-0 = "";
+            animation-charging-1 = "";
+            animation-charging-2 = "";
+            animation-charging-3 = "";
+            animation-charging-4 = "";
+            animation-charging-framerate = 750;
+          };
+          "module/backlight" = {
+            type = "internal/backlight";
 
-        card = "intel_backlight";
-        enable-scroll = true;
+            card = "intel_backlight";
+            enable-scroll = true;
 
-        format = "<ramp> <label>";
-        label = "%percentage%";
+            format = "<ramp> <label>";
+            label = "%percentage%";
 
-        ramp-0 = "🌕";
-        ramp-1 = "🌔";
-        ramp-2 = "🌓";
-        ramp-3 = "🌒";
-        ramp-4 = "🌑";
-      };
-      "module/volume" = {
-        type = "internal/pulseaudio";
+            ramp-0 = "🌕";
+            ramp-1 = "🌔";
+            ramp-2 = "🌓";
+            ramp-3 = "🌒";
+            ramp-4 = "🌑";
+          };
+          "module/volume" = {
+            type = "internal/pulseaudio";
 
-        format-volume = "<ramp-volume>  <label-volume>";
-        format-muted = "<label-muted>  0";
-        label-volume = "%percentage%";
-        label-muted = "";
-        format-volume-padding = 3;
-        format-muted-padding = 3;
+            format-volume = "<ramp-volume>  <label-volume>";
+            format-muted = "<label-muted>  0";
+            label-volume = "%percentage%";
+            label-muted = "";
+            format-volume-padding = 3;
+            format-muted-padding = 3;
 
-        ramp-volume-0 = "";
-        ramp-volume-1 = "";
-        ramp-volume-2 = "";
-        ramp-headphones-0 = "";
-      };
-      "module/mpd" = {
-        type = "internal/mpd";
+            ramp-volume-0 = "";
+            ramp-volume-1 = "";
+            ramp-volume-2 = "";
+            ramp-headphones-0 = "";
+          };
+          "module/mpd" = {
+            type = "internal/mpd";
 
-        host = "127.0.0.1";
-        port = 6600;
-        password = "";
+            host = "127.0.0.1";
+            port = 6600;
+            password = "";
 
-        # Seconds to sleep between progressbar/song timer sync
-        # Default: 1
-        interval = 2;
+            # Seconds to sleep between progressbar/song timer sync
+            # Default: 1
+            interval = 2;
 
-        # Available tags:
-        #   <label-song> (default)
-        #   <label-time>
-        #   <bar-progress>
-        #   <toggle> - gets replaced with <icon-(pause|play)>
-        #   <toggle-stop> - gets replaced with <icon-(stop|play)>
-        #   <icon-random>
-        #   <icon-repeat>
-        #   <icon-repeatone>
-        #   <icon-prev>
-        #   <icon-stop>
-        #   <icon-play>
-        #   <icon-pause>
-        #   <icon-next>
-        #   <icon-seekb>
-        #   <icon-seekf>
-        format-online = " <label-song>";
+            # Available tags:
+            #   <label-song> (default)
+            #   <label-time>
+            #   <bar-progress>
+            #   <toggle> - gets replaced with <icon-(pause|play)>
+            #   <toggle-stop> - gets replaced with <icon-(stop|play)>
+            #   <icon-random>
+            #   <icon-repeat>
+            #   <icon-repeatone>
+            #   <icon-prev>
+            #   <icon-stop>
+            #   <icon-play>
+            #   <icon-pause>
+            #   <icon-next>
+            #   <icon-seekb>
+            #   <icon-seekf>
+            format-online = " <label-song>";
 
-        # Available tokens:
-        #   %artist%
-        #   %album%
-        #   %date%
-        #   %title%
-        # Default: %artist% - %title%
-        label-song = "%title%";
-        format-online-padding = 3;
-      };
-      "module/lan" = {
-        type = "internal/network";
+            # Available tokens:
+            #   %artist%
+            #   %album%
+            #   %date%
+            #   %title%
+            # Default: %artist% - %title%
+            label-song = "%title%";
+            format-online-padding = 3;
+          };
+          "module/lan" = {
+            type = "internal/network";
 
-        interface = "enp0s31f6";
+            interface = "enp0s31f6";
 
-        interval = 1;
+            interval = 1;
 
-        label-connected = "";
-        label-disconnected = "";
-        label-disconnected-foreground = "${theme.red}";
-      };
+            label-connected = "";
+            label-disconnected = "";
+            label-disconnected-foreground = "${theme.red}";
+          };
 
-      "module/wlan" = {
-        type = "internal/network";
+          "module/wlan" = {
+            type = "internal/network";
 
-        interface = "wlp2s0";
+            interface = "wlp2s0";
 
-        interval = 1;
+            interval = 1;
 
-        label-connected = "%{A:xst -e nmtui&:}直  %essid%%{A}";
-        label-disconnected = "%{A:xst -e nmtui&:}睊%{A}";
-        label-disconnected-foreground = "${theme.red}";
-      };
+            label-connected = "%{A:xst -e nmtui&:}直  %essid%%{A}";
+            label-disconnected = "%{A:xst -e nmtui&:}睊%{A}";
+            label-disconnected-foreground = "${theme.red}";
+          };
+        };
     };
   };
 }

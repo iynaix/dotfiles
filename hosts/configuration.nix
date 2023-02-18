@@ -107,10 +107,6 @@
   };
   hardware.pulseaudio.enable = false;
 
-  # enable gnome-keyring for all users
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.gdm.enableGnomeKeyring = true;
-
   # auto login
   services.xserver.displayManager = {
     autoLogin = {
@@ -149,7 +145,8 @@
     settings = {
       auto-optimise-store = true; # Optimise syslinks
     };
-    gc = { # Automatic garbage collection
+    gc = {
+      # Automatic garbage collection
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 2d";
@@ -162,7 +159,8 @@
   # handle desktop / window manager
   # NOTE: only one desktop can be enabled at a time!
   imports = [
-    # ./gnome.nix
-    ./bspwm.nix
+    ../modules/impermanence.nix
+    ../modules/desktop/bspwm.nix
+    # ../modules/desktop/gnome3.nix
   ];
 }

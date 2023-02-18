@@ -1,7 +1,6 @@
 { lib, inputs, nixpkgs, home-manager, user, hyprland, ... }:
 
 let
-  system = "x86_64-linux";
   # cappuccin mocha
   theme = {
     base = "#1e1e2e";
@@ -37,43 +36,32 @@ let
 
     transparent = "#FF00000";
   };
-  createSystem = { hostName, hostInfo }: lib.nixosSystem {
-    inherit system;
+  createHost = { hostName, hostInfo }: lib.nixosSystem {
+    system = "x86_64-linux";
 
     specialArgs = {
-      inherit system user;
+      inherit user theme;
       host = hostInfo;
     };
 
     modules = [
-      inputs.impermanence.nixosModules.impermanence
       ./configuration.nix # shared nixos configuration across all hosts
-      ./${hostName}/configuration.nix # vm specific configuration, including hardware
-
+      ./home.nix # shared configuration for home-manager across all hosts
+      ./${hostName} # vm specific configuration, including hardware
       home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit user theme;
-          host = hostInfo;
-        };
-        home-manager.users.${user} = {
-          imports = [ ./home.nix ./${hostName}/home.nix ];
-        };
-      }
+      inputs.impermanence.nixosModules.impermanence
     ];
   };
 in
 {
-  vm = createSystem {
+  vm = createHost {
     hostName = "vm";
     hostInfo = {
       hostName = "vm";
       monitor1 = "Virtual-1";
     };
   };
-  desktop = createSystem {
+  desktop = createHost {
     hostName = "desktop";
     hostInfo = {
       hostName = "desktop";
@@ -82,7 +70,7 @@ in
       monitor3 = "HDMI-0";
     };
   };
-  laptop = createSystem {
+  laptop = createHost {
     hostName = "laptop";
     hostInfo = {
       hostName = "laptop";
