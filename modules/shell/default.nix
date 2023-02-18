@@ -3,7 +3,7 @@
 
   home-manager.users.${user} = {
     home = {
-      packages = with pkgs; [ bat htop lazygit neofetch ranger rar tmux ];
+      packages = with pkgs; [ bat bottom htop lazygit neofetch ranger rar tmux ];
 
       # ranger
       file.".shortcutrc".source = ./ranger/.shortcutrc;

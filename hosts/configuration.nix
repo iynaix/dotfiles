@@ -6,12 +6,9 @@
 
 {
   # handle desktop / window manager
-  # NOTE: only one desktop can be enabled at a time!
   imports = [
     ../modules/zfs.nix
     ../modules/impermanence.nix
-    ../modules/desktop/bspwm.nix
-    # ../modules/desktop/gnome3.nix
   ];
 
   # Bootloader.

@@ -1,5 +1,12 @@
 { pkgs, user, ... }: {
-  imports = [ ./shell ./programs ./desktop/gtk.nix ./desktop/bspwm.nix ];
+  imports = [
+    ./shell
+    ./programs
+    ./desktop/gtk.nix
+    # bspwm are mutually exclusive via a config option
+    ./desktop/bspwm.nix
+    ./desktop/gnome3.nix
+  ];
 
   home-manager.users.${user} = {
     services.udiskie = {

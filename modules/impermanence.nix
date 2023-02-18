@@ -1,4 +1,6 @@
-{ config, pkgs, user, host, lib, inputs, ... }: {
+{ config, pkgs, user, host, lib, inputs, ... }:
+let cfg = config.iynaix.persist; in
+{
   imports = [ ./tmpfs.nix ];
 
   options.iynaix.persist = {
@@ -29,18 +31,11 @@
   };
 
   config = {
-    # root filesystem is destroyed and rebuilt on every boot:
+    # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
-    # boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
-    #   "zfs rollback -r zroot/local/root@blank"
-    #   # impermanent home
-    #   # "zfs rollback -r zroot/local/home@blank"
-    # ]);
-
-    # impermanent root / home
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" (
-      lib.optional (!config.iynaix.persist.tmpfs.root) "zfs rollback -r zroot/local/root@blank" ++
-      lib.optional (!config.iynaix.persist.tmpfs.home) "zfs rollback -r zroot/local/home@blank"
+      lib.optional (!cfg.tmpfs.root) "zfs rollback -r zroot/local/root@blank" ++
+      lib.optional (!cfg.tmpfs.home) "zfs rollback -r zroot/local/home@blank"
     ));
 
 
@@ -58,13 +53,13 @@
     # persist files on root filesystem
     environment.persistence."/persist" = {
       hideMounts = true;
-      files = [ "/etc/machine-id" ] ++ config.iynaix.persist.root.files;
-      directories = config.iynaix.persist.root.directories;
+      files = [ "/etc/machine-id" ] ++ cfg.root.files;
+      directories = cfg.root.directories;
 
       # persist for home directory
       users.${user} = {
-        files = config.iynaix.persist.home.files;
-        directories = config.iynaix.persist.home.directories;
+        files = cfg.home.files;
+        directories = cfg.home.directories;
       };
     };
   };
