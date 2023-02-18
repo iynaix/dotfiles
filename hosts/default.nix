@@ -2,20 +2,6 @@
 
 let
   system = "x86_64-linux";
-  vmInfo = {
-    hostName = "vm";
-    monitor1 = "Virtual-1";
-  };
-  desktopInfo = {
-    hostName = "desktop";
-    monitor1 = "DP-2";
-    monitor2 = "DP-0.8";
-    monitor3 = "HDMI-0";
-  };
-  laptopInfo = {
-    hostName = "laptop";
-    monitor1 = "eDP-1";
-  };
   # cappuccin mocha
   theme = {
     base = "#1e1e2e";
@@ -51,19 +37,18 @@ let
 
     transparent = "#FF00000";
   };
-in {
-  vm = lib.nixosSystem {
+  createSystem = { hostName, hostInfo }: lib.nixosSystem {
     inherit system;
 
     specialArgs = {
       inherit system user;
-      host = vmInfo;
+      host = hostInfo;
     };
 
     modules = [
-      ./configuration.nix # shared nixos configuration across all hosts
-      ./vm/configuration.nix # vm specific configuration, including hardware
       inputs.impermanence.nixosModules.impermanence
+      ./configuration.nix # shared nixos configuration across all hosts
+      ./${hostName}/configuration.nix # vm specific configuration, including hardware
 
       home-manager.nixosModules.home-manager
       {
@@ -71,66 +56,37 @@ in {
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
           inherit user theme;
-          host = vmInfo;
+          host = hostInfo;
         };
         home-manager.users.${user} = {
-          imports = [ ./home.nix ./vm/home.nix ];
+          imports = [ ./home.nix ./${hostName}/home.nix ];
         };
       }
     ];
   };
-  desktop = lib.nixosSystem {
-    inherit system;
-
-    specialArgs = {
-      inherit system user;
-      host = desktopInfo;
+in
+{
+  vm = createSystem {
+    hostName = "vm";
+    hostInfo = {
+      hostName = "vm";
+      monitor1 = "Virtual-1";
     };
-
-    modules = [
-      ./configuration.nix # shared nixos configuration across all hosts
-      ./desktop/configuration.nix # desktop specific configuration, including hardware
-      inputs.impermanence.nixosModules.impermanence
-
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit user theme;
-          host = desktopInfo;
-        };
-        home-manager.users.${user} = {
-          imports = [ ./home.nix ./desktop/home.nix ];
-        };
-      }
-    ];
   };
-  laptop = lib.nixosSystem {
-    inherit system;
-
-    specialArgs = {
-      inherit system user;
-      host = laptopInfo;
+  desktop = createSystem {
+    hostName = "desktop";
+    hostInfo = {
+      hostName = "desktop";
+      monitor1 = "DP-2";
+      monitor2 = "DP-0.8";
+      monitor3 = "HDMI-0";
     };
-
-    modules = [
-      ./configuration.nix # shared nixos configuration across all hosts
-      ./laptop/configuration.nix # desktop specific configuration, including hardware
-      inputs.impermanence.nixosModules.impermanence
-
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit user theme;
-          host = laptopInfo;
-        };
-        home-manager.users.${user} = {
-          imports = [ ./home.nix ./laptop/home.nix ];
-        };
-      }
-    ];
+  };
+  laptop = createSystem {
+    hostName = "laptop";
+    hostInfo = {
+      hostName = "laptop";
+      monitor1 = "eDP-1";
+    };
   };
 }

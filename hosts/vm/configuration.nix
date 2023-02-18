@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/impermanence/configuration.nix
+    ../../modules/persist/configuration.nix
   ];
 
   # enable clipboard and file sharing

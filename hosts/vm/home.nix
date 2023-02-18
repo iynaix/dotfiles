@@ -6,7 +6,7 @@
       "${host.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
     };
     extraConfigEarly = lib.concatStringsSep "\n" [
-      "xrandr --output '${host.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal"
+      "xrandr --output '${host.monitor1}' --mode 1920x1200 --pos 0x0 --rotate normal"
     ];
     extraConfig = lib.concatStringsSep "\n" [
       "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png"
