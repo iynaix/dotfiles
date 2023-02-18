@@ -1,4 +1,6 @@
 { config, pkgs, user, host, lib, inputs, ... }: {
+  imports = [ ./tmpfs.nix ];
+
   options.iynaix.persist = {
     root = {
       directories = lib.mkOption {
@@ -29,11 +31,18 @@
   config = {
     # root filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
-    boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
-      "zfs rollback -r zroot/local/root@blank"
-      # impermanent home
-      # "zfs rollback -r zroot/safe/home@blank"
-    ]);
+    # boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
+    #   "zfs rollback -r zroot/local/root@blank"
+    #   # impermanent home
+    #   # "zfs rollback -r zroot/local/home@blank"
+    # ]);
+
+    # impermanent root / home
+    boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" (
+      lib.optional (!config.iynaix.persist.tmpfs.root) "zfs rollback -r zroot/local/root@blank" ++
+      lib.optional (!config.iynaix.persist.tmpfs.home) "zfs rollback -r zroot/local/home@blank"
+    ));
+
 
     fileSystems."/persist".neededForBoot = true;
 
