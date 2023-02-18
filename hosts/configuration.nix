@@ -5,14 +5,19 @@
 { config, pkgs, user, host, ... }:
 
 {
+  # handle desktop / window manager
+  # NOTE: only one desktop can be enabled at a time!
+  imports = [
+    ../modules/zfs.nix
+    ../modules/impermanence.nix
+    ../modules/desktop/bspwm.nix
+    # ../modules/desktop/gnome3.nix
+  ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
-
-  # booting with zfs
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.devNodes = "/dev/disk/by-partuuid";
 
   networking.hostName = "${user}-${host.hostName}"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -155,12 +160,4 @@
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
-
-  # handle desktop / window manager
-  # NOTE: only one desktop can be enabled at a time!
-  imports = [
-    ../modules/impermanence.nix
-    ../modules/desktop/bspwm.nix
-    # ../modules/desktop/gnome3.nix
-  ];
 }

@@ -31,10 +31,8 @@
       extraConfigEarly = lib.concatStringsSep "\n" [
         "xrandr --output '${host.monitor1}' --mode 1920x1200 --pos 0x0 --rotate normal"
       ];
-      extraConfig = lib.concatStringsSep "\n" [
-        "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png"
-        "systemctl --user restart polybar"
-      ];
+      extraConfig = "xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png";
+
       # just edit nix config on startup
       startupPrograms = lib.mkForce [
         # vscode on desktop 1

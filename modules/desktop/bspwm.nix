@@ -83,6 +83,8 @@ in
         # fix the cursor
         "xsetroot -cursor_name left_ptr"
       ];
+      # restart polybar after bspwm has initialized
+      extraConfig = lib.mkAfter "systemctl --user restart polybar";
 
       # uses one shot rules for startup
       startupPrograms = [

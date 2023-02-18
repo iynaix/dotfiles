@@ -26,7 +26,6 @@
         ("xwallpaper --output '${host.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png"
           + " --output '${host.monitor2}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-2560.png"
           + " --output '${host.monitor3}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png")
-        "systemctl --user restart polybar"
       ];
     };
 
