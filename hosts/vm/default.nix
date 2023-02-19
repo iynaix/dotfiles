@@ -7,6 +7,8 @@ let displayCfg = config.iynaix.displays; in
 
   config = {
     iynaix.displays.monitor1 = "Virtual-1";
+    # iynaix.persist.tmpfs.root = true;
+    # iynaix.persist.tmpfs.home = true;
 
     # enable clipboard and file sharing
     services.qemuGuest.enable = true;

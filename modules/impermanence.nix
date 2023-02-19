@@ -6,24 +6,20 @@ let cfg = config.iynaix.persist; in
   options.iynaix.persist = {
     root = {
       directories = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Directories to persist in root filesystem";
       };
       files = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Files to persist in root filesystem";
       };
     };
     home = {
       directories = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Directories to persist in home directory";
       };
       files = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Files to persist in home directory";
       };
@@ -59,8 +55,18 @@ let cfg = config.iynaix.persist; in
       # persist for home directory
       users.${user} = {
         files = cfg.home.files;
-        directories = cfg.home.directories;
+        directories = [
+          # TODO: reference projects on another dataset?
+          "projects"
+          ".config/systemd"
+        ] ++ cfg.home.directories;
       };
     };
+
+    # .Xauthority must be handled specially via a symlink as the
+    # bind mount is owned by root
+    systemd.tmpfiles.rules = [
+      "L+ /home/${user}/.Xauthority - ${user} users - /persist/home/${user}/.Xauthority"
+    ];
   };
 }

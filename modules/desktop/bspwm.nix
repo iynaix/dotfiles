@@ -30,14 +30,17 @@ in
   options.iynaix.displays = {
     monitor1 = lib.mkOption {
       type = lib.types.str;
+      default = "";
       description = "The name of the primary display, e.g. eDP-1";
     };
     monitor2 = lib.mkOption {
       type = lib.types.str;
+      default = "";
       description = "The name of the secondary display, e.g. eDP-1";
     };
     monitor3 = lib.mkOption {
       type = lib.types.str;
+      default = "";
       description = "The name of the tertiary display, e.g. eDP-1";
     };
   };
@@ -49,6 +52,7 @@ in
     };
 
     home-manager.users.${user} = {
+      xsession.enable = true;
       xsession.windowManager.bspwm = {
         enable = config.iynaix.bspwm;
         settings = {

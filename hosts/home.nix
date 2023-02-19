@@ -11,12 +11,7 @@
       username = user;
       homeDirectory = "/home/${user}";
 
-      packages = with pkgs; [
-        # nix dev stuff
-        nixfmt
-        nil
-        nixpkgs-fmt
-      ];
+      packages = with pkgs; [ ];
 
       # This value determines the Home Manager release that your
       # configuration is compatible with. This helps avoid breakage
@@ -30,17 +25,6 @@
     };
 
     # Let Home Manager install and manage itself.
-    programs = {
-      home-manager.enable = true;
-
-      neovim = {
-        enable = true;
-        defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
-        withNodeJs = true;
-        withPython3 = true;
-      };
-    };
+    programs.home-manager.enable = true;
   };
 }

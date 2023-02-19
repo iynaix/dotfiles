@@ -15,5 +15,14 @@
         # programs.zsh.shellAliases = lib.mapAttrs (name: value: "cd ${value}") config.iynaix.shortcuts;
       };
     };
+
+    iynaix.persist.home = {
+      # directories = [
+      #   ".cache/zsh4humans" # TODO: remove when switching to starship?
+      # ];
+      files = [
+        ".config/zsh/.zsh_history"
+      ];
+    };
   };
 }

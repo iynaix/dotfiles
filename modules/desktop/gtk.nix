@@ -11,8 +11,8 @@
         };
       };
       iconTheme = {
-        name = "Numix";
-        package = pkgs.numix-icon-theme;
+        name = "Papirus-Dark";
+        package = pkgs.papirus-icon-theme;
       };
       font = {
         name = "Inter Regular";
@@ -28,6 +28,9 @@
           "file:///media/6TBRED/US/Current"
           "file:///media/6TBRED/New"
         ];
+        extraConfig = {
+          gtk-application-prefer-dark-theme = 1;
+        };
       };
     };
 
