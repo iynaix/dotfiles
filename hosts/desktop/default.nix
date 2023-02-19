@@ -24,16 +24,12 @@ let displayCfg = config.iynaix.displays; in
           "${displayCfg.monitor2}" = [ "6" "7" "8" ];
           "${displayCfg.monitor3}" = [ "9" "10" ];
         };
-        extraConfigEarly = lib.concatStringsSep "\n" [
-          ("xrandr --output '${displayCfg.monitor1}' --primary --mode 3440x1440 --rate 144 --pos 1440x1080 --rotate normal"
-            + " --output '${displayCfg.monitor2}' --mode 2560x1440 --pos 0x728 --rotate left"
-            + " --output '${displayCfg.monitor3}' --mode 1920x1080 --pos 1754x0")
-        ];
-        extraConfig = lib.concatStringsSep "\n" [
-          ("xwallpaper --output '${displayCfg.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png"
-            + " --output '${displayCfg.monitor2}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-2560.png"
-            + " --output '${displayCfg.monitor3}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png")
-        ];
+        extraConfigEarly = "xrandr --output '${displayCfg.monitor1}' --primary --mode 3440x1440 --rate 144 --pos 1440x1080 --rotate normal"
+          + " --output '${displayCfg.monitor2}' --mode 2560x1440 --pos 0x728 --rotate left"
+          + " --output '${displayCfg.monitor3}' --mode 1920x1080 --pos 1754x0";
+        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png"
+          + " --output '${displayCfg.monitor2}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-2560.png"
+          + " --output '${displayCfg.monitor3}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
       };
 
       services.polybar = lib.mkIf config.iynaix.bspwm {

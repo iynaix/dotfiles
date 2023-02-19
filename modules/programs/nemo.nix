@@ -1,6 +1,6 @@
 { pkgs, user, ... }: {
   home-manager.users.${user} = {
-    home = { packages = with pkgs; [ cinnamon.nemo dconf gnome.dconf-editor ]; };
+    home = { packages = with pkgs; [ cinnamon.nemo dconf gnome.dconf-editor rar ]; };
 
     dconf.settings = {
       "org/nemo/preferences" = {
