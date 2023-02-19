@@ -1,7 +1,7 @@
 { pkgs, host, user, lib, config, ... }:
 let
-  window_gap = if host.hostName == "desktop" then 8 else 4;
-  padding = if host.hostName == "desktop" then 8 else 4;
+  window_gap = if host == "desktop" then 8 else 4;
+  padding = if host == "desktop" then 8 else 4;
   bar_height = 30;
   border_width = 2;
   # colors
@@ -25,6 +25,21 @@ in
     type = lib.types.bool;
     default = true;
     description = "Enable bspwm";
+  };
+
+  options.iynaix.displays = {
+    monitor1 = lib.mkOption {
+      type = lib.types.str;
+      description = "The name of the primary display, e.g. eDP-1";
+    };
+    monitor2 = lib.mkOption {
+      type = lib.types.str;
+      description = "The name of the secondary display, e.g. eDP-1";
+    };
+    monitor3 = lib.mkOption {
+      type = lib.types.str;
+      description = "The name of the tertiary display, e.g. eDP-1";
+    };
   };
 
   config = lib.mkIf config.iynaix.bspwm {

@@ -1,11 +1,11 @@
-{ pkgs, host, user, theme, ... }: {
-  home-manager.users.${user} = {
-    services.polybar = {
-      enable = true;
-      config =
-        let monitor1 = host.monitor2;
-        in
-        {
+{ pkgs, config, host, user, theme, ... }:
+let displayCfg = config.iynaix.displays; in
+{
+  config = {
+    home-manager.users.${user} = {
+      services.polybar = {
+        enable = true;
+        config = {
           # BARS
           "bar/base" = {
             width = "100%";
@@ -33,49 +33,14 @@
 
             wm-restack = "bspwm";
           };
-          "bar/primary" = {
-            "inherit" = "bar/base";
-            monitor = "${host.monitor1}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            # modules-right = "battery volume mpd date";
-            modules-right = "lan volume date";
-          };
-          "bar/secondary" = {
-            "inherit" = "bar/base";
-            monitor =
-              "${if host ? "monitor2" then host.monitor2 else host.monitor1}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "date";
-          };
-          "bar/tertiary" = {
-            "inherit" = "bar/base";
-            monitor =
-              "${if host ? "monitor3" then host.monitor3 else host.monitor1}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "date";
-          };
-          "bar/laptop" = {
+          "bar/${host}" = {
             "inherit" = "bar/base";
             # modules-right = "battery volume mpd date";
-            monitor = "${host.monitor1}";
+            monitor = "${displayCfg.monitor1}";
 
             modules-left = "bspwm_mode";
             modules-center = "bspwm";
             modules-right = "wlan volume backlight battery date";
-          };
-          "bar/vm" = {
-            "inherit" = "bar/base";
-            monitor = "${host.monitor1}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "date";
           };
 
           # MODULES
@@ -300,6 +265,7 @@
             label-disconnected-foreground = "${theme.red}";
           };
         };
+      };
     };
   };
 }

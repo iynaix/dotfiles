@@ -1,4 +1,4 @@
-{ pkgs, host, user, ... }: {
+{ pkgs, user, ... }: {
   services = {
     transmission = { enable = true; };
     sonarr = { enable = true; };

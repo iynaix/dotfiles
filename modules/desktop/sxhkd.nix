@@ -1,5 +1,6 @@
 { pkgs, host, user, ... }:
-let mod = if host.hostName == "vm" then "alt" else "super";
+# use alt in vms to avoid conflicts with the host
+let mod = if host == "vm" then "alt" else "super";
 in
 {
   home-manager.users.${user} = {

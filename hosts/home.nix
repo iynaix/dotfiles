@@ -14,7 +14,7 @@
       packages = with pkgs; [
         # nix dev stuff
         nixfmt
-        rnix-lsp
+        nil
         nixpkgs-fmt
       ];
 

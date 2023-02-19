@@ -1,4 +1,4 @@
-{ config, pkgs, user, host, lib, inputs, ... }:
+{ config, pkgs, user, lib, inputs, ... }:
 let cfg = config.iynaix.persist; in
 {
   imports = [ ./tmpfs.nix ];

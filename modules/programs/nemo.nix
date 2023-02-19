@@ -1,4 +1,4 @@
-{ pkgs, theme, user, ... }: {
+{ pkgs, user, ... }: {
   home-manager.users.${user} = {
     home = { packages = with pkgs; [ cinnamon.nemo dconf gnome.dconf-editor ]; };
 

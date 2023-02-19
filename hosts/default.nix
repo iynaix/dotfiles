@@ -36,12 +36,12 @@ let
 
     transparent = "#FF00000";
   };
-  createHost = { hostName, hostInfo }: lib.nixosSystem {
+  createHost = { hostName }: lib.nixosSystem {
     system = "x86_64-linux";
 
     specialArgs = {
       inherit user theme;
-      host = hostInfo;
+      host = hostName;
     };
 
     modules = [
@@ -56,25 +56,11 @@ in
 {
   vm = createHost {
     hostName = "vm";
-    hostInfo = {
-      hostName = "vm";
-      monitor1 = "Virtual-1";
-    };
   };
   desktop = createHost {
     hostName = "desktop";
-    hostInfo = {
-      hostName = "desktop";
-      monitor1 = "DP-2";
-      monitor2 = "DP-0.8";
-      monitor3 = "HDMI-0";
-    };
   };
   laptop = createHost {
     hostName = "laptop";
-    hostInfo = {
-      hostName = "laptop";
-      monitor1 = "eDP-1";
-    };
   };
 }
