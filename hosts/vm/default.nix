@@ -48,6 +48,9 @@ let displayCfg = config.iynaix.displays; in
           # terminal on desktop 2
           ''bspc rule -a Alacritty -o desktop="^2"''
           "$TERMINAL"
+          # nemo on desktop 3
+          ''bspc rule -a Nemo:nemo -o desktop="^3"''
+          "nemo"
         ];
       };
 
