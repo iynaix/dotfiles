@@ -151,11 +151,11 @@ in
         launcher = "rofi";
       };
 
+      services.picom.enable = true;
+
       home = {
         packages = with pkgs; [
           maim
-          picom
-          polybar
           rofi
           rofi-power-menu
           sxiv

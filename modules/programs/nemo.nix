@@ -1,8 +1,11 @@
 { pkgs, user, ... }: {
   home-manager.users.${user} = {
-    home = { packages = with pkgs; [ cinnamon.nemo dconf gnome.dconf-editor rar ]; };
+    home = { packages = with pkgs; [ cinnamon.nemo rar ]; };
 
     dconf.settings = {
+      # fix open in terminal
+      "org/gnome/desktop/applications/terminal" = { exec = "alacritty"; };
+      "org/cinnamon/desktop/applications/terminal" = { exec = "alacritty"; };
       "org/nemo/preferences" = {
         default-folder-viewer = "list-view";
         show-hidden-files = true;
