@@ -34,7 +34,7 @@
     iynaix.persist.home.directories = [
       { directory = ".gnupg"; mode = "0700"; }
       { directory = ".pki"; mode = "0700"; }
-      { directory = ".ssh"; mode = "0700"; }
+      { directory = ".ssh"; mode = "0600"; }
       { directory = ".local/share/keyrings"; mode = "0700"; }
     ];
   };

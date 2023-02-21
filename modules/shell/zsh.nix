@@ -1,4 +1,4 @@
-{ pkgs, user, lib, config, ... }: {
+{ pkgs, user, lib, config, host, ... }: {
   config = {
     home-manager.users.${user} = {
       programs = {
@@ -71,11 +71,12 @@
           gdc = "git diff --cached";
           gdi = "git diff";
           gl = "git pull";
+          gp = "git push";
           glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
           gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';
           groot = "cd $(git rev-parse - -show-toplevel)";
-          grh = "git reset - -hard";
-          gri = "git rebase - -interactive";
+          grh = "git reset --hard";
+          gri = "git rebase --interactive";
           gst = "git status -s -b && echo && git log | head -n 1";
           gsub = "git submodule update --init --recursive";
 
@@ -101,9 +102,16 @@
         # Suppress output of loud commands you don't want to hear from
         q() { "$@" > /dev/null 2>&1; }
 
-        # system update with autoremove
+        # switch / update via nix flake
+        switch() {
+            cd ~/projects/dotfiles
+            sudo nixos-rebuild switch --flake ".#${host}"
+        }
+
         upd8() {
-            yay -Syyu && sudo pacman -Rs $(pacman -Qdtq)
+            cd ~/projects/dotfiles
+            nix flake update
+            switch
         }
 
         # checkout and pull and merge gitflow branch
@@ -153,6 +161,30 @@
 
         # emacs mode
         set -o emacs
+
+        # Change cursor with support for inside/outside tmux
+        function _set_cursor() {
+            if [[ $TMUX = "" ]]; then
+              echo -ne $1
+            else
+              echo -ne "\ePtmux;\e\e$1\e\\"
+            fi
+        }
+
+        function _set_block_cursor() { _set_cursor '\e[2 q' }
+        function _set_beam_cursor() { _set_cursor '\e[6 q' }
+
+        function zle-keymap-select {
+          if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+              _set_block_cursor
+          else
+              _set_beam_cursor
+          fi
+        }
+        zle -N zle-keymap-select
+
+        # ensure beam cursor when starting new terminal
+        precmd_functions+=(_set_beam_cursor)
       '';
     };
 

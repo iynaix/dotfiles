@@ -4,8 +4,14 @@
 
     dconf.settings = {
       # fix open in terminal
-      "org/gnome/desktop/applications/terminal" = { exec = "alacritty"; };
-      "org/cinnamon/desktop/applications/terminal" = { exec = "alacritty"; };
+      "org/gnome/desktop/applications/terminal" = {
+        exec = "alacritty";
+        exec-args = "";
+      };
+      "org/cinnamon/desktop/applications/terminal" = {
+        exec = "alacritty";
+        exec-args = "";
+      };
       "org/nemo/preferences" = {
         default-folder-viewer = "list-view";
         show-hidden-files = true;

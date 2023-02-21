@@ -1,11 +1,32 @@
-{ pkgs, theme, user, ... }: {
+{ pkgs, theme, user, ... }:
+let
+  # create a fake gnome-terminal shell script so xdg terminal applications
+  # will open in alacritty
+  # https://unix.stackexchange.com/a/642886
+  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" ''
+    shift
+
+    TITLE="$(basename "$1")"
+    if [ -n "$TITLE" ]; then
+      ${pkgs.alacritty}/bin/alacritty -t "$TITLE" -e "$@"
+    else
+      ${pkgs.alacritty}/bin/alacritty -e "$@"
+    fi
+  '';
+in
+{
+  environment.systemPackages = [ fakeGnomeTerminal ];
+
+  # do not install xterm
+  services.xserver.excludePackages = [ pkgs.xterm ];
+
   home-manager.users.${user} = {
     programs = {
       alacritty = {
         enable = true;
         settings = {
           window.padding = {
-            x = 20;
+            x = 12;
             y = 12;
           };
           font = {
@@ -110,14 +131,8 @@
             };
 
             indexed_colors = [
-              {
-                index = 16;
-                color = "#FAB387";
-              }
-              {
-                index = 17;
-                color = "#F5E0DC";
-              }
+              { index = 16; color = "#FAB387"; }
+              { index = 17; color = "#F5E0DC"; }
             ];
           };
         };

@@ -80,12 +80,9 @@
       neovim
       ntfs3g
       ripgrep
-      tree
       wget
     ];
   };
-
-  services.xserver.desktopManager.xterm.enable = false; # go away, u ugly thing
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
