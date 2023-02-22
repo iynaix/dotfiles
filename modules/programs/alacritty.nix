@@ -1,4 +1,4 @@
-{ pkgs, theme, user, ... }:
+{ pkgs, theme, user, config, ... }:
 let
   # create a fake gnome-terminal shell script so xdg terminal applications
   # will open in alacritty
@@ -31,7 +31,7 @@ in
           };
           font = {
             normal = {
-              family = "JetBrainsMono Nerd Font";
+              family = config.iynaix.font.monospace;
               style = "Medium";
             };
             bold = { style = "Bold"; };

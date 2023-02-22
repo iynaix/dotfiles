@@ -2,10 +2,8 @@
   imports = [
     ./shell
     ./programs
+    ./desktop
     ./desktop/gtk.nix
-    # bspwm are mutually exclusive via a config option
-    ./desktop/bspwm.nix
-    ./desktop/gnome3.nix
   ];
 
   home-manager.users.${user} = {

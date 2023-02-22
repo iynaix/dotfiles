@@ -25,7 +25,7 @@ let displayCfg = config.iynaix.displays; in
             module-margin-right = 0;
 
             font-0 = "Noto Sans:size=10;0";
-            font-1 = "JetBrainsMono Nerd Font:size=10;1";
+            font-1 = "${config.iynaix.font.monospace} Font:size=10;1";
 
             # tray-position = "right";
             # tray-padding = 2;

@@ -47,7 +47,7 @@ let
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./home.nix # shared configuration for home-manager across all hosts
-      ./${hostName} # vm specific configuration, including hardware
+      ./${hostName} # host specific configuration, including hardware
       home-manager.nixosModules.home-manager
       inputs.impermanence.nixosModules.impermanence
     ];

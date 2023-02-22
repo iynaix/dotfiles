@@ -1,9 +1,9 @@
 { pkgs, host, user, lib, config, ... }:
 let
-  window_gap = if host == "desktop" then 8 else 4;
-  padding = if host == "desktop" then 8 else 4;
-  bar_height = 30;
-  border_width = 2;
+  cfg = config.iynaix.bspwm;
+  # misc bspwm variables here
+  barHeight = 30;
+  # border_width = 2;
   # colors
   normal = "#30302f";
   focused = "#4491ed";
@@ -14,38 +14,28 @@ let
   filedesktop = "^3";
   nemodesktop = "^4";
   secondarytermdesktop = "^7";
-  listdesktop = "^8";
+  # listdesktop = "^8";
   chatdesktop = "^9";
   dldesktop = "^10";
 in
 {
   imports = [ ./dunst.nix ./polybar.nix ./sxhkd.nix ];
 
-  options.iynaix.bspwm = lib.mkOption {
-    type = lib.types.bool;
-    default = true;
-    description = "Enable bspwm";
-  };
-
-  options.iynaix.displays = {
-    monitor1 = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "The name of the primary display, e.g. eDP-1";
+  options.iynaix.bspwm = {
+    enable = lib.mkEnableOption "bspwm";
+    windowGap = lib.mkOption {
+      type = lib.types.int;
+      default = 4;
+      description = "Size of the gap that separates windows";
     };
-    monitor2 = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "The name of the secondary display, e.g. eDP-1";
-    };
-    monitor3 = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "The name of the tertiary display, e.g. eDP-1";
+    padding = lib.mkOption {
+      type = lib.types.int;
+      default = 4;
+      description = "Padding space added at the sides of the monitor or desktop";
     };
   };
 
-  config = lib.mkIf config.iynaix.bspwm {
+  config = lib.mkIf cfg.enable {
     services.xserver = {
       enable = true;
       windowManager.bspwm.enable = true;
@@ -54,7 +44,7 @@ in
     home-manager.users.${user} = {
       xsession.enable = true;
       xsession.windowManager.bspwm = {
-        enable = config.iynaix.bspwm;
+        enable = cfg.enable;
         settings = {
           automatic_scheme = "longest_side";
 
@@ -64,11 +54,11 @@ in
           normal_border_color = normal;
           focused_border_color = focused;
 
-          window_gap = window_gap;
-          top_padding = padding + bar_height;
-          left_padding = padding;
-          right_padding = padding;
-          bottom_padding = padding;
+          window_gap = cfg.windowGap;
+          top_padding = cfg.padding + barHeight;
+          left_padding = cfg.padding;
+          right_padding = cfg.padding;
+          bottom_padding = cfg.padding;
 
           presel_feedback_color = focused;
           split_ratio = 0.5;

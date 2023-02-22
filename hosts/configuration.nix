@@ -153,4 +153,7 @@
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
+
+  # enable bspwm
+  iynaix.bspwm.enable = true;
 }

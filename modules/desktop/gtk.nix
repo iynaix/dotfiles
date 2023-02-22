@@ -1,4 +1,4 @@
-{ pkgs, user, ... }: {
+{ pkgs, user, config, ... }: {
   home-manager.users.${user} = {
     home = { packages = with pkgs; [ dconf ]; };
 
@@ -17,7 +17,7 @@
         package = pkgs.papirus-icon-theme;
       };
       font = {
-        name = "Inter Regular";
+        name = "${config.iynaix.font.regular} Regular";
         package = pkgs.inter;
       };
       gtk3 = {

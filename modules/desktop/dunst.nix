@@ -1,4 +1,4 @@
-{ pkgs, theme, user, ... }: {
+{ pkgs, theme, user, config, ... }: {
   home-manager.users.${user} = {
     services = {
       dunst = {
@@ -11,7 +11,7 @@
             frame_width = 0;
             frame_color = theme.base;
             separator_color = theme.mantle;
-            font = "Inter Regular 12";
+            font = "${config.iynaix.font.regular} Regular 12";
             ellipsize = "end";
             show_indicators = "no";
             max_icon_size = 72;

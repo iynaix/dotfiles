@@ -1,4 +1,4 @@
-{ pkgs, host, user, ... }:
+{ pkgs, host, user, config, ... }:
 # use alt in vms to avoid conflicts with the host
 let mod = if host == "vm" then "alt" else "super";
 in
@@ -20,7 +20,7 @@ in
 
           # rofi shutdown actions menu
           "ctrl + alt + Delete" = ''
-            rofi -show power-menu -font "JetBrainsMono Nerd Font Regular 10" -modi power-menu:rofi-power-menu'';
+            rofi -show power-menu -font "${config.iynaix.font.regular} Regular 10" -modi power-menu:rofi-power-menu'';
 
           # screenshots
           "${mod} + shift + backslash" = "rofi-screenshot";

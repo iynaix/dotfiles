@@ -6,13 +6,13 @@ let displayCfg = config.iynaix.displays; in
   config = {
     iynaix.displays.monitor1 = "eDP-1";
 
-    environment.systemPackages = with pkgs; [ ];
+    # environment.systemPackages = with pkgs; [ ];
 
     # do not autologin on laptop!
     services.xserver.displayManager.autoLogin.enable = false;
 
     home-manager.users.${user} = {
-      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm {
+      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
         };
@@ -22,7 +22,7 @@ let displayCfg = config.iynaix.displays; in
         extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
       };
 
-      services.polybar = lib.mkIf config.iynaix.bspwm {
+      services.polybar = lib.mkIf config.iynaix.bspwm.enable {
         script = "polybar ${host} &";
       };
 

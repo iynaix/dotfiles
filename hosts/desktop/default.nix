@@ -7,6 +7,11 @@ let displayCfg = config.iynaix.displays; in
   ];
 
   config = {
+    iynaix.bspwm = {
+      windowGap = 8;
+      padding = 8;
+    };
+
     iynaix.displays = {
       monitor1 = "DP-2";
       monitor2 = "DP-0.8";
@@ -15,10 +20,10 @@ let displayCfg = config.iynaix.displays; in
 
     services.xserver.videoDrivers = [ "nvidia" ];
 
-    environment.systemPackages = with pkgs; [ ];
+    # environment.systemPackages = with pkgs; [ ];
 
     home-manager.users.${user} = {
-      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm {
+      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" ];
           "${displayCfg.monitor2}" = [ "6" "7" "8" ];
@@ -32,7 +37,7 @@ let displayCfg = config.iynaix.displays; in
           + " --output '${displayCfg.monitor3}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
       };
 
-      services.polybar = lib.mkIf config.iynaix.bspwm {
+      services.polybar = lib.mkIf config.iynaix.bspwm.enable {
         # setup bars specific to host
         config = lib.mkAfter {
           "bar/primary" = {
