@@ -71,6 +71,7 @@
           gdc = "git diff --cached";
           gdi = "git diff";
           gl = "git pull";
+          glg = "git log";
           gp = "git push";
           glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
           gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';
@@ -144,7 +145,7 @@
         # searches git history, can never remember this stupid thing
         gsearch() {
             # 2nd argument is target path and subsequent arguments are passed thru
-            glg -S$1 -- ''${2:-.} $*[2,-1]
+            git log -S$1 -- ''${2:-.} $*[2,-1]
         }
 
         # cd to project dir and open the virtualenv if it exists

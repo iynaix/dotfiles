@@ -14,11 +14,6 @@
     };
 
     home = {
-      file.".config/rofi" = {
-        source = ./rofi;
-        recursive = true;
-      };
-
       file.".config/sxiv" = {
         source = ./sxiv;
         recursive = true;

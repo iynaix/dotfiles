@@ -19,7 +19,12 @@ let
   dldesktop = "^10";
 in
 {
-  imports = [ ./dunst.nix ./polybar.nix ./sxhkd.nix ];
+  imports = [
+    ./dunst.nix
+    ./polybar.nix
+    ./rofi.nix
+    ./sxhkd.nix
+  ];
 
   options.iynaix.bspwm = {
     enable = lib.mkEnableOption "bspwm";
@@ -97,6 +102,7 @@ in
           "xsetroot -cursor_name left_ptr"
         ];
         # restart polybar after bspwm has initialized
+        # https://www.reddit.com/r/NixOS/comments/v8ikwq/polybar_doesnt_start_at_launch
         extraConfig = lib.mkAfter "systemctl --user restart polybar";
 
         # uses one shot rules for startup
@@ -127,9 +133,6 @@ in
           ''bspc rule -a ${termclass}:dlterm -o desktop="${dldesktop}"''
           "$TERMINAL --class ${termclass},dlterm"
 
-          # force polybar to start, see:
-          # https://www.reddit.com/r/NixOS/comments/v8ikwq/polybar_doesnt_start_at_launch
-          "systemctl --user restart polybar"
 
           # must be the last line in the file
           "bspc subscribe all | bspc-events"
@@ -146,8 +149,6 @@ in
       home = {
         packages = with pkgs; [
           maim
-          rofi
-          rofi-power-menu
           sxiv
           xwallpaper
         ];
