@@ -50,12 +50,8 @@
           ytsub = "yt --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
           ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
           coinfc = "openproj coinfc";
-          coinfc-backend = "openproj coinfc-backend && workon coinfc-backend";
-          coinfcweb = "tmuxp load ~/.tmuxp/coinfcweb.yml";
-          coinfcnative = "tmuxp load ~/.tmuxp/coinfcnative.yml";
 
           # cd aliases
-
           ".." = "cd..";
           "..." = "cd ../..";
           ".2" = "cd ../..";

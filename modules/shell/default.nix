@@ -1,5 +1,5 @@
 { pkgs, user, lib, config, ... }: {
-  imports = [ ./ranger.nix ./zsh.nix ];
+  imports = [ ./ranger.nix ./tmux.nix ./zsh.nix ];
 
   options.iynaix.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
@@ -32,12 +32,7 @@
   config = {
     home-manager.users.${user} = {
       home = {
-        packages = with pkgs; [ bat bottom htop lazygit neofetch tmux ];
-
-        file.".config/tmux" = {
-          source = ./tmux;
-          recursive = true;
-        };
+        packages = with pkgs; [ bat bottom htop lazygit neofetch ];
       };
 
       # potential vifm shortcuts
@@ -71,16 +66,6 @@
             push = { default = "simple"; };
           };
           aliases = { reword = "!sh ~/bin/git-reword.sh"; };
-        };
-        yt-dlp = {
-          enable = true;
-          settings = {
-            add-metadata = true;
-            no-mtime = true;
-            format = "best[ext=mp4]";
-            sponsorblock-mark = "all";
-            output = "%(title)s.%(ext)s";
-          };
         };
       };
     };
