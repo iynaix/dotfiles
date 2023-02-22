@@ -1,4 +1,6 @@
 { pkgs, user, config, ... }: {
+  services.gvfs.enable = true;
+
   home-manager.users.${user} = {
     home = { packages = with pkgs; [ dconf ]; };
 
@@ -26,9 +28,6 @@
           "file:///home/iynaix/projects/coinfc"
           "file:///home/iynaix/projects"
           "file:///home/iynaix/Pictures"
-          "file:///media/6TBRED/Anime/Current"
-          "file:///media/6TBRED/US/Current"
-          "file:///media/6TBRED/New"
         ];
         extraConfig = {
           gtk-application-prefer-dark-theme = 1;

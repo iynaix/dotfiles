@@ -7,7 +7,7 @@
     ./nemo.nix
     ./vscode.nix
     ./zathura.nix
-    ../media/mpv.nix
+    ../media
   ];
 
   config = {

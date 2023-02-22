@@ -12,12 +12,5 @@
       automount = true;
       notify = true;
     };
-
-    home = {
-      file.".config/sxiv" = {
-        source = ./sxiv;
-        recursive = true;
-      };
-    };
   };
 }

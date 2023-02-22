@@ -58,7 +58,6 @@ let cfg = config.iynaix.persist; in
         directories = [
           # TODO: reference projects on another dataset?
           "projects"
-          ".config/systemd"
         ] ++ cfg.home.directories;
       };
     };

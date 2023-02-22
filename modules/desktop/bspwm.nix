@@ -151,6 +151,26 @@ in
           sxiv
           xwallpaper
         ];
+
+        file.".config/sxiv/exec/key-handler".text = ''
+          #!/usr/bin/env sh
+
+          while read file
+          do
+              case "$1" in
+              "C-c")
+                  xclip -selection clipboard "$file" -t image/png ;;
+              "C-d")
+                  mv -f "$file" /tmp ;;
+              esac
+          done
+        '';
+      };
+
+      # shell aliases that require bspwm
+      programs.zsh.shellAliases = {
+        ":sp" = "bspc node -p south; $TERMINAL & disown";
+        ":vs" = "bspc node -p east; $TERMINAL & disown";
       };
     };
   };

@@ -55,7 +55,6 @@
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.zsh;
   };
 
   # Enable automatic login for the user.
@@ -67,7 +66,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment = {
-    shells = [ pkgs.zsh ];
     variables = {
       TERMINAL = "alacritty";
       VISUAL = "nvim";

@@ -1,1 +1,0 @@
---add-metadata --no-mtime -f "best[ext=mp4]" --sponsorblock-mark all --output "%(title)s.%(ext)s"

@@ -12,5 +12,14 @@
 
       packages = with pkgs; [ transmission-remote-gtk ];
     };
+
+    # extra media specific settings
+    gtk.gtk3 = {
+      bookmarks = [
+        "file:///media/6TBRED/Anime/Current"
+        "file:///media/6TBRED/US/Current"
+        "file:///media/6TBRED/New"
+      ];
+    };
   };
 }
