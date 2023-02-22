@@ -31,6 +31,9 @@ let displayCfg = config.iynaix.displays; in
     };
 
     home-manager.users.${user} = {
+      # disable picom as it lags in vm
+      services.picom.enable = lib.mkForce false;
+
       xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
@@ -38,7 +41,7 @@ let displayCfg = config.iynaix.displays; in
         extraConfigEarly = lib.concatStringsSep "\n" [
           "xrandr --output '${displayCfg.monitor1}' --mode 1920x1200 --pos 0x0 --rotate normal"
         ];
-        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-3440.png";
+        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
 
         # just edit nix config on startup
         startupPrograms = lib.mkForce [

@@ -36,4 +36,17 @@
       };
     };
   };
+
+  config = {
+    home-manager.users.${user} = {
+      home = {
+        # copy wallpapers
+        file."Pictures/Wallpapers" = {
+          source = ./wallpapers;
+          recursive = true;
+        };
+
+      };
+    };
+  };
 }

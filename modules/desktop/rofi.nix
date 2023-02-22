@@ -27,7 +27,6 @@ in
         display-Network = " 󰤨  Network";
         sidebar-mode = true;
       };
-      # theme = "./catppuccin-mocha";
       theme = {
         "*" = {
           bg-col = mkLiteral theme.base;
@@ -42,8 +41,8 @@ in
         };
 
         "element-text, element-icon, mode-switcher" = {
-          background-color = mkLiteral "@bg-col";
-          text-color = mkLiteral "@fg-col";
+          background-color = mkLiteral "inherit";
+          text-color = mkLiteral "inherit";
         };
 
         window = {

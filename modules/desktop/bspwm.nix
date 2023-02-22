@@ -21,6 +21,7 @@ in
 {
   imports = [
     ./dunst.nix
+    ./picom.nix
     ./polybar.nix
     ./rofi.nix
     ./sxhkd.nix
@@ -144,19 +145,12 @@ in
         launcher = "rofi";
       };
 
-      services.picom.enable = true;
-
       home = {
         packages = with pkgs; [
           maim
           sxiv
           xwallpaper
         ];
-
-        file."Pictures/Wallpapers" = {
-          source = ./wallpapers;
-          recursive = true;
-        };
       };
     };
   };

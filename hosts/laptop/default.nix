@@ -19,7 +19,7 @@ let displayCfg = config.iynaix.displays; in
         extraConfigEarly = lib.concatStringsSep "\n" [
           "xrandr --output '${displayCfg.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal"
         ];
-        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ~/Pictures/Wallpapers/gits-catppuccin-1920.png";
+        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
       };
 
       services.polybar = lib.mkIf config.iynaix.bspwm.enable {
