@@ -18,7 +18,9 @@ let displayCfg = config.iynaix.displays; in
       monitor3 = "HDMI-0";
     };
 
+    # enable nvidia support
     services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.opengl.enable = true;
 
     # environment.systemPackages = with pkgs; [ ];
 
@@ -66,7 +68,11 @@ let displayCfg = config.iynaix.displays; in
             modules-right = "date";
           };
         };
-        script = "polybar primary &; polybar secondary &; polybar tertiary &;";
+        script = ''
+          polybar primary &
+          polybar secondary &
+          polybar tertiary &
+        '';
       };
 
       home = {

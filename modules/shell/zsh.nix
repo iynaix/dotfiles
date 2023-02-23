@@ -1,7 +1,6 @@
 { pkgs, user, lib, config, host, ... }: {
   config = {
     # set as default shell for user
-    users.user.${user}.shell = pkgs.zsh;
     environment.shells = [ pkgs.zsh ];
 
     home-manager.users.${user} = {

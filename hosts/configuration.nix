@@ -55,6 +55,7 @@
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
   };
 
   # Enable automatic login for the user.
