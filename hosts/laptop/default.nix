@@ -16,9 +16,7 @@ let displayCfg = config.iynaix.displays; in
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
         };
-        extraConfigEarly = lib.concatStringsSep "\n" [
-          "xrandr --output '${displayCfg.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal"
-        ];
+        extraConfigEarly = "xrandr --output '${displayCfg.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal";
         extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
       };
 
