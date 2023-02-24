@@ -5,6 +5,7 @@
     type = lib.types.attrsOf lib.types.str;
     default = {
       h = "~";
+      dots = "~/projects/dotfiles";
       c = "~/.config";
       vv = "~/Videos";
       vaa = "~/Videos/Anime";

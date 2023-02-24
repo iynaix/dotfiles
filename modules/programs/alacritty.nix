@@ -37,7 +37,7 @@ in
             bold = { style = "Bold"; };
             italic = { style = "Italic"; };
             bold_italic = { style = "Bold Italic"; };
-            size = 11;
+            size = 10;
           };
           selection.save_to_clipboard = true;
           # window.opacity = 0.5;

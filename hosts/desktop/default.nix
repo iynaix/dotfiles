@@ -28,7 +28,7 @@ let displayCfg = config.iynaix.displays; in
       xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" ];
-          "${displayCfg.monitor2}" = [ "6" "7" "8" ];
+          "%${displayCfg.monitor2}" = [ "6" "7" "8" ]; # escape with % because there is a dot
           "${displayCfg.monitor3}" = [ "9" "10" ];
         };
         extraConfigEarly = "xrandr --output '${displayCfg.monitor1}' --primary --mode 3440x1440 --rate 144 --pos 1440x1080 --rotate normal"

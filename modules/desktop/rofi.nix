@@ -13,7 +13,7 @@ in
       package = pkgs.rofi;
       location = "center";
       terminal = "alacritty";
-      font = "${config.iynaix.font.monospace} 14";
+      font = "${config.iynaix.font.regular} 14";
       extraConfig = {
         modi = "run,drun,window";
         icon-theme = "Papirus-Dark";

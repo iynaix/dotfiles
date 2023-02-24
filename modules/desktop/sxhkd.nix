@@ -20,7 +20,7 @@ in
 
           # rofi shutdown actions menu
           "ctrl + alt + Delete" = ''
-            rofi -show power-menu -font "${config.iynaix.font.regular} Regular 10" -modi power-menu:rofi-power-menu'';
+            rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
 
           # screenshots
           "${mod} + shift + backslash" = "rofi-screenshot";

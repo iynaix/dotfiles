@@ -23,12 +23,6 @@
         package = pkgs.inter;
       };
       gtk3 = {
-        bookmarks = [
-          "file:///home/iynaix/Downloads"
-          "file:///home/iynaix/projects/coinfc"
-          "file:///home/iynaix/projects"
-          "file:///home/iynaix/Pictures"
-        ];
         extraConfig = {
           gtk-application-prefer-dark-theme = 1;
         };

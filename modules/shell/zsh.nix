@@ -48,7 +48,7 @@
           coinfc = "openproj coinfc";
 
           # cd aliases
-          ".." = "cd..";
+          ".." = "cd ..";
           "..." = "cd ../..";
           ".2" = "cd ../..";
           ".3" = "cd ../../..";
