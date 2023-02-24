@@ -28,5 +28,4 @@
     device = "zroot/safe/persist";
     fsType = "zfs";
   };
-
 }

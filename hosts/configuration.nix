@@ -73,7 +73,6 @@
     };
     systemPackages = with pkgs; [
       curl
-      git
       exa
       killall
       neovim

@@ -12,7 +12,7 @@
 
   config = {
     home-manager.users.${user} = {
-      home.packages = with pkgs; [ libreoffice ];
+      home.packages = with pkgs; [ gparted libreoffice ];
     };
 
     iynaix.persist.home.directories = [
