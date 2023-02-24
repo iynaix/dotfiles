@@ -55,7 +55,7 @@ sudo mkfs.fat -F 32 $BOOTDISK
 sudo fatlabel $BOOTDISK NIXBOOT
 
 echo "Creating base zpool"
-sudo zpool create -f -o ashift=12 -O compression=on -O acltype=posixacl -O atime=off -O xattr=sa -O normalization=formD -O mountpoint=none zroot $ZFSDISK
+sudo zpool create -f -o ashift=12 -O compression=on -O acltype=posixacl -O atime=off -O xattr=sa -O normalization=formD -O mountpoint=none -R /mnt zroot $ZFSDISK
 
 echo "Creating /"
 sudo zfs create -p -o mountpoint=legacy zroot/local/root
