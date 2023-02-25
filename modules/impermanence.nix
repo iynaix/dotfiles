@@ -34,7 +34,6 @@ let cfg = config.iynaix.persist; in
       lib.optional (!cfg.tmpfs.home) "zfs rollback -r zroot/local/home@blank"
     ));
 
-
     fileSystems."/persist".neededForBoot = true;
 
     # persisting user passwords
@@ -43,8 +42,6 @@ let cfg = config.iynaix.persist; in
     users.mutableUsers = false;
     users.users.root.passwordFile = "/persist/passwords/root";
     users.users.${user}.passwordFile = "/persist/passwords/${user}";
-
-    security.sudo.extraConfig = "Defaults lecture=never"; # shut sudo up
 
     # persist files on root filesystem
     environment.persistence."/persist" = {

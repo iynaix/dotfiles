@@ -7,17 +7,32 @@ let displayCfg = config.iynaix.displays; in
   ];
 
   config = {
-    iynaix.bspwm = {
-      windowGap = 8;
-      padding = 8;
-    };
-
     iynaix.displays = {
       monitor1 = "DP-2";
       monitor2 = "DP-0.8";
       monitor3 = "HDMI-0";
     };
 
+    iynaix.bspwm = {
+      windowGap = 8;
+      padding = 8;
+    };
+
+    boot.loader.grub = {
+      # useOSProber = true; # os prober is very slow
+
+      # set $FS_UUID to the UUID of the EFI partition
+      # extraEntries = ''
+      #   menuentry "Windows" {
+      #     insmod part_gpt
+      #     insmod fat
+      #     insmod search_fs_uuid
+      #     insmod chain
+      #     search --fs-uuid --set=root $FS_UUID
+      #     chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      #   }
+      # '';
+    };
     networking.hostId = "89eaa833"; # required for zfs
 
     # enable nvidia support

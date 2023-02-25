@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, user, host, ... }:
-
 {
   # handle desktop / window manager
   imports = [
@@ -12,9 +11,19 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader = {
+    # systemd-boot.enable = true;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      version = 2;
+    };
+  };
 
   networking.hostName = "${user}-${host}"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -110,6 +119,9 @@
       user = user;
     };
   };
+
+  # shut sudo up
+  security.sudo.extraConfig = "Defaults lecture=never";
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
