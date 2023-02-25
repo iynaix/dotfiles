@@ -10,6 +10,8 @@ let displayCfg = config.iynaix.displays; in
     # iynaix.persist.tmpfs.root = true;
     # iynaix.persist.tmpfs.home = true;
 
+    networking.hostId = "5f43c101"; # required for zfs
+
     # enable clipboard and file sharing
     services.qemuGuest.enable = true;
     services.spice-vdagentd.enable = true;

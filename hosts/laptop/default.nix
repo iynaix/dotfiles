@@ -8,6 +8,8 @@ let displayCfg = config.iynaix.displays; in
 
     # environment.systemPackages = with pkgs; [ ];
 
+    networking.hostId = "abb4d116"; # required for zfs
+
     # do not autologin on laptop!
     services.xserver.displayManager.autoLogin.enable = false;
 

@@ -18,6 +18,8 @@ let displayCfg = config.iynaix.displays; in
       monitor3 = "HDMI-0";
     };
 
+    networking.hostId = "89eaa833"; # required for zfs
+
     # enable nvidia support
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.opengl.enable = true;
