@@ -21,6 +21,14 @@ let displayCfg = config.iynaix.displays; in
     boot.loader.grub = {
       # useOSProber = true; # os prober is very slow
 
+      # menuentry 'Arch Linux (on /dev/nvme1n1p1)' --class arch --class gnu-linux --class gnu --class os $menuentry_id_option 'osprober-gnulinux-simple-696be7fa-e1d2-4373-ad54-360a93b7c9e2' {
+      # 	insmod part_msdos
+      # 	insmod ext2
+      # 	search --no-floppy --fs-uuid --set=root 696be7fa-e1d2-4373-ad54-360a93b7c9e2
+      # 	linux /boot/vmlinuz-linux root=UUID=696be7fa-e1d2-4373-ad54-360a93b7c9e2 rw quiet
+      # 	initrd /boot/intel-ucode.img /boot/initramfs-linux.img
+      # }
+
       # set $FS_UUID to the UUID of the EFI partition
       # extraEntries = ''
       #   menuentry "Windows" {

@@ -11,6 +11,26 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  # systemd.tmpfiles.rules = [
+  #   "d /media/Files   - root root - -"
+  # ];
+
+  # extra HDDs
+  fileSystems."/media/Files" = {
+    device = "/dev/disk/by-label/Files";
+    fsType = "ext4";
+  };
+
+  fileSystems."/media/6TBRED" = {
+    device = "/dev/disk/by-label/6TBRED";
+    fsType = "ext4";
+  };
+
+  fileSystems."/media/6TBRED2" = {
+    device = "/dev/disk/by-label/6TBRED2";
+    fsType = "ext4";
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
