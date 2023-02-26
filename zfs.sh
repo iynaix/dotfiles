@@ -13,10 +13,17 @@ The following ZFS datasets will be created:
     - zroot/safe/persist (mounted at /persist)
 
 Introduction
+# in a vm, special case
+if [[ -b "/dev/vda" ]]; then
+DISK="/dev/vda"
 
+BOOTDISK="${DISK}3"
+ZFSDISK="${DISK}1"
+# normal disk
+else
 cat << FormatWarning
 Please enter the disk by id to be formatted *without* the part number.
- (e.g. nvme-eui.0123456789). Your devices are shown below:
+(e.g. nvme-eui.0123456789). Your devices are shown below:
 
 FormatWarning
 
@@ -30,6 +37,7 @@ DISK="/dev/disk/by-id/${DISKINPUT}"
 
 BOOTDISK="${DISK}-part3"
 ZFSDISK="${DISK}-part1"
+fi
 
 cat << DiskInfo
 
@@ -56,7 +64,7 @@ sudo sgdisk -n1:0:0 -t1:BF01 $DISK
 
 # notify kernel of parition changes
 sudo sgdisk -p $DISK > /dev/null
-sudo partprobe
+# sudo partprobe
 
 sudo mkfs.fat -F 32 $BOOTDISK
 sudo fatlabel $BOOTDISK NIXBOOT
