@@ -21,28 +21,29 @@ let displayCfg = config.iynaix.displays; in
     boot.loader.grub = {
       # useOSProber = true; # os prober is very slow
 
-      extraEntries = ''
-        menuentry "Arch Linux" {
-          insmod part_msdos
-          insmod ext2
-          search --no-floppy --fs-uuid --set=root 696be7fa-e1d2-4373-ad54-360a93b7c9e2
-          linux /boot/vmlinuz-linux root=UUID=696be7fa-e1d2-4373-ad54-360a93b7c9e2 rw quiet
-          initrd /boot/intel-ucode.img /boot/initramfs-linux.img
-        }
-      '';
-
-      # set $FS_UUID to the UUID of the EFI partition
-      # extraEntries = ''
-      #   menuentry "Windows" {
-      #     insmod part_gpt
-      #     insmod fat
-      #     insmod search_fs_uuid
-      #     insmod chain
-      #     search --fs-uuid --set=root $FS_UUID
-      #     chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-      #   }
-      # '';
+      extraEntries = lib.concatStringsSep "\n" [
+        ''
+          menuentry "Arch Linux" {
+            insmod part_msdos
+            insmod ext2
+            search --no-floppy --fs-uuid --set=root 696be7fa-e1d2-4373-ad54-360a93b7c9e2
+            linux /boot/vmlinuz-linux root=UUID=696be7fa-e1d2-4373-ad54-360a93b7c9e2 rw quiet
+            initrd /boot/intel-ucode.img /boot/initramfs-linux.img
+          }
+        ''
+        ''
+          menuentry "Windows 10" {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root 8651-D10F
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        ''
+      ];
     };
+
     networking.hostId = "89eaa833"; # required for zfs
 
     # enable nvidia support
