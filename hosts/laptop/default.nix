@@ -11,7 +11,7 @@ let displayCfg = config.iynaix.displays; in
     networking.hostId = "abb4d116"; # required for zfs
 
     # do not autologin on laptop!
-    services.xserver.displayManager.autoLogin.enable = false;
+    services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
 
     home-manager.users.${user} = {
       xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {

@@ -34,6 +34,11 @@
     home-manager.users.${user} = {
       home = {
         packages = with pkgs; [ bat bottom htop lazygit neofetch ];
+
+        file."bin" = {
+          source = ./bin;
+          recursive = true;
+        };
       };
 
       # potential vifm shortcuts

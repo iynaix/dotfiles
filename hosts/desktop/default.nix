@@ -51,6 +51,13 @@ let displayCfg = config.iynaix.displays; in
 
     # environment.systemPackages = with pkgs; [ ];
 
+    # symlinks from other drives
+    systemd.tmpfiles.rules = [
+      "L+ /home/${user}/Documents   - - - - /media/Files/Documents"
+      "L+ /home/${user}/Downloads   - - - - /media/Files/Downloads"
+      "L+ /home/${user}/Pictures   - - - - /media/Files/Pictures"
+    ];
+
     home-manager.users.${user} = {
       xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
         monitors = {

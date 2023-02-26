@@ -11,10 +11,6 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  # systemd.tmpfiles.rules = [
-  #   "d /media/Files   - root root - -"
-  # ];
-
   # extra HDDs
   fileSystems."/media/Files" = {
     device = "/dev/disk/by-label/Files";
