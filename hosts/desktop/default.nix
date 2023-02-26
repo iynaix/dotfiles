@@ -83,7 +83,6 @@ let displayCfg = config.iynaix.displays; in
 
             modules-left = "bspwm_mode";
             modules-center = "bspwm";
-            # modules-right = "battery volume mpd date";
             modules-right = "lan volume date";
           };
           "bar/secondary" = {

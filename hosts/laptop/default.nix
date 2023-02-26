@@ -23,6 +23,9 @@ let displayCfg = config.iynaix.displays; in
       };
 
       services.polybar = lib.mkIf config.iynaix.bspwm.enable {
+        package = pkgs.polybar.override {
+          iwSupport = true;
+        };
         script = "polybar ${host} &";
       };
 

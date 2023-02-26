@@ -15,8 +15,8 @@
         };
       };
       iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
+        name = "Numix";
+        package = pkgs.numix-icon-theme;
       };
       font = {
         name = "${config.iynaix.font.regular} Regular";

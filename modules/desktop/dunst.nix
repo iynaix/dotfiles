@@ -25,12 +25,12 @@
             context = "ctrl + mod4 + period";
           };
           urgency_low = {
-            background = theme.rosewater;
+            background = theme.mantle;
             foreground = theme.text;
             timeout = 10;
           };
           urgency_normal = {
-            background = theme.rosewater;
+            background = theme.mantle;
             foreground = theme.text;
             timeout = 10;
           };
