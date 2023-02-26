@@ -86,6 +86,14 @@
             switch
         }
 
+        ngc() {
+            if [[ $? -ne 0 ]]; then
+              sudo nix-collect-garbage $*
+            else
+              sudo nix-collect-garbage -d
+            fi
+        }
+
         # less verbose xev output with only the relevant parts
         keys() {
             xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'

@@ -1,7 +1,7 @@
-"modern vim, forget about vi compatibility
+" modern vim, forget about vi compatibility
 set nocompatible
 
-" automatic instllation of vim-plug
+" Install vim-plug if not found
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -66,7 +66,6 @@ Plug 'MaxMEllon/vim-jsx-pretty' " fix indentation in jsx until treesitter can
 " tmux plugins
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'preservim/vimux'
-
 call plug#end()
 
 " enable 24bit true color
@@ -260,7 +259,7 @@ noremap gV `[v`]
 " vp doesn't replace paste buffer
 function! RestoreRegister()
   let @" = s:restore_reg
-  return ''
+  return ""
 endfunction
 function! s:Repl()
   let s:restore_reg = @"

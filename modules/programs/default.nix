@@ -5,6 +5,7 @@
     ./firefox.nix
     ./keyring.nix
     ./nemo.nix
+    ./neovim.nix
     ./vscode.nix
     ./zathura.nix
     ../media

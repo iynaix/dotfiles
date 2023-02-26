@@ -88,6 +88,7 @@
       ntfs3g
       ripgrep
       wget
+      xclip
     ];
   };
 
