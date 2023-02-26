@@ -64,7 +64,7 @@ sudo sgdisk -n1:0:0 -t1:BF01 $DISK
 
 # notify kernel of parition changes
 sudo sgdisk -p $DISK > /dev/null
-# sudo partprobe
+sudo partprobe
 
 sudo mkfs.fat -F 32 $BOOTDISK
 sudo fatlabel $BOOTDISK NIXBOOT

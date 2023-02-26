@@ -119,8 +119,8 @@ in
           "nemo"
 
           # terminals
-          ''bspc rule -a ${termclass}:ranger -o desktop=${filedesktop}''
-          "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
+          # ''bspc rule -a ${termclass}:ranger -o desktop=${filedesktop}''
+          # "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
           ''
             bspc rule -a ${termclass}:initialterm -o desktop=${secondarytermdesktop} follow=on''
           "$TERMINAL --class ${termclass},initialterm"

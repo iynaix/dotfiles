@@ -21,6 +21,7 @@
           enable = true;
           enableZshIntegration = true;
           settings = {
+            add_newline = false;
             line_break = {
               disabled = true;
             };
@@ -36,6 +37,8 @@
           isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
           ll = "ls -al";
           ls = "exa --group-directories-first --color-scale --icons";
+          nre = "nixos-rebuild";
+          nsh = "nix-shell";
           open = "xdg-open";
           pj = "openproj";
           py = "python";
@@ -65,10 +68,16 @@
         # Suppress output of loud commands you don't want to hear from
         q() { "$@" > /dev/null 2>&1; }
 
+        # get the current nix generation
+        nix-current-generation() {
+            sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
+        }
+
         # switch / update via nix flake
         switch() {
             cd ~/projects/dotfiles
             sudo nixos-rebuild switch --flake ".#${host}"
+            echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
         }
 
         upd8() {
@@ -125,6 +134,11 @@
 
         # ensure beam cursor when starting new terminal
         precmd_functions+=(_set_beam_cursor)
+
+        # disable empty line when opening new terminal, but
+        # insert empty line after each command for starship
+        # https://github.com/starship/starship/issues/560#issuecomment-1318462079
+        precmd() { precmd() { echo "" } }
       '';
     };
 

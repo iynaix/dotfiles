@@ -17,6 +17,15 @@
         blur-method = "dual_kawase";
         blur-size = 12;
         blur-strength = 10;
+        blur-background-exclude = [
+          # "window_type = 'dock'"
+          "window_type = 'desktop'"
+          "window_type = 'tooltip'"
+          "window_type = 'dropdown_menu'"
+          "window_type = 'popup_menu'"
+          "class_g = 'slop'" # do not blur desktop while capturing screenshots
+          "_GTK_FRAME_EXTENTS@:c"
+        ];
         invert-color-include = [ "class_g = 'MongoDB Compass'" ];
         glx-no-stencil = true;
       };

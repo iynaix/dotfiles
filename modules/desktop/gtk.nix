@@ -2,7 +2,7 @@
   services.gvfs.enable = true;
 
   home-manager.users.${user} = {
-    home = { packages = with pkgs; [ dconf ]; };
+    home = { packages = with pkgs; [ dconf gnome.dconf-editor ]; };
 
     gtk = {
       enable = true;
@@ -21,6 +21,7 @@
       font = {
         name = "${config.iynaix.font.regular} Regular";
         package = pkgs.inter;
+        size = 10;
       };
       gtk3 = {
         extraConfig = {

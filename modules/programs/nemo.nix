@@ -7,7 +7,7 @@
       "file:///home/iynaix/projects/coinfc"
       "file:///home/iynaix/projects"
       "file:///home/iynaix/Pictures"
-      "file:///persist"
+      "file:///persist Persist"
     ];
 
     dconf.settings = {
@@ -22,6 +22,9 @@
         default-folder-viewer = "list-view";
         show-hidden-files = true;
         start-with-dual-pane = true;
+      };
+      "org/nemo/preferences/window-state" = {
+        sidebar-bookmark-breakpoint = 0;
       };
       "org/nemo/preferences/menu-config" = {
         selection-menu-make-link = true;
