@@ -1,14 +1,13 @@
-{ pkgs, config, host, user, theme, ... }:
+{ pkgs, config, host, user, theme, lib, ... }:
 let displayCfg = config.iynaix.displays; in
 {
   config = {
     home-manager.users.${user} = {
       services.polybar = {
         enable = true;
-        package =
-          pkgs.polybar.override {
-            pulseSupport = true;
-          };
+        package = lib.mkDefault (pkgs.polybar.override {
+          pulseSupport = true;
+        });
         config = {
           # BARS
           "bar/base" = {
@@ -29,7 +28,7 @@ let displayCfg = config.iynaix.displays; in
             module-margin-right = 0;
 
             font-0 = "Noto Sans:size=10;0";
-            font-1 = "${config.iynaix.font.monospace}:size=11;1";
+            font-1 = "${config.iynaix.font.monospace}:size=10;1";
 
             # tray-position = "right";
             # tray-padding = 2;
@@ -154,9 +153,9 @@ let displayCfg = config.iynaix.displays; in
 
             poll-interval = 5;
 
-            format-charging = "<animation-charging>  <label-charging>";
-            format-discharging = "<ramp-capacity>  <label-discharging>";
-            format-full = "<ramp-capacity>  <label-full>";
+            format-charging = "<animation-charging>    <label-charging>";
+            format-discharging = "<ramp-capacity>    <label-discharging>";
+            format-full = "<ramp-capacity>    <label-full>";
             label-charging = "%percentage%";
             label-discharging = "%percentage%";
             label-full = "%percentage%";

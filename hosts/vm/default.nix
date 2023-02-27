@@ -13,7 +13,7 @@ let displayCfg = config.iynaix.displays; in
     networking.hostId = "5f43c101"; # required for zfs
 
     # doesn't work with by-id
-    boot.zfs.devNodes = lib.mkForce "/dev/disk/by-partuuid"
+    boot.zfs.devNodes = "/dev/disk/by-partuuid";
 
     # enable clipboard and file sharing
     services.qemuGuest.enable = true;

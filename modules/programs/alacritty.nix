@@ -1,4 +1,4 @@
-{ pkgs, theme, user, config, ... }:
+{ pkgs, theme, user, config, lib, ... }:
 let
   # create a fake gnome-terminal shell script so xdg terminal applications
   # will open in alacritty
@@ -37,7 +37,7 @@ in
             bold = { style = "Bold"; };
             italic = { style = "Italic"; };
             bold_italic = { style = "Bold Italic"; };
-            size = 10;
+            size = lib.mkDefault 10;
           };
           selection.save_to_clipboard = true;
           # window.opacity = 0.5;

@@ -4,14 +4,25 @@ let displayCfg = config.iynaix.displays; in
   imports = [ ./hardware.nix ];
 
   config = {
-    iynaix.displays.monitor1 = "eDP-1";
-
-    # environment.systemPackages = with pkgs; [ ];
+    iynaix = {
+      displays.monitor1 = "eDP-1";
+      persist.root.directories = [ "/etc/NetworkManager" ];
+    };
 
     networking.hostId = "abb4d116"; # required for zfs
 
+    environment.systemPackages = with pkgs; [
+      wirelesstools
+      xorg.xbacklight
+      xorg.xmodmap
+    ];
+
+    # touchpad support
+    services.xserver.libinput.enable = true;
+
     # do not autologin on laptop!
     services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
+    security.pam.services.gdm.enableGnomeKeyring = true;
 
     home-manager.users.${user} = {
       xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
@@ -23,9 +34,10 @@ let displayCfg = config.iynaix.displays; in
       };
 
       services.polybar = lib.mkIf config.iynaix.bspwm.enable {
-        package = pkgs.polybar.override {
+        package = (pkgs.polybar.override {
           iwSupport = true;
-        };
+          pulseSupport = true;
+        });
         script = "polybar ${host} &";
       };
 
@@ -37,8 +49,10 @@ let displayCfg = config.iynaix.displays; in
           add Lock = Caps_Lock
         '';
 
-        packages = with pkgs; [ xorg.xmodmap ];
+        # packages = with pkgs; [ xorg.xmodmap ];
       };
+
+      programs.alacritty.settings.font.size = 7;
 
       services.xcape = {
         enable = true;

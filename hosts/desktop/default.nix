@@ -7,16 +7,18 @@ let displayCfg = config.iynaix.displays; in
   ];
 
   config = {
-    iynaix.displays = {
-      monitor1 = "DP-2";
-      monitor2 = "DP-0.8";
-      monitor3 = "HDMI-0";
+    iynaix = {
+      displays = {
+        monitor1 = "DP-2";
+        monitor2 = "DP-0.8";
+        monitor3 = "HDMI-0";
+      };
+      bspwm = {
+        windowGap = 8;
+        padding = 8;
+      };
     };
 
-    iynaix.bspwm = {
-      windowGap = 8;
-      padding = 8;
-    };
 
     boot.loader.grub = {
       # useOSProber = true; # os prober is very slow
