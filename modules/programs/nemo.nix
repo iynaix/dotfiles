@@ -22,6 +22,7 @@
         default-folder-viewer = "list-view";
         show-hidden-files = true;
         start-with-dual-pane = true;
+        date-format-monospace = true;
       };
       "org/nemo/preferences/window-state" = {
         sidebar-bookmark-breakpoint = 0;

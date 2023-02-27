@@ -3,6 +3,11 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
 
+  services.zfs = {
+    autoScrub.enable = true;
+    trim.enable = true;
+  };
+
   # standard zfs filesystem layout
   fileSystems."/" = {
     device = "zroot/local/root";
