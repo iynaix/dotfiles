@@ -31,11 +31,16 @@
     };
 
     # persist keyring and misc other secrets
-    iynaix.persist.home.directories = [
-      { directory = ".gnupg"; mode = "0700"; }
-      { directory = ".pki"; mode = "0700"; }
-      { directory = ".ssh"; mode = "0600"; }
-      ".local/share/keyrings"
-    ];
+    iynaix.persist.home = {
+      directories = [
+        ".gnupg"
+        ".pki"
+        ".ssh"
+        ".local/share/keyrings"
+      ];
+      files = [
+        ".ssh/id_rsa"
+      ];
+    };
   };
 }

@@ -1,5 +1,11 @@
 { pkgs, user, lib, config, ... }: {
-  imports = [ ./git.nix ./ranger.nix ./tmux.nix ./zsh.nix ];
+  imports = [
+    ./git.nix
+    ./direnv.nix
+    ./ranger.nix
+    ./tmux.nix
+    ./zsh.nix
+  ];
 
   options.iynaix.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
@@ -33,7 +39,13 @@
   config = {
     home-manager.users.${user} = {
       home = {
-        packages = with pkgs; [ bat bottom htop lazygit neofetch ];
+        packages = with pkgs; [
+          bat
+          bottom
+          htop
+          lazygit
+          neofetch
+        ];
 
         file."bin" = {
           source = ./bin;
