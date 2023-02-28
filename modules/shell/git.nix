@@ -33,6 +33,7 @@
           gbr = "git bisect reset";
           gcaam = "gaa && gcam";
           gcam = "git commit --amend";
+          gco = "git checkout";
           gdc = "git diff --cached";
           gdi = "git diff";
           gl = "git pull";

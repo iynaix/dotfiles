@@ -1,6 +1,13 @@
 { pkgs, user, ... }: {
   home-manager.users.${user} = {
-    home = { packages = with pkgs; [ cinnamon.nemo rar ]; };
+    home = {
+      packages = with pkgs; [
+        cinnamon.nemo-with-extensions
+        cinnamon.nemo-fileroller
+        gzip
+        rar
+      ];
+    };
 
     gtk.gtk3.bookmarks = [
       "file:///home/iynaix/Downloads"
