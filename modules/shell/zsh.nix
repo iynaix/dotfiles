@@ -127,6 +127,12 @@
             sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
         }
 
+        # build flake but don't switch
+        nbuild() {
+            cd ~/projects/dotfiles
+            sudo nixos-rebuild build --flake ".#${host}"
+        }
+
         # switch / update via nix flake
         switch() {
             cd ~/projects/dotfiles
@@ -140,12 +146,17 @@
             switch
         }
 
+        # nix garbage collection
         ngc() {
             if [[ $? -ne 0 ]]; then
               sudo nix-collect-garbage $*
             else
               sudo nix-collect-garbage -d
             fi
+        }
+
+        nlog() {
+            nix-store --read-log /nix/store/$1
         }
 
         # less verbose xev output with only the relevant parts

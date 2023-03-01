@@ -42,9 +42,11 @@
         packages = with pkgs; [
           bat
           bottom
+          fd
           htop
           lazygit
           neofetch
+          ugrep
         ];
 
         file."bin" = {
