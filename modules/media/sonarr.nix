@@ -8,7 +8,7 @@
     systemd.services.sonarr-ical-sync = {
       serviceConfig.Type = "oneshot";
       serviceConfig.User = user;
-      path = with pkgs; [ direnv nix-direnv ];
+      path = with pkgs; [ git direnv nix-direnv ];
       script = ''
         cd /home/${user}/projects/sonarr-ical-sync
         # activate direnv
@@ -20,8 +20,8 @@
       wantedBy = [ "timers.target" ];
       partOf = [ "sonarr-ical-sync.service" ];
       timerConfig = {
-        # every 3h at 39min past the hour
-        OnCalendar = "00/3:39:00";
+        # every 6h at 39min past the hour
+        OnCalendar = "00/6:39:00";
         Unit = "sonarr-ical-sync.service";
       };
     };

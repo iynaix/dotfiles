@@ -11,7 +11,7 @@ let
   termclass = "Alacritty";
   chromeclass = "Brave-browser";
   webdesktop = "1";
-  filedesktop = "3";
+  # filedesktop = "3";
   nemodesktop = "4";
   secondarytermdesktop = "7";
   # listdesktop = "8";
