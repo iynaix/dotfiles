@@ -4,6 +4,7 @@ let displayCfg = config.iynaix.displays; in
   imports = [
     ./hardware.nix
     ../../modules/media/download.nix # torrenting stuff
+    ../../modules/media/pathofbuilding.nix
   ];
 
   config = {
