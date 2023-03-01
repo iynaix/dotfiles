@@ -22,11 +22,9 @@ let
         preConfigure = ''
           ln -s rockspecs/${pname}-${version}.rockspec .
         '';
-
-        # lib/lua/5.1/lcurl.so
       })
     { };
-  pobfrontend = pkgs.stdenv.mkDerivation {
+  pob-frontend = pkgs.stdenv.mkDerivation {
     pname = "pobfrontend";
     version = "luajit";
 
@@ -59,6 +57,37 @@ let
     '';
   };
 
+  pob-runtime-src = pkgs.stdenv.mkDerivation {
+    name = "pob-runtime-src";
+    version = "1167199";
+
+    src = pkgs.fetchzip {
+      url = "https://github.com/Openarl/PathOfBuilding/files/1167199/PathOfBuilding-runtime-src.zip";
+      sha256 = "sha256-74ye6adtYWwVxu1kjCfEzHbKsOoO5/4g+anQemQmZY4=";
+      stripRoot = false;
+    };
+
+    nativeBuildInputs = with pkgs; [
+      pkgconf
+      zlib
+    ];
+
+    dontBuild = true;
+
+    installPhase = ''
+      cd LZip
+      g++ ''${CXXFLAGS} -W -Wall -fPIC -shared -o lzip.so \
+        -I"$(pkgconf luajit --variable=includedir)" \
+        lzip.cpp \
+        ''${LDFLAGS} \
+        -L"$(pkgconf luajit --variable=libdir)" \
+        -l"$(pkgconf luajit --variable=libname)" \
+        -lz
+        mkdir -p $out/bin
+        cp lzip.so $out/bin
+    '';
+  };
+
   # referenced from pob package on AUR
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=path-of-building-community-git
   path-of-building = pkgs.stdenv.mkDerivation rec {
@@ -76,7 +105,8 @@ let
       mkdir -p $out
       cp -r ${src}/* $out
       cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
-      cp ${pobfrontend}/bin/pobfrontend $out/pobfrontend
+      cp ${pob-runtime-src}/bin/lzip.so $out
+      cp ${pob-frontend}/bin/pobfrontend $out
     '';
   };
 in
@@ -84,6 +114,6 @@ in
   home-manager.users.${user} = {
     # home.packages = [ lua-curl ];
     # home.packages = [ pobfrontend ];
-    home.packages = [ path-of-building ];
+    home.packages = [ path-of-building pob-runtime-src ];
   };
 }
