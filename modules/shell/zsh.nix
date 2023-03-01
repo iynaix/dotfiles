@@ -16,6 +16,7 @@
           enableAutosuggestions = true;
           enableSyntaxHighlighting = true;
           history.path = "$ZDOTDIR/.zsh_history";
+          historySubstringSearch.enable = true;
         };
 
         starship = {
@@ -129,7 +130,7 @@
         # switch / update via nix flake
         switch() {
             cd ~/projects/dotfiles
-            sudo nixos-rebuild switch --flake ".#${host}"
+            sudo nixos-rebuild switch --flake ".#${host}" && \
             echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
         }
 
