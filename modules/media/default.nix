@@ -1,5 +1,5 @@
 { pkgs, user, ... }: {
-  imports = [ ./mpv.nix ];
+  imports = [ ./mpv.nix ./pathofbuilding.nix ];
 
   home-manager.users.${user} = {
     programs = {

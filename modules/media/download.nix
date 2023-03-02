@@ -1,10 +1,6 @@
 { pkgs, user, lib, ... }: {
   imports = [ ./transmission.nix ./sonarr.nix ];
 
-  services = {
-    sonarr = { enable = true; };
-  };
-
   home-manager.users.${user} = {
     # extra media specific settings
     gtk.gtk3 = {

@@ -28,7 +28,7 @@ in
   ];
 
   options.iynaix.bspwm = {
-    enable = lib.mkEnableOption "bspwm";
+    enable = lib.mkEnableOption "bspwm" // { default = true; };
     windowGap = lib.mkOption {
       type = lib.types.int;
       default = 4;

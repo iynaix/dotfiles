@@ -6,7 +6,10 @@ let displayCfg = config.iynaix.displays; in
   config = {
     iynaix = {
       displays.monitor1 = "eDP-1";
-      persist.root.directories = [ "/etc/NetworkManager" ];
+      pathofbuilding.enable = true;
+      persist.root.directories = [
+        "/etc/NetworkManager" # for wifi
+      ];
     };
 
     networking.hostId = "abb4d116"; # required for zfs

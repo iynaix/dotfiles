@@ -6,9 +6,15 @@ let displayCfg = config.iynaix.displays; in
   ];
 
   config = {
-    iynaix.displays.monitor1 = "Virtual-1";
-    # iynaix.persist.tmpfs.root = true;
-    # iynaix.persist.tmpfs.home = true;
+    iynaix = {
+      displays.monitor1 = "Virtual-1";
+
+      pathofbuilding.enable = false;
+
+      # persist.tmpfs.root = true;
+      # persist.tmpfs.home = true;
+    };
+
 
     networking.hostId = "5f43c101"; # required for zfs
 

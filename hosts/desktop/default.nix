@@ -7,7 +7,6 @@ let displayCfg = config.iynaix.displays; in
   ];
 
   config = {
-    environment.systemPackages = [ (pkgs.callPackage ../../packages/pathofbuilding.nix { }) ];
 
     iynaix = {
       displays = {
