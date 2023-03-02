@@ -134,7 +134,7 @@
         }
 
         # switch / update via nix flake
-        switch() {
+        nswitch() {
             cd ~/projects/dotfiles
             sudo nixos-rebuild switch --flake ".#${host}" && \
             echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
@@ -153,10 +153,6 @@
             else
               sudo nix-collect-garbage -d
             fi
-        }
-
-        nlog() {
-            nix-store --read-log /nix/store/$1
         }
 
         # less verbose xev output with only the relevant parts

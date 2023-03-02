@@ -56,7 +56,6 @@ let
       cp ./pobfrontend $out/bin
     '';
   };
-
   pob-runtime-src = pkgs.stdenv.mkDerivation {
     name = "pob-runtime-src";
     version = "1167199";
@@ -67,15 +66,21 @@ let
       stripRoot = false;
     };
 
-    nativeBuildInputs = with pkgs; [
-      pkgconf
-      zlib
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/lzip-linux.patch?h=path-of-building-community-git";
+        sha256 = "sha256-nbyIArdM7tePGmuh1bkCUfWuf5qM9Ul0JuSjUAERL80=";
+      })
     ];
+
+    # everything else from now on is done in the lua directory
+    prePatch = "cd LZip";
+
+    nativeBuildInputs = with pkgs; [ pkgconf zlib ];
 
     dontBuild = true;
 
     installPhase = ''
-      cd LZip
       g++ ''${CXXFLAGS} -W -Wall -fPIC -shared -o lzip.so \
         -I"$(pkgconf luajit --variable=includedir)" \
         lzip.cpp \
@@ -99,21 +104,32 @@ let
       sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
+        sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
+      })
+    ];
+
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
+
     dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out
+      mkdir -p $out/bin
       cp -r ${src}/* $out
       cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
       cp ${pob-runtime-src}/bin/lzip.so $out
       cp ${pob-frontend}/bin/pobfrontend $out
+
+      # create a wrapper script for pobfrontend
+      wrapProgram $out/pobfrontend \
+          --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua"
     '';
   };
 in
 {
   home-manager.users.${user} = {
-    # home.packages = [ lua-curl ];
-    # home.packages = [ pobfrontend ];
-    home.packages = [ path-of-building pob-runtime-src ];
+    home.packages = [ path-of-building ];
   };
 }

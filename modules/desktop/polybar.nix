@@ -263,8 +263,8 @@ let displayCfg = config.iynaix.displays; in
 
             interval = 1;
 
-            label-connected = "%{A:xst -e nmtui&:}直  %essid%%{A}";
-            label-disconnected = "%{A:xst -e nmtui&:}睊%{A}";
+            label-connected = "%{A:alacritty -e nmtui&:}直  %essid%%{A}";
+            label-disconnected = "%{A:alacritty -e nmtui&:}睊%{A}";
             label-disconnected-foreground = "${theme.red}";
           };
         };

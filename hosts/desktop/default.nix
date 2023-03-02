@@ -4,7 +4,7 @@ let displayCfg = config.iynaix.displays; in
   imports = [
     ./hardware.nix
     ../../modules/media/download.nix # torrenting stuff
-    ../../modules/media/pathofbuilding
+    ../../modules/media/pathofbuilding.nix
   ];
 
   config = {
@@ -20,10 +20,8 @@ let displayCfg = config.iynaix.displays; in
       };
     };
 
-
     boot.loader.grub = {
       # useOSProber = true; # os prober is very slow
-
       extraEntries = lib.concatStringsSep "\n" [
         ''
           menuentry "Arch Linux" {

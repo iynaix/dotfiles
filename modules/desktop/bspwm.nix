@@ -148,6 +148,7 @@ in
         packages = with pkgs; [
           maim
           sxiv
+          xdotool
           xwallpaper
         ];
 
