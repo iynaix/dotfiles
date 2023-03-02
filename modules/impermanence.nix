@@ -26,7 +26,7 @@ let cfg = config.iynaix.persist; in
     };
   };
 
-  config = {
+  config = lib.mkIf config.iynaix.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [

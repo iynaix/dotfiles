@@ -16,7 +16,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf config.iynaix.zfs.enable {
     fileSystems."/" = lib.mkIf cfg.root (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
