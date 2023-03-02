@@ -127,14 +127,8 @@
             sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
         }
 
-        # build flake but don't switch
-        nbuild() {
-            cd ~/projects/dotfiles
-            sudo nixos-rebuild build --flake ".#${host}"
-        }
-
         # switch / update via nix flake
-        nswitch() {
+        switch() {
             cd ~/projects/dotfiles
             sudo nixos-rebuild switch --flake ".#${host}" && \
             echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"

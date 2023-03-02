@@ -1,4 +1,6 @@
-{ pkgs, user, lib, config, stdenv, ... }:
+# build this package standalone with the following command:
+# nix-build path-of-building.nix
+{ pkgs ? import <nixpkgs> { } }:
 let
   pobVersion = "2.25.1";
   luacurlVersion = "0.3.13-1";
@@ -92,44 +94,39 @@ let
         cp lzip.so $out/bin
     '';
   };
-
-  # referenced from pob package on AUR
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=path-of-building-community-git
-  path-of-building = pkgs.stdenv.mkDerivation rec {
-    pname = "path-of-building";
-    version = pobVersion;
-
-    src = pkgs.fetchzip {
-      url = "https://github.com/PathOfBuildingCommunity/PathOfBuilding/archive/refs/tags/v${pobVersion}.zip";
-      sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
-    };
-
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
-        sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
-      })
-    ];
-
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
-
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/bin
-      cp -r ${src}/* $out
-      cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
-      cp ${pob-runtime-src}/bin/lzip.so $out
-      cp ${pob-frontend}/bin/pobfrontend $out
-
-      # create a wrapper script for pobfrontend
-      wrapProgram $out/pobfrontend \
-          --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua"
-    '';
-  };
 in
-{
-  home-manager.users.${user} = {
-    home.packages = [ path-of-building ];
+# referenced from pob package on AUR
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=path-of-building-community-git
+pkgs.stdenv.mkDerivation rec {
+  pname = "path-of-building";
+  version = pobVersion;
+
+  src = pkgs.fetchzip {
+    url = "https://github.com/PathOfBuildingCommunity/PathOfBuilding/archive/refs/tags/v${pobVersion}.zip";
+    sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
   };
+
+  patches = [
+    (pkgs.fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
+      sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
+    })
+  ];
+
+  nativeBuildInputs = with pkgs; [ makeWrapper ];
+
+  dontBuild = true;
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -r ${src}/* $out
+    cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
+    cp ${pob-runtime-src}/bin/lzip.so $out
+    cp ${pob-frontend}/bin/pobfrontend $out
+
+    # create a wrapper script for pobfrontend
+    makeWrapper $out/pobfrontend $out/bin/path-of-building \
+        --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua" \
+        --run "cd $out"
+  '';
 }

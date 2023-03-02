@@ -4,10 +4,11 @@ let displayCfg = config.iynaix.displays; in
   imports = [
     ./hardware.nix
     ../../modules/media/download.nix # torrenting stuff
-    ../../modules/media/pathofbuilding.nix
   ];
 
   config = {
+    environment.systemPackages = [ (pkgs.callPackage ../../packages/pathofbuilding.nix { }) ];
+
     iynaix = {
       displays = {
         monitor1 = "DP-2";
@@ -111,10 +112,10 @@ let displayCfg = config.iynaix.displays; in
       };
 
       home = {
-        packages = with pkgs; [
+        packages = [
           # additional media players
-          smplayer
-          vlc
+          pkgs.smplayer
+          pkgs.vlc
         ];
       };
     };
