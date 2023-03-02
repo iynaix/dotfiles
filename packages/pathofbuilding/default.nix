@@ -101,8 +101,10 @@ pkgs.stdenv.mkDerivation rec {
   pname = "path-of-building";
   version = pobVersion;
 
-  src = pkgs.fetchzip {
-    url = "https://github.com/PathOfBuildingCommunity/PathOfBuilding/archive/refs/tags/v${pobVersion}.zip";
+  src = pkgs.fetchFromGitHub {
+    owner = "PathOfBuildingCommunity";
+    repo = "PathOfBuilding";
+    rev = "v${pobVersion}";
     sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
   };
 
@@ -119,7 +121,7 @@ pkgs.stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r ${src}/* $out
+    cp -r * $out
     cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
     cp ${pob-runtime-src}/bin/lzip.so $out
     cp ${pob-frontend}/bin/pobfrontend $out
@@ -128,5 +130,24 @@ pkgs.stdenv.mkDerivation rec {
     makeWrapper $out/pobfrontend $out/bin/path-of-building \
         --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua" \
         --run "cd $out"
+
+    # create logos
+    mkdir -p $out/share/pixmaps
+    cp ${./PathOfBuilding-logo.png} $out/share/pixmaps/PathOfBuilding.png
+    cp ${./PathOfBuilding-logo.svg} $out/share/pixmaps/PathOfBuilding.svg
+    ln -sv "${desktopItem}/share/applications" $out/share
   '';
+
+  desktopItem = pkgs.makeDesktopItem {
+    name = "Path of Building";
+    desktopName = "Path of Building";
+    comment = "Offline build planner for Path of Exile";
+    exec = "path-of-building %U";
+    terminal = false;
+    type = "Application";
+    icon = "PathOfBuilding";
+    categories = [ "Game" ];
+    keywords = [ "poe" "pob" "pobc" "path" "exile" ];
+    mimeTypes = [ "x-scheme-handler/pob" ];
+  };
 }
