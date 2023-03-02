@@ -55,7 +55,7 @@ let displayCfg = config.iynaix.displays; in
         # packages = with pkgs; [ xorg.xmodmap ];
       };
 
-      programs.alacritty.settings.font.size = 7;
+      programs.alacritty.settings.font.size = 10;
 
       services.xcape = {
         enable = true;

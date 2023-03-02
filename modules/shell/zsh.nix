@@ -143,7 +143,7 @@
         upd8() {
             cd ~/projects/dotfiles
             nix flake update
-            switch
+            nswitch
         }
 
         # nix garbage collection

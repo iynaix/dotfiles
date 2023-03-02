@@ -185,11 +185,10 @@ let displayCfg = config.iynaix.displays; in
             format = "<ramp> <label>";
             label = "%percentage%";
 
-            ramp-0 = "🌕";
-            ramp-1 = "🌔";
-            ramp-2 = "🌓";
-            ramp-3 = "🌒";
-            ramp-4 = "🌑";
+            ramp-0 = "";
+            ramp-1 = "󰃟";
+            ramp-2 = "󰃝";
+            ramp-3 = "󰃞";
           };
           "module/volume" = {
             type = "internal/pulseaudio";
