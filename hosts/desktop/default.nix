@@ -1,23 +1,20 @@
 { config, pkgs, user, lib, host, ... }:
 let displayCfg = config.iynaix.displays; in
 {
-  imports = [
-    ./hardware.nix
-    ../../modules/media/download.nix # torrenting stuff
-  ];
+  imports = [ ./hardware.nix ];
 
   config = {
-
     iynaix = {
       displays = {
         monitor1 = "DP-2";
         monitor2 = "DP-0.8";
         monitor3 = "HDMI-0";
       };
-      bspwm = {
-        windowGap = 8;
+      bspwm.extraSettings = {
+        window_gap = 8;
         padding = 8;
       };
+      torrenters.enable = true;
     };
 
     boot.loader.grub = {

@@ -1,25 +1,48 @@
-{ pkgs, user, ... }: {
-  imports = [ ./mpv.nix ./pathofbuilding.nix ];
+{ pkgs, user, config, lib, ... }:
+let cfg = config.iynaix.torrenters; in
+{
+  imports = [
+    ./mpv.nix
+    ./pathofbuilding.nix
+    ./transmission.nix
+    ./sonarr.nix
+  ];
 
-  home-manager.users.${user} = {
-    programs = {
-      yt-dlp = {
-        enable = true;
-        settings = {
-          add-metadata = true;
-          no-mtime = true;
-          format = "best[ext=mp4]";
-          sponsorblock-mark = "all";
-          output = "%(title)s.%(ext)s";
+  options.iynaix.torrenters = {
+    enable = lib.mkEnableOption "Torrenting Applications";
+  };
+
+  config = {
+    home-manager.users.${user} = {
+      programs = {
+        yt-dlp = {
+          enable = true;
+          settings = {
+            add-metadata = true;
+            no-mtime = true;
+            format = "best[ext=mp4]";
+            sponsorblock-mark = "all";
+            output = "%(title)s.%(ext)s";
+          };
+        };
+
+        zsh.shellAliases = {
+          yt = "yt-dlp";
+          ytaudio = "yt --audio-format mp3 --extract-audio";
+          ytsub = "yt --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
+          ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
         };
       };
 
-      zsh.shellAliases = {
-        yt = "yt-dlp";
-        ytaudio = "yt --audio-format mp3 --extract-audio";
-        ytsub = "yt --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
-        ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
+      # extra downloader specific settings
+      gtk.gtk3 = lib.mkIf cfg.enable {
+        bookmarks = lib.mkAfter [
+          "file:///media/6TBRED/Anime/Current TV Current"
+          "file:///media/6TBRED/US/Current Anime Current"
+          "file:///media/6TBRED/New TV New"
+        ];
       };
     };
+
   };
 }

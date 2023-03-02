@@ -1,6 +1,6 @@
 { pkgs, user, lib, config, ... }:
 let home = "/home/${user}"; in {
-  config = {
+  config = lib.mkIf config.iynaix.torrenters.enable {
     # transmission dark mode, the default theme is hideous
     nixpkgs.overlays = [
       (self: super: {

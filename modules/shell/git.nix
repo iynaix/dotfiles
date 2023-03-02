@@ -30,7 +30,8 @@
       zsh = {
         shellAliases = {
           gaa = "git add --all";
-          gbr = "git bisect reset";
+          gb = "git branch";
+          gbtr = "git bisect reset";
           gcaam = "gaa && gcam";
           gcam = "git commit --amend";
           gco = "git checkout";

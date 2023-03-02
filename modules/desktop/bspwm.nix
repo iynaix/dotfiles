@@ -3,6 +3,7 @@ let
   cfg = config.iynaix.bspwm;
   # misc bspwm variables here
   barHeight = 30;
+  padding = cfg.extraSettings.padding or 4;
   # border_width = 2;
   # colors
   normal = "#30302f";
@@ -29,15 +30,9 @@ in
 
   options.iynaix.bspwm = {
     enable = lib.mkEnableOption "bspwm" // { default = true; };
-    windowGap = lib.mkOption {
-      type = lib.types.int;
-      default = 4;
-      description = "Size of the gap that separates windows";
-    };
-    padding = lib.mkOption {
-      type = lib.types.int;
-      default = 4;
-      description = "Padding space added at the sides of the monitor or desktop";
+    extraSettings = lib.mkOption {
+      default = { };
+      description = "Extra settings to override for bspwm.settings.";
     };
   };
 
@@ -51,48 +46,50 @@ in
       xsession.enable = true;
       xsession.windowManager.bspwm = {
         enable = cfg.enable;
-        settings = {
-          automatic_scheme = "longest_side";
+        settings = (lib.overrideExisting
+          {
+            automatic_scheme = "longest_side";
 
-          # borders and gaps
-          border_width = 2;
-          active_border_color = normal;
-          normal_border_color = normal;
-          focused_border_color = focused;
+            # borders and gaps
+            border_width = 2;
+            active_border_color = normal;
+            normal_border_color = normal;
+            focused_border_color = focused;
 
-          window_gap = cfg.windowGap;
-          top_padding = cfg.padding + barHeight;
-          left_padding = cfg.padding;
-          right_padding = cfg.padding;
-          bottom_padding = cfg.padding;
+            window_gap = cfg.extraSettings.window_gap or 4;
+            top_padding = padding + barHeight;
+            left_padding = padding;
+            right_padding = padding;
+            bottom_padding = padding;
 
-          presel_feedback_color = focused;
-          split_ratio = 0.5;
-          focus_follows_pointer = true;
-          pointer_follows_monitor = true;
+            presel_feedback_color = focused;
+            split_ratio = 0.5;
+            focus_follows_pointer = true;
+            pointer_follows_monitor = true;
 
-          # smart gaps
-          single_monocle = true;
-          borderless_monocle = false;
-          gapless_monocle = true;
-          top_monocle_padding = 0;
-          right_monocle_padding = 0;
-          bottom_monocle_padding = 0;
-          left_monocle_padding = 0;
+            # smart gaps
+            single_monocle = true;
+            borderless_monocle = false;
+            gapless_monocle = true;
+            top_monocle_padding = 0;
+            right_monocle_padding = 0;
+            bottom_monocle_padding = 0;
+            left_monocle_padding = 0;
 
-          # handle the mouse
-          pointer_modifier = "mod4";
-          pointer_action1 = "move";
-          pointer_action2 = "resize_corner";
-          pointer_motion_interval = "7ms";
+            # handle the mouse
+            pointer_modifier = "mod4";
+            pointer_action1 = "move";
+            pointer_action2 = "resize_corner";
+            pointer_motion_interval = "7ms";
 
-          # handle unplugging monitors
-          remove_disabled_monitors = false;
-          remove_unplugged_monitors = false;
+            # handle unplugging monitors
+            remove_disabled_monitors = false;
+            remove_unplugged_monitors = false;
 
-          # custom external rules
-          external_rules_command = "~/bin/bspwm_external_rules";
-        };
+            # custom external rules
+            external_rules_command = "~/bin/bspwm_external_rules";
+          }
+          cfg.extraSettings);
         rules = {
           "ffchat" = { desktop = chatdesktop; };
           "Transmission-gtk" = { desktop = dldesktop; };

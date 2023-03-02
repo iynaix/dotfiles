@@ -1,5 +1,5 @@
 { pkgs, user, lib, config, ... }: {
-  config = {
+  config = lib.mkIf config.iynaix.torrenters.enable {
     services.sonarr.enable = true;
 
     # setup cron job to sync sonarr ical with google calendar
