@@ -44,6 +44,7 @@ Plug 'tpope/vim-unimpaired' " helpful shorthand like [b ]b
 Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/matchit.zip'
 Plug 'windwp/nvim-autopairs'
+Plug 'rummik/vim-nix', { 'branch': 'language-fencing' }
 
 " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'

@@ -82,7 +82,7 @@ let
 
     dontBuild = true;
 
-    installPhase = ''
+    installPhase = /* sh */ ''
       g++ ''${CXXFLAGS} -W -Wall -fPIC -shared -o lzip.so \
         -I"$(pkgconf luajit --variable=includedir)" \
         lzip.cpp \
@@ -119,7 +119,7 @@ pkgs.stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
+  installPhase = /* sh */ ''
     mkdir -p $out/bin
     cp -r * $out
     cp ${lua-curl}/lib/lua/5.1/lcurl.so $out

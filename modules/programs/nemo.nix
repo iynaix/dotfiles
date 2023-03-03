@@ -11,8 +11,8 @@
 
     gtk.gtk3.bookmarks = [
       "file:///home/iynaix/Downloads"
-      "file:///home/iynaix/projects/coinfc"
       "file:///home/iynaix/projects"
+      "file:///home/iynaix/projects/coinfc"
       "file:///home/iynaix/Pictures"
       "file:///persist Persist"
     ];
@@ -31,7 +31,7 @@
         start-with-dual-pane = true;
         date-format-monospace = true;
       };
-      "org/nemo/preferences/window-state" = {
+      "org/nemo/window-state" = {
         sidebar-bookmark-breakpoint = 0;
       };
       "org/nemo/preferences/menu-config" = {

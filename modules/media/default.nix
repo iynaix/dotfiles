@@ -40,6 +40,7 @@ let cfg = config.iynaix.torrenters; in
           "file:///media/6TBRED/Anime/Current TV Current"
           "file:///media/6TBRED/US/Current Anime Current"
           "file:///media/6TBRED/New TV New"
+          "file:///media/6TBRED/Movies"
         ];
       };
     };
