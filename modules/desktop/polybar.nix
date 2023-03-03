@@ -186,7 +186,7 @@ in
             card = "intel_backlight";
             enable-scroll = true;
 
-            format = "<ramp> <label>";
+            format = "<ramp>  <label>";
             label = "%percentage%";
 
             ramp-0 = "";

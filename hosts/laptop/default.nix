@@ -15,9 +15,9 @@ let displayCfg = config.iynaix.displays; in
     networking.hostId = "abb4d116"; # required for zfs
 
     environment.systemPackages = with pkgs; [
+      alsa-utils
       wirelesstools
-      xorg.xbacklight
-      xorg.xmodmap
+      brightnessctl
     ];
 
     # touchpad support

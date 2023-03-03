@@ -40,8 +40,8 @@ in
           "XF86AudioLowerVolume" = "volume-change 5%-";
           "XF86AudioRaiseVolume" = "volume-change 5%+ on";
           "XF86AudioMute" = "volume-change toggle";
-          "XF86MonBrightnessDown" = "brightness-change -dec 5";
-          "XF86MonBrightnessUp" = "brightness-change -inc 5";
+          "XF86MonBrightnessDown" = "brightness-change set 5%-";
+          "XF86MonBrightnessUp" = "brightness-change set +5%";
           "XF86AudioPlay" = "mpvctl playpause";
 
           ############################
