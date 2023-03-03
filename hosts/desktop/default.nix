@@ -117,5 +117,9 @@ let displayCfg = config.iynaix.displays; in
         ];
       };
     };
+
+    iynaix.persist.home.directories = [
+      ".config/smplayer"
+    ];
   };
 }

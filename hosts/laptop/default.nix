@@ -51,8 +51,6 @@ let displayCfg = config.iynaix.displays; in
           keysym Caps_Lock = Super_R
           add Lock = Caps_Lock
         '';
-
-        # packages = with pkgs; [ xorg.xmodmap ];
       };
 
       programs.alacritty.settings.font.size = 10;
@@ -63,5 +61,12 @@ let displayCfg = config.iynaix.displays; in
         timeout = 200;
       };
     };
+
+    # run xmodmap, see:
+    # https://nixos.wiki/wiki/Keyboard_Layout_Customization
+    services.xserver.displayManager.sessionCommands = ''
+      sleep 5 && ${pkgs.xorg.xmodmap}/bin/xmodmap ~/.xmodmap &
+    '';
+
   };
 }

@@ -1,6 +1,9 @@
 { pkgs, user, lib, config, ... }: {
   config = lib.mkIf config.iynaix.torrenters.enable {
-    services.sonarr.enable = true;
+    services.sonarr = {
+      enable = true;
+      user = user;
+    };
 
     # setup cron job to sync sonarr ical with google calendar
     # https://www.codyhiar.com/blog/repeated-tasks-with-systemd-service-timers-on-nixos/
@@ -9,7 +12,7 @@
       serviceConfig.Type = "oneshot";
       serviceConfig.User = user;
       path = with pkgs; [ git direnv nix-direnv ];
-      script = ''
+      script = /* sh */ ''
         cd /home/${user}/projects/sonarr-ical-sync
         # activate direnv
         direnv allow && eval "$(direnv export bash)"

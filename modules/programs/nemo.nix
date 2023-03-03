@@ -1,4 +1,10 @@
 { pkgs, user, ... }: {
+  programs.file-roller.enable = true;
+  xdg.mime.defaultApplications = {
+    # wtf zathura registers itself to open zip files
+    "application/zip" = "org.gnome.FileRoller.desktop";
+  };
+
   home-manager.users.${user} = {
     home = {
       packages = with pkgs; [
@@ -41,4 +47,5 @@
       };
     };
   };
+
 }
