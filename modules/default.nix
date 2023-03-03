@@ -1,9 +1,9 @@
 { pkgs, user, ... }: {
   imports = [
-    ./shell
-    ./programs
     ./desktop
-    ./desktop/gtk.nix
+    ./hardware
+    ./programs
+    ./shell
   ];
 
   home-manager.users.${user} = {

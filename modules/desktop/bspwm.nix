@@ -144,6 +144,7 @@ in
       home = {
         packages = with pkgs; [
           maim
+          python3 # for bspc scripts
           sxiv
           xdotool
           xwallpaper

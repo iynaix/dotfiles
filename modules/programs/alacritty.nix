@@ -3,7 +3,7 @@ let
   # create a fake gnome-terminal shell script so xdg terminal applications
   # will open in alacritty
   # https://unix.stackexchange.com/a/642886
-  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" ''
+  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" /* sh */ ''
     shift
 
     TITLE="$(basename "$1")"

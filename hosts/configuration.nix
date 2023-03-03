@@ -101,15 +101,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # setup pipewire for audio
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-  hardware.pulseaudio.enable = false;
-
   # auto login
   services.xserver.displayManager = {
     autoLogin = {

@@ -6,6 +6,7 @@ let displayCfg = config.iynaix.displays; in
   config = {
     iynaix = {
       displays.monitor1 = "eDP-1";
+      backlight.enable = true;
       pathofbuilding.enable = true;
       persist.root.directories = [
         "/etc/NetworkManager" # for wifi
@@ -15,9 +16,7 @@ let displayCfg = config.iynaix.displays; in
     networking.hostId = "abb4d116"; # required for zfs
 
     environment.systemPackages = with pkgs; [
-      alsa-utils
       wirelesstools
-      brightnessctl
     ];
 
     # touchpad support
@@ -67,6 +66,5 @@ let displayCfg = config.iynaix.displays; in
     services.xserver.displayManager.sessionCommands = ''
       sleep 5 && ${pkgs.xorg.xmodmap}/bin/xmodmap ~/.xmodmap &
     '';
-
   };
 }

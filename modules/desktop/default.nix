@@ -3,6 +3,7 @@
     # bspwm are mutually exclusive via a config option
     ./bspwm.nix
     ./gnome3.nix
+    ./gtk.nix
   ];
 
   options.iynaix = {

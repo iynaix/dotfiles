@@ -1,6 +1,8 @@
 { pkgs, host, user, config, ... }:
 # use alt in vms to avoid conflicts with the host
-let mod = if host == "vm" then "alt" else "super";
+let
+  mod = if host == "vm" then "alt" else "super";
+  rofi = config.iynaix.rofi.bin;
 in
 {
   home-manager.users.${user} = {
@@ -8,19 +10,15 @@ in
       sxhkd = {
         enable = true;
         keybindings = {
-          ############################
-          # COMMON KEYBINDINGS
-          ############################
-
           # terminal emulator
           "${mod} + Return" = "$TERMINAL";
 
           # program launcher
-          "${mod} + shift + Return" = "rofi -show drun";
+          "${mod} + shift + Return" = "${rofi} -show drun";
 
           # rofi shutdown actions menu
           "ctrl + alt + Delete" = ''
-            rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
+            ${rofi} -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
 
           # screenshots
           "${mod} + shift + backslash" = "rofi-screenshot";
@@ -37,16 +35,9 @@ in
             "{$TERMINAL -e ranger ~/Downloads,nemo ~/Downloads}";
 
           # special keys
-          "XF86AudioLowerVolume" = "volume-change 5%-";
-          "XF86AudioRaiseVolume" = "volume-change 5%+ on";
-          "XF86AudioMute" = "volume-change toggle";
-          "XF86MonBrightnessDown" = "brightness-change set 5%-";
-          "XF86MonBrightnessUp" = "brightness-change set +5%";
           "XF86AudioPlay" = "mpvctl playpause";
 
-          ############################
           # BSPWM KEYBINDINGS
-          ############################
 
           # reload bspwm
           "ctrl + shift + Escape" =
@@ -153,20 +144,6 @@ in
 
           # move a floating window / pip window
           "${mod} + {Left,Down,Up,Right}" = "bspc-smartmove {left,down,up,right}";
-
-          # adjust inner gaps
-          "${mod} + slash : {k,j}" = ''
-            new_gap=$(( $(bspc config window_gap) {+,-} 5 )); \
-            	bspc config window_gap $((new_gap >= 0 ? new_gap : 0))'';
-
-          # adjust outer gaps
-          "${mod} + slash : {h,l}" = ''
-            bar_height=30; \
-            	padding=$(( $(bspc config left_padding) {+,-} 5 )); \
-            	bspc config left_padding $((padding >= 0 ? padding : 0)); \
-            	bspc config right_padding $((padding >= 0 ? padding : 0)); \
-            	bspc config bottom_padding $((padding >= 0 ? padding : 0)); \
-            	bspc config top_padding $((padding >= 0 ? bar_height + padding : bar_height));'';
 
           # toggle default gaps / gapless
           "${mod} + shift + slash" = ''
