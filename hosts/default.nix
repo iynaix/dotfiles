@@ -1,5 +1,4 @@
-{ lib, inputs, nixpkgs, home-manager, user, hyprland, ... }:
-
+{ lib, inputs, nixpkgs, home-manager, user, hyprland, nixos-hardware, ... }:
 let
   # cappuccin mocha
   theme = {
@@ -50,7 +49,7 @@ let
       ./${hostName} # host specific configuration, including hardware
       home-manager.nixosModules.home-manager
       inputs.impermanence.nixosModules.impermanence
-    ];
+    ] ++ lib.optional (hostName == "laptop") nixos-hardware.nixosModules.dell-xps-13-9343;
   };
 in
 {

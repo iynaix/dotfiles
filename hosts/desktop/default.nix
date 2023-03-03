@@ -18,7 +18,6 @@ let displayCfg = config.iynaix.displays; in
     };
 
     boot.loader.grub = {
-      # useOSProber = true; # os prober is very slow
       extraEntries = lib.concatStringsSep "\n" [
         ''
           menuentry "Arch Linux" {
@@ -41,6 +40,9 @@ let displayCfg = config.iynaix.displays; in
         ''
       ];
     };
+
+    # fix clock to be compatible with windows
+    time.hardwareClockInLocalTime = true;
 
     networking.hostId = "89eaa833"; # required for zfs
 

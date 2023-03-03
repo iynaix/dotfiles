@@ -3,10 +3,10 @@ let home = "/home/${user}"; in {
   config = lib.mkIf config.iynaix.torrenters.enable {
     # transmission dark mode, the default theme is hideous
     nixpkgs.overlays = [
-      (self: super: {
-        transmission = super.transmission.overrideAttrs
+      (final: prev: {
+        transmission = prev.transmission.overrideAttrs
           (old: rec {
-            themeSrc = super.fetchzip
+            themeSrc = prev.fetchzip
               {
                 url = "https://git.eigenlab.org/sbiego/transmission-web-soft-theme/-/archive/master/transmission-web-soft-theme-master.tar.gz";
                 sha256 = "sha256-TAelzMJ8iFUhql2CX8lhysXKvYtH+cL6BCyMcpMaS9Q=";

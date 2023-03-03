@@ -3,12 +3,15 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    impermanence.url = "github:nix-community/impermanence";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
       # Official Hyprland flake
@@ -18,12 +21,12 @@
 
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, nixos-hardware, ... }:
     let user = "iynaix";
     in {
       nixosConfigurations = (import ./hosts {
         inherit (nixpkgs) lib;
-        inherit inputs nixpkgs home-manager user impermanence hyprland;
+        inherit inputs nixpkgs home-manager user impermanence hyprland nixos-hardware;
       });
     };
 }
