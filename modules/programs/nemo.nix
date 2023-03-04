@@ -18,6 +18,7 @@
     gtk.gtk3.bookmarks = [
       "file:///home/iynaix/Downloads"
       "file:///home/iynaix/projects"
+      "file:///home/iynaix/projects/dotfiles"
       "file:///home/iynaix/projects/coinfc"
       "file:///home/iynaix/Pictures"
       "file:///persist Persist"

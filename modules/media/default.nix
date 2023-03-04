@@ -4,6 +4,7 @@ let cfg = config.iynaix.torrenters; in
   imports = [
     ./mpv.nix
     ./pathofbuilding.nix
+    ./smplayer.nix
     ./transmission.nix
     ./sonarr.nix
   ];

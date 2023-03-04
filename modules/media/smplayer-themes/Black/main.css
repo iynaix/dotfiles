@@ -1,0 +1,121 @@
+#menubar{
+	color: #9d9d9d;
+	/*
+	background-color: #dcdcdc;
+	background-image: url(control-bg-menu.png);
+	background-repeat:repeat-x;
+	*/
+	background-color: black;
+	border-style: none;
+}
+
+#menubar::item {
+	background: transparent;
+}
+
+#menubar::item:selected {
+	background: #f9f9f9;
+}
+
+#menubar::item:pressed {
+	background: #3a3a3a;
+}
+
+IconSetter {
+	/* qproperty-toolbar: url(control-button-toolbar.png); */
+	qproperty-backward: url(control-button-rewind.png);
+	qproperty-previous: url(control-button-previous.png);
+	qproperty-playPause: url(control-button-play-pause.png);
+	qproperty-stop: url(control-button-stop.png);
+	qproperty-record: url(control-button-record.png);
+	qproperty-next: url(control-button-next.png);
+	qproperty-forward: url(control-button-fastforward.png);
+	qproperty-repeat: url(control-button-repeat.png);
+	qproperty-shuffle: url(control-button-shuffle.png);
+}
+
+#toolbar {
+	/* background-image: url(control-bg-toolbar.png); */
+	background-color: black;
+	border-style: none;
+}
+
+#toolbar > QToolButton:hover {
+	border-style: none;
+}
+
+MediaBarPanel {
+	/*
+	background-image: url(control-bg-mediabar.png);
+	background-repeat:repeat-x;
+	*/
+	background-color: black;
+}
+
+MediaPanel {
+	qproperty-bgLeft: url(control-bg-panel-left.png);
+	qproperty-bgRight: url(control-bg-panel-right.png);
+	qproperty-bgCenter: url(control-bg-panel.png);
+}
+
+#panel-main-label {
+	color: #b8b8b8;
+}
+
+#panel-resolution {
+	color: #b8b8b8;
+}
+
+#panel-seeker {
+	qproperty-left: url(control-bg-seekbar-left.png);
+	qproperty-center: url(control-bg-seekbar.png);
+	qproperty-right: url(control-bg-seekbar-right.png);
+	qproperty-knob: url(control-button-seek-knob.png);
+	qproperty-progress: url(control-bg-seekbar-progress.png);
+	qproperty-buffering: url(control-bg-seekbar-buffering.png);
+}
+
+#volume-control-panel {
+	qproperty-mute: url(control-button-min-volume.png);
+	qproperty-max: url(control-button-max-volume.png);
+	qproperty-fullscreen: url(control-button-fullscreen.png);
+	qproperty-playlist: url(control-button-playlist.png);
+	qproperty-equalizer: url(control-button-equalizer.png);
+	qproperty-volumebar: url(control-bg-volumebar.png);
+	qproperty-volumebarProgress: url(control- bg-volumebar-progress.png);
+	qproperty-volumeKnob: url(control-button-volume-knob.png);
+}
+
+#panel-elapsed-label {
+	color: #b8b8b8;
+}
+
+#panel-total-label {
+	color: #b8b8b8;
+}
+
+/*
+#search-box {
+	qproperty-bgLeft: url(control-bg-search-box-left.png);
+	qproperty-bgRight: url(control-bg-search-box-right.png);
+	qproperty-bgCenter: url(control-bg-search-box.png);
+	qproperty-arrow: url(control-search-arrow.png);
+	qproperty-search: url(control-search-icon.png);
+	qproperty-youtube: url(control-search-youtube.png);
+	qproperty-shoutcast: url(control-search-shoutcast.png);
+}
+
+#search-box #input
+{
+	color: #9d9c9a;
+}
+*/
+
+QMenu {
+	background-color: #202020;
+	color: #9d9d9d;
+}
+
+QMenu::item:selected {
+	background: #f9f9f9;
+}

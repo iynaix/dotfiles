@@ -14,6 +14,7 @@ let displayCfg = config.iynaix.displays; in
         window_gap = 8;
         padding = 8;
       };
+      smplayer.enable = true;
       torrenters.enable = true;
     };
 
@@ -110,10 +111,8 @@ let displayCfg = config.iynaix.displays; in
       };
 
       home = {
-        packages = [
-          # additional media players
-          pkgs.smplayer
-          pkgs.vlc
+        packages = with pkgs; [
+          vlc
         ];
       };
     };

@@ -23,7 +23,6 @@
       vn = "~/Videos/US/New";
       pp = "~/projects";
       pcf = "~/projects/coinfc";
-      pcb = "~/projects/coinfc-backend";
       pe = "~/projects/ergodox-layout";
       PP = "~/Pictures";
       Ps = "~/Pictures/Screenshots";

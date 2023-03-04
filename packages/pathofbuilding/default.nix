@@ -1,5 +1,5 @@
 # build this package standalone with the following command:
-# nix-build path-of-building.nix
+# nix-build default.nix
 { pkgs ? import <nixpkgs> { } }:
 let
   pobVersion = "2.25.1";

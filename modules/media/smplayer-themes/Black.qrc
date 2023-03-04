@@ -1,0 +1,40 @@
+<RCC>
+	<qresource prefix="/">
+		<file>Black/control-bg-panel-left.png</file>
+		<file>Black/control-bg-panel-right.png</file>
+		<file>Black/control-bg-panel.png</file>
+		<file>Black/control-bg-seekbar-buffering.png</file>
+		<file>Black/control-bg-seekbar-left.png</file>
+		<file>Black/control-bg-seekbar-progress.png</file>
+		<file>Black/control-bg-seekbar-right.png</file>
+		<file>Black/control-bg-seekbar.png</file>
+		<file>Black/control-bg-volumebar-progress.png</file>
+		<file>Black/control-bg-volumebar.png</file>
+		<file>Black/control-button-equalizer.png</file>
+		<file>Black/control-button-fastforward.png</file>
+		<file>Black/control-button-fullscreen.png</file>
+		<file>Black/control-button-max-volume.png</file>
+		<file>Black/control-button-min-volume.png</file>
+		<file>Black/control-button-next.png</file>
+		<file>Black/control-button-play-pause.png</file>
+		<file>Black/control-button-playlist.png</file>
+		<file>Black/control-button-previous.png</file>
+		<file>Black/control-button-record.png</file>
+		<file>Black/control-button-repeat.png</file>
+		<file>Black/control-button-rewind.png</file>
+		<file>Black/control-button-seek-knob.png</file>
+		<file>Black/control-button-shuffle.png</file>
+		<file>Black/control-button-stop.png</file>
+		<file>Black/control-button-volume-knob.png</file>
+		<file>Black/download_subs.png</file>
+		<file>Black/dvd.png</file>
+		<file>Black/info.png</file>
+		<file>Black/open.png</file>
+		<file>Black/open_favorites.png</file>
+		<file>Black/open_folder.png</file>
+		<file>Black/prefs.png</file>
+		<file>Black/screenshot.png</file>
+		<file>Black/tubebrowser.png</file>
+		<file>Black/url.png</file>
+	</qresource>
+</RCC>
