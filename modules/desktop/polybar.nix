@@ -8,7 +8,7 @@ in
   config = {
     home-manager.users.${user} = {
       services.polybar = {
-        enable = true;
+        enable = config.iynaix.bspwm.enable;
         package = lib.mkDefault (pkgs.polybar.override {
           pulseSupport = true;
         });

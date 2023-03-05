@@ -4,6 +4,7 @@
     ./bspwm.nix
     ./gnome3.nix
     ./gtk.nix
+    ./hyprland.nix
     ./theme.nix
   ];
 

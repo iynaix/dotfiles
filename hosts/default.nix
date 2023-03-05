@@ -10,9 +10,28 @@ let
 
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
-      ./home.nix # shared configuration for home-manager across all hosts
       ./${hostName} # host specific configuration, including hardware
       home-manager.nixosModules.home-manager
+      {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          users.${user} = {
+            imports = [ inputs.hyprland.homeManagerModules.default ];
+            home = {
+              username = user;
+              homeDirectory = "/home/${user}";
+
+              # do not change this value
+              stateVersion = "22.11";
+            };
+
+            # Let Home Manager install and manage itself.
+            programs.home-manager.enable = true;
+          };
+        };
+        # nixpkgs.overlays = [ transimission.overlay ];
+      }
       inputs.impermanence.nixosModules.impermanence
     ] ++ lib.optional (hostName == "laptop") nixos-hardware.nixosModules.dell-xps-13-9343;
   };

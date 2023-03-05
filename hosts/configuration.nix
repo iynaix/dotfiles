@@ -6,6 +6,7 @@
 {
   # handle desktop / window manager
   imports = [
+    ../modules
     ../modules/zfs.nix
     ../modules/impermanence.nix
   ];
@@ -141,6 +142,9 @@
   nix = {
     settings = {
       auto-optimise-store = true; # Optimise syslinks
+      # hyprland cachix
+      substituters = [ "https://hyprland.cachix.org" ];
+      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
     };
     gc = {
       # Automatic garbage collection
