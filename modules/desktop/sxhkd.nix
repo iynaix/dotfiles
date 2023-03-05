@@ -1,9 +1,6 @@
 { pkgs, host, user, config, ... }:
 # use alt in vms to avoid conflicts with the host
-let
-  mod = if host == "vm" then "alt" else "super";
-  rofi = config.iynaix.rofi.bin;
-in
+let mod = if host == "vm" then "alt" else "super"; in
 {
   home-manager.users.${user} = {
     services = {
@@ -14,11 +11,11 @@ in
           "${mod} + Return" = "$TERMINAL";
 
           # program launcher
-          "${mod} + shift + Return" = "${rofi} -show drun";
+          "${mod} + shift + Return" = "rofi -show drun";
 
           # rofi shutdown actions menu
           "ctrl + alt + Delete" = ''
-            ${rofi} -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
+            rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
 
           # screenshots
           "${mod} + shift + backslash" = "rofi-screenshot";

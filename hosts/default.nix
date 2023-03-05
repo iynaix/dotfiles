@@ -21,7 +21,6 @@ let
             home = {
               username = user;
               homeDirectory = "/home/${user}";
-
               # do not change this value
               stateVersion = "22.11";
             };
@@ -30,7 +29,7 @@ let
             programs.home-manager.enable = true;
           };
         };
-        # nixpkgs.overlays = [ transimission.overlay ];
+        nixpkgs.overlays = (import ../overlays);
       }
       inputs.impermanence.nixosModules.impermanence
     ] ++ lib.optional (hostName == "laptop") nixos-hardware.nixosModules.dell-xps-13-9343;

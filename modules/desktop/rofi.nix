@@ -10,18 +10,13 @@ in
 {
   options.iynaix.rofi = {
     enable = lib.mkEnableOption "Enable Rofi" // { default = true; };
-    bin = lib.mkOption {
-      type = lib.types.str;
-      default = "${pkgs.rofi}/bin/rofi";
-      description = "Path to the rofi executable";
-    };
   };
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
       programs.rofi = {
         enable = true;
-        package = pkgs.rofi;
+        package = lib.mkDefault pkgs.rofi;
         location = "center";
         terminal = "alacritty";
         font = "${config.iynaix.font.regular} 14";

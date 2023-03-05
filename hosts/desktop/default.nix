@@ -10,13 +10,11 @@ let displayCfg = config.iynaix.displays; in
         monitor2 = "DP-0.8";
         monitor3 = "HDMI-0";
       };
-      bspwm = {
-        enable = true;
-        extraSettings = {
-          window_gap = 8;
-          padding = 8;
-        };
+      bspwm.extraSettings = {
+        window_gap = 8;
+        padding = 8;
       };
+      bspwm.enable = true;
       hyprland.enable = false;
       smplayer.enable = true;
       torrenters.enable = true;
