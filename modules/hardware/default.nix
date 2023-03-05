@@ -1,4 +1,4 @@
 { pkgs, host, user, config, ... }:
 {
-  imports = [ ./audio.nix ];
+  imports = [ ./audio.nix ./backlight.nix ];
 }

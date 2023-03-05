@@ -1,5 +1,4 @@
 from subprocess import run, check_output
-import q
 
 
 def rget(obj, name, default=None):
@@ -14,9 +13,6 @@ def rget(obj, name, default=None):
 
 
 def cmd(args, debug=False, output=False):
-    if debug:
-        q(" ".join(str(a) for a in args))
-
     if output:
         return check_output(args).decode("ascii")
     else:

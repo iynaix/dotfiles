@@ -1,6 +1,7 @@
 { pkgs, user, ... }: {
   programs.file-roller.enable = true;
   xdg.mime.defaultApplications = {
+    "inode/directory" = "nemo.desktop";
     # wtf zathura registers itself to open zip files
     "application/zip" = "org.gnome.FileRoller.desktop";
   };

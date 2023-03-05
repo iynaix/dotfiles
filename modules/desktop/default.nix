@@ -4,6 +4,7 @@
     ./bspwm.nix
     ./gnome3.nix
     ./gtk.nix
+    ./theme.nix
   ];
 
   options.iynaix = {
@@ -41,9 +42,6 @@
   config = {
     home-manager.users.${user} = {
       home = {
-        # xresources
-        file.".Xresources".source = ./.Xresources;
-
         # copy wallpapers
         file."Pictures/Wallpapers" = {
           source = ./wallpapers;

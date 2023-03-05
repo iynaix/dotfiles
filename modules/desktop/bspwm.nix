@@ -4,10 +4,6 @@ let
   # misc bspwm variables here
   barHeight = 30;
   padding = cfg.extraSettings.padding or 4;
-  # border_width = 2;
-  # colors
-  normal = "#30302f";
-  focused = "#4491ed";
   # window classes and desktops
   termclass = "Alacritty";
   chromeclass = "Brave-browser";
@@ -44,7 +40,7 @@ in
 
     home-manager.users.${user} = {
       xsession.enable = true;
-      xsession.windowManager.bspwm = {
+      xsession.windowManager.bspwm = with config.iynaix.xrdb; {
         enable = cfg.enable;
         settings = (lib.overrideExisting
           {
@@ -52,9 +48,9 @@ in
 
             # borders and gaps
             border_width = 2;
-            active_border_color = normal;
-            normal_border_color = normal;
-            focused_border_color = focused;
+            active_border_color = color0;
+            normal_border_color = color0;
+            focused_border_color = color4;
 
             window_gap = cfg.extraSettings.window_gap or 4;
             top_padding = padding + barHeight;
@@ -62,7 +58,7 @@ in
             right_padding = padding;
             bottom_padding = padding;
 
-            presel_feedback_color = focused;
+            presel_feedback_color = color4;
             split_ratio = 0.5;
             focus_follows_pointer = true;
             pointer_follows_monitor = true;

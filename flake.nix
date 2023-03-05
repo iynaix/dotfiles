@@ -13,12 +13,7 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
-    hyprland = {
-      # Official Hyprland flake
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, nixos-hardware, ... }:

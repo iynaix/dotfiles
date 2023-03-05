@@ -39,15 +39,15 @@ in
           sidebar-mode = true;
         };
         theme = {
-          "*" = {
-            bg-col = mkLiteral theme.base;
-            bg-col-light = mkLiteral theme.base;
-            border-col = mkLiteral theme.base;
-            selected-col = mkLiteral theme.base;
-            blue = mkLiteral theme.blue;
-            fg-col = mkLiteral theme.text;
-            fg-col2 = mkLiteral theme.red;
-            grey = mkLiteral theme.overlay0;
+          "*" = with config.iynaix.xrdb; {
+            bg-color = mkLiteral background;
+            bg-color-light = mkLiteral background;
+            border-color = mkLiteral color0;
+            selected-color = mkLiteral background;
+            accent = mkLiteral color4;
+            foreground-color = mkLiteral foreground;
+            foreground-selected-color = mkLiteral color1;
+            button-text-color = mkLiteral color0;
             width = 600;
           };
 
@@ -59,25 +59,25 @@ in
           window = {
             height = mkLiteral "360px";
             border = mkLiteral "3px";
-            border-color = mkLiteral "@border-col";
-            background-color = mkLiteral "@bg-col";
+            border-color = mkLiteral "@border-color";
+            background-color = mkLiteral "@bg-color";
           };
 
           mainbox = {
-            background-color = mkLiteral "@bg-col";
+            background-color = mkLiteral "@bg-color";
           };
 
           inputbar = {
             children = mkLiteral "[prompt,entry]";
-            background-color = mkLiteral "@bg-col";
+            background-color = mkLiteral "@bg-color";
             border-radius = mkLiteral "5px";
             padding = mkLiteral "2px";
           };
 
           prompt = {
-            background-color = mkLiteral "@blue";
+            background-color = mkLiteral "@accent";
             padding = mkLiteral "6px";
-            text-color = mkLiteral "@bg-col";
+            text-color = mkLiteral "@bg-color";
             border-radius = mkLiteral "3px";
             margin = mkLiteral "20px 0px 0px 20px";
           };
@@ -90,8 +90,8 @@ in
           entry = {
             padding = mkLiteral "6px";
             margin = mkLiteral "20px 0px 0px 10px";
-            text-color = mkLiteral "@fg-col";
-            background-color = mkLiteral "@bg-col";
+            text-color = mkLiteral "@foreground-color";
+            background-color = mkLiteral "@bg-color";
           };
 
           listview = {
@@ -100,13 +100,13 @@ in
             margin = mkLiteral "10px 0px 0px 20px";
             columns = 2;
             lines = 5;
-            background-color = mkLiteral "@bg-col";
+            background-color = mkLiteral "@bg-color";
           };
 
           element = {
             padding = mkLiteral "5px";
-            background-color = mkLiteral "@bg-col";
-            text-color = mkLiteral "@fg-col";
+            background-color = mkLiteral "@bg-color";
+            text-color = mkLiteral "@foreground-color";
           };
 
           element-icon = {
@@ -114,8 +114,8 @@ in
           };
 
           "element selected" = {
-            background-color = mkLiteral "@selected-col";
-            text-color = mkLiteral "@fg-col2";
+            background-color = mkLiteral "@selected-color";
+            text-color = mkLiteral "@foreground-selected-color";
           };
 
           mode-switcher = {
@@ -124,19 +124,19 @@ in
 
           button = {
             padding = mkLiteral "10px";
-            background-color = mkLiteral "@bg-col-light";
-            text-color = mkLiteral "@grey";
+            background-color = mkLiteral "@bg-color-light";
+            text-color = mkLiteral "@button-text-color";
             vertical-align = mkLiteral "0.5";
             horizontal-align = mkLiteral "0.5";
           };
 
           "button selected" = {
-            background-color = mkLiteral "@bg-col";
-            text-color = mkLiteral "@blue";
+            background-color = mkLiteral "@bg-color";
+            text-color = mkLiteral "@accent";
           };
 
           message = {
-            background-color = mkLiteral "@bg-col-light";
+            background-color = mkLiteral "@bg-color-light";
             margin = mkLiteral "2px";
             padding = mkLiteral "2px";
             border-radius = mkLiteral "5px";
@@ -145,8 +145,8 @@ in
           textbox = {
             padding = mkLiteral "6px";
             margin = mkLiteral "20px 0px 0px 20px";
-            text-color = mkLiteral "@blue";
-            background-color = mkLiteral "@bg-col-light";
+            text-color = mkLiteral "@accent";
+            background-color = mkLiteral "@bg-color-light";
           };
         };
       };

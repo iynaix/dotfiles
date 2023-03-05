@@ -1,4 +1,4 @@
-{ pkgs, config, host, user, theme, lib, ... }:
+{ pkgs, config, host, user, lib, ... }:
 let
   displayCfg = config.iynaix.displays;
   alacritty = "${pkgs.alacritty}/bin/alacritty";
@@ -13,6 +13,14 @@ in
           pulseSupport = true;
         });
         config = {
+          colors = with config.iynaix.xrdb; {
+            background = background;
+            foreground = foreground;
+            focused = color8;
+            urgent = color5;
+            disconnected = color1;
+            empty = color0;
+          };
           # BARS
           "bar/base" = {
             width = "100%";
@@ -20,11 +28,11 @@ in
             offset-x = 0;
             offset-y = 0;
 
-            background = "${theme.base}";
-            foreground = "${theme.text}";
+            background = ''''${colors.background}'';
+            foreground = ''''${colors.foreground}'';
 
             underline-size = 2;
-            underline-color = "${theme.text}";
+            underline-color = ''''${colors.foreground}'';
 
             padding-left = 0;
             padding-right = 0;
@@ -85,20 +93,20 @@ in
             format = "<label-state>";
 
             # label-focused = "";
-            label-focused-background = "${theme.surface2}";
-            label-focused-underline = "${theme.surface2}";
+            label-focused-background = ''''${colors.focused}'';
+            label-focused-underline = ''''${colors.focused}'';
             label-focused-padding = 4;
 
             # label-occupied = "";
             label-occupied-padding = 4;
 
             # label-urgent = "%icon%";
-            label-urgent-background = "${theme.pink}";
-            label-urgent-underline = "${theme.pink}";
+            label-urgent-background = ''''${colors.urgent}'';
+            label-urgent-underline = ''''${colors.urgent}'';
             label-urgent-padding = 4;
 
             # label-empty = "%icon%";
-            label-empty-foreground = "${theme.surface1}";
+            label-empty-foreground = ''''${colors.empty}'';
             label-empty-padding = 4;
           };
 
@@ -256,7 +264,7 @@ in
 
             label-connected = "";
             label-disconnected = "";
-            label-disconnected-foreground = "${theme.red}";
+            label-disconnected-foreground = ''''${colors.disconnected}'';
           };
 
           "module/wlan" = {
@@ -268,7 +276,7 @@ in
 
             label-connected = "%{A:${alacritty} -e ${nmtui}:}直  %essid%%{A}";
             label-disconnected = "%{A:${alacritty} -e ${nmtui}:}睊%{A}";
-            label-disconnected-foreground = "${theme.red}";
+            label-disconnected-foreground = ''''${colors.disconnected}'';
           };
         };
       };

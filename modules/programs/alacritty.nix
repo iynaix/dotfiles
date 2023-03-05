@@ -41,99 +41,30 @@ in
           };
           selection.save_to_clipboard = true;
           # window.opacity = 0.5;
-          # catppuccin theme
-          colors = {
+          colors = with config.iynaix.xrdb; {
             primary = {
-              background = theme.base;
-              foreground = theme.text;
-              # Bright and dim foreground colors
-              dim_foreground = theme.text;
-              bright_foreground = theme.text;
+              inherit background foreground;
             };
-
-            # Cursor colors
-            cursor = {
-              text = theme.base;
-              cursor = theme.rosewater;
-            };
-            vi_mode_cursor = {
-              text = theme.base;
-              cursor = theme.lavender;
-            };
-
-            # Search colors
-            search = {
-              matches = {
-                foreground = theme.base;
-                background = theme.subtext0;
-              };
-              focused_match = {
-                foreground = theme.base;
-                background = theme.green;
-              };
-              footer_bar = {
-                foreground = theme.base;
-                background = theme.subtext0;
-              };
-            };
-
-            # Keyboard regex hints
-            hints = {
-              start = {
-                foreground = theme.base;
-                background = theme.yellow;
-              };
-              end = {
-                foreground = theme.base;
-                background = theme.subtext0;
-              };
-            };
-
-            # Selection colors
-            selection = {
-              text = theme.base;
-              background = theme.rosewater;
-            };
-
-            # Normal colors
             normal = {
-              black = theme.surface1;
-              red = theme.red;
-              green = theme.green;
-              yellow = theme.yellow;
-              blue = theme.blue;
-              magenta = theme.pink;
-              cyan = theme.teal;
-              white = theme.subtext1;
+              black = color0;
+              red = color1;
+              green = color2;
+              yellow = color3;
+              blue = color4;
+              magenta = color5;
+              cyan = color6;
+              white = color7;
             };
-            # Bright colors
             bright = {
-              black = theme.surface2;
-              red = theme.red;
-              green = theme.green;
-              yellow = theme.yellow;
-              blue = theme.blue;
-              magenta = theme.pink;
-              cyan = theme.teal;
-              white = theme.subtext0;
+              black = color8;
+              red = color9;
+              green = color10;
+              yellow = color11;
+              blue = color12;
+              magenta = color13;
+              cyan = color14;
+              white = color15;
             };
-
-            # Dim colors
-            dim = {
-              black = theme.surface1;
-              red = theme.red;
-              green = theme.green;
-              yellow = theme.yellow;
-              blue = theme.blue;
-              magenta = theme.pink;
-              cyan = theme.teal;
-              white = theme.subtext1;
-            };
-
-            indexed_colors = [
-              { index = 16; color = "#FAB387"; }
-              { index = 17; color = "#F5E0DC"; }
-            ];
           };
         };
       };

@@ -39,6 +39,7 @@
           gdi = "git diff";
           gl = "git pull";
           glg = "git log";
+          gm = "git merge";
           gp = "git push";
           glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
           gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';

@@ -112,6 +112,7 @@ let displayCfg = config.iynaix.displays; in
 
       home = {
         packages = with pkgs; [
+          filezilla
           vlc
         ];
       };
