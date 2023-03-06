@@ -14,10 +14,20 @@ let displayCfg = config.iynaix.displays; in
         window_gap = 8;
         padding = 8;
       };
-      bspwm.enable = true;
-      hyprland.enable = false;
+      hyprland = {
+        monitors = lib.concatStringsSep "\n" [
+          "monitor=DP-2, 3440x1440@144, 1440x1080, 1"
+          "monitor=DP-4, 2560x1440, 0x728, 1"
+          "monitor=HDMI-0, 1920x1080, 1754x0, 2"
+          "monitor=,preferred,auto,auto"
+        ];
+      };
       smplayer.enable = true;
       torrenters.enable = true;
+
+      # toggle WMs
+      bspwm.enable = false;
+      hyprland.enable = true;
     };
 
     boot.loader.grub = {
@@ -51,7 +61,15 @@ let displayCfg = config.iynaix.displays; in
 
     # enable nvidia support
     services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.opengl.enable = true;
+
+    hardware = {
+      nvidia.modesetting.enable = true;
+
+      opengl = {
+        enable = true;
+        driSupport = true;
+      };
+    };
 
     # environment.systemPackages = with pkgs; [ ];
 

@@ -1,10 +1,10 @@
 { pkgs, user, lib, ... }: {
   imports = [
-    # bspwm are mutually exclusive via a config option
+    # WMs are mutually exclusive via a config options
     ./bspwm.nix
     ./gnome3.nix
     ./gtk.nix
-    ./hyprland.nix
+    ./hyprland
     ./theme.nix
   ];
 

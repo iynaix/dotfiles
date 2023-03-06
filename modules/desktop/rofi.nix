@@ -21,7 +21,7 @@ in
         terminal = "alacritty";
         font = "${config.iynaix.font.regular} 14";
         extraConfig = {
-          modi = "run,drun,window";
+          modi = lib.mkDefault "run,drun,window";
           icon-theme = "Papirus-Dark";
           show-icons = true;
           drun-display-format = "{icon} {name}";

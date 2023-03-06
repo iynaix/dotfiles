@@ -106,7 +106,7 @@
   services.xserver.displayManager = {
     autoLogin = {
       enable = true;
-      user = user;
+      inherit user;
     };
   };
 
