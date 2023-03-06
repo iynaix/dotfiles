@@ -8,7 +8,12 @@ let
     keybinds);
 in
 {
-  imports = [ ./nvidia.nix ./wallpaper.nix ];
+  imports = [
+    ./nvidia.nix
+    ./startup.nix
+    ./wallpaper.nix
+    ./waybar.nix
+  ];
 
   options.iynaix.hyprland = {
     # mutually exclusive with bspwm
@@ -34,11 +39,6 @@ in
         https://wiki.hyprland.org/Configuring/Monitors/
       '';
     };
-    startupPrograms = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = [ ];
-      description = "Programs to start on startup";
-    };
     settings = lib.mkOption {
       type = with lib.types; attrsOf str;
       default = { };
@@ -61,46 +61,6 @@ in
         };
       };
     };
-
-    iynaix.hyprland.startupPrograms =
-      let
-        # window classes and desktops
-        termclass = "Alacritty";
-        chromeclass = "Brave-browser";
-        webdesktop = "1";
-        # filedesktop = "3";
-        nemodesktop = "4";
-        secondarytermdesktop = "7";
-        # listdesktop = "8";
-        chatdesktop = "9";
-        dldesktop = "10";
-      in
-      [
-        # ''bspc rule -a ${chromeclass} -o desktop=${webdesktop}''
-        # "brave --profile-directory=Default"
-        # ''bspc rule -a ${chromeclass} -o desktop=${webdesktop} follow=on''
-        # "brave --incognito"
-
-        # # nemo
-        # ''bspc rule -a Nemo:nemo -o desktop=${nemodesktop}''
-        # "nemo"
-
-        # # terminals
-        # # ''bspc rule -a ${termclass}:ranger -o desktop=${filedesktop}''
-        # # "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
-        # ''
-        #   bspc rule -a ${termclass}:initialterm -o desktop=${secondarytermdesktop} follow=on''
-        # "$TERMINAL --class ${termclass},initialterm"
-
-        # # chat
-        # "firefox-devedition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
-
-        # # download stuff
-        # ''bspc rule -a ${termclass}:dltxt -o desktop=${dldesktop}''
-        # "$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
-        # ''bspc rule -a ${termclass}:dlterm -o desktop=${dldesktop}''
-        # "$TERMINAL --class ${termclass},dlterm"
-      ];
 
     home-manager.users.${user} = {
       programs.rofi = {
@@ -313,8 +273,11 @@ in
             # additional keybind
             (keybindsToStr cfg.keybinds)
 
-            # reload wallpaper every time
-            "exec = hyprpaper"
+            "exec = hyprpaper" # reload wallpaper every time
+
+            "exec-once = waybar &"
+
+            (lib.concatStringsSep "\n" cfg.startupPrograms)
 
             "source=~/.config/hyprland-extra.conf"
           ]);
