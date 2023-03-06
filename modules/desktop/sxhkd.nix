@@ -29,7 +29,7 @@ let mod = if host == "vm" then "alt" else "super"; in
 
           # file browser
           "${mod} + {_, shift + }e" =
-            "{$TERMINAL -e ranger ~/Downloads,nemo ~/Downloads}";
+            "{nemo ~/Downloads,$TERMINAL -e ranger ~/Downloads}";
 
           # special keys
           "XF86AudioPlay" = "mpvctl playpause";

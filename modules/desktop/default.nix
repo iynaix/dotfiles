@@ -1,4 +1,4 @@
-{ pkgs, user, lib, ... }: {
+{ pkgs, user, lib, config, ... }: {
   imports = [
     # WMs are mutually exclusive via a config options
     ./bspwm.nix
@@ -29,12 +29,12 @@
       };
       monitor2 = lib.mkOption {
         type = lib.types.str;
-        default = "";
+        default = config.iynaix.displays.monitor1;
         description = "The name of the secondary display, e.g. eDP-1";
       };
       monitor3 = lib.mkOption {
         type = lib.types.str;
-        default = "";
+        default = config.iynaix.displays.monitor1;
         description = "The name of the tertiary display, e.g. eDP-1";
       };
     };

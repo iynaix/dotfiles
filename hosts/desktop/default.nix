@@ -1,5 +1,8 @@
 { config, pkgs, user, lib, host, ... }:
-let displayCfg = config.iynaix.displays; in
+let
+  displayCfg = config.iynaix.displays;
+  hyprlandCfg = config.iynaix.hyprland;
+in
 {
   imports = [ ./hardware.nix ];
 
@@ -7,8 +10,8 @@ let displayCfg = config.iynaix.displays; in
     iynaix = {
       displays = {
         monitor1 = "DP-2";
-        monitor2 = "DP-0.8";
-        monitor3 = "HDMI-0";
+        monitor2 = if hyprlandCfg.enable then "DP-4" else "DP-0.8";
+        monitor3 = if hyprlandCfg.enable then "HDMI-A-1" else "HDMI-0";
       };
       bspwm.extraSettings = {
         window_gap = 8;
@@ -16,11 +19,16 @@ let displayCfg = config.iynaix.displays; in
       };
       hyprland = {
         monitors = lib.concatStringsSep "\n" [
-          "monitor=DP-2, 3440x1440@144, 1440x1080, 1"
-          "monitor=DP-4, 2560x1440, 0x728, 1"
-          "monitor=HDMI-0, 1920x1080, 1754x0, 2"
-          "monitor=,preferred,auto,auto"
+          "monitor=${displayCfg.monitor3},1920x1080,1754x0,1"
+          "monitor=${displayCfg.monitor1},3440x1440@144,1440x1080,1"
+          "monitor=${displayCfg.monitor2},2560x1440,0x728,1"
+          "monitor=${displayCfg.monitor2},transform,1" # rotate monitor
         ];
+        wallpapers = {
+          "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
+          "${displayCfg.monitor2}" = "${../../modules/desktop/wallpapers/gits-catppuccin-2560.png}";
+          "${displayCfg.monitor3}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
+        };
       };
       smplayer.enable = true;
       torrenters.enable = true;
