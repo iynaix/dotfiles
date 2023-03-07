@@ -26,13 +26,16 @@ let
     "dispatch workspace 8"
     "dispatch layoutmsg orientationtop"
   ];
-  hyprStart = pkgs.writeShellScriptBin "hyprland-start" /* sh */ ''
+  hyprInitWorkspace = pkgs.writeShellScriptBin "hypr-init-ws" /* sh */ ''
     ${verticalStart}
-    hyprctl dispatch workspace 7
     ${ultrawideStart}
+  '';
+  hyprSwitchWorkspace = pkgs.writeShellScriptBin "hypr-switch-ws" /* sh */ ''
+    hyprctl dispatch workspace 9
+    hyprctl dispatch workspace 7
     hyprctl dispatch workspace 1
   '';
-  hyprStartCleanup = pkgs.writeShellScriptBin "hyprland-start-cleanup" /* sh */ ''
+  hyprCleanup = pkgs.writeShellScriptBin "hypr-cleanup" /* sh */ ''
     ${lib.concatStringsSep "\n"  (["sleep 10"] ++ cfg.startupCleanup)}
   '';
 in
@@ -65,8 +68,8 @@ in
     {
       iynaix.hyprland.startupPrograms =
         [
-          # replace with exec once
-          "exec-once = ${hyprStart}/bin/hyprland-start"
+          "exec-once = ${hyprInitWorkspace}/bin/hypr-init-ws"
+          "exec-once = ${hyprSwitchWorkspace}/bin/hypr-switch-ws"
 
           "windowrule=workspace ${webdesktop} silent,brave-browser"
           "windowrule=workspace ${nemodesktop} silent,nemo"
@@ -92,15 +95,12 @@ in
           "exec-once = $TERMINAL --class dlterm"
 
           # cleanup bindings after startup
-          "exec = ${hyprStartCleanup}/bin/hyprland-start-cleanup"
+          "exec = ${hyprCleanup}/bin/hypr-cleanup"
         ];
       iynaix.hyprland.startupCleanup = [
         ''hyprctl keyword windowrule "workspace unset,brave-browser"''
         ''hyprctl keyword windowrule "workspace unset,nemo"''
-        ''hyprctl keyword windowrule "workspace unset,inititalterm"''
         ''hyprctl keyword windowrule "workspace unset,firefox-aurora"''
-        ''hyprctl keyword windowrule "workspace unset,dltxt"''
-        ''hyprctl keyword windowrule "workspace unset,dlterm"''
       ];
     }
   );

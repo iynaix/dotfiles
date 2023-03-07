@@ -66,15 +66,18 @@ in
         "${mod}, Return" = "exec, alacritty";
         "${mod}_SHIFT, Return" = "exec, rofi -show drun";
         "${mod}, BackSpace" = "killactive,";
-        "${mod}, E" = "exec, nemo ~/Downloads";
-        "${mod}_SHIFT, E" = "exec, alacritty -e ranger ~/Downloads";
-        "${mod}, W" = "exec, brave";
-        "${mod}_SHIFT, W" = "exec, brave --incognito";
-        "${mod}, V" = "exec, alacritty -e nvim";
-        "${mod}_SHIFT, V" = "exec, code";
+        "${mod}, e" = "exec, nemo ~/Downloads";
+        "${mod}_SHIFT, e" = "exec, alacritty -e ranger ~/Downloads";
+        "${mod}, w" = "exec, brave";
+        "${mod}_SHIFT, w" = "exec, brave --incognito";
+        "${mod}, v" = "exec, alacritty -e nvim";
+        "${mod}_SHIFT, v" = "exec, code";
 
         "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
-        "${mod}_CTRL, V" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
+        "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
+
+        # reload
+        "CTRL_SHIFT, Escape" = "forcerendererreload";
 
         # bind = ${mod}, P, pseudo, # dwindle
         # bind = ${mod}, J, togglesplit, # dwindle
@@ -108,20 +111,71 @@ in
         "${mod}, 0" = "workspace, 10";
 
         # Move active window to a workspace with mainMod + SHIFT + [0-9]
-        "${mod} SHIFT, 1" = "movetoworkspace, 1";
-        "${mod} SHIFT, 2" = "movetoworkspace, 2";
-        "${mod} SHIFT, 3" = "movetoworkspace, 3";
-        "${mod} SHIFT, 4" = "movetoworkspace, 4";
-        "${mod} SHIFT, 5" = "movetoworkspace, 5";
-        "${mod} SHIFT, 6" = "movetoworkspace, 6";
-        "${mod} SHIFT, 7" = "movetoworkspace, 7";
-        "${mod} SHIFT, 8" = "movetoworkspace, 8";
-        "${mod} SHIFT, 9" = "movetoworkspace, 9";
-        "${mod} SHIFT, 0" = "movetoworkspace, 10";
+        "${mod}_SHIFT, 1" = "movetoworkspace, 1";
+        "${mod}_SHIFT, 2" = "movetoworkspace, 2";
+        "${mod}_SHIFT, 3" = "movetoworkspace, 3";
+        "${mod}_SHIFT, 4" = "movetoworkspace, 4";
+        "${mod}_SHIFT, 5" = "movetoworkspace, 5";
+        "${mod}_SHIFT, 6" = "movetoworkspace, 6";
+        "${mod}_SHIFT, 7" = "movetoworkspace, 7";
+        "${mod}_SHIFT, 8" = "movetoworkspace, 8";
+        "${mod}_SHIFT, 9" = "movetoworkspace, 9";
+        "${mod}_SHIFT, 0" = "movetoworkspace, 10";
+
+
+        "${mod}, b" = "layoutmsg, swapwithmaster";
+
+        # focus the previous / next desktop in the current monitor (DE style)
+        "CTRL_ALT, Left" = "workspace, m-1";
+        "CTRL_ALT, Right" = "workspace, m+1";
+
+        # monocle mode
+        "${mod}, z" = "fullscreen, 1";
+
+        # fullscreen
+        "${mod}, f" = "fullscreen, 0";
+        "${mod}_SHIFT, f" = "fakefullscreen";
+
+        # floating
+        "${mod}, g" = "togglefloating";
+
+        # sticky
+        "${mod}, s" = "pin";
+
+        # focus next / previous monitor
+        "${mod}, Left" = "focusmonitor, -1";
+        "${mod}, Right" = "focusmonitor, +1";
+
+        # move to next / previous monitor
+        "${mod}_SHIFT, Left" = "movewindow, mon:-1";
+        "${mod}_SHIFT, Right" = "movewindow, mon:+1";
+
+        "ALT, Tab" = "cyclenext";
+        "ALT_SHIFT, Tab" = "cyclenext, prev";
+
+        # toggle between previous and current window
+        "${mod}, grave" = "focuscurrentorlast";
+
+        # add / remove master windows
+        "${mod}, m" = "layoutmsg, addmaster";
+        "${mod}_SHIFT, m" = "layoutmsg, removemaster";
 
         # Scroll through existing workspaces with mainMod + scroll
         "${mod}, mouse_down" = "workspace, e+1";
         "${mod}, mouse_up" = "workspace, e-1";
+
+        # TODO:
+        # screenshots
+        # "${mod} + shift + backslash" = "rofi-screenshot";
+
+        # special keys
+        # "XF86AudioPlay" = "mpvctl playpause";
+
+        # equalize size of windows at parent / root level
+        # "${mod} + {_,ctrl + }equal" = "bspc node {@parent,@/} --balance";
+
+        # focus the next/previous node of the same class
+        # "${mod} + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";
       };
 
     home-manager.users.${user} = {
@@ -140,6 +194,7 @@ in
         packages = with pkgs; [
           # clipboard history
           cliphist
+          wl-clipboard
         ];
       };
 
@@ -165,7 +220,7 @@ in
             "wsbind=7,${displays.monitor2}"
             "wsbind=8,${displays.monitor2}"
             "wsbind=9,${displays.monitor3}"
-            "wsbind=0,${displays.monitor3}"
+            "wsbind=10,${displays.monitor3}"
             # See https://wiki.hyprland.org/Configuring/Keywords/
 
             # Source a file (multi-file configs)

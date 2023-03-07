@@ -19,9 +19,9 @@ in
       };
       hyprland = {
         monitors = lib.concatStringsSep "\n" [
-          "monitor=${displayCfg.monitor3},1920x1080,1754x0,1"
           "monitor=${displayCfg.monitor1},3440x1440@144,1440x1080,1"
           "monitor=${displayCfg.monitor2},2560x1440,0x728,1"
+          "monitor=${displayCfg.monitor3},1920x1080,1754x0,1"
           "monitor=${displayCfg.monitor2},transform,1" # rotate monitor
         ];
         wallpapers = {
