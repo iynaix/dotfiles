@@ -32,70 +32,76 @@ let
     ${ultrawideStart}
     hyprctl dispatch workspace 1
   '';
+  hyprStartCleanup = pkgs.writeShellScriptBin "hyprland-start-cleanup" /* sh */ ''
+    ${lib.concatStringsSep "\n"  (["sleep 10"] ++ cfg.startupCleanup)}
+  '';
 in
 {
   options.iynaix.hyprland = {
     startupPrograms = lib.mkOption {
+      type = with lib.types;
+        listOf str;
+      default = [ ];
+      description = "Programs to start on startup";
+    };
+  };
+  options.iynaix.hyprland = {
+    startupCleanup = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];
       description = "Programs to start on startup";
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    iynaix.hyprland.startupPrograms =
-      let
-        # window classes and desktops
-        termclass = "Alacritty";
-        browserclass = "Brave-browser";
-        webdesktop = "1";
-        # filedesktop = "3";
-        nemodesktop = "4";
-        secondarytermdesktop = "7";
-        # listdesktop = "8";
-        chatdesktop = "9";
-        dldesktop = "10";
-      in
-      [
-        # replace with exec once
-        "# ${hyprStart}/bin/hyprland-start"
-        "exec = ${hyprStart}/bin/hyprland-start"
+  config = lib.mkIf cfg.enable (
+    let
+      # window classes and desktops
+      webdesktop = "1";
+      nemodesktop = "4";
+      secondarytermdesktop = "7";
+      chatdesktop = "9";
+      dldesktop = "10";
+    in
+    {
+      iynaix.hyprland.startupPrograms =
+        [
+          # replace with exec once
+          "exec-once = ${hyprStart}/bin/hyprland-start"
 
-        # "windowrule=workspace 1 silent,brave"
-        # "windowrule=workspace 1 silent,brave --incognito"
-        # "windowrule=workspace 4 silent,nemo"
-        # "windowrule=workspace 7 silent,$TERMINAL:initialterm"
-        # "windowrule=workspace 9 silent,firefox-devedition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
-        # "windowrule=workspace 0 silent,$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
-        # "windowrule=workspace 0 silent,$TERMINAL --class ${termclass},dlterm"
+          "windowrule=workspace ${webdesktop} silent,brave-browser"
+          "windowrule=workspace ${nemodesktop} silent,nemo"
+          "windowrule=workspace ${secondarytermdesktop} silent,initialterm"
+          "windowrule=workspace ${chatdesktop} silent,firefox-aurora"
+          "windowrule=workspace ${dldesktop} silent,dltxt"
+          "windowrule=workspace ${dldesktop} silent,dlterm"
 
-        # ''bspc rule -a ${termclass}:dlterm -o desktop=${dldesktop}''
-        # "$TERMINAL --class ${termclass},dlterm"
+          # browsers
+          "exec-once = brave --profile-directory=Default"
+          "exec-once = brave --incognito"
 
-        # ''bspc rule -a ${browserclass} -o desktop=${webdesktop}''
-        # "brave --profile-directory=Default"
-        # ''bspc rule -a ${browserclass} -o desktop=${webdesktop} follow=on''
-        # "brave --incognito"
+          # file manager
+          "exec-once = nemo"
 
-        # # nemo
-        # ''bspc rule -a Nemo:nemo -o desktop=${nemodesktop}''
-        # "nemo"
+          # terminal
+          "exec-once = $TERMINAL --class initialterm"
 
-        # # terminals
-        # # ''bspc rule -a ${termclass}:ranger -o desktop=${filedesktop}''
-        # # "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
-        # ''
-        #   bspc rule -a ${termclass}:initialterm -o desktop=${secondarytermdesktop} follow=on''
-        # "$TERMINAL --class ${termclass},initialterm"
+          # firefox
+          "exec-once = firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
 
-        # # chat
-        # "firefox-devedition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
+          "exec-once = $TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
+          "exec-once = $TERMINAL --class dlterm"
 
-        # # download stuff
-        # ''bspc rule -a ${termclass}:dltxt -o desktop=${dldesktop}''
-        # "$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
-        # ''bspc rule -a ${termclass}:dlterm -o desktop=${dldesktop}''
-        # "$TERMINAL --class ${termclass},dlterm"
+          # cleanup bindings after startup
+          "exec = ${hyprStartCleanup}/bin/hyprland-start-cleanup"
+        ];
+      iynaix.hyprland.startupCleanup = [
+        ''hyprctl keyword windowrule "workspace unset,brave-browser"''
+        ''hyprctl keyword windowrule "workspace unset,nemo"''
+        ''hyprctl keyword windowrule "workspace unset,inititalterm"''
+        ''hyprctl keyword windowrule "workspace unset,firefox-aurora"''
+        ''hyprctl keyword windowrule "workspace unset,dltxt"''
+        ''hyprctl keyword windowrule "workspace unset,dlterm"''
       ];
-  };
+    }
+  );
 }

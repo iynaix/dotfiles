@@ -141,27 +141,6 @@ let mod = if host == "vm" then "alt" else "super"; in
 
           # move a floating window / pip window
           "${mod} + {Left,Down,Up,Right}" = "bspc-smartmove {left,down,up,right}";
-
-          # toggle default gaps / gapless
-          "${mod} + shift + slash" = ''
-            curr_gap=$(bspc config window_gap); \
-                if [ $curr_gap -eq 0 ]; then; \
-                    window_gap=10; \
-                    bar_height=30; \
-                    padding=10; \
-                    bspc config window_gap $window_gap; \
-                    bspc config left_padding $padding; \
-                    bspc config right_padding $padding; \
-                    bspc config bottom_padding $padding; \
-                    bspc config top_padding $((padding + bar_height)); \
-                else; \
-                    bar_height=30; \
-                    bspc config window_gap 0; \
-                    bspc config left_padding 0; \
-                    bspc config right_padding 0; \
-                    bspc config bottom_padding 0; \
-                    bspc config top_padding $bar_height; \
-                fi'';
         };
       };
     };
