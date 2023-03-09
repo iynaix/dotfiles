@@ -1,5 +1,9 @@
 { config, pkgs, user, lib, host, ... }:
-let displayCfg = config.iynaix.displays; in
+let
+  displayCfg = config.iynaix.displays;
+  bspwmCfg = config.iynaix.bspwm;
+  hyprlandCfg = config.iynaix.hyprland;
+in
 {
   imports = [ ./hardware.nix ];
 
@@ -27,7 +31,8 @@ let displayCfg = config.iynaix.displays; in
     security.pam.services.gdm.enableGnomeKeyring = true;
 
     home-manager.users.${user} = {
-      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
+      # bspwm settings
+      xsession.windowManager.bspwm = lib.mkIf bspwmCfg.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
         };
@@ -35,12 +40,23 @@ let displayCfg = config.iynaix.displays; in
         extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
       };
 
-      services.polybar = lib.mkIf config.iynaix.bspwm.enable {
+      services.polybar = lib.mkIf bspwmCfg.enable {
         package = (pkgs.polybar.override {
           iwSupport = true;
           pulseSupport = true;
         });
         script = "polybar ${host} &";
+      };
+
+      # wayland settings
+      programs.waybar = lib.mkIf config.iynaix.hyprland.enable {
+        settings.network.on-click = "~/.config/rofi/scripts/rofi-wifi-menu";
+        # add rounded corners for leftmost modules-right
+        style = lib.mkAfter ''
+          #network {
+            border-radius: 12px 0 0 12px;
+          }
+        '';
       };
 
       # for remapping capslock to super

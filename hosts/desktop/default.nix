@@ -1,6 +1,7 @@
 { config, pkgs, user, lib, host, ... }:
 let
   displayCfg = config.iynaix.displays;
+  bspwmCfg = config.iynaix.bspwm;
   hyprlandCfg = config.iynaix.hyprland;
 in
 {
@@ -17,6 +18,7 @@ in
         window_gap = 8;
         padding = 8;
       };
+      # wayland settings
       hyprland = {
         monitors = lib.concatStringsSep "\n" [
           "monitor=${displayCfg.monitor1},3440x1440@144,1440x1080,1"
@@ -30,6 +32,17 @@ in
           "${displayCfg.monitor3}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
         };
       };
+      waybar = {
+        style = [
+          # add rounded corners for leftmost modules-right
+          ''
+            #pulseaudio {
+              border-radius: 12px 0 0 12px;
+            }
+          ''
+        ];
+      };
+
       smplayer.enable = true;
       torrenters.enable = true;
 
@@ -89,7 +102,8 @@ in
     ];
 
     home-manager.users.${user} = {
-      xsession.windowManager.bspwm = lib.mkIf config.iynaix.bspwm.enable {
+      # bspwm related config
+      xsession.windowManager.bspwm = lib.mkIf bspwmCfg.enable {
         monitors = {
           "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" ];
           "%${displayCfg.monitor2}" = [ "6" "7" "8" ]; # escape with % because there is a dot
@@ -103,7 +117,7 @@ in
           + " --output '${displayCfg.monitor3}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
       };
 
-      services.polybar = lib.mkIf config.iynaix.bspwm.enable {
+      services.polybar = lib.mkIf bspwmCfg.enable {
         # setup bars specific to host
         config = lib.mkAfter {
           "bar/primary" = {

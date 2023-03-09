@@ -13,8 +13,7 @@ in
 {
   options.iynaix.hyprland = {
     startupPrograms = lib.mkOption {
-      type = with lib.types;
-        listOf str;
+      type = with lib.types; listOf str;
       default = [ ];
       description = "Programs to start on startup";
     };
