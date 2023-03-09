@@ -1,4 +1,4 @@
-{ pkgs, user, config, ... }: {
+{ pkgs, user, config, lib, ... }: {
   config = {
     home-manager.users.${user} = {
       services = {
@@ -7,6 +7,7 @@
           settings =
             with config.iynaix.xrdb; {
               global = {
+                monitor = lib.mkDefault 0;
                 transparency = 15;
                 separator_height = 1;
                 horizontal_padding = 10;

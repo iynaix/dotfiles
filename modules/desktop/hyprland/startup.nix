@@ -1,35 +1,6 @@
 { pkgs, host, user, lib, config, ... }:
 let
   cfg = config.iynaix.hyprland;
-  displayCfg = config.iynaix.displays;
-  hyprBatch = cmds: ''hyprctl --batch "'' + (lib.concatStringsSep " ; " cmds) + ''"'';
-  # sets master center
-  # ultrawideStart = lib.optionalString (displayCfg.monitor1 == "DP-2") hyprBatch [
-  #   "dispatch workspace 1"
-  #   "dispatch layoutmsg orientationcenter"
-  #   "dispatch workspace 2"
-  #   "dispatch layoutmsg orientationcenter"
-  #   "dispatch workspace 3"
-  #   "dispatch layoutmsg orientationcenter"
-  #   "dispatch workspace 4"
-  #   "dispatch layoutmsg orientationcenter"
-  #   "dispatch workspace 5"
-  #   "dispatch layoutmsg orientationcenter"
-  # ];
-  ultrawideStart = "";
-  # sets vertical splits
-  verticalStart = lib.optionalString (displayCfg.monitor2 == "DP-4") hyprBatch [
-    "dispatch workspace 6"
-    "dispatch layoutmsg orientationtop"
-    "dispatch workspace 7"
-    "dispatch layoutmsg orientationtop"
-    "dispatch workspace 8"
-    "dispatch layoutmsg orientationtop"
-  ];
-  hyprInitWorkspace = pkgs.writeShellScriptBin "hypr-init-ws" /* sh */ ''
-    ${verticalStart}
-    ${ultrawideStart}
-  '';
   hyprSwitchWorkspace = pkgs.writeShellScriptBin "hypr-switch-ws" /* sh */ ''
     hyprctl dispatch workspace 9
     hyprctl dispatch workspace 7
@@ -68,10 +39,10 @@ in
     {
       iynaix.hyprland.startupPrograms =
         [
-          "exec-once = ${hyprInitWorkspace}/bin/hypr-init-ws"
+          # focus the correct workspaces on boot
           "exec-once = ${hyprSwitchWorkspace}/bin/hypr-switch-ws"
 
-          "windowrule=workspace ${webdesktop} silent,brave-browser"
+          "windowrule=workspace ${webdesktop} silent,Brave-browser"
           "windowrule=workspace ${nemodesktop} silent,nemo"
           "windowrule=workspace ${secondarytermdesktop} silent,initialterm"
           "windowrule=workspace ${chatdesktop} silent,firefox-aurora"
@@ -98,7 +69,7 @@ in
           "exec = ${hyprCleanup}/bin/hypr-cleanup"
         ];
       iynaix.hyprland.startupCleanup = [
-        ''hyprctl keyword windowrule "workspace unset,brave-browser"''
+        ''hyprctl keyword windowrule "workspace unset,Brave-browser"''
         ''hyprctl keyword windowrule "workspace unset,nemo"''
         ''hyprctl keyword windowrule "workspace unset,firefox-aurora"''
       ];

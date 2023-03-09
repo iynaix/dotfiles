@@ -11,6 +11,7 @@ in
   imports = [
     ./nvidia.nix
     ./startup.nix
+    ./waybar.nix
     ./wallpaper.nix
   ];
 
@@ -21,7 +22,6 @@ in
     };
     keybinds = lib.mkOption {
       type = with lib.types; attrsOf str;
-      default = { };
       description = ''
         Keybinds for Hyprland, see
         https://wiki.hyprland.org/Configuring/Binds/
@@ -29,40 +29,7 @@ in
       example = ''{
         "SUPER, Return" = "exec, alacritty";
       }'';
-    };
-    monitors = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        Config for monitors, see
-        https://wiki.hyprland.org/Configuring/Monitors/
-      '';
-    };
-    settings = lib.mkOption {
-      type = with lib.types; attrsOf str;
-      default = { };
-      description = "Settings for Hyprland";
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
-    services.xserver.desktopManager.gnome.enable = lib.mkForce false;
-    services.xserver.displayManager.lightdm.enable = lib.mkForce false;
-
-    services.greetd = {
-      enable = true;
-      settings = {
-        default_session.command = "${pkgs.greetd.greetd}/bin/agreety --cmd Hyprland";
-
-        initial_session = {
-          command = "Hyprland";
-          inherit user;
-        };
-      };
-    };
-
-    iynaix.hyprland.keybinds =
-      {
+      default = {
         "${mod}, Return" = "exec, alacritty";
         "${mod}_SHIFT, Return" = "exec, rofi -show drun";
         "${mod}, BackSpace" = "killactive,";
@@ -122,7 +89,6 @@ in
         "${mod}_SHIFT, 9" = "movetoworkspace, 9";
         "${mod}_SHIFT, 0" = "movetoworkspace, 10";
 
-
         "${mod}, b" = "layoutmsg, swapwithmaster";
 
         # focus the previous / next desktop in the current monitor (DE style)
@@ -160,6 +126,9 @@ in
         "${mod}, m" = "layoutmsg, addmaster";
         "${mod}_SHIFT, m" = "layoutmsg, removemaster";
 
+        # rotate via switching master orientation
+        "${mod}, r" = "layoutmsg, orientationnext";
+
         # Scroll through existing workspaces with mainMod + scroll
         "${mod}, mouse_down" = "workspace, e+1";
         "${mod}, mouse_up" = "workspace, e-1";
@@ -177,6 +146,48 @@ in
         # focus the next/previous node of the same class
         # "${mod} + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";
       };
+    };
+    monitors = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = ''
+        Config for monitors, see
+        https://wiki.hyprland.org/Configuring/Monitors/
+      '';
+    };
+    settings = lib.mkOption {
+      type = with lib.types; attrsOf str;
+      default = { };
+      description = "Settings for Hyprland";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    services.xserver.desktopManager.gnome.enable = lib.mkForce false;
+    services.xserver.displayManager.lightdm.enable = lib.mkForce false;
+
+    services.greetd = {
+      enable = true;
+      settings = {
+        default_session.command = "${pkgs.greetd.greetd}/bin/agreety --cmd Hyprland";
+
+        initial_session = {
+          command = "Hyprland";
+          inherit user;
+        };
+      };
+    };
+
+    # iynaix.hyprland.keybinds = // lib.optionalAttrs (host == "desktop") {
+    #     # set master to vertical on every navigation to the workspace
+    #     "${mod}, 6" = "layoutmsg, orientationtop";
+    #     "${mod}, 7" = "layoutmsg, orientationtop";
+    #     "${mod}, 8" = "layoutmsg, orientationtop";
+
+    #     "${mod}_SHIFT, 6" = "layoutmsg, orientationtop";
+    #     "${mod}_SHIFT, 7" = "layoutmsg, orientationtop";
+    #     "${mod}_SHIFT, 8" = "layoutmsg, orientationtop";
+    #   };
 
     home-manager.users.${user} = {
       programs.rofi = {

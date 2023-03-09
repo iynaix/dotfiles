@@ -144,6 +144,11 @@ in
           vlc
         ];
       };
+
+      # dunst notifications should show on ultrawide
+      services.dunst.settings.global = lib.mkIf hyprlandCfg.enable {
+        monitor = 1;
+      };
     };
 
     iynaix.persist.home.directories = [

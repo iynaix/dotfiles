@@ -129,21 +129,24 @@
 
         # build flake but don't switch
         nbuild() {
-            cd ~/projects/dotfiles
+            pushd ~/projects/dotfiles
             sudo nixos-rebuild build --flake ".#''${1:-${host}}"
+            popd
         }
 
         # switch / update via nix flake
         nswitch() {
-            cd ~/projects/dotfiles
+            pushd ~/projects/dotfiles
             sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && \
             echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+            popd
         }
 
         upd8() {
-            cd ~/projects/dotfiles
+            pushd ~/projects/dotfiles
             nix flake update
             nswitch
+            popd
         }
 
         # nix garbage collection
