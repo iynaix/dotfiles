@@ -12,13 +12,6 @@ let
 in
 {
   options.iynaix.hyprland = {
-    startupPrograms = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = [ ];
-      description = "Programs to start on startup";
-    };
-  };
-  options.iynaix.hyprland = {
     startupCleanup = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];
@@ -36,37 +29,40 @@ in
       dldesktop = "10";
     in
     {
-      iynaix.hyprland.startupPrograms =
-        [
-          # focus the correct workspaces on boot
-          "exec-once = ${hyprSwitchWorkspace}/bin/hypr-switch-ws"
+      iynaix.hyprland.extraBinds = lib.mkAfter
+        {
+          exec-once = [
+            "${hyprSwitchWorkspace}/bin/hypr-switch-ws"
 
-          "windowrule=workspace ${webdesktop} silent,Brave-browser"
-          "windowrule=workspace ${nemodesktop} silent,nemo"
-          "windowrule=workspace ${secondarytermdesktop} silent,initialterm"
-          "windowrule=workspace ${chatdesktop} silent,firefox-aurora"
-          "windowrule=workspace ${dldesktop} silent,dltxt"
-          "windowrule=workspace ${dldesktop} silent,dlterm"
+            # browsers
+            "brave --profile-directory=Default"
+            "brave --incognito"
 
-          # browsers
-          "exec-once = brave --profile-directory=Default"
-          "exec-once = brave --incognito"
+            # file manager
+            "nemo"
 
-          # file manager
-          "exec-once = nemo"
+            # terminal
+            "$TERMINAL --class initialterm"
 
-          # terminal
-          "exec-once = $TERMINAL --class initialterm"
+            # firefox
+            "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
 
-          # firefox
-          "exec-once = firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
+            "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
+            "$TERMINAL --class dlterm"
+          ];
+          exec = [
+            "${hyprCleanup}/bin/hypr-cleanup"
+          ];
+          windowrule = [
+            "workspace ${webdesktop} silent,Brave-browser"
+            "workspace ${nemodesktop} silent,nemo"
+            "workspace ${secondarytermdesktop} silent,initialterm"
+            "workspace ${chatdesktop} silent,firefox-aurora"
+            "workspace ${dldesktop} silent,dltxt"
+            "workspace ${dldesktop} silent,dlterm"
+          ];
+        };
 
-          "exec-once = $TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
-          "exec-once = $TERMINAL --class dlterm"
-
-          # cleanup bindings after startup
-          "exec = ${hyprCleanup}/bin/hypr-cleanup"
-        ];
       iynaix.hyprland.startupCleanup = [
         ''hyprctl keyword windowrule "workspace unset,Brave-browser"''
         ''hyprctl keyword windowrule "workspace unset,nemo"''

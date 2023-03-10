@@ -7,7 +7,7 @@ let cfg = config.iynaix.pathofbuilding; in
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [ (pkgs.callPackage ../../packages/pathofbuilding { }) ];
+      home.packages = [ (pkgs.callPackage ../../pkgs/pathofbuilding { }) ];
     };
   };
 }

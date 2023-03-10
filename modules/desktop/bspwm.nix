@@ -94,8 +94,6 @@ in
         extraConfigEarly = lib.concatStringsSep "\n" [
           # fix the cursor
           "xsetroot -cursor_name left_ptr"
-          # start polkit
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         ];
         # restart polybar after bspwm has initialized
         # https://www.reddit.com/r/NixOS/comments/v8ikwq/polybar_doesnt_start_at_launch
