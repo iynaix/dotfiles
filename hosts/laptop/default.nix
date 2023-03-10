@@ -2,7 +2,6 @@
 let
   displayCfg = config.iynaix.displays;
   bspwmCfg = config.iynaix.bspwm;
-  hyprlandCfg = config.iynaix.hyprland;
 in
 {
   imports = [ ./hardware.nix ];

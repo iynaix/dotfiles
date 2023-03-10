@@ -1,6 +1,6 @@
-{ lib, inputs, nixpkgs, home-manager, user, hyprland, nixos-hardware, ... }:
+{ lib, inputs, nixpkgs, home-manager, user, hyprland, hyprwm-contrib, nixos-hardware, ... }:
 let
-  createHost = { hostName }: lib.nixosSystem {
+  createHost = { hostName }: lib.nixosSystem rec {
     system = "x86_64-linux";
 
     specialArgs = {
@@ -29,7 +29,11 @@ let
             programs.home-manager.enable = true;
           };
         };
-        nixpkgs.overlays = (import ../overlays);
+        nixpkgs.overlays = (import ../overlays) ++ [
+          (self: super: {
+            hyprwm-contrib-packages = hyprwm-contrib.packages.${system};
+          })
+        ];
       }
       inputs.impermanence.nixosModules.impermanence
     ] ++ lib.optional (hostName == "laptop") nixos-hardware.nixosModules.dell-xps-13-9343;

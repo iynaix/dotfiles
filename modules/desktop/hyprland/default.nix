@@ -203,6 +203,7 @@ in
         };
 
         packages = with pkgs; [
+          pciutils
           # clipboard history
           cliphist
           wl-clipboard
@@ -327,6 +328,12 @@ in
               }
             ''
 
+            ''
+              misc {
+                disable_splash_rendering = true
+              }
+            ''
+
             # Example windowrule v1
             # windowrule = float, ^(kitty)$
             # Example windowrule v2
@@ -342,10 +349,9 @@ in
 
             "exec = hyprpaper" # reload wallpaper every time
             "exec-once = wl-paste --watch cliphist store" # clipboard manager
+            "exec-once = ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1" # start polkit
 
             (lib.concatStringsSep "\n" cfg.startupPrograms)
-
-            "source=~/.config/hyprland-extra.conf"
           ]);
         };
     };

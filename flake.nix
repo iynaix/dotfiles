@@ -13,15 +13,23 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprwm-contrib = {
+      url = "github:hyprwm/contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, nixos-hardware, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, hyprwm-contrib, nixos-hardware, ... }:
     let user = "iynaix";
     in {
       nixosConfigurations = (import ./hosts {
         inherit (nixpkgs) lib;
-        inherit inputs nixpkgs home-manager user impermanence hyprland nixos-hardware;
+        inherit inputs nixpkgs home-manager user impermanence hyprland hyprwm-contrib nixos-hardware;
       });
     };
 }
