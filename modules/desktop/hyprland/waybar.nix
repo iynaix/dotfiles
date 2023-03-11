@@ -2,8 +2,8 @@
 let
   cfg = config.iynaix.waybar;
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
-    killall .waybar-wrapped
-    waybar -c $HOME/waybar-config > /dev/null 2>&1 &
+    killall -q .waybar-wrapped
+    waybar > /dev/null 2>&1 &
   '';
 in
 {
@@ -21,6 +21,7 @@ in
 
       programs.waybar = {
         enable = true;
+        package = pkgs.hyprland.waybar-hyprland;
         settings = [{
           layer = "top";
           position = "top";

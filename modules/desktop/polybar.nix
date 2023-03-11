@@ -280,6 +280,8 @@ in
           };
         };
       };
+
+      # home.file.".config/polybar/config".onChange = "systemctl --user restart";
     };
   };
 }

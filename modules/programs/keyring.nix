@@ -3,6 +3,7 @@
   config = {
     # enable gnome-keyring for all users
     services.gnome.gnome-keyring.enable = true;
+    security.polkit.enable = true;
 
     # enable polkit
     # https://nixos.wiki/wiki/Polkit

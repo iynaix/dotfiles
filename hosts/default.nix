@@ -4,7 +4,7 @@ let
     system = "x86_64-linux";
 
     specialArgs = {
-      inherit user;
+      inherit user inputs;
       host = hostName;
     };
 
@@ -17,7 +17,6 @@ let
           useGlobalPkgs = true;
           useUserPackages = true;
           users.${user} = {
-            imports = [ inputs.hyprland.homeManagerModules.default ];
             home = {
               username = user;
               homeDirectory = "/home/${user}";
@@ -32,6 +31,7 @@ let
         nixpkgs.overlays = (import ../overlays) ++ [
           (self: super: {
             hyprwm-contrib-packages = hyprwm-contrib.packages.${system};
+            hyprland = hyprland.packages.${system};
           })
         ];
       }

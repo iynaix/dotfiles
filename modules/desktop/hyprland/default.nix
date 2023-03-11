@@ -1,4 +1,4 @@
-{ pkgs, host, user, lib, config, ... }:
+{ pkgs, host, user, lib, config, inputs, ... }:
 let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
@@ -104,6 +104,7 @@ in
   config = lib.mkIf cfg.enable {
     services.xserver.desktopManager.gnome.enable = lib.mkForce false;
     services.xserver.displayManager.lightdm.enable = lib.mkForce false;
+    # services.xserver.displayManager.sddm.enable = lib.mkForce true;
 
     services.greetd = {
       enable = true;
@@ -117,7 +118,13 @@ in
       };
     };
 
+    # prevents crashes with nvidia on resuming, see:
+    # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
+    hardware.nvidia.powerManagement.enable = true;
+
     home-manager.users.${user} = {
+      imports = [ inputs.hyprland.homeManagerModules.default ];
+
       programs.rofi = {
         package = pkgs.rofi-wayland;
         extraConfig = {
@@ -154,12 +161,25 @@ in
               {
                 input = {
                   kb_layout = "us";
-
                   follow_mouse = 1;
 
                   touchpad = {
                     natural_scroll = false;
+                    disable_while_typing = true;
                   };
+                };
+
+                general = {
+                  gaps_in = if host == "desktop" then 8 else 4;
+                  gaps_out = if host == "desktop" then 8 else 4;
+                  border_size = 2;
+
+                  # "col.inactive_border" = "rgba(595959aa)";
+                  # "col.active_border" = "rgba(${xrdb.color4}ee) rgba(${xrdb.color2}55)";
+                  "col.active_border" = "rgb(${xrdb.color4})";
+                  "col.inactive_border" = "rgb(${xrdb.color0})";
+
+                  layout = "master";
                 };
 
                 decoration = {
@@ -198,18 +218,6 @@ in
 
                 misc = {
                   disable_splash_rendering = true;
-                };
-
-                general = {
-                  gaps_in = if host == "desktop" then 8 else 4;
-                  gaps_out = if host == "desktop" then 8 else 4;
-                  border_size = 2;
-                  # "col.inactive_border" = "rgba(595959aa)";
-                  # "col.active_border" = "rgba(${xrdb.color4}ee) rgba(${xrdb.color2}55)";
-                  "col.active_border" = "rgb(${xrdb.color4})";
-                  "col.inactive_border" = "rgb(${xrdb.color0})";
-
-                  layout = "master";
                 };
               }
               cfg.extraVariables
@@ -364,6 +372,9 @@ in
                 # Example windowrule v2
                 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
                 # See https://wiki.hyprland.org/Configuring/Window-Rules/
+                windowrulev2 = [
+                  "center,floating:1"
+                ];
 
                 exec = [
                   "hyprpaper" # reload wallpaper every time
@@ -372,12 +383,10 @@ in
                 exec-once = [
                   # clipboard manager
                   "wl-paste - -watch cliphist store"
-                  # start polkit
-                  # "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
                 ];
               }
               cfg.extraBinds
-            ]);
+            ]) + "\nsource=~/hypr-extra.conf\n";
         };
     };
   };
