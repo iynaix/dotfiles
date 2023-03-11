@@ -83,13 +83,9 @@ in
     # enable nvidia support
     services.xserver.videoDrivers = [ "nvidia" ];
 
-    hardware = {
-      nvidia.modesetting.enable = true;
-
-      opengl = {
-        enable = true;
-        driSupport = true;
-      };
+    hardware.opengl = {
+      enable = true;
+      driSupport = true;
     };
 
     # environment.systemPackages = with pkgs; [ ];

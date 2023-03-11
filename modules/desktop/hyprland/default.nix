@@ -118,10 +118,6 @@ in
       };
     };
 
-    # prevents crashes with nvidia on resuming, see:
-    # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
-    hardware.nvidia.powerManagement.enable = true;
-
     home-manager.users.${user} = {
       imports = [ inputs.hyprland.homeManagerModules.default ];
 
@@ -139,6 +135,7 @@ in
 
         packages = with pkgs; [
           pciutils
+          socat
           # clipboard history
           cliphist
           wl-clipboard
