@@ -8,8 +8,12 @@ let
 in
 {
   options.iynaix.waybar = {
+    settings = lib.mkOption {
+      default = { };
+      description = "Additional waybar settings";
+    };
     style = lib.mkOption {
-      type = with lib.types; listOf str;
+      type = lib.types.str;
       default = [ ];
       description = "Additional waybar css styles as lines";
     };
@@ -22,57 +26,65 @@ in
       programs.waybar = {
         enable = true;
         package = pkgs.hyprland.waybar-hyprland;
-        settings = [{
-          layer = "top";
-          position = "top";
-          margin = "4 4 0 4";
-          modules-left = [ "hyprland/window" ];
-          modules-center = [ "wlr/workspaces" ];
-          modules-right = [ "network" "pulseaudio" "battery" "clock" ];
-          clock = {
-            format = "{:%H:%M}";
-            format-alt = "{:%a, %d %b %Y}";
-            interval = 10;
-          };
-          "hyprland/window" = {
-            separate-outputs = true;
-          };
-          network = {
-            tooltip = false;
-            format-ethernet = "";
-            format-disconnected = "<span color=\"#4a4a4a\"></span>";
-            format-wifi = "";
-          };
-          pulseaudio = {
-            format = "{icon}  {volume}%";
-            scroll-step = 1;
-            format-muted = "婢 Muted";
-            format-icons = [ "" "" "" ];
-            on-click = "pamixer -t";
-            on-click-right = "pavucontrol";
-            tooltip = false;
-          };
-          battery = {
-            format = "{icon} {capacity}%";
-            format-charging = " {capacity}%";
-            format-icons = [ "" "" "" "" "" ];
-            tooltip = false;
-          };
-          "custom/power" = {
-            format = "";
-            on-click = "rofi -show power-menu -modi power-menu:~/.config/rofi/scripts/rofi-power-menu -theme ~/.config/rofi/powermenu.rasi";
-            tooltip = false;
-          };
-          "wlr/workspaces" = {
-            on-click = "activate";
-            sort-by-number = true;
-          };
-        }];
+        settings = [
+          ({
+            layer = "top";
+            position = "top";
+            margin = "4 4 0 4";
+            modules-left = [ "hyprland/window" ];
+            modules-center = [ "wlr/workspaces" ];
+            modules-right = [ "network" "pulseaudio" "battery" "clock" ];
+            clock = {
+              format = "{:%H:%M}";
+              format-alt = "{:%a, %d %b %Y}";
+              interval = 10;
+            };
+            "hyprland/window" = {
+              separate-outputs = true;
+            };
+            network = {
+              tooltip = false;
+              format-wifi = "  {essid}";
+              format-ethernet = "";
+              format-disconnected = "睊  Offline";
+            };
+            pulseaudio = {
+              format = "{icon}  {volume}%";
+              scroll-step = 1;
+              format-muted = "婢 Muted";
+              format-icons = [ "" "" "" ];
+              on-click = "pamixer -t";
+              on-click-right = "pavucontrol";
+              tooltip = false;
+            };
+            battery = {
+              format = "{icon}  {capacity}%";
+              format-charging = "  {capacity}%";
+              format-icons = [ "" "" "" "" "" ];
+              tooltip = false;
+            };
+            backlight = {
+              format = "{icon}  {percent}%";
+              format-icons = [ "󰃞" "󰃝" "󰃟" "" ];
+              on-scroll-up = "brightnessctl s +1%";
+              on-scroll-down = "brightnessctl s 1%-";
+            };
+            "custom/power" = {
+              format = "";
+              on-click = "rofi -show power-menu -modi power-menu:~/.config/rofi/scripts/rofi-power-menu -theme ~/.config/rofi/powermenu.rasi";
+              tooltip = false;
+            };
+            "wlr/workspaces" = {
+              on-click = "activate";
+              sort-by-number = true;
+            };
+          } // cfg.settings)
+        ];
         style = with config.iynaix.xrdb; ''
           #waybar {
             background: transparent;
           }
-          #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window {
+          #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {
             font-family: "Inter", "FontAwesome6Free";
             font-weight: bold;
             color: ${foreground};
@@ -91,7 +103,7 @@ in
             margin-right: 4px;
             border-radius: 0 12px 12px 0;
           }
-          #pulseaudio {
+          #pulseaudio, #backlight {
             padding: 0 12px;
           }
           #network {
@@ -107,10 +119,11 @@ in
           #workspaces button.active {
             border-radius: 50%;
           }
-        '' + (lib.concatStringsSep "\n" cfg.style);
+        '' + "\n" + cfg.style;
       };
 
-      wayland.windowManager.hyprland.extraConfig = lib.mkAfter "exec-once = ${launch-waybar}/bin/launch-waybar";
+      wayland.windowManager.hyprland.extraConfig = lib.mkAfter
+        "exec-once = ${launch-waybar}/bin/launch-waybar";
     };
   };
 }

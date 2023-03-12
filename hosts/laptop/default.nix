@@ -11,6 +11,36 @@ in
       displays.monitor1 = "eDP-1";
       backlight.enable = true;
       pathofbuilding.enable = true;
+
+      hyprland = {
+        monitors = lib.concatStringsSep "\n" [
+          "monitor=${displayCfg.monitor1},1920x1080,0x0,1"
+        ];
+        wallpapers = {
+          "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
+        };
+      };
+
+      waybar = {
+        settings = {
+          modules-right = [ "network" "pulseaudio" "backlight" "battery" "clock" ];
+          network = {
+            format = "  {essid}";
+            on-click = "~/.config/rofi/scripts/rofi-wifi-menu";
+          };
+        };
+        # add rounded corners for leftmost modules-right
+        style = lib.mkAfter ''
+          #network {
+            border-radius: 12px 0 0 12px;
+          }
+        '';
+      };
+
+      # toggle WMs
+      bspwm.enable = false;
+      hyprland.enable = true;
+
       persist.root.directories = [
         "/etc/NetworkManager" # for wifi
       ];
@@ -47,17 +77,6 @@ in
         script = "polybar ${host} &";
       };
 
-      # wayland settings
-      programs.waybar = lib.mkIf config.iynaix.hyprland.enable {
-        settings.network.on-click = "~/.config/rofi/scripts/rofi-wifi-menu";
-        # add rounded corners for leftmost modules-right
-        style = lib.mkAfter ''
-          #network {
-            border-radius: 12px 0 0 12px;
-          }
-        '';
-      };
-
       # for remapping capslock to super
       home = {
         file.".xmodmap".text = ''
@@ -68,7 +87,7 @@ in
       };
 
       programs.alacritty.settings.font.size = 10;
-      programs.kitty.settings.font.size = 10;
+      programs.kitty.font.size = 10;
 
       services.xcape = {
         enable = true;
