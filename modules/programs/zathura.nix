@@ -1,5 +1,9 @@
 { pkgs, config, user, ... }: {
   config = {
+    xdg.mime.defaultApplications = {
+      "application/pdf" = "org.pwmt.zathura.desktop";
+    };
+
     home-manager.users.${user} =
       {
         programs = {

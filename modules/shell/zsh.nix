@@ -88,6 +88,7 @@
           ":e" = "nvim";
           ":q" = "exit";
           c = "clear";
+          btop = "btop --preset 2";
           isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
           ll = "ls -al";
           ls = "exa --group-directories-first --color-scale --icons";

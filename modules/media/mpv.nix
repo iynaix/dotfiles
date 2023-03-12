@@ -44,7 +44,7 @@
         config = {
           profile = "gpu-hq";
           input-ipc-server = "/tmp/mpvsocket";
-          no-border = true;
+          # no-border = true;
           save-position-on-quit = true;
 
           sub-auto = "fuzzy";

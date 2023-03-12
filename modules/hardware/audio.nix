@@ -10,7 +10,6 @@
   hardware.pulseaudio.enable = false;
 
   environment.systemPackages = with pkgs; [
-    alsa-utils
     pamixer
     pavucontrol
   ];

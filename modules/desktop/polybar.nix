@@ -198,8 +198,8 @@ in
             label = "%percentage%";
 
             ramp-0 = "";
-            ramp-1 = "󰃟";
-            ramp-2 = "󰃝";
+            ramp-1 = "󰃝";
+            ramp-2 = "󰃟";
             ramp-3 = "󰃞";
           };
           "module/volume" = {

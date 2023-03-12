@@ -93,6 +93,7 @@ in
       "L+ /home/${user}/Documents   - - - - /media/Files/Documents"
       "L+ /home/${user}/Downloads   - - - - /media/Files/Downloads"
       "L+ /home/${user}/Pictures   - - - - /media/Files/Pictures"
+      "L+ /home/${user}/Videos   - - - - /media/6TBRED"
     ];
 
     home-manager.users.${user} = {

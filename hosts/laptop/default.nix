@@ -27,6 +27,7 @@ in
           network = {
             format = "  {essid}";
             on-click = "~/.config/rofi/rofi-wifi-menu/rofi-wifi-menu.sh";
+            on-click-right = "nmtui";
           };
         };
         # add rounded corners for leftmost modules-right

@@ -216,6 +216,9 @@ in
                 misc = {
                   disable_splash_rendering = true;
                   mouse_move_enables_dpms = true;
+                  # key_press_enables_dpms = true;
+                  enable_swallow = true;
+                  swallow_regex = "[Kk]itty|[Aa]lacritty";
                 };
               }
               cfg.extraVariables
@@ -333,6 +336,9 @@ in
                   # Scroll through existing workspaces with mainMod + scroll
                   "${mod}, mouse_down" = "workspace, e+1";
                   "${mod}, mouse_up" = "workspace, e-1";
+
+                  # lock monitors
+                  "${mod}_SHIFT_CTRL, l" = "dpms, off";
 
                   # TODO:
                   # special keys
