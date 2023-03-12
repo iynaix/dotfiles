@@ -215,6 +215,7 @@ in
 
                 misc = {
                   disable_splash_rendering = true;
+                  mouse_move_enables_dpms = true;
                 };
               }
               cfg.extraVariables
@@ -364,13 +365,8 @@ in
                   "10" = displays.monitor3;
                 };
 
-                # Example windowrule v1
-                # windowrule = float, ^(kitty)$
-                # Example windowrule v2
-                # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
-                # See https://wiki.hyprland.org/Configuring/Window-Rules/
                 windowrulev2 = [
-                  "center,floating:1"
+                  # "center,floating:1"
                 ];
 
                 exec = [
@@ -383,7 +379,7 @@ in
                 ];
               }
               cfg.extraBinds
-            ]) + "\nsource=~/hypr-extra.conf\n";
+            ]);
         };
     };
   };

@@ -2,9 +2,9 @@
 {
   config = lib.mkIf (config.iynaix.hyprland.enable && host == "desktop") {
     hardware.nvidia = {
-      open = true;
+      # open = true;
       modesetting.enable = true;
-      nvidiaPersistenced = true;
+      # nvidiaPersistenced = true;
       # prevents crashes with nvidia on resuming, see:
       # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
       powerManagement.enable = true;
