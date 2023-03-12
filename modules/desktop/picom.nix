@@ -10,6 +10,7 @@
         "100:window_type = 'popup_menu'"
         # "95:name *= 'NVIM'"
         "90:class_g = 'Alacritty'"
+        "90:class_g = 'kitty'"
         # "70:class_g = 'Bspwm' && class_i = 'presel_feedback'"
       ];
       backend = "glx";

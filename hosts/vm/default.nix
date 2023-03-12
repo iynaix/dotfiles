@@ -56,7 +56,7 @@ let displayCfg = config.iynaix.displays; in
           ''bspc rule -a Code -o desktop=1''
           "code"
           # terminal on desktop 2
-          ''bspc rule -a Alacritty -o desktop=2''
+          ''bspc rule -a kitty -o desktop=2''
           "$TERMINAL"
           # nemo on desktop 3
           ''bspc rule -a Nemo:nemo -o desktop=3''

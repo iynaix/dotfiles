@@ -4,6 +4,7 @@
     ./brave.nix
     ./firefox.nix
     ./keyring.nix
+    ./kitty.nix
     ./nemo.nix
     ./neovim.nix
     ./vscode.nix

@@ -68,6 +68,7 @@ in
       };
 
       programs.alacritty.settings.font.size = 10;
+      programs.kitty.settings.font.size = 10;
 
       services.xcape = {
         enable = true;

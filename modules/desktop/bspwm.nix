@@ -5,7 +5,7 @@ let
   barHeight = 30;
   padding = cfg.extraSettings.padding or 4;
   # window classes and desktops
-  termclass = "Alacritty";
+  termclass = "kitty";
   chromeclass = "Brave-browser";
   webdesktop = "1";
   # filedesktop = "3";

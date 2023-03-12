@@ -73,7 +73,7 @@
   # $ nix search wget
   environment = {
     variables = {
-      TERMINAL = "alacritty";
+      TERMINAL = "kitty";
       VISUAL = "nvim";
     };
     systemPackages = with pkgs; [

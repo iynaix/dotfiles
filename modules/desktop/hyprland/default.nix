@@ -79,7 +79,7 @@ in
         https://wiki.hyprland.org/Configuring/Binds/
       '';
       example = ''{
-        "SUPER, Return" = "exec, alacritty";
+        "SUPER, Return" = "exec, kitty";
       }'';
       default = { };
     };
@@ -222,14 +222,14 @@ in
             ]) + "\n" + mkHyprlandBinds (recursiveMerge [
               {
                 bind = {
-                  "${mod}, Return" = "exec, alacritty";
+                  "${mod}, Return" = "exec, kitty";
                   "${mod}_SHIFT, Return" = "exec, rofi -show drun";
                   "${mod}, BackSpace" = "killactive,";
                   "${mod}, e" = "exec, nemo ~/Downloads";
-                  "${mod}_SHIFT, e" = "exec, alacritty -e ranger ~/Downloads";
+                  "${mod}_SHIFT, e" = "exec, kitty ranger ~/Downloads";
                   "${mod}, w" = "exec, brave";
                   "${mod}_SHIFT, w" = "exec, brave --incognito";
-                  "${mod}, v" = "exec, alacritty -e nvim";
+                  "${mod}, v" = "exec, kitty nvim";
                   "${mod}_SHIFT, v" = "exec, code";
 
                   "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';

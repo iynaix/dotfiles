@@ -18,7 +18,7 @@ in
         enable = true;
         package = lib.mkDefault pkgs.rofi;
         location = "center";
-        terminal = "alacritty";
+        terminal = "kitty";
         font = "${config.iynaix.font.regular} 14";
         extraConfig = {
           modi = lib.mkDefault "run,drun,window";

@@ -1,7 +1,7 @@
 { pkgs, config, host, user, lib, ... }:
 let
   displayCfg = config.iynaix.displays;
-  alacritty = "${pkgs.alacritty}/bin/alacritty";
+  kitty = "${pkgs.kitty}/bin/kitty";
   nmtui = "${pkgs.networkmanager}/bin/nmtui";
 in
 {
@@ -274,8 +274,8 @@ in
 
             interval = 1;
 
-            label-connected = "%{A:${alacritty} -e ${nmtui}:}直  %essid%%{A}";
-            label-disconnected = "%{A:${alacritty} -e ${nmtui}:}睊%{A}";
+            label-connected = "%{A:${kitty} ${nmtui}:}直  %essid%%{A}";
+            label-disconnected = "%{A:${kitty} ${nmtui}:}睊%{A}";
             label-disconnected-foreground = ''''${colors.disconnected}'';
           };
         };
