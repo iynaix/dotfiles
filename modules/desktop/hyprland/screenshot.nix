@@ -19,20 +19,24 @@ let
     case "$choice" in
       "All")
         delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
         sleep $delay
         ${grimblast} copysave screen $img
         ;;
       "Monitor")
         delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
         sleep $delay
         ${grimblast} copysave output $img
         ;;
       "Selection")
+        sleep 0.5
         sleep $delay
         ${grimblast} copysave area $img
         ;;
       "Window")
         delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
         sleep $delay
         ${grimblast} copysave active $img
         ;;

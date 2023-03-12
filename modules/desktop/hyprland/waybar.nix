@@ -67,15 +67,15 @@ in
             sort-by-number = true;
           };
         }];
-        style = ''
+        style = with config.iynaix.xrdb; ''
           #waybar {
             background: transparent;
           }
           #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window {
             font-family: "Inter", "FontAwesome6Free";
             font-weight: bold;
-            color: #b0b0b0;
-            background-color: #0a0a0a;
+            color: ${foreground};
+            background-color: ${color0};
             border-radius: 0;
             transition: none;
             padding: 0 8px;
@@ -85,8 +85,8 @@ in
             border-radius: 12px;
           }
           #clock, #workspaces button.active {
-            background-color: #b0b0b0;
-            color: #0a0a0a;
+            background-color: ${foreground};
+            color: ${color0};
             margin-right: 4px;
             border-radius: 0 12px 12px 0;
           }
@@ -97,7 +97,7 @@ in
             padding: 0 12px;
           }
           #network.disconnected {
-            color: #4a4a4a;
+            color: ${color1};
           }
           #window {
             margin-left: 4px;
