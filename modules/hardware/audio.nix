@@ -9,7 +9,11 @@
   };
   hardware.pulseaudio.enable = false;
 
-  environment.systemPackages = [ pkgs.alsa-utils ];
+  environment.systemPackages = with pkgs; [
+    alsa-utils
+    pamixer
+    pavucontrol
+  ];
 
   home-manager.users.${user} = {
     services = {

@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf config.iynaix.hyprland.enable {
     home-manager.users.${user} = {
-      home.packages = with pkgs; [ pavucontrol launch-waybar ];
+      home.packages = [ launch-waybar ];
 
       programs.waybar = {
         enable = true;
@@ -44,12 +44,13 @@ in
             format-wifi = "";
           };
           pulseaudio = {
-            format = "{icon}";
-            format-muted = "<span color=\"#4a4a4a\"></span>";
-            format-icons = [ "" "" ];
-            on-click = "pavucontrol";
-            tooltip = true;
-            tooltip-format = "{volume}%";
+            format = "{icon}  {volume}%";
+            scroll-step = 1;
+            format-muted = "婢 Muted";
+            format-icons = [ "" "" "" ];
+            on-click = "pamixer -t";
+            on-click-right = "pavucontrol";
+            tooltip = false;
           };
           battery = {
             format = "{icon} {capacity}%";

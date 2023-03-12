@@ -26,6 +26,9 @@ let
 
         # set wallpapers again
         hyprpaper
+
+        # reset waybar
+        launch-waybar
       fi
     }
 

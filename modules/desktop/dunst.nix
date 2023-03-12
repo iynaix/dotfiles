@@ -7,7 +7,7 @@
           settings =
             with config.iynaix.xrdb; {
               global = {
-                monitor = lib.mkDefault 0;
+                follow = "mouse";
                 transparency = 15;
                 separator_height = 1;
                 horizontal_padding = 10;
