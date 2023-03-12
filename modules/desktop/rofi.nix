@@ -114,6 +114,7 @@ in
           };
 
           mode-switcher = {
+            enabled = false;
             spacing = 0;
           };
 
@@ -148,6 +149,11 @@ in
 
       home = {
         packages = with pkgs; [ rofi-power-menu ];
+
+        file.".config/rofi/rofi-wifi-menu" = {
+          source = ./rofi-wifi-menu;
+          recursive = true;
+        };
       };
     };
   };

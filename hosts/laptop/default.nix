@@ -26,7 +26,7 @@ in
           modules-right = [ "network" "pulseaudio" "backlight" "battery" "clock" ];
           network = {
             format = "  {essid}";
-            on-click = "~/.config/rofi/scripts/rofi-wifi-menu";
+            on-click = "~/.config/rofi/rofi-wifi-menu/rofi-wifi-menu.sh";
           };
         };
         # add rounded corners for leftmost modules-right

@@ -10,25 +10,17 @@ let cfg = config.iynaix.backlight; in
 
     home-manager.users.${user} = {
       services = {
-        sxhkd.keybindings =
-          let
-            brightness-change = pkgs.writeShellScriptBin "brightness-change" /* sh */ ''
-              # arbitrary but unique message id
-              msgId="906882"
+        sxhkd.keybindings = {
+          "XF86MonBrightnessDown" = "brightnessctl set 5%-";
+          "XF86MonBrightnessUp" = "brightnessctl set +5%";
+        };
+      };
+    };
 
-              brightnessctl "$@"
-
-              # query xbacklight for the current brightness
-              pct=$(brightnessctl i | grep -i current | cut -d' ' -f 4 | tr -dc '0-9')
-
-              # show backlight notification
-              dunstify -a "brightness-change" -u low -r "$msgId" "Backlight: ''${pct}%"
-            '';
-          in
-          {
-            "XF86MonBrightnessDown" = "${brightness-change}/bin/brightness-change set 5%-";
-            "XF86MonBrightnessUp" = "${brightness-change}/bin/brightness-change set +5%";
-          };
+    iynaix.hyprland.extraBinds = {
+      bind = {
+        "XF86MonBrightnessDown" = "brightnessctl set 5%-";
+        "XF86MonBrightnessUp" = "brightnessctl set +5%";
       };
     };
   };

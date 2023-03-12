@@ -32,7 +32,7 @@ let mod = if host == "vm" then "alt" else "super"; in
             "{nemo ~/Downloads,$TERMINAL -e ranger ~/Downloads}";
 
           # special keys
-          "XF86AudioPlay" = "mpvctl playpause";
+          # "XF86AudioPlay" = "mpvctl playpause";
 
           # BSPWM KEYBINDINGS
 
