@@ -5,7 +5,7 @@ let
   nmtui = "${pkgs.networkmanager}/bin/nmtui";
 in
 {
-  config = {
+  config = lib.mkIf config.iynaix.bspwm.enable {
     home-manager.users.${user} = {
       services.polybar = {
         enable = config.iynaix.bspwm.enable;

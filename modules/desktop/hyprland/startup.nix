@@ -55,7 +55,7 @@ in
     in
     {
       home-manager.users.${user} = {
-        home.packages = [ hyprConnectMonitors ];
+        home.packages = with pkgs; [ hyprConnectMonitors swayidle ];
       };
 
       iynaix.hyprland.extraBinds = lib.mkAfter
@@ -80,6 +80,8 @@ in
             "$TERMINAL --class dlterm"
 
             "${hyprConnectMonitors}/bin/hypr-connect-monitors"
+
+            "swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
           ];
           exec = [
             "${hyprCleanup}/bin/hypr-cleanup"

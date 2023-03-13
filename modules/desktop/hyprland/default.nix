@@ -332,6 +332,7 @@ in
 
                   # rotate via switching master orientation
                   "${mod}, r" = "layoutmsg, orientationnext";
+                  "${mod}_SHIFT, r" = "layoutmsg, orientationprev";
 
                   # Scroll through existing workspaces with mainMod + scroll
                   "${mod}, mouse_down" = "workspace, e+1";
@@ -372,7 +373,12 @@ in
                 };
 
                 windowrulev2 = [
-                  # "center,floating:1"
+                  # pink border for monocle windows
+                  "bordercolor rgb(${xrdb.color5}),fullscreen:1"
+                  # teal border for floating windows
+                  "bordercolor rgb(${xrdb.color6}),floating:1"
+                  # yellow border for sticky (must be floating) windows
+                  "bordercolor rgb(${xrdb.color3}),pinned:1"
                 ];
 
                 exec = [
