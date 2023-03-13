@@ -1,4 +1,4 @@
-{ pkgs, user, theme, config, lib, ... }:
+{ pkgs, user, config, lib, host, ... }:
 let
   # can't get the import to work, copied definition from rofi source
   mkLiteral = value: {
@@ -150,9 +150,8 @@ in
       home = {
         packages = with pkgs; [ rofi-power-menu ];
 
-        file.".config/rofi/rofi-wifi-menu" = {
-          source = ./rofi-wifi-menu;
-          recursive = true;
+        file.".config/rofi/rofi-wifi-menu" = lib.mkIf (host == "laptop") {
+          source = ./rofi-wifi-menu.sh;
         };
       };
     };

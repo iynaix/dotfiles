@@ -43,10 +43,9 @@ in
               separate-outputs = true;
             };
             network = {
-              tooltip = false;
-              format-wifi = "  {essid}";
               format-ethernet = "";
               format-disconnected = "睊  Offline";
+              tooltip = false;
             };
             pulseaudio = {
               format = "{icon}  {volume}%";
@@ -61,6 +60,9 @@ in
               format = "{icon}  {capacity}%";
               format-charging = "  {capacity}%";
               format-icons = [ "" "" "" "" "" ];
+              states = {
+                critical = 20;
+              };
               tooltip = false;
             };
             backlight = {
@@ -109,7 +111,7 @@ in
           #network {
             padding: 0 12px;
           }
-          #network.disconnected {
+          #network.disconnected, #battery.discharging.critical {
             color: ${color1};
           }
           #window {

@@ -1,4 +1,4 @@
-{ pkgs, host, user, config, ... }:
+{ pkgs, host, user, config, lib, ... }:
 {
   # setup pipewire for audio
   services.pipewire = {
@@ -25,11 +25,11 @@
     };
   };
 
-  iynaix.hyprland.extraBinds = {
+  iynaix.hyprland.extraBinds = lib.mkAfter {
     bind = {
-      XF86AudioLowerVolume = "pamixer -i 5";
-      XF86AudioRaiseVolume = "pamixer -d 5";
-      XF86AudioMute = "pamixer -t";
+      ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
+      ",XF86AudioRaiseVolume" = "exec, pamixer -d 5";
+      ",XF86AudioMute" = "exec, pamixer -t";
     };
   };
 }

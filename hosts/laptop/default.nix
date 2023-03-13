@@ -26,8 +26,10 @@ in
           modules-right = [ "network" "pulseaudio" "backlight" "battery" "clock" ];
           network = {
             format = "  {essid}";
-            on-click = "~/.config/rofi/rofi-wifi-menu/rofi-wifi-menu.sh";
-            on-click-right = "nmtui";
+            format-disconnected = "睊  Offline";
+            on-click = "~/.config/rofi/rofi-wifi-menu";
+            on-click-right = "kitty nmtui";
+            tooltip = false;
           };
         };
         # add rounded corners for leftmost modules-right
@@ -50,6 +52,7 @@ in
     networking.hostId = "abb4d116"; # required for zfs
 
     environment.systemPackages = with pkgs; [
+      bc # needed for rofi-wifi-menu
       wirelesstools
     ];
 

@@ -8,7 +8,7 @@ let
     hyprctl dispatch workspace 1
   '';
   hyprCleanup = pkgs.writeShellScriptBin "hypr-cleanup" /* sh */ ''
-    ${lib.concatStringsSep "\n"  (["sleep 10"] ++ cfg.startupCleanup)}
+    ${lib.concatStringsSep "\n"  (["sleep ${if host == "lpatop" then "20" else "10"}"] ++ cfg.startupCleanup)}
   '';
   hyprConnectMonitors = pkgs.writeShellScriptBin "hypr-connect-monitors" /* sh */ ''
     function handle {

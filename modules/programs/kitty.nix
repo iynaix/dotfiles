@@ -1,4 +1,4 @@
-{ pkgs, theme, user, config, lib, ... }:
+{ pkgs, user, config, lib, ... }:
 let
   # create a fake gnome-terminal shell script so xdg terminal applications
   # will open in kitty
