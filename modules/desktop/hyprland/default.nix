@@ -204,7 +204,7 @@ in
               misc = {
                 disable_splash_rendering = true;
                 mouse_move_enables_dpms = true;
-                # key_press_enables_dpms = true;
+                key_press_enables_dpms = true;
                 enable_swallow = true;
                 swallow_regex = "[Kk]itty|[Aa]lacritty";
               };
@@ -332,9 +332,6 @@ in
                   # TODO:
                   # special keys
                   # "XF86AudioPlay" = "mpvctl playpause";
-
-                  # equalize size of windows at parent / root level
-                  # "${mod} + {_,ctrl + }equal" = "bspc node {@parent,@/} --balance";
 
                   # focus the next/previous node of the same class
                   # "${mod} + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";

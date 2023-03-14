@@ -19,6 +19,18 @@ in
         wallpapers = {
           "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
         };
+        extraVariables = {
+          gestures = {
+            workspace_swipe = true;
+          };
+        };
+        extraBinds = {
+          # handle laptop lid
+          bindl = {
+            ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "eDP-1, 1920x1080, 0x0, 1"'';
+            ",switch:off:Lid Switch" = ''exec, hyprctl monitor "eDP-1, disable"'';
+          };
+        };
       };
 
       waybar = {
