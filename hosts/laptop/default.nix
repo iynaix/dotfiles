@@ -10,6 +10,7 @@ in
     iynaix = {
       displays.monitor1 = "eDP-1";
       backlight.enable = true;
+      kmonad.enable = true;
       pathofbuilding.enable = true;
 
       hyprland = {
@@ -27,8 +28,8 @@ in
         extraBinds = {
           # handle laptop lid
           bindl = {
-            ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "eDP-1, 1920x1080, 0x0, 1"'';
-            ",switch:off:Lid Switch" = ''exec, hyprctl monitor "eDP-1, disable"'';
+            ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "${displayCfg.monitor1}, 1920x1080, 0x0, 1"'';
+            ",switch:off:Lid Switch" = ''exec, hyprctl monitor "${displayCfg.monitor1}, disable"'';
           };
         };
       };
@@ -93,29 +94,8 @@ in
         script = "polybar ${host} &";
       };
 
-      # for remapping capslock to super
-      home = {
-        file.".xmodmap".text = ''
-          remove Lock = Caps_Lock
-          keysym Caps_Lock = Super_R
-          add Lock = Caps_Lock
-        '';
-      };
-
       programs.alacritty.settings.font.size = 10;
       programs.kitty.font.size = 10;
-
-      services.xcape = {
-        enable = true;
-        mapExpression = { Super_R = "Escape"; };
-        timeout = 200;
-      };
     };
-
-    # run xmodmap, see:
-    # https://nixos.wiki/wiki/Keyboard_Layout_Customization
-    services.xserver.displayManager.sessionCommands = ''
-      sleep 5 && ${pkgs.xorg.xmodmap}/bin/xmodmap ~/.xmodmap &
-    '';
   };
 }

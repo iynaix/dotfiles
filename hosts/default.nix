@@ -36,7 +36,10 @@ let
         ];
       }
       inputs.impermanence.nixosModules.impermanence
-    ] ++ lib.optional (hostName == "laptop") nixos-hardware.nixosModules.dell-xps-13-9343;
+    ] ++ lib.optionals (hostName == "laptop") [
+      inputs.kmonad.nixosModules.default
+      nixos-hardware.nixosModules.dell-xps-13-9343
+    ];
   };
 in
 {

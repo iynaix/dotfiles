@@ -5,6 +5,7 @@
     ./gnome3.nix
     ./gtk.nix
     ./hyprland
+    ./kmonad.nix
     ./theme.nix
   ];
 
