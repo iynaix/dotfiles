@@ -1,4 +1,4 @@
-{ config, pkgs, user, lib, host, ... }:
+{ config, pkgs, user, lib, ... }:
 let
   displayCfg = config.iynaix.displays;
   bspwmCfg = config.iynaix.bspwm;
@@ -18,8 +18,10 @@ in
         window_gap = 8;
         padding = 8;
       };
+
       # wayland settings
       hyprland = {
+        enable = true;
         monitors = lib.concatStringsSep "\n" [
           "monitor=${displayCfg.monitor1},3440x1440@144,1440x1080,1"
           "monitor=${displayCfg.monitor2},2560x1440,0x728,1"
@@ -43,10 +45,6 @@ in
 
       smplayer.enable = true;
       torrenters.enable = true;
-
-      # toggle WMs
-      bspwm.enable = false;
-      hyprland.enable = true;
     };
 
     boot.loader.grub = {

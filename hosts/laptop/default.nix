@@ -14,6 +14,7 @@ in
       pathofbuilding.enable = true;
 
       hyprland = {
+        enable = true;
         monitors = lib.concatStringsSep "\n" [
           "monitor=${displayCfg.monitor1},1920x1080,0x0,1"
         ];
@@ -52,10 +53,6 @@ in
           }
         '';
       };
-
-      # toggle WMs
-      bspwm.enable = false;
-      hyprland.enable = true;
 
       persist.root.directories = [
         "/etc/NetworkManager" # for wifi

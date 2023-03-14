@@ -29,12 +29,11 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, hyprland, hyprwm-contrib, nixos-hardware, kmonad, ... }:
-    let user = "iynaix";
-    in {
-      nixosConfigurations = (import ./hosts {
-        inherit (nixpkgs) lib;
-        inherit inputs nixpkgs home-manager user impermanence hyprland hyprwm-contrib kmonad nixos-hardware;
-      });
-    };
+  outputs = inputs@{ nixpkgs, ... }: {
+    nixosConfigurations = (import ./hosts {
+      inherit (nixpkgs) lib;
+      inherit inputs nixpkgs;
+      user = "iynaix";
+    });
+  };
 }

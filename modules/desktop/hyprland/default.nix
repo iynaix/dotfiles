@@ -55,9 +55,7 @@ in
 
   options.iynaix.hyprland = {
     # mutually exclusive with bspwm
-    enable = lib.mkEnableOption "Hyprland" // {
-      default = (!config.iynaix.bspwm && !config.iynaix.gnome3);
-    };
+    enable = lib.mkEnableOption "Hyprland" // { default = true; };
     keybinds = lib.mkOption {
       type = with lib.types; attrsOf str;
       description = ''
@@ -232,12 +230,6 @@ in
                   # bind = ${mod}, P, pseudo, # dwindle
                   # bind = ${mod}, J, togglesplit, # dwindle
 
-                  # Move focus with mainMod + arrow keys
-                  # "${mod}, left" = "movefocus, l";
-                  # "${mod}, right" = "movefocus, r";
-                  # "${mod}, up" = "movefocus, u";
-                  # "${mod}, down" = "movefocus, d";
-
                   "${mod}, h" = "movefocus, l";
                   "${mod}, l" = "movefocus, r";
                   "${mod}, j" = "movefocus, u";
@@ -332,9 +324,6 @@ in
                   # TODO:
                   # special keys
                   # "XF86AudioPlay" = "mpvctl playpause";
-
-                  # focus the next/previous node of the same class
-                  # "${mod} + {_,shift + }Tab" = "bspc node -f {next,prev}.same_class";
                 };
 
                 # Move/resize windows with mainMod + LMB/RMB and dragging

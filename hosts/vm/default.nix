@@ -9,6 +9,17 @@ let displayCfg = config.iynaix.displays; in
 
       pathofbuilding.enable = false;
 
+      # wayland settings
+      hyprland = {
+        enable = true;
+        monitors = lib.concatStringsSep "\n" [
+          "monitor=${displayCfg.monitor1},1920x1200,0x0,1"
+        ];
+        wallpapers = {
+          "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
+        };
+      };
+
       # persist.tmpfs.root = true;
       # persist.tmpfs.home = true;
     };

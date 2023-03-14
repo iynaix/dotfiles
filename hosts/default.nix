@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, home-manager, user, hyprland, hyprwm-contrib, nixos-hardware, ... }:
+{ lib, inputs, user, ... }:
 let
   createHost = { hostName }: lib.nixosSystem rec {
     system = "x86_64-linux";
@@ -11,7 +11,7 @@ let
     modules = [
       ./configuration.nix # shared nixos configuration across all hosts
       ./${hostName} # host specific configuration, including hardware
-      home-manager.nixosModules.home-manager
+      inputs.home-manager.nixosModules.home-manager
       {
         home-manager = {
           useGlobalPkgs = true;
@@ -30,15 +30,15 @@ let
         };
         nixpkgs.overlays = (import ../overlays) ++ [
           (self: super: {
-            hyprwm-contrib-packages = hyprwm-contrib.packages.${system};
-            hyprland = hyprland.packages.${system};
+            hyprwm-contrib-packages = inputs.hyprwm-contrib.packages.${system};
+            hyprland = inputs.hyprland.packages.${system};
           })
         ];
       }
       inputs.impermanence.nixosModules.impermanence
-    ] ++ lib.optionals (hostName == "laptop") [
       inputs.kmonad.nixosModules.default
-      nixos-hardware.nixosModules.dell-xps-13-9343
+    ] ++ lib.optionals (hostName == "laptop") [
+      inputs.nixos-hardware.nixosModules.dell-xps-13-9343
     ];
   };
 in

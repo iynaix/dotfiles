@@ -24,7 +24,9 @@ in
   ];
 
   options.iynaix.bspwm = {
-    enable = lib.mkEnableOption "bspwm" // { default = true; };
+    enable = lib.mkEnableOption "bspwm" // {
+      default = (!config.iynaix.hyprland.enable && !config.iynaix.gnome3.enable);
+    };
     extraSettings = lib.mkOption {
       default = { };
       description = "Extra settings to override for bspwm.settings.";
