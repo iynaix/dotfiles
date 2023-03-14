@@ -45,7 +45,11 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    iynaix.hyprland.extraBinds = lib.mkAfter {
+    home-manager.users.${user} = {
+      home.packages = [ hypr-screenshot ];
+    };
+
+    iynaix.hyprland.extraBinds = {
       # screenshots
       bind = {
         "${mod}, backslash" = "exec, ${grimblast} copy area";

@@ -25,7 +25,7 @@
     };
   };
 
-  iynaix.hyprland.extraBinds = lib.mkAfter {
+  iynaix.hyprland.extraBinds = {
     bind = {
       ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
       ",XF86AudioRaiseVolume" = "exec, pamixer -d 5";

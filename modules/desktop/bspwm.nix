@@ -5,8 +5,7 @@ let
   barHeight = 30;
   padding = cfg.extraSettings.padding or 4;
   # window classes and desktops
-  termclass = "kitty";
-  chromeclass = "Brave-browser";
+  browserclass = "Brave-browser";
   webdesktop = "1";
   # filedesktop = "3";
   nemodesktop = "4";
@@ -102,9 +101,9 @@ in
         # uses one shot rules for startup
         startupPrograms = [
           # web browsers
-          ''bspc rule -a ${chromeclass} -o desktop=${webdesktop}''
+          ''bspc rule -a ${browserclass} -o desktop=${webdesktop}''
           "brave --profile-directory=Default"
-          ''bspc rule -a ${chromeclass} -o desktop=${webdesktop} follow=on''
+          ''bspc rule -a ${browserclass} -o desktop=${webdesktop} follow=on''
           "brave --incognito"
 
           # nemo
@@ -112,20 +111,20 @@ in
           "nemo"
 
           # terminals
-          # ''bspc rule -a ${termclass}:ranger -o desktop=${filedesktop}''
-          # "$TERMINAL --class ${termclass},ranger -e ranger ~/Downloads"
+          # ''bspc rule -a ranger -o desktop=${filedesktop}''
+          # "$TERMINAL --class ranger -e ranger ~/Downloads"
           ''
-            bspc rule -a ${termclass}:initialterm -o desktop=${secondarytermdesktop} follow=on''
-          "$TERMINAL --class ${termclass},initialterm"
+            bspc rule -a initialterm -o desktop=${secondarytermdesktop} follow=on''
+          "$TERMINAL --class initialterm"
 
           # chat
           "firefox-devedition --class=ffchat https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
 
           # download stuff
-          ''bspc rule -a ${termclass}:dltxt -o desktop=${dldesktop}''
-          "$TERMINAL --class ${termclass},dltxt -e nvim ~/Desktop/yt.txt"
-          ''bspc rule -a ${termclass}:dlterm -o desktop=${dldesktop}''
-          "$TERMINAL --class ${termclass},dlterm"
+          ''bspc rule -a dltxt -o desktop=${dldesktop}''
+          "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
+          ''bspc rule -a dlterm -o desktop=${dldesktop}''
+          "$TERMINAL --class dlterm"
 
           # must be the last line in the file
           "bspc subscribe all | bspc-events"

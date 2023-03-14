@@ -17,7 +17,7 @@ let cfg = config.iynaix.backlight; in
       };
     };
 
-    iynaix.hyprland.extraBinds = lib.mkAfter {
+    iynaix.hyprland.extraBinds = {
       bind = {
         ",XF86MonBrightnessDown" = "exec, brightnessctl set 5%-";
         ",XF86MonBrightnessUp" = "exec, brightnessctl set +5%";

@@ -24,6 +24,8 @@ let
         hyprctl dispatch moveworkspacetomonitor "9 ${displays.monitor3}"
         hyprctl dispatch moveworkspacetomonitor "10 ${displays.monitor3}"
 
+        ${hyprSwitchWorkspace}/bin/hypr-switch-ws
+
         # set wallpapers again
         hyprpaper
 
@@ -58,43 +60,42 @@ in
         home.packages = with pkgs; [ hyprConnectMonitors swayidle ];
       };
 
-      iynaix.hyprland.extraBinds = lib.mkAfter
-        {
-          exec-once = [
-            "${hyprSwitchWorkspace}/bin/hypr-switch-ws"
+      iynaix.hyprland.extraBinds = {
+        exec-once = [
+          "${hyprSwitchWorkspace}/bin/hypr-switch-ws"
 
-            # browsers
-            "brave --profile-directory=Default"
-            "brave --incognito"
+          # browsers
+          "brave --profile-directory=Default"
+          "brave --incognito"
 
-            # file manager
-            "nemo"
+          # file manager
+          "nemo"
 
-            # terminal
-            "$TERMINAL --class initialterm"
+          # terminal
+          "$TERMINAL --class initialterm"
 
-            # firefox
-            "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
+          # firefox
+          "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
 
-            "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
-            "$TERMINAL --class dlterm"
+          "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
+          "$TERMINAL --class dlterm"
 
-            "${hyprConnectMonitors}/bin/hypr-connect-monitors"
+          "${hyprConnectMonitors}/bin/hypr-connect-monitors"
 
-            "swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
-          ];
-          exec = [
-            "${hyprCleanup}/bin/hypr-cleanup"
-          ];
-          windowrule = [
-            "workspace ${webdesktop} silent,Brave-browser"
-            "workspace ${nemodesktop} silent,nemo"
-            "workspace ${secondarytermdesktop} silent,initialterm"
-            "workspace ${chatdesktop} silent,firefox-aurora"
-            "workspace ${dldesktop} silent,dltxt"
-            "workspace ${dldesktop} silent,dlterm"
-          ];
-        };
+          "swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
+        ];
+        exec = [
+          "${hyprCleanup}/bin/hypr-cleanup"
+        ];
+        windowrule = [
+          "workspace ${webdesktop} silent,Brave-browser"
+          "workspace ${nemodesktop} silent,nemo"
+          "workspace ${secondarytermdesktop} silent,initialterm"
+          "workspace ${chatdesktop} silent,firefox-aurora"
+          "workspace ${dldesktop} silent,dltxt"
+          "workspace ${dldesktop} silent,dlterm"
+        ];
+      };
 
       iynaix.hyprland.startupCleanup = [
         ''hyprctl keyword windowrule "workspace unset,Brave-browser"''

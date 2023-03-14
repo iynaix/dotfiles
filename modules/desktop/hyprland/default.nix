@@ -5,20 +5,6 @@ let
   mod = if host == "vm" then "ALT" else "SUPER";
   # functions for creating hyprland config
   # https://github.com/hyprwm/Hyprland/pull/870#issuecomment-1319448768
-  recursiveMerge = with lib; attrList:
-    let
-      f = attrPath:
-        zipAttrsWith (n: values:
-          if tail values == [ ]
-          then head values
-          else if all isList values
-          then unique (concatLists values)
-          else if all isAttrs values
-          then f (attrPath ++ [ n ]) values
-          else last values
-        );
-    in
-    f [ ] attrList;
   mkValueString = value: (
     if builtins.isBool value then (if value then "true" else "false")
     else if (builtins.isFloat value || builtins.isInt value) then (builtins.toString value)
@@ -92,10 +78,12 @@ in
       '';
     };
     extraVariables = lib.mkOption {
+      type = with lib.types; attrsOf unspecified;
       default = { };
       description = "Extra variable config for Hyprland";
     };
     extraBinds = lib.mkOption {
+      type = with lib.types; attrsOf unspecified;
       default = { };
       description = "Extra binds for Hyprland";
     };
@@ -149,80 +137,80 @@ in
         {
           enable = true;
           systemdIntegration = true;
-          extraConfig =
+          xwayland.hidpi = false;
+          extraConfig = lib.concatStringsSep "\n" [
             # monitors
-            cfg.monitors + "\n" +
+            cfg.monitors
             # handles displays that are plugged in
-            "monitor=,preferred,auto,auto" + "\n" +
-            mkHyprlandVariables (recursiveMerge [
-              {
-                input = {
-                  kb_layout = "us";
-                  follow_mouse = 1;
+            "monitor=,preferred,auto,auto"
+            (mkHyprlandVariables {
+              input = {
+                kb_layout = "us";
+                follow_mouse = 1;
 
-                  touchpad = {
-                    natural_scroll = false;
-                    disable_while_typing = true;
-                  };
+                touchpad = {
+                  natural_scroll = false;
+                  disable_while_typing = true;
                 };
+              };
 
-                general = {
-                  gaps_in = if host == "desktop" then 8 else 4;
-                  gaps_out = if host == "desktop" then 8 else 4;
-                  border_size = 2;
+              general = {
+                gaps_in = if host == "desktop" then 8 else 4;
+                gaps_out = if host == "desktop" then 8 else 4;
+                border_size = 2;
 
-                  # "col.inactive_border" = "rgba(595959aa)";
-                  # "col.active_border" = "rgba(${xrdb.color4}ee) rgba(${xrdb.color2}55)";
-                  "col.active_border" = "rgb(${xrdb.color4})";
-                  "col.inactive_border" = "rgb(${xrdb.color0})";
+                # "col.inactive_border" = "rgba(595959aa)";
+                # "col.active_border" = "rgba(${xrdb.color4}ee) rgba(${xrdb.color2}55)";
+                "col.active_border" = "rgb(${xrdb.color4})";
+                "col.inactive_border" = "rgb(${xrdb.color0})";
 
-                  layout = "master";
-                };
+                layout = "master";
+              };
 
-                decoration = {
-                  rounding = 8;
-                  blur = true;
-                  blur_size = 3;
-                  blur_passes = 1;
-                  blur_new_optimizations = true;
+              decoration = {
+                rounding = 8;
+                blur = true;
+                blur_size = 3;
+                blur_passes = 1;
+                blur_new_optimizations = true;
 
-                  drop_shadow = true;
-                  shadow_range = 4;
-                  shadow_render_power = 3;
-                  "col.shadow" = "rgba(1a1a1aee)";
+                drop_shadow = true;
+                shadow_range = 4;
+                shadow_render_power = 3;
+                "col.shadow" = "rgba(1a1a1aee)";
 
-                  # dim_inactive = true;
-                  # dim_strength = 0.05;
-                };
+                # dim_inactive = true;
+                # dim_strength = 0.05;
+              };
 
-                animations = {
-                  enabled = true;
-                };
+              animations = {
+                enabled = true;
+              };
 
-                dwindle = {
-                  pseudotile = true; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-                  preserve_split = true; # you probably want this
-                };
+              dwindle = {
+                pseudotile = true; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+                preserve_split = true; # you probably want this
+              };
 
-                master = {
-                  new_is_master = false;
-                  mfact = 0.5;
-                };
+              master = {
+                new_is_master = false;
+                mfact = 0.5;
+              };
 
-                binds = {
-                  workspace_back_and_forth = true;
-                };
+              binds = {
+                workspace_back_and_forth = true;
+              };
 
-                misc = {
-                  disable_splash_rendering = true;
-                  mouse_move_enables_dpms = true;
-                  # key_press_enables_dpms = true;
-                  enable_swallow = true;
-                  swallow_regex = "[Kk]itty|[Aa]lacritty";
-                };
-              }
-              cfg.extraVariables
-            ]) + "\n" + mkHyprlandBinds (recursiveMerge [
+              misc = {
+                disable_splash_rendering = true;
+                mouse_move_enables_dpms = true;
+                # key_press_enables_dpms = true;
+                enable_swallow = true;
+                swallow_regex = "[Kk]itty|[Aa]lacritty";
+              };
+            })
+            (mkHyprlandVariables cfg.extraVariables)
+            (mkHyprlandBinds
               {
                 bind = {
                   "${mod}, Return" = "exec, kitty";
@@ -389,9 +377,9 @@ in
                   # clipboard manager
                   "wl-paste - -watch cliphist store"
                 ];
-              }
-              cfg.extraBinds
-            ]);
+              })
+            (mkHyprlandBinds cfg.extraBinds)
+          ];
         };
     };
   };
