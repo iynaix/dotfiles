@@ -1,4 +1,4 @@
-{ pkgs, host, user, lib, config, ... }:
+{ pkgs, user, lib, config, ... }:
 let
   cfg = config.iynaix.waybar;
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
@@ -106,10 +106,10 @@ in
             border-radius: 0 12px 12px 0;
           }
           #workspaces button.urgent {
-            background-color: ${foreground};
-            color: ${color1};
+            background-color: ${color1};
+            color: ${foreground};
             margin-right: 4px;
-            border-radius: 0 12px 12px 0;
+            border-radius: 12px;
           }
           #pulseaudio, #backlight {
             padding: 0 12px;

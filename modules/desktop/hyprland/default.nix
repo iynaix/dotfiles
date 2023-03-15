@@ -104,6 +104,11 @@ in
       };
     };
 
+    xdg.mime.defaultApplications = {
+      "image/jpeg" = "imv-dir.desktop";
+      "image/png" = "imv-dir.desktop";
+    };
+
     home-manager.users.${user} = {
       imports = [ inputs.hyprland.homeManagerModules.default ];
 
@@ -120,6 +125,8 @@ in
         };
 
         packages = with pkgs; [
+          imv
+          playerctl
           pciutils
           # clipboard history
           cliphist
@@ -229,8 +236,8 @@ in
                   "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
                   "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 
-                  # reload
-                  "CTRL_SHIFT, Escape" = "forcerendererreload";
+                  # reset monitors
+                  "CTRL_SHIFT, Escape" = "exec, hypr-reset-monitors";
 
                   # bind = ${mod}, P, pseudo, # dwindle
                   # bind = ${mod}, J, togglesplit, # dwindle
@@ -358,10 +365,11 @@ in
                   "bordercolor rgb(${xrdb.color6}),floating:1"
                   # yellow border for sticky (must be floating) windows
                   "bordercolor rgb(${xrdb.color3}),pinned:1"
-                ];
-
-                exec = [
-                  "hyprpaper" # reload wallpaper every time
+                  # handle save dialogs
+                  "float,title:^(Save File)$"
+                  "center,title:^(Save File)$"
+                  "float,title:^(File Upload)$"
+                  "center,title:^(File Upload)$"
                 ];
 
                 exec-once = [

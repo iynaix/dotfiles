@@ -7,7 +7,7 @@
       # nvidiaPersistenced = true;
       # prevents crashes with nvidia on resuming, see:
       # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
-      powerManagement.enable = true;
+      powerManagement.enable = false;
     };
 
     environment.sessionVariables = {

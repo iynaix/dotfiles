@@ -6,16 +6,16 @@ let
     ${lib.concatStringsSep "\n"  (["sleep ${if host == "laptop" then "20" else "10"}"] ++ cfg.startupCleanup)}
   '';
   hyprResetMonitors = pkgs.writeShellScriptBin "hypr-reset-monitors" /* sh */ ''
-    hyprctl dispatch moveworkspacetomonitor "1 ${displays.monitor1}"
-    hyprctl dispatch moveworkspacetomonitor "2 ${displays.monitor1}"
-    hyprctl dispatch moveworkspacetomonitor "3 ${displays.monitor1}"
-    hyprctl dispatch moveworkspacetomonitor "4 ${displays.monitor1}"
-    hyprctl dispatch moveworkspacetomonitor "5 ${displays.monitor1}"
-    hyprctl dispatch moveworkspacetomonitor "6 ${displays.monitor2}"
-    hyprctl dispatch moveworkspacetomonitor "7 ${displays.monitor2}"
-    hyprctl dispatch moveworkspacetomonitor "8 ${displays.monitor2}"
-    hyprctl dispatch moveworkspacetomonitor "9 ${displays.monitor3}"
-    hyprctl dispatch moveworkspacetomonitor "10 ${displays.monitor3}"
+    hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
+    hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
+    hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
+    hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
+    hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
+    hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
+    hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
+    hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
+    hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
+    hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
 
     hyprctl dispatch workspace 9
     hyprctl dispatch workspace 7
@@ -23,7 +23,7 @@ let
     hyprctl dispatch focusmonitor ${displays.monitor1}
 
     # set wallpapers again
-    hyprpaper
+    hypr-wallpaper
 
     # reset waybar
     launch-waybar
@@ -81,6 +81,9 @@ in
           "hyprctl dispatch workspace 9"
           "hyprctl dispatch workspace 7"
           "hyprctl dispatch workspace 1"
+
+          # set wallpaper
+          "swww init && hypr-wallpaper"
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

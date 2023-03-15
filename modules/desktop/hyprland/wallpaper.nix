@@ -1,16 +1,18 @@
-{ pkgs, host, user, lib, config, ... }:
+{ pkgs, inputs, system, user, lib, config, ... }:
 let
   cfg = config.iynaix.hyprland;
+  hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" (lib.concatStringsSep "\n" (
+    (lib.mapAttrsToList
+      (monitor: wallpaper: "swww img -o ${monitor} --transition-type grow ${wallpaper}")
+      cfg.wallpapers)
+  ));
 in
 {
   options.iynaix.hyprland = {
     wallpapers = lib.mkOption {
       type = with lib.types; attrsOf str;
       default = { };
-      description = ''
-        Attrset of wallpapers to use for $XDG_CONFIG_HOME/hyprpaper/hyprpaper.conf, see
-        https://github.com/hyprwm/hyprpaper#usage
-      '';
+      description = "Attrset of wallpapers to use for swww";
       example = ''{
         DP-2 = "/path/to/wallpaper.png";
       }'';
@@ -20,17 +22,10 @@ in
   config = {
     home-manager.users.${user} = {
       home = {
-        packages = [ pkgs.hyprpaper ];
-
-        file.".config/hypr/hyprpaper.conf".text = lib.concatStringsSep "\n" (
-          (lib.mapAttrsToList
-            (monitor: wallpaper: "preload = ${wallpaper}")
-            cfg.wallpapers) ++
-
-          (lib.mapAttrsToList
-            (monitor: wallpaper: "wallpaper = ${monitor},${wallpaper}")
-            cfg.wallpapers)
-        );
+        packages = [
+          hypr-wallpaper
+          inputs.nixpkgs-wayland.packages.${system}.swww
+        ];
       };
     };
   };

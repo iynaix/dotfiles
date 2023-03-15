@@ -4,7 +4,7 @@ let
     system = "x86_64-linux";
 
     specialArgs = {
-      inherit user inputs;
+      inherit user inputs system;
       host = hostName;
     };
 
