@@ -36,6 +36,7 @@ in
         theme = {
           "*" = with config.iynaix.xrdb; {
             bg-color = mkLiteral background;
+            # bg-color = mkLiteral "transparent";
             bg-color-light = mkLiteral background;
             border-color = mkLiteral color0;
             selected-color = mkLiteral background;

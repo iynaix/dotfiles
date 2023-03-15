@@ -2,39 +2,31 @@
 let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
-  hyprSwitchWorkspace = pkgs.writeShellScriptBin "hypr-switch-ws" /* sh */ ''
+  hyprCleanup = pkgs.writeShellScriptBin "hypr-cleanup" /* sh */ ''
+    ${lib.concatStringsSep "\n"  (["sleep ${if host == "laptop" then "20" else "10"}"] ++ cfg.startupCleanup)}
+  '';
+  hyprResetMonitors = pkgs.writeShellScriptBin "hypr-reset-monitors" /* sh */ ''
+    hyprctl dispatch moveworkspacetomonitor "1 ${displays.monitor1}"
+    hyprctl dispatch moveworkspacetomonitor "2 ${displays.monitor1}"
+    hyprctl dispatch moveworkspacetomonitor "3 ${displays.monitor1}"
+    hyprctl dispatch moveworkspacetomonitor "4 ${displays.monitor1}"
+    hyprctl dispatch moveworkspacetomonitor "5 ${displays.monitor1}"
+    hyprctl dispatch moveworkspacetomonitor "6 ${displays.monitor2}"
+    hyprctl dispatch moveworkspacetomonitor "7 ${displays.monitor2}"
+    hyprctl dispatch moveworkspacetomonitor "8 ${displays.monitor2}"
+    hyprctl dispatch moveworkspacetomonitor "9 ${displays.monitor3}"
+    hyprctl dispatch moveworkspacetomonitor "10 ${displays.monitor3}"
+
     hyprctl dispatch workspace 9
     hyprctl dispatch workspace 7
-    hyprctl dispatch workspace 1
-  '';
-  hyprCleanup = pkgs.writeShellScriptBin "hypr-cleanup" /* sh */ ''
-    ${lib.concatStringsSep "\n"  (["sleep ${if host == "lpatop" then "20" else "10"}"] ++ cfg.startupCleanup)}
-  '';
-  hyprConnectMonitors = pkgs.writeShellScriptBin "hypr-connect-monitors" /* sh */ ''
-    function handle {
-      if [[ ''${1:0:12} == "monitoradded" ]]; then
-        hyprctl dispatch moveworkspacetomonitor "1 ${displays.monitor1}"
-        hyprctl dispatch moveworkspacetomonitor "2 ${displays.monitor1}"
-        hyprctl dispatch moveworkspacetomonitor "3 ${displays.monitor1}"
-        hyprctl dispatch moveworkspacetomonitor "4 ${displays.monitor1}"
-        hyprctl dispatch moveworkspacetomonitor "5 ${displays.monitor1}"
-        hyprctl dispatch moveworkspacetomonitor "6 ${displays.monitor2}"
-        hyprctl dispatch moveworkspacetomonitor "7 ${displays.monitor2}"
-        hyprctl dispatch moveworkspacetomonitor "8 ${displays.monitor2}"
-        hyprctl dispatch moveworkspacetomonitor "9 ${displays.monitor3}"
-        hyprctl dispatch moveworkspacetomonitor "10 ${displays.monitor3}"
 
-        ${hyprSwitchWorkspace}/bin/hypr-switch-ws
+    hyprctl dispatch focusmonitor ${displays.monitor1}
 
-        # set wallpapers again
-        hyprpaper
+    # set wallpapers again
+    hyprpaper
 
-        # reset waybar
-        launch-waybar
-      fi
-    }
-
-    socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | while read line; do handle $line; done
+    # reset waybar
+    launch-waybar
   '';
 in
 {
@@ -57,12 +49,15 @@ in
     in
     {
       home-manager.users.${user} = {
-        home.packages = with pkgs; [ hyprConnectMonitors swayidle ];
+        home.packages = [ hyprResetMonitors ];
+
+        home.file.".config/hypr/ipc.py".source = ./ipc.py;
       };
 
       iynaix.hyprland.extraBinds = {
         exec-once = [
-          "${hyprSwitchWorkspace}/bin/hypr-switch-ws"
+          # init ipc listener
+          "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ~/.config/hypr/ipc.py &"
 
           # browsers
           "brave --profile-directory=Default"
@@ -80,9 +75,12 @@ in
           "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
           "$TERMINAL --class dlterm"
 
-          "${hyprConnectMonitors}/bin/hypr-connect-monitors"
+          "${pkgs.swayidle}/bin/swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
 
-          "swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
+          # focus the initial workspaces on startup
+          "hyprctl dispatch workspace 9"
+          "hyprctl dispatch workspace 7"
+          "hyprctl dispatch workspace 1"
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

@@ -105,6 +105,12 @@ in
             margin-right: 4px;
             border-radius: 0 12px 12px 0;
           }
+          #workspaces button.urgent {
+            background-color: ${foreground};
+            color: ${color1};
+            margin-right: 4px;
+            border-radius: 0 12px 12px 0;
+          }
           #pulseaudio, #backlight {
             padding: 0 12px;
           }

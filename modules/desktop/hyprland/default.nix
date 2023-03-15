@@ -121,10 +121,12 @@ in
 
         packages = with pkgs; [
           pciutils
-          socat
           # clipboard history
           cliphist
           wl-clipboard
+          # for debugging
+          # python3
+          # socat
         ];
       };
 
@@ -168,8 +170,8 @@ in
               decoration = {
                 rounding = 8;
                 blur = true;
-                blur_size = 3;
-                blur_passes = 1;
+                blur_size = 5;
+                blur_passes = 4;
                 blur_new_optimizations = true;
 
                 drop_shadow = true;
@@ -179,6 +181,8 @@ in
 
                 # dim_inactive = true;
                 # dim_strength = 0.05;
+
+                # blurls = "rofi";
               };
 
               animations = {
@@ -193,6 +197,7 @@ in
               master = {
                 new_is_master = false;
                 mfact = 0.5;
+                orientation = if host == "desktop" then "center" else "left";
               };
 
               binds = {
