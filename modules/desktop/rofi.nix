@@ -57,6 +57,7 @@ in
             border = mkLiteral "3px";
             border-color = mkLiteral "@border-color";
             background-color = mkLiteral "@bg-color";
+            border-radius = mkLiteral "12px";
           };
 
           mainbox = {

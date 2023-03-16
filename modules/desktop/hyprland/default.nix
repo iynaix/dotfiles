@@ -124,7 +124,9 @@ in
           "XCURSOR_SIZE" = "24";
         };
 
+        # various helper scripts for keybinds
         file.".config/hypr/same_class.py".source = ./same_class.py;
+        file.".config/hypr/pip.py".source = ./pip.py;
 
         packages = with pkgs; [
           imv
@@ -322,6 +324,9 @@ in
                   "SUPER, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py next";
                   "SUPER_SHIFT, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py prev";
 
+                  # picture in picture mode
+                  "${mod}, p" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/pip.py";
+
                   # toggle between previous and current window
                   "${mod}, grave" = "focuscurrentorlast";
 
@@ -379,6 +384,13 @@ in
                   "float,title:^(File Upload)$"
                   "center,title:^(File Upload)$"
                   "dimaround,title:^(File Upload)$"
+                ];
+
+                windowrule = [
+                  # do not idle while watching videos
+                  "idleinhibit fullscreen,Brave-browser"
+                  "idleinhibit fullscreen,firefox-aurora"
+                  "idleinhibit focus,mpv"
                 ];
 
                 exec-once = [
