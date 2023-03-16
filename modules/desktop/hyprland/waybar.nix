@@ -25,7 +25,15 @@ in
 
       programs.waybar = {
         enable = true;
-        package = pkgs.hyprland.waybar-hyprland;
+        # use a fresher version of waybar
+        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (final: prev: {
+          src = pkgs.fetchFromGitHub {
+            owner = "Alexays";
+            repo = "Waybar";
+            rev = "473eb0982bc7e0c8f5275079b5c79720d5083711";
+            sha256 = "sha256-MRjo3VeeRtNnheaPi+rT4tQwHl9pUMyk1voQ2mzXNMw=";
+          };
+        });
         settings = [
           ({
             layer = "top";
@@ -34,10 +42,27 @@ in
             modules-left = [ "hyprland/window" ];
             modules-center = [ "wlr/workspaces" ];
             modules-right = [ "network" "pulseaudio" "battery" "clock" ];
-            clock = {
+            clock = with config.iynaix.xrdb; {
               format = "{:%H:%M}";
               format-alt = "{:%a, %d %b %Y}";
               interval = 10;
+              tooltip-format = "<tt><small>{calendar}</small></tt>";
+              calendar = {
+                mode = "year";
+                mode-mon-col = 3;
+                on-scroll = 1;
+                format = {
+                  months = "<span color='${color4}'><b>{}</b></span>";
+                  days = "<span color='${foreground}'><b>{}</b></span>";
+                  weekdays = "<span color='${color3}'><b>{}</b></span>";
+                  today = "<span color='${color5}'><b><u>{}</u></b></span>";
+                };
+                actions = {
+                  on-click-right = "mode";
+                  on-scroll-up = "shift_up";
+                  on-scroll-down = "shift_down";
+                };
+              };
             };
             "hyprland/window" = {
               separate-outputs = true;
@@ -126,6 +151,9 @@ in
           }
           #workspaces button.active {
             border-radius: 50%;
+          }
+          tooltip {
+            background: ${color0};
           }
         '' + "\n" + cfg.style;
       };

@@ -1,8 +1,4 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, user, host, ... }:
+{ pkgs, user, host, ... }:
 {
   # handle desktop / window manager
   imports = [
@@ -46,7 +42,8 @@
     LC_NUMERIC = "en_SG.UTF-8";
     LC_PAPER = "en_SG.UTF-8";
     LC_TELEPHONE = "en_SG.UTF-8";
-    LC_TIME = "en_SG.UTF-8";
+    # week starts on a Monday, for fuck's sake
+    LC_TIME = "en_GB.UTF-8";
   };
 
   # Configure keymap in X11
