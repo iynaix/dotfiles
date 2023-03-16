@@ -124,6 +124,8 @@ in
           "XCURSOR_SIZE" = "24";
         };
 
+        file.".config/hypr/same_class.py".source = ./same_class.py;
+
         packages = with pkgs; [
           imv
           playerctl
@@ -314,6 +316,11 @@ in
 
                   "ALT, Tab" = "cyclenext";
                   "ALT_SHIFT, Tab" = "cyclenext, prev";
+
+                  # switches to the next / previous window of the same class
+                  # hardcoded to SUPER so it doesn't clash on VM
+                  "SUPER, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py next";
+                  "SUPER_SHIFT, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py prev";
 
                   # toggle between previous and current window
                   "${mod}, grave" = "focuscurrentorlast";

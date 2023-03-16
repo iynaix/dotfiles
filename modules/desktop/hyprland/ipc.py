@@ -1,7 +1,6 @@
 import json
 import sys
 import subprocess
-from pprint import pprint
 
 ULTRAWIDE = "DP-2"
 VERTICAL = "DP-4"
@@ -59,7 +58,7 @@ if __name__ == "__main__":
             # reset wallpaper
             subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
 
-            # focus workspace on ultrawide)
+            # focus workspace on ultrawide
             if IS_DESKTOP:
                 dispatch("focusmonitor", ULTRAWIDE)
 
