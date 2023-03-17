@@ -62,6 +62,10 @@ in
       default = xrdb;
       description = "Xresources colors";
     };
+    xrdb-no-hex = lib.mkOption {
+      default = lib.mapAttrs (name: value: (lib.substring 1 50 value)) xrdb;
+      description = "Xresources colors without hex";
+    };
   };
 
   config = {

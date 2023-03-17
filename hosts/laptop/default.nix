@@ -15,9 +15,7 @@ in
 
       hyprland = {
         enable = true;
-        monitors = lib.concatStringsSep "\n" [
-          "monitor=${displayCfg.monitor1},1920x1080,0x0,1"
-        ];
+        monitors = "monitor=${displayCfg.monitor1},1920x1080,0x0,1";
         wallpapers = {
           "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
         };
@@ -29,8 +27,9 @@ in
         extraBinds = {
           # handle laptop lid
           bindl = {
-            ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "${displayCfg.monitor1}, 1920x1080, 0x0, 1"'';
-            ",switch:off:Lid Switch" = ''exec, hyprctl monitor "${displayCfg.monitor1}, disable"'';
+            # ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "${displayCfg.monitor1}, 1920x1080, 0x0, 1"'';
+            # ",switch:off:Lid Switch" = ''exec, hyprctl monitor "${displayCfg.monitor1}, disable"'';
+            ",switch:Lid Switch" = "exec, hypr-lock";
           };
         };
       };

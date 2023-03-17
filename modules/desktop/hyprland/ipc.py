@@ -31,7 +31,7 @@ def set_workspace_orientation(workspace):
 
     wksp = workspace_info(workspace)
 
-    if wksp["windows"] > 1:
+    if wksp["windows"]:
         if wksp["monitor"] == VERTICAL:
             dispatch("layoutmsg", "orientationtop")
         elif wksp["monitor"] == SMALL:
