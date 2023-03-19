@@ -7,6 +7,7 @@
     ./kitty.nix
     ./nemo.nix
     ./neovim.nix
+    ./pywal.nix
     ./rofi.nix
     ./vscode.nix
     ./zathura.nix
