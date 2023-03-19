@@ -69,8 +69,8 @@ in
       default = { };
     };
     monitors = lib.mkOption {
-      type = lib.types.str;
-      default = "";
+      type = with lib.types; attrsOf str;
+      default = { };
       description = ''
         Config for monitors, see
         https://wiki.hyprland.org/Configuring/Monitors/
@@ -148,9 +148,7 @@ in
         xwayland.hidpi = false;
         extraConfig = lib.concatStringsSep "\n" [
           # monitors
-          cfg.monitors
-          # handles displays that are plugged in
-          "monitor=,preferred,auto,auto"
+          (mkHyprlandBinds { monitor = cfg.monitors; })
           (mkHyprlandVariables {
             input = {
               kb_layout = "us";
@@ -223,6 +221,9 @@ in
           (mkHyprlandVariables cfg.extraVariables)
           (mkHyprlandBinds
             {
+              # handles displays that are plugged in
+              monitor = { "" = "preferred,auto,auto"; };
+
               bind = {
                 "${mod}, Return" = "exec, kitty";
                 "${mod}_SHIFT, Return" = "exec, rofi -show drun";

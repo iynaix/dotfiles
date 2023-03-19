@@ -12,7 +12,9 @@ let displayCfg = config.iynaix.displays; in
       # wayland settings
       hyprland = {
         enable = true;
-        monitors = "monitor=${displayCfg.monitor1},1920x1200,0x0,1";
+        monitors = {
+          "${displayCfg.monitor1}" = "1920x1200,0x0,1";
+        };
         wallpapers = {
           "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
         };

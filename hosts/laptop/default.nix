@@ -15,7 +15,9 @@ in
 
       hyprland = {
         enable = true;
-        monitors = "monitor=${displayCfg.monitor1},1920x1080,0x0,1";
+        monitors = {
+          "${displayCfg.monitor1}" = "1920x1080,0x0,1";
+        };
         wallpapers = {
           "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
         };

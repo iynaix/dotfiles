@@ -22,12 +22,11 @@ in
       # wayland settings
       hyprland = {
         enable = true;
-        monitors = ''
-          monitor=${displayCfg.monitor1},3440x1440@144,1440x1080,1
-          monitor=${displayCfg.monitor2},2560x1440,0x728,1
-          monitor=${displayCfg.monitor2},transform,1 # rotate monitor
-          monitor=${displayCfg.monitor3},1920x1080,1754x0,1
-        '';
+        monitors = {
+          "${displayCfg.monitor1}" = "3440x1440@144,1440x1080,1";
+          "${displayCfg.monitor2}" = "2560x1440,0x728,1,transform,1";
+          "${displayCfg.monitor3}" = "1920x1080,1754x0,1";
+        };
         wallpapers = {
           "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
           "${displayCfg.monitor2}" = "${../../modules/desktop/wallpapers/gits-catppuccin-2560.png}";

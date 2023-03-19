@@ -38,8 +38,8 @@ let cfg = config.iynaix.torrenters; in
       # extra downloader specific settings
       gtk.gtk3 = lib.mkIf cfg.enable {
         bookmarks = lib.mkAfter [
-          "file:///media/6TBRED/Anime/Current TV Current"
-          "file:///media/6TBRED/US/Current Anime Current"
+          "file:///media/6TBRED/Anime/Current Anime Current"
+          "file:///media/6TBRED/US/Current TV Current"
           "file:///media/6TBRED/New TV New"
           "file:///media/6TBRED/Movies"
         ];
