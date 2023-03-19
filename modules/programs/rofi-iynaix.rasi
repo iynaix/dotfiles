@@ -1,0 +1,111 @@
+* {{
+    accent: {color4};
+    bg-color: {background};
+    bg-color-light: {background};
+    border-color: {color0};
+    button-text-color: {color0};
+    foreground-color: {foreground};
+    foreground-selected-color: {color1};
+    selected-color: {background};
+    width: 600;
+}}
+
+button {{
+    background-color: @bg-color-light;
+    horizontal-align: 0.5;
+    padding: 10px;
+    text-color: @button-text-color;
+    vertical-align: 0.5;
+}}
+
+button selected {{
+    background-color: @bg-color;
+    text-color: @accent;
+}}
+
+element {{
+    background-color: @bg-color;
+    padding: 5px;
+    text-color: @foreground-color;
+}}
+
+element selected {{
+    background-color: @selected-color;
+    text-color: @foreground-selected-color;
+}}
+
+element-icon {{
+    size: 25px;
+}}
+
+element-text, element-icon, mode-switcher {{
+    background-color: inherit;
+    text-color: inherit;
+}}
+
+entry {{
+    background-color: @bg-color;
+    margin: 20px 0px 0px 10px;
+    padding: 6px;
+    text-color: @foreground-color;
+}}
+
+inputbar {{
+    background-color: @bg-color;
+    border-radius: 5px;
+    children: [prompt,entry];
+    padding: 2px;
+}}
+
+listview {{
+    background-color: @bg-color;
+    border: 0px 0px 0px;
+    columns: 2;
+    lines: 5;
+    margin: 10px 0px 0px 20px;
+    padding: 6px 0px 0px;
+}}
+
+mainbox {{
+    background-color: @bg-color;
+}}
+
+message {{
+    background-color: @bg-color-light;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
+}}
+
+mode-switcher {{
+    enabled: false;
+    spacing: 0;
+}}
+
+prompt {{
+    background-color: @accent;
+    border-radius: 3px;
+    margin: 20px 0px 0px 20px;
+    padding: 6px;
+    text-color: @bg-color;
+}}
+
+textbox {{
+    background-color: @bg-color-light;
+    margin: 20px 0px 0px 20px;
+    padding: 6px;
+    text-color: @accent;
+}}
+
+textbox-prompt-colon {{
+    expand: false;
+    str: ":";
+}}
+
+window {{
+    background-color: @bg-color;
+    border: 3px;
+    border-color: @border-color;
+    border-radius: 12px;
+    height: 360px;
+}}

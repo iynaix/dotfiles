@@ -6,6 +6,10 @@ let
       (monitor: wallpaper: "swww img -o ${monitor} --transition-type grow ${wallpaper}")
       cfg.wallpapers)
   ));
+  hypr-test = pkgs.writeShellScriptBin "hypr-test" /* sh */ ''
+    wal -n -i $HOME/Pictures/Wallpapers
+    swww img --transition-type grow "$(< "$HOME/.cache/wal/wal")"
+  '';
 in
 {
   options.iynaix.hyprland = {
@@ -25,6 +29,7 @@ in
         packages = [
           hypr-wallpaper
           inputs.nixpkgs-wayland.packages.${system}.swww
+          hypr-test
         ];
       };
     };
