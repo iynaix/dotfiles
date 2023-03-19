@@ -1,4 +1,4 @@
-{ pkgs, user, config, lib, ... }: {
+{ user, config, ... }: {
   config = {
     home-manager.users.${user} = {
       services = {
@@ -12,6 +12,7 @@
                 separator_height = 1;
                 horizontal_padding = 10;
                 frame_width = 0;
+                corner_radius = 8;
                 frame_color = background;
                 separator_color = color7;
                 font = "${config.iynaix.font.regular} Regular 12";
@@ -28,17 +29,17 @@
                 context = "ctrl + mod4 + period";
               };
               urgency_low = {
-                background = color0;
+                background = "${color0}E5"; # 0.9 opacity
                 foreground = foreground;
                 timeout = 10;
               };
               urgency_normal = {
-                background = color0;
+                background = "${color0}E5"; # 0.9 opacity
                 foreground = foreground;
                 timeout = 10;
               };
               urgency_critical = {
-                background = color1;
+                background = "${color1}E5"; # 0.9 opacity
                 foreground = foreground;
                 timeout = 0;
               };

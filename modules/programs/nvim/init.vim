@@ -151,7 +151,9 @@ set exrc " use project specific vimrc
 "Show 3 lines between a change and a fold that contains unchanged lines
 set diffopt+=context:3
 
-"check if running in terminal and set to 256 colors
+" make vim opaque in kitty
+" https://github.com/dracula/vim/issues/284#issuecomment-1441202303
+" autocmd ColorScheme catppuccin-mocha highlight Normal guibg=#1e1e2f
 colorscheme catppuccin-mocha
 
 "Sign column same color as line numbers

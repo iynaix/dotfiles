@@ -3,6 +3,7 @@
     ./alacritty.nix
     ./brave.nix
     ./firefox.nix
+    ./helix.nix
     ./keyring.nix
     ./kitty.nix
     ./nemo.nix

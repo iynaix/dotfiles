@@ -165,9 +165,7 @@ in
               gaps_out = if host == "desktop" then 8 else 4;
               border_size = 2;
 
-              # "col.inactive_border" = "rgba(595959aa)";
-              # "col.active_border" = "rgba(${color4}ee) rgba(${color2}55)";
-              "col.active_border" = "rgb(${color4})";
+              "col.active_border" = "rgb(${color4}) rgb(${color6}) 45deg";
               "col.inactive_border" = "rgb(${color0})";
 
               layout = "master";
