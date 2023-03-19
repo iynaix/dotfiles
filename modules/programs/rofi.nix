@@ -16,12 +16,12 @@ in
     home-manager.users.${user} = {
       programs.rofi = {
         enable = true;
-        package = lib.mkDefault pkgs.rofi;
+        package = pkgs.rofi-wayland;
         location = "center";
         terminal = "kitty";
         font = "${config.iynaix.font.regular} 14";
         extraConfig = {
-          modi = lib.mkDefault "run,drun,window";
+          modi = "run,drun";
           icon-theme = "Papirus-Dark";
           show-icons = true;
           drun-display-format = "{icon} {name}";

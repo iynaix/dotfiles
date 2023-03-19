@@ -116,7 +116,7 @@
         # add zsh shortcuts
         lib.mapAttrs (name: value: "cd ${value}") config.iynaix.shortcuts;
 
-      programs.zsh.initExtra = ''
+      programs.zsh.initExtra = /* sh */ ''
         function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
         compdef _directories md
 

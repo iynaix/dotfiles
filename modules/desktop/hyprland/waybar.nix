@@ -1,7 +1,7 @@
 { pkgs, user, lib, config, ... }:
 let
   cfg = config.iynaix.waybar;
-  launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
+  launch-waybar = pkgs.writeShellScriptBin "launch-waybar" /* sh */ ''
     killall -q .waybar-wrapped
     waybar > /dev/null 2>&1 &
   '';

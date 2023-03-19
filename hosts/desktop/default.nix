@@ -1,7 +1,6 @@
 { config, pkgs, user, lib, ... }:
 let
   displayCfg = config.iynaix.displays;
-  bspwmCfg = config.iynaix.bspwm;
   hyprlandCfg = config.iynaix.hyprland;
 in
 {
@@ -13,10 +12,6 @@ in
         monitor1 = "DP-2";
         monitor2 = if hyprlandCfg.enable then "DP-4" else "DP-0.8";
         monitor3 = if hyprlandCfg.enable then "HDMI-A-1" else "HDMI-0";
-      };
-      bspwm.extraSettings = {
-        window_gap = 8;
-        padding = 8;
       };
 
       # wayland settings
@@ -94,56 +89,6 @@ in
     ];
 
     home-manager.users.${user} = {
-      # bspwm related config
-      xsession.windowManager.bspwm = lib.mkIf bspwmCfg.enable {
-        monitors = {
-          "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" ];
-          "%${displayCfg.monitor2}" = [ "6" "7" "8" ]; # escape with % because there is a dot
-          "${displayCfg.monitor3}" = [ "9" "10" ];
-        };
-        extraConfigEarly = "xrandr --output '${displayCfg.monitor1}' --primary --mode 3440x1440 --rate 144 --pos 1440x1080 --rotate normal"
-          + " --output '${displayCfg.monitor2}' --mode 2560x1440 --pos 0x728 --rotate left"
-          + " --output '${displayCfg.monitor3}' --mode 1920x1080 --pos 1754x0";
-        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}"
-          + " --output '${displayCfg.monitor2}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-2560.png}"
-          + " --output '${displayCfg.monitor3}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
-      };
-
-      services.polybar = lib.mkIf bspwmCfg.enable {
-        # setup bars specific to host
-        config = lib.mkAfter {
-          "bar/primary" = {
-            "inherit" = "bar/base";
-            monitor = "${displayCfg.monitor1}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "lan volume date";
-          };
-          "bar/secondary" = {
-            "inherit" = "bar/base";
-            monitor = "${displayCfg.monitor2}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "date";
-          };
-          "bar/tertiary" = {
-            "inherit" = "bar/base";
-            monitor = "${displayCfg.monitor3}";
-
-            modules-left = "bspwm_mode";
-            modules-center = "bspwm";
-            modules-right = "date";
-          };
-        };
-        script = ''
-          polybar primary &
-          polybar secondary &
-          polybar tertiary &
-        '';
-      };
-
       home = {
         packages = with pkgs; [
           filezilla

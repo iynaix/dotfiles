@@ -1,7 +1,7 @@
 { pkgs, lib, host, user, config, ... }:
 let
   mod = if host == "vm" then "ALT" else "SUPER";
-  hyprLock = with config.iynaix.xrdb-no-hex; pkgs.writeShellScriptBin "hypr-lock" ''
+  hyprLock = with config.iynaix.xrdb-no-hex; pkgs.writeShellScriptBin "hypr-lock" /* sh */ ''
     ${pkgs.swaylock-effects}/bin/swaylock \
       --clock \
       --screenshots \

@@ -1,6 +1,5 @@
 { pkgs, user, config, ... }: {
   imports = [
-    ./alacritty.nix
     ./brave.nix
     ./firefox.nix
     ./helix.nix
@@ -8,14 +7,22 @@
     ./kitty.nix
     ./nemo.nix
     ./neovim.nix
+    ./rofi.nix
     ./vscode.nix
     ./zathura.nix
-    ../media
   ];
 
   config = {
+    xdg.mime.defaultApplications = {
+      "image/jpeg" = "imv-dir.desktop";
+      "image/png" = "imv-dir.desktop";
+    };
+
     home-manager.users.${user} = {
-      home.packages = with pkgs; [ gparted libreoffice ];
+      home.packages = with pkgs; [
+        imv
+        libreoffice
+      ];
     };
 
     iynaix.persist.home.directories = [

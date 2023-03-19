@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-cd /home/iynaix/projects/sonarr_ical
-
-npm run sync

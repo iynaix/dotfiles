@@ -48,11 +48,6 @@
           ugrep
         ];
 
-        file."bin" = {
-          source = ./bin;
-          recursive = true;
-        };
-
         file.".config/btop/themes/catppuccin-mocha.theme".source = ./btop-catppuccin-mocha.theme;
 
         # potential vifm shortcuts

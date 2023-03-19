@@ -55,7 +55,6 @@ in
   ];
 
   options.iynaix.hyprland = {
-    # mutually exclusive with bspwm
     enable = lib.mkEnableOption "Hyprland" // { default = true; };
     keybinds = lib.mkOption {
       type = with lib.types; attrsOf str;
@@ -105,20 +104,8 @@ in
       };
     };
 
-    xdg.mime.defaultApplications = {
-      "image/jpeg" = "imv-dir.desktop";
-      "image/png" = "imv-dir.desktop";
-    };
-
     home-manager.users.${user} = {
       imports = [ inputs.hyprland.homeManagerModules.default ];
-
-      programs.rofi = {
-        package = pkgs.rofi-wayland;
-        extraConfig = {
-          modi = "run,drun";
-        };
-      };
 
       home = {
         sessionVariables = {
@@ -130,7 +117,6 @@ in
         file.".config/hypr/pip.py".source = ./pip.py;
 
         packages = with pkgs; [
-          imv
           playerctl
           pciutils
           # clipboard history

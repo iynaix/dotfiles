@@ -1,7 +1,6 @@
 { config, pkgs, user, lib, host, ... }:
 let
   displayCfg = config.iynaix.displays;
-  bspwmCfg = config.iynaix.bspwm;
 in
 {
   imports = [ ./hardware.nix ];
@@ -75,24 +74,6 @@ in
     security.pam.services.gdm.enableGnomeKeyring = true;
 
     home-manager.users.${user} = {
-      # bspwm settings
-      xsession.windowManager.bspwm = lib.mkIf bspwmCfg.enable {
-        monitors = {
-          "${displayCfg.monitor1}" = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-        };
-        extraConfigEarly = "xrandr --output '${displayCfg.monitor1}' --mode 1920x1080 --pos 0x0 --rotate normal";
-        extraConfig = "xwallpaper --output '${displayCfg.monitor1}' --zoom ${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
-      };
-
-      services.polybar = lib.mkIf bspwmCfg.enable {
-        package = (pkgs.polybar.override {
-          iwSupport = true;
-          pulseSupport = true;
-        });
-        script = "polybar ${host} &";
-      };
-
-      programs.alacritty.settings.font.size = 10;
       programs.kitty.font.size = 10;
     };
   };

@@ -14,17 +14,6 @@
     pavucontrol
   ];
 
-  home-manager.users.${user} = {
-    services = {
-      sxhkd.keybindings =
-        {
-          XF86AudioLowerVolume = "pamixer -i 5";
-          XF86AudioRaiseVolume = "pamixer -d 5";
-          XF86AudioMute = "pamixer -t";
-        };
-    };
-  };
-
   iynaix.hyprland.extraBinds = {
     bind = {
       ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
