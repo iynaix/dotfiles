@@ -128,7 +128,7 @@ in
         ];
       };
 
-      wayland.windowManager.hyprland = with config.iynaix.xrdb-no-hex; {
+      wayland.windowManager.hyprland = {
         enable = true;
         systemdIntegration = true;
         xwayland.hidpi = false;
@@ -150,9 +150,6 @@ in
               gaps_in = if host == "desktop" then 8 else 4;
               gaps_out = if host == "desktop" then 8 else 4;
               border_size = 2;
-
-              "col.active_border" = "rgb(${color4}) rgb(${color6}) 45deg";
-              "col.inactive_border" = "rgb(${color0})";
 
               layout = "master";
             };
@@ -353,12 +350,6 @@ in
               };
 
               windowrulev2 = [
-                # pink border for monocle windows
-                "bordercolor rgb(${color5}),fullscreen:1"
-                # teal border for floating windows
-                "bordercolor rgb(${color6}),floating:1"
-                # yellow border for sticky (must be floating) windows
-                "bordercolor rgb(${color3}),pinned:1"
                 # handle save dialogs
                 "float,title:^(Save File)$"
                 "center,title:^(Save File)$"
