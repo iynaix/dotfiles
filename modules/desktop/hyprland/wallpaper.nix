@@ -1,13 +1,7 @@
-{ pkgs, inputs, system, user, lib, config, ... }:
+{ pkgs, inputs, system, user, ... }:
 let
-  # cfg = config.iynaix.hyprland;
-  # hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" (lib.concatStringsSep "\n" (
-  #   (lib.mapAttrsToList
-  #     (monitor: wallpaper: "swww img -o ${monitor} --transition-type grow ${wallpaper}")
-  #     cfg.wallpapers)
-  # ));
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" /* sh */ ''
-    wal -n -i $HOME/Pictures/Wallpapers
+    wal -n -i ''${1:-$HOME/Pictures/Wallpapers}
 
     source $HOME/.cache/wal/colors-hexless.sh
 
@@ -24,20 +18,11 @@ let
     hyprctl keyword windowrulev2 bordercolor "rgb(''${color3}),pinned:1"
 
     swww img --transition-type grow "$(< "$HOME/.cache/wal/wal")"
+
+    launch-waybar
   '';
 in
 {
-  options.iynaix.hyprland = {
-    wallpapers = lib.mkOption {
-      type = with lib.types; attrsOf str;
-      default = { };
-      description = "Attrset of wallpapers to use for swww";
-      example = ''{
-        DP-2 = "/path/to/wallpaper.png";
-      }'';
-    };
-  };
-
   config = {
     home-manager.users.${user} = {
       home = {

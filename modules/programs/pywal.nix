@@ -43,5 +43,10 @@
         export LS_COLORS="''${{LS_COLORS}}:su=30;41:ow=30;42:st=30;44:"
       '';
     };
+
+    iynaix.persist.home.directories = [
+      ".config/wal"
+      ".cache/wal"
+    ];
   };
 }

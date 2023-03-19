@@ -22,18 +22,13 @@ in
           "${displayCfg.monitor2}" = "2560x1440,0x728,1,transform,1";
           "${displayCfg.monitor3}" = "1920x1080,1754x0,1";
         };
-        wallpapers = {
-          "${displayCfg.monitor1}" = "${../../modules/desktop/wallpapers/gits-catppuccin-3440.png}";
-          "${displayCfg.monitor2}" = "${../../modules/desktop/wallpapers/gits-catppuccin-2560.png}";
-          "${displayCfg.monitor3}" = "${../../modules/desktop/wallpapers/gits-catppuccin-1920.png}";
-        };
       };
       waybar = {
-        style = ''
+        style-template = ''
           /* add rounded corners for leftmost modules-right */
-          #pulseaudio {
+          #pulseaudio {{
             border-radius: 12px 0 0 12px;
-          }
+          }}
         '';
       };
 

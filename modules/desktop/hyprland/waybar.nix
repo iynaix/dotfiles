@@ -3,23 +3,24 @@ let
   cfg = config.iynaix.waybar;
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" /* sh */ ''
     killall -q .waybar-wrapped
-    waybar > /dev/null 2>&1 &
+    waybar --style $HOME/.cache/wal/colors-waybar.css > /dev/null 2>&1 &
   '';
 in
 {
   options.iynaix.waybar = {
+    enable = lib.mkEnableOption "waybar" // { default = true; };
     settings = lib.mkOption {
       default = { };
       description = "Additional waybar settings";
     };
-    style = lib.mkOption {
+    style-template = lib.mkOption {
       type = lib.types.str;
       default = [ ];
       description = "Additional waybar css styles as lines";
     };
   };
 
-  config = lib.mkIf config.iynaix.hyprland.enable {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
       home.packages = [ launch-waybar ];
 
@@ -107,56 +108,69 @@ in
             };
           } // cfg.settings)
         ];
-        style = with config.iynaix.xrdb; ''
-          #waybar {
-            background: transparent;
-          }
-          #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {
-            font-family: "Inter", "FontAwesome6Free";
-            font-weight: bold;
-            color: ${foreground};
-            background-color: ${color0};
-            border-radius: 0;
-            transition: none;
-            padding: 0 8px;
-          }
-          #workspaces, #workspaces button {
-            padding: 0 4px 0 4px;
-            border-radius: 12px;
-          }
-          #clock, #workspaces button.active {
-            background-color: ${foreground};
-            color: ${color0};
-            margin-right: 4px;
-            border-radius: 0 12px 12px 0;
-          }
-          #workspaces button.urgent {
-            background-color: ${color1};
-            color: ${foreground};
-            margin-right: 4px;
-            border-radius: 12px;
-          }
-          #pulseaudio, #backlight {
-            padding: 0 12px;
-          }
-          #network {
-            padding: 0 12px;
-          }
-          #network.disconnected, #battery.discharging.critical {
-            color: ${color1};
-          }
-          #window {
-            margin-left: 4px;
-            border-radius: 12px;
-          }
-          #workspaces button.active {
-            border-radius: 50%;
-          }
-          tooltip {
-            background: ${color0};
-          }
-        '' + "\n" + cfg.style;
       };
+
+      home.file.".config/wal/templates/colors-waybar.css".text = /* css */ ''
+        #waybar {{
+          background: transparent;
+        }}
+
+        #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {{
+          font-family: "Inter", "FontAwesome6Free";
+          font-weight: bold;
+          color: {foreground};
+          background-color: {color0};
+          border-radius: 0;
+          transition: none;
+          padding: 0 8px;
+        }}
+
+        #workspaces, #workspaces button {{
+          padding: 0 4px 0 4px;
+          border-radius: 12px;
+        }}
+
+        #clock, #workspaces button.active {{
+          background-color: {foreground};
+          color: {color0};
+          margin-right: 4px;
+          border-radius: 0 12px 12px 0;
+        }}
+
+        #workspaces button.urgent {{
+          background-color: {color1};
+          color: {foreground};
+          margin-right: 4px;
+          border-radius: 12px;
+        }}
+
+        #pulseaudio, #backlight {{
+          padding: 0 12px;
+        }}
+
+        #network {{
+          padding: 0 12px;
+        }}
+
+        #network.disconnected, #battery.discharging.critical {{
+          color: {color1};
+        }}
+
+        #window {{
+          margin-left: 4px;
+          border-radius: 12px;
+        }}
+
+        #workspaces button.active {{
+          border-radius: 50%;
+        }}
+
+        tooltip {{
+          background: {color0};
+        }}
+
+        ${cfg.style-template}
+      '';
 
       wayland.windowManager.hyprland.extraConfig = lib.mkAfter
         "exec-once = ${launch-waybar}/bin/launch-waybar";
