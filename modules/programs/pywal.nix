@@ -1,8 +1,14 @@
-{ user, ... }:
+{ lib, user, ... }:
 {
+  options.iynaix = {
+    pywal.enable = lib.mkEnableOption "pywal";
+  };
+
   config = {
     home-manager.users.${user} = {
       programs.pywal.enable = true;
+
+      # helix?
 
       home.file.".config/wal/templates/colors-hexless.sh".text = ''
         # Shell variables

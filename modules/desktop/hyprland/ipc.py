@@ -50,13 +50,13 @@ if __name__ == "__main__":
                 subprocess.run("hypr-reset-monitors")
 
             # always reset wallpaper and waybar
-            subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
+            subprocess.run("hypr-reset", stdout=subprocess.DEVNULL)
             subprocess.run("launch-waybar", stdout=subprocess.DEVNULL)
 
 
         elif ev == "monitorremoved":
             # reset wallpaper
-            subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
+            subprocess.run("hypr-reset", stdout=subprocess.DEVNULL)
 
             # focus workspace on ultrawide
             if IS_DESKTOP:

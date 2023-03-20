@@ -1,7 +1,7 @@
 { config, pkgs, user, ... }:
 {
   config = {
-    # enable gnome-keyring for all users
+    services.xserver.enable = true;
     services.gnome.gnome-keyring.enable = true;
     security.polkit.enable = true;
 

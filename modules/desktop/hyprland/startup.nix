@@ -23,7 +23,7 @@ let
     hyprctl dispatch focusmonitor ${displays.monitor1}
 
     # set wallpapers again
-    swww init || hypr-wallpaper
+    swww init || hypr-reset
 
     # reset waybar
     launch-waybar

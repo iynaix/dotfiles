@@ -20,52 +20,53 @@
               p = "print";
               i = "recolor";
             };
-            options = with config.iynaix.xrdb; {
+            extraConfig = ''
+              include "/home/${user}/.cache/wal/colors-zathurarc"
+            '';
+            options = {
               statusbar-h-padding = 0;
               statusbar-v-padding = 0;
               page-padding = 1;
               adjust-open = "best-fit";
-              # catppuccin mocha theme
-              default-fg = foreground;
-              default-bg = background;
-
-              completion-bg = color0;
-              completion-fg = foreground;
-              completion-highlight-bg = color8;
-              completion-highlight-fg = foreground;
-              completion-group-bg = color0;
-              completion-group-fg = color4;
-
-              statusbar-fg = foreground;
-              statusbar-bg = color0;
-
-              notification-bg = color0;
-              notification-fg = foreground;
-              notification-error-bg = color0;
-              notification-error-fg = color1;
-              notification-warning-bg = color0;
-              notification-warning-fg = color3;
-
-              inputbar-fg = foreground;
-              inputbar-bg = color0;
-
-              recolor-lightcolor = background;
-              recolor-darkcolor = foreground;
-
-              index-fg = foreground;
-              index-bg = background;
-              index-active-fg = foreground;
-              index-active-bg = color0;
-
-              render-loading-bg = background;
-              render-loading-fg = foreground;
-
-              highlight-color = color8;
-              highlight-fg = color5;
-              highlight-active-color = color5;
+              recolor = true; # invert by default
             };
           };
         };
+
+        home.file.".config/wal/templates/colors-zathurarc".text = ''
+          set default-bg                  "{color0}"
+          set default-fg                  "{color10}"
+
+          set statusbar-fg                "{color10}"
+          set statusbar-bg                "{color0}"
+
+          set inputbar-bg                 "{color0}"
+          set inputbar-fg                 "{color15}"
+
+          set notification-bg             "{color0}"
+          set notification-fg             "{color15}"
+
+          set notification-error-bg       "{color0}"
+          set notification-error-fg       "{color1}"
+
+          set notification-warning-bg     "{color0}"
+          set notification-warning-fg     "{color1}"
+
+          set highlight-color             "{color3}"
+          set highlight-active-color      "{color4}"
+
+          set completion-bg               "{color10}"
+          set completion-fg               "{color4}"
+
+          set completion-highlight-fg     "{color15}"
+          set completion-highlight-bg     "{color4}"
+
+          set recolor-lightcolor          "{color0}"
+          set recolor-darkcolor           "{color15}"
+
+          set recolor                     "false"
+          set recolor-keephue             "false"
+        '';
       };
   };
 }
