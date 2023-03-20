@@ -28,12 +28,7 @@ let
             programs.home-manager.enable = true;
           };
         };
-        nixpkgs.overlays = (import ../overlays) ++ [
-          (self: super: {
-            hyprwm-contrib-packages = inputs.hyprwm-contrib.packages.${system};
-            hyprland = inputs.hyprland.packages.${system};
-          })
-        ];
+        nixpkgs.overlays = (import ../overlays);
       }
       inputs.impermanence.nixosModules.impermanence
       inputs.kmonad.nixosModules.default

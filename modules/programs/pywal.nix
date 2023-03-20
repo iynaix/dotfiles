@@ -1,7 +1,7 @@
 { lib, user, ... }:
 {
   options.iynaix = {
-    pywal.enable = lib.mkEnableOption "pywal";
+    pywal.enable = lib.mkEnableOption "pywal" // { default = true; };
   };
 
   config = {

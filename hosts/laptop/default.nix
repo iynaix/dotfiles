@@ -33,16 +33,16 @@ in
       };
 
       waybar = {
-        settings = {
-          modules-right = [ "network" "pulseaudio" "backlight" "battery" "clock" ];
-          network = {
-            format = "  {essid}";
-            format-disconnected = "睊  Offline";
-            on-click = "~/.config/rofi/rofi-wifi-menu";
-            on-click-right = "kitty nmtui";
-            tooltip = false;
-          };
-        };
+        settings-template = ''
+          "modules-right": [ "network", "pulseaudio", "backlight", "battery", "clock" ],
+          "network": {{
+            "format": "  {{essid}}",
+            "format-disconnected": "睊  Offline",
+            "on-click": "/home/${user}/.config/rofi/rofi-wifi-menu",
+            "on-click-right": "kitty nmtui",
+            "tooltip": false
+          }}
+        '';
         # add rounded corners for leftmost modules-right
         style-template = lib.mkAfter ''
           #network {{

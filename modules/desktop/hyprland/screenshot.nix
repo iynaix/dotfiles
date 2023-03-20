@@ -2,7 +2,7 @@
 let
   cfg = config.iynaix.hyprland;
   mod = if host == "vm" then "ALT" else "SUPER";
-  grimblast = "${pkgs.hyprwm-contrib-packages.grimblast}/bin/grimblast --notify";
+  grimblast = "${pkgs.hyprwm-contrib.grimblast}/bin/grimblast --notify";
   hypr-screenshot = pkgs.writeShellScriptBin "hypr-screenshot" /* sh */ ''
     _rofi() {
         rofi -dmenu -sep '|' -disable-history true -cycle true -lines 4 -theme-str "mainbox { children: [listview]; }" "$@"

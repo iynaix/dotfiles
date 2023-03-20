@@ -44,7 +44,7 @@ in
       services = {
         dunst = {
           enable = true;
-          configFile = "~/.cache/wal/colors-dunstrc";
+          configFile = "/home/${user}/.cache/wal/colors-dunstrc";
         };
       };
 

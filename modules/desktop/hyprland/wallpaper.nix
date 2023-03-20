@@ -37,7 +37,7 @@ let
     wal --theme "$theme"
 
     if [ $theme = "catppuccin-mocha" ]; then
-      hypr-reset "${../wallpapers/gits-catppuccin-3440.png}"
+      hypr-reset "${../wallpapers/gits-catppuccin.jpg}"
     else
       hypr-reset
     fi

@@ -378,5 +378,13 @@ in
         ];
       };
     };
+
+    nixpkgs.overlays = [
+      (self: super: {
+        hyprwm-contrib = inputs.hyprwm-contrib.packages.x86_64-linux;
+        hyprland = inputs.hyprland.packages.x86_64-linux;
+      })
+    ];
+
   };
 }

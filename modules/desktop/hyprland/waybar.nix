@@ -3,20 +3,23 @@ let
   cfg = config.iynaix.waybar;
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" /* sh */ ''
     killall -q .waybar-wrapped
-    waybar --style $HOME/.cache/wal/colors-waybar.css > /dev/null 2>&1 &
+    waybar --config /home/${user}/.cache/wal/colors-waybar.config \
+      --style /home/${user}/.cache/wal/colors-waybar.css \
+      > /dev/null 2>&1 &
   '';
 in
 {
   options.iynaix.waybar = {
     enable = lib.mkEnableOption "waybar" // { default = true; };
-    settings = lib.mkOption {
-      default = { };
-      description = "Additional waybar settings";
+    settings-template = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Additional waybar settings in wal template format (original format is json)";
     };
     style-template = lib.mkOption {
       type = lib.types.str;
-      default = [ ];
-      description = "Additional waybar css styles as lines";
+      default = "";
+      description = "Additional waybar css styles in wal template format (original format is css)";
     };
   };
 
@@ -35,82 +38,117 @@ in
             sha256 = "sha256-MRjo3VeeRtNnheaPi+rT4tQwHl9pUMyk1voQ2mzXNMw=";
           };
         });
-        settings = [
-          ({
-            layer = "top";
-            position = "top";
-            margin = "4 4 0 4";
-            modules-left = [ "hyprland/window" ];
-            modules-center = [ "wlr/workspaces" ];
-            modules-right = [ "network" "pulseaudio" "battery" "clock" ];
-            clock = with config.iynaix.xrdb; {
-              format = "{:%H:%M}";
-              format-alt = "{:%a, %d %b %Y}";
-              interval = 10;
-              tooltip-format = "<tt><small>{calendar}</small></tt>";
-              calendar = {
-                mode = "year";
-                mode-mon-col = 3;
-                on-scroll = 1;
-                format = {
-                  months = "<span color='${color4}'><b>{}</b></span>";
-                  days = "<span color='${foreground}'><b>{}</b></span>";
-                  weekdays = "<span color='${color3}'><b>{}</b></span>";
-                  today = "<span color='${color5}'><b><u>{}</u></b></span>";
-                };
-                actions = {
-                  on-click-right = "mode";
-                  on-scroll-up = "shift_up";
-                  on-scroll-down = "shift_down";
-                };
-              };
-            };
-            "hyprland/window" = {
-              separate-outputs = true;
-            };
-            network = {
-              format-ethernet = "";
-              format-disconnected = "睊  Offline";
-              tooltip = false;
-            };
-            pulseaudio = {
-              format = "{icon}  {volume}%";
-              scroll-step = 1;
-              format-muted = "婢 Muted";
-              format-icons = [ "" "" "" ];
-              on-click = "pamixer -t";
-              on-click-right = "pavucontrol";
-              tooltip = false;
-            };
-            battery = {
-              format = "{icon}  {capacity}%";
-              format-charging = "  {capacity}%";
-              format-icons = [ "" "" "" "" "" ];
-              states = {
-                critical = 20;
-              };
-              tooltip = false;
-            };
-            backlight = {
-              format = "{icon}  {percent}%";
-              format-icons = [ "󰃞" "󰃟" "󰃝" "" ];
-              on-scroll-up = "brightnessctl s +1%";
-              on-scroll-down = "brightnessctl s 1%-";
-            };
-            "custom/power" = {
-              format = "";
-              on-click = "rofi -show power-menu -modi power-menu:~/.config/rofi/scripts/rofi-power-menu -theme ~/.config/rofi/powermenu.rasi";
-              tooltip = false;
-            };
-            "wlr/workspaces" = {
-              on-click = "activate";
-              sort-by-number = true;
-            };
-          } // cfg.settings)
-        ];
       };
 
-      home.file.".config/wal/templates/colors-waybar.css".text = /* css */ ''
+      home.file.".config/wal/templates/colors-waybar.config".text = lib.mkDefault ''
+        {{
+          "backlight": {{
+            "format": "{{icon}}  {{percent}}%",
+            "format-icons": [
+              "󰃞",
+              "󰃟",
+              "󰃝",
+              ""
+            ],
+            "on-scroll-down": "brightnessctl s 1%-",
+            "on-scroll-up": "brightnessctl s +1%"
+          }},
+
+          "battery": {{
+            "format": "{{icon}}  {{capacity}}%",
+            "format-charging": "  {{capacity}}%",
+            "format-icons": [
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "states": {{
+              "critical": 20
+            }},
+            "tooltip": false
+          }},
+
+          "clock": {{
+            "calendar": {{
+              "actions": {{
+                "on-click-right": "mode",
+                "on-scroll-down": "shift_down",
+                "on-scroll-up": "shift_up"
+              }},
+              "format": {{
+                "days": "<span color='{color4}'><b>{{}}</b></span>",
+                "months": "<span color='{foreground}'><b>{{}}</b></span>",
+                "today": "<span color='{color3}'><b><u>{{}}</u></b></span>",
+                "weekdays": "<span color='{color5}'><b>{{}}</b></span>"
+              }},
+              "mode": "year",
+              "mode-mon-col": 3,
+              "on-scroll": 1
+            }},
+            "format": "{{:%H:%M}}",
+            "format-alt": "{{:%a, %d %b %Y}}",
+            "interval": 10,
+            "tooltip-format": "<tt><small>{{calendar}}</small></tt>"
+          }},
+
+          "custom/power": {{
+            "format": "",
+            "on-click": "rofi -show power-menu -modi power-menu:/home/${user}/.config/rofi/scripts/rofi-power-menu -theme /home/${user}/.config/rofi/powermenu.rasi",
+            "tooltip": false
+          }},
+
+          "hyprland/window": {{
+            "separate-outputs": true
+          }},
+
+          "layer": "top",
+          "margin": "4 4 0 4",
+
+          "modules-center": [
+            "wlr/workspaces"
+          ],
+
+          "modules-left": [
+            "hyprland/window"
+          ],
+
+          "modules-right": [ "network", "pulseaudio", "battery", "clock" ],
+
+          "network": {{
+            "format-disconnected": "睊  Offline",
+            "format-ethernet": "",
+            "tooltip": false
+          }},
+
+          "position": "top",
+
+          "pulseaudio": {{
+            "format": "{{icon}}  {{volume}}%",
+            "format-icons": [
+              "",
+              "",
+              ""
+            ],
+            "format-muted": "婢 Muted",
+            "on-click": "pamixer -t",
+            "on-click-right": "pavucontrol",
+            "scroll-step": 1,
+            "tooltip": false
+          }},
+
+          "wlr/workspaces": {{
+            "on-click": "activate",
+            "sort-by-number": true
+          }}
+
+          ${if cfg.settings-template != "" then '',
+            ${cfg.settings-template}
+          '' else ""}
+        }}'';
+
+      home.file.".config/wal/templates/colors-waybar.css".text = lib.mkDefault /* css */ ''
         #waybar {{
           background: transparent;
         }}
