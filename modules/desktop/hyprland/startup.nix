@@ -83,7 +83,7 @@ in
           "hyprctl dispatch workspace 1"
 
           # set wallpaper
-          "swww init && hypr-wallpaper"
+          "swww init && ${if config.iynaix.pywal.enable then "hypr-wallpaper" else "hypr-theme"}"
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

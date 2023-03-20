@@ -16,15 +16,31 @@ let
     # yellow border for sticky (must be floating) windows
     hyprctl keyword windowrulev2 bordercolor "rgb(''${color3}),pinned:1"
 
-    swww img --transition-type grow "$(< "$HOME/.cache/wal/wal")"
+    if [ -z "$1" ]; then
+      swww img --transition-type grow "$(< "$HOME/.cache/wal/wal")"
+    else
+      swww img --transition-type grow "$1"
+    fi
 
     launch-waybar
   '';
   # sets a random wallpaper and changes the colors
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" /* sh */ ''
-    wal -n -i ''${1:-$HOME/Pictures/Wallpapers}
+    wal -i "/home/${user}/Pictures/Wallpapers"
 
     hypr-reset
+  '';
+  # applies a set theme
+  hypr-theme = pkgs.writeShellScriptBin "hypr-theme" /* sh */ ''
+    theme=''${1:-catppuccin-mocha}
+
+    wal --theme "$theme"
+
+    if [ $theme = "catppuccin-mocha" ]; then
+      hypr-reset "${../wallpapers/gits-catppuccin-3440.png}"
+    else
+      hypr-reset
+    fi
   '';
 in
 {
@@ -33,6 +49,7 @@ in
       home = {
         packages = [
           hypr-reset
+          hypr-theme
           hypr-wallpaper
           inputs.nixpkgs-wayland.packages.${system}.swww
         ];

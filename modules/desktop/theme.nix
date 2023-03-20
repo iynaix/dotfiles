@@ -62,10 +62,6 @@ in
       default = xrdb;
       description = "Xresources colors";
     };
-    xrdb-no-hex = lib.mkOption {
-      default = lib.mapAttrs (name: value: (lib.substring 1 50 value)) xrdb;
-      description = "Xresources colors without hex";
-    };
   };
 
   config = {
@@ -86,6 +82,16 @@ in
         "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
       } // lib.mapAttrs' (name: value: lib.nameValuePair ("*" + name) (value))
         xrdb;
+
+      home.file.".config/wal/colorschemes/dark/catppuccin-mocha.json".text = builtins.toJSON {
+        special = {
+          inherit (xrdb) background foreground;
+          cursor = theme.rosewater;
+        };
+        colors = {
+          inherit (xrdb) color0 color8 color1 color9 color2 color10 color3 color11 color4 color12 color5 color13 color6 color14 color7 color15;
+        };
+      };
     };
   };
 }
