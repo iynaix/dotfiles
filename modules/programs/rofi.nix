@@ -10,11 +10,10 @@
         };
 
         file.".config/rofi/config.rasi".text = ''
-          @import "~/.cache/wal/colors-rofi-dark.rasi"
+          @theme "/home/${user}/.cache/wal/colors-rofi-dark.rasi"
         '';
 
         file.".config/wal/templates/colors-rofi-dark.rasi".source = ./rofi-iynaix.rasi;
-        file.".config/wal/templates/colors-rofi-light.rasi".source = ./rofi-iynaix.rasi;
       };
     };
   };
