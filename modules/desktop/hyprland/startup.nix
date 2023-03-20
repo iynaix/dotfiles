@@ -23,7 +23,7 @@ let
     hyprctl dispatch focusmonitor ${displays.monitor1}
 
     # set wallpapers again
-    swww init || hypr-reset
+    hypr-reset
 
     # reset waybar
     launch-waybar
@@ -83,7 +83,7 @@ in
           "hyprctl dispatch workspace 1"
 
           # set wallpaper
-          "swww init && ${if config.iynaix.pywal.enable then "hypr-wallpaper" else "hypr-theme"}"
+          (if config.iynaix.pywal.enable then "hypr-wallpaper" else "hypr-theme")
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

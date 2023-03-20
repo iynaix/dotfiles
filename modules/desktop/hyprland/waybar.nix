@@ -111,6 +111,7 @@ in
           ],
 
           "modules-left": [
+            "custom/nix",
             "hyprland/window"
           ],
 
@@ -141,6 +142,13 @@ in
           "wlr/workspaces": {{
             "on-click": "activate",
             "sort-by-number": true
+          }},
+
+          "custom/nix": {{
+            "format": "",
+            // "on-click": "hypr-wallpaper",
+            // "on-click-right": "hypr-theme",
+            "tooltip": false
           }}
 
           ${if cfg.settings-template != "" then '',
@@ -175,6 +183,15 @@ in
           border-radius: 0 12px 12px 0;
         }}
 
+        #custom-nix {{
+          background-color: {foreground};
+          color: {color0};
+          margin-left: 4px;
+          padding: 0 12px;
+          font-size: 20px;
+          border-radius: 12px 0 0 12px;
+        }}
+
         #workspaces button.urgent {{
           background-color: {color1};
           color: {foreground};
@@ -195,8 +212,8 @@ in
         }}
 
         #window {{
-          margin-left: 4px;
-          border-radius: 12px;
+          padding: 0 12px;
+          border-radius: 0 12px 12px 0;
         }}
 
         #workspaces button.active {{
