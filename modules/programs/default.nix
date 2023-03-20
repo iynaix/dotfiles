@@ -3,6 +3,7 @@
     ./brave.nix
     ./firefox.nix
     ./helix.nix
+    ./imv.nix
     ./keyring.nix
     ./kitty.nix
     ./nemo.nix
@@ -14,14 +15,10 @@
   ];
 
   config = {
-    xdg.mime.defaultApplications = {
-      "image/jpeg" = "imv-dir.desktop";
-      "image/png" = "imv-dir.desktop";
-    };
 
     home-manager.users.${user} = {
       home.packages = with pkgs; [
-        imv
+        gparted
         libreoffice
       ];
     };

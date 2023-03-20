@@ -76,7 +76,6 @@
     systemPackages = with pkgs; [
       curl
       exa
-      gparted
       killall
       neovim
       helix
