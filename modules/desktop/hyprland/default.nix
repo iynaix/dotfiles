@@ -324,6 +324,9 @@ in
                 # lock monitors
                 "${mod}_SHIFT_CTRL, l" = "dpms, off";
 
+                # dunst controls
+                "${mod}_CTRL, grave" = "exec, dunstctl history-pop";
+
                 # TODO:
                 # special keys
                 # "XF86AudioPlay" = "mpvctl playpause";

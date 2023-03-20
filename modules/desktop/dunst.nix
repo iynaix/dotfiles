@@ -1,59 +1,88 @@
-{ user, config, ... }: {
+{ pkgs, lib, user, config, ... }:
+let
+  opacity = "E5";
+  # used for generation of icon_path, copied home-manager's dunst source
+  # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
+  hicolorTheme = {
+    package = pkgs.hicolor-icon-theme;
+    name = "hicolor";
+    size = "32x32";
+  };
+  basePaths = [
+    "/run/current-system/sw"
+    config.home-manager.users.${user}.home.profileDirectory
+    hicolorTheme.package
+  ];
+  themes = [ hicolorTheme ];
+  categories = [
+    "actions"
+    "animations"
+    "apps"
+    "categories"
+    "devices"
+    "emblems"
+    "emotes"
+    "filesystem"
+    "intl"
+    "legacy"
+    "mimetypes"
+    "places"
+    "status"
+    "stock"
+  ];
+  mkPath = { basePath, theme, category }:
+    "${basePath}/share/icons/${theme.name}/${theme.size}/${category}";
+  iconPath = lib.concatMapStringsSep ":" mkPath (lib.cartesianProductOfSets {
+    basePath = basePaths;
+    theme = themes;
+    category = categories;
+  });
+in
+{
   config = {
     home-manager.users.${user} = {
       services = {
         dunst = {
           enable = true;
-          settings =
-            with config.iynaix.xrdb; {
-              global = {
-                follow = "mouse";
-                transparency = 15;
-                separator_height = 1;
-                horizontal_padding = 10;
-                frame_width = 0;
-                corner_radius = 8;
-                frame_color = background;
-                separator_color = color7;
-                font = "${config.iynaix.font.regular} Regular 12";
-                ellipsize = "end";
-                show_indicators = "no";
-                max_icon_size = 72;
-                dmenu = "rofi -p dunst:";
-                browser = "brave -new-tab";
-                # keyboard shortcuts
-                mouse_left_click = "do_action";
-                mouse_middle_click = "do_action";
-                mouse_right_click = "close_current";
-                history = "ctrl + mod4 + grave";
-                context = "ctrl + mod4 + period";
-              };
-              urgency_low = {
-                background = "${color0}E5"; # 0.9 opacity
-                foreground = foreground;
-                timeout = 10;
-              };
-              urgency_normal = {
-                background = "${color0}E5"; # 0.9 opacity
-                foreground = foreground;
-                timeout = 10;
-              };
-              urgency_critical = {
-                background = "${color1}E5"; # 0.9 opacity
-                foreground = foreground;
-                timeout = 0;
-              };
-              brightness-change = {
-                appname = "brightness-change";
-                history_ignore = "yes";
-              };
-              volume-change = {
-                appname = "volume-change";
-                history_ignore = "yes";
-              };
-            };
+          configFile = "~/.cache/wal/colors-dunstrc";
         };
       };
+
+      home.file.".config/wal/templates/colors-dunstrc".text = ''
+        [global]
+        browser="brave -new-tab"
+        corner_radius=8
+        dmenu="rofi -p dunst:"
+        ellipsize="end"
+        follow="mouse"
+        font="${config.iynaix.font.regular} Regular 12"
+        frame_color="{background}"
+        frame_width=0
+        horizontal_padding=10
+        icon_path="${iconPath}"
+        max_icon_size=72
+        mouse_left_click="do_action"
+        mouse_middle_click="do_action"
+        mouse_right_click="close_current"
+        separator_color="{color7}"
+        separator_height=1
+        show_indicators="no"
+
+        [urgency_critical]
+        background="{color1}"
+        foreground="{foreground}"
+        timeout=0
+
+        [urgency_low]
+        background="{background}${opacity}"
+        foreground="{foreground}"
+        timeout=10
+
+        [urgency_normal]
+        background="{background}${opacity}"
+        foreground="{foreground}"
+        timeout=10
+      '';
     };
   };
 }
