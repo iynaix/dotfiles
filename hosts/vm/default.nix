@@ -21,6 +21,9 @@ let displayCfg = config.iynaix.displays; in
       # persist.tmpfs.home = true;
     };
 
+    environment.sessionVariables = {
+      WLR_RENDERER_ALLOW_SOFTWARE = "1";
+    };
 
     networking.hostId = "5f43c101"; # required for zfs
 

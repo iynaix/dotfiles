@@ -93,7 +93,7 @@
           ll = "ls -al";
           ls = "exa --group-directories-first --color-scale --icons";
           nre = "nixos-rebuild";
-          nsh = "nix-shell";
+          nsh = "nix-shell -p";
           open = "xdg-open";
           pj = "openproj";
           py = "python";

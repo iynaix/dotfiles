@@ -43,6 +43,22 @@ let
       hypr-reset
     fi
   '';
+  # creating an overlay for buildRustPackage overlay
+  # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+  swww = inputs.nixpkgs-wayland.packages.${system}.swww.overrideAttrs
+    (old: rec {
+      src = pkgs.fetchFromGitHub {
+        owner = "Horus645";
+        repo = "swww";
+        rev = "ad6439d5707df9fd253aeed9500964e48737b1b0";
+        sha256 = "sha256-h8E9OXnw2q9TPK+zWdE2q4i7+g5xOJXJFphT2E71xu8=";
+      };
+
+      cargoDeps = old.cargoDeps.overrideAttrs (_: {
+        inherit src;
+        outputHash = "sha256-DsRF1yY+0WPWnPhQpOjmnOclkvGBMB7qKHuORgzrUK0=";
+      });
+    });
 in
 {
   config = {
@@ -52,7 +68,7 @@ in
           hypr-reset
           hypr-theme
           hypr-wallpaper
-          inputs.nixpkgs-wayland.packages.${system}.swww
+          swww
         ];
       };
     };
