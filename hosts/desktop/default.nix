@@ -90,6 +90,8 @@ in
           vlc
         ];
       };
+
+      programs.obs-studio.enable = true;
     };
 
     iynaix.persist.home.directories = [

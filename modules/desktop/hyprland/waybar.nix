@@ -226,9 +226,10 @@ in
 
         ${cfg.style-template}
       '';
+    };
 
-      wayland.windowManager.hyprland.extraConfig = lib.mkAfter
-        "exec-once = ${launch-waybar}/bin/launch-waybar";
+    iynaix.hyprland.extraBinds = lib.mkAfter {
+      exec-once = [ "${launch-waybar}/bin/launch-waybar" ];
     };
   };
 }

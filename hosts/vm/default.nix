@@ -21,7 +21,7 @@ let displayCfg = config.iynaix.displays; in
       # persist.tmpfs.home = true;
     };
 
-    environment.sessionVariables = {
+    environment.sessionVariables = lib.mkIf config.iynaix.hyprland.enable {
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
     };
 

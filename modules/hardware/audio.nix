@@ -1,6 +1,7 @@
 { pkgs, host, user, config, lib, ... }:
 {
   # setup pipewire for audio
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
