@@ -1,8 +1,12 @@
-{ pkgs, user, config, ... }:
 {
+  pkgs,
+  user,
+  config,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
-      home.packages = [ pkgs.brave ];
+      home.packages = [pkgs.brave];
     };
 
     iynaix.persist.home.directories = [

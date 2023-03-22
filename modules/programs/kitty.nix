@@ -1,24 +1,33 @@
-{ pkgs, user, config, lib, ... }:
-let
+{
+  pkgs,
+  user,
+  config,
+  lib,
+  ...
+}: let
   # create a fake gnome-terminal shell script so xdg terminal applications
   # will open in kitty
   # https://unix.stackexchange.com/a/642886
-  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" /* sh */ ''
-    shift
+  fakeGnomeTerminal =
+    pkgs.writeShellScriptBin "gnome-terminal"
+    /*
+    sh
+    */
+    ''
+      shift
 
-    TITLE="$(basename "$1")"
-    if [ -n "$TITLE" ]; then
-      ${pkgs.kitty}/bin/kitty -T "$TITLE" -e "$@"
-    else
-      ${pkgs.kitty}/bin/kitty "$@"
-    fi
-  '';
-in
-{
-  environment.systemPackages = [ fakeGnomeTerminal ];
+      TITLE="$(basename "$1")"
+      if [ -n "$TITLE" ]; then
+        ${pkgs.kitty}/bin/kitty -T "$TITLE" -e "$@"
+      else
+        ${pkgs.kitty}/bin/kitty "$@"
+      fi
+    '';
+in {
+  environment.systemPackages = [fakeGnomeTerminal];
 
   # do not install xterm
-  services.xserver.excludePackages = [ pkgs.xterm ];
+  services.xserver.excludePackages = [pkgs.xterm];
 
   home-manager.users.${user} = {
     programs = {

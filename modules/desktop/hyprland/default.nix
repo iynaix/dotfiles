@@ -1,38 +1,63 @@
-{ pkgs, host, system, user, lib, config, inputs, ... }:
-let
+{
+  pkgs,
+  host,
+  system,
+  user,
+  lib,
+  config,
+  inputs,
+  ...
+}: let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
-  mod = if host == "vm" then "ALT" else "SUPER";
+  mod =
+    if host == "vm"
+    then "ALT"
+    else "SUPER";
   # functions for creating hyprland config
   # https://github.com/hyprwm/Hyprland/pull/870#issuecomment-1319448768
   mkValueString = value: (
-    if builtins.isBool value then (if value then "true" else "false")
-    else if (builtins.isFloat value || builtins.isInt value) then (builtins.toString value)
-    else if builtins.isString value then (value)
-    else if (
-      (builtins.isList value) &&
-      ((builtins.length value) == 2) &&
-      ((builtins.isFloat (builtins.elemAt value 0)) || (builtins.isFloat (builtins.elemAt value 0))) &&
-      ((builtins.isFloat (builtins.elemAt value 1)) || (builtins.isFloat (builtins.elemAt value 1)))
-    ) then (builtins.toString (builtins.elemAt value 0) + " " + builtins.toString (builtins.elemAt value 1))
+    if builtins.isBool value
+    then
+      (
+        if value
+        then "true"
+        else "false"
+      )
+    else if (builtins.isFloat value || builtins.isInt value)
+    then (builtins.toString value)
+    else if builtins.isString value
+    then value
+    else if
+      (
+        (builtins.isList value)
+        && ((builtins.length value) == 2)
+        && ((builtins.isFloat (builtins.elemAt value 0)) || (builtins.isFloat (builtins.elemAt value 0)))
+        && ((builtins.isFloat (builtins.elemAt value 1)) || (builtins.isFloat (builtins.elemAt value 1)))
+      )
+    then (builtins.toString (builtins.elemAt value 0) + " " + builtins.toString (builtins.elemAt value 1))
     else abort "Unhandled value type ${builtins.typeOf value}"
   );
   concatAttrs = arg: func: (
     assert builtins.isAttrs arg;
-    builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList func arg)
+      builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList func arg)
   );
   mkHyprlandVariables = arg: (
     concatAttrs arg (
-      name: value: name + (
-        if builtins.isAttrs value then (" {\n" + (mkHyprlandVariables value) + "\n}")
-        else " = " + mkValueString value
-      )
+      name: value:
+        name
+        + (
+          if builtins.isAttrs value
+          then (" {\n" + (mkHyprlandVariables value) + "\n}")
+          else " = " + mkValueString value
+        )
     )
   );
   mkHyprlandBinds = arg: (
     concatAttrs arg (
       name: value: (
-        if builtins.isList value then
+        if builtins.isList value
+        then
           (
             builtins.concatStringsSep "\n" (builtins.map (x: name + " = " + x) value)
           )
@@ -43,8 +68,7 @@ let
       )
     )
   );
-in
-{
+in {
   imports = [
     inputs.hyprland.nixosModules.default
     ./nvidia.nix
@@ -56,21 +80,21 @@ in
   ];
 
   options.iynaix.hyprland = {
-    enable = lib.mkEnableOption "Hyprland" // { default = true; };
+    enable = lib.mkEnableOption "Hyprland" // {default = true;};
     keybinds = lib.mkOption {
       type = with lib.types; attrsOf str;
       description = ''
         Keybinds for Hyprland, see
         https://wiki.hyprland.org/Configuring/Binds/
       '';
-      example = ''{
-        "SUPER, Return" = "exec, kitty";
-      }'';
-      default = { };
+      example = ''        {
+                "SUPER, Return" = "exec, kitty";
+              }'';
+      default = {};
     };
     monitors = lib.mkOption {
       type = with lib.types; attrsOf str;
-      default = { };
+      default = {};
       description = ''
         Config for monitors, see
         https://wiki.hyprland.org/Configuring/Monitors/
@@ -78,12 +102,12 @@ in
     };
     extraVariables = lib.mkOption {
       type = with lib.types; attrsOf unspecified;
-      default = { };
+      default = {};
       description = "Extra variable config for Hyprland";
     };
     extraBinds = lib.mkOption {
       type = with lib.types; attrsOf unspecified;
-      default = { };
+      default = {};
       description = "Extra binds for Hyprland";
     };
   };
@@ -142,7 +166,7 @@ in
 
       home.file.".config/hypr/hyprland.conf".text = lib.concatStringsSep "\n" [
         # monitors
-        (mkHyprlandBinds { monitor = cfg.monitors; })
+        (mkHyprlandBinds {monitor = cfg.monitors;})
         (mkHyprlandVariables {
           input = {
             kb_layout = "us";
@@ -155,8 +179,14 @@ in
           };
 
           general = {
-            gaps_in = if host == "desktop" then 8 else 4;
-            gaps_out = if host == "desktop" then 8 else 4;
+            gaps_in =
+              if host == "desktop"
+              then 8
+              else 4;
+            gaps_out =
+              if host == "desktop"
+              then 8
+              else 4;
             border_size = 2;
 
             layout = "master";
@@ -192,7 +222,10 @@ in
           master = {
             new_is_master = false;
             mfact = 0.5;
-            orientation = if host == "desktop" then "center" else "left";
+            orientation =
+              if host == "desktop"
+              then "center"
+              else "left";
           };
 
           binds = {
@@ -212,7 +245,7 @@ in
         (mkHyprlandBinds
           {
             # handles displays that are plugged in
-            monitor = { "" = "preferred,auto,auto"; };
+            monitor = {"" = "preferred,auto,auto";};
 
             bind = {
               "${mod}, Return" = "exec, kitty";
@@ -393,6 +426,5 @@ in
         hyprland = inputs.hyprland.packages.${system};
       })
     ];
-
   };
 }

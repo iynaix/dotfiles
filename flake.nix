@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    alejandra = {
+      url = "github:kamadorueda/alejandra/3.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
@@ -33,11 +38,11 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, ... }: {
-    nixosConfigurations = (import ./hosts {
+  outputs = inputs @ {nixpkgs, ...}: {
+    nixosConfigurations = import ./hosts {
       inherit (nixpkgs) lib;
       inherit inputs nixpkgs;
       user = "iynaix";
-    });
+    };
   };
 }

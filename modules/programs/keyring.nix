@@ -1,5 +1,8 @@
-{ pkgs, user, ... }:
 {
+  pkgs,
+  user,
+  ...
+}: {
   config = {
     services.xserver.enable = true;
     services.gnome.gnome-keyring.enable = true;
@@ -10,9 +13,9 @@
     systemd = {
       user.services.polkit-gnome-authentication-agent-1 = {
         description = "polkit-gnome-authentication-agent-1";
-        wantedBy = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        after = [ "graphical-session.target" ];
+        wantedBy = ["graphical-session.target"];
+        wants = ["graphical-session.target"];
+        after = ["graphical-session.target"];
         serviceConfig = {
           Type = "simple";
           ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
@@ -24,10 +27,9 @@
     };
 
     home-manager.users.${user} = {
-      home.packages = with pkgs;
-        [
-          gcr # stops errors with copilot login?
-        ];
+      home.packages = with pkgs; [
+        gcr # stops errors with copilot login?
+      ];
     };
 
     # persist keyring and misc other secrets

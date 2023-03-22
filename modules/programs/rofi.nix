@@ -1,9 +1,14 @@
-{ pkgs, user, lib, host, ... }:
 {
+  pkgs,
+  user,
+  lib,
+  host,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
       home = {
-        packages = with pkgs; [ rofi-power-menu rofi-wayland ];
+        packages = with pkgs; [rofi-power-menu rofi-wayland];
 
         file.".config/rofi/rofi-wifi-menu" = lib.mkIf (host == "laptop") {
           source = ./rofi-wifi-menu.sh;

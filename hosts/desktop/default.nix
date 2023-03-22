@@ -1,17 +1,27 @@
-{ config, pkgs, user, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  user,
+  lib,
+  ...
+}: let
   displayCfg = config.iynaix.displays;
   hyprlandCfg = config.iynaix.hyprland;
-in
-{
-  imports = [ ./hardware.nix ];
+in {
+  imports = [./hardware.nix];
 
   config = {
     iynaix = {
       displays = {
         monitor1 = "DP-2";
-        monitor2 = if hyprlandCfg.enable then "DP-4" else "DP-0.8";
-        monitor3 = if hyprlandCfg.enable then "HDMI-A-1" else "HDMI-0";
+        monitor2 =
+          if hyprlandCfg.enable
+          then "DP-4"
+          else "DP-0.8";
+        monitor3 =
+          if hyprlandCfg.enable
+          then "HDMI-A-1"
+          else "HDMI-0";
       };
 
       # wayland settings
@@ -66,7 +76,7 @@ in
     networking.hostId = "89eaa833"; # required for zfs
 
     # enable nvidia support
-    services.xserver.videoDrivers = [ "nvidia" ];
+    services.xserver.videoDrivers = ["nvidia"];
 
     hardware.opengl = {
       enable = true;

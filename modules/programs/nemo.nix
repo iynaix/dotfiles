@@ -1,4 +1,8 @@
-{ pkgs, user, ... }: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   programs.file-roller.enable = true;
   xdg.mime.defaultApplications = {
     "inode/directory" = "nemo.desktop";
@@ -49,5 +53,4 @@
       };
     };
   };
-
 }

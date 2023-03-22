@@ -1,8 +1,14 @@
-{ pkgs, user, lib, config, ... }: {
+{
+  pkgs,
+  user,
+  lib,
+  config,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
       home = {
-        packages = with pkgs; [ ranger ];
+        packages = with pkgs; [ranger];
 
         file.".config/ranger" = {
           source = ./ranger;

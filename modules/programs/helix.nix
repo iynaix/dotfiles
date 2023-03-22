@@ -1,5 +1,4 @@
-{ user, ... }:
-{
+{user, ...}: {
   config = {
     home-manager.users.${user} = {
       programs.helix = {

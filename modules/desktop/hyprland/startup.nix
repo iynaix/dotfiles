@@ -1,39 +1,61 @@
-{ pkgs, host, user, lib, config, ... }:
-let
+{
+  pkgs,
+  host,
+  user,
+  lib,
+  config,
+  ...
+}: let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
-  hyprCleanup = pkgs.writeShellScriptBin "hypr-cleanup" /* sh */ ''
-    ${lib.concatStringsSep "\n"  (["sleep ${if host == "laptop" then "20" else "10"}"] ++ cfg.startupCleanup)}
-  '';
-  hyprResetMonitors = pkgs.writeShellScriptBin "hypr-reset-monitors" /* sh */ ''
-    hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
-    hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
+  hyprCleanup =
+    pkgs.writeShellScriptBin "hypr-cleanup"
+    /*
+    sh
+    */
+    ''
+      ${lib.concatStringsSep "\n" ([
+          "sleep ${
+            if host == "laptop"
+            then "20"
+            else "10"
+          }"
+        ]
+        ++ cfg.startupCleanup)}
+    '';
+  hyprResetMonitors =
+    pkgs.writeShellScriptBin "hypr-reset-monitors"
+    /*
+    sh
+    */
+    ''
+      hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
+      hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
 
-    hyprctl dispatch workspace 9
-    hyprctl dispatch workspace 7
+      hyprctl dispatch workspace 9
+      hyprctl dispatch workspace 7
 
-    hyprctl dispatch focusmonitor ${displays.monitor1}
+      hyprctl dispatch focusmonitor ${displays.monitor1}
 
-    # set wallpapers again
-    hypr-reset
+      # set wallpapers again
+      hypr-reset
 
-    # reset waybar
-    launch-waybar
-  '';
-in
-{
+      # reset waybar
+      launch-waybar
+    '';
+in {
   options.iynaix.hyprland = {
     startupCleanup = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
+      default = [];
       description = "Programs to start on startup";
     };
   };
@@ -46,10 +68,9 @@ in
       secondarytermdesktop = "7";
       chatdesktop = "9";
       dldesktop = "10";
-    in
-    {
+    in {
       home-manager.users.${user} = {
-        home.packages = [ hyprResetMonitors ];
+        home.packages = [hyprResetMonitors];
 
         home.file.".config/hypr/ipc.py".source = ./ipc.py;
       };
@@ -83,7 +104,11 @@ in
           "hyprctl dispatch workspace 1"
 
           # set wallpaper
-          (if config.iynaix.pywal.enable then "hypr-wallpaper" else "hypr-theme")
+          (
+            if config.iynaix.pywal.enable
+            then "hypr-wallpaper"
+            else "hypr-theme"
+          )
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

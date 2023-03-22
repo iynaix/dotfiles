@@ -1,5 +1,8 @@
-{ pkgs, user, config, ... }:
 {
+  pkgs,
+  user,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
       # fix for error fail to delete using trash
@@ -8,13 +11,7 @@
         ELECTRON_TRASH = "gio";
       };
 
-      home.packages = with pkgs; [
-        pkgs.vscode
-        # nix dev stuff
-        nixfmt
-        nil
-        nixpkgs-fmt
-      ];
+      home.packages = [pkgs.vscode];
     };
 
     iynaix.persist.home.directories = [

@@ -1,12 +1,17 @@
-{ pkgs, lib, config, ... }:
-let cfg = config.iynaix.backlight; in
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.iynaix.backlight;
+in {
   options.iynaix.backlight = {
     enable = lib.mkEnableOption "backlight";
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.brightnessctl ];
+    environment.systemPackages = [pkgs.brightnessctl];
 
     iynaix.hyprland.extraBinds = {
       bind = {

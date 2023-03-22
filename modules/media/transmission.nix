@@ -1,5 +1,12 @@
-{ pkgs, user, lib, config, ... }:
-let home = "/home/${user}"; in {
+{
+  pkgs,
+  user,
+  lib,
+  config,
+  ...
+}: let
+  home = "/home/${user}";
+in {
   config = lib.mkIf config.iynaix.torrenters.enable {
     services.transmission = {
       enable = true;
@@ -98,7 +105,7 @@ let home = "/home/${user}"; in {
 
     home-manager.users.${user} = {
       home = {
-        packages = with pkgs; [ transmission-remote-gtk ];
+        packages = with pkgs; [transmission-remote-gtk];
       };
     };
 

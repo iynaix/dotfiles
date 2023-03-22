@@ -1,4 +1,10 @@
-{ pkgs, user, lib, config, ... }: {
+{
+  pkgs,
+  user,
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ./btop.nix
     ./git.nix
@@ -45,6 +51,7 @@
           htop
           lazygit
           neofetch
+          sd
           ugrep
         ];
 

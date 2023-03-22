@@ -1,4 +1,8 @@
-{ pkgs, user, ... }: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   home-manager.users.${user} = {
     home = {
       file.".config/mpv" = {

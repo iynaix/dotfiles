@@ -1,6 +1,12 @@
-{ pkgs, user, config, lib, ... }:
-let cfg = config.iynaix.torrenters; in
 {
+  pkgs,
+  user,
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.iynaix.torrenters;
+in {
   imports = [
     ./mpv.nix
     ./pathofbuilding.nix
@@ -45,6 +51,5 @@ let cfg = config.iynaix.torrenters; in
         ];
       };
     };
-
   };
 }

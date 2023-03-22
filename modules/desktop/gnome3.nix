@@ -1,5 +1,8 @@
-{ config, lib, ... }:
 {
+  config,
+  lib,
+  ...
+}: {
   options.iynaix.gnome3 = {
     enable = lib.mkEnableOption "gnome3";
   };

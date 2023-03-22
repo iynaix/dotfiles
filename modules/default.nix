@@ -1,4 +1,8 @@
-{ pkgs, user, ... }: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   imports = [
     ./desktop
     ./hardware

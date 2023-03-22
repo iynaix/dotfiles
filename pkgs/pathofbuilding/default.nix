@@ -1,12 +1,15 @@
 # build this package standalone with the following command:
 # nix-build default.nix
-{ pkgs ? import <nixpkgs> { } }:
-let
+{pkgs ? import <nixpkgs> {}}: let
   pobVersion = "2.25.1";
   luacurlVersion = "0.3.13-1";
   # package lua-curl for luajit
-  lua-curl = pkgs.callPackage
-    ({ luajit, fetchFromGitHub }:
+  lua-curl =
+    pkgs.callPackage
+    ({
+      luajit,
+      fetchFromGitHub,
+    }:
       luajit.pkgs.buildLuarocksPackage rec {
         pname = "lua-curl";
         version = luacurlVersion;
@@ -18,14 +21,14 @@ let
           hash = "sha256-16oS4T8Sul8Qs7ymTLtB/dEqRzWZeRAR3VUsm/lKxT4=";
         };
 
-        buildInputs = [ pkgs.curl ];
-        propagatedBuildInputs = [ luajit ];
+        buildInputs = [pkgs.curl];
+        propagatedBuildInputs = [luajit];
 
         preConfigure = ''
           ln -s rockspecs/${pname}-${version}.rockspec .
         '';
       })
-    { };
+    {};
   pob-frontend = pkgs.stdenv.mkDerivation {
     pname = "pobfrontend";
     version = "luajit";
@@ -50,7 +53,7 @@ let
       zlib
     ];
 
-    mesonFlags = [ "--buildtype=release" ];
+    mesonFlags = ["--buildtype=release"];
 
     installPhase = ''
       strip ./pobfrontend
@@ -78,76 +81,84 @@ let
     # everything else from now on is done in the lua directory
     prePatch = "cd LZip";
 
-    nativeBuildInputs = with pkgs; [ pkgconf zlib ];
+    nativeBuildInputs = with pkgs; [pkgconf zlib];
 
     dontBuild = true;
 
-    installPhase = /* sh */ ''
-      g++ ''${CXXFLAGS} -W -Wall -fPIC -shared -o lzip.so \
-        -I"$(pkgconf luajit --variable=includedir)" \
-        lzip.cpp \
-        ''${LDFLAGS} \
-        -L"$(pkgconf luajit --variable=libdir)" \
-        -l"$(pkgconf luajit --variable=libname)" \
-        -lz
-        mkdir -p $out/bin
-        cp lzip.so $out/bin
-    '';
+    installPhase =
+      /*
+      sh
+      */
+      ''
+        g++ ''${CXXFLAGS} -W -Wall -fPIC -shared -o lzip.so \
+          -I"$(pkgconf luajit --variable=includedir)" \
+          lzip.cpp \
+          ''${LDFLAGS} \
+          -L"$(pkgconf luajit --variable=libdir)" \
+          -l"$(pkgconf luajit --variable=libname)" \
+          -lz
+          mkdir -p $out/bin
+          cp lzip.so $out/bin
+      '';
   };
 in
-# referenced from pob package on AUR
+  # referenced from pob package on AUR
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=path-of-building-community-git
-pkgs.stdenv.mkDerivation rec {
-  pname = "path-of-building";
-  version = pobVersion;
+  pkgs.stdenv.mkDerivation rec {
+    pname = "path-of-building";
+    version = pobVersion;
 
-  src = pkgs.fetchFromGitHub {
-    owner = "PathOfBuildingCommunity";
-    repo = "PathOfBuilding";
-    rev = "v${pobVersion}";
-    sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
-  };
+    src = pkgs.fetchFromGitHub {
+      owner = "PathOfBuildingCommunity";
+      repo = "PathOfBuilding";
+      rev = "v${pobVersion}";
+      sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
+    };
 
-  patches = [
-    (pkgs.fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
-      sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
-    })
-  ];
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
+        sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
+      })
+    ];
 
-  nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = with pkgs; [makeWrapper];
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = /* sh */ ''
-    mkdir -p $out/bin
-    cp -r * $out
-    cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
-    cp ${pob-runtime-src}/bin/lzip.so $out
-    cp ${pob-frontend}/bin/pobfrontend $out
+    installPhase =
+      /*
+      sh
+      */
+      ''
+        mkdir -p $out/bin
+        cp -r * $out
+        cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
+        cp ${pob-runtime-src}/bin/lzip.so $out
+        cp ${pob-frontend}/bin/pobfrontend $out
 
-    # create a wrapper script for pobfrontend
-    makeWrapper $out/pobfrontend $out/bin/path-of-building \
-        --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua" \
-        --run "cd $out"
+        # create a wrapper script for pobfrontend
+        makeWrapper $out/pobfrontend $out/bin/path-of-building \
+            --set LUA_PATH "$out/runtime/lua/?.lua;$out/runtime/lua/?/init.lua" \
+            --run "cd $out"
 
-    # create logos
-    mkdir -p $out/share/pixmaps
-    cp ${./PathOfBuilding-logo.png} $out/share/pixmaps/PathOfBuilding.png
-    cp ${./PathOfBuilding-logo.svg} $out/share/pixmaps/PathOfBuilding.svg
-    ln -sv "${desktopItem}/share/applications" $out/share
-  '';
+        # create logos
+        mkdir -p $out/share/pixmaps
+        cp ${./PathOfBuilding-logo.png} $out/share/pixmaps/PathOfBuilding.png
+        cp ${./PathOfBuilding-logo.svg} $out/share/pixmaps/PathOfBuilding.svg
+        ln -sv "${desktopItem}/share/applications" $out/share
+      '';
 
-  desktopItem = pkgs.makeDesktopItem {
-    name = "Path of Building";
-    desktopName = "Path of Building";
-    comment = "Offline build planner for Path of Exile";
-    exec = "path-of-building %U";
-    terminal = false;
-    type = "Application";
-    icon = "PathOfBuilding";
-    categories = [ "Game" ];
-    keywords = [ "poe" "pob" "pobc" "path" "exile" ];
-    mimeTypes = [ "x-scheme-handler/pob" ];
-  };
-}
+    desktopItem = pkgs.makeDesktopItem {
+      name = "Path of Building";
+      desktopName = "Path of Building";
+      comment = "Offline build planner for Path of Exile";
+      exec = "path-of-building %U";
+      terminal = false;
+      type = "Application";
+      icon = "PathOfBuilding";
+      categories = ["Game"];
+      keywords = ["poe" "pob" "pobc" "path" "exile"];
+      mimeTypes = ["x-scheme-handler/pob"];
+    };
+  }

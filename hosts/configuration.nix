@@ -1,5 +1,9 @@
-{ pkgs, user, host, ... }:
 {
+  pkgs,
+  user,
+  host,
+  ...
+}: {
   # handle desktop / window manager
   imports = [
     ../modules
@@ -16,7 +20,7 @@
     };
     grub = {
       enable = true;
-      devices = [ "nodev" ];
+      devices = ["nodev"];
       efiSupport = true;
       version = 2;
     };
@@ -53,10 +57,10 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${user} = { ... }: {
+  users.users.${user} = {...}: {
     isNormalUser = true;
     initialPassword = "password";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     shell = pkgs.zsh;
   };
 
@@ -127,7 +131,7 @@
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Ubuntu" ]; })
+      (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Ubuntu"];})
     ];
   };
 

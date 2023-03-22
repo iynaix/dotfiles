@@ -1,4 +1,10 @@
-{ pkgs, user, config, ... }: {
+{
+  pkgs,
+  user,
+  system,
+  inputs,
+  ...
+}: {
   imports = [
     ./brave.nix
     ./firefox.nix
@@ -19,6 +25,9 @@
       home.packages = with pkgs; [
         gparted
         libreoffice
+        # nix dev stuff
+        nil
+        inputs.alejandra.defaultPackage.${system}
       ];
     };
 

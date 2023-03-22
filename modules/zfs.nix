@@ -1,11 +1,18 @@
-{ config, pkgs, user, lib, inputs, ... }: {
+{
+  config,
+  pkgs,
+  user,
+  lib,
+  inputs,
+  ...
+}: {
   options.iynaix.zfs = {
-    enable = lib.mkEnableOption "Enable zfs" // { default = true; };
+    enable = lib.mkEnableOption "Enable zfs" // {default = true;};
   };
 
   config = {
     # booting with zfs
-    boot.supportedFilesystems = [ "zfs" ];
+    boot.supportedFilesystems = ["zfs"];
     boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
 
     services.zfs = {

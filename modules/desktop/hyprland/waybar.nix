@@ -1,16 +1,25 @@
-{ pkgs, user, lib, config, ... }:
-let
-  cfg = config.iynaix.waybar;
-  launch-waybar = pkgs.writeShellScriptBin "launch-waybar" /* sh */ ''
-    killall -q .waybar-wrapped
-    waybar --config /home/${user}/.cache/wal/colors-waybar.config \
-      --style /home/${user}/.cache/wal/colors-waybar.css \
-      > /dev/null 2>&1 &
-  '';
-in
 {
+  pkgs,
+  user,
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.iynaix.waybar;
+  launch-waybar =
+    pkgs.writeShellScriptBin "launch-waybar"
+    /*
+    sh
+    */
+    ''
+      killall -q .waybar-wrapped
+      waybar --config /home/${user}/.cache/wal/colors-waybar.config \
+        --style /home/${user}/.cache/wal/colors-waybar.css \
+        > /dev/null 2>&1 &
+    '';
+in {
   options.iynaix.waybar = {
-    enable = lib.mkEnableOption "waybar" // { default = true; };
+    enable = lib.mkEnableOption "waybar" // {default = true;};
     settings-template = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -25,7 +34,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [ launch-waybar ];
+      home.packages = [launch-waybar];
 
       programs.waybar = {
         enable = true;
@@ -151,85 +160,94 @@ in
             "tooltip": false
           }}
 
-          ${if cfg.settings-template != "" then '',
-            ${cfg.settings-template}
-          '' else ""}
+          ${
+          if cfg.settings-template != ""
+          then ''            ,
+                        ${cfg.settings-template}
+          ''
+          else ""
+        }
         }}'';
 
-      home.file.".config/wal/templates/colors-waybar.css".text = lib.mkDefault /* css */ ''
-        #waybar {{
-          background: transparent;
-        }}
+      home.file.".config/wal/templates/colors-waybar.css".text =
+        lib.mkDefault
+        /*
+        css
+        */
+        ''
+          #waybar {{
+            background: transparent;
+          }}
 
-        #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {{
-          font-family: "Inter", "FontAwesome6Free";
-          font-weight: bold;
-          color: {foreground};
-          background-color: {color0};
-          border-radius: 0;
-          transition: none;
-          padding: 0 8px;
-        }}
+          #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {{
+            font-family: "Inter", "FontAwesome6Free";
+            font-weight: bold;
+            color: {foreground};
+            background-color: {color0};
+            border-radius: 0;
+            transition: none;
+            padding: 0 8px;
+          }}
 
-        #workspaces, #workspaces button {{
-          padding: 0 4px 0 4px;
-          border-radius: 12px;
-        }}
+          #workspaces, #workspaces button {{
+            padding: 0 4px 0 4px;
+            border-radius: 12px;
+          }}
 
-        #clock, #workspaces button.active {{
-          background-color: {foreground};
-          color: {color0};
-          margin-right: 4px;
-          border-radius: 0 12px 12px 0;
-        }}
+          #clock, #workspaces button.active {{
+            background-color: {foreground};
+            color: {color0};
+            margin-right: 4px;
+            border-radius: 0 12px 12px 0;
+          }}
 
-        #custom-nix {{
-          background-color: {foreground};
-          color: {color0};
-          margin-left: 4px;
-          padding: 0 12px;
-          font-size: 20px;
-          border-radius: 12px 0 0 12px;
-        }}
+          #custom-nix {{
+            background-color: {foreground};
+            color: {color0};
+            margin-left: 4px;
+            padding: 0 12px;
+            font-size: 20px;
+            border-radius: 12px 0 0 12px;
+          }}
 
-        #workspaces button.urgent {{
-          background-color: {color1};
-          color: {foreground};
-          margin-right: 4px;
-          border-radius: 12px;
-        }}
+          #workspaces button.urgent {{
+            background-color: {color1};
+            color: {foreground};
+            margin-right: 4px;
+            border-radius: 12px;
+          }}
 
-        #pulseaudio, #backlight {{
-          padding: 0 12px;
-        }}
+          #pulseaudio, #backlight {{
+            padding: 0 12px;
+          }}
 
-        #network {{
-          padding: 0 12px;
-        }}
+          #network {{
+            padding: 0 12px;
+          }}
 
-        #network.disconnected, #battery.discharging.critical {{
-          color: {color1};
-        }}
+          #network.disconnected, #battery.discharging.critical {{
+            color: {color1};
+          }}
 
-        #window {{
-          padding: 0 12px;
-          border-radius: 0 12px 12px 0;
-        }}
+          #window {{
+            padding: 0 12px;
+            border-radius: 0 12px 12px 0;
+          }}
 
-        #workspaces button.active {{
-          border-radius: 50%;
-        }}
+          #workspaces button.active {{
+            border-radius: 50%;
+          }}
 
-        tooltip {{
-          background: {color0};
-        }}
+          tooltip {{
+            background: {color0};
+          }}
 
-        ${cfg.style-template}
-      '';
+          ${cfg.style-template}
+        '';
     };
 
     iynaix.hyprland.extraBinds = lib.mkAfter {
-      exec-once = [ "${launch-waybar}/bin/launch-waybar" ];
+      exec-once = ["${launch-waybar}/bin/launch-waybar"];
     };
   };
 }

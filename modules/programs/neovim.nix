@@ -1,5 +1,10 @@
-{ pkgs, user, config, lib, ... }:
 {
+  pkgs,
+  user,
+  config,
+  lib,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
       home = {
@@ -16,7 +21,7 @@
         vimAlias = true;
         # withNodeJs = true;
         # withPython3 = true;
-        extraPackages = with pkgs; [ fzf gcc ];
+        extraPackages = with pkgs; [fzf gcc];
       };
     };
 

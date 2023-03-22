@@ -1,5 +1,10 @@
-{ pkgs, lib, user, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  user,
+  config,
+  ...
+}: let
   opacity = "E5";
   # used for generation of icon_path, copied home-manager's dunst source
   # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
@@ -13,7 +18,7 @@ let
     config.home-manager.users.${user}.home.profileDirectory
     hicolorTheme.package
   ];
-  themes = [ hicolorTheme ];
+  themes = [hicolorTheme];
   categories = [
     "actions"
     "animations"
@@ -30,15 +35,17 @@ let
     "status"
     "stock"
   ];
-  mkPath = { basePath, theme, category }:
-    "${basePath}/share/icons/${theme.name}/${theme.size}/${category}";
+  mkPath = {
+    basePath,
+    theme,
+    category,
+  }: "${basePath}/share/icons/${theme.name}/${theme.size}/${category}";
   iconPath = lib.concatMapStringsSep ":" mkPath (lib.cartesianProductOfSets {
     basePath = basePaths;
     theme = themes;
     category = categories;
   });
-in
-{
+in {
   config = {
     home-manager.users.${user} = {
       services = {

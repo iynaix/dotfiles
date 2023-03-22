@@ -1,5 +1,11 @@
-{ pkgs, host, user, config, lib, ... }:
 {
+  pkgs,
+  host,
+  user,
+  config,
+  lib,
+  ...
+}: {
   # setup pipewire for audio
   security.rtkit.enable = true;
   services.pipewire = {

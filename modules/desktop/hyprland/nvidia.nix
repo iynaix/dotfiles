@@ -1,5 +1,11 @@
-{ pkgs, host, user, lib, config, ... }:
 {
+  pkgs,
+  host,
+  user,
+  lib,
+  config,
+  ...
+}: {
   config = lib.mkIf (config.iynaix.hyprland.enable && host == "desktop") {
     hardware.nvidia = {
       # open = true;

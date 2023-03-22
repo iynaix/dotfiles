@@ -1,5 +1,9 @@
-{ pkgs, user, config, ... }:
 {
+  pkgs,
+  user,
+  config,
+  ...
+}: {
   config = {
     home-manager.users.${user} = {
       programs = {

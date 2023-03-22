@@ -1,7 +1,14 @@
-{ config, pkgs, user, lib, host, ... }:
-let displayCfg = config.iynaix.displays; in
 {
-  imports = [ ./hardware.nix ];
+  config,
+  pkgs,
+  user,
+  lib,
+  host,
+  ...
+}: let
+  displayCfg = config.iynaix.displays;
+in {
+  imports = [./hardware.nix];
 
   config = {
     iynaix = {
@@ -38,18 +45,18 @@ let displayCfg = config.iynaix.displays; in
     # fix for spice-vdagentd not starting in wms
     systemd.user.services.spice-agent = {
       enable = true;
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
       serviceConfig = {
         ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagent -x";
       };
       unitConfig = {
         ConditionVirtualization = "vm";
         Description = "Spice guest session agent";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session-pre.target"];
+        PartOf = ["graphical-session.target"];
       };
     };
 
-    home-manager.users.${user} = { };
+    home-manager.users.${user} = {};
   };
 }

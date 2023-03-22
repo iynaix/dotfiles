@@ -1,9 +1,14 @@
-{ config, pkgs, user, lib, host, ... }:
-let
-  displayCfg = config.iynaix.displays;
-in
 {
-  imports = [ ./hardware.nix ];
+  config,
+  pkgs,
+  user,
+  lib,
+  host,
+  ...
+}: let
+  displayCfg = config.iynaix.displays;
+in {
+  imports = [./hardware.nix];
 
   config = {
     iynaix = {

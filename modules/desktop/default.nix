@@ -1,4 +1,10 @@
-{ pkgs, user, lib, config, ... }: {
+{
+  pkgs,
+  user,
+  lib,
+  config,
+  ...
+}: {
   imports = [
     # WMs are mutually exclusive via a config options
     ./dunst.nix
