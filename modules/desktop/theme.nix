@@ -61,33 +61,23 @@
     color15 = theme.subtext0;
   };
 in {
-  options.iynaix = {
-    xrdb = lib.mkOption {
-      default = xrdb;
-      description = "Xresources colors";
-    };
-  };
-
   config = {
     home-manager.users.${user} = {
       # create xresources
-      xresources.properties =
-        {
-          "Xft.dpi" = 96;
-          "Xft.antialias" = true;
-          "Xft.hinting" = true;
-          "Xft.rgba" = "rgb";
-          "Xft.autohint" = false;
-          "Xft.hintstyle" = "hintslight";
-          "Xft.lcdfilter" = "lcddefault";
-          "Xcursor.theme" = "Adwaita";
-          "Xcursor.size" = 24;
+      xresources.properties = {
+        "Xft.dpi" = 96;
+        "Xft.antialias" = true;
+        "Xft.hinting" = true;
+        "Xft.rgba" = "rgb";
+        "Xft.autohint" = false;
+        "Xft.hintstyle" = "hintslight";
+        "Xft.lcdfilter" = "lcddefault";
+        "Xcursor.theme" = "Adwaita";
+        "Xcursor.size" = 24;
 
-          "*.font" = "JetBrainsMono Nerd Font Mono:Medium:size=12";
-          "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
-        }
-        // lib.mapAttrs' (name: value: lib.nameValuePair ("*" + name) value)
-        xrdb;
+        "*.font" = "JetBrainsMono Nerd Font Mono:Medium:size=12";
+        "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
+      };
 
       home.file.".config/wal/colorschemes/dark/catppuccin-mocha.json".text = builtins.toJSON {
         special = {

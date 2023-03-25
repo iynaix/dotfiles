@@ -2,7 +2,6 @@
   pkgs,
   user,
   lib,
-  config,
   ...
 }: {
   imports = [
@@ -53,6 +52,7 @@
           neofetch
           sd
           ugrep
+          lsix
         ];
 
         file.".config/btop/themes/catppuccin-mocha.theme".source = ./btop-catppuccin-mocha.theme;

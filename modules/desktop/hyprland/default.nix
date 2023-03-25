@@ -129,14 +129,7 @@ in {
       };
     };
 
-    programs.hyprland = {
-      enable = true;
-
-      xwayland = {
-        enable = true;
-        hidpi = false;
-      };
-    };
+    programs.hyprland.enable = true;
 
     environment.systemPackages = with pkgs; [
       hyprland.xdg-desktop-portal-hyprland
@@ -194,12 +187,12 @@ in {
 
           decoration = {
             rounding = 8;
-            blur = true;
+            blur = host != "vm";
             blur_size = 5;
             blur_passes = 4;
             blur_new_optimizations = true;
 
-            drop_shadow = true;
+            drop_shadow = host != "vm";
             shadow_range = 4;
             shadow_render_power = 3;
             "col.shadow" = "rgba(1a1a1aee)";
@@ -211,7 +204,7 @@ in {
           };
 
           animations = {
-            enabled = true;
+            enabled = host != "vm";
           };
 
           dwindle = {
@@ -348,9 +341,6 @@ in {
               # picture in picture mode
               "${mod}, p" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/pip.py";
 
-              # toggle between previous and current window
-              "${mod}, grave" = "focuscurrentorlast";
-
               # add / remove master windows
               "${mod}, m" = "layoutmsg, addmaster";
               "${mod}_SHIFT, m" = "layoutmsg, removemaster";
@@ -367,7 +357,7 @@ in {
               "${mod}_SHIFT_CTRL, l" = "dpms, off";
 
               # dunst controls
-              "${mod}_CTRL, grave" = "exec, dunstctl history-pop";
+              "${mod}, grave" = "exec, dunstctl history-pop";
 
               # TODO:
               # special keys

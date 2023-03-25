@@ -162,8 +162,9 @@ in {
 
           ${
           if cfg.settings-template != ""
-          then ''            ,
-                        ${cfg.settings-template}
+          then ''
+            ,
+            cfg.settings-template}
           ''
           else ""
         }
