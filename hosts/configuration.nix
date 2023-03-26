@@ -2,6 +2,8 @@
   pkgs,
   user,
   host,
+  config,
+  lib,
   ...
 }: {
   # handle desktop / window manager
@@ -74,8 +76,8 @@
   # $ nix search wget
   environment = {
     variables = {
-      TERMINAL = "kitty";
-      VISUAL = "nvim";
+      TERMINAL = lib.getExe config.iynaix.terminal.package;
+      VISUAL = lib.getExe pkgs.neovim;
     };
     systemPackages = with pkgs; [
       curl

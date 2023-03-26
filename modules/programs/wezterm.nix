@@ -4,27 +4,25 @@
   config,
   lib,
   ...
-}: let
-  # create a fake gnome-terminal shell script so xdg terminal applications
-  # will open in kitty
-  # https://unix.stackexchange.com/a/642886
-  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" ''
-    shift
-
-    TITLE="$(basename "$1")"
-    if [ -n "$TITLE" ]; then
-      ${pkgs.wezterm}/bin/wezterm start --class "$TITLE" "$@"
-    else
-      ${pkgs.wezterm}/bin/wezterm start "$@"
-    fi
-  '';
-in {
+}: {
   options.iynaix.wezterm = {
     enable = lib.mkEnableOption "wezterm" // {default = true;};
   };
 
-  config = {
-    # environment.systemPackages = [fakeGnomeTerminal];
+  config = lib.mkIf config.iynaix.wezterm.enable {
+    iynaix.terminal = {
+      exec = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) "${lib.getExe pkgs.wezterm} start";
+      fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) (pkgs.writeShellScriptBin "gnome-terminal" ''
+        shift
+
+        TITLE="$(basename "$1")"
+        if [ -n "$TITLE" ]; then
+          ${config.iynaix.terminal.exec} --class "$TITLE" "$@"
+        else
+          ${config.iynaix.terminal.exec} "$@"
+        fi
+      '');
+    };
 
     home-manager.users.${user} = {
       home.packages = with pkgs; [

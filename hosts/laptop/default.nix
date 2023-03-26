@@ -45,7 +45,7 @@ in {
             "format": "  {{essid}}",
             "format-disconnected": "睊  Offline",
             "on-click": "/home/${user}/.config/rofi/rofi-wifi-menu",
-            "on-click-right": "kitty nmtui",
+            "on-click-right": "${config.iynaix.terminal.exec} nmtui",
             "tooltip": false
           }}
         '';

@@ -1,6 +1,8 @@
 {
   pkgs,
   user,
+  config,
+  lib,
   ...
 }: {
   programs.file-roller.enable = true;
@@ -32,10 +34,10 @@
     dconf.settings = {
       # fix open in terminal
       "org/gnome/desktop/applications/terminal" = {
-        exec = "kitty";
+        exec = lib.getExe config.iynaix.terminal.package;
       };
       "org/cinnamon/desktop/applications/terminal" = {
-        exec = "kitty";
+        exec = lib.getExe config.iynaix.terminal.package;
       };
       "org/nemo/preferences" = {
         default-folder-viewer = "list-view";

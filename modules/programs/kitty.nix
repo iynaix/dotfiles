@@ -1,30 +1,25 @@
 {
-  pkgs,
   user,
   config,
   lib,
+  pkgs,
   ...
-}: let
-  # create a fake gnome-terminal shell script so xdg terminal applications
-  # will open in kitty
-  # https://unix.stackexchange.com/a/642886
-  fakeGnomeTerminal = pkgs.writeShellScriptBin "gnome-terminal" ''
-    shift
-
-    TITLE="$(basename "$1")"
-    if [ -n "$TITLE" ]; then
-      ${pkgs.kitty}/bin/kitty -T "$TITLE" -e "$@"
-    else
-      ${pkgs.kitty}/bin/kitty "$@"
-    fi
-  '';
-in {
+}: {
   options.iynaix.kitty = {
     enable = lib.mkEnableOption "kitty" // {default = true;};
   };
 
-  config = {
-    environment.systemPackages = [fakeGnomeTerminal];
+  config = lib.mkIf config.iynaix.kitty.enable {
+    iynaix.terminal.fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.kitty) (pkgs.writeShellScriptBin "gnome-terminal" ''
+      shift
+
+      TITLE="$(basename "$1")"
+      if [ -n "$TITLE" ]; then
+        ${config.iynaix.terminal.exec} -T "$TITLE" "$@"
+      else
+        ${config.iynaix.terminal.exec} "$@"
+      fi
+    '');
 
     home-manager.users.${user} = {
       programs = {

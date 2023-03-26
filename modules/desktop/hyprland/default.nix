@@ -87,9 +87,7 @@ in {
         Keybinds for Hyprland, see
         https://wiki.hyprland.org/Configuring/Binds/
       '';
-      example = ''        {
-                "SUPER, Return" = "exec, kitty";
-              }'';
+      example = ''{ "SUPER, Return" = "exec, kitty"; }'';
       default = {};
     };
     monitors = lib.mkOption {
@@ -242,14 +240,14 @@ in {
               monitor = {"" = "preferred,auto,auto";};
 
               bind = {
-                "${mod}, Return" = "exec, kitty";
+                "${mod}, Return" = "exec, ${lib.getExe config.iynaix.terminal.package}";
                 "${mod}_SHIFT, Return" = "exec, rofi -show drun";
                 "${mod}, BackSpace" = "killactive,";
                 "${mod}, e" = "exec, nemo ~/Downloads";
-                "${mod}_SHIFT, e" = "exec, kitty ranger ~/Downloads";
+                "${mod}_SHIFT, e" = "exec, ${config.iynaix.terminal.exec} ranger ~/Downloads";
                 "${mod}, w" = "exec, brave";
                 "${mod}_SHIFT, w" = "exec, brave --incognito";
-                "${mod}, v" = "exec, kitty nvim";
+                "${mod}, v" = "exec, ${config.iynaix.terminal.exec} nvim";
                 "${mod}_SHIFT, v" = "exec, code";
 
                 "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.regular} 14" -modi power-menu:rofi-power-menu'';
