@@ -17,6 +17,7 @@
     ./pywal.nix
     ./rofi.nix
     ./vscode.nix
+    ./wezterm.nix
     ./zathura.nix
   ];
 

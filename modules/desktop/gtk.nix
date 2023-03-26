@@ -7,7 +7,20 @@
   services.gvfs.enable = true;
 
   home-manager.users.${user} = {
-    home = {packages = with pkgs; [dconf gnome.dconf-editor];};
+    home = {
+      packages = with pkgs; [
+        dconf
+        # gnome.dconf-editor
+      ];
+
+      pointerCursor = {
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
+      };
+    };
 
     gtk = {
       enable = true;

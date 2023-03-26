@@ -360,6 +360,7 @@ in {
                 # dunst controls
                 "${mod}, grave" = "exec, dunstctl history-pop";
 
+                "${mod}, q" = "exec, wezterm";
                 # TODO:
                 # special keys
                 # "XF86AudioPlay" = "mpvctl playpause";
@@ -386,7 +387,7 @@ in {
               };
 
               windowrulev2 = [
-                "dimaround,floating:1"
+                # "dimaround,floating:1"
               ];
 
               windowrule = [

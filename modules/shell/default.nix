@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   user,
   lib,
   ...
@@ -12,6 +13,32 @@
     ./tmux.nix
     ./zsh.nix
   ];
+
+  options.iynaix.terminal = {
+    font = lib.mkOption {
+      type = lib.types.str;
+      default = config.iynaix.font.monospace;
+      description = "Font for the terminal.";
+    };
+
+    size = lib.mkOption {
+      type = lib.types.int;
+      default = 11;
+      description = "Font size for the terminal.";
+    };
+
+    padding = lib.mkOption {
+      type = lib.types.int;
+      default = 12;
+      description = "Padding for the terminal.";
+    };
+
+    opacity = lib.mkOption {
+      type = lib.types.float;
+      default = 0.6;
+      description = "Opacity for the terminal.";
+    };
+  };
 
   options.iynaix.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
@@ -47,12 +74,12 @@
         packages = with pkgs; [
           bat
           fd
+          fzf
           htop
           lazygit
           neofetch
           sd
           ugrep
-          lsix
         ];
       };
     };

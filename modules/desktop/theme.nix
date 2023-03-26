@@ -72,8 +72,6 @@ in {
         "Xft.autohint" = false;
         "Xft.hintstyle" = "hintslight";
         "Xft.lcdfilter" = "lcddefault";
-        "Xcursor.theme" = "Adwaita";
-        "Xcursor.size" = 24;
 
         "*.font" = "JetBrainsMono Nerd Font Mono:Medium:size=12";
         "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";

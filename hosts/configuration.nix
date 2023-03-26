@@ -112,6 +112,9 @@
     };
   };
 
+  # do not install xterm
+  services.xserver.excludePackages = [pkgs.xterm];
+
   # shut sudo up
   security.sudo.extraConfig = "Defaults lecture=never";
 
