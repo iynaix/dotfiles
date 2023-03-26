@@ -386,13 +386,7 @@ in {
               };
 
               windowrulev2 = [
-                # handle save dialogs
-                "float,title:^(Save File)$"
-                "center,title:^(Save File)$"
-                "dimaround,title:^(Save File)$"
-                "float,title:^(File Upload)$"
-                "center,title:^(File Upload)$"
-                "dimaround,title:^(File Upload)$"
+                "dimaround,floating:1"
               ];
 
               windowrule = [

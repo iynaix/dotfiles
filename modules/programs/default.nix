@@ -25,6 +25,7 @@
       home.packages = with pkgs; [
         gparted
         libreoffice
+        libnotify
         # nix dev stuff
         nil
         inputs.alejandra.defaultPackage.${system}

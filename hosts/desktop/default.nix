@@ -98,11 +98,15 @@ in {
         packages = with pkgs; [
           filezilla
           vlc
+          # vial
         ];
       };
 
       programs.obs-studio.enable = true;
     };
+
+    # required for vial to work
+    # services.udev.extraRules = ''KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"'';
 
     iynaix.persist.home.directories = [
       ".config/smplayer"

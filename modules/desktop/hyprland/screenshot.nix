@@ -11,62 +11,67 @@
     if host == "vm"
     then "ALT"
     else "SUPER";
-  grimblast = "${pkgs.hyprwm-contrib.grimblast}/bin/grimblast --notify";
-  hypr-screenshot =
-    pkgs.writeShellScriptBin "hypr-screenshot"
-    /*
-    sh
-    */
-    ''
-      _rofi() {
-          rofi -dmenu -sep '|' -disable-history true -cycle true -lines 4 -theme-str "mainbox { children: [listview]; }" "$@"
-      }
+  # screenshot with rofi options to preselect
+  hypr-screenshot = pkgs.writeShellScriptBin "hypr-screenshot" ''
+    _rofi() {
+        rofi -dmenu -sep '|' -disable-history true -cycle true -lines 4 -theme-str "mainbox { children: [listview]; }" "$@"
+    }
 
-      choice=$(echo "Selection|Window|Monitor|All" | _rofi)
+    choice=$(echo "Selection|Window|Monitor|All" | _rofi)
 
-      screenshots=~/Pictures/Screenshots
-      mkdir -p $screenshots
+    img="/home/${user}/Pictures/Screenshots/$(date --iso-8601=seconds).png"
 
-      img="$screenshots/$(date --iso-8601=seconds).png"
+    # small sleep delay is required so rofi menu doesnt appear in the screenshot
+    case "$choice" in
+      "All")
+        delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
+        sleep $delay
+        grimblast --notify copysave screen $img
+        ;;
+      "Monitor")
+        delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
+        sleep $delay
+        grimblast --notify copysave output $img
+        ;;
+      "Selection")
+        sleep 0.5
+        sleep $delay
+        grimblast --notify copysave area $img
+        ;;
+      "Window")
+        delay=$(echo "0|3|5" | _rofi)
+        sleep 0.5
+        sleep $delay
+        grimblast --notify copysave active $img
+        ;;
+    esac
+  '';
+  # run ocr on selected area and copy to clipboard
+  hypr-ocr = with pkgs;
+    pkgs.writeShellScriptBin "hypr-ocr" ''
+      img="/home/${user}/Pictures/Screenshots/ocr.png"
 
-      # small sleep delay is required so rofi menu doesnt appear in the screenshot
-      case "$choice" in
-        "All")
-          delay=$(echo "0|3|5" | _rofi)
-          sleep 0.5
-          sleep $delay
-          ${grimblast} copysave screen $img
-          ;;
-        "Monitor")
-          delay=$(echo "0|3|5" | _rofi)
-          sleep 0.5
-          sleep $delay
-          ${grimblast} copysave output $img
-          ;;
-        "Selection")
-          sleep 0.5
-          sleep $delay
-          ${grimblast} copysave area $img
-          ;;
-        "Window")
-          delay=$(echo "0|3|5" | _rofi)
-          sleep 0.5
-          sleep $delay
-          ${grimblast} copysave active $img
-          ;;
-      esac
+      grimblast save area $img
+      ${tesseract5}/bin/tesseract $img - | wl-copy
+      rm $img
+      notify-send "$(wl-paste)"
     '';
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [hypr-screenshot];
+      home.packages = with pkgs; [
+        hyprwm-contrib.grimblast
+        hyprwm-contrib.hyprprop
+      ];
     };
 
     iynaix.hyprland.extraBinds = {
-      # screenshots
       bind = {
-        "${mod}, backslash" = "exec, ${grimblast} copy area";
+        "${mod}, backslash" = "exec, grimblast --notify copy area";
         "${mod}_SHIFT, backslash" = "exec, ${hypr-screenshot}/bin/hypr-screenshot";
+        "${mod}_CTRL, backslash" = "exec, ${hypr-ocr}/bin/hypr-ocr";
       };
     };
   };

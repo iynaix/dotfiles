@@ -13,6 +13,8 @@
       homeBinInPath = true;
     };
 
+    programs.zsh.enable = true;
+
     home-manager.users.${user} = {
       programs = {
         zsh = {
