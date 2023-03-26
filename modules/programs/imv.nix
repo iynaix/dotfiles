@@ -15,7 +15,7 @@
     home-manager.users.${user} = {
       home.packages = [pkgs.imv];
 
-      home.file.".config/imv/config".text =
+      xdg.configFile."imv/config".text =
         /*
         ini
         */

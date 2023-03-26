@@ -79,7 +79,7 @@ in {
         "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
       };
 
-      home.file.".config/wal/colorschemes/dark/catppuccin-mocha.json".text = builtins.toJSON {
+      xdg.configFile."wal/colorschemes/dark/catppuccin-mocha.json".text = builtins.toJSON {
         special = {
           inherit (xrdb) background foreground;
           cursor = theme.rosewater;

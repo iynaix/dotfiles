@@ -1,17 +1,13 @@
 {
   pkgs,
   user,
-  config,
-  lib,
   ...
 }: {
   config = {
     home-manager.users.${user} = {
-      home = {
-        file.".config/nvim" = {
-          source = ./nvim;
-          recursive = true;
-        };
+      xdg.configFile."nvim" = {
+        source = ./nvim;
+        recursive = true;
       };
 
       programs.neovim = {

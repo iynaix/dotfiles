@@ -72,7 +72,7 @@ in {
       home-manager.users.${user} = {
         home.packages = [hyprResetMonitors];
 
-        home.file.".config/hypr/ipc.py".source = ./ipc.py;
+        xdg.configFile."hypr/ipc.py".source = ./ipc.py;
       };
 
       iynaix.hyprland.extraBinds = {

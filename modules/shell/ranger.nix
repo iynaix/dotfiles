@@ -7,16 +7,15 @@
 }: {
   config = {
     home-manager.users.${user} = {
-      home = {
-        packages = with pkgs; [ranger];
+      home.packages = [pkgs.ranger];
 
-        file.".config/ranger" = {
+      xdg.configFile = {
+        "ranger" = {
           source = ./ranger;
           recursive = true;
         };
 
-        #
-        file.".config/ranger/shortcuts.conf".text = lib.mkAfter (lib.concatStringsSep "\n"
+        "ranger/shortcuts.conf".text = lib.mkAfter (lib.concatStringsSep "\n"
           (lib.mapAttrsToList
             (name: value: (lib.concatStringsSep "\n" [
               "map g${name} cd ${value}"

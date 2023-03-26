@@ -49,7 +49,7 @@ in {
         });
       };
 
-      home.file.".config/wal/templates/colors-waybar.config".text = lib.mkDefault ''
+      xdg.configFile."wal/templates/colors-waybar.config".text = lib.mkDefault ''
         {{
           "backlight": {{
             "format": "{{icon}}  {{percent}}%",
@@ -170,7 +170,7 @@ in {
         }
         }}'';
 
-      home.file.".config/wal/templates/colors-waybar.css".text =
+      xdg.configFile."wal/templates/colors-waybar.css".text =
         lib.mkDefault
         /*
         css

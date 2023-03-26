@@ -54,19 +54,6 @@
           ugrep
           lsix
         ];
-
-        file.".config/btop/themes/catppuccin-mocha.theme".source = ./btop-catppuccin-mocha.theme;
-
-        # potential vifm shortcuts
-        # file.".config/vifm/vifmrc".text = lib.mkAfter (lib.concatStringsSep "\n"
-        #   (lib.mapAttrsToList
-        #     (name: value: (lib.concatStringsSep "\n" [
-        #       "map g${name} :cd ${value}"
-        #       "map t${name} <tab>:cd ${value} <CR><tab>"
-        #       "map M${name} <tab>:cd ${value} <CR><tab>:mo<CR>"
-        #       "map Y${name} <tab>:cd ${value} <CR><tab>:co<CR>"
-        #     ]))
-        #     config.iynaix.shortcuts));
       };
     };
   };

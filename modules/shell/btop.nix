@@ -16,9 +16,7 @@
         };
       };
 
-      home = {
-        file.".config/btop/themes/catppuccin-mocha.theme".source = ./btop-catppuccin-mocha.theme;
-      };
+      xdg.configFile."btop/themes/catppuccin-mocha.theme".source = ./btop-catppuccin-mocha.theme;
     };
   };
 }

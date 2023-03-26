@@ -37,7 +37,7 @@
         };
       };
 
-      home.file.".config/wal/templates/colors-zathurarc".text = ''
+      xdg.configFile."wal/templates/colors-zathurarc".text = ''
         set default-bg                  "{color0}"
         set default-fg                  "{color10}"
 

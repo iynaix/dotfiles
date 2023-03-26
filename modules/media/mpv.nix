@@ -1,14 +1,8 @@
-{
-  pkgs,
-  user,
-  ...
-}: {
+{user, ...}: {
   home-manager.users.${user} = {
-    home = {
-      file.".config/mpv" = {
-        source = ./mpv;
-        recursive = true;
-      };
+    xdg.configFile."mpv" = {
+      source = ./mpv;
+      recursive = true;
     };
 
     programs = {

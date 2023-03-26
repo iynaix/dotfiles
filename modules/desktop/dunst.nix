@@ -55,7 +55,7 @@ in {
         };
       };
 
-      home.file.".config/wal/templates/colors-dunstrc".text = ''
+      xdg.configFile."wal/templates/colors-dunstrc".text = ''
         [global]
         browser="brave -new-tab"
         corner_radius=8

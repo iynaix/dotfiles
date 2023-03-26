@@ -34,7 +34,6 @@
                 programs.home-manager.enable = true;
               };
             };
-            nixpkgs.overlays = import ../overlays;
           }
           inputs.impermanence.nixosModules.impermanence
           inputs.kmonad.nixosModules.default
