@@ -36,6 +36,8 @@ def set_workspace_orientation(workspace):
             dispatch("layoutmsg", "orientationtop")
         elif wksp["monitor"] == SMALL:
             dispatch("layoutmsg", "orientationleft")
+        else:
+            dispatch("layoutmsg", "orientationcenter")
 
 
 if __name__ == "__main__":
