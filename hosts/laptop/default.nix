@@ -3,7 +3,6 @@
   pkgs,
   user,
   lib,
-  host,
   ...
 }: let
   displayCfg = config.iynaix.displays;
@@ -36,6 +35,8 @@ in {
           };
         };
       };
+
+      terminal.size = 10;
 
       waybar = {
         settings-template = ''
@@ -75,8 +76,6 @@ in {
     services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
     security.pam.services.gdm.enableGnomeKeyring = true;
 
-    home-manager.users.${user} = {
-      programs.kitty.font.size = 10;
-    };
+    home-manager.users.${user} = {};
   };
 }

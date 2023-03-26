@@ -1,11 +1,12 @@
 # build this package standalone with the following command:
 # nix-build default.nix
-{pkgs ? import <nixpkgs> {}}: let
+{pkgs ? import <nixpkgs> {}}:
+with pkgs; let
   pobVersion = "2.25.1";
   luacurlVersion = "0.3.13-1";
   # package lua-curl for luajit
   lua-curl =
-    pkgs.callPackage
+    callPackage
     ({
       luajit,
       fetchFromGitHub,
@@ -21,7 +22,7 @@
           hash = "sha256-16oS4T8Sul8Qs7ymTLtB/dEqRzWZeRAR3VUsm/lKxT4=";
         };
 
-        buildInputs = [pkgs.curl];
+        buildInputs = [curl];
         propagatedBuildInputs = [luajit];
 
         preConfigure = ''
@@ -29,23 +30,23 @@
         '';
       })
     {};
-  pob-frontend = pkgs.stdenv.mkDerivation {
+  pob-frontend = stdenv.mkDerivation {
     pname = "pobfrontend";
     version = "luajit";
 
-    src = pkgs.fetchgit {
+    src = fetchgit {
       url = "https://gitlab.com/bcareil/pobfrontend.git";
       rev = "29feacd42e1f11274bad66514e6ad1a8d732ec21";
       hash = "sha256-4JKMyuTQEGqKTnai6h30FYyYvhiTnGRcNapB8cVrHxg=";
     };
 
-    nativeBuildInputs = with pkgs; [
+    nativeBuildInputs = [
       pkg-config
       meson
       ninja
       lua-curl
     ];
-    buildInputs = with pkgs; [
+    buildInputs = [
       libsForQt5.qt5.qtbase
       libsForQt5.qt5.qttools
       libsForQt5.qt5.wrapQtAppsHook
@@ -61,18 +62,18 @@
       cp ./pobfrontend $out/bin
     '';
   };
-  pob-runtime-src = pkgs.stdenv.mkDerivation {
+  pob-runtime-src = stdenv.mkDerivation {
     name = "pob-runtime-src";
     version = "1167199";
 
-    src = pkgs.fetchzip {
+    src = fetchzip {
       url = "https://github.com/Openarl/PathOfBuilding/files/1167199/PathOfBuilding-runtime-src.zip";
       sha256 = "sha256-74ye6adtYWwVxu1kjCfEzHbKsOoO5/4g+anQemQmZY4=";
       stripRoot = false;
     };
 
     patches = [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/lzip-linux.patch?h=path-of-building-community-git";
         sha256 = "sha256-nbyIArdM7tePGmuh1bkCUfWuf5qM9Ul0JuSjUAERL80=";
       })
@@ -81,7 +82,7 @@
     # everything else from now on is done in the lua directory
     prePatch = "cd LZip";
 
-    nativeBuildInputs = with pkgs; [pkgconf zlib];
+    nativeBuildInputs = [pkgconf zlib];
 
     dontBuild = true;
 
@@ -104,11 +105,11 @@
 in
   # referenced from pob package on AUR
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=path-of-building-community-git
-  pkgs.stdenv.mkDerivation rec {
+  stdenv.mkDerivation rec {
     pname = "path-of-building";
     version = pobVersion;
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${pobVersion}";
@@ -116,13 +117,13 @@ in
     };
 
     patches = [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/PathOfBuilding-force-disable-devmode.patch?h=path-of-building-community-git";
         sha256 = "sha256-dCZZP3yj6rPZn5Z6yK9wJjn9vcHIXBwOtO/kuzK3YFc=";
       })
     ];
 
-    nativeBuildInputs = with pkgs; [makeWrapper];
+    nativeBuildInputs = [makeWrapper];
 
     dontBuild = true;
 
@@ -149,7 +150,7 @@ in
         ln -sv "${desktopItem}/share/applications" $out/share
       '';
 
-    desktopItem = pkgs.makeDesktopItem {
+    desktopItem = makeDesktopItem {
       name = "Path of Building";
       desktopName = "Path of Building";
       comment = "Offline build planner for Path of Exile";

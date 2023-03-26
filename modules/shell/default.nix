@@ -46,7 +46,7 @@
       h = "~";
       dots = "~/projects/dotfiles";
       c = "~/.config";
-      vv = "~/Videos";
+      vd = "~/Videos";
       vaa = "~/Videos/Anime";
       vac = "~/Videos/Anime/Current";
       vC = "~/Videos/Courses";

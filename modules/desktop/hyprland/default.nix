@@ -360,7 +360,7 @@ in {
                 # dunst controls
                 "${mod}, grave" = "exec, dunstctl history-pop";
 
-                "${mod}, q" = "exec, wezterm start --always-new-process";
+                "${mod}, q" = "exec, wezterm start";
                 # TODO:
                 # special keys
                 # "XF86AudioPlay" = "mpvctl playpause";
