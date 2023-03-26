@@ -5,12 +5,23 @@
   config,
   host,
   ...
-}: {
+}: let
+  zdotdir = "/home/${user}/.config/zsh";
+  histFile = "${zdotdir}/.zsh_history";
+in {
   config = {
     # set as default shell for user
     environment = {
       shells = [pkgs.zsh];
       homeBinInPath = true;
+    };
+
+    programs.zsh = {
+      enable = true;
+      # use home-manager config
+      shellInit = "source ${zdotdir}/.zshenv";
+      interactiveShellInit = "source ${zdotdir}/.zshrc";
+      histFile = histFile;
     };
 
     home-manager.users.${user} = {
@@ -22,8 +33,14 @@
           enableCompletion = true;
           enableAutosuggestions = true;
           enableSyntaxHighlighting = true;
-          history.path = "$ZDOTDIR/.zsh_history";
-          historySubstringSearch.enable = true;
+          history.path = histFile;
+          historySubstringSearch = {
+            enable = true;
+            # fix up and down arrows for substring search not worling
+            # https://reddit.com/r/zsh/comments/kae8yg/plugin_zshhistorysubstringsearch_not_working/
+            searchUpKey = "^[OA";
+            searchDownKey = "^[OB";
+          };
         };
 
         starship = {
