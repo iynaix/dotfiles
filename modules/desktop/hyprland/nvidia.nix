@@ -1,12 +1,17 @@
 {
-  pkgs,
-  host,
-  user,
   lib,
   config,
   ...
 }: {
-  config = lib.mkIf (config.iynaix.hyprland.enable && host == "desktop") {
+  config = lib.mkIf config.iynaix.hyprland.nvidia {
+    # enable nvidia support
+    services.xserver.videoDrivers = ["nvidia"];
+
+    hardware.opengl = {
+      enable = true;
+      driSupport = true;
+    };
+
     hardware.nvidia = {
       # open = true;
       modesetting.enable = true;

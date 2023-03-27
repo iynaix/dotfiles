@@ -81,6 +81,7 @@ in {
 
   options.iynaix.hyprland = {
     enable = lib.mkEnableOption "Hyprland" // {default = true;};
+    nvidia = lib.mkEnableOption "Nvidia";
     keybinds = lib.mkOption {
       type = with lib.types; attrsOf str;
       description = ''

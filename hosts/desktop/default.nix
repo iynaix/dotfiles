@@ -27,6 +27,7 @@ in {
       # wayland settings
       hyprland = {
         enable = true;
+        nvidia = true;
         monitors = {
           "${displayCfg.monitor1}" = "3440x1440@144,1440x1080,1";
           "${displayCfg.monitor2}" = "2560x1440,0x728,1,transform,1";
@@ -74,14 +75,6 @@ in {
     time.hardwareClockInLocalTime = true;
 
     networking.hostId = "89eaa833"; # required for zfs
-
-    # enable nvidia support
-    services.xserver.videoDrivers = ["nvidia"];
-
-    hardware.opengl = {
-      enable = true;
-      driSupport = true;
-    };
 
     # environment.systemPackages = with pkgs; [ ];
 

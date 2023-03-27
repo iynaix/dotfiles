@@ -117,6 +117,12 @@
   # do not install xterm
   services.xserver.excludePackages = [pkgs.xterm];
 
+  # enable opengl
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+  };
+
   # shut sudo up
   security.sudo.extraConfig = "Defaults lecture=never";
 
