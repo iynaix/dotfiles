@@ -126,7 +126,6 @@ in {
           tree = "exa --group-directories-first --color-scale --icons --tree";
           v = "nvim";
           wget = "wget - -content-disposition";
-          xclip = "xclip -selection c";
           coinfc = "openproj coinfc";
 
           # cd aliases
