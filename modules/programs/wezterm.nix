@@ -82,7 +82,6 @@
             end
 
             return {
-              front_end = "WebGpu",
               font = wezterm.font('${font}', {
                 weight = "Regular",
               }),

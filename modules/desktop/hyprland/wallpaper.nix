@@ -75,10 +75,10 @@
         sha256 = "sha256-h8E9OXnw2q9TPK+zWdE2q4i7+g5xOJXJFphT2E71xu8=";
       };
 
-      cargoDeps = old.cargoDeps.overrideAttrs (_: {
-        inherit src;
-        outputHash = "sha256-DsRF1yY+0WPWnPhQpOjmnOclkvGBMB7qKHuORgzrUK0=";
-      });
+      cargoDeps = pkgs.rustPlatform.importCargoLock {
+        lockFile = src + "/Cargo.lock";
+        allowBuiltinFetchGit = true;
+      };
     });
 in {
   config = {
