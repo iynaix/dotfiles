@@ -11,7 +11,7 @@
     home-manager.users.${user} = {
       programs.pywal.enable = true;
 
-      # helix?
+      # TODO: helix?
 
       xdg.configFile."wal/templates/colors-hexless.sh".text = ''
         # Shell variables

@@ -1,74 +1,6 @@
 " modern vim, forget about vi compatibility
 set nocompatible
 
-" Install vim-plug if not found
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
-
-" initialize plugins
-" Specify a directory for plugins
-call plug#begin('~/.vim/plugged')
-
-Plug 'akinsho/nvim-bufferline.lua'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'haishanh/night-owl.vim'
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'haya14busa/incsearch.vim'
-Plug 'hoob3rt/lualine.nvim'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'karb94/neoscroll.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'mattn/emmet-vim'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'norcalli/nvim-colorizer.lua'
-Plug 'ojroques/nvim-bufdel'
-Plug 'pantharshit00/vim-prisma'
-Plug 'tommcdo/vim-exchange' " cxiw ., cxx ., cxc
-Plug 'tpope/vim-abolish' " :%S
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired' " helpful shorthand like [b ]b
-Plug 'vim-scripts/IndexedSearch'
-Plug 'vim-scripts/matchit.zip'
-Plug 'windwp/nvim-autopairs'
-Plug 'rummik/vim-nix', { 'branch': 'language-fencing' }
-
-" Language Server Protocol
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-compe'
-Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
-Plug 'folke/trouble.nvim'
-Plug 'mhartington/formatter.nvim'
-
-" File Management
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'kyazdani42/nvim-tree.lua'
-
-" Syntax Highlighting
-" https://github.com/nvim-treesitter/nvim-treesitter/issues/1111
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'MaxMEllon/vim-jsx-pretty' " fix indentation in jsx until treesitter can
-
-" tmux plugins
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'preservim/vimux'
-call plug#end()
-
 " enable 24bit true color
 if (has("termguicolors"))
     set termguicolors
@@ -538,9 +470,6 @@ inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 " nvim-treesitter
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {
-    'html', 'javascript', 'typescript', 'tsx', 'css', 'json'
-  },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = true

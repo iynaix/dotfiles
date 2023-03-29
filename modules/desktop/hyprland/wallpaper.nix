@@ -71,8 +71,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "Horus645";
         repo = "swww";
-        rev = "ad6439d5707df9fd253aeed9500964e48737b1b0";
-        sha256 = "sha256-h8E9OXnw2q9TPK+zWdE2q4i7+g5xOJXJFphT2E71xu8=";
+        rev = "6739c9c0244ced29db81ab887f4527d59fb967e2";
+        sha256 = "sha256-gsQlhNS92oY67azJZF7ZTqwCe3GVOs0LYdEm9qJXKQo=";
       };
 
       cargoDeps = pkgs.rustPlatform.importCargoLock {
