@@ -160,16 +160,9 @@ in {
             // "on-click": "hypr-wallpaper",
             // "on-click-right": "hypr-theme",
             "tooltip": false
-          }}
+          }}${lib.optionalString (cfg.settings-template != "") ","}
 
-          ${
-          if cfg.settings-template != ""
-          then ''
-            ,
-            cfg.settings-template}
-          ''
-          else ""
-        }
+          ${cfg.settings-template}
         }}'';
 
       xdg.configFile."wal/templates/colors-waybar.css".text =
