@@ -77,6 +77,7 @@
   environment = {
     variables = {
       TERMINAL = lib.getExe config.iynaix.terminal.package;
+      EDITOR = lib.getExe pkgs.neovim;
       VISUAL = lib.getExe pkgs.neovim;
     };
     systemPackages = with pkgs; [

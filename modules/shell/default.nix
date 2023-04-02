@@ -4,7 +4,15 @@
   user,
   lib,
   ...
-}: {
+}: let
+  renameutils-renamed = pkgs.renameutils.overrideAttrs (old: {
+    # fix name conflict with imv imageviewer
+    postInstall = ''
+      mv $out/bin/imv $out/bin/iimv
+      mv $out/share/man/man1/imv.1 $out/share/man/man1/iimv.1
+    '';
+  });
+in {
   imports = [
     ./btop.nix
     ./git.nix
@@ -100,6 +108,7 @@
           htop
           lazygit
           neofetch
+          renameutils-renamed
           sd
           ugrep
         ];
