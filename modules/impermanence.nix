@@ -53,7 +53,7 @@ in {
     users.mutableUsers = false;
     # create a password with for root and $user with:
     # mkpasswd -m sha-512 'PASSWORD' | sudo tee -a /persist/etc/shadow/root
-    users.users.root.passwordFile = "/persist//etc/shadow/root";
+    users.users.root.passwordFile = "/persist/etc/shadow/root";
     users.users.${user}.passwordFile = "/persist/etc/shadow/${user}";
 
     # persist files on root filesystem

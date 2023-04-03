@@ -3,7 +3,6 @@
   user,
   lib,
   config,
-  host,
   ...
 }: let
   cfg = config.iynaix.pathofbuilding;
@@ -16,5 +15,9 @@ in {
     home-manager.users.${user} = {
       home.packages = [(pkgs.callPackage ../../pkgs/pathofbuilding {})];
     };
+
+    iynaix.persist.home.directories = [
+      ".local/share/pobfrontend"
+    ];
   };
 }

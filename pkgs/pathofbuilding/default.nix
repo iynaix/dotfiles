@@ -2,7 +2,8 @@
 # nix-build default.nix
 {pkgs ? import <nixpkgs> {}}:
 with pkgs; let
-  pobVersion = "2.25.1";
+  pobVersion = "2.26.3";
+  pobSha256 = "sha256-S8yeYaS3JE46ZK9Ak4/ANHh/UA09jhw1WtBUM7xjZyY=";
   luacurlVersion = "0.3.13-1";
   # package lua-curl for luajit
   lua-curl =
@@ -113,7 +114,7 @@ in
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${pobVersion}";
-      sha256 = "sha256-3ZctM3sRd5fviAd4oHDLFXBpsP1VPRxVe0qor4RrvVE=";
+      sha256 = pobSha256;
     };
 
     patches = [

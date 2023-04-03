@@ -65,6 +65,7 @@ in {
             tool = "nvim -d";
             guitool = "code";
           };
+          pull = {rebase = true;};
           push = {default = "simple";};
         };
         aliases = {reword = "!sh ${gitReword}/bin/git-reword";};

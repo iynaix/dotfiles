@@ -8,8 +8,8 @@
   renameutils-renamed = pkgs.renameutils.overrideAttrs (old: {
     # fix name conflict with imv imageviewer
     postInstall = ''
-      mv $out/bin/imv $out/bin/iimv
-      mv $out/share/man/man1/imv.1 $out/share/man/man1/iimv.1
+      mv $out/bin/imv $out/bin/imv2
+      mv $out/share/man/man1/imv.1 $out/share/man/man1/imv2.1
     '';
   });
 in {

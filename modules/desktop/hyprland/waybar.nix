@@ -44,8 +44,8 @@ in {
           src = pkgs.fetchFromGitHub {
             owner = "Alexays";
             repo = "Waybar";
-            rev = "9fd2703cb9c1ecc3f6cc18ce076d790e42ba47cf";
-            sha256 = "sha256-wyZ5E9xpJsGj+Ag9J+f8I3n2EUFES2keRtGo6HISb+o=";
+            rev = "3d980f92a399a3656256d36c586940f3db928d24";
+            sha256 = "sha256-+r6zryc52RhGSt+iGAb1GmTiRV077sx7fQX7MXHxGoo=";
           };
         });
       };
