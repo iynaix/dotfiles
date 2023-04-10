@@ -1,6 +1,9 @@
 import json
+import socket
 import sys
 import subprocess
+
+USE_CENTERED_MASTER = False
 
 ULTRAWIDE = "DP-2"
 VERTICAL = "DP-4"
@@ -12,7 +15,7 @@ def info(cmd):
     with subprocess.Popen(["hyprctl", "-j", cmd], stdout=subprocess.PIPE) as proc:
         return json.loads(proc.stdout.read())
 
-IS_DESKTOP = set([m["name"] for m in info("monitors")]) == {ULTRAWIDE, VERTICAL, SMALL}
+IS_DESKTOP = socket.gethostname().endswith("desktop")
 
 def workspace_info(workspace):
     for wksp in info("workspaces"):
@@ -36,7 +39,7 @@ def set_workspace_orientation(workspace):
             dispatch("layoutmsg", "orientationtop")
         elif wksp["monitor"] == SMALL:
             dispatch("layoutmsg", "orientationleft")
-        else:
+        elif USE_CENTERED_MASTER and wksp["monitor"] == ULTRAWIDE:
             dispatch("layoutmsg", "orientationcenter")
 
 

@@ -12,13 +12,13 @@
 
       programs.neovim = {
         enable = true;
-        defaultEditor = true;
+        # defaultEditor = true;
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
 
-        # withNodeJs = true;
-        # withPython3 = true;
+        withNodeJs = true;
+        withPython3 = true;
         extraPackages = with pkgs; [fzf gcc nodePackages.typescript-language-server];
         plugins = with pkgs.vimPlugins; [
           bufferline-nvim
