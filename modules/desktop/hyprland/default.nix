@@ -208,17 +208,14 @@ in {
             };
 
             dwindle = {
-              pseudotile = true; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+              pseudotile = true; # master switch for pseudotiling.
               preserve_split = true; # you probably want this
             };
 
             master = {
               new_is_master = false;
               mfact = 0.5;
-              orientation =
-                if host == "desktop"
-                then "center"
-                else "left";
+              orientation = "left";
             };
 
             binds = {

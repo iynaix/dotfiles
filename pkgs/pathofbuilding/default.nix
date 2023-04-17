@@ -2,8 +2,8 @@
 # nix-build default.nix
 {pkgs ? import <nixpkgs> {}}:
 with pkgs; let
-  pobVersion = "2.27.2";
-  pobSha256 = "sha256-z5jkTa3Cfsg+A/fK8k37/bwLRDlEvWBoZhwYrOnjyjY=";
+  pobVersion = "2.28.0";
+  pobSha256 = "sha256-IO6qUE6OcjNibljNzcJQlwji3DZqrBm7cvHedKuAwpM=";
   luacurlVersion = "0.3.13-1";
   # package lua-curl for luajit
   lua-curl =
