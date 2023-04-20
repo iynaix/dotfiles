@@ -39,14 +39,17 @@ in {
 
       programs.waybar = {
         enable = true;
+
         # use a fresher version of waybar
-        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (final: prev: {
+        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (oldAttrs: {
           src = pkgs.fetchFromGitHub {
             owner = "Alexays";
             repo = "Waybar";
-            rev = "3d980f92a399a3656256d36c586940f3db928d24";
-            sha256 = "sha256-+r6zryc52RhGSt+iGAb1GmTiRV077sx7fQX7MXHxGoo=";
+            rev = "a9a222346990b46e4c928a1c57cf0678120721de";
+            sha256 = "sha256-OkThVQ9MHQY18xlbaiwvNW80jF5wNLtiPEVd/4UBRSk=";
           };
+
+          mesonFlags = oldAttrs.mesonFlags ++ ["-Dcava=disabled"];
         });
       };
 

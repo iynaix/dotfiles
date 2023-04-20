@@ -5,8 +5,8 @@
   lib,
   ...
 }: let
-  renameutils-renamed = pkgs.renameutils.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs ++ [pkgs.makeWrapper];
+  renameutils-renamed = pkgs.renameutils.overrideAttrs (oldAttrs: {
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [pkgs.makeWrapper];
 
     # fix name conflict with imv imageviewer
     postInstall = ''

@@ -110,7 +110,7 @@ in {
     # transmission dark mode, the default theme is hideous
     nixpkgs.overlays = [
       (self: super: {
-        transmission = super.transmission.overrideAttrs (old: rec {
+        transmission = super.transmission.overrideAttrs (oldAttrs: rec {
           themeSrc =
             super.fetchzip
             {
@@ -119,7 +119,7 @@ in {
             };
           # sed command taken from original install.sh script
           postInstall = ''
-            ${old.postInstall}
+            ${oldAttrs.postInstall}
             cp -RT ${themeSrc}/web/ $out/share/transmission/web/
             sed -i '21i\\t\t<link href="./style/transmission/soft-theme.min.css" type="text/css" rel="stylesheet" />\n\t\t<link href="style/transmission/soft-dark-theme.min.css" type="text/css" rel="stylesheet" />\n' $out/share/transmission/web/index.html;
           '';

@@ -120,12 +120,12 @@
 
     nixpkgs.overlays = [
       (self: super: {
-        lsix = super.lsix.overrideAttrs (old: {
+        lsix = super.lsix.overrideAttrs (oldAttrs: {
           # add default font to silence null font errors
           postFixup = ''
             substituteInPlace $out/bin/lsix \
               --replace '#fontfamily=Mincho' 'fontfamily="JetBrains-Mono-Regular-Nerd-Font-Complete"'
-            ${old.postFixup}
+            ${oldAttrs.postFixup}
           '';
         });
       })
