@@ -50,15 +50,6 @@ in {
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" [
         ''
-          menuentry "Arch Linux" {
-            insmod part_msdos
-            insmod ext2
-            search --no-floppy --fs-uuid --set=root 696be7fa-e1d2-4373-ad54-360a93b7c9e2
-            linux /boot/vmlinuz-linux root=UUID=696be7fa-e1d2-4373-ad54-360a93b7c9e2 rw quiet
-            initrd /boot/intel-ucode.img /boot/initramfs-linux.img
-          }
-        ''
-        ''
           menuentry "Windows 10" {
             insmod part_gpt
             insmod fat
