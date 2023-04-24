@@ -47,6 +47,9 @@ in {
       torrenters.enable = true;
     };
 
+    # by-id doesn't seem to work with amd mobo
+    boot.zfs.devNodes = "/dev/disk/by-partuuid";
+
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" [
         ''

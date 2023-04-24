@@ -6,11 +6,14 @@
   inputs,
   ...
 }: {
-  options.iynaix.zfs = {
-    enable = lib.mkEnableOption "Enable zfs" // {default = true;};
+  options.iynaix = {
+    zfs = {
+      enable = lib.mkEnableOption "Enable zfs" // {default = true;};
+      snapshots = lib.mkEnableOption "Enable zfs snapshots" // {default = true;};
+    };
   };
 
-  config = {
+  config = lib.mkIf config.iynaix.zfs.enable {
     # booting with zfs
     boot.supportedFilesystems = ["zfs"];
     boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
@@ -44,6 +47,17 @@
     fileSystems."/persist" = {
       device = "zroot/safe/persist";
       fsType = "zfs";
+    };
+
+    services.sanoid = lib.mkIf config.iynaix.zfs.snapshots {
+      enable = true;
+
+      datasets."zroot/safe" = {
+        hourly = 50;
+        daily = 20;
+        weekly = 6;
+        monthly = 3;
+      };
     };
   };
 }
