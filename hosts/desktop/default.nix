@@ -53,12 +53,12 @@ in {
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" [
         ''
-          menuentry "Windows 10" {
+          menuentry "Windows 11" {
             insmod part_gpt
             insmod fat
             insmod search_fs_uuid
             insmod chain
-            search --fs-uuid --set=root 8651-D10F
+            search --fs-uuid --set=root FA1C-F224
             chainloader /EFI/Microsoft/Boot/bootmgfw.efi
           }
         ''
