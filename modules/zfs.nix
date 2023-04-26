@@ -8,8 +8,8 @@
 }: {
   options.iynaix = {
     zfs = {
-      enable = lib.mkEnableOption "Enable zfs" // {default = true;};
-      snapshots = lib.mkEnableOption "Enable zfs snapshots" // {default = true;};
+      enable = lib.mkEnableOption "zfs" // {default = true;};
+      snapshots = lib.mkEnableOption "zfs snapshots" // {default = true;};
     };
   };
 

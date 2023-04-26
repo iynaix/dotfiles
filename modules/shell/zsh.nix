@@ -209,6 +209,14 @@ in {
           }
           compdef _openproj openproj
 
+          renamer() {
+              pushd ~/projects/personal-graphql
+              # activate direnv
+              direnv allow && eval "$(direnv export bash)"
+              yarn renamer
+              popd
+          }
+
           # emacs mode
           set -o emacs
 

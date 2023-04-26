@@ -1,7 +1,6 @@
 {
   pkgs,
   user,
-  host,
   lib,
   config,
   ...
@@ -148,7 +147,7 @@ in {
             "format-muted": "婢 Muted",
             "on-click": "pamixer -t",
             "on-click-right": "pavucontrol",
-            ${lib.optionalString (host == "desktop") ''"on-click-middle": "reset-dac",''}
+            ${lib.optionalString (config.iynaix.dac) ''"on-click-middle": "reset-dac",''}
             "scroll-step": 1,
             "tooltip": false
           }},

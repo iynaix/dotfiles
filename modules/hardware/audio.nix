@@ -1,15 +1,19 @@
 {
   pkgs,
-  host,
+  config,
   user,
   lib,
   ...
 }: let
-  hasDac = host == "desktop";
+  hasDac = config.iynaix.dac;
   reset-dac = pkgs.writeShellScriptBin "reset-dac" ''
     sudo ${pkgs.usb-modeswitch}/bin/usb_modeswitch -v 0x262a -p 0x1048 --reset-usb
   '';
 in {
+  options.iynaix = {
+    dac = lib.mkEnableOption "DAC";
+  };
+
   config = {
     # setup pipewire for audio
     security.rtkit.enable = true;

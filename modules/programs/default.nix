@@ -8,6 +8,7 @@
   imports = [
     ./brave.nix
     ./firefox.nix
+    ./gparted.nix
     ./helix.nix
     ./imv.nix
     ./keyring.nix
@@ -24,7 +25,6 @@
   config = {
     home-manager.users.${user} = {
       home.packages = with pkgs; [
-        gparted
         libreoffice
         libnotify
         # nix dev stuff
