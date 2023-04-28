@@ -5,13 +5,11 @@
   lib,
   ...
 }: {
-  options = {
-    iynaix.smplayer = {
-      enable = lib.mkEnableOption "smplayer";
-    };
+  options.iynaix.smplayer = {
+    enable = lib.mkEnableOption "smplayer";
   };
 
-  config = {
+  config = lib.mkIf config.iynaix.smplayer.enable {
     home-manager.users.${user} = {
       xdg.configFile."smplayer/themes" = {
         source = ./smplayer-themes;

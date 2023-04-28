@@ -147,7 +147,7 @@ in {
             "format-muted": "婢 Muted",
             "on-click": "pamixer -t",
             "on-click-right": "pavucontrol",
-            ${lib.optionalString (config.iynaix.dac) ''"on-click-middle": "reset-dac",''}
+            ${lib.optionalString (config.iynaix.dac.enable) ''"on-click-middle": "reset-dac",''}
             "scroll-step": 1,
             "tooltip": false
           }},

@@ -5,5 +5,5 @@
   config,
   ...
 }: {
-  imports = [./audio.nix ./backlight.nix];
+  imports = [./audio.nix ./backlight.nix ./am5.nix];
 }

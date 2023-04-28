@@ -12,6 +12,10 @@ in {
 
   config = {
     iynaix = {
+      # hardware
+      dac.enable = true;
+      am5.enable = true;
+
       displays = {
         monitor1 = "DP-2";
         monitor2 =
@@ -45,10 +49,8 @@ in {
 
       smplayer.enable = true;
       torrenters.enable = true;
+      pathofbuilding.enable = false;
     };
-
-    # by-id doesn't seem to work with amd mobo
-    boot.zfs.devNodes = "/dev/disk/by-partuuid";
 
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" [

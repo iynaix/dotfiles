@@ -19,7 +19,7 @@ in {
     enable = lib.mkEnableOption "Torrenting Applications";
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
       programs = {
         yt-dlp = {
@@ -42,7 +42,7 @@ in {
       };
 
       # extra downloader specific settings
-      gtk.gtk3 = lib.mkIf cfg.enable {
+      gtk.gtk3 = {
         bookmarks = lib.mkAfter [
           "file:///media/6TBRED/Anime/Current Anime Current"
           "file:///media/6TBRED/US/Current TV Current"

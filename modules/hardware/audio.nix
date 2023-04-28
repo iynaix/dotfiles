@@ -5,13 +5,13 @@
   lib,
   ...
 }: let
-  hasDac = config.iynaix.dac;
+  hasDac = config.iynaix.dac.enable;
   reset-dac = pkgs.writeShellScriptBin "reset-dac" ''
     sudo ${pkgs.usb-modeswitch}/bin/usb_modeswitch -v 0x262a -p 0x1048 --reset-usb
   '';
 in {
   options.iynaix = {
-    dac = lib.mkEnableOption "DAC";
+    dac.enable = lib.mkEnableOption "DAC";
   };
 
   config = {
