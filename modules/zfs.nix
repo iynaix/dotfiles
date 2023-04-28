@@ -52,7 +52,14 @@
     services.sanoid = lib.mkIf config.iynaix.zfs.snapshots {
       enable = true;
 
-      datasets."zroot/safe" = {
+      datasets."zroot/safe/home" = {
+        hourly = 50;
+        daily = 20;
+        weekly = 6;
+        monthly = 3;
+      };
+
+      datasets."zroot/safe/persist" = {
         hourly = 50;
         daily = 20;
         weekly = 6;

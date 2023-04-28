@@ -40,16 +40,6 @@ in {
           ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
         };
       };
-
-      # extra downloader specific settings
-      gtk.gtk3 = {
-        bookmarks = lib.mkAfter [
-          "file:///media/6TBRED/Anime/Current Anime Current"
-          "file:///media/6TBRED/US/Current TV Current"
-          "file:///media/6TBRED/New TV New"
-          "file:///media/6TBRED/Movies"
-        ];
-      };
     };
   };
 }

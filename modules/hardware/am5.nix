@@ -14,5 +14,8 @@
 
     # by-id doesn't seem to work with amd mobo
     boot.zfs.devNodes = "/dev/disk/by-partuuid";
+
+    # fix clock to be compatible with windows
+    time.hardwareClockInLocalTime = true;
   };
 }

@@ -15,22 +15,6 @@
   boot.kernelModules = [];
   boot.extraModulePackages = [];
 
-  # extra HDDs
-  fileSystems."/media/Files" = {
-    device = "/dev/disk/by-label/Files";
-    fsType = "ext4";
-  };
-
-  fileSystems."/media/6TBRED" = {
-    device = "/dev/disk/by-label/6TBRED";
-    fsType = "ext4";
-  };
-
-  fileSystems."/media/6TBRED2" = {
-    device = "/dev/disk/by-label/6TBRED2";
-    fsType = "ext4";
-  };
-
   swapDevices = [];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -41,6 +25,6 @@
   # networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode =
+  hardware.cpu.amd.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

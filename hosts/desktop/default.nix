@@ -2,7 +2,6 @@
   config,
   pkgs,
   user,
-  lib,
   ...
 }: let
   displayCfg = config.iynaix.displays;
@@ -13,8 +12,9 @@ in {
   config = {
     iynaix = {
       # hardware
-      dac.enable = true;
       am5.enable = true;
+      dac.enable = true;
+      hdds.enable = true;
 
       displays = {
         monitor1 = "DP-2";
@@ -52,35 +52,9 @@ in {
       pathofbuilding.enable = false;
     };
 
-    boot.loader.grub = {
-      extraEntries = lib.concatStringsSep "\n" [
-        ''
-          menuentry "Windows 11" {
-            insmod part_gpt
-            insmod fat
-            insmod search_fs_uuid
-            insmod chain
-            search --fs-uuid --set=root FA1C-F224
-            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-          }
-        ''
-      ];
-    };
-
-    # fix clock to be compatible with windows
-    time.hardwareClockInLocalTime = true;
-
     networking.hostId = "89eaa833"; # required for zfs
 
     # environment.systemPackages = with pkgs; [ ];
-
-    # symlinks from other drives
-    systemd.tmpfiles.rules = [
-      "L+ /home/${user}/Documents   - - - - /media/Files/Documents"
-      "L+ /home/${user}/Downloads   - - - - /media/Files/Downloads"
-      "L+ /home/${user}/Pictures   - - - - /media/Files/Pictures"
-      "L+ /home/${user}/Videos   - - - - /media/6TBRED"
-    ];
 
     home-manager.users.${user} = {
       home = {
