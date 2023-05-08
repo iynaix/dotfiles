@@ -60,7 +60,7 @@ in {
               "󰃞",
               "󰃟",
               "󰃝",
-              ""
+              "󰃠"
             ],
             "on-scroll-down": "brightnessctl s 1%-",
             "on-scroll-up": "brightnessctl s +1%"
@@ -124,7 +124,7 @@ in {
           "modules-right": [ "network", "pulseaudio", "battery", "clock" ],
 
           "network": {{
-            "format-disconnected": "睊  Offline",
+            "format-disconnected": "󰖪  Offline",
             "format-ethernet": "",
             "tooltip": false
           }},
@@ -138,7 +138,7 @@ in {
               "",
               ""
             ],
-            "format-muted": "婢 Muted",
+            "format-muted": "󰸈 Muted",
             "on-click": "pamixer -t",
             "on-click-right": "pavucontrol",
             ${lib.optionalString (config.iynaix.dac.enable) ''"on-click-middle": "reset-dac",''}
@@ -198,7 +198,7 @@ in {
             color: {color0};
             margin-left: 4px;
             padding: 0 12px;
-            font-size: 20px;
+            font-size: 16px;
             border-radius: 12px 0 0 12px;
           }}
 

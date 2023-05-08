@@ -28,6 +28,14 @@
     };
   };
 
+  # enable serial console tty
+  # https://github.com/NixOS/nixpkgs/issues/84105
+  systemd.services."serial-getty@ttyS0" = {
+    enable = true;
+    wantedBy = ["getty.target"]; # to start at boot
+    serviceConfig.Restart = "always"; # restart when session is closed
+  };
+
   networking.hostName = "${user}-${host}"; # Define your hostname.
 
   # Enable networking

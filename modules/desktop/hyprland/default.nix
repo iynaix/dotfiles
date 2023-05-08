@@ -116,18 +116,6 @@ in {
     services.xserver.displayManager.lightdm.enable = lib.mkForce false;
     # services.xserver.displayManager.sddm.enable = lib.mkForce true;
 
-    services.greetd = {
-      enable = true;
-      settings = {
-        default_session.command = "${pkgs.greetd.greetd}/bin/agreety --cmd Hyprland";
-
-        initial_session = {
-          command = "Hyprland";
-          inherit user;
-        };
-      };
-    };
-
     programs.hyprland.enable = true;
 
     environment.systemPackages = with pkgs; [
@@ -135,6 +123,20 @@ in {
     ];
 
     home-manager.users.${user} = {
+      # start hyprland
+      programs.zsh = {
+        loginExtra = ''
+          if [ "$(tty)" = "/dev/tty1" ]; then
+            exec Hyprland &> /dev/null
+          fi
+        '';
+        profileExtra = ''
+          if [ "$(tty)" = "/dev/tty1" ]; then
+            exec Hyprland &> /dev/null
+          fi
+        '';
+      };
+
       home = {
         sessionVariables = {
           "XCURSOR_SIZE" = "24";
