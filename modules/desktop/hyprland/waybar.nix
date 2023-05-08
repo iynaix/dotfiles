@@ -105,12 +105,6 @@ in {
             "tooltip-format": "<tt><small>{{calendar}}</small></tt>"
           }},
 
-          "custom/power": {{
-            "format": "",
-            "on-click": "rofi -show power-menu -modi power-menu:/home/${user}/.config/rofi/scripts/rofi-power-menu -theme /home/${user}/.config/rofi/powermenu.rasi",
-            "tooltip": false
-          }},
-
           "hyprland/window": {{
             "separate-outputs": true
           }},
