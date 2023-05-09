@@ -49,7 +49,7 @@ in {
 
       smplayer.enable = true;
       torrenters.enable = true;
-      pathofbuilding.enable = false;
+      pathofbuilding.enable = true;
     };
 
     networking.hostId = "89eaa833"; # required for zfs

@@ -30,6 +30,11 @@
 
   # enable serial console tty
   # https://github.com/NixOS/nixpkgs/issues/84105
+  boot.kernelParams = [
+    "console=ttyS0,115200"
+    "console=tty1"
+  ];
+
   systemd.services."serial-getty@ttyS0" = {
     enable = true;
     wantedBy = ["getty.target"]; # to start at boot

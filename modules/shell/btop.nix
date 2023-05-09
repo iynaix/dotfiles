@@ -1,10 +1,4 @@
-{
-  pkgs,
-  user,
-  lib,
-  config,
-  ...
-}: {
+{user, ...}: {
   config = {
     home-manager.users.${user} = {
       programs.btop = {

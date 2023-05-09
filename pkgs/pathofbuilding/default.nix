@@ -4,33 +4,6 @@
 with pkgs; let
   pobVersion = "2.28.0";
   pobSha256 = "sha256-IO6qUE6OcjNibljNzcJQlwji3DZqrBm7cvHedKuAwpM=";
-  luacurlVersion = "0.3.13-1";
-  # package lua-curl for luajit
-  lua-curl =
-    callPackage
-    ({
-      luajit,
-      fetchFromGitHub,
-    }:
-      luajit.pkgs.buildLuarocksPackage rec {
-        pname = "lua-curl";
-        version = luacurlVersion;
-
-        src = fetchFromGitHub {
-          owner = "Lua-cURL";
-          repo = "Lua-cURLv3";
-          rev = "833e87c830bed05fe3910a33f573c202a48ba6d4";
-          hash = "sha256-16oS4T8Sul8Qs7ymTLtB/dEqRzWZeRAR3VUsm/lKxT4=";
-        };
-
-        buildInputs = [curl];
-        propagatedBuildInputs = [luajit];
-
-        preConfigure = ''
-          ln -s rockspecs/${pname}-${version}.rockspec .
-        '';
-      })
-    {};
   pob-frontend = stdenv.mkDerivation {
     pname = "pobfrontend";
     version = "luajit";
@@ -45,7 +18,7 @@ with pkgs; let
       pkg-config
       meson
       ninja
-      lua-curl
+      luajitPackages.lua-curl
     ];
     buildInputs = [
       libsForQt5.qt5.qtbase
@@ -135,7 +108,7 @@ in
       ''
         mkdir -p $out/bin
         cp -r * $out
-        cp ${lua-curl}/lib/lua/5.1/lcurl.so $out
+        cp ${luajitPackages.lua-curl}/lib/lua/5.1/lcurl.so $out
         cp ${pob-runtime-src}/bin/lzip.so $out
         cp ${pob-frontend}/bin/pobfrontend $out
 
