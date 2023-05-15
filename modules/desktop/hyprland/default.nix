@@ -127,12 +127,12 @@ in {
       programs.zsh = {
         loginExtra = ''
           if [ "$(tty)" = "/dev/tty1" ]; then
-            exec Hyprland &> /dev/null
+            sleep 30 && exec Hyprland &> /dev/null
           fi
         '';
         profileExtra = ''
           if [ "$(tty)" = "/dev/tty1" ]; then
-            exec Hyprland &> /dev/null
+            sleep 30 && exec Hyprland &> /dev/null
           fi
         '';
       };
@@ -371,17 +371,17 @@ in {
               };
 
               # bind workspaces to monitors
-              wsbind = {
-                "1" = displays.monitor1;
-                "2" = displays.monitor1;
-                "3" = displays.monitor1;
-                "4" = displays.monitor1;
-                "5" = displays.monitor1;
-                "6" = displays.monitor2;
-                "7" = displays.monitor2;
-                "8" = displays.monitor2;
-                "9" = displays.monitor3;
-                "10" = displays.monitor3;
+              workspace = {
+                "1" = "monitor:${displays.monitor1}";
+                "2" = "monitor:${displays.monitor1}";
+                "3" = "monitor:${displays.monitor1}";
+                "4" = "monitor:${displays.monitor1}";
+                "5" = "monitor:${displays.monitor1}";
+                "6" = "monitor:${displays.monitor2}";
+                "7" = "monitor:${displays.monitor2}";
+                "8" = "monitor:${displays.monitor2}";
+                "9" = "monitor:${displays.monitor3}";
+                "10" = "monitor:${displays.monitor3}";
               };
 
               windowrulev2 = [
