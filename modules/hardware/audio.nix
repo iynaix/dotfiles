@@ -1,15 +1,8 @@
 {
   pkgs,
-  config,
-  user,
   lib,
   ...
-}: let
-  hasDac = config.iynaix.dac.enable;
-  reset-dac = pkgs.writeShellScriptBin "reset-dac" ''
-    sudo ${pkgs.usb-modeswitch}/bin/usb_modeswitch -v 0x262a -p 0x1048 --reset-usb
-  '';
-in {
+}: {
   options.iynaix = {
     dac.enable = lib.mkEnableOption "DAC";
   };
@@ -25,23 +18,9 @@ in {
     };
     hardware.pulseaudio.enable = false;
 
-    environment.systemPackages = with pkgs;
-      [
-        pamixer
-        pavucontrol
-      ]
-      ++ (lib.optional hasDac reset-dac);
-
-    security.sudo.extraRules = lib.mkIf hasDac [
-      {
-        users = [user];
-        commands = [
-          {
-            command = "${pkgs.usb-modeswitch}/bin/usb_modeswitch";
-            options = ["NOPASSWD"];
-          }
-        ];
-      }
+    environment.systemPackages = with pkgs; [
+      pamixer
+      pavucontrol
     ];
 
     iynaix.hyprland.extraBinds = {

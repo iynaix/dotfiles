@@ -24,21 +24,7 @@
       enable = true;
       devices = ["nodev"];
       efiSupport = true;
-      version = 2;
     };
-  };
-
-  # enable serial console tty
-  # https://github.com/NixOS/nixpkgs/issues/84105
-  boot.kernelParams = [
-    "console=ttyS0,115200"
-    "console=tty1"
-  ];
-
-  systemd.services."serial-getty@ttyS0" = {
-    enable = true;
-    wantedBy = ["getty.target"]; # to start at boot
-    serviceConfig.Restart = "always"; # restart when session is closed
   };
 
   networking.hostName = "${user}-${host}"; # Define your hostname.
@@ -92,6 +78,7 @@
       TERMINAL = lib.getExe config.iynaix.terminal.package;
       EDITOR = "nvim";
       VISUAL = "nvim";
+      NIXPKGS_ALLOW_UNFREE = "1";
     };
     systemPackages = with pkgs; [
       curl
