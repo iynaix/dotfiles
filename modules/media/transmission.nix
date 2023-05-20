@@ -103,6 +103,9 @@ in {
       };
     };
 
+    # setup port forwarding
+    networking.firewall.allowedTCPPorts = [51413];
+
     home-manager.users.${user} = {
       home.packages = with pkgs; [transmission-remote-gtk];
     };

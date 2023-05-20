@@ -124,15 +124,17 @@ in {
 
     home-manager.users.${user} = {
       # start hyprland
-      programs.zsh = {
+      programs.zsh = let
+        isAmd = config.iynaix.am5.enable;
+      in {
         loginExtra = ''
           if [ "$(tty)" = "/dev/tty1" ]; then
-            sleep 30 && exec Hyprland &> /dev/null
+            ${lib.optionalString isAmd "sleep 30 && "}exec Hyprland &> /dev/null
           fi
         '';
         profileExtra = ''
           if [ "$(tty)" = "/dev/tty1" ]; then
-            sleep 30 && exec Hyprland &> /dev/null
+            ${lib.optionalString isAmd "sleep 30 && "}exec Hyprland &> /dev/null
           fi
         '';
       };
