@@ -1,17 +1,18 @@
 {
   lib,
   user,
+  config,
   ...
-}: {
+}: let
+  cfg = config.iynaix.pywal;
+in {
   options.iynaix = {
     pywal.enable = lib.mkEnableOption "pywal" // {default = true;};
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
       programs.pywal.enable = true;
-
-      # TODO: helix?
 
       xdg.configFile."wal/templates/colors-hexless.sh".text = ''
         # Shell variables

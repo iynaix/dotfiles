@@ -252,6 +252,9 @@ in {
                 "${mod}, v" = "exec, ${config.iynaix.terminal.exec} nvim";
                 "${mod}_SHIFT, v" = "exec, code";
 
+                # exit hyprland
+                "${mod}_SHIFT, c" = "exit,";
+
                 "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.monospace} 14" -modi power-menu:rofi-power-menu'';
                 "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 

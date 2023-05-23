@@ -44,8 +44,8 @@ in {
           src = pkgs.fetchFromGitHub {
             owner = "Alexays";
             repo = "Waybar";
-            rev = "a9a222346990b46e4c928a1c57cf0678120721de";
-            sha256 = "sha256-OkThVQ9MHQY18xlbaiwvNW80jF5wNLtiPEVd/4UBRSk=";
+            rev = "2b24b160230d2166b74a175c6bed530c2720963d";
+            sha256 = "sha256-s1LNE5duBTZ8V1JkyQBHPBeVLDKN/kTWRux3FCb48j4=";
           };
 
           mesonFlags = oldAttrs.mesonFlags ++ ["-Dcava=disabled"];

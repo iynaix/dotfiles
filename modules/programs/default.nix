@@ -9,7 +9,7 @@
     ./brave.nix
     ./firefox.nix
     ./gparted.nix
-    ./helix.nix
+    # ./helix.nix
     ./imv.nix
     ./keyring.nix
     ./kitty.nix

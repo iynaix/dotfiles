@@ -85,7 +85,6 @@
       exa
       killall
       neovim
-      helix
       ntfs3g
       ripgrep
       tree # for root, normal user has an exa alias

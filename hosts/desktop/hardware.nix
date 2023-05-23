@@ -10,9 +10,9 @@
 }: {
   imports = [];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "uas" "sd_mod"];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod"];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
+  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   swapDevices = [];
