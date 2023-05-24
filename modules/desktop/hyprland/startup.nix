@@ -73,18 +73,15 @@ in {
         home.packages = [hyprResetMonitors];
 
         # start hyprland
-        programs.zsh = let
-          # isAmd = config.iynaix.am5.enable;
-          isAmd = false;
-        in {
+        programs.zsh = {
           loginExtra = ''
             if [ "$(tty)" = "/dev/tty1" ]; then
-              ${lib.optionalString isAmd "sleep 30 && "}exec Hyprland &> /dev/null
+              exec Hyprland &> /dev/null
             fi
           '';
           profileExtra = ''
             if [ "$(tty)" = "/dev/tty1" ]; then
-              ${lib.optionalString isAmd "sleep 30 && "}exec Hyprland &> /dev/null
+              exec Hyprland &> /dev/null
             fi
           '';
         };
