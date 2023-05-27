@@ -204,8 +204,6 @@ in {
           #workspaces button.urgent {{
             background-color: {color1};
             color: {foreground};
-            margin-right: 4px;
-            border-radius: 12px;
           }}
 
           #pulseaudio, #backlight {{

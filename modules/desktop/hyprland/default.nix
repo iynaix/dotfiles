@@ -140,6 +140,10 @@ in {
         ];
       };
 
+      programs.zsh.shellAliases = {
+        hypr-log = "cat /tmp/hypr/$(command ls -t /tmp/hypr/ | head -n 1)/hyprland.log";
+      };
+
       xdg.configFile = {
         # various helper scripts for keybinds
         "hypr/same_class.py".source = ./same_class.py;

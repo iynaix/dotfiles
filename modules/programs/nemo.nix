@@ -8,8 +8,9 @@
   programs.file-roller.enable = true;
   xdg.mime.defaultApplications = {
     "inode/directory" = "nemo.desktop";
-    # wtf zathura registers itself to open zip files
+    # wtf zathura registers itself to open archives
     "application/zip" = "org.gnome.FileRoller.desktop";
+    "application/vnd.rar" = "org.gnome.FileRoller.desktop";
   };
 
   home-manager.users.${user} = {

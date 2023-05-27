@@ -1,5 +1,4 @@
 {
-  pkgs,
   user,
   config,
   lib,
@@ -8,6 +7,7 @@
   cfg = config.iynaix.torrenters;
 in {
   imports = [
+    ./filezilla.nix
     ./mpv.nix
     ./pathofbuilding.nix
     ./smplayer.nix
