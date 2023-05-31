@@ -1,0 +1,630 @@
+diff --exclude '.git*' --exclude '.travis*' -Naur mpv-0.33.1/video/out/vo.c mpv-mod.git/video/out/vo.c
+--- mpv-0.33.1/video/out/vo.c	2021-04-05 18:45:41.000000000 +0200
++++ mpv-mod.git/video/out/vo.c	2023-04-23 18:01:39.419977621 +0200
+@@ -65,6 +65,8 @@
+ extern const struct vo_driver video_out_rpi;
+ extern const struct vo_driver video_out_tct;
+ extern const struct vo_driver video_out_sixel;
++extern const struct vo_driver video_out_sharedbuffer;
++extern const struct vo_driver video_out_shm;
+ 
+ const struct vo_driver *const video_out_drivers[] =
+ {
+@@ -111,6 +113,12 @@
+     &video_out_sixel,
+ #endif
+     &video_out_lavc,
++#if HAVE_COCOA
++    &video_out_sharedbuffer,
++#endif
++#if HAVE_POSIX
++    &video_out_shm,
++#endif
+     NULL
+ };
+ 
+diff --exclude '.git*' --exclude '.travis*' -Naur mpv-0.33.1/video/out/vo_sharedbuffer.h mpv-mod.git/video/out/vo_sharedbuffer.h
+--- mpv-0.33.1/video/out/vo_sharedbuffer.h	1970-01-01 01:00:00.000000000 +0100
++++ mpv-mod.git/video/out/vo_sharedbuffer.h	2023-04-23 18:01:39.420977622 +0200
+@@ -0,0 +1,37 @@
++/*
++ * OSX Shared Buffer Video Output (extracted from mplayer's corevideo)
++ *
++ * This file is part of mplayer2.
++ *
++ * mplayer2 is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * mplayer2 is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with mplayer2.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef MPLAYER_VO_OSX_SHAREDBUFFER_H
++#define MPLAYER_VO_OSX_SHAREDBUFFER_H
++
++#import <Cocoa/Cocoa.h>
++
++// Protocol to communicate with the GUI
++@protocol MPlayerOSXVOProto
++- (int) startWithWidth: (bycopy int)width
++            withHeight: (bycopy int)height
++             withBytes: (bycopy int)bytes
++            withAspect: (bycopy int)aspect;
++- (void) stop;
++- (void) render;
++- (void) toggleFullscreen;
++- (void) ontop;
++@end
++
++#endif /* MPLAYER_VO_OSX_SHAREDBUFFER_H */
+diff --exclude '.git*' --exclude '.travis*' -Naur mpv-0.33.1/video/out/vo_sharedbuffer.m mpv-mod.git/video/out/vo_sharedbuffer.m
+--- mpv-0.33.1/video/out/vo_sharedbuffer.m	1970-01-01 01:00:00.000000000 +0100
++++ mpv-mod.git/video/out/vo_sharedbuffer.m	2023-04-23 18:01:39.420977622 +0200
+@@ -0,0 +1,254 @@
++/*
++ * OSX Shared Buffer Video Output (extracted from mplayer's corevideo)
++ *
++ * This file is part of mplayer2.
++ *
++ * mplayer2 is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * mplayer2 is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with mplayer2.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++/*
++ * This video output was extracted from mplayer's corevideo. Its purpose is
++ * to copy mp_image data to a shared buffer using mmap and to do simple
++ * coordination with the GUIs using Distributed Objects.
++ */
++
++
++#include "vo_sharedbuffer.h"
++#include "vo.h"
++#include "video/mp_image.h"
++#include "sub/osd.h"
++
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <errno.h>
++#include <unistd.h>
++
++
++// declarations
++struct priv {
++    char *buffer_name;
++    unsigned char *image_data;
++    uint32_t image_bytes;
++    uint32_t image_width;
++    uint32_t image_height;
++    uint32_t image_format;
++    uint32_t image_stride;
++    uint32_t buffer_size;
++
++    NSDistantObject *mposx_proxy;
++    id <MPlayerOSXVOProto> mposx_proto;
++};
++
++
++static int preinit(struct vo *vo)
++{
++    MP_INFO(vo, "preinit \n");
++    return 0;
++}
++
++static void flip_page(struct vo *vo)
++{
++    //MP_INFO(vo, "flip_page \n");
++
++    struct priv *p = vo->priv;
++    NSAutoreleasePool *pool = [NSAutoreleasePool new];
++    [p->mposx_proto render];
++    [pool release];
++}
++
++static void draw_image(struct vo *vo, mp_image_t *mpi)
++{
++    //MP_INFO(vo, "draw_image \n");
++
++    struct priv *p = vo->priv;
++    struct mp_osd_res dim = osd_res_from_image_params(vo->params);
++    osd_draw_on_image(vo->osd, dim, mpi->pts, 0, mpi);
++
++    if (p->image_format == IMGFMT_420P) {
++        unsigned char * ptr = p->image_data;
++        int size = p->image_stride * p->image_height;
++        memcpy_pic(ptr, mpi->planes[0], p->image_width, p->image_height, p->image_stride, mpi->stride[0]);
++        ptr += size;
++        size = (p->image_width * p->image_height) / 2;
++        memcpy_pic(ptr, mpi->planes[1], p->image_width / 2, p->image_height / 2, p->image_width / 2, mpi->stride[1]);
++        ptr += size;
++        memcpy_pic(ptr, mpi->planes[2], p->image_width / 2, p->image_height / 2, p->image_width / 2, mpi->stride[2]);
++    } else {
++        memcpy_pic(p->image_data, mpi->planes[0],
++               p->image_width * p->image_bytes, p->image_height,
++               p->image_stride, mpi->stride[0]);
++    }
++    talloc_free(mpi);
++}
++
++static void free_buffers(struct vo *vo)
++{
++    struct priv *p = vo->priv;
++    [p->mposx_proto stop];
++    p->mposx_proto = nil;
++    [p->mposx_proxy release];
++    p->mposx_proxy = nil;
++
++    if (p->image_data) {
++        if (munmap(p->image_data, p->buffer_size) == -1) {
++            MP_FATAL(vo, "uninit: munmap failed. Error: %s\n", strerror(errno));
++        }
++        if (shm_unlink(p->buffer_name) == -1) {
++            MP_FATAL(vo, "uninit: shm_unlink failed. Error: %s\n", strerror(errno));
++        }
++    }
++}
++
++static int reconfig(struct vo *vo, struct mp_image_params *params)
++{
++    MP_INFO(vo, "reconfig w: %d h: %d format: %d \n", params->w, params->h, params->imgfmt);
++
++    struct priv *p = vo->priv;
++    NSAutoreleasePool *pool = [NSAutoreleasePool new];
++    free_buffers(vo);
++
++    p->image_width = params->w;
++    p->image_height = params->h;
++    p->image_format = params->imgfmt;
++
++    switch (p->image_format)
++    {
++        case IMGFMT_RGB24:
++            p->image_bytes = 3;
++            break;
++        case IMGFMT_RGB565:
++            p->image_bytes = 2;
++            break;
++        case IMGFMT_420P:
++            p->image_bytes = 1;
++            break;
++        case IMGFMT_NV12:
++        case IMGFMT_UYVY:
++            p->image_bytes = 2;
++            break;
++        default:
++            p->image_bytes = 3;
++    }
++    p->image_stride = p->image_width * p->image_bytes;
++    p->buffer_size = p->image_stride * p->image_height;
++    if (p->image_format == IMGFMT_420P) {
++        p->buffer_size = p->image_width * p->image_height * 2;
++    }
++
++    MP_INFO(vo, "writing output to a shared buffer named \"%s\"\n", p->buffer_name);
++
++    // create shared memory
++    int shm_fd = shm_open(p->buffer_name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
++    if (shm_fd == -1) {
++        MP_FATAL(vo, "failed to open shared memory. Error: %s\n", strerror(errno));
++        goto err_out;
++    }
++
++    MP_INFO(vo, "dw: %d dh: %d\n", vo->dwidth, vo->dheight);
++    MP_INFO(vo, "w: %d h: %d bytes: %d buffer size: %d\n", p->image_width, p->image_height, p->image_bytes, p->buffer_size);
++
++    if (ftruncate(shm_fd, p->buffer_size) == -1) {
++        close(shm_fd);
++        shm_unlink(p->buffer_name);
++        goto err_out;
++    }
++
++    p->image_data = mmap(NULL, p->buffer_size,
++        PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
++    close(shm_fd);
++
++    if (p->image_data == MAP_FAILED) {
++        MP_FATAL(vo, "failed to map shared memory. Error: %s\n", strerror(errno));
++        shm_unlink(p->buffer_name);
++        goto err_out;
++    }
++
++    //connect to mplayerosx
++    p->mposx_proxy = [NSConnection
++        rootProxyForConnectionWithRegisteredName:
++                  [NSString stringWithUTF8String:p->buffer_name] host:nil];
++
++    if ([p->mposx_proxy conformsToProtocol:@protocol(MPlayerOSXVOProto)]) {
++        [p->mposx_proxy setProtocolForProxy:@protocol(MPlayerOSXVOProto)];
++        p->mposx_proto = (id <MPlayerOSXVOProto>)p->mposx_proxy;
++        [p->mposx_proto startWithWidth:p->image_width
++                            withHeight:p->image_height
++                             withBytes:p->image_bytes
++                            withAspect:vo->dwidth*100/vo->dheight];
++    } else {
++        MP_ERR(vo, "distributed object doesn't conform to the correct protocol.\n");
++        [p->mposx_proxy release];
++        p->mposx_proxy = nil;
++        p->mposx_proto = nil;
++    }
++
++    [pool release];
++    return 0;
++err_out:
++    [pool release];
++    return -1;
++}
++
++static int query_format(struct vo *vo, int format)
++{
++    //MP_INFO(vo, "query_format: %d \n", format);
++
++    switch (format) {
++    case IMGFMT_420P:
++    //case IMGFMT_YUY2:
++    case IMGFMT_UYVY:
++    case IMGFMT_RGB24:
++    //case IMGFMT_ARGB:
++    //case IMGFMT_BGRA:
++        return 1;
++    }
++    return 0;
++}
++
++static void uninit(struct vo *vo)
++{
++    free_buffers(vo);
++}
++
++static int control(struct vo *vo, uint32_t request, void *data)
++{
++    //MP_INFO(vo, "control: request: %d \n", request);
++    return VO_NOTIMPL;
++}
++
++
++#undef OPT_BASE_STRUCT
++#define OPT_BASE_STRUCT struct priv
++
++const struct vo_driver video_out_sharedbuffer = {
++    .name = "sharedbuffer",
++    .description = "Mac OS X Shared Buffer (headless video output for GUIs)",
++    .preinit = preinit,
++    .reconfig = reconfig,
++    .control = control,
++    .flip_page = flip_page,
++    .query_format = query_format,
++    .draw_image = draw_image,
++    .uninit = uninit,
++    .priv_size = sizeof(struct priv),
++    .options = (const struct m_option[]) {
++       {"name", OPT_STRING(buffer_name)},
++       {0}
++    },
++    .priv_defaults = &(const struct priv) {
++        .buffer_name = "mpv",
++    },
++    .options_prefix = "sharedbuffer",
++};
+diff --exclude '.git*' --exclude '.travis*' -Naur mpv-0.33.1/video/out/vo_shm.c mpv-mod.git/video/out/vo_shm.c
+--- mpv-0.33.1/video/out/vo_shm.c	1970-01-01 01:00:00.000000000 +0100
++++ mpv-mod.git/video/out/vo_shm.c	2023-04-23 18:01:39.421977622 +0200
+@@ -0,0 +1,290 @@
++/*
++ * Shm video output driver
++ * Copyright (c) 2021 Ricardo Villalba <ricardo@smplayer.info>
++ * Copyright (c) 2005 Nicolas Plourde <nicolasplourde@gmail.com>
++ *
++ * This file is part of MPlayer.
++ *
++ * MPlayer is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * MPlayer is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with MPlayer; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
++
++/* Based on vo_corevideo.m by Nicolas Plourde <nicolas.plourde@gmail.com> */
++
++#include "vo.h"
++#include "video/mp_image.h"
++#include "sub/osd.h"
++
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <errno.h>
++#include <unistd.h>
++
++struct header_t {
++    uint32_t header_size;
++    uint32_t video_buffer_size;
++    uint32_t width;
++    uint32_t height;
++    uint32_t bytes;
++    uint32_t stride[3];
++    uint32_t planes;
++    uint32_t format;
++    uint32_t frame_count;
++    uint32_t busy;
++    float fps;
++    // MPV
++    int32_t rotate;
++    int32_t colorspace;
++    int32_t colorspace_levels;
++    int32_t colorspace_primaries;
++    int32_t colorspace_gamma;
++    int32_t colorspace_light;
++    float colorspace_sig_peak;
++    int32_t chroma_location;
++    uint32_t reserved[20];
++} * header;
++
++
++struct priv {
++    unsigned char * image_data;
++    char * buffer_name;
++    uint32_t image_width;
++    uint32_t image_height;
++    uint32_t image_bytes;
++    uint32_t image_stride;
++    uint32_t image_format;
++    uint32_t frame_count;
++    uint32_t buffer_size;
++    uint32_t video_buffer_size;
++};
++
++static void free_buffers(struct vo *vo)
++{
++    struct priv * p = vo->priv;
++
++    if (munmap(header, p->buffer_size) == -1) {
++        //MP_INFO(vo, "uninit: munmap failed. Error: %s\n", strerror(errno));
++    }
++
++    if (shm_unlink(p->buffer_name) == -1) {
++        //MP_INFO(vo, "uninit: shm_unlink failed. Error: %s\n", strerror(errno));
++    }
++}
++
++static int reconfig(struct vo *vo, struct mp_image_params *params)
++{
++    MP_INFO(vo, "reconfig: w: %d h: %d format: %d \n", params->w, params->h, params->imgfmt);
++    /*
++    MP_INFO(vo, "reconfig: color space: %d levels: %d primaries: %d gamma: %d light: %d\n",
++                 params->color.space, params->color.levels, params->color.primaries, params->color.gamma, params->color.light);
++    MP_INFO(vo, "reconfig: chroma_location: %d rotate: %d stereo3d: %d\n", params->chroma_location, params->rotate, params->stereo3d);
++    */
++
++    free_buffers(vo);
++
++    struct priv * p = vo->priv;
++
++    p->image_width = params->w;
++    p->image_height = params->h;
++    p->image_format = params->imgfmt;
++
++    switch (p->image_format)
++    {
++        case IMGFMT_RGB24:
++            p->image_bytes = 3;
++            break;
++        case IMGFMT_RGB565:
++            p->image_bytes = 2;
++            break;
++        case IMGFMT_420P:
++            p->image_bytes = 1;
++            break;
++        case IMGFMT_NV12:
++        case IMGFMT_UYVY:
++            p->image_bytes = 2;
++            break;
++        default:
++            p->image_bytes = 3;
++    }
++    p->image_stride = p->image_width * p->image_bytes;
++    p->video_buffer_size = p->image_stride * p->image_height;
++    if (p->image_format == IMGFMT_420P) {
++        p->video_buffer_size = p->image_width * p->image_height * 2;
++    }
++
++    MP_INFO(vo, "w: %d h: %d format: %d\n", p->image_width, p->image_height, p->image_format);
++    MP_INFO(vo, "stride: %d bytes: %d\n", p->image_stride, p->image_bytes);
++    MP_INFO(vo, "video buffer size: %d\n", p->video_buffer_size);
++
++    MP_INFO(vo, "writing output to a shared buffer named \"%s\"\n", p->buffer_name);
++
++    // Create shared memory
++    int shm_fd = shm_open(p->buffer_name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
++    if (shm_fd == -1)
++    {
++        MP_FATAL(vo, "failed to open shared memory. Error: %s\n", strerror(errno));
++        return -1;
++    }
++
++    p->buffer_size = sizeof(header) + p->video_buffer_size;
++
++    if (ftruncate(shm_fd, p->buffer_size) == -1)
++    {
++        MP_FATAL(vo, "failed to size shared memory, possibly already in use. Error: %s\n", strerror(errno));
++        close(shm_fd);
++        shm_unlink(p->buffer_name);
++        return -1;
++    }
++
++    header = mmap(NULL, p->buffer_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
++    close(shm_fd);
++
++    if (header == MAP_FAILED)
++    {
++        MP_FATAL(vo, "failed to map shared memory. Error: %s\n", strerror(errno));
++        shm_unlink(p->buffer_name);
++        return 1;
++    }
++
++    header->header_size = sizeof(struct header_t);
++    header->video_buffer_size = p->video_buffer_size;
++
++    p->image_data = (unsigned char*) header + header->header_size;
++    //MP_INFO(vo, "header: %p image_data: %p\n", header, p->image_data);
++
++    header->rotate = params->rotate;
++    header->colorspace = params->color.space;
++    header->colorspace_levels = params->color.levels;
++    header->colorspace_primaries = params->color.primaries;
++    header->colorspace_gamma = params->color.gamma;
++    header->colorspace_light = params->color.light;
++    header->colorspace_sig_peak = params->color.sig_peak;
++    header->chroma_location = params->chroma_location;
++
++    return 0;
++}
++
++static void draw_image(struct vo *vo, mp_image_t *mpi)
++{
++    //MP_INFO(vo, "draw_image \n");
++
++    if (!mpi) {
++        //MP_WARN(vo, "no mpi \n");
++        return;
++    }
++
++    struct priv * p = vo->priv;
++
++    header->width = p->image_width;
++    header->height = p->image_height;
++    header->bytes = p->image_bytes;
++    header->stride[0] = p->image_stride;
++    if (p->image_format == IMGFMT_420P) {
++        header->stride[1] = header->stride[2] = p->image_width / 2;
++    } else {
++        header->stride[1] = header->stride[2] = 0;
++    }
++
++    header->planes = mpi->num_planes;
++    header->format = p->image_format;
++    header->frame_count = p->frame_count++;
++    header->fps = mpi->nominal_fps;
++
++    struct mp_osd_res dim = osd_res_from_image_params(vo->params);
++    osd_draw_on_image(vo->osd, dim, mpi->pts, 0, mpi);
++
++    //MP_INFO(vo, "w: %d h: %d stride: %d fps: %f \n", mpi->w, mpi->h, mpi->stride[0], mpi->nominal_fps);
++
++    header->busy = 1;
++    if (p->image_format == IMGFMT_420P) {
++        unsigned char * ptr = p->image_data;
++        int size = p->image_stride * p->image_height;
++        memcpy_pic(ptr, mpi->planes[0], p->image_width, p->image_height, p->image_stride, mpi->stride[0]);
++        ptr += size;
++        size = (p->image_width * p->image_height) / 2;
++        memcpy_pic(ptr, mpi->planes[1], p->image_width / 2, p->image_height / 2, p->image_width / 2, mpi->stride[1]);
++        ptr += size;
++        memcpy_pic(ptr, mpi->planes[2], p->image_width / 2, p->image_height / 2, p->image_width / 2, mpi->stride[2]);
++    } else {
++        memcpy_pic(p->image_data, mpi->planes[0], p->image_width * p->image_bytes, p->image_height, p->image_stride, mpi->stride[0]);
++    }
++    header->busy = 0;
++
++    talloc_free(mpi);
++}
++
++static void flip_page(struct vo *vo)
++{
++    //MP_INFO(vo, "flip_page \n");
++}
++
++static void uninit(struct vo *vo)
++{
++    MP_INFO(vo, "uninit \n");
++    free_buffers(vo);
++}
++
++static int preinit(struct vo *vo)
++{
++    MP_INFO(vo, "preinit \n");
++    struct priv * p = vo->priv;
++    MP_INFO(vo, "preinit: buffer_name: %s \n", p->buffer_name);
++    return 0;
++}
++
++static int query_format(struct vo *vo, int format)
++{
++    //MP_INFO(vo, "query_format: %d \n", format);
++    switch(format)
++    {
++        case IMGFMT_420P:
++        //case IMGFMT_NV12:
++        case IMGFMT_UYVY:
++        case IMGFMT_RGB24:
++        //case IMGFMT_RGB565:
++            return 1;
++    }
++
++    return 0;
++}
++
++static int control(struct vo *vo, uint32_t request, void *data)
++{
++    //MP_INFO(vo, "control \n");
++    return VO_NOTIMPL;
++}
++
++#define OPT_BASE_STRUCT struct priv
++
++const struct vo_driver video_out_shm = {
++    .name = "shm",
++    .description = "Shared buffer",
++    .preinit = preinit,
++    .query_format = query_format,
++    .reconfig = reconfig,
++    .control = control,
++    .draw_image = draw_image,
++    .flip_page = flip_page,
++    .uninit = uninit,
++    .priv_size = sizeof(struct priv),
++    .options = (const struct m_option[]) {
++       {"buffer-name", OPT_STRING(buffer_name)},
++       {0}
++    },
++    .priv_defaults = &(const struct priv) {
++        .buffer_name = "mpv",
++    },
++    .options_prefix = "shm",
++};
+diff --exclude '.git*' --exclude '.travis*' -Naur mpv-0.33.1/wscript_build.py mpv-mod.git/wscript_build.py
+--- mpv-0.33.1/wscript_build.py	2021-04-05 18:45:41.000000000 +0200
++++ mpv-mod.git/wscript_build.py	2023-04-23 18:01:39.427977622 +0200
+@@ -520,6 +520,8 @@
+         ( "video/out/win32/droptarget.c",        "win32-desktop" ),
+         ( "video/out/win_state.c"),
+         ( "video/out/x11_common.c",              "x11" ),
++        ( "video/out/vo_sharedbuffer.m",         "cocoa"),
++        ( "video/out/vo_shm.c",                  "posix"),
+         ( "video/repack.c" ),
+         ( "video/sws_utils.c" ),
+         ( "video/zimg.c",                        "zimg" ),

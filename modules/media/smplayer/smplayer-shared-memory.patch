@@ -1,0 +1,13 @@
+diff -up smplayer-22.7.0/src/smplayer.pro.shmfix smplayer-22.7.0/src/smplayer.pro
+--- smplayer-22.7.0/src/smplayer.pro.shmfix	2023-04-23 16:56:41.731563910 +0200
++++ smplayer-22.7.0/src/smplayer.pro	2023-04-23 16:58:10.263573307 +0200
+@@ -37,7 +37,8 @@ DEFINES += INITIAL_BLACKBORDERS
+ DEFINES += CHROMECAST_SUPPORT
+ DEFINES += USE_QRCODE
+ DEFINES += SCREENSAVER_OFF
+-#DEFINES += USE_SHM
++DEFINES += USE_SHM
++DEFINES += USE_GL_WINDOW
+ #DEFINES += USE_SMTUBE_LIB
+ 
+ DEFINES += MPV_SUPPORT

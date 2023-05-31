@@ -1,0 +1,24 @@
+diff --git a/meson.build b/meson.build
+index acaa39f..de2fab0 100644
+--- a/meson.build
++++ b/meson.build
+@@ -401,7 +401,8 @@ if features['cocoa']
+                      'video/out/cocoa_common.m',
+                      'video/out/cocoa/events_view.m',
+                      'video/out/cocoa/video_view.m',
+-                     'video/out/cocoa/window.m')
++                     'video/out/cocoa/window.m',
++                     'video/out/vo_sharedbuffer.c')
+ endif
+
+ if posix
+@@ -410,7 +411,8 @@ if posix
+                      'osdep/polldev.c',
+                      'osdep/subprocess-posix.c',
+                      'osdep/terminal-unix.c',
+-                     'sub/filter_regex.c')
++                     'sub/filter_regex.c',
++                     'video/out/vo_shm.c')
+ endif
+
+ if posix and not features['cocoa']

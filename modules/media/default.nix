@@ -10,7 +10,7 @@ in {
     ./filezilla.nix
     ./mpv.nix
     ./pathofbuilding.nix
-    ./smplayer.nix
+    ./smplayer
     ./transmission.nix
     ./sonarr.nix
   ];
