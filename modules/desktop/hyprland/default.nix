@@ -220,7 +220,7 @@ in {
               mouse_move_enables_dpms = true;
               # key_press_enables_dpms = true;
               enable_swallow = true;
-              swallow_regex = "[Kk]itty|[Aa]lacritty";
+              swallow_regex = "[Kk]itty|[Ww]ezterm";
             };
           })
           (mkHyprlandVariables cfg.extraVariables)

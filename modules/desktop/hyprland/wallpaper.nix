@@ -1,7 +1,5 @@
 {
   pkgs,
-  inputs,
-  system,
   user,
   ...
 }: let
@@ -63,23 +61,6 @@
         hypr-reset
       fi
     '';
-  # creating an overlay for buildRustPackage overlay
-  # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-  swww =
-    inputs.nixpkgs-wayland.packages.${system}.swww.overrideAttrs
-    (oldAttrs: rec {
-      src = pkgs.fetchFromGitHub {
-        owner = "Horus645";
-        repo = "swww";
-        rev = "1112c2de3f9cec59e3713dbebf7ba2afe25fd9d0";
-        sha256 = "sha256-58zUi6tftTvNoc/R/HO4RDC7n+NODKOrBCHH8QntKSY=";
-      };
-
-      cargoDeps = pkgs.rustPlatform.importCargoLock {
-        lockFile = src + "/Cargo.lock";
-        allowBuiltinFetchGit = true;
-      };
-    });
 in {
   config = {
     home-manager.users.${user} = {
@@ -88,7 +69,7 @@ in {
           hypr-reset
           hypr-theme
           hypr-wallpaper
-          swww
+          pkgs.swww
         ];
       };
     };

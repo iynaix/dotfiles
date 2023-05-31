@@ -6,9 +6,14 @@
   ...
 }: {
   config = lib.mkIf config.iynaix.torrenters.enable {
-    services.sonarr = {
-      enable = true;
-      inherit user;
+    services = {
+      sonarr = {
+        enable = true;
+        inherit user;
+      };
+
+      # for indexers
+      prowlarr.enable = true;
     };
 
     # setup cron job to sync sonarr ical with google calendar
@@ -41,6 +46,7 @@
 
     iynaix.persist.root.directories = [
       "/var/lib/sonarr/.config/NzbDrone"
+      "/var/lib/private/prowlarr"
     ];
   };
 }
