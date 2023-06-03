@@ -156,6 +156,11 @@ in {
               sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
           }
 
+          # set the current configuration as default to boot
+          ndefault() {
+            sudo /run/current-system/bin/switch-to-configuration boot
+          }
+
           # build flake but don't switch
           nbuild() {
               pushd ~/projects/dotfiles

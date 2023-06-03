@@ -38,18 +38,8 @@ in {
 
       programs.waybar = {
         enable = true;
-
-        # use a fresher version of waybar
-        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (oldAttrs: {
-          src = pkgs.fetchFromGitHub {
-            owner = "Alexays";
-            repo = "Waybar";
-            rev = "2b24b160230d2166b74a175c6bed530c2720963d";
-            sha256 = "sha256-s1LNE5duBTZ8V1JkyQBHPBeVLDKN/kTWRux3FCb48j4=";
-          };
-
-          mesonFlags = oldAttrs.mesonFlags ++ ["-Dcava=disabled"];
-        });
+        # patch waybar for hyprland workspaces
+        package = pkgs.hyprland.waybar-hyprland;
       };
 
       xdg.configFile."wal/templates/colors-waybar.config".text = lib.mkDefault ''
