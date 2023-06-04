@@ -40,5 +40,32 @@
       inherit inputs nixpkgs;
       user = "iynaix";
     };
+
+    # templates for devenv
+    templates = let
+      welcomeText = ''
+        # `.devenv` should be added to `.gitignore`
+        ```sh
+          echo .devenv >> .gitignore
+        ```
+      '';
+    in rec {
+      javascript = {
+        inherit welcomeText;
+        path = ./templates/javascript;
+        description = "Javascript / Typescript dev environment";
+      };
+
+      python = {
+        inherit welcomeText;
+        path = ./templates/python;
+        description = "Python dev environment";
+      };
+
+      js = javascript;
+      ts = javascript;
+
+      py = python;
+    };
   };
 }
