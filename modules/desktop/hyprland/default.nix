@@ -385,6 +385,7 @@ in {
                 # do not idle while watching videos
                 "idleinhibit fullscreen,Brave-browser"
                 "idleinhibit fullscreen,firefox-aurora"
+                "idleinhibit focus,YouTube"
                 "idleinhibit focus,mpv"
               ];
 
