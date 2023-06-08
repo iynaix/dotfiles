@@ -10,6 +10,7 @@
     ./firefox.nix
     ./gparted.nix
     # ./helix.nix
+    ./pathofbuilding
     ./imv.nix
     ./keyring.nix
     ./kitty.nix

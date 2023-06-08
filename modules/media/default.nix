@@ -9,7 +9,6 @@ in {
   imports = [
     ./filezilla.nix
     ./mpv.nix
-    ./pathofbuilding.nix
     ./smplayer
     ./transmission.nix
     ./sonarr.nix

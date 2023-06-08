@@ -100,7 +100,6 @@
           fzf
           htop
           lazygit
-          neofetch
           sd
           ugrep
         ];
