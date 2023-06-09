@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   user,
   ...
 }: let
@@ -10,9 +11,8 @@
     sh
     */
     ''
-      source /home/${user}/.cache/wal/colors-hexless.sh
-
       # hyprland doesnt accept leading #
+      source /home/${user}/.cache/wal/colors-hexless.sh
 
       hyprctl keyword general:col.active_border "rgb(''${color4}) rgb(''${color6}) 45deg";
       hyprctl keyword general:col.inactive_border "rgb(''${color0})";
@@ -40,7 +40,7 @@
     sh
     */
     ''
-      wal -n -i "/home/${user}/Pictures/Wallpapers"
+      wal --backend ${config.iynaix.pywal.backend} -n -i "/home/${user}/Pictures/Wallpapers"
 
       hypr-reset
     '';

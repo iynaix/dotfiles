@@ -47,6 +47,8 @@ in {
         '';
       };
 
+      pywal.backend = "colorthief";
+
       smplayer.enable = true;
       torrenters.enable = true;
       pathofbuilding.enable = true;

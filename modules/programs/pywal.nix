@@ -2,12 +2,26 @@
   lib,
   user,
   config,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix.pywal;
 in {
   options.iynaix = {
     pywal.enable = lib.mkEnableOption "pywal" // {default = true;};
+    pywal.backend = lib.mkOption {
+      type = lib.types.enum [
+        "colorthief"
+        "colorz"
+        "haishoku"
+        "schemer2"
+        "wal"
+      ];
+      default = "wal";
+      description = ''
+        Wal backend to use for generating colors.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -53,6 +67,53 @@ in {
         export LS_COLORS="''${{LS_COLORS}}:su=30;41:ow=30;42:st=30;44:"
       '';
     };
+
+    nixpkgs.overlays = [
+      (self: super: {
+        pywal = super.pywal.overrideAttrs (oldAttrs: {
+          propagatedBuildInputs = with pkgs;
+            oldAttrs.propagatedBuildInputs
+            ++ lib.optional (cfg.backend == "colorthief") [
+              python3Packages.colorthief
+            ]
+            ++ lib.optional (cfg.backend == "colorz") [
+              python3Packages.colorz
+            ]
+            ++ lib.optional (cfg.backend == "haishoku") [
+              pkgs.python3Packages.buildPythonPackage
+              rec {
+                pname = "haishoku";
+                version = "1.1.8";
+                src = super.fetchFromGitHub {
+                  owner = "LanceGin";
+                  repo = "haishoku";
+                  rev = "v${version}";
+                  sha256 = "sha256-LSoZopCaM5vbknGS9gG13OZIgghgqJvPtktUkBCH04Q=";
+                };
+
+                propagatedBuildInputs = [pkgs.python3Packages.pillow];
+              }
+            ]
+            ++ lib.optional (cfg.backend == "schemer2") [
+              pkgs.buildGoPackage
+              rec {
+                pname = "schemer2";
+                version = "2019-04-06";
+                rev = "89a66cbf40440e82921719c6919f11bb563d7cfa";
+
+                goPackagePath = "github.com/thefryscorer/schemer2";
+
+                src = super.fetchFromGitHub {
+                  inherit rev;
+                  owner = "thefryscorer";
+                  repo = "schemer2";
+                  sha256 = "0z1nv9gdswfci6y180slvyx4ba2ifc4ifb1b39mdrik4hg7xba0h";
+                };
+              }
+            ];
+        });
+      })
+    ];
 
     iynaix.persist.home.directories = [
       ".config/wal"

@@ -28,6 +28,7 @@
       home.packages = with pkgs; [
         libreoffice
         libnotify
+        neofetch
         # nix dev stuff
         nil
         inputs.alejandra.defaultPackage.${system}
