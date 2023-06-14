@@ -101,6 +101,11 @@
     enableSSHSupport = true;
   };
 
+  # faster shutdown
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=5s
+  '';
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.

@@ -61,6 +61,7 @@ in {
     home-manager.users.${user} = {
       home = {
         packages = with pkgs; [
+          deadbeef
           vlc
           # vial
         ];
