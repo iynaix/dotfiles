@@ -37,6 +37,7 @@ in {
         incomplete-dir-enabled = false;
         inhibit-desktop-hibernation = false;
         lpd-enabled = false;
+        message-level = 1;
         open-dialog-dir = home;
         peer-congestion-algorithm = "";
         peer-id-ttl-hours = 6;
