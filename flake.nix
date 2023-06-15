@@ -20,7 +20,8 @@
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # use cachix
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprwm-contrib = {

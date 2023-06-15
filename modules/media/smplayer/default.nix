@@ -4,12 +4,14 @@
   config,
   lib,
   ...
-}: {
+}: let
+  cfg = config.iynaix.smplayer;
+in {
   options.iynaix.smplayer = {
     enable = lib.mkEnableOption "smplayer";
   };
 
-  config = lib.mkIf config.iynaix.smplayer.enable {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
       xdg.configFile."smplayer/themes" = {
         source = ./themes;

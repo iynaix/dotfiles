@@ -49,9 +49,10 @@ in {
 
       pywal.backend = "colorthief";
 
+      pathofbuilding.enable = true;
       smplayer.enable = true;
       torrenters.enable = true;
-      pathofbuilding.enable = true;
+      virt-manager.enable = true;
     };
 
     networking.hostId = "89eaa833"; # required for zfs

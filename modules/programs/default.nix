@@ -18,6 +18,7 @@
     ./neovim.nix
     ./pywal.nix
     ./rofi.nix
+    ./virt-manager.nix
     ./vscode.nix
     ./wezterm.nix
     ./zathura.nix
