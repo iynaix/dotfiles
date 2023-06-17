@@ -1,8 +1,6 @@
 {
   pkgs,
   user,
-  system,
-  inputs,
   ...
 }: {
   imports = [
@@ -32,7 +30,7 @@
         neofetch
         # nix dev stuff
         nil
-        inputs.alejandra.defaultPackage.${system}
+        pkgs.alejandra
       ];
     };
 

@@ -11,11 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    alejandra = {
-      url = "github:kamadorueda/alejandra";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
@@ -41,6 +36,8 @@
       inherit inputs nixpkgs;
       user = "iynaix";
     };
+
+    formatter = nixpkgs.alejandra;
 
     # templates for devenv
     templates = let
