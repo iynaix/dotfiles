@@ -28,9 +28,10 @@
         libreoffice
         libnotify
         neofetch
+        wallust
         # nix dev stuff
         nil
-        pkgs.alejandra
+        alejandra
       ];
     };
 

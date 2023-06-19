@@ -36,7 +36,7 @@ in {
           history.path = histFile;
           historySubstringSearch = {
             enable = true;
-            # fix up and down arrows for substring search not worling
+            # fix up and down arrows for substring search not working
             # https://reddit.com/r/zsh/comments/kae8yg/plugin_zshhistorysubstringsearch_not_working/
             searchUpKey = "^[OA";
             searchDownKey = "^[OB";
