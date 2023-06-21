@@ -18,6 +18,7 @@
     ./rofi.nix
     ./virt-manager.nix
     ./vscode.nix
+    ./wallust.nix
     ./wezterm.nix
     ./zathura.nix
   ];
