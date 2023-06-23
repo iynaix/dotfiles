@@ -41,19 +41,19 @@ in {
       waybar = {
         settings-template = ''
           "modules-right": [ "network", "pulseaudio", "backlight", "battery", "clock" ],
-          "network": {{
-            "format": "  {{essid}}",
+          "network": {
+            "format": "  {essid}",
             "format-disconnected": "睊  Offline",
             "on-click": "/home/${user}/.config/rofi/rofi-wifi-menu",
             "on-click-right": "${config.iynaix.terminal.exec} nmtui",
             "tooltip": false
-          }}
+          }
         '';
         # add rounded corners for leftmost modules-right
         style-template = lib.mkAfter ''
-          #network {{
+          #network {
             border-radius: 12px 0 0 12px;
-          }}
+          }
         '';
       };
 

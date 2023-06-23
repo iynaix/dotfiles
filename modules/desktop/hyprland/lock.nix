@@ -16,7 +16,7 @@
     sh
     */
     ''
-      source $HOME/.cache/wal/colors.sh
+      source $HOME/.cache/wallust/colors.sh
 
       ${pkgs.swaylock-effects}/bin/swaylock \
         --clock \

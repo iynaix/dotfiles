@@ -3,6 +3,7 @@
   user,
   lib,
   host,
+  config,
   ...
 }: {
   config = {
@@ -15,11 +16,15 @@
         };
 
         "rofi/config.rasi".text = ''
-          @theme "/home/${user}/.cache/wal/colors-rofi-dark.rasi"
+          @theme "/home/${user}/.cache/wallust/rofi.rasi"
         '';
-
-        "wal/templates/colors-rofi-dark.rasi".source = ./rofi-iynaix.rasi;
       };
+    };
+
+    iynaix.wallust.entries."rofi.rasi" = {
+      enable = config.iynaix.wallust.rofi;
+      text = builtins.readFile ./rofi-iynaix.rasi;
+      target = "~/.cache/wallust/rofi.rasi";
     };
   };
 }

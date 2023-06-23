@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   user,
   ...
@@ -25,7 +24,7 @@
             i = "recolor";
           };
           extraConfig = ''
-            include "/home/${user}/.cache/wal/colors-zathurarc"
+            include "/home/${user}/.cache/wallust/zathurarc"
           '';
           options = {
             statusbar-h-padding = 0;
@@ -36,8 +35,11 @@
           };
         };
       };
+    };
 
-      xdg.configFile."wal/templates/colors-zathurarc".text = ''
+    iynaix.wallust.entries.zathurarc = {
+      enable = config.iynaix.wallust.zathura;
+      text = ''
         set default-bg                  "{color0}"
         set default-fg                  "{color10}"
 
@@ -71,6 +73,7 @@
         set recolor                     "false"
         set recolor-keephue             "false"
       '';
+      target = "~/.cache/wallust/zathurarc";
     };
   };
 }

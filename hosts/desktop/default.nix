@@ -41,9 +41,9 @@ in {
       waybar = {
         style-template = ''
           /* add rounded corners for leftmost modules-right */
-          #pulseaudio {{
+          #pulseaudio {
             border-radius: 12px 0 0 12px;
-          }}
+          }
         '';
       };
 
