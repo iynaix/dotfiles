@@ -1,6 +1,8 @@
 {
   pkgs,
   user,
+  config,
+  lib,
   ...
 }: let
   # sets up all the colors but DOES NOT change the wallpaper
@@ -29,7 +31,7 @@
   '';
   # sets a random wallpaper and changes the colors
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" ''
-    wallust $(random-wallpaper)
+    wallust ${lib.optionalString (!config.iynaix.wallust.zsh) "--skip-sequences "} $(random-wallpaper)
     hypr-reset
   '';
   # applies a set theme

@@ -58,6 +58,7 @@ in {
     };
 
     # enable wallust for individual programs
+    zsh = lib.mkEnableOption "zsh" // {default = cfg.enable;};
     dunst = lib.mkEnableOption "dunst" // {default = cfg.enable;};
     waybar = lib.mkEnableOption "waybar" // {default = cfg.enable;};
     swaylock = lib.mkEnableOption "swaylock" // {default = cfg.enable;};

@@ -140,125 +140,124 @@ in {
         # add zsh shortcuts
         lib.mapAttrs (name: value: "cd ${value}") config.iynaix.shortcuts;
 
-      programs.zsh.initExtra =
-        /*
-        sh
-        */
-        ''
-          function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
-          compdef _directories md
+      programs.zsh.initExtra = ''
+        function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+        compdef _directories md
 
-          # Suppress output of loud commands you don't want to hear from
-          q() { "$@" > /dev/null 2>&1; }
+        # Suppress output of loud commands you don't want to hear from
+        q() { "$@" > /dev/null 2>&1; }
 
-          # get the current nix generation
-          nix-current-generation() {
-              sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
-          }
+        # get the current nix generation
+        nix-current-generation() {
+            sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
+        }
 
-          # set the current configuration as default to boot
-          ndefault() {
-            sudo /run/current-system/bin/switch-to-configuration boot
-          }
+        # set the current configuration as default to boot
+        ndefault() {
+          sudo /run/current-system/bin/switch-to-configuration boot
+        }
 
-          # build flake but don't switch
-          nbuild() {
-              pushd ~/projects/dotfiles
-              sudo nixos-rebuild build --flake ".#''${1:-${host}}"
-              popd
-          }
+        # build flake but don't switch
+        nbuild() {
+            pushd ~/projects/dotfiles
+            sudo nixos-rebuild build --flake ".#''${1:-${host}}"
+            popd
+        }
 
-          # switch / update via nix flake
-          nswitch() {
-              pushd ~/projects/dotfiles
-              sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && \
-              echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
-              popd
-          }
+        # switch / update via nix flake
+        nswitch() {
+            pushd ~/projects/dotfiles
+            sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && \
+            echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+            popd
+        }
 
-          # create a new devenv environment
-          mkdevenv() {
-              nix flake init --template github:iynaix/dotfiles#$1
-          }
+        # create a new devenv environment
+        mkdevenv() {
+            nix flake init --template github:iynaix/dotfiles#$1
+        }
 
-          upd8() {
-              pushd ~/projects/dotfiles
-              nix flake update
-              nswitch
-              popd
-          }
+        upd8() {
+            pushd ~/projects/dotfiles
+            nix flake update
+            nswitch
+            popd
+        }
 
-          # nix garbage collection
-          ngc() {
-              if [[ $? -ne 0 ]]; then
-                sudo nix-collect-garbage $*
-              else
-                sudo nix-collect-garbage -d
-              fi
-          }
-
-          # less verbose xev output with only the relevant parts
-          keys() {
-              xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
-          }
-
-          # server command, runs a local server
-          server() {
-              python3 -m http.server ''${1:-8000}
-          }
-
-          # cd to project dir and open the virtualenv if it exists
-          openproj () {
-              cd ~/projects/
-              if [[ $# -eq 1 ]]; then
-                  cd $1
-              fi
-          }
-          _openproj() {
-              _files -/ -W '/home/iynaix/projects/'
-          }
-          compdef _openproj openproj
-
-          renamer() {
-              pushd ~/projects/personal-graphql
-              # activate direnv
-              direnv allow && eval "$(direnv export bash)"
-              yarn renamer
-              popd
-          }
-
-          # emacs mode
-          set -o emacs
-
-          # Change cursor with support for inside/outside tmux
-          function _set_cursor() {
-              if [[ $TMUX = "" ]]; then
-                echo -ne $1
-              else
-                echo -ne "\ePtmux;\e\e$1\e\\"
-              fi
-          }
-
-          function _set_block_cursor() { _set_cursor '\e[2 q' }
-          function _set_beam_cursor() { _set_cursor '\e[6 q' }
-
-          function zle-keymap-select {
-            if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-                _set_block_cursor
+        # nix garbage collection
+        ngc() {
+            if [[ $? -ne 0 ]]; then
+              sudo nix-collect-garbage $*
             else
-                _set_beam_cursor
+              sudo nix-collect-garbage -d
             fi
-          }
-          zle -N zle-keymap-select
+        }
 
-          # ensure beam cursor when starting new terminal
-          precmd_functions+=(_set_beam_cursor)
+        # less verbose xev output with only the relevant parts
+        keys() {
+            xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
+        }
 
-          # disable empty line when opening new terminal, but
-          # insert empty line after each command for starship
-          # https://github.com/starship/starship/issues/560#issuecomment-1318462079
-          precmd() { precmd() { echo "" } }
-        '';
+        # server command, runs a local server
+        server() {
+            python3 -m http.server ''${1:-8000}
+        }
+
+        # cd to project dir and open the virtualenv if it exists
+        openproj () {
+            cd ~/projects/
+            if [[ $# -eq 1 ]]; then
+                cd $1
+            fi
+        }
+        _openproj() {
+            _files -/ -W '/home/iynaix/projects/'
+        }
+        compdef _openproj openproj
+
+        renamer() {
+            pushd ~/projects/personal-graphql
+            # activate direnv
+            direnv allow && eval "$(direnv export bash)"
+            yarn renamer
+            popd
+        }
+
+        # emacs mode
+        set -o emacs
+
+        # Change cursor with support for inside/outside tmux
+        function _set_cursor() {
+            if [[ $TMUX = "" ]]; then
+              echo -ne $1
+            else
+              echo -ne "\ePtmux;\e\e$1\e\\"
+            fi
+        }
+
+        function _set_block_cursor() { _set_cursor '\e[2 q' }
+        function _set_beam_cursor() { _set_cursor '\e[6 q' }
+
+        function zle-keymap-select {
+          if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+              _set_block_cursor
+          else
+              _set_beam_cursor
+          fi
+        }
+        zle -N zle-keymap-select
+
+        # ensure beam cursor when starting new terminal
+        precmd_functions+=(_set_beam_cursor)
+
+        # disable empty line when opening new terminal, but
+        # insert empty line after each command for starship
+        # https://github.com/starship/starship/issues/560#issuecomment-1318462079
+        precmd() { precmd() { echo "" } }
+
+        # wallust colorscheme
+        ${lib.optionalString (config.iynaix.wallust.zsh) "cat ~/.cache/wallust/sequences"}
+      '';
     };
 
     iynaix.persist.home = {
