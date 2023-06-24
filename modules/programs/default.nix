@@ -14,7 +14,6 @@
     ./kitty.nix
     ./nemo.nix
     ./neovim.nix
-    ./pywal.nix
     ./rofi.nix
     ./virt-manager.nix
     ./vscode.nix

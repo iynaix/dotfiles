@@ -18,12 +18,12 @@ in {
     settings-template = lib.mkOption {
       type = lib.types.str;
       default = "";
-      description = "Additional waybar settings in wal template format (original format is json)";
+      description = "Additional waybar settings in wallust template format (original format is json)";
     };
     style-template = lib.mkOption {
       type = lib.types.str;
       default = "";
-      description = "Additional waybar css styles in wal template format (original format is css)";
+      description = "Additional waybar css styles in wallust template format (original format is css)";
     };
   };
 
@@ -141,7 +141,7 @@ in {
 
             "custom/nix": {
               "format": "",
-              // "on-click": "hypr-wallpaper",
+              "on-click": "hypr-wallpaper",
               // "on-click-right": "hypr-theme",
               "tooltip": false
             }${lib.optionalString (cfg.settings-template != "") ","}

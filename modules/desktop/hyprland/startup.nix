@@ -117,7 +117,7 @@ in {
 
           # set wallpaper
           (
-            if config.iynaix.pywal.enable
+            if config.iynaix.wallust.enable
             then "hypr-wallpaper"
             else "hypr-theme"
           )
