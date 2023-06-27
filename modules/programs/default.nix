@@ -14,6 +14,7 @@
     ./kitty.nix
     ./nemo.nix
     ./neovim.nix
+    ./nixlang.nix
     ./rofi.nix
     ./virt-manager.nix
     ./vscode.nix
@@ -29,9 +30,6 @@
         libnotify
         neofetch
         wallust
-        # nix dev stuff
-        nil
-        alejandra
       ];
     };
 

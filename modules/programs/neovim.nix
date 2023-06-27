@@ -60,7 +60,7 @@
           plenary-nvim
           nvim-tree-lua
           # syntax highlighting
-          (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+          nvim-treesitter.withAllGrammars
           vim-jsx-pretty
           # tmux plugins
           vim-tmux-navigator
