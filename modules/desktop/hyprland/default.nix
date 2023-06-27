@@ -259,8 +259,8 @@ in {
 
                 "${mod}_SHIFT, h" = "movewindow, l";
                 "${mod}_SHIFT, l" = "movewindow, r";
-                "${mod}_SHIFT, j" = "movewindow, u";
-                "${mod}_SHIFT, k" = "movewindow, d";
+                "${mod}_SHIFT, k" = "movewindow, u";
+                "${mod}_SHIFT, j" = "movewindow, d";
 
                 # Switch workspaces with mainMod + [0-9]
                 "${mod}, 1" = "workspace, 1";

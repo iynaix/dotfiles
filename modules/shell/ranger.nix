@@ -23,7 +23,15 @@
               "map m${name} shell mv -v ${value}"
               "map Y${name} shell cp -rv ${value}"
             ]))
-            config.iynaix.shortcuts));
+            config.iynaix.shortcuts
+            ++ [
+              # set preview images method here
+              ''set preview_images_method ${
+                  if config.iynaix.terminal.package.pname == "kitty"
+                  then "kitty"
+                  else "iterm2"
+                }''
+            ]));
       };
     };
   };

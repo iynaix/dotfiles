@@ -45,15 +45,13 @@
             end
 
             return {
-              font = wezterm.font('${font}', {
-                weight = "Regular",
-              }),
+              font = wezterm.font('${font}', { weight = "Regular", }),
               harfbuzz_features = { 'zero=1' },
               font_size = ${toString (size - 1)},
               window_background_opacity = ${toString opacity},
               enable_scroll_bar = false,
               enable_tab_bar = false,
-              enable_wayland = false,
+              enable_wayland = true,
               scrollback_lines = 10000,
               color_scheme_dirs = { "/home/${user}/.cache/wallust" },
               color_scheme = "Wallust",
@@ -127,7 +125,7 @@
           # add default font to silence null font errors
           postFixup = ''
             substituteInPlace $out/bin/lsix \
-              --replace '#fontfamily=Mincho' 'fontfamily="JetBrains-Mono-Regular-Nerd-Font-Complete"'
+              --replace '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
             ${oldAttrs.postFixup}
           '';
         });

@@ -1,7 +1,6 @@
 {
   pkgs,
   user,
-  config,
   ...
 }: {
   config = {
