@@ -45,6 +45,7 @@
         show-hidden-files = true;
         start-with-dual-pane = true;
         date-format-monospace = true;
+        thumnail-limit = 31457280;
       };
       "org/nemo/window-state" = {
         sidebar-bookmark-breakpoint = 0;

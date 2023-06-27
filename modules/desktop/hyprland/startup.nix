@@ -115,12 +115,7 @@ in {
           "hyprctl dispatch workspace 7"
           "hyprctl dispatch workspace 1"
 
-          # set wallpaper
-          (
-            if config.iynaix.wallust.enable
-            then "hypr-wallpaper"
-            else "hypr-theme"
-          )
+          "hypr-wallpaper"
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"
