@@ -12,7 +12,7 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
 ```
 ### Install from flake
 
-Change `desktop` to desired host as necessary
+Change `desktop` to desired host as needed
 
 ```sh
 nix-shell -p nixFlakes

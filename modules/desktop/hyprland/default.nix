@@ -16,42 +16,9 @@
     else "SUPER";
   # functions for creating hyprland config
   # https://github.com/hyprwm/Hyprland/pull/870#issuecomment-1319448768
-  mkValueString = value: (
-    if builtins.isBool value
-    then
-      (
-        if value
-        then "true"
-        else "false"
-      )
-    else if (builtins.isFloat value || builtins.isInt value)
-    then (builtins.toString value)
-    else if builtins.isString value
-    then value
-    else if
-      (
-        (builtins.isList value)
-        && ((builtins.length value) == 2)
-        && ((builtins.isFloat (builtins.elemAt value 0)) || (builtins.isFloat (builtins.elemAt value 0)))
-        && ((builtins.isFloat (builtins.elemAt value 1)) || (builtins.isFloat (builtins.elemAt value 1)))
-      )
-    then (builtins.toString (builtins.elemAt value 0) + " " + builtins.toString (builtins.elemAt value 1))
-    else abort "Unhandled value type ${builtins.typeOf value}"
-  );
   concatAttrs = arg: func: (
     assert builtins.isAttrs arg;
       builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList func arg)
-  );
-  mkHyprlandVariables = arg: (
-    concatAttrs arg (
-      name: value:
-        name
-        + (
-          if builtins.isAttrs value
-          then (" {\n" + (mkHyprlandVariables value) + "\n}")
-          else " = " + mkValueString value
-        )
-    )
   );
   mkHyprlandBinds = arg: (
     concatAttrs arg (
@@ -100,8 +67,8 @@ in {
       '';
     };
     extraVariables = lib.mkOption {
-      type = with lib.types; attrsOf unspecified;
-      default = {};
+      type = lib.types.str;
+      default = "";
       description = "Extra variable config for Hyprland";
     };
     extraBinds = lib.mkOption {
@@ -151,249 +118,265 @@ in {
 
         "hypr/hyprland.conf".text = lib.concatStringsSep "\n" [
           # monitors
-          (mkHyprlandBinds {monitor = cfg.monitors;})
-          (mkHyprlandVariables {
-            input = {
-              kb_layout = "us";
-              follow_mouse = 1;
-
-              touchpad = {
-                natural_scroll = false;
-                disable_while_typing = true;
-              };
-            };
-
-            general = {
-              gaps_in =
-                if host == "desktop"
-                then 8
-                else 4;
-              gaps_out =
-                if host == "desktop"
-                then 8
-                else 4;
-              border_size = 2;
-
-              layout = "master";
-            };
-
-            decoration = {
-              rounding = 8;
-              blur = host != "vm";
-              blur_size = 5;
-              blur_passes = 4;
-              blur_new_optimizations = true;
-
-              drop_shadow = host != "vm";
-              shadow_range = 4;
-              shadow_render_power = 3;
-              "col.shadow" = "rgba(1a1a1aee)";
-
-              # dim_inactive = true;
-              # dim_strength = 0.05;
-
-              # blurls = "rofi";
-            };
-
-            animations = {
-              enabled = host != "vm";
-            };
-
-            dwindle = {
-              pseudotile = true; # master switch for pseudotiling.
-              preserve_split = true; # you probably want this
-            };
-
-            master = {
-              new_is_master = false;
-              mfact = 0.5;
-              orientation = "left";
-            };
-
-            binds = {
-              workspace_back_and_forth = true;
-            };
-
-            misc = {
-              disable_hyprland_logo = true;
-              disable_splash_rendering = true;
-              mouse_move_enables_dpms = true;
-              # key_press_enables_dpms = true;
-              enable_swallow = true;
-              swallow_regex = "[Kk]itty|[Ww]ezterm";
-            };
+          (mkHyprlandBinds {
+            # handles displays that are plugged in
+            monitor = cfg.monitors // {"" = "preferred,auto,auto";};
           })
-          (mkHyprlandVariables cfg.extraVariables)
-          (mkHyprlandBinds
-            {
-              # handles displays that are plugged in
-              monitor = {"" = "preferred,auto,auto";};
+          ''
+            input {
+              kb_layout = us
+              follow_mouse = 1
 
-              bind = {
-                "${mod}, Return" = "exec, ${lib.getExe config.iynaix.terminal.package}";
-                "${mod}_SHIFT, Return" = "exec, rofi -show drun";
-                "${mod}, BackSpace" = "killactive,";
-                "${mod}, e" = "exec, nemo ~/Downloads";
-                "${mod}_SHIFT, e" = "exec, ${config.iynaix.terminal.exec} ranger ~/Downloads";
-                "${mod}, w" = "exec, brave";
-                "${mod}_SHIFT, w" = "exec, brave --incognito";
-                "${mod}, v" = "exec, ${config.iynaix.terminal.exec} nvim";
-                "${mod}_SHIFT, v" = "exec, code";
+              touchpad {
+                natural_scroll = false
+                disable_while_typing = true
+              }
+            }
 
-                # exit hyprland
-                "${mod}_SHIFT, c" = "exit,";
+            general {
+              gaps_in = ${
+              toString (
+                if host == "desktop"
+                then 8
+                else 4
+              )
+            }
+              gaps_out = ${
+              toString (
+                if host == "desktop"
+                then 8
+                else 4
+              )
+            }
+              border_size = 2
+              layout = master
+            }
 
-                "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.monospace} 14" -modi power-menu:rofi-power-menu'';
-                "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
+            decoration {
+              rounding = 8
+              blur = ${lib.boolToString (host != "vm")}
+              blur_size = 5
+              blur_passes = 4
+              blur_new_optimizations = true
 
-                # reset monitors
-                "CTRL_SHIFT, Escape" = "exec, hypr-reset-monitors";
+              drop_shadow = ${lib.boolToString (host != "vm")}
+              shadow_range = 4
+              shadow_render_power = 3
+              col.shadow = rgba(1a1a1aee)
 
-                # bind = ${mod}, P, pseudo, # dwindle
-                # bind = ${mod}, J, togglesplit, # dwindle
+              # dim_inactive = true
+              # dim_strength = 0.05
 
-                "${mod}, h" = "movefocus, l";
-                "${mod}, l" = "movefocus, r";
-                "${mod}, j" = "movefocus, u";
-                "${mod}, k" = "movefocus, d";
+              # blurls = rofi
+            }
 
-                "${mod}_SHIFT, h" = "movewindow, l";
-                "${mod}_SHIFT, l" = "movewindow, r";
-                "${mod}_SHIFT, k" = "movewindow, u";
-                "${mod}_SHIFT, j" = "movewindow, d";
+            animations {
+              enabled = ${lib.boolToString (host != "vm")}
+              bezier = overshot, 0.05, 0.9, 0.1, 1.05
+              bezier = smoothOut, 0.36, 0, 0.66, -0.56
+              bezier = smoothIn, 0.25, 1, 0.5, 1
 
-                # Switch workspaces with mainMod + [0-9]
-                "${mod}, 1" = "workspace, 1";
-                "${mod}, 2" = "workspace, 2";
-                "${mod}, 3" = "workspace, 3";
-                "${mod}, 4" = "workspace, 4";
-                "${mod}, 5" = "workspace, 5";
-                "${mod}, 6" = "workspace, 6";
-                "${mod}, 7" = "workspace, 7";
-                "${mod}, 8" = "workspace, 8";
-                "${mod}, 9" = "workspace, 9";
-                "${mod}, 0" = "workspace, 10";
+              animation = windows, 1, 5, overshot, slide
+              animation = windowsOut, 1, 4, smoothOut, slide
+              animation = windowsMove, 1, 4, smoothIn, slide
+              animation = border, 1, 5, default
+              animation = fade, 1, 5, smoothIn
+              animation = fadeDim, 1, 5, smoothIn
+              animation = workspaces, 1, 6, default
+            }
 
-                # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                "${mod}_SHIFT, 1" = "movetoworkspace, 1";
-                "${mod}_SHIFT, 2" = "movetoworkspace, 2";
-                "${mod}_SHIFT, 3" = "movetoworkspace, 3";
-                "${mod}_SHIFT, 4" = "movetoworkspace, 4";
-                "${mod}_SHIFT, 5" = "movetoworkspace, 5";
-                "${mod}_SHIFT, 6" = "movetoworkspace, 6";
-                "${mod}_SHIFT, 7" = "movetoworkspace, 7";
-                "${mod}_SHIFT, 8" = "movetoworkspace, 8";
-                "${mod}_SHIFT, 9" = "movetoworkspace, 9";
-                "${mod}_SHIFT, 0" = "movetoworkspace, 10";
+            dwindle {
+              pseudotile = true
+              preserve_split = true
+            }
 
-                "${mod}, b" = "layoutmsg, swapwithmaster";
+            master {
+              new_is_master = false
+              mfact = 0.5
+              orientation = left
+            }
 
-                # set master to vertical on every navigation to the workspace
-                # "${mod}, 6" = "layoutmsg, orientationtop";
-                # "${mod}, 7" = "layoutmsg, orientationtop";
-                # "${mod}, 8" = "layoutmsg, orientationtop";
+            binds {
+              workspace_back_and_forth = true
+            }
 
-                # "${mod}_SHIFT, 6" = "layoutmsg, orientationtop";
-                # "${mod}_SHIFT, 7" = "layoutmsg, orientationtop";
-                # "${mod}_SHIFT, 8" = "layoutmsg, orientationtop";
+            misc {
+              disable_hyprland_logo = true
+              disable_splash_rendering = true
+              mouse_move_enables_dpms = true
+              # key_press_enables_dpms = true
+              enable_swallow = true
+              swallow_regex = [Kk]itty|[Ww]ezterm
+            }
+          ''
+          cfg.extraVariables
+          (mkHyprlandBinds {
+            bind = {
+              "${mod}, Return" = "exec, ${lib.getExe config.iynaix.terminal.package}";
+              "${mod}_SHIFT, Return" = "exec, rofi -show drun";
+              "${mod}, BackSpace" = "killactive,";
+              "${mod}, e" = "exec, nemo ~/Downloads";
+              "${mod}_SHIFT, e" = "exec, ${config.iynaix.terminal.exec} ranger ~/Downloads";
+              "${mod}, w" = "exec, brave";
+              "${mod}_SHIFT, w" = "exec, brave --incognito";
+              "${mod}, v" = "exec, ${config.iynaix.terminal.exec} nvim";
+              "${mod}_SHIFT, v" = "exec, code";
+              "${mod}, period" = "exec, code ~/projects/dotfiles";
 
-                # focus the previous / next desktop in the current monitor (DE style)
-                "CTRL_ALT, Left" = "workspace, m-1";
-                "CTRL_ALT, Right" = "workspace, m+1";
+              # exit hyprland
+              "${mod}_SHIFT, c" = "exit,";
 
-                # monocle mode
-                "${mod}, z" = "fullscreen, 1";
+              "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.monospace} 14" -modi power-menu:rofi-power-menu'';
+              "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 
-                # fullscreen
-                "${mod}, f" = "fullscreen, 0";
-                "${mod}_SHIFT, f" = "fakefullscreen";
+              # reset monitors
+              "CTRL_SHIFT, Escape" = "exec, hypr-reset-monitors";
 
-                # floating
-                "${mod}, g" = "togglefloating";
+              # bind = ${mod}, P, pseudo, # dwindle
+              # bind = ${mod}, J, togglesplit, # dwindle
 
-                # sticky
-                "${mod}, s" = "pin";
+              "${mod}, h" = "movefocus, l";
+              "${mod}, l" = "movefocus, r";
+              "${mod}, j" = "movefocus, u";
+              "${mod}, k" = "movefocus, d";
 
-                # focus next / previous monitor
-                "${mod}, Left" = "focusmonitor, -1";
-                "${mod}, Right" = "focusmonitor, +1";
+              "${mod}_SHIFT, h" = "movewindow, l";
+              "${mod}_SHIFT, l" = "movewindow, r";
+              "${mod}_SHIFT, k" = "movewindow, u";
+              "${mod}_SHIFT, j" = "movewindow, d";
 
-                # move to next / previous monitor
-                "${mod}_SHIFT, Left" = "movewindow, mon:-1";
-                "${mod}_SHIFT, Right" = "movewindow, mon:+1";
+              # Switch workspaces with mainMod + [0-9]
+              "${mod}, 1" = "workspace, 1";
+              "${mod}, 2" = "workspace, 2";
+              "${mod}, 3" = "workspace, 3";
+              "${mod}, 4" = "workspace, 4";
+              "${mod}, 5" = "workspace, 5";
+              "${mod}, 6" = "workspace, 6";
+              "${mod}, 7" = "workspace, 7";
+              "${mod}, 8" = "workspace, 8";
+              "${mod}, 9" = "workspace, 9";
+              "${mod}, 0" = "workspace, 10";
 
-                "ALT, Tab" = "cyclenext";
-                "ALT_SHIFT, Tab" = "cyclenext, prev";
+              # Move active window to a workspace with mainMod + SHIFT + [0-9]
+              "${mod}_SHIFT, 1" = "movetoworkspace, 1";
+              "${mod}_SHIFT, 2" = "movetoworkspace, 2";
+              "${mod}_SHIFT, 3" = "movetoworkspace, 3";
+              "${mod}_SHIFT, 4" = "movetoworkspace, 4";
+              "${mod}_SHIFT, 5" = "movetoworkspace, 5";
+              "${mod}_SHIFT, 6" = "movetoworkspace, 6";
+              "${mod}_SHIFT, 7" = "movetoworkspace, 7";
+              "${mod}_SHIFT, 8" = "movetoworkspace, 8";
+              "${mod}_SHIFT, 9" = "movetoworkspace, 9";
+              "${mod}_SHIFT, 0" = "movetoworkspace, 10";
 
-                # switches to the next / previous window of the same class
-                # hardcoded to SUPER so it doesn't clash on VM
-                "SUPER, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py next";
-                "SUPER_SHIFT, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py prev";
+              "${mod}, b" = "layoutmsg, swapwithmaster";
 
-                # picture in picture mode
-                "${mod}, p" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/pip.py";
+              # set master to vertical on every navigation to the workspace
+              # "${mod}, 6" = "layoutmsg, orientationtop";
+              # "${mod}, 7" = "layoutmsg, orientationtop";
+              # "${mod}, 8" = "layoutmsg, orientationtop";
 
-                # add / remove master windows
-                "${mod}, m" = "layoutmsg, addmaster";
-                "${mod}_SHIFT, m" = "layoutmsg, removemaster";
+              # "${mod}_SHIFT, 6" = "layoutmsg, orientationtop";
+              # "${mod}_SHIFT, 7" = "layoutmsg, orientationtop";
+              # "${mod}_SHIFT, 8" = "layoutmsg, orientationtop";
 
-                # rotate via switching master orientation
-                "${mod}, r" = "layoutmsg, orientationnext";
-                "${mod}_SHIFT, r" = "layoutmsg, orientationprev";
+              # focus the previous / next desktop in the current monitor (DE style)
+              "CTRL_ALT, Left" = "workspace, m-1";
+              "CTRL_ALT, Right" = "workspace, m+1";
 
-                # Scroll through existing workspaces with mainMod + scroll
-                "${mod}, mouse_down" = "workspace, e+1";
-                "${mod}, mouse_up" = "workspace, e-1";
+              # monocle mode
+              "${mod}, z" = "fullscreen, 1";
 
-                # lock monitors
-                "${mod}_SHIFT_CTRL, l" = "dpms, off";
+              # fullscreen
+              "${mod}, f" = "fullscreen, 0";
+              "${mod}_SHIFT, f" = "fakefullscreen";
 
-                # dunst controls
-                "${mod}, grave" = "exec, dunstctl history-pop";
+              # floating
+              "${mod}, g" = "togglefloating";
 
-                "${mod}, q" = "exec, wezterm start";
-                # TODO:
-                # special keys
-                # "XF86AudioPlay" = "mpvctl playpause";
-              };
+              # sticky
+              "${mod}, s" = "pin";
 
-              # Move/resize windows with mainMod + LMB/RMB and dragging
-              bindm = {
-                "${mod}, mouse:272" = "movewindow";
-                "${mod}, mouse:273" = "resizewindow";
-              };
+              # focus next / previous monitor
+              "${mod}, Left" = "focusmonitor, -1";
+              "${mod}, Right" = "focusmonitor, +1";
 
-              # bind workspaces to monitors
-              workspace = {
-                "1" = "monitor:${displays.monitor1}";
-                "2" = "monitor:${displays.monitor1}";
-                "3" = "monitor:${displays.monitor1}";
-                "4" = "monitor:${displays.monitor1}";
-                "5" = "monitor:${displays.monitor1}";
-                "6" = "monitor:${displays.monitor2}";
-                "7" = "monitor:${displays.monitor2}";
-                "8" = "monitor:${displays.monitor2}";
-                "9" = "monitor:${displays.monitor3}";
-                "10" = "monitor:${displays.monitor3}";
-              };
+              # move to next / previous monitor
+              "${mod}_SHIFT, Left" = "movewindow, mon:-1";
+              "${mod}_SHIFT, Right" = "movewindow, mon:+1";
 
-              windowrulev2 = [
-                # "dimaround,floating:1"
-              ];
+              "ALT, Tab" = "cyclenext";
+              "ALT_SHIFT, Tab" = "cyclenext, prev";
 
-              windowrule = [
-                # do not idle while watching videos
-                "idleinhibit fullscreen,Brave-browser"
-                "idleinhibit fullscreen,firefox-aurora"
-                "idleinhibit focus,YouTube"
-                "idleinhibit focus,mpv"
-              ];
+              # switches to the next / previous window of the same class
+              # hardcoded to SUPER so it doesn't clash on VM
+              "SUPER, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py next";
+              "SUPER_SHIFT, Tab" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py prev";
 
-              exec-once = [
-                # clipboard manager
-                "wl-paste - -watch cliphist store"
-              ];
-            })
+              # picture in picture mode
+              "${mod}, p" = "exec, ${pkgs.python3}/bin/python ~/.config/hypr/pip.py";
+
+              # add / remove master windows
+              "${mod}, m" = "layoutmsg, addmaster";
+              "${mod}_SHIFT, m" = "layoutmsg, removemaster";
+
+              # rotate via switching master orientation
+              "${mod}, r" = "layoutmsg, orientationnext";
+              "${mod}_SHIFT, r" = "layoutmsg, orientationprev";
+
+              # Scroll through existing workspaces with mainMod + scroll
+              "${mod}, mouse_down" = "workspace, e+1";
+              "${mod}, mouse_up" = "workspace, e-1";
+
+              # lock monitors
+              "${mod}_SHIFT_CTRL, l" = "dpms, off";
+
+              # dunst controls
+              "${mod}, grave" = "exec, dunstctl history-pop";
+
+              "${mod}, q" = "exec, wezterm start";
+              # TODO:
+              # special keys
+              # "XF86AudioPlay" = "mpvctl playpause";
+            };
+
+            # Move/resize windows with mainMod + LMB/RMB and dragging
+            bindm = {
+              "${mod}, mouse:272" = "movewindow";
+              "${mod}, mouse:273" = "resizewindow";
+            };
+
+            # bind workspaces to monitors
+            workspace = {
+              "1" = "monitor:${displays.monitor1}";
+              "2" = "monitor:${displays.monitor1}";
+              "3" = "monitor:${displays.monitor1}";
+              "4" = "monitor:${displays.monitor1}";
+              "5" = "monitor:${displays.monitor1}";
+              "6" = "monitor:${displays.monitor2}";
+              "7" = "monitor:${displays.monitor2}";
+              "8" = "monitor:${displays.monitor2}";
+              "9" = "monitor:${displays.monitor3}";
+              "10" = "monitor:${displays.monitor3}";
+            };
+
+            windowrulev2 = [
+              # "dimaround,floating:1"
+            ];
+
+            windowrule = [
+              # do not idle while watching videos
+              "idleinhibit fullscreen,Brave-browser"
+              "idleinhibit fullscreen,firefox-aurora"
+              "idleinhibit focus,YouTube"
+              "idleinhibit focus,mpv"
+            ];
+
+            exec-once = [
+              # clipboard manager
+              "wl-paste - -watch cliphist store"
+            ];
+          })
           (mkHyprlandBinds cfg.extraBinds)
         ];
       };

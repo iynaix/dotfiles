@@ -39,7 +39,6 @@
         bookmarks = lib.mkAfter [
           "file:///media/6TBRED/Anime/Current Anime Current"
           "file:///media/6TBRED/US/Current TV Current"
-          "file:///media/6TBRED/New TV New"
           "file:///media/6TBRED/Movies"
         ];
       };
