@@ -103,6 +103,7 @@ in {
               # Use the most prominent colors in a way that makes sense, a scheme:
               #  * dark    - 8 dark colors, color0 darkest - color7 lightest, dark background light contrast
               #  * dark16  - same as dark but it displays 16 colors
+              #  * harddark  - same as dark but with darker hard hue colors
               #  * light   - 8 light colors, color0 lightest - color7 darkest, light background dark contrast
               #  * light16 - same as light but displays 16 colors
               filter = "dark16"
@@ -228,8 +229,8 @@ in {
         wallust = super.wallust.overrideAttrs (oldAttrs: rec {
           src = pkgs.fetchgit {
             url = "https://codeberg.org/explosion-mental/wallust.git";
-            rev = "f98cc59f7a3584d20a2aae1d8d82cf41f7f2767d";
-            sha256 = "sha256-QHCllaS3y/F4aKQYeDEoX9mnGU2LsZphysBizQueWbE=";
+            rev = "23d5064e4b4ae2ecd67ccb0759c3b510b5059ac9";
+            sha256 = "sha256-3N/a7aEPPLV5lyz4GgaJ1DUApVwqo2s18YUo5cZzlFI=";
           };
 
           cargoDeps = pkgs.rustPlatform.importCargoLock {

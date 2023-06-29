@@ -32,7 +32,7 @@ in {
           autocd = true;
           enableCompletion = true;
           enableAutosuggestions = true;
-          enableSyntaxHighlighting = true;
+          syntaxHighlighting.enable = true;
           history.path = histFile;
           historySubstringSearch = {
             enable = true;

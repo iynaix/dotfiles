@@ -49,7 +49,7 @@
 
     opacity = lib.mkOption {
       type = lib.types.float;
-      default = 0.6;
+      default = 0.5;
       description = "Opacity for the terminal.";
     };
 

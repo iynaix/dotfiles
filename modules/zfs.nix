@@ -1,9 +1,6 @@
 {
   config,
-  pkgs,
-  user,
   lib,
-  inputs,
   ...
 }: {
   options.iynaix = {
