@@ -6,6 +6,9 @@
   ...
 }: let
   cfg = config.iynaix.waybar;
+  reload-waybar = pkgs.writeShellScriptBin "reload-waybar" ''
+    killall -q -SIGUSR2 .waybar-wrapped
+  '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
     waybar --config $HOME/.cache/wallust/waybar-config \
@@ -29,7 +32,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [launch-waybar];
+      home.packages = [launch-waybar reload-waybar];
 
       programs.waybar = {
         enable = true;
@@ -110,7 +113,7 @@ in {
               "hyprland/window"
             ],
 
-            "modules-right": [ "network", "pulseaudio", "battery", "clock" ],
+            "modules-right": [ "pulseaudio", "network", "battery", "clock" ],
 
             "network": {
               "format-disconnected": "󰖪  Offline",

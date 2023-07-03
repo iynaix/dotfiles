@@ -106,6 +106,7 @@ in {
               #  * harddark  - same as dark but with darker hard hue colors
               #  * light   - 8 light colors, color0 lightest - color7 darkest, light background dark contrast
               #  * light16 - same as light but displays 16 colors
+              #  * softlight - counterpart of `harddark`
               filter = "dark16"
 
             ''
@@ -127,7 +128,7 @@ in {
         // lib.mapAttrs' (
           template: {text, ...}:
             lib.nameValuePair "wallust/${template}" {
-              text = text;
+              inherit text;
             }
         )
         cfg.entries;

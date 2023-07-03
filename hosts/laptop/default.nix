@@ -18,9 +18,9 @@ in {
 
       hyprland = {
         enable = true;
-        monitors = {
-          "${displayCfg.monitor1}" = "1920x1080,0x0,1";
-        };
+        monitors = ''
+          monitor = ${displayCfg.monitor1}, 1920x1080,0x0,1
+        '';
         extraVariables = ''
           gestures {
             workspace_swipe = true
