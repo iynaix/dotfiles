@@ -85,7 +85,7 @@ set diffopt+=context:3
 
 " make vim opaque in kitty
 " https://github.com/dracula/vim/issues/284#issuecomment-1441202303
-" autocmd ColorScheme catppuccin-mocha highlight Normal guibg=#1e1e2f
+autocmd ColorScheme catppuccin-mocha highlight Normal guibg=#1e1e2f
 colorscheme catppuccin-mocha
 
 "Sign column same color as line numbers

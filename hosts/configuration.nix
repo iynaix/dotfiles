@@ -119,7 +119,10 @@
     };
   };
 
-  # do not install xterm
+  # bye bye nano
+  environment.defaultPackages = [pkgs.perl pkgs.rsync pkgs.strace];
+
+  # bye bye xterm
   services.xserver.excludePackages = [pkgs.xterm];
 
   # enable opengl

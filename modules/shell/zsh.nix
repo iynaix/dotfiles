@@ -116,7 +116,7 @@ in {
           isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
           ll = "ls -al";
           ls = "exa --group-directories-first --color-scale --icons";
-          nre = "nixos-rebuild";
+          nano = "nvim";
           nsh = "nix-shell -p";
           open = "xdg-open";
           pj = "openproj";

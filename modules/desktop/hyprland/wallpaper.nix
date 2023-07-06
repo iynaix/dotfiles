@@ -37,7 +37,7 @@
       wallpaper="$1"
     fi
     wallust ${lib.optionalString (!config.iynaix.wallust.zsh) "--skip-sequences "} "$wallpaper"
-    hypr-reset
+    hypr-reset "$wallpaper"
   '';
   # applies a set theme
   hypr-theme = pkgs.writeShellScriptBin "hypr-theme" ''
