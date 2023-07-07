@@ -45,7 +45,7 @@
     hypr-reset
 
     # reset waybar
-    # launch-waybar
+    launch-waybar
   '';
 in {
   options.iynaix.hyprland = {

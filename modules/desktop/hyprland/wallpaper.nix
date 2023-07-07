@@ -27,7 +27,7 @@
       swww img --transition-type grow "$1"
     fi
 
-    reload-waybar
+    launch-waybar
   '';
   # sets a random wallpaper and changes the colors
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" ''

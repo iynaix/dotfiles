@@ -13,7 +13,6 @@ in {
     iynaix = {
       # hardware
       am5.enable = true;
-      dac.enable = true;
       hdds.enable = true;
 
       displays = {

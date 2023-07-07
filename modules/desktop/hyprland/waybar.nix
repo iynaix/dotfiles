@@ -6,9 +6,6 @@
   ...
 }: let
   cfg = config.iynaix.waybar;
-  reload-waybar = pkgs.writeShellScriptBin "reload-waybar" ''
-    killall -q -SIGUSR2 .waybar-wrapped
-  '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
     waybar --config $HOME/.cache/wallust/waybar-config \
@@ -32,12 +29,18 @@ in {
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [launch-waybar reload-waybar];
+      home.packages = [launch-waybar];
 
       programs.waybar = {
         enable = true;
-        # patch waybar for hyprland workspaces
-        package = pkgs.hyprland.waybar-hyprland;
+        # patch waybar to fix hyprland/window on 0.9.19
+        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (oldAttrs: {
+          src = pkgs.fetchgit {
+            url = "https://github.com/Alexays/Waybar";
+            rev = "e4900db9a2e00e41f43e40d6a8d90c2466645c37";
+            sha256 = "sha256-Z4INHQFkORA+20cLKjZvUFb2+kfEuM7nuOSBeYLyob4=";
+          };
+        });
       };
     };
 

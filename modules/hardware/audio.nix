@@ -1,12 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}: {
-  options.iynaix = {
-    dac.enable = lib.mkEnableOption "DAC";
-  };
-
+{pkgs, ...}: {
   config = {
     # setup pipewire for audio
     security.rtkit.enable = true;
