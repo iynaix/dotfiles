@@ -19,9 +19,7 @@ in {
       # wayland settings
       hyprland = {
         enable = true;
-        monitors = {
-          "${displayCfg.monitor1}" = "1920x1200,0x0,1";
-        };
+        monitors = "monitor = ${displayCfg.monitor1}, 1920x1200,0x0,1";
       };
 
       # persist.tmpfs.root = true;
