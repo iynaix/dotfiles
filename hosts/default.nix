@@ -11,6 +11,7 @@
       specialArgs = {
         inherit user inputs system;
         host = hostName;
+        isLaptop = hostName == "laptop";
       };
 
       modules =

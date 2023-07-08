@@ -37,7 +37,7 @@
   );
 in {
   imports = [
-    inputs.hyprland.nixosModules.default
+    # inputs.hyprland.nixosModules.default    # use hyprland unstable
     ./nvidia.nix
     ./screenshot.nix
     ./startup.nix
@@ -85,8 +85,8 @@ in {
 
     programs.hyprland.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      hyprland.xdg-desktop-portal-hyprland
+    environment.systemPackages = [
+      inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland
     ];
 
     home-manager.users.${user} = {
@@ -382,12 +382,5 @@ in {
         };
       };
     };
-
-    nixpkgs.overlays = [
-      (self: super: {
-        hyprwm-contrib = inputs.hyprwm-contrib.packages.${system};
-        hyprland = inputs.hyprland.packages.${system};
-      })
-    ];
   };
 }

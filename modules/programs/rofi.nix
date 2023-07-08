@@ -2,8 +2,8 @@
   pkgs,
   user,
   lib,
-  host,
   config,
+  isLaptop,
   ...
 }: {
   config = {
@@ -11,7 +11,7 @@
       home.packages = with pkgs; [rofi-power-menu rofi-wayland];
 
       xdg.configFile = {
-        "rofi/rofi-wifi-menu" = lib.mkIf (host == "laptop") {
+        "rofi/rofi-wifi-menu" = lib.mkIf isLaptop {
           source = ./rofi-wifi-menu.sh;
         };
 

@@ -1,6 +1,8 @@
 {
   pkgs,
   user,
+  inputs,
+  system,
   lib,
   config,
   ...
@@ -34,7 +36,7 @@ in {
       programs.waybar = {
         enable = true;
         # patch waybar to fix hyprland/window on 0.9.19
-        package = pkgs.hyprland.waybar-hyprland.overrideAttrs (oldAttrs: {
+        package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
           src = pkgs.fetchgit {
             url = "https://github.com/Alexays/Waybar";
             rev = "e4900db9a2e00e41f43e40d6a8d90c2466645c37";

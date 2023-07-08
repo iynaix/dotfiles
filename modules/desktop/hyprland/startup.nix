@@ -4,6 +4,7 @@
   user,
   lib,
   config,
+  isLaptop,
   ...
 }: let
   cfg = config.iynaix.hyprland;
@@ -16,7 +17,7 @@
     ''
       ${lib.concatStringsSep "\n" ([
           "sleep ${
-            if host == "laptop"
+            if isLaptop
             then "20"
             else "10"
           }"

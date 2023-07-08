@@ -3,6 +3,8 @@
   host,
   user,
   lib,
+  inputs,
+  system,
   config,
   ...
 }: let
@@ -61,9 +63,9 @@
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = with pkgs; [
-        hyprwm-contrib.grimblast
-        hyprwm-contrib.hyprprop
+      home.packages = with inputs.hyprwm-contrib.packages.${system}; [
+        grimblast
+        hyprprop
       ];
     };
 
