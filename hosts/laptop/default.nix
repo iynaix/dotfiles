@@ -12,6 +12,7 @@ in {
   config = {
     iynaix = {
       displays.monitor1 = "eDP-1";
+      zfs.swap = true;
       backlight.enable = true;
       kmonad.enable = true;
       pathofbuilding.enable = true;

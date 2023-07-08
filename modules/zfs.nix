@@ -2,15 +2,18 @@
   config,
   lib,
   ...
-}: {
+}: let
+  cfg = config.iynaix.zfs;
+in {
   options.iynaix = {
     zfs = {
       enable = lib.mkEnableOption "zfs" // {default = true;};
+      swap = lib.mkEnableOption "swap";
       snapshots = lib.mkEnableOption "zfs snapshots" // {default = true;};
     };
   };
 
-  config = lib.mkIf config.iynaix.zfs.enable {
+  config = lib.mkIf cfg.enable {
     # booting with zfs
     boot.supportedFilesystems = ["zfs"];
     boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
@@ -47,7 +50,7 @@
       fsType = "zfs";
     };
 
-    services.sanoid = lib.mkIf config.iynaix.zfs.snapshots {
+    services.sanoid = lib.mkIf cfg.snapshots {
       enable = true;
 
       datasets."zroot/safe/home" = {
@@ -64,5 +67,12 @@
         monthly = 3;
       };
     };
+
+    # mount swap if specified
+    swapDevices = lib.mkIf cfg.swap (lib.mkForce [
+      {
+        device = "/dev/disk/by-label/SWAP";
+      }
+    ]);
   };
 }
