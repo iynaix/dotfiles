@@ -172,11 +172,6 @@ in {
             popd
         }
 
-        # create a new devenv environment
-        mkdevenv() {
-            nix flake init --template github:iynaix/dotfiles#$1
-        }
-
         upd8() {
             pushd ~/projects/dotfiles
             nix flake update
@@ -191,6 +186,11 @@ in {
             else
               sudo nix-collect-garbage -d
             fi
+        }
+
+        # create a new devenv environment
+        mkdevenv() {
+            nix flake init --template github:iynaix/dotfiles#$1
         }
 
         # less verbose xev output with only the relevant parts

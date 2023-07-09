@@ -15,7 +15,6 @@
     ./nemo.nix
     ./neovim.nix
     ./nixlang.nix
-    ./rice
     ./rofi.nix
     ./virt-manager.nix
     ./vscode.nix

@@ -61,6 +61,7 @@ in {
         packages = with pkgs; [
           deadbeef
           vlc
+          ffmpeg
           # vial
         ];
       };

@@ -10,6 +10,7 @@
     ./git.nix
     ./direnv.nix
     ./ranger.nix
+    ./rice
     ./renameutils.nix
     ./tmux.nix
     ./zsh.nix
@@ -49,7 +50,7 @@
 
     opacity = lib.mkOption {
       type = lib.types.float;
-      default = 0.6;
+      default = 0.8;
       description = "Opacity for the terminal.";
     };
 
