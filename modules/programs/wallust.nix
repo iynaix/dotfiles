@@ -58,13 +58,14 @@ in {
     };
 
     # enable wallust for individual programs
-    zsh = lib.mkEnableOption "zsh" // {default = cfg.enable;};
+    cava = lib.mkEnableOption "cava" // {default = cfg.enable;};
     dunst = lib.mkEnableOption "dunst" // {default = cfg.enable;};
-    waybar = lib.mkEnableOption "waybar" // {default = cfg.enable;};
-    swaylock = lib.mkEnableOption "swaylock" // {default = cfg.enable;};
     rofi = lib.mkEnableOption "rofi" // {default = cfg.enable;};
-    zathura = lib.mkEnableOption "zathura" // {default = cfg.enable;};
+    swaylock = lib.mkEnableOption "swaylock" // {default = cfg.enable;};
+    waybar = lib.mkEnableOption "waybar" // {default = cfg.enable;};
     wezterm = lib.mkEnableOption "wezterm" // {default = cfg.enable;};
+    zathura = lib.mkEnableOption "zathura" // {default = cfg.enable;};
+    zsh = lib.mkEnableOption "zsh" // {default = cfg.enable;};
   };
 
   config = lib.mkIf cfg.enable {

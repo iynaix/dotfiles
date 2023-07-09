@@ -15,6 +15,7 @@
     ./nemo.nix
     ./neovim.nix
     ./nixlang.nix
+    ./rice
     ./rofi.nix
     ./virt-manager.nix
     ./vscode.nix
@@ -28,7 +29,6 @@
       home.packages = with pkgs; [
         libreoffice
         libnotify
-        neofetch
         wallust
       ];
     };
