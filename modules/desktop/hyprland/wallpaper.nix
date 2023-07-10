@@ -5,6 +5,7 @@
   lib,
   ...
 }: let
+  cfg = config.iynaix.wallpaper;
   # sets up all the colors but DOES NOT change the wallpaper
   hypr-reset = pkgs.writeShellScriptBin "hypr-reset" ''
     # hyprland doesnt accept leading #
@@ -22,9 +23,9 @@
 
     swww query || swww init
     if [ -z "$1" ]; then
-      swww img --transition-type grow "$wallpaper"
+      swww img --transition-type ${cfg.transition} "$wallpaper"
     else
-      swww img --transition-type grow "$1"
+      swww img --transition-type ${cfg.transition} "$1"
     fi
 
     launch-waybar
@@ -52,6 +53,16 @@
     fi
   '';
 in {
+  options.iynaix.wallpaper = {
+    # transition is type of left right top
+    transition = lib.mkOption {
+      type =
+        lib.types.enum ["simple" "fade" "left" "right" "top" "bottom" "wipe" "wave" "grow" "center" "any" "outer" "random"];
+      default = "grow";
+      description = "The transition type for swww";
+    };
+  };
+
   config = {
     home-manager.users.${user} = {
       home = {

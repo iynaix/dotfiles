@@ -3,7 +3,6 @@
   pkgs,
   user,
   lib,
-  host,
   ...
 }: let
   displayCfg = config.iynaix.displays;

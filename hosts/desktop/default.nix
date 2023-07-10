@@ -45,6 +45,7 @@ in {
           }
         '';
       };
+      wallpaper.transition = "random";
 
       pathofbuilding.enable = true;
       smplayer.enable = true;
