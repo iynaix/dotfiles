@@ -5,6 +5,7 @@
 }: {
   imports = [
     ./brave.nix
+    ./docker.nix
     ./firefox.nix
     ./gparted.nix
     # ./helix.nix

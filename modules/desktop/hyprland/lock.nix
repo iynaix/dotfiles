@@ -52,7 +52,7 @@ in {
 
     iynaix.hyprland.extraBinds = {
       bind = {
-        "${mod}, l" = "exec, hypr-lock";
+        "${mod}, x" = "exec, hypr-lock";
       };
     };
   };

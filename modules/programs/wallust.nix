@@ -29,7 +29,7 @@ in {
     enable = lib.mkEnableOption "wallust" // {default = true;};
     threshold = lib.mkOption {
       type = int;
-      default = 11;
+      default = 10;
     };
 
     entries = lib.mkOption {
@@ -231,8 +231,8 @@ in {
         wallust = super.wallust.overrideAttrs (oldAttrs: rec {
           src = pkgs.fetchgit {
             url = "https://codeberg.org/explosion-mental/wallust.git";
-            rev = "23d5064e4b4ae2ecd67ccb0759c3b510b5059ac9";
-            sha256 = "sha256-3N/a7aEPPLV5lyz4GgaJ1DUApVwqo2s18YUo5cZzlFI=";
+            rev = "648ca7b90473ee42746f3235e6987c655d45d61a";
+            sha256 = "sha256-EV/+nyKdI1pG7A/TJMM8nN+dv1qerHN7ByuzRVklffA=";
           };
 
           cargoDeps = pkgs.rustPlatform.importCargoLock {
