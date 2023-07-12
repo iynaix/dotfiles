@@ -29,7 +29,7 @@ in {
     enable = lib.mkEnableOption "wallust" // {default = true;};
     threshold = lib.mkOption {
       type = int;
-      default = 10;
+      default = 11;
     };
 
     entries = lib.mkOption {

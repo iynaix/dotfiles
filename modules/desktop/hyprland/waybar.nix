@@ -13,6 +13,7 @@
   '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
+    wait
     waybar --config $HOME/.cache/wallust/waybar-config \
         --style $HOME/.cache/wallust/waybar-style.css \
         > /dev/null 2>&1 &
@@ -42,8 +43,8 @@ in {
         package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
           src = pkgs.fetchgit {
             url = "https://github.com/Alexays/Waybar";
-            rev = "91bd28d410c92814feb2673db0b716b3457eae99";
-            sha256 = "sha256-I2A0pt4jYGhel2B5j2I1TI1xJCM8TGUyARtOLo+JVY8=";
+            rev = "dffba784016604b3c700b2a54aa91e433e28af46";
+            sha256 = "sha256-+ufdGEnyq8AOszy4Qn21TWCHIPcRQR1HKv/XrIPiYzE=";
           };
         });
       };
@@ -237,7 +238,7 @@ in {
     };
 
     iynaix.hyprland.extraBinds = lib.mkAfter {
-      exec-once = ["${launch-waybar}/bin/launch-waybar"];
+      exec-once = ["launch-waybar"];
     };
   };
 }

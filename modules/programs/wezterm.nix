@@ -47,11 +47,12 @@
             return {
               font = wezterm.font('${font}', { weight = "Regular", }),
               harfbuzz_features = { 'zero=1' },
-              font_size = ${toString (size - 1)},
+              font_size = ${toString size},
               window_background_opacity = ${toString opacity},
               enable_scroll_bar = false,
               enable_tab_bar = false,
               enable_wayland = true,
+              front_end = "OpenGL",
               scrollback_lines = 10000,
               color_scheme_dirs = { "/home/${user}/.cache/wallust" },
               color_scheme = "Wallust",

@@ -27,6 +27,7 @@
     else
       swww img --transition-type ${cfg.transition} "$1"
     fi
+    wait
 
     launch-waybar
   '';
@@ -38,19 +39,8 @@
       wallpaper="$1"
     fi
     wallust ${lib.optionalString (!config.iynaix.wallust.zsh) "--skip-sequences "} "$wallpaper"
+    wait
     hypr-reset "$wallpaper"
-  '';
-  # applies a set theme
-  hypr-theme = pkgs.writeShellScriptBin "hypr-theme" ''
-    theme=''${1:-catppuccin-mocha}
-
-    wal --theme "$theme"
-
-    if [ $theme = "catppuccin-mocha" ]; then
-      hypr-reset "${../wallpapers/gits-catppuccin.jpg}"
-    else
-      hypr-reset
-    fi
   '';
 in {
   options.iynaix.wallpaper = {
@@ -68,7 +58,6 @@ in {
       home = {
         packages = [
           hypr-reset
-          hypr-theme
           hypr-wallpaper
           pkgs.swww
         ];
