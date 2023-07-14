@@ -32,7 +32,9 @@ def random_wallpaper():
     return random.choice(wallpapers)
 
 
-def set_hyprland_colors(colors):
+def set_colors():
+    colors = get_colors()
+
     # get hexless colors
     c = {
         int(k.replace("color", "")): f"rgb({v.replace('#', '')})"
@@ -57,6 +59,9 @@ def set_hyprland_colors(colors):
     # yellow border for sticky (must be floating) windows
     run(["hyprctl", "keyword", "windowrulev2", "bordercolor", f"{c[3]},pinned:1"])
 
+    # reload waybar
+    run(["killall", "-SIGUSR2", ".waybar-wrapped"])
+
 
 parser = argparse.ArgumentParser(
     prog="hypr-wallpaper",
@@ -64,7 +69,6 @@ parser = argparse.ArgumentParser(
 )
 
 
-# --rofi?
 def get_wallust_preset_themes():
     with subprocess.Popen(
         ["wallust-themes", "theme", "--help"], stdout=subprocess.PIPE
@@ -75,7 +79,18 @@ def get_wallust_preset_themes():
         return line.split(", ")
 
 
-preset_themes = get_wallust_preset_themes()
+PRESET_THEMES = get_wallust_preset_themes()
+
+
+def rofi_theme():
+    rofi_process = subprocess.Popen(
+        ["rofi", "-dmenu"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
+    )
+    theme, _ = rofi_process.communicate(input="\n".join(PRESET_THEMES).encode())
+
+    run(["wallust-themes", "theme", theme.decode("utf-8").strip()])
+    set_colors()
+
 
 parser.add_argument("--reload", action="store_true", help="reload the wallpaper")
 parser.add_argument(
@@ -86,7 +101,12 @@ parser.add_argument(
 parser.add_argument(
     "--theme",
     help="preset theme for wallust",
-    choices=preset_themes,
+    choices=PRESET_THEMES,
+)
+parser.add_argument(
+    "--rofi",
+    help="use rofi to select a wallpaper / theme",
+    choices=("wallpaper", "theme"),
 )
 parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 
@@ -94,20 +114,22 @@ parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 if __name__ == "__main__":
     args = parser.parse_args()
 
+    if args.rofi == "theme":
+        rofi_theme()
+        exit()
+
+    if args.rofi == "wallpaper":
+        exit()
+
     wallpaper = args.image or random_wallpaper()
 
-    # generate colors
+    # set colors and wallpaper
     if args.theme:
         run(["wallust-themes", "theme", args.theme])
+    elif args.reload:
+        run(["wallust", wallpaper])
     else:
         run(["wallust", wallpaper])
-
-    colors = get_colors()
-    set_hyprland_colors(colors)
-
-    # set the wallpaper
-    if not (args.reload or args.theme):
         run(["swww", "img", "--transition-type", args.transition_type, wallpaper])
 
-    # reload waybar
-    run(["killall", "-SIGUSR2", ".waybar-wrapped"])
+    set_colors()

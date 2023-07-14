@@ -242,9 +242,5 @@ in {
         target = "~/.cache/wallust/waybar-style.css";
       };
     };
-
-    iynaix.hyprland.extraBinds = lib.mkAfter {
-      exec-once = ["launch-waybar"];
-    };
   };
 }
