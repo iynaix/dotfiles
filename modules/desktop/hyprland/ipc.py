@@ -57,7 +57,7 @@ if __name__ == "__main__":
         # print("[EVENT]", ev)
         if ev == "monitoradded":
             if IS_DESKTOP:
-                subprocess.run("hypr-reset-monitors")
+                subprocess.run("hypr-monitors")
 
             # always reset wallpaper and waybar
             # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)

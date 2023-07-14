@@ -23,7 +23,7 @@
         ]
         ++ cfg.startupCleanup)}
     '';
-  hyprResetMonitors = pkgs.writeShellScriptBin "hypr-reset-monitors" ''
+  hyprResetMonitors = pkgs.writeShellScriptBin "hypr-monitors" ''
     hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
     hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
     hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}

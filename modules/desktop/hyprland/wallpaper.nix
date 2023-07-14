@@ -6,7 +6,10 @@
 }: let
   # sets a random wallpaper and changes the colors
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" ''
-    ${pkgs.python3}/bin/python3 ${../../programs/wallust/hypr-wallpaper.py}
+    ${pkgs.python3}/bin/python3 ${../../programs/wallust/hypr-wallpaper.py} "$@"
+  '';
+  rofi-wallpaper = pkgs.writeShellScriptBin "rofi-wallpaper" ''
+    hyprctl dispatch exec '[float;size 30%;center] imv -c "bind <Escape> quit" ~/Pictures/Wallpapers'
   '';
 in {
   options.iynaix.wallpaper = {
@@ -24,6 +27,7 @@ in {
       home = {
         packages = [
           hypr-wallpaper
+          rofi-wallpaper
           pkgs.swww
         ];
       };

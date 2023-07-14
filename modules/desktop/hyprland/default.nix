@@ -238,7 +238,7 @@ in {
                 "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 
                 # reset monitors
-                "CTRL_SHIFT, Escape" = "exec, hypr-reset-monitors";
+                "CTRL_SHIFT, Escape" = "exec, hypr-monitors";
 
                 # bind = ${mod}, P, pseudo, # dwindle
                 # bind = ${mod}, J, togglesplit, # dwindle
@@ -343,6 +343,11 @@ in {
                 "${mod}, grave" = "exec, dunstctl history-pop";
 
                 "${mod}, q" = "exec, wezterm start";
+
+                # switching wallpapers or themes
+                "${mod}, apostrophe" = "exec, rofi-wallpaper";
+                "${mod}_SHIFT, apostrophe" = "exec, ${pkgs.python3}/bin/python3 ${../../programs/wallust/hypr-wallpaper.py} --rofi";
+
                 # TODO:
                 # special keys
                 # "XF86AudioPlay" = "mpvctl playpause";
@@ -386,7 +391,7 @@ in {
               ];
             })
             (mkHyprlandBinds cfg.extraBinds)
-            "source ~/.config/hypr/hyprland-test.conf"
+            "source=~/.config/hypr/hyprland-test.conf"
           ];
         };
       };

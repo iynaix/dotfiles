@@ -165,6 +165,10 @@ in {
         text = ''
           {
             "wallpaper": "{wallpaper}",
+            "neofetch": {
+                "logo": "${../../shell/rice/nixos.png}",
+                "conf": "${../../shell/rice/neofetch.conf}"
+            },
             "alpha": "{alpha}",
             "special": {
                 "background": "{background}",

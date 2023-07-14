@@ -154,7 +154,7 @@ in {
             "custom/nix": {
               "format": "",
               "on-click": "hypr-wallpaper",
-              // "on-click-right": "hypr-theme",
+              "on-click-right": "rofi-wallpaper",
               "tooltip": false
             }${lib.optionalString (cfg.settings-template != "") ","}
 

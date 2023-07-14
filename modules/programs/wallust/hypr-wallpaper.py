@@ -16,7 +16,7 @@ def get_colors():
 
 
 def get_current_wallpaper():
-    return getattr(get_colors(), "wallpaper", None)
+    return dict.get(get_colors(), "wallpaper", None)
 
 
 def random_wallpaper():
@@ -42,14 +42,7 @@ def set_colors():
     }
 
     # update borders
-    run(
-        [
-            "hyprctl",
-            "keyword",
-            "general:col.active_border",
-            f"{c[4]} {c[0]} 45deg",
-        ]
-    )
+    run(["hyprctl", "keyword", "general:col.active_border", f"{c[4]} {c[0]} 45deg"])
     run(["hyprctl", "keyword", "general:col.inactive_border", c[0]])
 
     # pink border for monocle windows
@@ -58,6 +51,12 @@ def set_colors():
     run(["hyprctl", "keyword", "windowrulev2", "bordercolor", f"{c[6]},floating:1"])
     # yellow border for sticky (must be floating) windows
     run(["hyprctl", "keyword", "windowrulev2", "bordercolor", f"{c[3]},pinned:1"])
+
+    # reload cava
+    run(["killall", "-SIGUSR2", "cava"])
+
+    # reload waifufetch
+    run(["killall", "-SIGUSR2", "python3"])
 
     # reload waybar
     run(["killall", "-SIGUSR2", ".waybar-wrapped"])
@@ -96,7 +95,7 @@ parser.add_argument("--reload", action="store_true", help="reload the wallpaper"
 parser.add_argument(
     "--transition-type",
     help="transition type for swww",
-    default="random",
+    default="grow",
 )
 parser.add_argument(
     "--theme",
@@ -104,9 +103,9 @@ parser.add_argument(
     choices=PRESET_THEMES,
 )
 parser.add_argument(
-    "--rofi",
+    "--rofi-theme",
     help="use rofi to select a wallpaper / theme",
-    choices=("wallpaper", "theme"),
+    action="store_true"
 )
 parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 
@@ -114,11 +113,8 @@ parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    if args.rofi == "theme":
+    if args.rofi_theme:
         rofi_theme()
-        exit()
-
-    if args.rofi == "wallpaper":
         exit()
 
     wallpaper = args.image or random_wallpaper()
@@ -127,7 +123,7 @@ if __name__ == "__main__":
     if args.theme:
         run(["wallust-themes", "theme", args.theme])
     elif args.reload:
-        run(["wallust", wallpaper])
+        run(["wallust", get_current_wallpaper()])
     else:
         run(["wallust", wallpaper])
         run(["swww", "img", "--transition-type", args.transition_type, wallpaper])

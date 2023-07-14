@@ -45,7 +45,7 @@ in {
           }
         '';
       };
-      wallpaper.transition = "random";
+      wallpaper.transition = "grow";
 
       pathofbuilding.enable = true;
       smplayer.enable = true;

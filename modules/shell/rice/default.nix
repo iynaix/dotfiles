@@ -14,6 +14,7 @@
         neofetch
         nitch
         pipes
+        cmatrix
         # cbonsai
       ];
     };

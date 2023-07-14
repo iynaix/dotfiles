@@ -16,7 +16,7 @@
 
       xdg.configFile."imv/config".text = ''
         [options]
-        overlay = true
+        overlay = false
 
         [binds]
         i = overlay
