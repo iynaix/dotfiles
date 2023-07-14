@@ -43,8 +43,8 @@ in {
         package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
           src = pkgs.fetchgit {
             url = "https://github.com/Alexays/Waybar";
-            rev = "dffba784016604b3c700b2a54aa91e433e28af46";
-            sha256 = "sha256-+ufdGEnyq8AOszy4Qn21TWCHIPcRQR1HKv/XrIPiYzE=";
+            rev = "2211a798408adce99679c28bb25dc772da416b1d";
+            sha256 = "sha256-YeTz9sTVzEB+dbd4+wzUDtRyNl7sJroPaLu8nPIal7M=";
           };
         });
       };
@@ -221,6 +221,12 @@ in {
           #window {
             padding: 0 12px;
             border-radius: 0 12px 12px 0;
+          }
+
+          /* swap colors for monocle / swallowing */
+          window#waybar.fullscreen #window, window#waybar.swallowing #window {
+              background-color: {foreground};
+              color: {color0};
           }
 
           #workspaces button.active {

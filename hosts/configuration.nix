@@ -102,6 +102,9 @@
     enableSSHSupport = true;
   };
 
+  # enable sysrq in case for kernel panic
+  boot.kernel.sysctl."kernel.sysrq" = 1;
+
   # faster shutdown
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=5s

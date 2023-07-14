@@ -83,7 +83,10 @@ in {
     services.xserver.displayManager.lightdm.enable = lib.mkForce false;
     # services.xserver.displayManager.sddm.enable = lib.mkForce true;
 
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      # package = inputs.hyprland.packages.${system}.hyprland;
+    };
 
     environment.systemPackages = [
       inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland
@@ -198,6 +201,10 @@ in {
               binds {
                 workspace_back_and_forth = true
               }
+
+              # xwayland {
+              #   force_zero_scaling = true
+              # }
 
               misc {
                 disable_hyprland_logo = true
