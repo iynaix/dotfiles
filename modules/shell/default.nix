@@ -11,7 +11,6 @@
     ./direnv.nix
     ./ranger.nix
     ./rice
-    ./renameutils.nix
     ./tmux.nix
     ./zsh.nix
   ];
@@ -102,6 +101,7 @@
           htop
           lazygit
           sd
+          vimv
           ugrep
         ];
       };

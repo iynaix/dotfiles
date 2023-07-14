@@ -1,6 +1,5 @@
 {
   pkgs,
-  host,
   user,
   lib,
   config,
@@ -43,7 +42,7 @@
     hyprctl dispatch focusmonitor ${displays.monitor1}
 
     # set wallpapers again
-    hypr-wallpaper
+    hypr-wallpaper --reload
   '';
 in {
   options.iynaix.hyprland = {
