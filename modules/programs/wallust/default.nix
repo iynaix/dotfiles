@@ -6,24 +6,6 @@
   ...
 }: let
   cfg = config.iynaix.wallust;
-  random-wallpaper = pkgs.writeShellScriptBin "random-wallpaper" ''
-    wallpaper_directory="$HOME/Pictures/Wallpapers/"
-
-    # Find all image files within the wallpaper directory and its subdirectories
-    image_files=()
-    while IFS= read -r -d "" file; do
-        image_files+=("$file")
-    done < <(find "$wallpaper_directory" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -print0)
-
-    # Count the number of image files found
-    num_files=''${#image_files[@]}
-
-    # Generate a random index within the range of the number of image files
-    random_index=''$((RANDOM % num_files))
-
-    # Output the path to the randomly chosen image file
-    echo ''${image_files[random_index]}
-  '';
 in {
   options.iynaix.wallust = with lib.types; {
     enable = lib.mkEnableOption "wallust" // {default = true;};
@@ -70,10 +52,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [
-        pkgs.wallust
-        random-wallpaper
-      ];
+      home.packages = [pkgs.wallust pkgs.wallust-themes];
 
       # wallust config
       xdg.configFile =
@@ -181,46 +160,38 @@ in {
         '';
         target = "~/.cache/wallust/colors.sh";
       };
-
-      "colors-hexless.sh" = {
+      "colors.json" = {
         enable = true;
         text = ''
-          wallpaper="{wallpaper}"
-
-          # Special
-          background='{background.strip}'
-          foreground='{foreground.strip}'
-          cursor='{cursor.strip}'
-
-          # Colors
-          color0='{color0.strip}'
-          color1='{color1.strip}'
-          color2='{color2.strip}'
-          color3='{color3.strip}'
-          color4='{color4.strip}'
-          color5='{color5.strip}'
-          color6='{color6.strip}'
-          color7='{color7.strip}'
-          color8='{color8.strip}'
-          color9='{color9.strip}'
-          color10='{color10.strip}'
-          color11='{color11.strip}'
-          color12='{color12.strip}'
-          color13='{color13.strip}'
-          color14='{color14.strip}'
-          color15='{color15.strip}'
-
-          # FZF colors
-          export FZF_DEFAULT_OPTS="
-              $FZF_DEFAULT_OPTS
-              --color fg:7,bg:0,hl:1,fg+:232,bg+:1,hl+:255
-              --color info:7,prompt:2,spinner:1,pointer:232,marker:1
-          "
-
-          # Fix LS_COLORS being unreadable.
-          export LS_COLORS="''${LS_COLORS}:su=30;41:ow=30;42:st=30;44:"
+          {
+            "wallpaper": "{wallpaper}",
+            "alpha": "{alpha}",
+            "special": {
+                "background": "{background}",
+                "foreground": "{foreground}",
+                "cursor": "{cursor}"
+            },
+            "colors": {
+                "color0": "{color0}",
+                "color1": "{color1}",
+                "color2": "{color2}",
+                "color3": "{color3}",
+                "color4": "{color4}",
+                "color5": "{color5}",
+                "color6": "{color6}",
+                "color7": "{color7}",
+                "color8": "{color8}",
+                "color9": "{color9}",
+                "color10": "{color10}",
+                "color11": "{color11}",
+                "color12": "{color12}",
+                "color13": "{color13}",
+                "color14": "{color14}",
+                "color15": "{color15}"
+            }
+          }
         '';
-        target = "~/.cache/wallust/colors-hexless.sh";
+        target = "~/.cache/wallust/colors.json";
       };
     };
 
@@ -239,6 +210,24 @@ in {
             lockFile = src + "/Cargo.lock";
             allowBuiltinFetchGit = true;
           };
+        });
+        wallust-themes = super.wallust.overrideAttrs (oldAttrs: rec {
+          pname = "wallust-themes";
+
+          src = pkgs.fetchgit {
+            url = "https://codeberg.org/explosion-mental/wallust.git";
+            rev = "0ae3a3d98df11cc1b0752ddebbb02375e31d1162";
+            sha256 = "sha256-mmRPfcgocvQYKW5bJPlyRpESqFlqVvthjtrPUboMQY4=";
+          };
+
+          cargoDeps = pkgs.rustPlatform.importCargoLock {
+            lockFile = src + "/Cargo.lock";
+            allowBuiltinFetchGit = true;
+          };
+
+          postInstall = ''
+            mv $out/bin/wallust $out/bin/wallust-themes
+          '';
         });
       })
     ];

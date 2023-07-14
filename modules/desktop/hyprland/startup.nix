@@ -43,10 +43,7 @@
     hyprctl dispatch focusmonitor ${displays.monitor1}
 
     # set wallpapers again
-    hypr-reset
-
-    # reset waybar
-    launch-waybar
+    hypr-wallpaper
   '';
 in {
   options.iynaix.hyprland = {
@@ -112,7 +109,9 @@ in {
           "hyprctl dispatch workspace 7"
           "hyprctl dispatch workspace 1"
 
+          "swww init"
           "hypr-wallpaper"
+          "launch-waybar"
         ];
         exec = [
           "${hyprCleanup}/bin/hypr-cleanup"

@@ -11,22 +11,27 @@ SMALL = "HDMI-A-1"
 
 DEBUG = False
 
+
 def info(cmd):
     with subprocess.Popen(["hyprctl", "-j", cmd], stdout=subprocess.PIPE) as proc:
         return json.loads(proc.stdout.read())
 
+
 IS_DESKTOP = socket.gethostname().endswith("desktop")
+
 
 def workspace_info(workspace):
     for wksp in info("workspaces"):
         if wksp["name"] == workspace:
             return wksp
 
+
 def dispatch(*args):
     cmd = ["hyprctl", "dispatch", *args]
     if DEBUG:
         print("[DEBUG]", cmd)
     subprocess.run(cmd)
+
 
 def set_workspace_orientation(workspace):
     if not IS_DESKTOP:
@@ -55,14 +60,9 @@ if __name__ == "__main__":
                 subprocess.run("hypr-reset-monitors")
 
             # always reset wallpaper and waybar
-            subprocess.run("hypr-reset", stdout=subprocess.DEVNULL)
-            subprocess.run("launch-waybar", stdout=subprocess.DEVNULL)
-
+            # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
 
         elif ev == "monitorremoved":
-            # reset wallpaper
-            subprocess.run("hypr-reset", stdout=subprocess.DEVNULL)
-
             # focus workspace on ultrawide
             if IS_DESKTOP:
                 dispatch("focusmonitor", ULTRAWIDE)

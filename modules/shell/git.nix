@@ -1,11 +1,9 @@
 {
   pkgs,
   user,
-  lib,
-  config,
   ...
 }: let
-  gitReword =
+  git-reword =
     pkgs.writeShellScriptBin "git-reword.sh"
     /*
     sh
@@ -45,7 +43,7 @@
     '';
 in {
   environment = {
-    systemPackages = with pkgs; [git gitReword];
+    systemPackages = with pkgs; [git git-reword];
   };
 
   home-manager.users.${user} = {
@@ -68,7 +66,7 @@ in {
           pull = {rebase = true;};
           push = {default = "simple";};
         };
-        aliases = {reword = "!sh ${gitReword}/bin/git-reword";};
+        aliases = {reword = "!sh ${git-reword}/bin/git-reword";};
       };
 
       # extra git stuff for zsh
