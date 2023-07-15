@@ -1,5 +1,4 @@
 {
-  pkgs,
   user,
   lib,
   config,
@@ -12,7 +11,6 @@
     ./gtk.nix
     ./hyprland
     ./kmonad.nix
-    ./theme.nix
   ];
 
   options.iynaix = {

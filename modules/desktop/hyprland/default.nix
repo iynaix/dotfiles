@@ -346,7 +346,7 @@ in {
 
                 # switching wallpapers or themes
                 "${mod}, apostrophe" = "exec, rofi-wallpaper";
-                "${mod}_SHIFT, apostrophe" = "exec, ${pkgs.python3}/bin/python3 ${../../programs/wallust/hypr-wallpaper.py} --rofi";
+                "${mod}_SHIFT, apostrophe" = "exec, hypr-wallpaper --rofi-theme";
 
                 # TODO:
                 # special keys
@@ -391,7 +391,7 @@ in {
               ];
             })
             (mkHyprlandBinds cfg.extraBinds)
-            "source=~/.config/hypr/hyprland-test.conf"
+            # "source=~/.config/hypr/hyprland-test.conf"
           ];
         };
       };

@@ -43,7 +43,7 @@ def waifufetch():
             "--kitty" if os.environ["TERM"] == "xterm-kitty" else "--sixel",
             img,
             "--config",
-            neofetch_config
+            neofetch_config,
         ]
     )
 

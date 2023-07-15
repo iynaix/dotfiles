@@ -57,6 +57,9 @@ in {
       # wallust config
       xdg.configFile =
         {
+          # custom themes in pywal format
+          "wallust/catppuccin-mocha.json".source = ./catppuccin-mocha.json;
+          # wallust config
           "wallust/wallust.toml".text =
             ''
               # How the image is parse, in order to get the colors:

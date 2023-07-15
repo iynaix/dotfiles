@@ -108,8 +108,7 @@ in {
           "hyprctl dispatch workspace 7"
           "hyprctl dispatch workspace 1"
 
-          "swww init"
-          "hypr-wallpaper"
+          "swww init && hypr-wallpaper"
           "launch-waybar"
         ];
         exec = [

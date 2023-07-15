@@ -79,13 +79,15 @@ def get_wallust_preset_themes():
 
 
 PRESET_THEMES = get_wallust_preset_themes()
+CUSTOM_THEMES = ["catppuccin-mocha"]
+THEMES = sorted(PRESET_THEMES + CUSTOM_THEMES)
 
 
 def rofi_theme():
     rofi_process = subprocess.Popen(
         ["rofi", "-dmenu"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
     )
-    theme, _ = rofi_process.communicate(input="\n".join(PRESET_THEMES).encode())
+    theme, _ = rofi_process.communicate(input="\n".join(THEMES).encode())
 
     run(["wallust-themes", "theme", theme.decode("utf-8").strip()])
     set_colors()
@@ -100,12 +102,10 @@ parser.add_argument(
 parser.add_argument(
     "--theme",
     help="preset theme for wallust",
-    choices=PRESET_THEMES,
+    choices=THEMES,
 )
 parser.add_argument(
-    "--rofi-theme",
-    help="use rofi to select a wallpaper / theme",
-    action="store_true"
+    "--rofi-theme", help="use rofi to select a wallpaper / theme", action="store_true"
 )
 parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 
@@ -121,7 +121,16 @@ if __name__ == "__main__":
 
     # set colors and wallpaper
     if args.theme:
-        run(["wallust-themes", "theme", args.theme])
+        if args.theme in CUSTOM_THEMES:
+            run(
+                [
+                    "wallust-themes",
+                    "cs",
+                    Path(f"~/.config/wallust/{args.theme}.json").expanduser(),
+                ]
+            )
+        else:
+            run(["wallust-themes", "theme", args.theme])
     elif args.reload:
         run(["wallust", get_current_wallpaper()])
     else:
