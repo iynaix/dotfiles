@@ -45,7 +45,6 @@ in {
           }
         '';
       };
-      wallpaper.transition = "grow";
 
       pathofbuilding.enable = true;
       smplayer.enable = true;

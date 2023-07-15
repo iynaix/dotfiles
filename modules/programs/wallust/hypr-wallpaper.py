@@ -97,7 +97,22 @@ parser.add_argument("--reload", action="store_true", help="reload the wallpaper"
 parser.add_argument(
     "--transition-type",
     help="transition type for swww",
-    default="grow",
+    default="random",
+    choices=[
+        "simple",
+        # "fade", # swww 0.8
+        "left",
+        "right",
+        "top",
+        "bottom",
+        "wipe",
+        "wave",
+        "grow",
+        "center",
+        "any",
+        "random",
+        "outer",
+    ],
 )
 parser.add_argument(
     "--theme",
@@ -132,7 +147,7 @@ if __name__ == "__main__":
         else:
             run(["wallust-themes", "theme", args.theme])
     elif args.reload:
-        run(["wallust", get_current_wallpaper()])
+        run(["wallust", get_current_wallpaper() or wallpaper])
     else:
         run(["wallust", wallpaper])
         run(["swww", "img", "--transition-type", args.transition_type, wallpaper])

@@ -1,7 +1,6 @@
 {
   pkgs,
   user,
-  lib,
   ...
 }: let
   # sets a random wallpaper and changes the colors
@@ -12,16 +11,6 @@
     hyprctl dispatch exec '[float;size 30%;center] imv -c "bind <Escape> quit" ~/Pictures/Wallpapers'
   '';
 in {
-  options.iynaix.wallpaper = {
-    # transition is type of left right top
-    transition = lib.mkOption {
-      type =
-        lib.types.enum ["simple" "fade" "left" "right" "top" "bottom" "wipe" "wave" "grow" "center" "any" "outer" "random"];
-      default = "grow";
-      description = "The transition type for swww";
-    };
-  };
-
   config = {
     home-manager.users.${user} = {
       home = {

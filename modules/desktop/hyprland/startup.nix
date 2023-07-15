@@ -3,27 +3,12 @@
   user,
   lib,
   config,
-  isLaptop,
   ...
 }: let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
-  hyprCleanup =
-    pkgs.writeShellScriptBin "hypr-cleanup"
-    /*
-    sh
-    */
-    ''
-      ${lib.concatStringsSep "\n" ([
-          "sleep ${
-            if isLaptop
-            then "20"
-            else "10"
-          }"
-        ]
-        ++ cfg.startupCleanup)}
-    '';
-  hyprResetMonitors = pkgs.writeShellScriptBin "hypr-monitors" ''
+  openOnWorkspace = workspace: program: "hyprctl dispatch exec '[workspace ${toString workspace} silent] ${program}'";
+  hyprMonitors = pkgs.writeShellScriptBin "hypr-monitors" ''
     hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
     hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
     hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
@@ -45,90 +30,57 @@
     hypr-wallpaper --reload
   '';
 in {
-  options.iynaix.hyprland = {
-    startupCleanup = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = [];
-      description = "Programs to start on startup";
+  config = lib.mkIf cfg.enable {
+    home-manager.users.${user} = {
+      home.packages = [hyprMonitors];
+
+      # start hyprland
+      programs.zsh = let
+        hyprlandInit = ''
+          if [ "$(tty)" = "/dev/tty1" ]; then
+            exec Hyprland &> /dev/null
+          fi
+        '';
+      in {
+        loginExtra = hyprlandInit;
+        profileExtra = hyprlandInit;
+      };
+
+      xdg.configFile."hypr/ipc.py".source = ./ipc.py;
+    };
+
+    iynaix.hyprland.extraBinds = {
+      exec-once = [
+        # init ipc listener
+        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ~/.config/hypr/ipc.py &"
+
+        # browsers
+        (openOnWorkspace 1 "brave --profile-directory=Default")
+        (openOnWorkspace 1 "brave --incognito")
+
+        # file manager
+        (openOnWorkspace 4 "nemo")
+
+        # terminal
+        (openOnWorkspace 7 "$TERMINAL --class initialterm")
+
+        # firefox
+        (openOnWorkspace 9 "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091")
+
+        # download desktop
+        (openOnWorkspace 10 "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt")
+        (openOnWorkspace 10 "$TERMINAL --class dlterm")
+
+        "${pkgs.swayidle}/bin/swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
+
+        # focus the initial workspaces on startup
+        "hyprctl dispatch workspace 9"
+        "hyprctl dispatch workspace 7"
+        "hyprctl dispatch workspace 1"
+
+        "swww init && hypr-wallpaper"
+        "launch-waybar"
+      ];
     };
   };
-
-  config = lib.mkIf cfg.enable (
-    let
-      # window classes and desktops
-      webdesktop = "1";
-      nemodesktop = "4";
-      secondarytermdesktop = "7";
-      chatdesktop = "9";
-      dldesktop = "10";
-    in {
-      home-manager.users.${user} = {
-        home.packages = [hyprResetMonitors];
-
-        # start hyprland
-        programs.zsh = let
-          hyprlandInit = ''
-            if [ "$(tty)" = "/dev/tty1" ]; then
-              exec Hyprland &> /dev/null
-            fi
-          '';
-        in {
-          loginExtra = hyprlandInit;
-          profileExtra = hyprlandInit;
-        };
-
-        xdg.configFile."hypr/ipc.py".source = ./ipc.py;
-      };
-
-      iynaix.hyprland.extraBinds = {
-        exec-once = [
-          # init ipc listener
-          "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ~/.config/hypr/ipc.py &"
-
-          # browsers
-          "brave --profile-directory=Default"
-          "brave --incognito"
-
-          # file manager
-          "nemo"
-
-          # terminal
-          "$TERMINAL --class initialterm"
-
-          # firefox
-          "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091"
-
-          "$TERMINAL --class dltxt -e nvim ~/Desktop/yt.txt"
-          "$TERMINAL --class dlterm"
-
-          "${pkgs.swayidle}/bin/swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
-
-          # focus the initial workspaces on startup
-          "hyprctl dispatch workspace 9"
-          "hyprctl dispatch workspace 7"
-          "hyprctl dispatch workspace 1"
-
-          "swww init && hypr-wallpaper"
-          "launch-waybar"
-        ];
-        exec = [
-          "${hyprCleanup}/bin/hypr-cleanup"
-        ];
-        windowrule = [
-          "workspace ${webdesktop} silent,Brave-browser"
-          "workspace ${nemodesktop} silent,nemo"
-          "workspace ${secondarytermdesktop} silent,initialterm"
-          "workspace ${chatdesktop} silent,firefox-aurora"
-          "workspace ${dldesktop} silent,dltxt"
-          "workspace ${dldesktop} silent,dlterm"
-        ];
-      };
-
-      iynaix.hyprland.startupCleanup = [
-        ''hyprctl keyword windowrule "workspace unset,Brave-browser"''
-        ''hyprctl keyword windowrule "workspace unset,nemo"''
-        ''hyprctl keyword windowrule "workspace unset,firefox-aurora"''
-      ];
-    }
-  );
 }
