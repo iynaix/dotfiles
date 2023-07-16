@@ -21,7 +21,7 @@
         [binds]
         i = overlay
         x = exec rm "$imv_current_file"
-        w = exec ${pkgs.python3}/bin/python3 ${./wallust/hypr-wallpaper.py} "$imv_current_file"
+        w = exec hypr-wallpaper "$imv_current_file"
       '';
     };
 

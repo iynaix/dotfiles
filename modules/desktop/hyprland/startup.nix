@@ -28,6 +28,8 @@
 
     # set wallpapers again
     hypr-wallpaper --reload
+
+    launch-waybar
   '';
 in {
   config = lib.mkIf cfg.enable {

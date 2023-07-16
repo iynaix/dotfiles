@@ -71,12 +71,6 @@ def set_colors():
     run(["killall", "-SIGUSR2", ".waybar-wrapped"])
 
 
-parser = argparse.ArgumentParser(
-    prog="hypr-wallpaper",
-    description="Changes the wallpaper and updates the colorscheme",
-)
-
-
 def get_wallust_preset_themes():
     with subprocess.Popen(
         ["wallust", "theme", "--help"], stdout=subprocess.PIPE
@@ -121,40 +115,50 @@ def rofi_theme():
     set_colors()
 
 
-parser.add_argument("--reload", action="store_true", help="reload the wallpaper")
-parser.add_argument(
-    "--transition-type",
-    help="transition type for swww",
-    default="random",
-    choices=[
-        "simple",
-        # "fade", # swww 0.8
-        "left",
-        "right",
-        "top",
-        "bottom",
-        "wipe",
-        "wave",
-        "grow",
-        "center",
-        "any",
-        "random",
-        "outer",
-    ],
-)
-parser.add_argument(
-    "--theme",
-    help="preset theme for wallust",
-    choices=THEMES,
-)
-parser.add_argument(
-    "--rofi-theme", help="use rofi to select a wallpaper / theme", action="store_true"
-)
-parser.add_argument("image", help="path to the wallpaper image", nargs="?")
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="hypr-wallpaper",
+        description="Changes the wallpaper and updates the colorscheme",
+    )
+
+    parser.add_argument("--reload", action="store_true", help="reload the wallpaper")
+    parser.add_argument(
+        "--transition-type",
+        help="transition type for swww",
+        default="random",
+        choices=[
+            "simple",
+            # "fade", # swww 0.8
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "wipe",
+            "wave",
+            "grow",
+            "center",
+            "any",
+            "random",
+            "outer",
+        ],
+    )
+    parser.add_argument(
+        "--theme",
+        help="preset theme for wallust",
+        choices=THEMES,
+    )
+    parser.add_argument(
+        "--rofi-theme",
+        help="use rofi to select a wallpaper / theme",
+        action="store_true",
+    )
+    parser.add_argument("image", help="path to the wallpaper image", nargs="?")
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    args = parser.parse_args()
+    args = parse_args()
 
     if args.rofi_theme:
         rofi_theme()

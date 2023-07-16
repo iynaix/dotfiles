@@ -29,7 +29,14 @@
     };
   };
 
-  outputs = inputs @ {nixpkgs, ...}: {
+  # flake-utils is unnecessary
+  # https://ayats.org/blog/no-flake-utils/
+  outputs = inputs @ {nixpkgs, ...}: let
+    forAllSystems = function:
+      nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+      ] (system: function nixpkgs.legacyPackages.${system});
+  in {
     nixosConfigurations = import ./hosts {
       inherit (nixpkgs) lib;
       inherit inputs nixpkgs;
@@ -37,6 +44,16 @@
     };
 
     formatter = nixpkgs.alejandra;
+
+    # devshell for working on dotfiles, provides python utilities
+    devShells = forAllSystems (pkgs: {
+      default = pkgs.mkShell {
+        packages = with pkgs.python311Packages; [
+          flake8
+          black
+        ];
+      };
+    });
 
     # templates for devenv
     templates = let

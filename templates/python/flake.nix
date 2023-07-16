@@ -24,7 +24,7 @@
           modules = [
             {
               # https://devenv.sh/reference/options/
-              packages = with pkgs; [python311Packages.flake8 python311Packages.black];
+              packages = with pkgs.python311Packages; [flake8 black];
 
               languages.python.enable = true;
               languages.python.venv.enable = true;
