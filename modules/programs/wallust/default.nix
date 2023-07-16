@@ -52,7 +52,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${user} = {
-      home.packages = [pkgs.wallust pkgs.wallust-themes];
+      home.packages = [pkgs.wallust];
 
       # wallust config
       xdg.configFile =
@@ -214,32 +214,14 @@ in {
         wallust = super.wallust.overrideAttrs (oldAttrs: rec {
           src = pkgs.fetchgit {
             url = "https://codeberg.org/explosion-mental/wallust.git";
-            rev = "648ca7b90473ee42746f3235e6987c655d45d61a";
-            sha256 = "sha256-EV/+nyKdI1pG7A/TJMM8nN+dv1qerHN7ByuzRVklffA=";
+            rev = "47a38a49c975da3be0e8fb5d66b1755c7d2e8c93";
+            sha256 = "sha256-FJ66MX2Hp1bvO4oW/RPSTh/INZwoD9Iz7tVCnGm/F2A=";
           };
 
           cargoDeps = pkgs.rustPlatform.importCargoLock {
             lockFile = src + "/Cargo.lock";
             allowBuiltinFetchGit = true;
           };
-        });
-        wallust-themes = super.wallust.overrideAttrs (oldAttrs: rec {
-          pname = "wallust-themes";
-
-          src = pkgs.fetchgit {
-            url = "https://codeberg.org/explosion-mental/wallust.git";
-            rev = "0ae3a3d98df11cc1b0752ddebbb02375e31d1162";
-            sha256 = "sha256-mmRPfcgocvQYKW5bJPlyRpESqFlqVvthjtrPUboMQY4=";
-          };
-
-          cargoDeps = pkgs.rustPlatform.importCargoLock {
-            lockFile = src + "/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-
-          postInstall = ''
-            mv $out/bin/wallust $out/bin/wallust-themes
-          '';
         });
       })
     ];

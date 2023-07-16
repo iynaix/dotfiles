@@ -16,7 +16,16 @@ def get_colors():
 
 
 def get_current_wallpaper():
-    return dict.get(get_colors(), "wallpaper", None)
+    curr = dict.get(get_colors(), "wallpaper", None)
+
+    if curr != "./foo/bar.txt":
+        return curr
+
+    # set using theme, use swww to get the wallpaper
+    with subprocess.Popen(["swww", "query"], stdout=subprocess.PIPE) as proc:
+        line = proc.stdout.read().splitlines()[0].decode("utf-8")
+        img = line.split(": ").pop().replace('"', "")
+        return str(WALLPAPERS / img)
 
 
 def random_wallpaper():
@@ -70,7 +79,7 @@ parser = argparse.ArgumentParser(
 
 def get_wallust_preset_themes():
     with subprocess.Popen(
-        ["wallust-themes", "theme", "--help"], stdout=subprocess.PIPE
+        ["wallust", "theme", "--help"], stdout=subprocess.PIPE
     ) as proc:
         # get longest line in the output
         line = sorted(proc.stdout.read().splitlines(), key=len)[-1]
@@ -89,13 +98,26 @@ CUSTOM_THEMES = [
 THEMES = sorted(PRESET_THEMES + CUSTOM_THEMES)
 
 
+def apply_theme(theme):
+    if theme in CUSTOM_THEMES:
+        run(
+            [
+                "wallust",
+                "cs",
+                str(Path(f"~/.config/wallust/{theme}.json").expanduser()),
+            ]
+        )
+    else:
+        run(["wallust", "theme", theme])
+
+
 def rofi_theme():
     rofi_process = subprocess.Popen(
         ["rofi", "-dmenu"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
     )
     theme, _ = rofi_process.communicate(input="\n".join(THEMES).encode())
 
-    run(["wallust-themes", "theme", theme.decode("utf-8").strip()])
+    apply_theme(theme.decode("utf-8").strip())
     set_colors()
 
 
@@ -142,16 +164,7 @@ if __name__ == "__main__":
 
     # set colors and wallpaper
     if args.theme:
-        if args.theme in CUSTOM_THEMES:
-            run(
-                [
-                    "wallust-themes",
-                    "cs",
-                    Path(f"~/.config/wallust/{args.theme}.json").expanduser(),
-                ]
-            )
-        else:
-            run(["wallust-themes", "theme", args.theme])
+        apply_theme(args.theme)
     elif args.reload:
         run(["wallust", get_current_wallpaper() or wallpaper])
     else:

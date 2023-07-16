@@ -85,7 +85,7 @@ in {
 
     programs.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${system}.hyprland;
+      # package = inputs.hyprland.packages.${system}.hyprland;
     };
 
     environment.systemPackages = [
