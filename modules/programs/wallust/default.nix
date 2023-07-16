@@ -58,7 +58,12 @@ in {
       xdg.configFile =
         {
           # custom themes in pywal format
+          "wallust/catppuccin-frappe.json".source = ./catppuccin-frappe.json;
+          "wallust/catppuccin-macchiato.json".source = ./catppuccin-macchiato.json;
           "wallust/catppuccin-mocha.json".source = ./catppuccin-mocha.json;
+          "wallust/night-owl.json".source = ./night-owl.json;
+          "wallust/tokyo-night.json".source = ./tokyo-night.json;
+
           # wallust config
           "wallust/wallust.toml".text =
             ''

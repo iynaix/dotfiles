@@ -79,7 +79,13 @@ def get_wallust_preset_themes():
 
 
 PRESET_THEMES = get_wallust_preset_themes()
-CUSTOM_THEMES = ["catppuccin-mocha"]
+CUSTOM_THEMES = [
+    "catppuccin-frappe",
+    "catppuccin-macchiato",
+    "catppuccin-mocha",
+    "night-owl",
+    "tokyo-night",
+]
 THEMES = sorted(PRESET_THEMES + CUSTOM_THEMES)
 
 
