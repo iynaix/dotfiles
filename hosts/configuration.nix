@@ -178,6 +178,4 @@
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
-
-  # FIXME: added from home-manager refactor
 }

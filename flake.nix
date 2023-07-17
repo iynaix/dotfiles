@@ -1,5 +1,5 @@
 {
-  description = "iynaix's dotfiles managed via nixos and home-manager";
+  description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
