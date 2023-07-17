@@ -43,8 +43,8 @@ in {
         package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
           src = pkgs.fetchgit {
             url = "https://github.com/Alexays/Waybar";
-            rev = "2211a798408adce99679c28bb25dc772da416b1d";
-            sha256 = "sha256-YeTz9sTVzEB+dbd4+wzUDtRyNl7sJroPaLu8nPIal7M=";
+            rev = "1e2b9cb5ed6871a63a4a3d371c1e41e298004cff";
+            sha256 = "sha256-CQK6P5ce/cnuNUhrwwGeiR2YdjJD5YjJ1liCSlGyCNA=";
           };
         });
       };
@@ -154,7 +154,7 @@ in {
             "custom/nix": {
               "format": "",
               "on-click": "hypr-wallpaper",
-              "on-click-right": "rofi-wallpaper",
+              "on-click-right": "hypr-wallpaper --rofi wallpaper",
               "tooltip": false
             }${lib.optionalString (cfg.settings-template != "") ","}
 

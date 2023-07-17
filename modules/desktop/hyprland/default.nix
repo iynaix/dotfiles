@@ -345,8 +345,8 @@ in {
                 "${mod}, q" = "exec, wezterm start";
 
                 # switching wallpapers or themes
-                "${mod}, apostrophe" = "exec, rofi-wallpaper";
-                "${mod}_SHIFT, apostrophe" = "exec, hypr-wallpaper --rofi-theme";
+                "${mod}, apostrophe" = "exec, hypr-wallpaper --rofi wallpaper";
+                "${mod}_SHIFT, apostrophe" = "exec, hypr-wallpaper --rofi theme";
 
                 # TODO:
                 # special keys

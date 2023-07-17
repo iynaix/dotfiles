@@ -115,6 +115,27 @@ def rofi_theme():
     set_colors()
 
 
+def rofi_wallpaper():
+    count = 0
+
+    for f in WALLPAPERS.iterdir():
+        if f.is_file() and f.suffix in [".jpg", ".jpeg", ".png"]:
+            count += 1
+
+    float_rule = "[float;size 30%;center]"
+    # to behave like rofi
+    esc_bind = "bind <Escape> quit"
+    rand_idx = random.randint(1, count)
+    run(
+        [
+            "hyprctl",
+            "dispatch",
+            "exec",
+            f"{float_rule} imv -n {rand_idx} -c '{esc_bind}' {str(WALLPAPERS)}",
+        ]
+    )
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         prog="hypr-wallpaper",
@@ -148,9 +169,9 @@ def parse_args():
         choices=THEMES,
     )
     parser.add_argument(
-        "--rofi-theme",
+        "--rofi",
         help="use rofi to select a wallpaper / theme",
-        action="store_true",
+        choices=["wallpaper", "theme"],
     )
     parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 
@@ -160,8 +181,12 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
 
-    if args.rofi_theme:
+    if args.rofi == "theme":
         rofi_theme()
+        exit()
+
+    if args.rofi == "wallpaper":
+        rofi_wallpaper()
         exit()
 
     wallpaper = args.image or random_wallpaper()
