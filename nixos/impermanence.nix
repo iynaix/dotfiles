@@ -1,37 +1,12 @@
 {
   config,
-  pkgs,
   user,
   lib,
-  inputs,
   ...
 }: let
   cfg = config.iynaix.persist;
 in {
   imports = [./tmpfs.nix];
-
-  options.iynaix.persist = {
-    root = {
-      directories = lib.mkOption {
-        default = [];
-        description = "Directories to persist in root filesystem";
-      };
-      files = lib.mkOption {
-        default = [];
-        description = "Files to persist in root filesystem";
-      };
-    };
-    home = {
-      directories = lib.mkOption {
-        default = [];
-        description = "Directories to persist in home directory";
-      };
-      files = lib.mkOption {
-        default = [];
-        description = "Files to persist in home directory";
-      };
-    };
-  };
 
   config = lib.mkIf config.iynaix.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:

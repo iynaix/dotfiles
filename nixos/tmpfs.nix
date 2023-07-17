@@ -1,26 +1,10 @@
 {
   config,
-  pkgs,
-  user,
   lib,
-  inputs,
   ...
 }: let
   cfg = config.iynaix.persist.tmpfs;
 in {
-  options.iynaix.persist.tmpfs = {
-    root = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable tmpfs for /";
-    };
-    home = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable tmpfs for /home";
-    };
-  };
-
   config = lib.mkIf config.iynaix.zfs.enable {
     fileSystems."/" = lib.mkIf cfg.root (lib.mkForce {
       device = "none";

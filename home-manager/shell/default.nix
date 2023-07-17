@@ -2,6 +2,7 @@
   imports = [
     ./btop.nix
     ./git.nix
+    ./neovim.nix
     ./ranger.nix
     ./tmux.nix
     ./zsh.nix

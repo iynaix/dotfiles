@@ -241,4 +241,10 @@ in {
     # wallust colorscheme
     ${lib.optionalString (config.iynaix.wallust.zsh) "cat ~/.cache/wallust/sequences"}
   '';
+
+  iynaix.persist.home = {
+    files = [
+      ".config/zsh/.zsh_history"
+    ];
+  };
 }

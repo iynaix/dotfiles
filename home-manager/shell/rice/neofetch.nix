@@ -1,24 +1,14 @@
-{
-  pkgs,
-  user,
-  ...
-}: let
+{pkgs, ...}: let
   waifufetch = pkgs.writeShellScriptBin "waifufetch" ''
     ${pkgs.python3}/bin/python3 ${./waifufetch.py}
   '';
 in {
-  imports = [./cava.nix];
+  home.packages = with pkgs; [
+    neofetch
+    waifufetch
+  ];
 
-  config = {
-    home-manager.users.${user} = {
-      home.packages = with pkgs; [
-        neofetch
-        waifufetch
-      ];
-
-      programs.zsh.shellAliases = {
-        neofetch = "neofetch --config ${./neofetch.conf}";
-      };
-    };
+  programs.zsh.shellAliases = {
+    neofetch = "neofetch --config ${./neofetch.conf}";
   };
 }

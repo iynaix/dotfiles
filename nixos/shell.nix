@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  lib,
   user,
   ...
 }: {
@@ -23,12 +22,6 @@
       shellInit = "source ${zdotdir}/.zshenv";
       interactiveShellInit = "source ${zdotdir}/.zshrc";
       histFile = histFile;
-    };
-
-    iynaix.persist.home = {
-      files = [
-        ".config/zsh/.zsh_history"
-      ];
     };
   };
 }

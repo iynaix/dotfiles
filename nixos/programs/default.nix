@@ -14,7 +14,6 @@
     ./keyring.nix
     ./kitty.nix
     ./nemo.nix
-    ./neovim.nix
     ./nixlang.nix
     ./rofi.nix
     ./virt-manager.nix
