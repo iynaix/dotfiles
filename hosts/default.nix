@@ -2,49 +2,56 @@
   lib,
   inputs,
   user,
+  system,
+  isNixOS,
   ...
 }: let
-  createHost = {hostName}:
-    lib.nixosSystem rec {
-      system = "x86_64-linux";
+  mkHost = {hostName}:
+    if isNixOS
+    then
+      lib.nixosSystem {
+        specialArgs = {
+          inherit user inputs system;
+          host = hostName;
+          isLaptop = hostName == "laptop";
+        };
 
-      specialArgs = {
-        inherit user inputs system;
-        host = hostName;
-        isLaptop = hostName == "laptop";
-      };
-
-      modules =
-        [
-          ./configuration.nix # shared nixos configuration across all hosts
-          ./${hostName} # host specific configuration, including hardware
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.${user} = {
-                home = {
-                  username = user;
-                  homeDirectory = "/home/${user}";
-                  # do not change this value
-                  stateVersion = "22.11";
+        modules =
+          [
+            ./configuration.nix # shared nixos configuration across all hosts
+            ./${hostName} # host specific configuration, including hardware
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                # TODO: consolidate specialArgs variable
+                extraSpecialArgs = {
+                  inherit user inputs system;
+                  host = hostName;
+                  isLaptop = hostName == "laptop";
                 };
 
-                # Let Home Manager install and manage itself.
-                programs.home-manager.enable = true;
+                users.${user} = {
+                  imports = [
+                    ./home.nix
+                  ];
+
+                  # Let Home Manager install and manage itself.
+                  programs.home-manager.enable = true;
+                };
               };
-            };
-          }
-          inputs.impermanence.nixosModules.impermanence
-          inputs.kmonad.nixosModules.default
-        ]
-        ++ lib.optionals (hostName == "laptop") [
-          inputs.nixos-hardware.nixosModules.dell-xps-13-9343
-        ];
-    };
+            }
+            inputs.impermanence.nixosModules.impermanence
+            inputs.kmonad.nixosModules.default
+          ]
+          ++ lib.optionals (hostName == "laptop") [
+            inputs.nixos-hardware.nixosModules.dell-xps-13-9343
+          ];
+      }
+    else {};
 in {
-  vm = createHost {hostName = "vm";};
-  desktop = createHost {hostName = "desktop";};
-  laptop = createHost {hostName = "laptop";};
+  vm = mkHost {hostName = "vm";};
+  desktop = mkHost {hostName = "desktop";};
+  laptop = mkHost {hostName = "laptop";};
 }

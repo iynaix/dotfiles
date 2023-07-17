@@ -36,12 +36,20 @@
       nixpkgs.lib.genAttrs [
         "x86_64-linux"
       ] (system: function nixpkgs.legacyPackages.${system});
-  in {
-    nixosConfigurations = import ./hosts {
+    commonInherits = {
       inherit (nixpkgs) lib;
       inherit inputs nixpkgs;
       user = "iynaix";
+      system = "x86_64-linux";
     };
+  in {
+    nixosConfigurations = import ./hosts (
+      commonInherits // {isNixOS = true;}
+    );
+
+    homeConfigurations = import ./hosts (
+      commonInherits // {isNixOS = false;}
+    );
 
     formatter = nixpkgs.alejandra;
 
