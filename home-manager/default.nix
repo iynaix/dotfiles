@@ -1,8 +1,18 @@
 {user, ...}: {
+  imports = [
+    ./shell
+  ];
+
+  # mounting and unmounting of disks
   services.udiskie = {
     enable = true;
     automount = true;
     notify = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   home = {

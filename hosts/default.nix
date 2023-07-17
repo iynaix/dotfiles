@@ -34,7 +34,8 @@
 
                 users.${user} = {
                   imports = [
-                    ./home.nix
+                    ../home-manager
+                    ../modules
                   ];
 
                   # Let Home Manager install and manage itself.

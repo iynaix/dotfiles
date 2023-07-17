@@ -9,8 +9,7 @@
   # handle desktop / window manager
   imports = [
     ../modules
-    ../modules/zfs.nix
-    ../modules/impermanence.nix
+    ../nixos
   ];
 
   # Bootloader.
@@ -179,4 +178,6 @@
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };
+
+  # FIXME: added from home-manager refactor
 }

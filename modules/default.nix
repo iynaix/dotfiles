@@ -1,9 +1,7 @@
 {...}: {
   imports = [
-    ./desktop
-    ./hardware
-    ./media
-    ./programs
-    ./shell
+    ./shortcuts.nix
+    ./terminal.nix
+    ./wallust.nix
   ];
 }
