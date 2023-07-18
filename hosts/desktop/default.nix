@@ -5,7 +5,6 @@
   ...
 }: let
   displayCfg = config.iynaix.displays;
-  hyprlandCfg = config.iynaix.hyprland;
 in {
   imports = [./hardware.nix];
 
@@ -18,14 +17,8 @@ in {
 
       displays = {
         monitor1 = "DP-2";
-        monitor2 =
-          if hyprlandCfg.enable
-          then "DP-4"
-          else "DP-0.8";
-        monitor3 =
-          if hyprlandCfg.enable
-          then "HDMI-A-1"
-          else "HDMI-0";
+        monitor2 = "DP-4";
+        monitor3 = "HDMI-A-1";
       };
 
       # wayland settings
@@ -59,8 +52,6 @@ in {
       iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
     '';
 
-    # environment.systemPackages = with pkgs; [ ];
-
     home-manager.users.${user} = {
       home = {
         packages = with pkgs; [
@@ -76,9 +67,5 @@ in {
 
     # required for vial to work
     # services.udev.extraRules = ''KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"'';
-
-    iynaix.persist.home.directories = [
-      ".config/smplayer"
-    ];
   };
 }

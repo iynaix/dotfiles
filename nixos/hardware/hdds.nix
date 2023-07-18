@@ -31,17 +31,6 @@ in {
       "L+ /home/${user}/Videos   - - - - /media/6TBRED"
     ];
 
-    # extra nemo bookmarks
-    home-manager.users.${user} = {
-      gtk.gtk3 = {
-        bookmarks = lib.mkAfter [
-          "file:///media/6TBRED/Anime/Current Anime Current"
-          "file:///media/6TBRED/US/Current TV Current"
-          "file:///media/6TBRED/Movies"
-        ];
-      };
-    };
-
     # dual boot windows
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" [

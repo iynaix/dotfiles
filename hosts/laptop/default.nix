@@ -76,7 +76,5 @@ in {
     # do not autologin on laptop!
     services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
     security.pam.services.gdm.enableGnomeKeyring = true;
-
-    home-manager.users.${user} = {};
   };
 }

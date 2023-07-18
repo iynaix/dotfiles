@@ -39,8 +39,8 @@ in {
   imports = [
     ./screenshot.nix
     ./startup.nix
-    # ./lock.nix
-    # ./waybar.nix
+    ./lock.nix
+    ./waybar.nix
     ./swww.nix
   ];
 

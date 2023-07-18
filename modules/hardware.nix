@@ -26,5 +26,11 @@
         description = "The name of the tertiary display, e.g. eDP-1";
       };
     };
+
+    zfs = {
+      enable = lib.mkEnableOption "zfs" // {default = true;};
+      swap = lib.mkEnableOption "swap";
+      snapshots = lib.mkEnableOption "zfs snapshots" // {default = true;};
+    };
   };
 }

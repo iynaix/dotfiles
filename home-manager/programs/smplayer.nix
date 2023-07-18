@@ -13,5 +13,9 @@ in {
       source = ./smplayer-themes;
       recursive = true;
     };
+
+    iynaix.persist.home.directories = [
+      ".config/smplayer"
+    ];
   };
 }

@@ -1,6 +1,5 @@
 {
   pkgs,
-  user,
   inputs,
   system,
   lib,
@@ -19,35 +18,19 @@
         > /dev/null 2>&1 &
   '';
 in {
-  options.iynaix.waybar = {
-    enable = lib.mkEnableOption "waybar" // {default = true;};
-    settings-template = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "Additional waybar settings in wallust template format (original format is json)";
-    };
-    style-template = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "Additional waybar css styles in wallust template format (original format is css)";
-    };
-  };
-
   config = lib.mkIf cfg.enable {
-    home-manager.users.${user} = {
-      home.packages = [launch-waybar reload-waybar];
+    home.packages = [launch-waybar reload-waybar];
 
-      programs.waybar = {
-        enable = true;
-        # patch waybar to fix hyprland/window on 0.9.19
-        package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
-          src = pkgs.fetchgit {
-            url = "https://github.com/Alexays/Waybar";
-            rev = "1e2b9cb5ed6871a63a4a3d371c1e41e298004cff";
-            sha256 = "sha256-CQK6P5ce/cnuNUhrwwGeiR2YdjJD5YjJ1liCSlGyCNA=";
-          };
-        });
-      };
+    programs.waybar = {
+      enable = true;
+      # patch waybar to fix hyprland/window on 0.9.19
+      package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
+        src = pkgs.fetchgit {
+          url = "https://github.com/Alexays/Waybar";
+          rev = "1e2b9cb5ed6871a63a4a3d371c1e41e298004cff";
+          sha256 = "sha256-CQK6P5ce/cnuNUhrwwGeiR2YdjJD5YjJ1liCSlGyCNA=";
+        };
+      });
     };
 
     iynaix.wallust.entries = {

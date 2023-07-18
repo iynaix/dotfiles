@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    ./hyprland
     ./programs
     ./shell
   ];

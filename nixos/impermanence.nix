@@ -6,8 +6,6 @@
 }: let
   cfg = config.iynaix.persist;
 in {
-  imports = [./tmpfs.nix];
-
   config = lib.mkIf config.iynaix.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
@@ -19,6 +17,18 @@ in {
       #   (!cfg.tmpfs.home)
       #   "zfs rollback -r zroot/local/home@blank")
     ]);
+
+    # replace root and /or home filesystems with tmpfs
+    fileSystems."/" = lib.mkIf cfg.tmpfs.root (lib.mkForce {
+      device = "none";
+      fsType = "tmpfs";
+      options = ["defaults" "size=3G" "mode=755"];
+    });
+    fileSystems."/home" = lib.mkIf cfg.tmpfs.home (lib.mkForce {
+      device = "none";
+      fsType = "tmpfs";
+      options = ["defaults" "size=5G" "mode=755"];
+    });
 
     fileSystems."/persist".neededForBoot = true;
 

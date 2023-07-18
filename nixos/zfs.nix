@@ -5,14 +5,6 @@
 }: let
   cfg = config.iynaix.zfs;
 in {
-  options.iynaix = {
-    zfs = {
-      enable = lib.mkEnableOption "zfs" // {default = true;};
-      swap = lib.mkEnableOption "swap";
-      snapshots = lib.mkEnableOption "zfs snapshots" // {default = true;};
-    };
-  };
-
   config = lib.mkIf cfg.enable {
     # booting with zfs
     boot.supportedFilesystems = ["zfs"];

@@ -53,7 +53,5 @@ in {
         PartOf = ["graphical-session.target"];
       };
     };
-
-    home-manager.users.${user} = {};
   };
 }
