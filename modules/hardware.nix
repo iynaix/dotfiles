@@ -1,19 +1,14 @@
 {
-  user,
   lib,
   config,
   ...
 }: {
-  imports = [
-    # WMs are mutually exclusive via a config options
-    ./dunst.nix
-    ./gnome3.nix
-    ./gtk.nix
-    ./hyprland
-    ./kmonad.nix
-  ];
-
   options.iynaix = {
+    am5.enable = lib.mkEnableOption "B650E-E motherboard";
+    backlight.enable = lib.mkEnableOption "Backlight";
+    nvidia.enable = lib.mkEnableOption "Nvidia GPU";
+    hdds.enable = lib.mkEnableOption "Desktop HDDs";
+
     displays = {
       monitor1 = lib.mkOption {
         type = lib.types.str;
@@ -29,18 +24,6 @@
         type = lib.types.str;
         default = config.iynaix.displays.monitor1;
         description = "The name of the tertiary display, e.g. eDP-1";
-      };
-    };
-  };
-
-  config = {
-    home-manager.users.${user} = {
-      home = {
-        # copy wallpapers
-        file."Pictures/Wallpapers" = {
-          source = ./wallpapers;
-          recursive = true;
-        };
       };
     };
   };

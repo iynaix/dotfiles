@@ -3,12 +3,10 @@
   config,
   user,
   ...
-}: {
-  options.iynaix.hdds = {
-    enable = lib.mkEnableOption "Desktop HDDs";
-  };
-
-  config = lib.mkIf config.iynaix.hdds.enable {
+}: let
+  cfg = config.iynaix.hdds;
+in {
+  config = lib.mkIf cfg.enable {
     # filesystems
     fileSystems."/media/Files" = {
       device = "/dev/disk/by-label/Files";

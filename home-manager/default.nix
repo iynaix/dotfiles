@@ -29,5 +29,11 @@
     packages = with pkgs; [
       libreoffice
     ];
+
+    # copy wallpapers
+    file."Pictures/Wallpapers/gits-catppuccin.jpg" = {
+      source = ./gits-catppuccin.jpg;
+      recursive = true;
+    };
   };
 }

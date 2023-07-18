@@ -5,10 +5,6 @@
 }: let
   cfg = config.iynaix.kmonad;
 in {
-  options.iynaix.kmonad = {
-    enable = lib.mkEnableOption "kmonad";
-  };
-
   config = lib.mkIf cfg.enable {
     services.kmonad = {
       enable = true;

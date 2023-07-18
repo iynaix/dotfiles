@@ -5,15 +5,21 @@
   ...
 }: {
   imports = [
+    ./audio.nix
     ./docker.nix
+    ./gnome3.nix
     ./keyring.nix
+    ./kmonad.nix
     ./overlays.nix
     ./sonarr.nix
     ./transmission.nix
     ./virt-manager.nix
+    ./zsh.nix
   ];
 
   config = {
+    services.gvfs.enable = true;
+
     environment.systemPackages = with pkgs;
       [
         gcr # stops errors with copilot login?

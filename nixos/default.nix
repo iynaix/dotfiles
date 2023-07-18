@@ -1,10 +1,9 @@
 {...}: {
   imports = [
-    ./desktop
+    ./desktop/hyprland
     ./hardware
     ./impermanence.nix
     ./programs
-    ./shell.nix
     ./zfs.nix
   ];
 }
