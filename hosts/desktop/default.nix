@@ -14,6 +14,7 @@ in {
       # hardware
       am5.enable = true;
       hdds.enable = true;
+      nvidia.enable = true;
 
       displays = {
         monitor1 = "DP-2";
@@ -30,7 +31,6 @@ in {
       # wayland settings
       hyprland = {
         enable = true;
-        nvidia = true;
         monitors = ''
           monitor = ${displayCfg.monitor1}, 3440x1440@160,1440x1080,1
           monitor = ${displayCfg.monitor2}, 2560x1440,0x728,1,transform,1

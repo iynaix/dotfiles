@@ -2,8 +2,10 @@
   lib,
   config,
   ...
-}: {
-  config = lib.mkIf config.iynaix.hyprland.nvidia {
+}: let
+  cfg = config.iynaix.nvidia;
+in {
+  config = lib.mkIf cfg.enable {
     # enable nvidia support
     services.xserver.videoDrivers = ["nvidia"];
 
@@ -21,7 +23,7 @@
       powerManagement.enable = false;
     };
 
-    environment.sessionVariables = {
+    environment.sessionVariables = lib.mkIf config.iynaix.hyprland.enable {
       NIXOS_OZONE_WL = "1";
       WLR_NO_HARDWARE_CURSORS = "1";
       LIBVA_DRIVER_NAME = "nvidia";
@@ -30,6 +32,6 @@
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     };
 
-    programs.hyprland.nvidiaPatches = true;
+    programs.hyprland.nvidiaPatches = config.iynaix.hyprland.enable;
   };
 }

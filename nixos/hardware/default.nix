@@ -1,3 +1,8 @@
 {...}: {
-  imports = [./am5.nix ./backlight.nix ./hdds.nix];
+  imports = [
+    ./am5.nix
+    ./backlight.nix
+    ./hdds.nix
+    ./nvidia.nix
+  ];
 }

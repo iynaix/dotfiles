@@ -1,6 +1,5 @@
 {
   pkgs,
-  user,
   lib,
   config,
   ...
@@ -33,23 +32,21 @@
   '';
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${user} = {
-      home.packages = [hyprMonitors];
+    home.packages = [hyprMonitors];
 
-      # start hyprland
-      programs.zsh = let
-        hyprlandInit = ''
-          if [ "$(tty)" = "/dev/tty1" ]; then
-            exec Hyprland &> /dev/null
-          fi
-        '';
-      in {
-        loginExtra = hyprlandInit;
-        profileExtra = hyprlandInit;
-      };
-
-      xdg.configFile."hypr/ipc.py".source = ./ipc.py;
+    # start hyprland
+    programs.zsh = let
+      hyprlandInit = ''
+        if [ "$(tty)" = "/dev/tty1" ]; then
+          exec Hyprland &> /dev/null
+        fi
+      '';
+    in {
+      loginExtra = hyprlandInit;
+      profileExtra = hyprlandInit;
     };
+
+    xdg.configFile."hypr/ipc.py".source = ./ipc.py;
 
     iynaix.hyprland.extraBinds = {
       exec-once = [

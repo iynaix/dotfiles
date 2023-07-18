@@ -1,7 +1,6 @@
 {
   pkgs,
   host,
-  user,
   lib,
   inputs,
   system,
@@ -21,7 +20,7 @@
 
     choice=$(echo "Selection|Window|Monitor|All" | _rofi)
 
-    img="/home/${user}/Pictures/Screenshots/$(date --iso-8601=seconds).png"
+    img="~/Pictures/Screenshots/$(date --iso-8601=seconds).png"
 
     # small sleep delay is required so rofi menu doesnt appear in the screenshot
     case "$choice" in
@@ -53,7 +52,7 @@
   # run ocr on selected area and copy to clipboard
   hypr-ocr = with pkgs;
     pkgs.writeShellScriptBin "hypr-ocr" ''
-      img="/home/${user}/Pictures/Screenshots/ocr.png"
+      img="~/Pictures/Screenshots/ocr.png"
 
       grimblast save area $img
       ${tesseract5}/bin/tesseract $img - | wl-copy
@@ -62,12 +61,10 @@
     '';
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${user} = {
-      home.packages = with inputs.hyprwm-contrib.packages.${system}; [
-        grimblast
-        hyprprop
-      ];
-    };
+    home.packages = with inputs.hyprwm-contrib.packages.${system}; [
+      grimblast
+      hyprprop
+    ];
 
     iynaix.hyprland.extraBinds = {
       bind = {
