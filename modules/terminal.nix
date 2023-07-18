@@ -17,7 +17,7 @@ in {
       type = lib.types.str;
       default = "${lib.getExe cfg.package}";
       description = "Terminal command to execute other programs.";
-      example = "alacritty -e";
+      example = "kitty";
     };
 
     font = lib.mkOption {
@@ -48,6 +48,18 @@ in {
     # https://unix.stackexchange.com/a/642886
     fakeGnomeTerminal = lib.mkOption {
       type = lib.types.package;
+      default = (
+        pkgs.writeShellScriptBin "gnome-terminal" ''
+          shift
+
+          TITLE="$(basename "$1")"
+          if [ -n "$TITLE" ]; then
+            ${cfg.exec} -T "$TITLE" "$@"
+          else
+            ${cfg.exec} "$@"
+          fi
+        ''
+      );
       description = "Fake gnome-terminal shell script so gnome opens terminal applications in the correct terminal.";
     };
   };

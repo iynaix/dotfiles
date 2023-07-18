@@ -12,7 +12,6 @@
     ./pathofbuilding
     ./imv.nix
     ./keyring.nix
-    ./kitty.nix
     ./nemo.nix
     ./nixlang.nix
     ./virt-manager.nix
