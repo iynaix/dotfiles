@@ -2,16 +2,14 @@
   pkgs,
   config,
   lib,
-  user,
   ...
-}: let
-  hm = config.home-manager.users.${user};
-in {
+}: {
   imports = [
     ./docker.nix
     ./keyring.nix
     ./overlays.nix
     ./sonarr.nix
+    ./transmission.nix
     ./virt-manager.nix
   ];
 
