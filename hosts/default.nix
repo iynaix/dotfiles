@@ -6,15 +6,17 @@
   isNixOS,
   ...
 }: let
-  mkHost = {hostName}:
+  mkHost = {hostName}: let
+    extraSpecialArgs = {
+      inherit inputs isNixOS system user;
+      host = hostName;
+      isLaptop = hostName == "laptop";
+    };
+  in
     if isNixOS
     then
       lib.nixosSystem {
-        specialArgs = {
-          inherit user inputs system;
-          host = hostName;
-          isLaptop = hostName == "laptop";
-        };
+        specialArgs = extraSpecialArgs;
 
         modules =
           [
@@ -25,12 +27,8 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                # TODO: consolidate specialArgs variable
-                extraSpecialArgs = {
-                  inherit user inputs system;
-                  host = hostName;
-                  isLaptop = hostName == "laptop";
-                };
+
+                inherit extraSpecialArgs;
 
                 users.${user} = {
                   imports = [
