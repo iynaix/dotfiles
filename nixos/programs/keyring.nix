@@ -1,8 +1,4 @@
-{
-  pkgs,
-  user,
-  ...
-}: {
+{pkgs, ...}: {
   config = {
     services.xserver.enable = true;
     services.gnome.gnome-keyring.enable = true;
@@ -24,12 +20,6 @@
           TimeoutStopSec = 10;
         };
       };
-    };
-
-    home-manager.users.${user} = {
-      home.packages = with pkgs; [
-        gcr # stops errors with copilot login?
-      ];
     };
 
     # persist keyring and misc other secrets

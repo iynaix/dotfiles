@@ -1,4 +1,8 @@
-{user, ...}: {
+{
+  user,
+  pkgs,
+  ...
+}: {
   imports = [
     ./programs
     ./shell
@@ -21,5 +25,9 @@
     homeDirectory = "/home/${user}";
     # do not change this value
     stateVersion = "22.11";
+
+    packages = with pkgs; [
+      libreoffice
+    ];
   };
 }

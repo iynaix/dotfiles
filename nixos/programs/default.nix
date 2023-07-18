@@ -1,31 +1,37 @@
 {
   pkgs,
+  config,
+  lib,
   user,
   ...
-}: {
+}: let
+  hm = config.home-manager.users.${user};
+in {
   imports = [
-    ./brave.nix
     ./docker.nix
-    ./firefox.nix
-    ./gparted.nix
-    # ./helix.nix
-    ./imv.nix
     ./keyring.nix
-    ./nemo.nix
-    ./nixlang.nix
     ./overlays.nix
+    ./sonarr.nix
     ./virt-manager.nix
-    ./vscode.nix
-    ./zathura.nix
   ];
 
   config = {
-    home-manager.users.${user} = {
-      home.packages = with pkgs; [
-        libreoffice
+    environment.systemPackages = with pkgs;
+      [
+        gcr # stops errors with copilot login?
+        gparted
         libnotify
-      ];
-    };
+        # for nixlang
+        alejandra
+        nil
+      ]
+      ++ (lib.optional config.iynaix.helix.enable helix);
+
+    iynaix.hyprland.extraBinds.exec-once = [
+      # fix gparted "cannot open display: :0" error
+      # see: https://askubuntu.com/questions/939938/gparted-cannot-open-display
+      "${pkgs.xorg.xhost}/bin/xhost +local:"
+    ];
 
     iynaix.persist.home.directories = [
       ".local/state/wireplumber"
