@@ -1,6 +1,7 @@
 {
   user,
   pkgs,
+  config,
   ...
 }: {
   imports = [
@@ -28,6 +29,7 @@
     stateVersion = "22.11";
 
     packages = with pkgs; [
+      config.iynaix.terminal.fakeGnomeTerminal
       libreoffice
     ];
 

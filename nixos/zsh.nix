@@ -4,8 +4,6 @@
   ...
 }: {
   config = {
-    # environment.systemPackages = [config.iynaix.terminal.fakeGnomeTerminal];
-
     # set as default shell for user
     environment = {
       shells = [pkgs.zsh];

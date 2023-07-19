@@ -4,28 +4,18 @@
   user,
   lib,
   ...
-}: let
-  displayCfg = config.iynaix.displays;
-in {
+}: {
   imports = [./hardware.nix];
 
   config = {
-    iynaix = {
-      displays.monitor1 = "Virtual-1";
-
-      pathofbuilding.enable = false;
-
-      # wayland settings
-      hyprland = {
-        enable = true;
-        monitors = "monitor = ${displayCfg.monitor1}, 1920x1200,0x0,1";
-      };
+    iynaix-nixos = {
+      hyprland.enable = false;
 
       # persist.tmpfs.root = true;
       # persist.tmpfs.home = true;
     };
 
-    environment.sessionVariables = lib.mkIf config.iynaix.hyprland.enable {
+    environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland.enable {
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
     };
 
@@ -52,6 +42,10 @@ in {
         After = ["graphical-session-pre.target"];
         PartOf = ["graphical-session.target"];
       };
+    };
+
+    home-manager.users.${user} = {
+      imports = [./home.nix];
     };
   };
 }
