@@ -4,6 +4,7 @@
     ./git.nix
     ./neovim.nix
     ./ranger.nix
+    ./rice
     ./tmux.nix
     ./zsh.nix
   ];

@@ -41,6 +41,35 @@ def random_wallpaper():
     return random.choice(wallpapers)
 
 
+def refresh_zathura():
+    # get list of all dbus destinations
+    with subprocess.Popen(
+        [
+            "dbus-send",
+            "--print-reply",
+            "--dest=org.freedesktop.DBus",
+            "/org/freedesktop/DBus",
+            "org.freedesktop.DBus.ListNames",
+        ],
+        stdout=subprocess.PIPE,
+    ) as proc:
+        for line in proc.stdout.read().decode("utf-8").splitlines():
+            if "org.pwmt.zathura" in line:
+                dest = sorted(line.strip().split('"'), key=len)[-1]
+                # send message to zathura via dbus
+                run(
+                    [
+                        "dbus-send",
+                        "--type=method_call",
+                        f"--dest={dest}",
+                        "/org/pwmt/zathura",
+                        "org.pwmt.zathura.ExecuteCommand",
+                        "string:source",
+                    ]
+                )
+                return
+
+
 def set_colors():
     colors = get_colors()
 
@@ -61,13 +90,16 @@ def set_colors():
     # yellow border for sticky (must be floating) windows
     run(["hyprctl", "keyword", "windowrulev2", "bordercolor", f"{c[3]},pinned:1"])
 
-    # reload cava
+    # refresh zathura
+    refresh_zathura()
+
+    # refresh cava
     run(["killall", "-SIGUSR2", "cava"])
 
-    # reload waifufetch
+    # refresh waifufetch
     run(["killall", "-SIGUSR2", "python3"])
 
-    # reload waybar
+    # refresh waybar
     run(["killall", "-SIGUSR2", ".waybar-wrapped"])
 
 

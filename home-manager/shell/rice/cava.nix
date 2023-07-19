@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   home.packages = [pkgs.cava];
 
   iynaix.wallust.entries.cava = {
