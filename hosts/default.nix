@@ -22,6 +22,7 @@
           [
             ./configuration.nix # shared nixos configuration across all hosts
             ./${hostName} # host specific configuration, including hardware
+            ../overlays
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager = {
