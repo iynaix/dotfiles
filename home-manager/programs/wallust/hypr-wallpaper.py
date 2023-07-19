@@ -18,7 +18,7 @@ def get_colors():
 def get_current_wallpaper():
     curr = dict.get(get_colors(), "wallpaper", None)
 
-    if curr != "./foo/bar.txt":
+    if curr and curr != "./foo/bar.txt":
         return curr
 
     # set using theme, use swww to get the wallpaper

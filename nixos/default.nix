@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  user,
   ...
 }: {
   imports = [
@@ -14,6 +15,7 @@
     ./impermanence.nix
     ./keyring.nix
     ./kmonad.nix
+    ./nemo.nix
     ./overlays.nix
     ./sonarr.nix
     ./transmission.nix
@@ -34,11 +36,16 @@
         alejandra
         nil
       ]
+      ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
       ++ (lib.optional config.iynaix-nixos.helix.enable helix);
 
     # fix gparted "cannot open display: :0" error
     # see: https://askubuntu.com/questions/939938/gparted-cannot-open-display
-    environment.shellInit = "${pkgs.xorg.xhost}/bin/xhost +local:";
+    home-manager.users.${user} = {
+      iynaix.hyprland.extraBinds.exec-once = [
+        "${pkgs.xorg.xhost}/bin/xhost +local:"
+      ];
+    };
 
     iynaix-nixos.persist.home.directories = [
       ".local/state/wireplumber"

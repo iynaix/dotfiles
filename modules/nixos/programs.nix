@@ -1,11 +1,12 @@
 {
+  config,
   lib,
-  # isNixOS,
   ...
 }: {
   options.iynaix-nixos = {
     ### NIXOS LEVEL OPTIONS ###
-    docker.enable = lib.mkEnableOption "docker";
+    distrobox.enable = lib.mkEnableOption "distrobox";
+    docker.enable = lib.mkEnableOption "docker" // {default = config.iynaix-nixos.distrobox.enable;};
     helix.enable = lib.mkEnableOption "helix";
     hyprland.enable = lib.mkEnableOption "hyprland";
     kmonad.enable = lib.mkEnableOption "kmonad";

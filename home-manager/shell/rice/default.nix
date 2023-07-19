@@ -5,12 +5,12 @@
   ];
 
   home.packages = with pkgs; [
+    cbonsai
+    cmatrix
     imagemagick
     neofetch
     nitch
     pipes
-    cmatrix
-    # cbonsai
   ];
 
   # create xresources

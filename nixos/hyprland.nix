@@ -1,8 +1,9 @@
 {
+  inputs,
   system,
   lib,
   config,
-  inputs,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix-nixos.hyprland;
@@ -23,7 +24,7 @@ in {
     };
 
     environment.systemPackages = [
-      inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-hyprland
     ];
   };
 }

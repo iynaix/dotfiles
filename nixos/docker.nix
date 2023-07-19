@@ -9,6 +9,9 @@ in {
   config = lib.mkIf cfg.enable {
     users.users.${user}.extraGroups = ["docker"];
 
-    virtualisation.docker.enable = true;
+    virtualisation.docker = {
+      enable = true;
+      storageDriver = "zfs";
+    };
   };
 }

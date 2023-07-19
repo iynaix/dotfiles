@@ -4,8 +4,10 @@
     ./dunst.nix
     ./firefox.nix
     ./gtk.nix
+    ./helix.nix
     ./imv.nix
     ./kitty.nix
+    ./mpv.nix
     ./nemo.nix
     ./pathofbuilding.nix
     ./rofi.nix
