@@ -3,7 +3,7 @@
   config,
   ...
 }: {
-  options.iynaix = {
+  options.iynaix-nixos = {
     am5.enable = lib.mkEnableOption "B650E-E motherboard";
     backlight.enable = lib.mkEnableOption "Backlight";
     nvidia.enable = lib.mkEnableOption "Nvidia GPU";

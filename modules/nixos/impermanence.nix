@@ -1,5 +1,5 @@
 {lib, ...}: {
-  options.iynaix.persist = {
+  options.iynaix-nixos.persist = {
     root = {
       directories = lib.mkOption {
         default = [];

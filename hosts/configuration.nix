@@ -8,7 +8,7 @@
 }: {
   # handle desktop / window manager
   imports = [
-    ../modules
+    ../modules/nixos
     ../nixos
   ];
 
