@@ -23,7 +23,7 @@
     };
 
     # persist keyring and misc other secrets
-    iynaix.persist.home = {
+    iynaix-nixos.persist.home = {
       directories = [
         ".gnupg"
         ".pki"

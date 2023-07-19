@@ -7,6 +7,7 @@
   imports = [
     ./audio.nix
     ./docker.nix
+    ./filezilla.nix
     ./gnome3.nix
     ./hardware
     ./hyprland.nix
@@ -39,7 +40,7 @@
     # see: https://askubuntu.com/questions/939938/gparted-cannot-open-display
     environment.shellInit = "${pkgs.xorg.xhost}/bin/xhost +local:";
 
-    iynaix.persist.home.directories = [
+    iynaix-nixos.persist.home.directories = [
       ".local/state/wireplumber"
     ];
   };

@@ -26,4 +26,12 @@ in {
         "image/webp" = "imv-dir.desktop";
         "image/png" = "imv-dir.desktop";
       });
+
+  home-manager.users.${user} = {
+    gtk.gtk3.bookmarks = lib.optionals config.iynaix-nixos.hdds.enable [
+      "file:///media/6TBRED/Anime/Current Anime Current"
+      "file:///media/6TBRED/US/Current TV Current"
+      "file:///media/6TBRED/Movies"
+    ];
+  };
 }

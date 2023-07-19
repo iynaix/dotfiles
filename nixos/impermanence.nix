@@ -4,27 +4,28 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.persist;
+  nixos-cfg = config.iynaix-nixos.persist;
+  hm-cfg = config.home-manager.users.${user}.iynaix.persist;
 in {
   config = lib.mkIf config.iynaix-nixos.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
       (lib.optionalString
-        (!cfg.tmpfs.root)
+        (!nixos-cfg.tmpfs.root)
         "zfs rollback -r zroot/local/root@blank")
-      # (lib.optionalString
-      #   (!cfg.tmpfs.home)
-      #   "zfs rollback -r zroot/local/home@blank")
+      (lib.optionalString
+        (!nixos-cfg.tmpfs.home)
+        "zfs rollback -r zroot/local/home@blank")
     ]);
 
     # replace root and /or home filesystems with tmpfs
-    fileSystems."/" = lib.mkIf cfg.tmpfs.root (lib.mkForce {
+    fileSystems."/" = lib.mkIf nixos-cfg.tmpfs.root (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
       options = ["defaults" "size=3G" "mode=755"];
     });
-    fileSystems."/home" = lib.mkIf cfg.tmpfs.home (lib.mkForce {
+    fileSystems."/home" = lib.mkIf nixos-cfg.tmpfs.home (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
       options = ["defaults" "size=5G" "mode=755"];
@@ -44,18 +45,13 @@ in {
     # persist files on root filesystem
     environment.persistence."/persist" = {
       hideMounts = true;
-      files = ["/etc/machine-id"] ++ cfg.root.files;
-      directories = cfg.root.directories;
+      files = ["/etc/machine-id"] ++ nixos-cfg.root.files;
+      directories = nixos-cfg.root.directories;
 
       # persist for home directory
       users.${user} = {
-        files = cfg.home.files;
-        directories =
-          [
-            # TODO: reference projects on another dataset?
-            "projects"
-          ]
-          ++ cfg.home.directories;
+        files = nixos-cfg.home.files ++ hm-cfg.home.files;
+        directories = ["projects"] ++ nixos-cfg.home.directories ++ hm-cfg.home.directories;
       };
     };
 

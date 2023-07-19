@@ -44,7 +44,7 @@
       };
     };
 
-    iynaix.persist.root.directories = [
+    iynaix-nixos.persist.root.directories = [
       "/var/lib/sonarr/.config/NzbDrone"
       "/var/lib/private/prowlarr"
     ];

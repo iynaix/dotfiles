@@ -1,11 +1,8 @@
 {
   pkgs,
   host,
-  system,
-  user,
   lib,
   config,
-  inputs,
   ...
 }: let
   cfg = config.iynaix.hyprland;

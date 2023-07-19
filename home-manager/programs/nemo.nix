@@ -13,20 +13,14 @@
     ];
   };
 
-  gtk.gtk3.bookmarks =
-    [
-      "file:///home/iynaix/Downloads"
-      "file:///home/iynaix/projects"
-      "file:///home/iynaix/projects/dotfiles"
-      "file:///home/iynaix/projects/coinfc"
-      "file:///home/iynaix/Pictures"
-      "file:///persist Persist"
-    ]
-    ++ lib.optionals config.iynaix.hdds.enable [
-      "file:///media/6TBRED/Anime/Current Anime Current"
-      "file:///media/6TBRED/US/Current TV Current"
-      "file:///media/6TBRED/Movies"
-    ];
+  gtk.gtk3.bookmarks = [
+    "file:///home/iynaix/Downloads"
+    "file:///home/iynaix/projects"
+    "file:///home/iynaix/projects/dotfiles"
+    "file:///home/iynaix/projects/coinfc"
+    "file:///home/iynaix/Pictures"
+    "file:///persist Persist"
+  ];
 
   dconf.settings = {
     # fix open in terminal

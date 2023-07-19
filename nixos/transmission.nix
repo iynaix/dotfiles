@@ -111,7 +111,7 @@ in {
       home.packages = with pkgs; [transmission-remote-gtk];
     };
 
-    iynaix.persist.home.directories = [
+    iynaix-nixos.persist.home.directories = [
       ".config/transmission-daemon/resume"
       ".config/transmission-daemon/torrents"
     ];
