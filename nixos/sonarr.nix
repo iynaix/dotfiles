@@ -5,7 +5,7 @@
   config,
   ...
 }: {
-  config = lib.mkIf config.iynaix.torrenters.enable {
+  config = lib.mkIf config.iynaix-nixos.torrenters.enable {
     services = {
       sonarr = {
         enable = true;

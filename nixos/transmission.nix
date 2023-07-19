@@ -7,7 +7,7 @@
 }: let
   home = "/home/${user}";
 in {
-  config = lib.mkIf config.iynaix.torrenters.enable {
+  config = lib.mkIf config.iynaix-nixos.torrenters.enable {
     services.transmission = {
       enable = true;
       inherit user home;

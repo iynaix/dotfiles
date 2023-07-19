@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.kmonad;
+  cfg = config.iynaix-nixos.kmonad;
 in {
   config = lib.mkIf cfg.enable {
     services.kmonad = {

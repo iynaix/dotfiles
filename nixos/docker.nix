@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.docker;
+  cfg = config.iynaix-nixos.docker;
 in {
   config = lib.mkIf cfg.enable {
     users.users.${user}.extraGroups = ["docker"];

@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.nvidia;
+  cfg = config.iynaix-nixos.nvidia;
 in {
   config = lib.mkIf cfg.enable {
     # enable nvidia support
@@ -23,7 +23,7 @@ in {
       powerManagement.enable = false;
     };
 
-    environment.sessionVariables = lib.mkIf config.iynaix.hyprland.enable {
+    environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland.enable {
       NIXOS_OZONE_WL = "1";
       WLR_NO_HARDWARE_CURSORS = "1";
       LIBVA_DRIVER_NAME = "nvidia";
@@ -32,6 +32,6 @@ in {
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     };
 
-    programs.hyprland.nvidiaPatches = config.iynaix.hyprland.enable;
+    programs.hyprland.nvidiaPatches = config.iynaix-nixos.hyprland.enable;
   };
 }

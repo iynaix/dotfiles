@@ -14,13 +14,5 @@
       pamixer
       pavucontrol
     ];
-
-    iynaix.hyprland.extraBinds = {
-      bind = {
-        ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
-        ",XF86AudioRaiseVolume" = "exec, pamixer -d 5";
-        ",XF86AudioMute" = "exec, pamixer -t";
-      };
-    };
   };
 }

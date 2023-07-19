@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix.zfs;
+  cfg = config.iynaix-nixos.zfs;
 in {
   config = lib.mkIf cfg.enable {
     # booting with zfs

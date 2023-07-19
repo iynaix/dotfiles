@@ -1,11 +1,10 @@
 {
   pkgs,
-  config,
   user,
   ...
 }: {
   config = {
-    environment.systemPackages = [config.iynaix.terminal.fakeGnomeTerminal];
+    # environment.systemPackages = [config.iynaix.terminal.fakeGnomeTerminal];
 
     # set as default shell for user
     environment = {

@@ -4,9 +4,9 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix.persist;
+  cfg = config.iynaix-nixos.persist;
 in {
-  config = lib.mkIf config.iynaix.zfs.enable {
+  config = lib.mkIf config.iynaix-nixos.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [

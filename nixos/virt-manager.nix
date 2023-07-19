@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix.virt-manager;
+  cfg = config.iynaix-nixos.virt-manager;
 in {
   config = lib.mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;

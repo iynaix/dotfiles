@@ -297,9 +297,17 @@ in {
               "${mod}, apostrophe" = "exec, hypr-wallpaper --rofi wallpaper";
               "${mod}_SHIFT, apostrophe" = "exec, hypr-wallpaper --rofi theme";
 
-              # TODO:
               # special keys
               # "XF86AudioPlay" = "mpvctl playpause";
+
+              # backlight
+              ",XF86MonBrightnessDown" = "exec, brightnessctl set 5%-";
+              ",XF86MonBrightnessUp" = "exec, brightnessctl set +5%";
+
+              # audio
+              ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
+              ",XF86AudioRaiseVolume" = "exec, pamixer -d 5";
+              ",XF86AudioMute" = "exec, pamixer -t";
             };
 
             # Move/resize windows with mainMod + LMB/RMB and dragging

@@ -4,7 +4,7 @@
   user,
   ...
 }: let
-  cfg = config.iynaix.hdds;
+  cfg = config.iynaix-nixos.hdds;
 in {
   config = lib.mkIf cfg.enable {
     # filesystems

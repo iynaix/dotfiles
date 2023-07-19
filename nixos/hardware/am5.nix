@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.am5;
+  cfg = config.iynaix-nixos.am5;
 in {
   config = lib.mkIf cfg.enable {
     # fix intel i225-v ethernet dying due to power management

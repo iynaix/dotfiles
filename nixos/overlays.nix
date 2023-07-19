@@ -1,12 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   nixpkgs.overlays = [
-    (self: super:
-      {
+    (
+      self: super: {
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
         imv = super.imv.overrideAttrs (oldAttrs: {
@@ -93,21 +88,21 @@
           };
         });
       }
-      // (lib.optionalAttrs config.iynaix.smplayer.enable {
-        # patch smplayer to not open an extra window under wayland
-        # https://github.com/smplayer-dev/smplayer/issues/369#issuecomment-1519941318
-        smplayer = super.smplayer.overrideAttrs (oldAttrs: {
-          patches = [
-            ./smplayer-shared-memory.patch
-          ];
-        });
-
-        mpv = super.mpv-unwrapped.overrideAttrs (oldAttrs: {
-          patches = [
-            ./mpv-meson.patch
-            ./mpv-mod.patch
-          ];
-        });
-      }))
+      # // (lib.optionalAttrs config.iynaix.smplayer.enable {
+      #   # patch smplayer to not open an extra window under wayland
+      #   # https://github.com/smplayer-dev/smplayer/issues/369#issuecomment-1519941318
+      #   smplayer = super.smplayer.overrideAttrs (oldAttrs: {
+      #     patches = [
+      #       ./smplayer-shared-memory.patch
+      #     ];
+      #   });
+      #   mpv = super.mpv-unwrapped.overrideAttrs (oldAttrs: {
+      #     patches = [
+      #       ./mpv-meson.patch
+      #       ./mpv-mod.patch
+      #     ];
+      #   });
+      # })
+    )
   ];
 }
