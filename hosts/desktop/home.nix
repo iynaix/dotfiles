@@ -22,7 +22,7 @@ in {
       '';
     };
     waybar = {
-      style-template = ''
+      css = ''
         /* add rounded corners for leftmost modules-right */
         #pulseaudio {
           border-radius: 12px 0 0 12px;

@@ -56,15 +56,15 @@
 
     waybar = {
       enable = lib.mkEnableOption "waybar" // {default = config.iynaix.hyprland.enable;};
-      settings-template = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "Additional waybar settings in wallust template format (original format is json)";
+      config = lib.mkOption {
+        type = lib.types.attrs;
+        default = {};
+        description = "Additional waybar config (wallust templating can be used)";
       };
-      style-template = lib.mkOption {
+      css = lib.mkOption {
         type = lib.types.str;
         default = "";
-        description = "Additional waybar css styles in wallust template format (original format is css)";
+        description = "Additional waybar css (wallust templating can be used)";
       };
     };
   };

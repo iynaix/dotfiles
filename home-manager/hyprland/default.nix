@@ -48,7 +48,7 @@ in {
       };
 
       packages = with pkgs; [
-        playerctl
+        # playerctl
         pciutils
         # clipboard history
         cliphist
@@ -296,10 +296,6 @@ in {
 
               # special keys
               # "XF86AudioPlay" = "mpvctl playpause";
-
-              # backlight
-              ",XF86MonBrightnessDown" = "exec, brightnessctl set 5%-";
-              ",XF86MonBrightnessUp" = "exec, brightnessctl set +5%";
 
               # audio
               ",XF86AudioLowerVolume" = "exec, pamixer -i 5";

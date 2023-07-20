@@ -13,5 +13,9 @@ in {
     environment.systemPackages = with pkgs; [virt-manager];
 
     users.users.${user}.extraGroups = ["libvirtd"];
+
+    iynaix-nixos.persist.root.directories = [
+      "/var/lib/libvirt"
+    ];
   };
 }

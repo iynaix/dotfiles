@@ -134,7 +134,7 @@ def apply_theme(theme):
             ]
         )
     else:
-        run(["wallust", "theme", theme])
+        wallust("theme", theme)
 
 
 def rofi_theme():
@@ -166,6 +166,11 @@ def rofi_wallpaper():
             f"{float_rule} imv -n {rand_idx} -c '{esc_bind}' {str(WALLPAPERS)}",
         ]
     )
+
+
+def wallust(*args):
+    Path("~/.config/waybar").expanduser().mkdir(parents=True, exist_ok=True)
+    run(["wallust", *args])
 
 
 def parse_args():
@@ -227,9 +232,9 @@ if __name__ == "__main__":
     if args.theme:
         apply_theme(args.theme)
     elif args.reload:
-        run(["wallust", get_current_wallpaper() or wallpaper])
+        wallust(get_current_wallpaper() or wallpaper)
     else:
-        run(["wallust", wallpaper])
+        wallust(wallpaper)
         run(["swww", "img", "--transition-type", args.transition_type, wallpaper])
 
     set_colors()

@@ -12,10 +12,7 @@
   '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
-    wait
-    waybar --config $HOME/.cache/wallust/waybar-config \
-        --style $HOME/.cache/wallust/waybar-style.css \
-        > /dev/null 2>&1 &
+    waybar &
   '';
 in {
   config = lib.mkIf cfg.enable {
@@ -23,12 +20,15 @@ in {
 
     programs.waybar = {
       enable = true;
+      # do not use the systemd service as it is flaky and unreliable
+      # https://github.com/nix-community/home-manager/issues/3599
+
       # patch waybar to fix hyprland/window on 0.9.19
       package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
         src = pkgs.fetchgit {
           url = "https://github.com/Alexays/Waybar";
-          rev = "1e2b9cb5ed6871a63a4a3d371c1e41e298004cff";
-          sha256 = "sha256-CQK6P5ce/cnuNUhrwwGeiR2YdjJD5YjJ1liCSlGyCNA=";
+          rev = "0.9.20";
+          sha256 = "sha256-aViAMgZzxmXrZhIXD15TwbJeF9PpRwKIDadjeKhB2hE=";
         };
       });
     };
@@ -36,114 +36,80 @@ in {
     iynaix.wallust.entries = {
       waybar-config = {
         enable = config.iynaix.wallust.waybar;
-        text = lib.mkDefault ''
-          {
-            "backlight": {
-              "format": "{icon}  {percent}%",
-              "format-icons": [
-                "󰃞",
-                "󰃟",
-                "󰃝",
-                "󰃠"
-              ],
-              "on-scroll-down": "brightnessctl s 1%-",
-              "on-scroll-up": "brightnessctl s +1%"
-            },
+        text = builtins.toJSON ({
+            clock = {
+              calendar = {
+                actions = {
+                  on-click-right = "mode";
+                  on-scroll-down = "shift_down";
+                  on-scroll-up = "shift_up";
+                };
+                format = {
+                  days = "<span color='{color4}'><b>{}</b></span>";
+                  months = "<span color='{foreground}'><b>{}</b></span>";
+                  today = "<span color='{color3}'><b><u>{}</u></b></span>";
+                  weekdays = "<span color='{color5}'><b>{}</b></span>";
+                };
+                mode = "year";
+                mode-mon-col = 3;
+                on-scroll = 1;
+              };
+              format = "{:%H:%M}";
+              format-alt = "{:%a, %d %b %Y}";
+              interval = 10;
+              tooltip-format = "<tt><small>{calendar}</small></tt>";
+            };
 
-            "battery": {
-              "format": "{icon}  {capacity}%",
-              "format-charging": "  {capacity}%",
-              "format-icons": [
-                "",
-                "",
-                "",
-                "",
-                ""
-              ],
-              "states": {
-                "critical": 20
-              },
-              "tooltip": false
-            },
+            "hyprland/window" = {
+              separate-outputs = true;
+            };
 
-            "clock": {
-              "calendar": {
-                "actions": {
-                  "on-click-right": "mode",
-                  "on-scroll-down": "shift_down",
-                  "on-scroll-up": "shift_up"
-                },
-                "format": {
-                  "days": "<span color='{color4}'><b>{}</b></span>",
-                  "months": "<span color='{foreground}'><b>{}</b></span>",
-                  "today": "<span color='{color3}'><b><u>{}</u></b></span>",
-                  "weekdays": "<span color='{color5}'><b>{}</b></span>"
-                },
-                "mode": "year",
-                "mode-mon-col": 3,
-                "on-scroll": 1
-              },
-              "format": "{:%H:%M}",
-              "format-alt": "{:%a, %d %b %Y}",
-              "interval": 10,
-              "tooltip-format": "<tt><small>{calendar}</small></tt>"
-            },
+            layer = "top";
+            margin = "4 4 0 4";
 
-            "hyprland/window": {
-              "separate-outputs": true
-            },
-
-            "layer": "top",
-            "margin": "4 4 0 4",
-
-            "modules-center": [
+            modules-center = [
               "wlr/workspaces"
-            ],
+            ];
 
-            "modules-left": [
-              "custom/nix",
+            modules-left = [
+              "custom/nix"
               "hyprland/window"
-            ],
+            ];
 
-            "modules-right": [ "pulseaudio", "network", "battery", "clock" ],
+            modules-right = ["pulseaudio" "network" "battery" "clock"];
 
-            "network": {
-              "format-disconnected": "󰖪  Offline",
-              "format-ethernet": "",
-              "tooltip": false
-            },
+            network = {
+              format-disconnected = "󰖪  Offline";
+              format-ethernet = "";
+              tooltip = false;
+            };
 
-            "position": "top",
+            position = "top";
 
-            "pulseaudio": {
-              "format": "{icon}  {volume}%",
-              "format-icons": [
-                "",
-                "",
-                ""
-              ],
-              "format-muted": "󰸈 Muted",
-              "on-click": "pamixer -t",
-              "on-click-right": "pavucontrol",
-              "scroll-step": 1,
-              "tooltip": false
-            },
+            pulseaudio = {
+              format = "{icon}  {volume}%";
+              format-icons = ["" "" ""];
+              format-muted = "󰸈 Muted";
+              on-click = "pamixer -t";
+              on-click-right = "pavucontrol";
+              scroll-step = 1;
+              tooltip = false;
+            };
 
-            "wlr/workspaces": {
-              "on-click": "activate",
-              "sort-by-number": true
-            },
+            "wlr/workspaces" = {
+              on-click = "activate";
+              sort-by-number = true;
+            };
 
-            "custom/nix": {
-              "format": "",
-              "on-click": "hypr-wallpaper",
-              "on-click-right": "hypr-wallpaper --rofi wallpaper",
-              "tooltip": false
-            }${lib.optionalString (cfg.settings-template != "") ","}
-
-            ${cfg.settings-template}
-          }'';
-        target = "~/.cache/wallust/waybar-config";
+            "custom/nix" = {
+              format = "";
+              on-click = "hypr-wallpaper";
+              on-click-right = "hypr-wallpaper --rofi wallpaper";
+              tooltip = false;
+            };
+          }
+          // cfg.config);
+        target = "~/.config/waybar/config";
       };
 
       waybar-css = {
@@ -206,7 +172,7 @@ in {
             border-radius: 0 12px 12px 0;
           }
 
-          /* swap colors for monocle / swallowing */
+          /* invert colors for monocle / swallowing */
           window#waybar.fullscreen #window, window#waybar.swallowing #window {
               background-color: {foreground};
               color: {color0};
@@ -220,9 +186,9 @@ in {
             background: {color0};
           }
 
-          ${cfg.style-template}
+          ${cfg.css}
         '';
-        target = "~/.cache/wallust/waybar-style.css";
+        target = "~/.config/waybar/style.css";
       };
     };
   };
