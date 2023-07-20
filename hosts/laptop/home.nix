@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{config, ...}: let
   displayCfg = config.iynaix.displays;
 in {
   iynaix = {
@@ -64,9 +60,11 @@ in {
         };
       };
       # add rounded corners for leftmost modules-right
-      css = lib.mkAfter ''
+      css = let
+        radius = config.iynaix.waybar.border-radius;
+      in ''
         #network {
-          border-radius: 12px 0 0 12px;
+          border-radius: ${radius} 0 0 ${radius};
         }
       '';
     };

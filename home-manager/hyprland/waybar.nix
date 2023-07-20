@@ -107,12 +107,73 @@ in {
               on-click-right = "hypr-wallpaper --rofi wallpaper";
               tooltip = false;
             };
+
+            # custom separators for future use
+            # "custom/separator-bl" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
+            # "custom/separator-br" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
+            # "custom/separator-tl" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
+            # "custom/separator-tr" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
+            # "custom/separator-right-triangle" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
+            # "custom/separator-left-triangle" = {
+            #   "format" = "";
+            #   "tooltip" = false;
+            # };
           }
           // cfg.config);
         target = "~/.config/waybar/config";
       };
 
-      waybar-css = {
+      waybar-css = let
+        separatorClass = {
+          name,
+          color,
+          background-color,
+          inverse ? false,
+        }: let
+          finalColor =
+            if color
+            then color
+            else
+              (
+                if inverse
+                then "background"
+                else "color0"
+              );
+          finalBackgroundColor =
+            if background-color
+            then background-color
+            else
+              (
+                if inverse
+                then "color0"
+                else "background"
+              );
+        in ''
+          #custom-separator-${name} {
+            color: {${finalColor}};
+            background-color: {${finalBackgroundColor}};
+            font-size: 18px;
+            font-family: "${config.iynaix.font.monospace}";
+            margin-top: -1px;
+          }
+        '';
+        radius = config.iynaix.waybar.border-radius;
+      in {
         enable = config.iynaix.wallust.waybar;
         text = lib.mkDefault ''
           #waybar {
@@ -131,14 +192,14 @@ in {
 
           #workspaces, #workspaces button {
             padding: 0 4px 0 4px;
-            border-radius: 12px;
+            border-radius: ${radius};
           }
 
           #clock, #workspaces button.active {
             background-color: {foreground};
             color: {color0};
             margin-right: 4px;
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 ${radius} ${radius} 0;
           }
 
           #custom-nix {
@@ -147,7 +208,7 @@ in {
             margin-left: 4px;
             padding: 0 12px;
             font-size: 16px;
-            border-radius: 12px 0 0 12px;
+            border-radius: ${radius} 0 0 ${radius};
           }
 
           #workspaces button.urgent {
@@ -169,7 +230,7 @@ in {
 
           #window {
             padding: 0 12px;
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 ${radius} ${radius} 0;
           }
 
           /* invert colors for monocle / swallowing */

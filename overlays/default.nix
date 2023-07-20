@@ -1,7 +1,7 @@
 {
   pkgs,
   lib,
-  config,
+  host,
   ...
 }: {
   nixpkgs.overlays = [
@@ -94,7 +94,7 @@
             };
           });
         }
-        // (lib.optionalAttrs config.iynaix-nixos.torrenters.enable {
+        // (lib.optionalAttrs (host == "desktop") {
           # patch smplayer to not open an extra window under wayland
           # https://github.com/smplayer-dev/smplayer/issues/369#issuecomment-1519941318
           smplayer = super.smplayer.overrideAttrs (oldAttrs: {

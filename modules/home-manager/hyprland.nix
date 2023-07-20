@@ -66,6 +66,11 @@
         default = "";
         description = "Additional waybar css (wallust templating can be used)";
       };
+      border-radius = lib.mkOption {
+        type = lib.types.str;
+        default = "12px";
+        description = "Border-radius for waybar";
+      };
     };
   };
 }

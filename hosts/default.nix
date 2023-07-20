@@ -52,6 +52,11 @@
     else
       inputs.home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs;
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
         modules = [
           ./${hostName}/home.nix
           ../overlays
