@@ -5,6 +5,7 @@
   inputs,
   system,
   config,
+  isNixOS,
   ...
 }: let
   cfg = config.iynaix.hyprland;
@@ -61,10 +62,10 @@
     '';
 in {
   config = lib.mkIf cfg.enable {
-    home.packages = with inputs.hyprwm-contrib.packages.${system}; [
+    home.packages = lib.mkIf isNixOS (with inputs.hyprwm-contrib.packages.${system}; [
       grimblast
       hyprprop
-    ];
+    ]);
 
     iynaix.hyprland.extraBinds = {
       bind = {

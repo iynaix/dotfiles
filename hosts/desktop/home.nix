@@ -1,6 +1,8 @@
 {
   pkgs,
   config,
+  lib,
+  isNixOS,
   ...
 }: let
   displayCfg = config.iynaix.displays;
@@ -37,15 +39,15 @@ in {
   };
 
   home = {
-    packages = with pkgs; [
+    packages = lib.mkIf isNixOS (with pkgs; [
       deadbeef
       vlc
       ffmpeg
       # vial
-    ];
+    ]);
   };
 
-  programs.obs-studio.enable = true;
+  programs.obs-studio.enable = isNixOS;
 
   # required for vial to work?
   # services.udev.extraRules = ''KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"'';

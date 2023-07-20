@@ -1,4 +1,4 @@
-{...}: {
+{isNixOS, ...}: {
   xdg.configFile."mpv" = {
     source = ./mpv;
     recursive = true;
@@ -6,7 +6,7 @@
 
   programs = {
     mpv = {
-      enable = true;
+      enable = isNixOS;
       bindings = {
         MBTN_LEFT = "cycle pause";
         WHEEL_UP = "ignore";

@@ -89,7 +89,6 @@
       ripgrep
       tree # for root, normal user has an exa alias
       wget
-      xclip
     ];
   };
 

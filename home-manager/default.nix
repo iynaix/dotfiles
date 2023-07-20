@@ -1,7 +1,8 @@
 {
   user,
   pkgs,
-  config,
+  lib,
+  isNixOS,
   ...
 }: {
   imports = [
@@ -28,10 +29,17 @@
     # do not change this value
     stateVersion = "22.11";
 
-    packages = with pkgs; [
-      config.iynaix.terminal.fakeGnomeTerminal
-      libreoffice
-    ];
+    packages = with pkgs;
+      [
+        curl
+        exa
+        gzip
+        killall
+        rar
+        ripgrep
+        wget
+      ]
+      ++ (lib.optional isNixOS libreoffice);
 
     # copy wallpapers
     file."Pictures/Wallpapers/gits-catppuccin.jpg" = {

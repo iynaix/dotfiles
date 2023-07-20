@@ -4,7 +4,9 @@
   lib,
   user,
   ...
-}: {
+}: let
+  hmConfig = config.home-manager.users.${user};
+in {
   imports = [
     ./audio.nix
     ./docker.nix
@@ -34,8 +36,9 @@
         alejandra
         nil
       ]
+      ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmConfig.iynaix.terminal.fakeGnomeTerminal)
       ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
-      ++ (lib.optional config.home-manager.users.${user}.iynaix.helix.enable helix);
+      ++ (lib.optional hmConfig.iynaix.helix.enable helix);
 
     programs.file-roller.enable = true;
 

@@ -4,6 +4,7 @@
   system,
   lib,
   config,
+  isNixOS,
   ...
 }: let
   cfg = config.iynaix.waybar;
@@ -19,7 +20,7 @@ in {
     home.packages = [launch-waybar reload-waybar];
 
     programs.waybar = {
-      enable = true;
+      enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
       # https://github.com/nix-community/home-manager/issues/3599
 
