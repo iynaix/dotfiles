@@ -115,11 +115,9 @@
   services.openssh.enable = true;
 
   # auto login
-  services.xserver.displayManager = {
-    autoLogin = {
-      enable = true;
-      inherit user;
-    };
+  services.xserver.displayManager.autoLogin = {
+    enable = true;
+    inherit user;
   };
 
   # bye bye nano

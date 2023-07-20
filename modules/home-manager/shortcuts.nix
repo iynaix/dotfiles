@@ -4,7 +4,7 @@
     default = {
       h = "~";
       dots = "~/projects/dotfiles";
-      c = "~/.config";
+      cfg = "~/.config";
       vd = "~/Videos";
       vaa = "~/Videos/Anime";
       vac = "~/Videos/Anime/Current";

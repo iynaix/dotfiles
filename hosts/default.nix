@@ -49,7 +49,16 @@
             inputs.nixos-hardware.nixosModules.dell-xps-13-9343
           ];
       }
-    else {};
+    else
+      inputs.home-manager.lib.homeManagerConfiguration {
+        inherit extraSpecialArgs;
+        modules = [
+          ./${hostName}/home.nix
+          ../overlays
+          ../home-manager
+          ../modules/home-manager
+        ];
+      };
 in {
   vm = mkHost {hostName = "vm";};
   desktop = mkHost {hostName = "desktop";};

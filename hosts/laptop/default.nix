@@ -29,6 +29,7 @@
     services.xserver.libinput.enable = true;
 
     # do not autologin on laptop!
+    services.getty.autologinUser = lib.mkForce null;
     services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
     security.pam.services.gdm.enableGnomeKeyring = true;
 

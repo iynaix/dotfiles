@@ -12,7 +12,7 @@
   '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
-    waybar &
+    waybar > /dev/null 2>&1 &
   '';
 in {
   config = lib.mkIf cfg.enable {
