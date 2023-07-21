@@ -155,6 +155,20 @@ in {
         popd
     }
 
+    # build home-manager flake but don't switch
+    hmbuild() {
+        pushd ~/projects/dotfiles
+        home-manager build --flake ".#''${1:-${host}}"
+        popd
+    }
+
+    # switch / update home-manager via nix flake
+    hmswitch() {
+        pushd ~/projects/dotfiles
+        home-manager switch --flake ".#''${1:-${host}}"
+        popd
+    }
+
     upd8() {
         pushd ~/projects/dotfiles
         nix flake update

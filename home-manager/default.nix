@@ -38,6 +38,7 @@
         rar
         ripgrep
         wget
+        home-manager
       ]
       ++ (lib.optional isNixOS libreoffice);
 

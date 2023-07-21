@@ -1,5 +1,7 @@
 # Iynaix's Nix Config
 
+This config is intended to be used with NixOS. There is *experimental* support for running the dotfiles on [other Linuxes](https://github.com/iynaix/dotfiles/blob/main/home-manager.md).
+
 ## How to Install
 Remove old zfs pools (if necessary)
 ```sh
@@ -12,7 +14,7 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
 ```
 ### Install from Flake
 
-Change `desktop` to desired host as needed
+Substitute `desktop` with desired host
 
 ```sh
 nix-shell -p nixFlakes
