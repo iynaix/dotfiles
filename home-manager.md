@@ -23,8 +23,17 @@ Substitute `desktop` with desired host
 mkdir -p ~/projects
 git clone https://github.com/iynaix/dotfiles
 cd dotfiles
+rm ~/.config/gtk-3.0/bookmarks
 nix-shell -p home-manager
 home-manager --extra-experimental-features "nix-command flakes" switch --flake ".#desktop"
+```
+
+Reboot.
+
+Other settings to apply:
+
+```sh
+sudo chsh -s $(which zsh) $USER
 ```
 
 ### Graphical Programs (WIP)
@@ -49,4 +58,4 @@ vlc
 ```
 
 ### TODO
-- gtk fonts, cursor and theme don't seem to be working
+- gtk theme doesn't seem to be working

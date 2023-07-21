@@ -1,6 +1,8 @@
 {
   pkgs,
   config,
+  lib,
+  isNixOS,
   ...
 }: {
   home = {
@@ -9,7 +11,7 @@
       # gnome.dconf-editor
     ];
 
-    pointerCursor = {
+    pointerCursor = lib.mkIf isNixOS {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
       size = 24;

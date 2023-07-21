@@ -1,10 +1,10 @@
 {
   pkgs,
-  inputs,
-  system,
   lib,
   config,
   isNixOS,
+  inputs,
+  system,
   ...
 }: let
   cfg = config.iynaix.waybar;
@@ -24,14 +24,16 @@ in {
       # do not use the systemd service as it is flaky and unreliable
       # https://github.com/nix-community/home-manager/issues/3599
 
-      # patch waybar to fix hyprland/window on 0.9.19
-      package = inputs.hyprland.packages.${system}.waybar-hyprland.overrideAttrs (oldAttrs: {
-        src = pkgs.fetchgit {
-          url = "https://github.com/Alexays/Waybar";
-          rev = "0.9.20";
-          sha256 = "sha256-aViAMgZzxmXrZhIXD15TwbJeF9PpRwKIDadjeKhB2hE=";
-        };
-      });
+      # use patched waybar from hyprland
+      package = inputs.hyprland.packages.${system}.waybar-hyprland;
+      # .overrideAttrs (oldAttrs: {
+      #     # use latest waybar from git
+      #   src = pkgs.fetchgit {
+      #     url = "https://github.com/Alexays/Waybar";
+      #     rev = "0.9.20";
+      #     sha256 = "sha256-aViAMgZzxmXrZhIXD15TwbJeF9PpRwKIDadjeKhB2hE=";
+      #   };
+      # });
     };
 
     iynaix.wallust.entries = {

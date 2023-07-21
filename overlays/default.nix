@@ -84,8 +84,8 @@
           wallust = super.wallust.overrideAttrs (oldAttrs: rec {
             src = pkgs.fetchgit {
               url = "https://codeberg.org/explosion-mental/wallust.git";
-              rev = "c085b41968c7ea7c08f0382080340c6e1356e5fa";
-              sha256 = "sha256-np03F4XxGFjWfxCKUUIm7Xlp1y9yjzkeb7F2I7dYttA=";
+              rev = "2.5.1";
+              sha256 = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
             };
 
             cargoDeps = pkgs.rustPlatform.importCargoLock {

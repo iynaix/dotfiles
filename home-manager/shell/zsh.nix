@@ -155,6 +155,14 @@ in {
         popd
     }
 
+    # update
+    upd8() {
+        pushd ~/projects/dotfiles
+        nix flake update
+        nswitch
+        popd
+    }
+
     # build home-manager flake but don't switch
     hmbuild() {
         pushd ~/projects/dotfiles
@@ -169,10 +177,11 @@ in {
         popd
     }
 
-    upd8() {
+    # update via home-manger
+    hmupd8() {
         pushd ~/projects/dotfiles
         nix flake update
-        nswitch
+        hmswitch
         popd
     }
 

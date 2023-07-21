@@ -12,7 +12,7 @@ def get_colors():
     try:
         return json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
     except FileNotFoundError:
-        return None
+        return {}
 
 
 def get_current_wallpaper():
@@ -73,6 +73,9 @@ def refresh_zathura():
 def set_colors():
     colors = get_colors()
 
+    if not colors:
+        return
+
     # get hexless colors
     c = {
         int(k.replace("color", "")): f"rgb({v.replace('#', '')})"
@@ -124,7 +127,7 @@ CUSTOM_THEMES = [
 THEMES = sorted(PRESET_THEMES + CUSTOM_THEMES)
 
 
-def apply_theme(theme):
+def apply_theme(theme: str):
     if theme in CUSTOM_THEMES:
         run(
             [
@@ -134,7 +137,7 @@ def apply_theme(theme):
             ]
         )
     else:
-        wallust("theme", theme)
+        run(["wallust", "theme", theme])
 
 
 def rofi_theme():
@@ -166,11 +169,6 @@ def rofi_wallpaper():
             f"{float_rule} imv -n {rand_idx} -c '{esc_bind}' {str(WALLPAPERS)}",
         ]
     )
-
-
-def wallust(*args):
-    Path("~/.config/waybar").expanduser().mkdir(parents=True, exist_ok=True)
-    run(["wallust", *args])
 
 
 def parse_args():
@@ -232,9 +230,9 @@ if __name__ == "__main__":
     if args.theme:
         apply_theme(args.theme)
     elif args.reload:
-        wallust(get_current_wallpaper() or wallpaper)
+        run(["wallust", get_current_wallpaper() or wallpaper])
     else:
-        wallust(wallpaper)
+        run(["wallust", wallpaper])
         run(["swww", "img", "--transition-type", args.transition_type, wallpaper])
 
     set_colors()

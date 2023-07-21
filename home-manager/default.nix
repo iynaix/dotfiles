@@ -25,7 +25,7 @@
   };
 
   # setup fonts for other distros, run "fc-cache -f" to refresh fonts
-  fonts.fontconfig.enable = !isNixOS;
+  fonts.fontconfig.enable = true;
 
   home = {
     username = user;
