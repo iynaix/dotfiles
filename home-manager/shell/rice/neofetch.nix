@@ -10,5 +10,6 @@ in {
 
   programs.zsh.shellAliases = {
     neofetch = "neofetch --config ${./neofetch.conf}";
+    neochallenge = "neofetch --config ${./neofetch-challenge.conf}";
   };
 }

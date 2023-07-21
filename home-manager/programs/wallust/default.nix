@@ -76,11 +76,6 @@ in {
       )
       cfg.entries;
 
-    iynaix.persist.home.directories = [
-      ".config/wallust"
-      ".cache/wallust"
-    ];
-
     iynaix.wallust.entries = {
       "colors.sh" = {
         enable = true;
@@ -160,5 +155,10 @@ in {
         target = "~/.cache/wallust/colors.json";
       };
     };
+
+    iynaix.persist.home.directories = [
+      ".config/wallust"
+      ".cache/wallust"
+    ];
   };
 }

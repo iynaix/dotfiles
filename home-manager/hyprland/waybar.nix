@@ -237,9 +237,9 @@ in {
           }
 
           /* invert colors for monocle / swallowing */
-          window#waybar.fullscreen #window, window#waybar.swallowing #window {
-              background-color: {foreground};
-              color: {color0};
+          window#waybar.fullscreen #window, window#waybar.swallowing #window, window#waybar.hidden #window {
+              background-color: {foreground} !important;
+              color: {color0} !important;
           }
 
           #workspaces button.active {

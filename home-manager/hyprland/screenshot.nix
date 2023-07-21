@@ -6,6 +6,7 @@
   system,
   config,
   isNixOS,
+  user,
   ...
 }: let
   cfg = config.iynaix.hyprland;
@@ -21,7 +22,8 @@
 
     choice=$(echo "Selection|Window|Monitor|All" | _rofi)
 
-    img="~/Pictures/Screenshots/$(date --iso-8601=seconds).png"
+    # ~ causes tee to fail!
+    img="/home/${user}/Pictures/Screenshots/$(date --iso-8601=seconds).png"
 
     # small sleep delay is required so rofi menu doesnt appear in the screenshot
     case "$choice" in

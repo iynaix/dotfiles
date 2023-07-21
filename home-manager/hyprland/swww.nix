@@ -14,4 +14,8 @@ in {
       hypr-wallpaper
     ]
     ++ (lib.optional isNixOS pkgs.swww);
+
+  iynaix.persist.home.directories = [
+    ".cache/swww"
+  ];
 }
