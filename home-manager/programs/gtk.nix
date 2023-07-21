@@ -33,7 +33,7 @@
       package = pkgs.numix-icon-theme;
     };
     font = {
-      name = "${config.iynaix.font.regular} Regular";
+      name = "${config.iynaix.fonts.regular} Regular";
       package = pkgs.inter;
       size = 10;
     };

@@ -169,7 +169,7 @@ in {
             color: {${finalColor}};
             background-color: {${finalBackgroundColor}};
             font-size: 18px;
-            font-family: "${config.iynaix.font.monospace}";
+            font-family: "${config.iynaix.fonts.monospace}";
             margin-top: -1px;
           }
         '';

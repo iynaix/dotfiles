@@ -2,6 +2,7 @@
   user,
   pkgs,
   lib,
+  config,
   isNixOS,
   ...
 }: {
@@ -23,6 +24,9 @@
     nix-direnv.enable = true;
   };
 
+  # setup fonts for other distros, run "fc-cache -f" to refresh fonts
+  fonts.fontconfig.enable = !isNixOS;
+
   home = {
     username = user;
     homeDirectory = "/home/${user}";
@@ -40,7 +44,9 @@
         wget
         home-manager
       ]
-      ++ (lib.optional isNixOS libreoffice);
+      ++ (lib.optional isNixOS libreoffice)
+      # handle fonts
+      ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
 
     # copy wallpapers
     file."Pictures/Wallpapers/gits-catppuccin.jpg" = {

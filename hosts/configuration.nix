@@ -144,15 +144,7 @@
   system.stateVersion = "22.11";
 
   # setup fonts
-  fonts = {
-    fonts = with pkgs; [
-      font-awesome
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Ubuntu"];})
-    ];
-  };
+  fonts.fonts = config.home-manager.users.${user}.iynaix.fonts.packages;
 
   # enable flakes
   nix = {

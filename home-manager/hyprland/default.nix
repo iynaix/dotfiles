@@ -180,7 +180,7 @@ in {
               # exit hyprland
               "${mod}_SHIFT, c" = "exit,";
 
-              "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.font.monospace} 14" -modi power-menu:rofi-power-menu'';
+              "CTRL_ALT, Delete" = ''exec, rofi -show power-menu -font "${config.iynaix.fonts.monospace} 14" -modi power-menu:rofi-power-menu'';
               "${mod}_CTRL, v" = "exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 
               # reset monitors

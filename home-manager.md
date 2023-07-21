@@ -23,7 +23,8 @@ Substitute `desktop` with desired host
 mkdir -p ~/projects
 git clone https://github.com/iynaix/dotfiles
 cd dotfiles
-home-manager switch --flake ".#desktop"
+nix-shell -p home-manager
+home-manager --extra-experimental-features "nix-command flakes" switch --flake ".#desktop"
 ```
 
 ### Graphical Programs (WIP)

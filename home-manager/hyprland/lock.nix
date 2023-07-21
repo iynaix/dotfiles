@@ -16,7 +16,7 @@
       --clock \
       --screenshots \
       --fade-in 0.2 \
-      --font ${config.iynaix.font.regular} \
+      --font ${config.iynaix.fonts.regular} \
       --effect-blur 8x5 \
       --effect-vignette 0.4:0.4 \
       --indicator-radius 100 \

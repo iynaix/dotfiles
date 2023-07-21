@@ -22,7 +22,7 @@ in {
 
     font = lib.mkOption {
       type = lib.types.str;
-      default = config.iynaix.font.monospace;
+      default = config.iynaix.fonts.monospace;
       description = "Font for the terminal.";
     };
 

@@ -59,7 +59,7 @@ in {
       dmenu="rofi -p dunst:"
       ellipsize="end"
       follow="mouse"
-      font="${config.iynaix.font.regular} Regular 12"
+      font="${config.iynaix.fonts.regular} Regular 12"
       frame_color="{background}"
       frame_width=0
       horizontal_padding=10
