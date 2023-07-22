@@ -2,14 +2,13 @@
   pkgs,
   config,
   lib,
-  isNixOS,
   ...
 }: {
   home = {
-    packages = lib.mkIf isNixOS (with pkgs; [
+    packages = with pkgs; [
       cinnamon.nemo-with-extensions
       cinnamon.nemo-fileroller
-    ]);
+    ];
   };
 
   # fix mimetype associations

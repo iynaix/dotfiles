@@ -33,6 +33,10 @@
     # do not change this value
     stateVersion = "22.11";
 
+    sessionVariables = {
+      "NIXPKGS_ALLOW_UNFREE" = "1";
+    };
+
     packages = with pkgs;
       [
         curl
@@ -43,8 +47,8 @@
         ripgrep
         wget
         home-manager
+        libreoffice
       ]
-      ++ (lib.optional isNixOS libreoffice)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
 
@@ -53,5 +57,9 @@
       source = ./gits-catppuccin.jpg;
       recursive = true;
     };
+  };
+
+  xdg.configFile = lib.mkIf (!isNixOS) {
+    "nix/nix.conf".text = "experimental-features = nix-command flakes";
   };
 }

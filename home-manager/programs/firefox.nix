@@ -1,13 +1,9 @@
-{
-  pkgs,
-  isNixOS,
-  ...
-}: {
+{pkgs, ...}: {
   config = {
     programs = {
       # firefox dev edition
       firefox = {
-        enable = isNixOS;
+        enable = true;
         package = pkgs.firefox-devedition-bin;
       };
     };

@@ -81,18 +81,18 @@
 
           # creating an overlay for buildRustPackage overlay
           # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-          wallust = super.wallust.overrideAttrs (oldAttrs: rec {
-            src = pkgs.fetchgit {
-              url = "https://codeberg.org/explosion-mental/wallust.git";
-              rev = "2.5.1";
-              sha256 = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
-            };
+          #   wallust = super.wallust.overrideAttrs (oldAttrs: rec {
+          #     src = pkgs.fetchgit {
+          #       url = "https://codeberg.org/explosion-mental/wallust.git";
+          #       rev = "2.5.1";
+          #       sha256 = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
+          #     };
 
-            cargoDeps = pkgs.rustPlatform.importCargoLock {
-              lockFile = src + "/Cargo.lock";
-              allowBuiltinFetchGit = true;
-            };
-          });
+          #     cargoDeps = pkgs.rustPlatform.importCargoLock {
+          #       lockFile = src + "/Cargo.lock";
+          #       allowBuiltinFetchGit = true;
+          #     };
+          #   });
         }
         // (lib.optionalAttrs (host == "desktop") {
           # patch smplayer to not open an extra window under wayland
