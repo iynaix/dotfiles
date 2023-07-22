@@ -7,7 +7,10 @@
   cfg = config.iynaix.wallust;
 in {
   config = lib.mkIf cfg.enable {
-    home.packages = [pkgs.wallust];
+    home.packages = with pkgs; [
+      wallust
+      (callPackage ./wallust-gtk-theme.nix {})
+    ];
 
     # wallust config
     xdg.configFile =

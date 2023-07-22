@@ -22,7 +22,7 @@
 
     home.packages = with pkgs; [
       lsix
-      (pkgs.callPackage ../../pkgs/vv.nix {})
+      (pkgs.callPackage ./vv.nix {})
     ];
 
     programs = {
