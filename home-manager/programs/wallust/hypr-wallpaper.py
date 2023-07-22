@@ -184,7 +184,7 @@ def parse_args():
         default="random",
         choices=[
             "simple",
-            # "fade", # swww 0.8
+            "fade",
             "left",
             "right",
             "top",

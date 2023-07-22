@@ -238,8 +238,8 @@ in {
 
           /* invert colors for monocle / swallowing */
           window#waybar.fullscreen #window, window#waybar.swallowing #window, window#waybar.hidden #window {
-              background-color: {foreground} !important;
-              color: {color0} !important;
+              background-color: {foreground};
+              color: {color0};
           }
 
           #workspaces button.active {
