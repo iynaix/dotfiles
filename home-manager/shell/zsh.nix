@@ -3,6 +3,7 @@
   lib,
   config,
   host,
+  pkgs,
   ...
 }: let
   zdotdir = "/home/${user}/.config/zsh";
@@ -204,9 +205,13 @@ in {
         xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
     }
 
+    wwhich() {
+        readlink -f $(which $1)
+    }
+
     # server command, runs a local server
     server() {
-        python3 -m http.server ''${1:-8000}
+        ${pkgs.python3}/bin/python -m http.server ''${1:-8000}
     }
 
     # cd to project dir and open the virtualenv if it exists

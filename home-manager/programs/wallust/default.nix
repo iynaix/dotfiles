@@ -160,6 +160,7 @@ in {
     };
 
     iynaix.persist.home.directories = [
+      ".themes"
       ".config/wallust"
       ".cache/wallust"
     ];

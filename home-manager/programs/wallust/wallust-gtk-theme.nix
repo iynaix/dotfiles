@@ -8,7 +8,7 @@ pkgs.writeShellApplication {
   ];
 
   text = ''
-    THEME_DIR="$HOME/themes"
+    THEME_DIR="$HOME/.themes"
     TEMPLATE_DIR="/tmp/wallust-gtk-theme"
     mkdir -p "$THEME_DIR"
 

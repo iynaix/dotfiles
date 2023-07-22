@@ -8,16 +8,19 @@
   config = lib.mkIf config.iynaix.wezterm.enable {
     iynaix.terminal = {
       exec = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) "${lib.getExe pkgs.wezterm} start";
-      fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) (pkgs.writeShellScriptBin "gnome-terminal" ''
-        shift
+      fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) (pkgs.writeShellApplication {
+        name = "gnome-terminal";
+        text = ''
+          shift
 
-        TITLE="$(basename "$1")"
-        if [ -n "$TITLE" ]; then
-          ${config.iynaix.terminal.exec} --class "$TITLE" "$@"
-        else
-          ${config.iynaix.terminal.exec} "$@"
-        fi
-      '');
+          TITLE="$(basename "$1")"
+          if [ -n "$TITLE" ]; then
+            ${config.iynaix.terminal.exec} --class "$TITLE" "$@"
+          else
+            ${config.iynaix.terminal.exec} "$@"
+          fi
+        '';
+      });
     };
 
     home.packages = with pkgs; [

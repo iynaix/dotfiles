@@ -49,16 +49,19 @@ in {
     fakeGnomeTerminal = lib.mkOption {
       type = lib.types.package;
       default = (
-        pkgs.writeShellScriptBin "gnome-terminal" ''
-          shift
+        pkgs.writeShellApplication {
+          name = "gnome-terminal";
+          text = ''
+            shift
 
-          TITLE="$(basename "$1")"
-          if [ -n "$TITLE" ]; then
-            ${cfg.exec} -T "$TITLE" "$@"
-          else
-            ${cfg.exec} "$@"
-          fi
-        ''
+            TITLE="$(basename "$1")"
+            if [ -n "$TITLE" ]; then
+              ${cfg.exec} -T "$TITLE" "$@"
+            else
+              ${cfg.exec} "$@"
+            fi
+          '';
+        }
       );
       description = "Fake gnome-terminal shell script so gnome opens terminal applications in the correct terminal.";
     };

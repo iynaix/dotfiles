@@ -7,29 +7,32 @@
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
   openOnWorkspace = workspace: program: "hyprctl dispatch exec '[workspace ${toString workspace} silent] ${program}'";
-  hyprMonitors = pkgs.writeShellScriptBin "hypr-monitors" ''
-    hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
-    hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
-    hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
-    hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
+  hyprMonitors = pkgs.writeShellApplication {
+    name = "hypr-monitors";
+    text = ''
+      hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
+      hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
+      hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
+      hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
 
-    hyprctl dispatch workspace 9
-    hyprctl dispatch workspace 7
-    hyprctl dispatch workspace 1
+      hyprctl dispatch workspace 9
+      hyprctl dispatch workspace 7
+      hyprctl dispatch workspace 1
 
-    hyprctl dispatch focusmonitor ${displays.monitor1}
+      hyprctl dispatch focusmonitor ${displays.monitor1}
 
-    # set wallpapers again
-    hypr-wallpaper --reload
+      # set wallpapers again
+      hypr-wallpaper --reload
 
-    launch-waybar
-  '';
+      launch-waybar
+    '';
+  };
 in {
   config = lib.mkIf cfg.enable {
     home.packages = [hyprMonitors];
