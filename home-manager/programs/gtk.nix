@@ -29,6 +29,8 @@
         variant = "mocha";
         size = "compact";
       };
+      # TODO: it's horrendous lol
+      # name = "wallust-Dark-Compact";
     };
     iconTheme = {
       name = "Numix";

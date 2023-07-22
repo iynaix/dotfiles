@@ -140,6 +140,23 @@ def apply_theme(theme: str):
         run(["wallust", "theme", theme])
 
 
+def swww(*args: str):
+    # check if swww is initialized and init if needed
+    with subprocess.Popen(
+        ["swww", "query"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    ) as proc:
+        # not started
+        if proc.stderr.read().decode("utf-8").startswith("Error"):
+            # FIXME: weird race condition with swww init, need to sleep for a second
+            # https://github.com/Horus645/swww/issues/144
+            run(
+                ["sleep 1; swww init", "&&", "swww", *args],
+                shell=True,
+            )
+        else:
+            run(["swww", *args])
+
+
 def rofi_theme():
     rofi_process = subprocess.Popen(
         ["rofi", "-dmenu"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
@@ -230,9 +247,11 @@ if __name__ == "__main__":
     if args.theme:
         apply_theme(args.theme)
     elif args.reload:
-        run(["wallust", get_current_wallpaper() or wallpaper])
+        wall = get_current_wallpaper() or wallpaper
+        run(["wallust", wall])
+        swww("img", wall)
     else:
         run(["wallust", wallpaper])
-        run(["swww", "img", "--transition-type", args.transition_type, wallpaper])
+        swww("img", "--transition-type", args.transition_type, wallpaper)
 
     set_colors()

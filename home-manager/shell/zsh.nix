@@ -188,6 +188,7 @@ in {
 
     # nix garbage collection
     ngc() {
+        # sudo rm /nix/var/nix/gcroots/auto/*
         if [[ $? -ne 0 ]]; then
           sudo nix-collect-garbage $*
         else

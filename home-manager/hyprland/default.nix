@@ -49,7 +49,7 @@ in {
 
       packages = with pkgs; [
         # playerctl
-        pciutils
+        # pciutils
         # clipboard history
         cliphist
         wl-clipboard
