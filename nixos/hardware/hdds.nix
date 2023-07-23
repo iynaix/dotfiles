@@ -5,30 +5,40 @@
   ...
 }: let
   cfg = config.iynaix-nixos.hdds;
+  wdred = "/media/6TBRED";
+  ironwolf = "/media/IRONWOLF22";
+  ironwolf-dataset = "zfs-ironwolf22-1/media";
 in {
   config = lib.mkIf cfg.enable {
     # filesystems
-    fileSystems."/media/Files" = {
-      device = "/dev/disk/by-label/Files";
-      fsType = "ext4";
-    };
-
-    fileSystems."/media/6TBRED" = {
+    fileSystems.${wdred} = {
       device = "/dev/disk/by-label/6TBRED";
       fsType = "ext4";
     };
 
-    fileSystems."/media/6TBRED2" = {
-      device = "/dev/disk/by-label/6TBRED2";
-      fsType = "ext4";
+    # non os zfs disks
+    boot.zfs.extraPools = ["zfs-ironwolf22-1"];
+    fileSystems.${ironwolf} = {
+      device = ironwolf-dataset;
+      fsType = "zfs";
+    };
+
+    services.sanoid = lib.mkIf config.iynaix-nixos.zfs.snapshots {
+      enable = true;
+
+      datasets.${ironwolf-dataset} = {
+        daily = 10;
+      };
     };
 
     # symlinks from hdds
     systemd.tmpfiles.rules = [
-      "L+ /home/${user}/Documents   - - - - /media/Files/Documents"
-      "L+ /home/${user}/Downloads   - - - - /media/Files/Downloads"
-      "L+ /home/${user}/Pictures   - - - - /media/Files/Pictures"
-      "L+ /home/${user}/Videos   - - - - /media/6TBRED"
+      # dest src
+      "L+ /home/${user}/Downloads   - - - - ${ironwolf}/Downloads"
+      "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
+      "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
+      "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
+      "L+ /home/${user}/Videos      - - - - ${wdred}"
     ];
 
     # dual boot windows

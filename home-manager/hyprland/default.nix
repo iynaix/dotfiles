@@ -298,8 +298,8 @@ in {
               # "XF86AudioPlay" = "mpvctl playpause";
 
               # audio
-              ",XF86AudioLowerVolume" = "exec, pamixer -i 5";
-              ",XF86AudioRaiseVolume" = "exec, pamixer -d 5";
+              ",XF86AudioLowerVolume" = "exec, pamixer -d 5";
+              ",XF86AudioRaiseVolume" = "exec, pamixer -i 5";
               ",XF86AudioMute" = "exec, pamixer -t";
             };
 

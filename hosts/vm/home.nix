@@ -10,7 +10,7 @@ in {
 
     # wayland settings
     hyprland = {
-      enable = true;
+      enable = false;
       monitors = "monitor = ${displayCfg.monitor1}, 1920x1200,0x0,1";
     };
   };

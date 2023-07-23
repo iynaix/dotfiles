@@ -31,7 +31,7 @@
     username = user;
     homeDirectory = "/home/${user}";
     # do not change this value
-    stateVersion = "22.11";
+    stateVersion = "23.05";
 
     sessionVariables = {
       "NIXPKGS_ALLOW_UNFREE" = "1";

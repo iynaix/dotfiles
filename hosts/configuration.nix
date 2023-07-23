@@ -131,6 +131,11 @@
     driSupport = true;
   };
 
+  # fuck it, stop bothering me
+  systemd.tmpfiles.rules = [
+    "L+ /bin/bash                 - - - - /bin/sh"
+  ];
+
   # shut sudo up
   security.sudo.extraConfig = "Defaults lecture=never";
 
@@ -141,7 +146,7 @@
   # networking.firewall.enable = false;
 
   # do not change this value
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 
   # setup fonts
   fonts.fonts = config.home-manager.users.${user}.iynaix.fonts.packages;

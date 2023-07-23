@@ -10,9 +10,9 @@
       vac = "~/Videos/Anime/Current";
       vC = "~/Videos/Courses";
       vm = "~/Videos/Movies";
-      vu = "~/Videos/US";
-      vc = "~/Videos/US/Current";
-      vn = "~/Videos/US/New";
+      vt = "~/Videos/TV";
+      vtc = "~/Videos/TV/Current";
+      vtn = "~/Videos/TV/New";
       pp = "~/projects";
       pcf = "~/projects/coinfc";
       pe = "~/projects/ergodox-layout";

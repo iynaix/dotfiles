@@ -47,12 +47,15 @@ in {
     home-manager.users.${user} = {
       gtk.gtk3.bookmarks = lib.optionals config.iynaix-nixos.hdds.enable [
         "file:///media/6TBRED/Anime/Current Anime Current"
-        "file:///media/6TBRED/US/Current TV Current"
+        "file:///media/6TBRED/TV/Current TV Current"
         "file:///media/6TBRED/Movies"
       ];
 
       iynaix.hyprland.extraBinds.exec-once = [
+        # fix gparted "cannot open display: :0" error
         "${pkgs.xorg.xhost}/bin/xhost +local:"
+        # fix Authorization required, but no authorization protocol specified error
+        "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
       ];
     };
 
