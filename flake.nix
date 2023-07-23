@@ -15,7 +15,7 @@
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprwm-contrib = {
@@ -56,7 +56,7 @@
     # devshell for working on dotfiles, provides python utilities
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
-        packages = with pkgs.python311Packages; [
+        packages = with pkgs.python3.pkgs; [
           flake8
           black
         ];

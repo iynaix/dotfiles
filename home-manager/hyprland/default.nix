@@ -160,7 +160,7 @@ in {
               # animate_mouse_windowdragging = true
               # key_press_enables_dpms = true
               enable_swallow = true
-              swallow_regex = [Kk]itty|[Ww]ezterm
+              swallow_regex = ^([Kk]itty|[Ww]ezterm)$
             }
           ''
           cfg.extraVariables

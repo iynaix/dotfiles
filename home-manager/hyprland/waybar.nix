@@ -64,6 +64,10 @@ in {
             };
 
             "hyprland/window" = {
+              rewrite = {
+                # strip the application name
+                "(.*) - (.*)" = "$1";
+              };
               separate-outputs = true;
             };
 

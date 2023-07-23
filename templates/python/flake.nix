@@ -25,8 +25,8 @@
             {
               # https://devenv.sh/reference/options/
               packages = with pkgs; [
-                python311Packages.flake8
-                python311Packages.black
+                python3.pkgs.flake8
+                python3.pkgs.black
               ];
 
               languages.python.enable = true;
