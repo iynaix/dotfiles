@@ -32,6 +32,12 @@ Reboot.
 
 - Install `kitty` on the host OS, the nix package requires [nixGL](https://github.com/guibou/nixGL) to run.
 
+- Install `zsh` on the host OS, then set the shell from the host OS:
+
+```sh
+sudo chsh -s /bin/zsh $(whoami)
+```
+
 ### TODO
 - gtk theme doesn't seem to be working
 - use zsh package from host instead?

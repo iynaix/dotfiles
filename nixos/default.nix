@@ -21,7 +21,6 @@ in {
     ./transmission.nix
     ./virt-manager.nix
     ./zfs.nix
-    ./zsh.nix
   ];
 
   config = {

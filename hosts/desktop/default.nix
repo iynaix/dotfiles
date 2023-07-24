@@ -22,8 +22,6 @@
       iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
     '';
 
-    # TODO: syncoid to NAS?
-
     home-manager.users.${user} = {
       imports = [./home.nix];
     };

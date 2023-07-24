@@ -93,6 +93,14 @@
           #       allowBuiltinFetchGit = true;
           #     };
           #   });
+
+          waybar = super.waybar.overrideAttrs (oldAttrs: {
+            src = pkgs.fetchgit {
+              url = "https://github.com/Alexays/Waybar";
+              rev = "9207fff627059b922fb790e30d68fea23f76146e";
+              sha256 = "sha256-Mk8VHbV7W+5O+Nox4I0D7BFKv1GT0jepVM+82zonOfE=";
+            };
+          });
         }
         // (lib.optionalAttrs (host == "desktop") {
           # patch smplayer to not open an extra window under wayland
