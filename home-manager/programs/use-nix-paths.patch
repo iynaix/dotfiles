@@ -1,0 +1,26 @@
+diff --git a/trimage/trimage.py b/trimage/trimage.py
+index b618b4b..e405ab2 100644
+--- a/trimage/trimage.py
++++ b/trimage/trimage.py
+@@ -38,10 +38,6 @@ class StartQt(QMainWindow):
+         if self.settings.value("geometry"):
+             self.restoreGeometry(self.settings.value("geometry"))
+ 
+-        # check if dependencies are installed
+-        if not check_dependencies():
+-            quit()
+-
+         # add quit shortcut
+         if hasattr(QKeySequence, "Quit"):
+             self.quit_shortcut = QShortcut(QKeySequence(QKeySequence.Quit),
+@@ -373,8 +369,8 @@ class Image:
+         self.reset()
+         self.compressing = True
+         runString = {
+-            "jpeg": "jpegoptim -f --strip-all '%(file)s'",
+-            "png": "optipng -force -o7 '%(file)s'&&advpng -z4 '%(file)s' && pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB -rem time '%(file)s' '%(file)s.bak' && mv '%(file)s.bak' '%(file)s'"
++            "jpeg": "@jpegoptim@ -f --strip-all '%(file)s'",
++            "png": "@optipng@ -force -o7 '%(file)s' && @advpng@ -z4 '%(file)s' && @pngcrush@ -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB -rem time '%(file)s' '%(file)s.bak' && mv '%(file)s.bak' '%(file)s'"
+         }
+         # create a backup file
+         backupfullpath = '/tmp/' + self.filename_w_ext

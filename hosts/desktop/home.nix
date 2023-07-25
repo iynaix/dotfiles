@@ -5,6 +5,7 @@
   isNixOS,
   ...
 }: let
+  cfg = config.iynaix;
   displayCfg = config.iynaix.displays;
 in {
   iynaix = {
@@ -36,15 +37,23 @@ in {
 
     pathofbuilding.enable = true;
     smplayer.enable = true;
+    trimage.enable = false;
   };
 
   home = {
-    packages = lib.mkIf isNixOS (with pkgs; [
-      deadbeef
-      vlc
-      ffmpeg
-      # vial
-    ]);
+    packages = lib.mkIf isNixOS (
+      with pkgs;
+        [
+          deadbeef
+          vlc
+          ffmpeg
+          # vial
+        ]
+        ++ (lib.optional cfg.trimage.enable
+          (callPackage ../../home-manager/programs/trimage.nix {
+            inherit (qt5) wrapQtAppsHook;
+          }))
+    );
   };
 
   programs.obs-studio.enable = isNixOS;
