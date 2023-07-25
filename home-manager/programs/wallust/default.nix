@@ -19,6 +19,7 @@ in {
         "wallust/catppuccin-frappe.json".source = ./catppuccin-frappe.json;
         "wallust/catppuccin-macchiato.json".source = ./catppuccin-macchiato.json;
         "wallust/catppuccin-mocha.json".source = ./catppuccin-mocha.json;
+        "wallust/decay-dark.json".source = ./decay-dark.json;
         "wallust/night-owl.json".source = ./night-owl.json;
         "wallust/tokyo-night.json".source = ./tokyo-night.json;
 

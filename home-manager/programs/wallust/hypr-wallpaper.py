@@ -121,6 +121,7 @@ CUSTOM_THEMES = [
     "catppuccin-frappe",
     "catppuccin-macchiato",
     "catppuccin-mocha",
+    "decay-dark",
     "night-owl",
     "tokyo-night",
 ]
