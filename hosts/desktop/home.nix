@@ -18,11 +18,11 @@ in {
     # wayland settings
     hyprland = {
       enable = true;
-      monitors = ''
-        monitor = ${displayCfg.monitor1}, 3440x1440@160,1440x1080,1
-        monitor = ${displayCfg.monitor2}, 2560x1440,0x728,1,transform,1
-        monitor = ${displayCfg.monitor3}, 1920x1080,1754x0,1
-      '';
+      monitors = [
+        "${displayCfg.monitor1}, 3440x1440@160,1440x1080,1"
+        "${displayCfg.monitor2}, 2560x1440,0x728,1,transform,1"
+        "${displayCfg.monitor3}, 1920x1080,1754x0,1"
+      ];
     };
     waybar = {
       css = let

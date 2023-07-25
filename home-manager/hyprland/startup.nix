@@ -52,7 +52,7 @@ in {
 
     xdg.configFile."hypr/ipc.py".source = ./ipc.py;
 
-    iynaix.hyprland.extraBinds = {
+    wayland.windowManager.hyprland.settings = {
       exec-once = [
         # init ipc listener
         "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ~/.config/hypr/ipc.py &"

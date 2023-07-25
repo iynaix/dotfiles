@@ -7,31 +7,8 @@ in {
 
     hyprland = {
       enable = true;
-      monitors = ''
-        monitor = ${displayCfg.monitor1}, 1920x1080,0x0,1
-      '';
-      extraVariables = ''
-        gestures {
-          workspace_swipe = true
-        }
-      '';
-      extraBinds = {
-        # backlight
-        bind = {
-          ",XF86MonBrightnessDown" = "exec, brightnessctl set 5%-";
-          ",XF86MonBrightnessUp" = "exec, brightnessctl set +5%";
-        };
-
-        # handle laptop lid
-        bindl = {
-          # ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "${displayCfg.monitor1}, 1920x1080, 0x0, 1"'';
-          # ",switch:off:Lid Switch" = ''exec, hyprctl monitor "${displayCfg.monitor1}, disable"'';
-          ",switch:Lid Switch" = "exec, hypr-lock";
-        };
-      };
+      monitors = ["${displayCfg.monitor1}, 1920x1080,0x0,1"];
     };
-
-    terminal.size = 10;
 
     waybar = {
       config = {
@@ -67,6 +44,27 @@ in {
           border-radius: ${radius} 0 0 ${radius};
         }
       '';
+    };
+
+    terminal.size = 10;
+  };
+
+  wayland.windowManager.hyprland.settings = {
+    gestures = {
+      workspace_swipe = true;
+    };
+
+    # backlight
+    bind = [
+      ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+      ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
+    ];
+
+    # handle laptop lid
+    bindl = {
+      # ",switch:on:Lid Switch" = ''exec, hyprctl keyword monitor "${displayCfg.monitor1}, 1920x1080, 0x0, 1"'';
+      # ",switch:off:Lid Switch" = ''exec, hyprctl monitor "${displayCfg.monitor1}, disable"'';
+      ",switch:Lid Switch" = "exec, hypr-lock";
     };
   };
 }

@@ -1,6 +1,7 @@
 {
-  lib,
   config,
+  lib,
+  user,
   ...
 }: let
   cfg = config.iynaix-nixos.nvidia;
@@ -32,6 +33,6 @@ in {
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     };
 
-    programs.hyprland.nvidiaPatches = config.iynaix-nixos.hyprland.enable;
+    home-manager.users.${user}.wayland.windowManager.hyprland.enableNvidiaPatches = config.iynaix-nixos.hyprland.enable;
   };
 }

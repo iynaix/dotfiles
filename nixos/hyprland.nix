@@ -1,6 +1,4 @@
 {
-  inputs,
-  system,
   lib,
   config,
   pkgs,
@@ -16,11 +14,6 @@ in {
     # locking with swaylock
     security.pam.services.swaylock = {
       text = "auth include login";
-    };
-
-    programs.hyprland = {
-      enable = true;
-      package = inputs.hyprland.packages.${system}.hyprland;
     };
 
     environment.systemPackages = [

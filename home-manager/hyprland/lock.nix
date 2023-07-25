@@ -46,10 +46,10 @@ in {
   config = lib.mkIf config.iynaix.hyprland.enable {
     home.packages = [hypr-lock];
 
-    iynaix.hyprland.extraBinds = {
-      bind = {
-        "${mod}, x" = "exec, hypr-lock";
-      };
+    wayland.windowManager.hyprland.settings = {
+      bind = [
+        "$mod, x, exec, hypr-lock"
+      ];
     };
   };
 }

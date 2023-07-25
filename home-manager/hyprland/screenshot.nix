@@ -79,12 +79,12 @@ in {
         hyprprop
       ]));
 
-    iynaix.hyprland.extraBinds = {
-      bind = {
-        "${mod}, backslash" = "exec, grimblast --notify copy area";
-        "${mod}_SHIFT, backslash" = "exec, hypr-screenshot";
-        "${mod}_CTRL, backslash" = "exec, hypr-ocr";
-      };
+    wayland.windowManager.hyprland.settings = {
+      bind = [
+        "$mod, backslash, exec, grimblast --notify copy area"
+        "$mod_SHIFT, backslash, exec, hypr-screenshot"
+        "$mod_CTRL, backslash, exec, hypr-ocr"
+      ];
     };
   };
 }
