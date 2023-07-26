@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  host,
   ...
 }: {
   options.iynaix-nixos = {
@@ -8,7 +9,7 @@
     distrobox.enable = lib.mkEnableOption "distrobox";
     docker.enable = lib.mkEnableOption "docker" // {default = config.iynaix-nixos.distrobox.enable;};
     hyprland.enable = lib.mkEnableOption "hyprland";
-    kmonad.enable = lib.mkEnableOption "kmonad";
+    kmonad.enable = lib.mkEnableOption "kmonad" // {default = host == "laptop";};
     torrenters.enable = lib.mkEnableOption "Torrenting Applications";
     virt-manager.enable = lib.mkEnableOption "virt-manager";
   };

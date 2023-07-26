@@ -2,26 +2,29 @@
   pkgs,
   config,
   lib,
+  host,
   user,
   ...
 }: let
   hmConfig = config.home-manager.users.${user};
 in {
-  imports = [
-    ./audio.nix
-    ./docker.nix
-    ./filezilla.nix
-    ./gnome3.nix
-    ./hardware
-    ./hyprland.nix
-    ./impermanence.nix
-    ./keyring.nix
-    ./kmonad.nix
-    ./sonarr.nix
-    ./transmission.nix
-    ./virt-manager.nix
-    ./zfs.nix
-  ];
+  imports =
+    [
+      ./audio.nix
+      ./auth.nix
+      ./docker.nix
+      ./filezilla.nix
+      ./gnome3.nix
+      ./hardware
+      ./hyprland.nix
+      ./impermanence.nix
+      ./sonarr.nix
+      ./sops.nix
+      ./transmission.nix
+      ./virt-manager.nix
+      ./zfs.nix
+    ]
+    ++ (lib.optionals (host == "laptop") [./kmonad.nix]);
 
   config = {
     services.gvfs.enable = true;
