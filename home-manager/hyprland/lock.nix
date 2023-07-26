@@ -1,14 +1,9 @@
 {
   pkgs,
   lib,
-  host,
   config,
   ...
 }: let
-  mod =
-    if host == "vm"
-    then "ALT"
-    else "SUPER";
   hypr-lock = pkgs.writeShellApplication {
     name = "hypr-lock";
     runtimeInputs = [pkgs.swaylock-effects];

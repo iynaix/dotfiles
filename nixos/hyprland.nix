@@ -1,7 +1,8 @@
 {
   lib,
   config,
-  pkgs,
+  inputs,
+  system,
   ...
 }: let
   cfg = config.iynaix-nixos.hyprland;
@@ -16,8 +17,10 @@ in {
       text = "auth include login";
     };
 
+    programs.hyprland.enable = true;
+
     environment.systemPackages = [
-      pkgs.xdg-desktop-portal-hyprland
+      inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland
     ];
   };
 }

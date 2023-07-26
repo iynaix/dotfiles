@@ -58,8 +58,6 @@
         };
 
         modules = [
-          inputs.hyprland.homeManagerModules.default
-          {wayland.windowManager.hyprland.enable = true;}
           ./${hostName}/home.nix
           ../overlays
           ../home-manager

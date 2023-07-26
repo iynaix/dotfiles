@@ -1,6 +1,5 @@
 {
   config,
-  host,
   inputs,
   isNixOS,
   lib,
@@ -9,10 +8,6 @@
   ...
 }: let
   cfg = config.iynaix.hyprland;
-  mod =
-    if host == "vm"
-    then "ALT"
-    else "SUPER";
   # screenshot with rofi options to preselect
   hypr-screenshot = pkgs.writeShellApplication {
     name = "hypr-screenshot";
