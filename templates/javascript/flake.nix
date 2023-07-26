@@ -26,6 +26,7 @@
               # https://devenv.sh/reference/options/
               packages = [];
 
+              dotenv.disableHint = true;
               languages.javascript.enable = true;
               languages.typescript.enable = true;
             }

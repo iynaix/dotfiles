@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  isNixOS,
   ...
 }: {
   home = {
@@ -41,6 +42,9 @@
     "file:///home/iynaix/Pictures"
     "file:///persist Persist"
   ];
+
+  # other OSes seem to override this file
+  xdg.configFile."gtk-3.0/bookmarks".force = !isNixOS;
 
   dconf.settings = {
     # fix open in terminal

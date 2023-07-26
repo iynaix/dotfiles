@@ -29,6 +29,7 @@
                 python3.pkgs.black
               ];
 
+              dotenv.disableHint = true;
               languages.python.enable = true;
               languages.python.venv.enable = true;
             }

@@ -4,8 +4,24 @@
   lib,
   config,
   ...
-}: {
+}: let
+  sonarr-ical-sync = pkgs.writeShellApplication {
+    name = "sonarr-ical-sync";
+    runtimeInputs = with pkgs; [curl netlify-cli];
+    text = ''
+      outDir=/tmp/sonarr-ical-sync
+      mkdir -p "$outDir"
+
+      SONARR_API_KEY="$(cat /run/secrets/sonarr_api_key)"
+      curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
+
+      NETLIFY_SITE_ID="$(cat /run/secrets/netlify_site_id)" netlify deploy --dir="$outDir" --prod
+    '';
+  };
+in {
   config = lib.mkIf config.iynaix-nixos.torrenters.enable {
+    home-manager.users.${user}.home.packages = [sonarr-ical-sync];
+
     services = {
       sonarr = {
         enable = true;
@@ -22,17 +38,7 @@
     systemd.services.sonarr-ical-sync = {
       serviceConfig.Type = "oneshot";
       serviceConfig.User = user;
-      path = with pkgs; [git direnv nix-direnv];
-      script =
-        /*
-        sh
-        */
-        ''
-          cd /home/${user}/projects/sonarr-ical-sync
-          # activate direnv
-          direnv allow && eval "$(direnv export bash)"
-          yarn sync
-        '';
+      script = "${sonarr-ical-sync}/bin/sonarr-ical-sync";
     };
     systemd.timers.sonarr-ical-sync = {
       wantedBy = ["timers.target"];
@@ -44,9 +50,14 @@
       };
     };
 
-    iynaix-nixos.persist.root.directories = [
-      "/var/lib/sonarr/.config/NzbDrone"
-      "/var/lib/private/prowlarr"
-    ];
+    iynaix-nixos.persist = {
+      root.directories = [
+        "/var/lib/sonarr/.config/NzbDrone"
+        "/var/lib/private/prowlarr"
+      ];
+      home.directories = [
+        ".config/netlify"
+      ];
+    };
   };
 }
