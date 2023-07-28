@@ -21,7 +21,8 @@
         modules =
           [
             ./configuration.nix # shared nixos configuration across all hosts
-            ./${hostName} # host specific configuration, including hardware
+            ./${hostName} # host specific configuration
+            ./${hostName}/hardware.nix # host specific hardware configuration
             ../overlays
             inputs.home-manager.nixosModules.home-manager
             {
@@ -33,6 +34,7 @@
 
                 users.${user} = {
                   imports = [
+                    ./${hostName}/home.nix # host specific home-manager configuration
                     ../home-manager
                     ../modules/home-manager
                   ];
@@ -59,7 +61,7 @@
         };
 
         modules = [
-          ./${hostName}/home.nix
+          ./${hostName}/home.nix # host specific home-manager configuration
           ../overlays
           ../home-manager
           ../modules/home-manager

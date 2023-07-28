@@ -1,51 +1,42 @@
 {
   config,
   pkgs,
-  user,
   lib,
   ...
 }: {
-  imports = [./hardware.nix];
+  iynaix-nixos = {
+    hyprland-nixos.enable = false;
 
-  config = {
-    iynaix-nixos = {
-      hyprland-nixos.enable = false;
+    # persist.tmpfs.root = true;
+    # persist.tmpfs.home = true;
+  };
 
-      # persist.tmpfs.root = true;
-      # persist.tmpfs.home = true;
+  environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland-nixos.enable {
+    WLR_RENDERER_ALLOW_SOFTWARE = "1";
+  };
+
+  networking.hostId = "5f43c101"; # required for zfs
+
+  # doesn't work with by-id
+  boot.zfs.devNodes = "/dev/disk/by-partuuid";
+
+  # enable clipboard and file sharing
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
+  services.spice-webdavd.enable = true;
+
+  # fix for spice-vdagentd not starting in wms
+  systemd.user.services.spice-agent = {
+    enable = true;
+    wantedBy = ["graphical-session.target"];
+    serviceConfig = {
+      ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagent -x";
     };
-
-    environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland-nixos.enable {
-      WLR_RENDERER_ALLOW_SOFTWARE = "1";
-    };
-
-    networking.hostId = "5f43c101"; # required for zfs
-
-    # doesn't work with by-id
-    boot.zfs.devNodes = "/dev/disk/by-partuuid";
-
-    # enable clipboard and file sharing
-    services.qemuGuest.enable = true;
-    services.spice-vdagentd.enable = true;
-    services.spice-webdavd.enable = true;
-
-    # fix for spice-vdagentd not starting in wms
-    systemd.user.services.spice-agent = {
-      enable = true;
-      wantedBy = ["graphical-session.target"];
-      serviceConfig = {
-        ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagent -x";
-      };
-      unitConfig = {
-        ConditionVirtualization = "vm";
-        Description = "Spice guest session agent";
-        After = ["graphical-session-pre.target"];
-        PartOf = ["graphical-session.target"];
-      };
-    };
-
-    home-manager.users.${user} = {
-      imports = [./home.nix];
+    unitConfig = {
+      ConditionVirtualization = "vm";
+      Description = "Spice guest session agent";
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
     };
   };
 }
