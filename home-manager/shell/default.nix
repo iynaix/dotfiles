@@ -19,4 +19,11 @@
     vimv
     ugrep
   ];
+
+  programs.exa = {
+    enable = true;
+    enableAliases = true;
+    icons = true;
+    extraOptions = ["--group-directories-first" "--color-scale"];
+  };
 }

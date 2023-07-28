@@ -40,10 +40,9 @@
     packages = with pkgs;
       [
         curl
-        exa
         gzip
         killall
-        rar
+        rar # includes unrar
         ripgrep
         wget
         home-manager
