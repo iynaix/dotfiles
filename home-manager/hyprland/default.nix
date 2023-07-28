@@ -137,7 +137,7 @@ in {
           "$mod_SHIFT, Return, exec, rofi -show drun"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ~/Downloads"
-          "$mod_SHIFT, e, exec, ${config.iynaix.terminal.exec} ranger ~/Downloads"
+          "$mod_SHIFT, e, exec, ${config.iynaix.terminal.exec} lf ~/Downloads"
           "$mod, w, exec, brave"
           "$mod_SHIFT, w, exec, brave --incognito"
           "$mod, v, exec, ${config.iynaix.terminal.exec} nvim"

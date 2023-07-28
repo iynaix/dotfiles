@@ -105,7 +105,7 @@ in {
       open = "xdg-open";
       pj = "openproj";
       py = "python";
-      r = "ranger";
+      r = "lf";
       # subs = "subliminal download -l 'en' -l 'eng' -s";
       t = "exa --group-directories-first --color-scale --icons --tree";
       tree = "exa --group-directories-first --color-scale --icons --tree";
