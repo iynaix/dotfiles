@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   host,
   ...
@@ -51,13 +50,13 @@
           # creating an overlay for buildRustPackage overlay
           # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
           swww = super.swww.overrideAttrs (oldAttrs: rec {
-            src = pkgs.fetchgit {
+            src = super.fetchgit {
               url = "https://github.com/Horus645/swww";
               rev = "517fbeb0f831d43d6c88dac22380536b00e7d9f1";
               sha256 = "sha256-Fx2e+UqBURY6Vxi6cePc0lK5gIEcWobMGfEx03ZOvAY=";
             };
 
-            cargoDeps = pkgs.rustPlatform.importCargoLock {
+            cargoDeps = super.rustPlatform.importCargoLock {
               lockFile = src + "/Cargo.lock";
               allowBuiltinFetchGit = true;
             };

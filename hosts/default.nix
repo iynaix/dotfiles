@@ -70,5 +70,6 @@
 in {
   vm = mkHost {hostName = "vm";};
   desktop = mkHost {hostName = "desktop";};
+  desktop-generic = mkHost {hostName = "desktop";};
   laptop = mkHost {hostName = "laptop";};
 }
