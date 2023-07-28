@@ -126,7 +126,7 @@
   system.stateVersion = "23.05";
 
   # setup fonts
-  fonts.fonts = config.home-manager.users.${user}.iynaix.fonts.packages;
+  fonts.packages = config.home-manager.users.${user}.iynaix.fonts.packages;
 
   # enable flakes
   nix = {
