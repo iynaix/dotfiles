@@ -9,7 +9,7 @@
   config = {
     iynaix-nixos = {
       backlight.enable = true;
-      hyprland.enable = true;
+      hyprland-nixos.enable = true;
       zfs.swap = true;
       kmonad.enable = true;
 

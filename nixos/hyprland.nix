@@ -5,7 +5,7 @@
   system,
   ...
 }: let
-  cfg = config.iynaix-nixos.hyprland;
+  cfg = config.iynaix-nixos.hyprland-nixos;
 in {
   config = lib.mkIf cfg.enable {
     services.xserver.desktopManager.gnome.enable = lib.mkForce false;

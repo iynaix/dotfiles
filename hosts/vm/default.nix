@@ -9,13 +9,13 @@
 
   config = {
     iynaix-nixos = {
-      hyprland.enable = false;
+      hyprland-nixos.enable = false;
 
       # persist.tmpfs.root = true;
       # persist.tmpfs.home = true;
     };
 
-    environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland.enable {
+    environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland-nixos.enable {
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
     };
 

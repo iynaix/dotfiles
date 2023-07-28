@@ -10,7 +10,7 @@
 
       # software
       distrobox.enable = true;
-      hyprland.enable = true;
+      hyprland-nixos.enable = true;
       torrenters.enable = true;
       virt-manager.enable = true;
     };

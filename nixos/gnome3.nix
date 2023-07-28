@@ -3,7 +3,7 @@
   lib,
   ...
 }: {
-  config = lib.mkIf (!config.iynaix-nixos.hyprland.enable) {
+  config = lib.mkIf (!config.iynaix-nixos.hyprland-nixos.enable) {
     services.xserver = {
       enable = true;
       desktopManager.gnome.enable = true;
