@@ -80,7 +80,7 @@ in {
 
             modules-left = [
               "custom/nix"
-              "hyprland/window"
+              # "hyprland/window"
             ];
 
             modules-right = ["pulseaudio" "network" "battery" "clock"];
@@ -213,9 +213,20 @@ in {
             background-color: {foreground};
             color: {color0};
             margin-left: 4px;
-            padding: 0 12px;
+            padding: 0 16px 0 12px;
             font-size: 16px;
-            border-radius: ${radius} 0 0 ${radius};
+
+            /* with hyprland / window */
+            /* border-radius: ${radius} 0 0 ${radius}; */
+
+            /* standalone */
+            border-radius: ${radius};
+          }
+
+          /* invert colors for monocle / swallowing */
+          window#waybar.fullscreen #custom-nix, window#waybar.swallowing #custom-nix, window#waybar.hidden #custom-nix {
+              background-color: {color0};
+              color: {foreground};
           }
 
           #workspaces button.urgent {
