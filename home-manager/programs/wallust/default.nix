@@ -9,7 +9,6 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       wallust
-      (callPackage ./wallust-gtk-theme.nix {})
     ];
 
     # wallust config

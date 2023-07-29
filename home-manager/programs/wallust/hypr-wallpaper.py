@@ -3,6 +3,7 @@ from subprocess import run
 import argparse
 import json
 import random
+import time
 import subprocess
 
 WALLPAPERS = Path("~/Pictures/Wallpapers").expanduser()
@@ -105,6 +106,9 @@ def set_colors():
     # refresh waybar
     run(["killall", "-SIGUSR2", ".waybar-wrapped"])
 
+    # reload gtk theme
+    # reload_gtk()
+
 
 def get_wallust_preset_themes():
     with subprocess.Popen(
@@ -156,6 +160,12 @@ def swww(*args: str):
             )
         else:
             run(["swww", *args])
+
+
+def reload_gtk():
+    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "\"''\""])
+    time.sleep(0.5)
+    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "adw-gtk3"])
 
 
 def rofi_theme():
@@ -251,6 +261,7 @@ if __name__ == "__main__":
         wall = get_current_wallpaper() or wallpaper
         run(["wallust", wall])
         swww("img", wall)
+        run(["killall", "-SIGUSR2", ".waybar-wrapped"])
     else:
         run(["wallust", wallpaper])
         swww("img", "--transition-type", args.transition_type, wallpaper)

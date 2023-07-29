@@ -26,4 +26,6 @@
     icons = true;
     extraOptions = ["--group-directories-first" "--color-scale"];
   };
+
+  programs.nix-index.enable = true;
 }

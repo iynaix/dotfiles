@@ -59,6 +59,8 @@ in {
               };
               format = "{:%H:%M}";
               format-alt = "{:%a, %d %b %Y}";
+              # format = "󰥔   {:%H:%M}";
+              # format-alt = "  {:%a, %d %b %Y}";
               interval = 10;
               tooltip-format = "<tt><small>{calendar}</small></tt>";
             };
@@ -221,12 +223,6 @@ in {
 
             /* standalone */
             border-radius: ${radius};
-          }
-
-          /* invert colors for monocle / swallowing */
-          window#waybar.fullscreen #custom-nix, window#waybar.swallowing #custom-nix, window#waybar.hidden #custom-nix {
-              background-color: {color0};
-              color: {foreground};
           }
 
           #workspaces button.urgent {

@@ -36,8 +36,6 @@
           grimblast --notify copysave output "$img"
           ;;
         "Selection")
-          sleep 0.5
-          sleep "$delay"
           grimblast --notify copysave area "$img"
           ;;
         "Window")

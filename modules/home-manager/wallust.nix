@@ -40,6 +40,7 @@ in {
     # enable wallust for individual programs
     cava = lib.mkEnableOption "cava" // {default = cfg.enable;};
     dunst = lib.mkEnableOption "dunst" // {default = cfg.enable;};
+    gtk = lib.mkEnableOption "gtk";
     rofi = lib.mkEnableOption "rofi" // {default = cfg.enable;};
     swaylock = lib.mkEnableOption "swaylock" // {default = cfg.enable;};
     waybar = lib.mkEnableOption "waybar" // {default = cfg.enable;};
