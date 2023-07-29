@@ -1,6 +1,16 @@
-# Iynaix's Nix Config
+# Iynaix's NixOS Config
 
 This config is intended to be used with NixOS. There is *experimental* support for running the dotfiles on [other Linuxes](https://github.com/iynaix/dotfiles/blob/main/home-manager.md).
+
+## Features
+
+- Multiple NixOS configurations, including desktop, laptop and VM
+- Persistence via impermanence
+- Automatic ZFS snapshots
+- Flexible NixOS / Home Manager config via feature flags
+- sops-nix for managing secrets
+- Hyprland with waybar setup, with screen capture
+- Dynamic colorschemes using wallust
 
 ## How to Install
 Remove old zfs pools (if necessary)
@@ -23,7 +33,7 @@ sudo nixos-install --flake github:iynaix/dotfiles#desktop --root /mnt
 
 ### Create Password Files for User and Root
 
-This is not needed if restoring from persist snapshot (see below)
+This is not needed if restoring from [persist snapshot](#restore-persist-from-snapshot)
 
 ```sh
 mkdir -p /persist/etc/shadow

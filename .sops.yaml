@@ -5,7 +5,7 @@
 keys:
   - &iynaix age1896scxney590tqpns8zyyglecwd8dlp8mrv4l6ypugp5atdqzd2qd06rl5
 creation_rules:
-  - path_regex: hosts/secrets.ya?ml$
+  - path_regex: hosts/secrets.json$
     key_groups:
     - age:
       - *iynaix
