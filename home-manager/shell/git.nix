@@ -39,6 +39,7 @@ in {
   home.packages = [git-reword];
 
   programs = {
+    gh.enable = true;
     git = {
       enable = true;
       userName = "Lin Xianyi";

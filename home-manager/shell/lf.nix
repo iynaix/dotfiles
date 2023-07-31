@@ -4,6 +4,11 @@
   config,
   ...
 }: let
+  mkLfCommands = lib.mapAttrs (name: value: ''
+    ''${{
+      ${value}
+    }}
+  '');
   # use kitty to preview images, adapted from:
   # https://github.com/gokcehan/lf/wiki/Previews#with-kitty-and-pistol
   lf-kitty-previewer = pkgs.writeShellApplication {
@@ -46,73 +51,60 @@ in {
 
     previewer.source = "${lf-kitty-previewer}/bin/lf-kitty-previewer";
 
-    # previewer.source = "${lf-previewer}/bin/lf-previewer";
-
-    commands = {
+    commands = mkLfCommands {
       open = ''
-        ''${{
-          case $(file --mime-type "$f" -bL) in
-              text/*|application/json) $EDITOR "$f";;
-              *) xdg-open "$f" ;;
-          esac
-        }}
+        case $(file --mime-type "$f" -bL) in
+            text/*|application/json) $EDITOR "$f";;
+            *) xdg-open "$f" ;;
+        esac
       '';
       mkdir = ''
-        ''${{
-          printf "Directory Name: "
-          read ans
-          mkdir $ans
-        }}
+        printf "Directory Name: "
+        read ans
+        mkdir $ans
       '';
       mkfile = ''
-        ''${{
-          printf "File Name: "
-          read ans
-          $EDITOR $ans
-        }}
+        printf "File Name: "
+        read ans
+        $EDITOR $ans
       '';
       chmod = ''
-        ''${{
-          printf "Mode Bits: "
-          read ans
+        printf "Mode Bits: "
+        read ans
 
-          for file in "$fx"
-          do
-            chmod $ans $file
-          done
+        for file in "$fx"
+        do
+          chmod $ans $file
+        done
 
-          lf -remote 'send reload'
-        }}
+        lf -remote 'send reload'
       '';
       sudomkfile = ''
-        ''${{
-          printf "File Name: "
-          read ans
-          sudo $EDITOR $ans
-        }}
+        printf "File Name: "
+        read ans
+        sudo $EDITOR $ans
+      '';
+      bulkrename = ''
+        /bin/sh -c "vimv $(echo -e "$fx" | xargs -i echo "\\'{}\\'" | xargs echo)"
       '';
       setwallpaper = ''%hypr-wallpaper "$f"'';
       fzf_jump = ''
-        ''${{
-          res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
-          if [ -f "$res" ]; then
-            cmd="select"
-          elif [ -d "$res" ]; then
-            cmd="cd"
-          fi
-          lf -remote "send $id $cmd \"$res\""
-        }}
+        res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
+        if [ -f "$res" ]; then
+          cmd="select"
+        elif [ -d "$res" ]; then
+          cmd="cd"
+        fi
+        lf -remote "send $id $cmd \"$res\""
       '';
       unarchive = ''
-        ''${{
-          case "$f" in
-              *.zip) unzip "$f" ;;
-              *.tar.gz) tar -xzvf "$f" ;;
-              *.tar.bz2) tar -xjvf "$f" ;;
-              *.tar) tar -xvf "$f" ;;
-              *) echo "Unsupported format" ;;
-          esac
-        }}
+        case "$f" in
+            *.zip) unzip "$f" ;;
+            *.tar.gz) tar -xzvf "$f" ;;
+            *.tar.bz2) tar -xjvf "$f" ;;
+            *.tar) tar -xvf "$f" ;;
+            *) echo "Unsupported format" ;;
+        esac
       '';
       zip = ''%zip -r "$f" "$f"'';
       tar = ''%tar cvf "$f.tar" "$f"'';
@@ -141,7 +133,7 @@ in {
         R = "reload";
         C = "clear";
         U = "unselect";
-        br = "$vimv $fx";
+        br = "bulkrename";
 
         # Archive Mappings
         az = "zip";

@@ -163,9 +163,9 @@ def swww(*args: str):
 
 
 def reload_gtk():
-    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "\"''\""])
+    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "''"])
     time.sleep(0.5)
-    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "adw-gtk3"])
+    run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "'adw-gtk3'"])
 
 
 def rofi_theme():

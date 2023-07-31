@@ -52,10 +52,7 @@
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
 
     # copy wallpapers
-    file."Pictures/Wallpapers/gits-catppuccin.jpg" = {
-      source = ./gits-catppuccin.jpg;
-      recursive = true;
-    };
+    file."Pictures/Wallpapers/gits-catppuccin.jpg".source = ./gits-catppuccin.jpg;
   };
 
   xdg.configFile = lib.mkIf (!isNixOS) {

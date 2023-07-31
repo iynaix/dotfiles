@@ -65,7 +65,7 @@ in {
     cssText = lib.concatStringsSep "\n" (lib.mapAttrsToList gtkColor {
       accent_color = "{color13}";
       accent_bg_color = "mix({color13}, {color0},0.3)";
-      accent_fg_color = "{color5}";
+      accent_fg_color = "{foreground}";
       destructive_color = "{color13}";
       destructive_bg_color = "mix({color13}, {color0},0.3)";
       destructive_fg_color = "{color5}";

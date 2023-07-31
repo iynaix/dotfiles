@@ -10,7 +10,7 @@
           # patch imv to not repeat keypresses causing waybar to launch infinitely
           # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
           imv = super.imv.overrideAttrs (oldAttrs: {
-            patches = [./imv-disable-key-repeat-timer.patch];
+            patches = (oldAttrs.patches or []) ++ [./imv-disable-key-repeat-timer.patch];
           });
 
           # add default font to silence null font errors
@@ -97,15 +97,19 @@
           # patch smplayer to not open an extra window under wayland
           # https://github.com/smplayer-dev/smplayer/issues/369#issuecomment-1519941318
           smplayer = super.smplayer.overrideAttrs (oldAttrs: {
-            patches = [
-              ./smplayer-shared-memory.patch
-            ];
+            patches =
+              (oldAttrs.patches or [])
+              ++ [
+                ./smplayer-shared-memory.patch
+              ];
           });
           mpv = super.mpv-unwrapped.overrideAttrs (oldAttrs: {
-            patches = [
-              ./mpv-meson.patch
-              ./mpv-mod.patch
-            ];
+            patches =
+              (oldAttrs.patches or [])
+              ++ [
+                ./mpv-meson.patch
+                ./mpv-mod.patch
+              ];
           });
         })
     )
