@@ -85,7 +85,7 @@ in {
         sudo $EDITOR $ans
       '';
       bulkrename = ''
-        /bin/sh -c "vimv $(echo -e "$fx" | xargs -i echo "\\'{}\\'" | xargs echo)"
+        sh -c "vimv $(echo -e "$fx" | xargs -i echo "\\'{}\\'" | xargs echo)"
       '';
       setwallpaper = ''%hypr-wallpaper "$f"'';
       fzf_jump = ''

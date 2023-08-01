@@ -54,6 +54,8 @@ in {
           then "ALT"
           else "SUPER";
 
+        "$term" = "${config.iynaix.terminal.exec}";
+
         general = {
           gaps_in = (
             if host == "desktop"
@@ -133,14 +135,14 @@ in {
         };
 
         bind = [
-          "$mod, Return, exec, ${lib.getExe config.iynaix.terminal.package}"
+          "$mod, Return, exec, $term"
           "$mod_SHIFT, Return, exec, rofi -show drun"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ~/Downloads"
-          "$mod_SHIFT, e, exec, ${config.iynaix.terminal.exec} lf ~/Downloads"
+          "$mod_SHIFT, e, exec, $term lf ~/Downloads"
           "$mod, w, exec, brave"
           "$mod_SHIFT, w, exec, brave --incognito"
-          "$mod, v, exec, ${config.iynaix.terminal.exec} nvim"
+          "$mod, v, exec, $term nvim"
           "$mod_SHIFT, v, exec, code"
           "$mod, period, exec, code ~/projects/dotfiles"
 

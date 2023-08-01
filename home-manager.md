@@ -19,6 +19,7 @@ Substitute `desktop` with desired host
 
 ```sh
 mkdir -p ~/projects
+cd ~/projects
 git clone https://github.com/iynaix/dotfiles
 cd dotfiles
 rm ~/.config/gtk-3.0/bookmarks
@@ -31,8 +32,7 @@ Reboot.
 ### Post Install
 
 - Install `kitty` on the host OS, the nix package requires [nixGL](https://github.com/guibou/nixGL) to run.
-
-- Install `zsh` on the host OS, then set the shell from the host OS:
+- Install `zsh` on the host OS (warning on Arch that the nix zsh is not in /etc/shells), then set the shell from the host OS:
 
 ```sh
 sudo chsh -s /bin/zsh $(whoami)
@@ -40,7 +40,6 @@ sudo chsh -s /bin/zsh $(whoami)
 
 ### TODO
 - gtk theme doesn't seem to be working
-- use zsh package from host instead?
 - hyprland stuff
   - grimblast
   - hyprland

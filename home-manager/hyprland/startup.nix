@@ -5,7 +5,6 @@
   ...
 }: let
   cfg = config.iynaix.hyprland;
-  term = config.iynaix.terminal.exec;
   displays = config.iynaix.displays;
   openOnWorkspace = workspace: program: "hyprctl dispatch exec '[workspace ${toString workspace} silent] ${program}'";
   hyprMonitors = pkgs.writeShellApplication {
@@ -65,14 +64,14 @@ in {
         (openOnWorkspace 4 "nemo")
 
         # terminal
-        (openOnWorkspace 7 "${term}")
+        (openOnWorkspace 7 "$term")
 
         # firefox
         (openOnWorkspace 9 "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091")
 
         # download desktop
-        (openOnWorkspace 10 "${term} nvim ~/Desktop/yt.txt")
-        (openOnWorkspace 10 "${term}")
+        (openOnWorkspace 10 "$term nvim ~/Desktop/yt.txt")
+        (openOnWorkspace 10 "$term")
 
         "${pkgs.swayidle}/bin/swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
 

@@ -58,7 +58,7 @@ in {
           # fix gparted "cannot open display: :0" error
           "${pkgs.xorg.xhost}/bin/xhost +local:"
           # fix Authorization required, but no authorization protocol specified error
-          "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
+          # "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
         ];
       };
     };

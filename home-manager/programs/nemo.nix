@@ -44,6 +44,7 @@
   ];
 
   # other OSes seem to override this file
+  xdg.configFile."mimeapps.list".force = !isNixOS;
   xdg.configFile."gtk-3.0/bookmarks".force = !isNixOS;
 
   dconf.settings = {
