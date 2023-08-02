@@ -55,6 +55,13 @@ in {
           search --fs-uuid --set=root FA1C-F224
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
         }
+        menuentry "Arch Linux" {
+          insmod part_msdos
+          insmod ext2
+          search --no-floppy --fs-uuid --set=root e630c4b1-075e-42a9-bd4e-894273e99ac7
+          linux /boot/vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw quiet
+          initrd /boot/intel-ucode.img /boot/initramfs-linux.img
+        }
       '';
     };
   };

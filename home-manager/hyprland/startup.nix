@@ -6,7 +6,7 @@
 }: let
   cfg = config.iynaix.hyprland;
   displays = config.iynaix.displays;
-  openOnWorkspace = workspace: program: "hyprctl dispatch exec '[workspace ${toString workspace} silent] ${program}'";
+  openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
   hyprMonitors = pkgs.writeShellApplication {
     name = "hypr-monitors";
     text = ''
