@@ -11,10 +11,10 @@
 in {
   config = lib.mkIf cfg.enable {
     # filesystems
-    fileSystems.${wdred} = {
-      device = "/dev/disk/by-label/6TBRED";
-      fsType = "ext4";
-    };
+    # fileSystems.${wdred} = {
+    #   device = "/dev/disk/by-label/6TBRED";
+    #   fsType = "ext4";
+    # };
 
     # non os zfs disks
     boot.zfs.extraPools = ["zfs-ironwolf22-1"];
@@ -38,10 +38,10 @@ in {
     systemd.tmpfiles.rules = [
       # dest src
       "L+ /home/${user}/Downloads   - - - - ${ironwolf}/Downloads"
-      "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
-      "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
-      "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
-      "L+ /home/${user}/Videos      - - - - ${wdred}"
+      # "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
+      # "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
+      # "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
+      # "L+ /home/${user}/Videos      - - - - ${wdred}"
     ];
 
     # dual boot windows

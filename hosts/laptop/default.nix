@@ -16,7 +16,7 @@
 
   networking.hostId = "abb4d116"; # required for zfs
 
-  nix.settings.allowed-users = ["iynaix"];
+  # nix.settings.allowed-users = ["iynaix"];
 
   environment.systemPackages = with pkgs; [
     bc # needed for rofi-wifi-menu

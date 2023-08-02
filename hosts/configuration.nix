@@ -94,11 +94,6 @@
   # enable sysrq in case for kernel panic
   boot.kernel.sysctl."kernel.sysrq" = 1;
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
   # bye bye nano
   environment.defaultPackages = [pkgs.perl pkgs.rsync pkgs.strace];
 

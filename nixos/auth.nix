@@ -1,9 +1,22 @@
-{
-  pkgs,
-  user,
-  ...
-}: {
+{user, ...}: let
+  sshKeyFile1 = ../home-manager/id_rsa.pub;
+  sshKeyFile2 = ../home-manager/id_ed25519.pub;
+in {
   config = {
+    services.openssh = {
+      enable = true;
+      authorizedKeysFiles = [
+        "${sshKeyFile1}"
+        "${sshKeyFile2}"
+      ];
+      settings.PasswordAuthentication = false;
+    };
+
+    users.users.${user}.openssh.authorizedKeys.keys = [
+      (builtins.readFile sshKeyFile1)
+      (builtins.readFile sshKeyFile2)
+    ];
+
     services.gnome.gnome-keyring.enable = true;
     security.polkit.enable = true;
 
