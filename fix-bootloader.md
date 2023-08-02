@@ -3,7 +3,8 @@
 ### Reimport existing zpool
 ```sh
 sudo zpool import
-sudo zpool labelclear <numeric id>
+sudo zpool import <numeric_id>
+```
 ```
 
 ### Format Boot Partition
