@@ -74,13 +74,37 @@ in {
         '')
         ++ (lib.optional cfg.archlinux ''
           menuentry "Arch Linux" {
-            insmod part_msdos
-            insmod ext2
-            search --no-floppy --fs-uuid --set=root e630c4b1-075e-42a9-bd4e-894273e99ac7
-            linux /boot/vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw quiet
-            initrd /boot/intel-ucode.img /boot/initramfs-linux.img
+            insmod gzio
+            insmod part_gpt
+            insmod fat
+            search --no-floppy --fs-uuid --set=root 35EE-1411
+            linux /vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw rootflags=subvol=@ loglevel=3 quiet
+            initrd /amd-ucode.img /initramfs-linux.img
           }
         ''));
+    };
+
+    boot.supportedFilesystems = lib.mkIf cfg.windows ["ntfs"];
+
+    # hide disks
+    fileSystems = {
+      "/media/archlinux" = lib.mkIf cfg.archlinux {
+        device = "/dev/disk/by-uuid/e630c4b1-075e-42a9-bd4e-894273e99ac7";
+        fsType = "btrfs";
+        options = ["nofail" "x-gvfs-hide" "subvol=/@"];
+      };
+
+      "/media/windows" = lib.mkIf cfg.windows {
+        device = "/dev/disk/by-uuid/94F422A4F4228916";
+        fsType = "ntfs-3g";
+        options = ["nofail" "x-gvfs-hide"];
+      };
+
+      "/media/windowsgames" = lib.mkIf cfg.windows {
+        device = "/dev/disk/by-label/GAMES";
+        fsType = "ntfs-3g";
+        options = ["nofail" "x-gvfs-hide"];
+      };
     };
   };
 }

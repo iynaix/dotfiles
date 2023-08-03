@@ -16,9 +16,7 @@ in {
     };
 
     hardware.nvidia = {
-      # open = true;
       modesetting.enable = true;
-      # nvidiaPersistenced = true;
       # prevents crashes with nvidia on resuming, see:
       # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
       powerManagement.enable = false;
