@@ -15,9 +15,11 @@ in {
 
     exec = lib.mkOption {
       type = lib.types.str;
-      default = "${lib.getExe cfg.package}";
+      default =
+        if cfg.package == pkgs.kitty
+        then "${cfg.package}/bin/kitty"
+        else "${lib.getExe cfg.package}";
       description = "Terminal command to execute other programs.";
-      example = "kitty";
     };
 
     font = lib.mkOption {

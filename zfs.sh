@@ -3,7 +3,7 @@
 set -e
 
 cat << Introduction
-This script will format the *entire* disk with a 512MB boot parition
+This script will format the *entire* disk with a 512MB boot partition
 (labelled NIXBOOT), allocating the rest to ZFS.
 
 The following ZFS datasets will be created:
@@ -80,7 +80,7 @@ if [[ $USESWAP == "1" ]]; then
 fi
 sudo sgdisk -n1:0:0 -t1:BF01 $DISK
 
-# notify kernel of parition changes
+# notify kernel of partition changes
 sudo sgdisk -p $DISK > /dev/null
 sleep 5
 

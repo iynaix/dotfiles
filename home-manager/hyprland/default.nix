@@ -25,8 +25,6 @@ in {
       };
 
       packages = with pkgs; [
-        # playerctl
-        # pciutils
         # clipboard history
         cliphist
         wl-clipboard
@@ -82,11 +80,6 @@ in {
 
         decoration = {
           rounding = 4;
-          blur = host != "vm";
-          blur_size = 2;
-          blur_passes = 3;
-          blur_new_optimizations = true;
-
           drop_shadow = host != "vm";
           shadow_range = 4;
           shadow_render_power = 3;
@@ -94,6 +87,13 @@ in {
 
           # dim_inactive = true
           # dim_strength = 0.05
+
+          blur = {
+            enabled = host != "vm";
+            size = 2;
+            passes = 3;
+            new_optimizations = true;
+          };
 
           # blurls = rofi
         };

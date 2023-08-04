@@ -50,10 +50,10 @@
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      exec = lib.getExe config.iynaix.terminal.package;
+      exec = config.iynaix.terminal.exec;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      exec = lib.getExe config.iynaix.terminal.package;
+      exec = config.iynaix.terminal.exec;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

@@ -16,7 +16,7 @@ in {
       trim.enable = true;
     };
 
-    # standard boot parititon
+    # standard boot partition
     fileSystems."/boot" = {
       device = "/dev/disk/by-label/NIXBOOT";
       fsType = "vfat";

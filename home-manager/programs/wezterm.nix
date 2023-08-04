@@ -7,7 +7,6 @@
 }: {
   config = lib.mkIf config.iynaix.wezterm.enable {
     iynaix.terminal = {
-      exec = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) "${lib.getExe pkgs.wezterm} start";
       fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) (pkgs.writeShellApplication {
         name = "gnome-terminal";
         text = ''

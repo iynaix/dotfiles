@@ -71,7 +71,7 @@
   # $ nix search wget
   environment = {
     variables = {
-      TERMINAL = lib.getExe config.home-manager.users.${user}.iynaix.terminal.package;
+      TERMINAL = config.home-manager.users.${user}.iynaix.terminal.exec;
       EDITOR = "nvim";
       VISUAL = "nvim";
       NIXPKGS_ALLOW_UNFREE = "1";
