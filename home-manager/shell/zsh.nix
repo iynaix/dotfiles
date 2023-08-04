@@ -130,71 +130,6 @@ in {
     # Suppress output of loud commands you don't want to hear from
     q() { "$@" > /dev/null 2>&1; }
 
-    # get the current nix generation
-    nix-current-generation() {
-        sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
-    }
-
-    # set the current configuration as default to boot
-    ndefault() {
-      sudo /run/current-system/bin/switch-to-configuration boot
-    }
-
-    # build flake but don't switch
-    nbuild() {
-        pushd ~/projects/dotfiles
-        sudo nixos-rebuild build --flake ".#''${1:-${host}}"
-        popd
-    }
-
-    # switch / update via nix flake
-    nswitch() {
-        pushd ~/projects/dotfiles
-        sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && \
-        echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
-        popd
-    }
-
-    # update
-    upd8() {
-        pushd ~/projects/dotfiles
-        nix flake update
-        nswitch
-        popd
-    }
-
-    # build home-manager flake but don't switch
-    hmbuild() {
-        pushd ~/projects/dotfiles
-        home-manager build --flake ".#''${1:-${host}}"
-        popd
-    }
-
-    # switch / update home-manager via nix flake
-    hmswitch() {
-        pushd ~/projects/dotfiles
-        home-manager switch --flake ".#''${1:-${host}}"
-        popd
-    }
-
-    # update via home-manger
-    hmupd8() {
-        pushd ~/projects/dotfiles
-        nix flake update
-        hmswitch
-        popd
-    }
-
-    # nix garbage collection
-    ngc() {
-        # sudo rm /nix/var/nix/gcroots/auto/*
-        if [[ $? -ne 0 ]]; then
-          sudo nix-collect-garbage $*
-        else
-          sudo nix-collect-garbage -d
-        fi
-    }
-
     # create a new devenv environment
     mkdevenv() {
         nix flake init --template github:iynaix/dotfiles#$1
@@ -205,7 +140,7 @@ in {
         xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
     }
 
-    wwhich() {
+    where() {
         readlink -f $(which $1)
     }
 
