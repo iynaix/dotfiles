@@ -18,12 +18,6 @@ in {
     # This will generate a new key if the key specified above does not exist
     sops.age.generateKey = false;
 
-    # This is the actual specification of the secrets.
-    sops.secrets = {
-      sonarr_api_key.owner = user;
-      netlify_site_id.owner = user;
-    };
-
     users.users.${user}.extraGroups = [config.users.groups.keys.name];
 
     systemd.services.some-service = {

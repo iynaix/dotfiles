@@ -21,6 +21,7 @@ in {
       ./sonarr.nix
       ./sops.nix
       ./transmission.nix
+      ./vercel.nix
       ./virt-manager.nix
       ./zfs.nix
     ]

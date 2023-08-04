@@ -20,8 +20,6 @@
   };
 in {
   config = lib.mkIf config.iynaix-nixos.torrenters.enable {
-    home-manager.users.${user}.home.packages = [sonarr-ical-sync];
-
     services = {
       sonarr = {
         enable = true;
@@ -30,6 +28,12 @@ in {
 
       # for indexers
       prowlarr.enable = true;
+    };
+
+    # allow sonarr to read secret keys
+    sops.secrets = {
+      sonarr_api_key.owner = user;
+      netlify_site_id.owner = user;
     };
 
     # setup cron job to sync sonarr ical with google calendar
