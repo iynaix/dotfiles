@@ -18,6 +18,7 @@ in {
       ./hardware
       ./hyprland.nix
       ./impermanence.nix
+      ./nix.nix
       ./sonarr.nix
       ./sops.nix
       ./transmission.nix

@@ -10,12 +10,20 @@ in {
         "${sshKeyFile2}"
       ];
       settings.PasswordAuthentication = false;
+      settings.KbdInteractiveAuthentication = false;
     };
 
-    users.users.${user}.openssh.authorizedKeys.keys = [
-      (builtins.readFile sshKeyFile1)
-      (builtins.readFile sshKeyFile2)
-    ];
+    users.users = {
+      root.openssh.authorizedKeys.keys = [
+        (builtins.readFile sshKeyFile1)
+        (builtins.readFile sshKeyFile2)
+      ];
+
+      ${user}.openssh.authorizedKeys.keys = [
+        (builtins.readFile sshKeyFile1)
+        (builtins.readFile sshKeyFile2)
+      ];
+    };
 
     services.gnome.gnome-keyring.enable = true;
     security.polkit.enable = true;

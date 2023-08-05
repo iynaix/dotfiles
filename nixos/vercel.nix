@@ -18,9 +18,7 @@
   };
 in {
   config = lib.mkIf cfg.enable {
-    sops.secrets = {
-      vercel_postgres.owner = user;
-    };
+    sops.secrets.vercel_postgres.owner = user;
 
     systemd.services.vercel-backup = {
       serviceConfig.Type = "oneshot";

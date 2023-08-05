@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  user,
   ...
 }: {
   iynaix-nixos = {
@@ -16,7 +17,8 @@
 
   networking.hostId = "abb4d116"; # required for zfs
 
-  # nix.settings.allowed-users = ["iynaix"];
+  # allow building and pushing of laptop config from desktop
+  nix.settings.trusted-users = [user];
 
   environment.systemPackages = with pkgs; [
     bc # needed for rofi-wifi-menu
