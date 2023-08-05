@@ -8,6 +8,7 @@
     # software
     distrobox.enable = true;
     hyprland-nixos.enable = true;
+    syncoid.enable = true;
     torrenters.enable = true;
     vercel.enable = true;
     virt-manager.enable = true;

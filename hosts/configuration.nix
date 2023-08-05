@@ -3,7 +3,6 @@
   user,
   host,
   config,
-  lib,
   ...
 }: {
   # handle desktop / window manager

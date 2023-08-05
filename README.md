@@ -13,6 +13,8 @@ This config is intended to be used with NixOS. There is *experimental* support f
 - Dynamic colorschemes using wallust
 
 ## How to Install
+Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
+
 Remove old zfs pools (if necessary)
 ```sh
 sudo zpool import

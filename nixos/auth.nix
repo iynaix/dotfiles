@@ -1,28 +1,19 @@
-{user, ...}: let
-  sshKeyFile1 = ../home-manager/id_rsa.pub;
-  sshKeyFile2 = ../home-manager/id_ed25519.pub;
-in {
+{user, ...}: {
   config = {
     services.openssh = {
       enable = true;
-      authorizedKeysFiles = [
-        "${sshKeyFile1}"
-        "${sshKeyFile2}"
-      ];
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
     };
 
-    users.users = {
-      root.openssh.authorizedKeys.keys = [
-        (builtins.readFile sshKeyFile1)
-        (builtins.readFile sshKeyFile2)
+    users.users = let
+      keyFiles = [
+        ../home-manager/id_rsa.pub
+        ../home-manager/id_ed25519.pub
       ];
-
-      ${user}.openssh.authorizedKeys.keys = [
-        (builtins.readFile sshKeyFile1)
-        (builtins.readFile sshKeyFile2)
-      ];
+    in {
+      root.openssh.authorizedKeys.keyFiles = keyFiles;
+      ${user}.openssh.authorizedKeys.keyFiles = keyFiles;
     };
 
     services.gnome.gnome-keyring.enable = true;

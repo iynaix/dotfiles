@@ -1,7 +1,6 @@
 {
   pkgs,
   host,
-  user,
   lib,
   ...
 }: let
@@ -46,14 +45,11 @@
     name = "nswitchremote";
     text = ''
       pushd ~/projects/dotfiles
-      LAPTOP_IP="$(cat /run/secrets/laptop_ip)"
-      sudo nixos-rebuild --target-host "root@''${1:-$LAPTOP_IP}" --flake ".#''${2:-laptop}" switch
+      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-laptop}" switch
       popd
     '';
   };
 in {
-  sops.secrets.laptop_ip.owner = user;
-
   environment.systemPackages =
     [
       nix-current-generation

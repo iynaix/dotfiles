@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  host,
+  user,
   ...
 }: let
   cfg = config.iynaix-nixos.zfs;
@@ -21,6 +23,13 @@ in {
       device = "/dev/disk/by-label/NIXBOOT";
       fsType = "vfat";
     };
+
+    # mount swap if specified
+    swapDevices = lib.mkIf cfg.swap (lib.mkForce [
+      {
+        device = "/dev/disk/by-label/SWAP";
+      }
+    ]);
 
     # standard zfs filesystem layout
     fileSystems = {
@@ -64,12 +73,5 @@ in {
         };
       };
     };
-
-    # mount swap if specified
-    swapDevices = lib.mkIf cfg.swap (lib.mkForce [
-      {
-        device = "/dev/disk/by-label/SWAP";
-      }
-    ]);
   };
 }

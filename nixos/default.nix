@@ -21,6 +21,7 @@ in {
       ./nix.nix
       ./sonarr.nix
       ./sops.nix
+      ./syncoid.nix
       ./transmission.nix
       ./vercel.nix
       ./virt-manager.nix
