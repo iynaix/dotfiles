@@ -34,5 +34,9 @@ in {
         Unit = "vercel-backup.service";
       };
     };
+
+    iynaix-nixos.persist.home.directories = [
+      ".local/share/com.vercel.cli"
+    ];
   };
 }

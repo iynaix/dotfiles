@@ -1,4 +1,4 @@
-{user, ...}: {
+{...}: {
   programs.btop = {
     enable = true;
     settings = {
@@ -6,6 +6,7 @@
       theme_background = false;
       cpu_single_graph = true;
       show_disks = false;
+      use_fstab = true;
     };
   };
 

@@ -58,4 +58,8 @@
       };
     };
   };
+
+  iynaix.persist.home.directories = [
+    ".config/mpv/watch_later"
+  ];
 }

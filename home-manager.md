@@ -22,7 +22,6 @@ mkdir -p ~/projects
 cd ~/projects
 git clone https://github.com/iynaix/dotfiles
 cd dotfiles
-rm ~/.config/gtk-3.0/bookmarks
 nix-shell -p home-manager
 NIXPKGS_ALLOW_UNFREE=1 home-manager --extra-experimental-features "nix-command flakes" switch --flake ".#desktop"
 ```

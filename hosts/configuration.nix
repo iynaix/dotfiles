@@ -110,12 +110,6 @@
     "L+ /bin/bash                 - - - - /bin/sh"
   ];
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
   # do not change this value
   system.stateVersion = "23.05";
 

@@ -60,6 +60,15 @@ in {
         "L+ /home/${user}/Videos      - - - - ${wdred}"
       ]);
 
+    # add bookmarks for gtk
+    home-manager.users.${user} = {
+      gtk.gtk3.bookmarks = [
+        "file:///media/6TBRED/Anime/Current Anime Current"
+        "file:///media/6TBRED/TV/Current TV Current"
+        "file:///media/6TBRED/Movies"
+      ];
+    };
+
     # dual boot windows
     boot.loader.grub = {
       extraEntries = lib.concatStringsSep "\n" ((lib.optional cfg.windows ''
