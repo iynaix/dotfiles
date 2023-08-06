@@ -62,10 +62,10 @@ in {
 
     # add bookmarks for gtk
     home-manager.users.${user} = {
-      gtk.gtk3.bookmarks = [
-        "file:///media/6TBRED/Anime/Current Anime Current"
-        "file:///media/6TBRED/TV/Current TV Current"
-        "file:///media/6TBRED/Movies"
+      gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
+        "file://${ironwolf}/Anime/Current Anime Current"
+        "file://${ironwolf}/TV/Current TV Current"
+        "file://${ironwolf}/Movies"
       ];
     };
 

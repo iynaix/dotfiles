@@ -185,7 +185,23 @@ def rofi_wallpaper():
         if f.is_file() and f.suffix in [".jpg", ".jpeg", ".png"]:
             count += 1
 
-    float_rule = "[float;size 30%;center]"
+    # get dimensions of current display
+    TARGET_PERCENT = 30 / 100
+
+    with subprocess.Popen(
+        ["hyprctl", "monitors", "-j"], stdout=subprocess.PIPE
+    ) as proc:
+        for monitor in json.loads(proc.stdout.read().decode("utf-8")):
+            if not monitor["focused"]:
+                continue
+
+            width = monitor["width"] * TARGET_PERCENT
+            height = monitor["height"] * TARGET_PERCENT
+
+            if height > width:
+                [width, height] = [height, width]
+
+    float_rule = f"[float;size {int(width)} {int(height)};center]"
     # to behave like rofi
     esc_bind = "bind <Escape> quit"
     rand_idx = random.randint(1, count)
