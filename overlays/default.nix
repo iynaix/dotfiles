@@ -24,6 +24,18 @@
 
           # add icon and .desktop file
           path-of-building = super.path-of-building.overrideAttrs (oldAttrs: rec {
+            # dataVersion = "2.30.1";
+            # data = runCommand "path-of-building-data" {
+            #   src = fetchFromGitHub {
+            #     owner = "PathOfBuildingCommunity";
+            #     repo = "PathOfBuilding";
+            #     rev = "v${dataVersion}";
+            #     hash = "sha256-2itcALgl8eDkZylb/hmePDMILM4RxW2u5LYLbg+NNJ4=";
+            #   };
+
+            #   nativeBuildInputs = [ unzip ];
+            # }
+
             installPhase =
               oldAttrs.installPhase
               + ''

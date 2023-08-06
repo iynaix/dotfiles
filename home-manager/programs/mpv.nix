@@ -1,7 +1,10 @@
-{isNixOS, ...}: {
-  xdg.configFile."mpv" = {
-    source = ./mpv;
-    recursive = true;
+{
+  pkgs,
+  isNixOS,
+  ...
+}: {
+  xdg.configFile = {
+    "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
   };
 
   programs = {
@@ -56,6 +59,16 @@
         write-filename-in-watch-later-config = true;
         script-opts = "chapterskip-skip=opening;ending;sponsorblock";
       };
+      scripts = with pkgs; [
+        mpvScripts.seekTo
+        mpvScripts.sponsorblock
+        mpvScripts.thumbfast
+        (pkgs.callPackage ../../packages/mpv-chapterskip.nix {})
+        (pkgs.callPackage ../../packages/mpv-deletefile.nix {})
+        (pkgs.callPackage ../../packages/mpv-nextfile.nix {})
+        (pkgs.callPackage ../../packages/mpv-subsearch.nix {})
+        (pkgs.callPackage ../../packages/mpv-thumbfast-osc.nix {})
+      ];
     };
   };
 

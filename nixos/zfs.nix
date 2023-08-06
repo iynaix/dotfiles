@@ -1,8 +1,6 @@
 {
   config,
   lib,
-  host,
-  user,
   ...
 }: let
   cfg = config.iynaix-nixos.zfs;
