@@ -41,8 +41,8 @@
     '';
   };
   # build and push config for laptop
-  nswitchremote = pkgs.writeShellApplication {
-    name = "nswitchremote";
+  nswitch-remote = pkgs.writeShellApplication {
+    name = "nswitch-remote";
     text = ''
       pushd ~/projects/dotfiles
       sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-laptop}" switch
@@ -58,7 +58,7 @@ in {
       nswitch
       upd8
     ]
-    ++ lib.optionals (host == "desktop") [nswitchremote];
+    ++ lib.optionals (host == "desktop") [nswitch-remote];
 
   # enable flakes
   nix = {

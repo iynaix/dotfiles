@@ -51,7 +51,7 @@ in {
           # vial
         ]
         ++ (lib.optional cfg.trimage.enable
-          (callPackage ../../home-manager/programs/trimage.nix {
+          (callPackage ../../packages/trimage.nix {
             inherit (qt5) wrapQtAppsHook;
           }))
     );
