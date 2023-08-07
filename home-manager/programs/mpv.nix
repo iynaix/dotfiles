@@ -58,6 +58,10 @@
 
         write-filename-in-watch-later-config = true;
         script-opts = "chapterskip-skip=opening;ending;sponsorblock";
+
+        # ModernX
+        # osc = "no";
+        # border = "no";
       };
       scripts = with pkgs; [
         mpvScripts.seekTo
@@ -65,6 +69,7 @@
         mpvScripts.thumbfast
         (pkgs.callPackage ../../packages/mpv-chapterskip.nix {})
         (pkgs.callPackage ../../packages/mpv-deletefile.nix {})
+        # (pkgs.callPackage ../../packages/mpv-modernx.nix {})
         (pkgs.callPackage ../../packages/mpv-nextfile.nix {})
         (pkgs.callPackage ../../packages/mpv-subsearch.nix {})
         (pkgs.callPackage ../../packages/mpv-thumbfast-osc.nix {})
