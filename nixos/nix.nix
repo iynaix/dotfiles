@@ -2,6 +2,7 @@
   pkgs,
   host,
   lib,
+  user,
   ...
 }: let
   # outputs the current nixos generation
@@ -49,6 +50,13 @@
       popd
     '';
   };
+  # sync wallpapers with laptop
+  sync-wallpapers = pkgs.writeShellApplication {
+    name = "sync-wallpapers";
+    text = ''
+      rsync -aP --delete --no-links -e "ssh" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
+    '';
+  };
 in {
   environment.systemPackages =
     [
@@ -58,7 +66,10 @@ in {
       nswitch
       upd8
     ]
-    ++ lib.optionals (host == "desktop") [nswitch-remote];
+    ++ lib.optionals (host == "desktop") [
+      nswitch-remote
+      sync-wallpapers
+    ];
 
   # enable flakes
   nix = {

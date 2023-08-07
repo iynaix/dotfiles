@@ -35,7 +35,6 @@ in {
     environment.systemPackages = with pkgs;
       [
         gcr # stops errors with copilot login?
-        gparted
         libnotify
         # for nixlang
         alejandra
@@ -46,19 +45,6 @@ in {
       ++ (lib.optional hmConfig.iynaix.helix.enable helix);
 
     programs.file-roller.enable = true;
-
-    # fix gparted "cannot open display: :0" error
-    # see: https://askubuntu.com/questions/939938/gparted-cannot-open-display
-    home-manager.users.${user} = {
-      wayland.windowManager.hyprland.settings = {
-        exec-once = [
-          # fix gparted "cannot open display: :0" error
-          "${pkgs.xorg.xhost}/bin/xhost +local:"
-          # fix Authorization required, but no authorization protocol specified error
-          "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
-        ];
-      };
-    };
 
     iynaix-nixos.persist.home.directories = [
       ".local/state/wireplumber"

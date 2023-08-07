@@ -4,28 +4,28 @@
   lib,
   ...
 }: let
-  nixos-cfg = config.iynaix-nixos.persist;
-  hm-cfg = config.home-manager.users.${user}.iynaix.persist;
+  nixosCfg = config.iynaix-nixos.persist;
+  hmCfg = config.home-manager.users.${user}.iynaix.persist;
 in {
   config = lib.mkIf config.iynaix-nixos.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
       (lib.optionalString
-        (!nixos-cfg.tmpfs.root)
+        (!nixosCfg.tmpfs.root)
         "zfs rollback -r zroot/local/root@blank")
       (lib.optionalString
-        (!nixos-cfg.tmpfs.home)
+        (!nixosCfg.tmpfs.home)
         "zfs rollback -r zroot/local/home@blank")
     ]);
 
     # replace root and /or home filesystems with tmpfs
-    fileSystems."/" = lib.mkIf nixos-cfg.tmpfs.root (lib.mkForce {
+    fileSystems."/" = lib.mkIf nixosCfg.tmpfs.root (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
       options = ["defaults" "size=3G" "mode=755"];
     });
-    fileSystems."/home" = lib.mkIf nixos-cfg.tmpfs.home (lib.mkForce {
+    fileSystems."/home" = lib.mkIf nixosCfg.tmpfs.home (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
       options = ["defaults" "size=5G" "mode=755"];
@@ -45,13 +45,13 @@ in {
     # persist files on root filesystem
     environment.persistence."/persist" = {
       hideMounts = true;
-      files = ["/etc/machine-id"] ++ nixos-cfg.root.files;
-      directories = nixos-cfg.root.directories;
+      files = ["/etc/machine-id"] ++ nixosCfg.root.files;
+      directories = nixosCfg.root.directories;
 
       # persist for home directory
       users.${user} = {
-        files = nixos-cfg.home.files ++ hm-cfg.home.files;
-        directories = ["projects"] ++ nixos-cfg.home.directories ++ hm-cfg.home.directories;
+        files = nixosCfg.home.files ++ hmCfg.home.files;
+        directories = ["projects"] ++ nixosCfg.home.directories ++ hmCfg.home.directories;
       };
     };
 

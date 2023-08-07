@@ -84,6 +84,11 @@ in {
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
         "launch-waybar"
+
+        # fix gparted "cannot open display: :0" error
+        "${pkgs.xorg.xhost}/bin/xhost +local:"
+        # fix Authorization required, but no authorization protocol specified error
+        "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
       ];
     };
   };
