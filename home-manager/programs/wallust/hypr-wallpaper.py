@@ -199,7 +199,7 @@ def rofi_wallpaper():
             height = monitor["height"] * TARGET_PERCENT
 
             if height > width:
-                [width, height] = [height, width]
+                width, height = height, width
 
     float_rule = f"[float;size {int(width)} {int(height)};center]"
     # to behave like rofi

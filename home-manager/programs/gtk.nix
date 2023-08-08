@@ -61,6 +61,12 @@ in {
     };
   };
 
+  # use gtk theme on qt apps
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+  };
+
   iynaix.wallust.entries = let
     # https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.3/named-colors.html
     cssText = lib.concatStringsSep "\n" (lib.mapAttrsToList gtkColor {
