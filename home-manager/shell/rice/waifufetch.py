@@ -1,15 +1,15 @@
 from pathlib import Path
 from subprocess import run
+import argparse
 import json
 import os
 import signal
 import sys
 
 
-def waifufetch():
-    colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
+# creates the image and returns the path to the image
+def create_image(colors):
     logo = colors["neofetch"]["logo"]
-    neofetch_config = colors["neofetch"]["conf"]
     c4 = colors["colors"]["color4"]
     c6 = colors["colors"]["color6"]
 
@@ -37,6 +37,13 @@ def waifufetch():
         ]
     )
 
+    return img
+
+
+def waifufetch(colors):
+    neofetch_config = colors["neofetch"]["conf"]
+    img = create_image(colors)
+
     run(
         [
             "neofetch",
@@ -56,9 +63,29 @@ def sigint_handler(sig, frame):
     sys.exit()
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="waifufetch",
+        description="Neofetch with more waifu",
+    )
+    parser.add_argument(
+        "--image", action="store_true", help="returns path to generated image"
+    )
+
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
+
+    args = parse_args()
+
+    if args.image:
+        print(create_image(colors))
+        exit()
+
     # initial run
-    waifufetch()
+    waifufetch(colors)
 
     # reload waifufetch on SIGUSR2
     signal.signal(signal.SIGUSR2, sigusr2_handler)
