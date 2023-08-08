@@ -47,6 +47,7 @@
         wget
         home-manager
         libreoffice
+        trash-cli
       ]
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);

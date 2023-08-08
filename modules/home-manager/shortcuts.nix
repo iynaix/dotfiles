@@ -15,13 +15,12 @@
       vtn = "~/Videos/TV/New";
       pp = "~/projects";
       pcf = "~/projects/coinfc";
-      pe = "~/projects/ergodox-layout";
-      PP = "~/Pictures";
+      PC = "~/Pictures";
       Ps = "~/Pictures/Screenshots";
       Pw = "~/Pictures/Wallpapers";
       dd = "~/Downloads";
       dp = "~/Downloads/pending";
-      du = "~/Downloads/pending/Unsorted";
+      dus = "~/Downloads/pending/Unsorted";
       dk = "/run/media/iynaix";
     };
     description = "Shortcuts for navigating across multiple terminal programs.";

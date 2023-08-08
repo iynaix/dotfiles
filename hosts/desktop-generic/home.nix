@@ -37,7 +37,6 @@ in {
     };
 
     pathofbuilding.enable = false;
-    smplayer.enable = false;
     trimage.enable = false;
   };
 

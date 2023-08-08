@@ -38,7 +38,6 @@ in {
 
     wallust.gtk = false;
     pathofbuilding.enable = true;
-    smplayer.enable = true;
     trimage.enable = false;
   };
 
