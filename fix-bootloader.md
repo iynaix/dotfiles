@@ -5,7 +5,6 @@
 sudo zpool import
 sudo zpool import <numeric_id>
 ```
-```
 
 ### Format Boot Partition
 Trying to follow the bootloader reinstall process from the [NixOS Wiki](https://nixos.wiki/wiki/Bootloader#From_an_installation_media) doesn't seem to work; erroring out on the `/boot` being a read-only filesystem. As a workaround, reformat the boot partition before remounting so that it can be written to.

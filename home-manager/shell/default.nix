@@ -6,6 +6,7 @@
     ./neovim.nix
     ./nix.nix
     ./rice
+    ./starship.nix
     ./tmux.nix
     ./zsh.nix
   ];
