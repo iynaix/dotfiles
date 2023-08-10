@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   nixpkgs.overlays = [
     (
       self: super: {
@@ -83,6 +83,12 @@
             cp -RT ${themeSrc}/web/ $out/share/transmission/web/
             sed -i '21i\\t\t<link href="./style/transmission/soft-theme.min.css" type="text/css" rel="stylesheet" />\n\t\t<link href="style/transmission/soft-dark-theme.min.css" type="text/css" rel="stylesheet" />\n' $out/share/transmission/web/index.html;
           '';
+        });
+
+        # fix gnome keyring error
+        # https://github.com/NixOS/nixpkgs/pull/248167
+        vscode = super.vscode.overrideAttrs (oldAttrs: {
+          runtimeDependencies = (oldAttrs.runtimeDependencies or []) ++ [pkgs.libsecret];
         });
 
         # creating an overlay for buildRustPackage overlay
