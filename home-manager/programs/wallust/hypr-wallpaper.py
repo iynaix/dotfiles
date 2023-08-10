@@ -243,6 +243,11 @@ def parse_args():
         ],
     )
     parser.add_argument(
+        "--current",
+        action="store_true",
+        help="prints the current wallpaper path",
+    )
+    parser.add_argument(
         "--theme",
         help="preset theme for wallust",
         choices=THEMES,
@@ -259,6 +264,10 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
+
+    if args.current:
+        print(get_current_wallpaper())
+        exit()
 
     if args.rofi == "theme":
         rofi_theme()

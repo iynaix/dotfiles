@@ -8,7 +8,9 @@ import sys
 
 
 # creates the image and returns the path to the image
-def create_image(colors):
+def create_image(colors=None):
+    if not colors:
+        colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
     logo = colors["neofetch"]["logo"]
     c4 = colors["colors"]["color4"]
     c6 = colors["colors"]["color6"]
@@ -40,7 +42,8 @@ def create_image(colors):
     return img
 
 
-def waifufetch(colors):
+def waifufetch():
+    colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
     neofetch_config = colors["neofetch"]["conf"]
     img = create_image(colors)
 
@@ -53,14 +56,6 @@ def waifufetch(colors):
             neofetch_config,
         ]
     )
-
-
-def sigusr2_handler(sig, frame):
-    waifufetch()
-
-
-def sigint_handler(sig, frame):
-    sys.exit()
 
 
 def parse_args():
@@ -76,16 +71,20 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
-
     args = parse_args()
 
     if args.image:
-        print(create_image(colors))
+        print(create_image())
         exit()
 
+    def sigusr2_handler(sig, frame):
+        waifufetch()
+
+    def sigint_handler(sig, frame):
+        sys.exit()
+
     # initial run
-    waifufetch(colors)
+    waifufetch()
 
     # reload waifufetch on SIGUSR2
     signal.signal(signal.SIGUSR2, sigusr2_handler)

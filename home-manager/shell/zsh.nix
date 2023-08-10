@@ -41,7 +41,7 @@ in {
         # subs = "subliminal download -l 'en' -l 'eng' -s";
         t = "exa --tree";
         v = "nvim";
-        wget = "wget - -content-disposition";
+        wget = "wget --content-disposition";
         coinfc = "openproj coinfc";
 
         # cd aliases
