@@ -233,11 +233,11 @@ in {
 
           # switches to the next / previous window of the same class
           # hardcoded to SUPER so it doesn't clash on VM
-          "SUPER, Tab, exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py next"
-          "SUPER_SHIFT, Tab, exec, ${pkgs.python3}/bin/python ~/.config/hypr/same_class.py prev"
+          "SUPER, Tab, exec, ${pkgs.python3}/bin/python ${./same_class.py} next"
+          "SUPER_SHIFT, Tab, exec, ${pkgs.python3}/bin/python ${./same_class.py} prev"
 
           # picture in picture mode
-          "$mod, p, exec, ${pkgs.python3}/bin/python ~/.config/hypr/pip.py"
+          "$mod, p, exec, ${pkgs.python3}/bin/python ${./picture_in_picture.py}"
 
           # add / remove master windows
           "$mod, m, layoutmsg, addmaster"
@@ -251,7 +251,7 @@ in {
           "$mod, mouse_down, workspace, e+1"
           "$mod, mouse_up, workspace, e-1"
 
-          # lock monitors
+          # turn monitors off
           "$mod_SHIFT_CTRL, l, dpms, off"
 
           # dunst controls
@@ -311,12 +311,6 @@ in {
 
         # source = "~/.config/hypr/hyprland-test.conf";
       };
-    };
-
-    xdg.configFile = {
-      # various helper scripts for keybinds
-      "hypr/same_class.py".source = ./same_class.py;
-      "hypr/pip.py".source = ./pip.py;
     };
 
     programs.zsh.shellAliases = {

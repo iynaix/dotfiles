@@ -34,6 +34,10 @@
     stateVersion = "23.05";
 
     sessionVariables = {
+      "__IS_NIXOS" =
+        if isNixOS
+        then "1"
+        else "0";
       "NIXPKGS_ALLOW_UNFREE" = "1";
     };
 

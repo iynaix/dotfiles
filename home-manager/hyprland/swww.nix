@@ -12,7 +12,7 @@
     name = "preload-wallpapers";
     runtimeInputs = [pkgs.wallust hypr-wallpaper];
     text = ''
-      rm -rf "$HOME/.cache/swww/*"
+      rm -rf "$HOME/.cache/wallust/Resized"
 
       curr=$(hypr-wallpaper --current)
 

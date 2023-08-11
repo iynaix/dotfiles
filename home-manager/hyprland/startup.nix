@@ -49,12 +49,10 @@ in {
       profileExtra = hyprlandInit;
     };
 
-    xdg.configFile."hypr/ipc.py".source = ./ipc.py;
-
     wayland.windowManager.hyprland.settings = {
       exec-once = [
         # init ipc listener
-        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ~/.config/hypr/ipc.py &"
+        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

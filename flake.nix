@@ -71,9 +71,10 @@
     # templates for devenv
     templates = let
       welcomeText = ''
-        # `.devenv` should be added to `.gitignore`
+        # `.devenv` and `direnv` should be added to `.gitignore`
         ```sh
           echo .devenv >> .gitignore
+          echo .direnv >> .gitignore
         ```
       '';
     in rec {

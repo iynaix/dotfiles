@@ -1,6 +1,7 @@
 import json
 import subprocess
 
+
 def info(cmd):
     with subprocess.Popen(["hyprctl", "-j", cmd], stdout=subprocess.PIPE) as proc:
         return json.loads(proc.stdout.read())
@@ -33,7 +34,7 @@ if __name__ == "__main__":
         dispatch("resizeactive", "exact", str(target_w), str(target_h))
         win = info("activewindow")
 
-        padding = 30 # distance from the corner of the screen
+        padding = 30  # distance from the corner of the screen
         # check for vertical monitor
         if curr_mon["transform"] in (1, 3, 5, 7):
             mon_bottom = curr_mon["y"] + curr_mon["width"]
