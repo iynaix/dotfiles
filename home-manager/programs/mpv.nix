@@ -5,6 +5,21 @@
 }: {
   xdg.configFile = {
     "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
+    "mpv/script-opts/sub-select.json".text = builtins.toJSON [
+      {
+        alang = "jpn";
+        slang = ["en" "eng"];
+        blacklist = ["signs" "songs" "translation only"];
+      }
+      {
+        alang = "eng";
+        slang = ["forced" "no"];
+      }
+      {
+        alang = "*";
+        slang = "eng";
+      }
+    ];
   };
 
   programs = {
@@ -71,6 +86,7 @@
         (pkgs.callPackage ../../packages/mpv-deletefile.nix {})
         # (pkgs.callPackage ../../packages/mpv-modernx.nix {})
         (pkgs.callPackage ../../packages/mpv-nextfile.nix {})
+        (pkgs.callPackage ../../packages/mpv-sub-select.nix {})
         (pkgs.callPackage ../../packages/mpv-subsearch.nix {})
         (pkgs.callPackage ../../packages/mpv-thumbfast-osc.nix {})
       ];
