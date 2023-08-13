@@ -34,11 +34,9 @@ in {
         nano = "nvim";
         nsh = "nix-shell -p";
         open = "xdg-open";
-        lg = "lazygit";
         pj = "openproj";
         py = "python";
         r = "lf";
-        # subs = "subliminal download -l 'en' -l 'eng' -s";
         t = "exa --tree";
         v = "nvim";
         wget = "wget --content-disposition";

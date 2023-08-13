@@ -77,6 +77,15 @@
     };
   };
 
+  # setup subliminal
+  home.packages = with pkgs; [
+    python3Packages.subliminal
+  ];
+
+  programs.zsh.shellAliases = {
+    subs = "subliminal download -l 'en' -l 'eng' -s";
+  };
+
   iynaix.persist.home.directories = [
     ".config/mpv/watch_later"
   ];

@@ -36,7 +36,10 @@
     '';
   };
 in {
-  home.packages = [git-reword];
+  home.packages = [
+    git-reword
+    pkgs.lazygit
+  ];
 
   programs = {
     gh.enable = true;
@@ -64,6 +67,7 @@ in {
     # extra git stuff for zsh
     zsh = {
       shellAliases = {
+        lg = "lazygit";
         gaa = "git add --all";
         gb = "git branch";
         gbtr = "git bisect reset";
@@ -83,13 +87,6 @@ in {
         gri = "git rebase --interactive";
         gst = "git status -s -b && echo && git log | head -n 1";
         gsub = "git submodule update --init --recursive";
-        # git flow
-        gf = "git flow";
-        gff = "gf feature";
-        gffco = "gff checkout";
-        gfh = "gf hotfix";
-        gfr = "gf release";
-        gfs = "gf support";
         # access github page for the repo we are currently in
         github = "open \`git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'\`";
         # cleanup leftover files from merges
@@ -97,21 +94,10 @@ in {
       };
 
       initExtra = ''
-        # checkout and pull and merge gitflow branch
-        gffp() {
-            gffco $1 && gp
-        }
-
         # delete a remote branch
         grd() {
             gb -D $1
             gp origin --delete $1
-        }
-
-        # delete a remote feature branch
-        gffrd() {
-            gb -D feature/$1
-            gp origin --delete feature/$1
         }
 
         # searches git history, can never remember this stupid thing

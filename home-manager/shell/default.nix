@@ -16,7 +16,6 @@
     fd
     fzf
     htop
-    lazygit
     sd
     vimv
     ugrep
