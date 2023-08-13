@@ -5,7 +5,6 @@
   isNixOS,
   ...
 }: let
-  cfg = config.iynaix;
   displayCfg = config.iynaix.displays;
 in {
   iynaix = {
@@ -42,17 +41,7 @@ in {
 
   home = {
     packages = lib.mkIf isNixOS (
-      with pkgs;
-        [
-          deadbeef
-          vlc
-          ffmpeg
-          # vial
-        ]
-        ++ (lib.optional cfg.trimage.enable
-          (callPackage ../../packages/trimage.nix {
-            inherit (qt5) wrapQtAppsHook;
-          }))
+      with pkgs; [deadbeef ffmpeg]
     );
   };
 

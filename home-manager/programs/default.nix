@@ -11,6 +11,7 @@
     ./nemo.nix
     ./pathofbuilding.nix
     ./rofi.nix
+    ./vlc.nix
     ./vscode.nix
     ./wallust
     ./wezterm.nix

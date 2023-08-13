@@ -39,6 +39,7 @@ in {
     wallust.gtk = false;
     pathofbuilding.enable = true;
     trimage.enable = false;
+    vlc.enable = false;
   };
 
   home = {
@@ -46,7 +47,6 @@ in {
       with pkgs;
         [
           deadbeef
-          vlc
           ffmpeg
           # vial
         ]
