@@ -4,7 +4,6 @@
   config,
   isNixOS,
   inputs,
-  system,
   ...
 }: let
   cfg = config.iynaix.waybar;
@@ -25,7 +24,7 @@ in {
       # https://github.com/nix-community/home-manager/issues/3599
 
       # use patched waybar from hyprland
-      package = inputs.hyprland.packages.${system}.waybar-hyprland;
+      package = inputs.hyprland.packages.${pkgs.system}.waybar-hyprland;
       # .overrideAttrs (oldAttrs: {
       #     # use latest waybar from git
       #   src = pkgs.fetchgit {

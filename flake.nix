@@ -38,9 +38,7 @@
   # https://ayats.org/blog/no-flake-utils/
   outputs = inputs @ {nixpkgs, ...}: let
     forAllSystems = function:
-      nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-      ] (system: function nixpkgs.legacyPackages.${system});
+      nixpkgs.lib.genAttrs ["x86_64-linux"] (system: function nixpkgs.legacyPackages.${system});
     commonInherits = {
       inherit (nixpkgs) lib;
       inherit inputs nixpkgs;
@@ -48,13 +46,9 @@
       system = "x86_64-linux";
     };
   in {
-    nixosConfigurations = import ./hosts (
-      commonInherits // {isNixOS = true;}
-    );
+    nixosConfigurations = import ./hosts (commonInherits // {isNixOS = true;});
 
-    homeConfigurations = import ./hosts (
-      commonInherits // {isNixOS = false;}
-    );
+    homeConfigurations = import ./hosts (commonInherits // {isNixOS = false;});
 
     formatter = nixpkgs.alejandra;
 

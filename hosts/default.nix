@@ -2,15 +2,13 @@
   lib,
   inputs,
   user,
-  system,
   isNixOS,
   ...
 }: let
-  mkHost = {hostName}: let
+  mkHost = host: let
     extraSpecialArgs = {
-      inherit inputs isNixOS system user;
-      host = hostName;
-      isLaptop = hostName == "laptop";
+      inherit inputs isNixOS host user;
+      isLaptop = host == "laptop";
     };
   in
     if isNixOS
@@ -21,8 +19,8 @@
         modules =
           [
             ./configuration.nix # shared nixos configuration across all hosts
-            ./${hostName} # host specific configuration
-            ./${hostName}/hardware.nix # host specific hardware configuration
+            ./${host} # host specific configuration
+            ./${host}/hardware.nix # host specific hardware configuration
             ../overlays
             inputs.home-manager.nixosModules.home-manager
             {
@@ -34,7 +32,7 @@
 
                 users.${user} = {
                   imports = [
-                    ./${hostName}/home.nix # host specific home-manager configuration
+                    ./${host}/home.nix # host specific home-manager configuration
                     ../home-manager
                     ../modules/home-manager
                   ];
@@ -45,10 +43,10 @@
               };
             }
             inputs.impermanence.nixosModules.impermanence
+            inputs.kmonad.nixosModules.default
             inputs.sops-nix.nixosModules.sops
           ]
-          ++ lib.optionals (hostName == "laptop") [
-            inputs.kmonad.nixosModules.default
+          ++ lib.optionals (host == "laptop") [
             inputs.nixos-hardware.nixosModules.dell-xps-13-9343
           ];
       }
@@ -56,20 +54,19 @@
       inputs.home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs;
         pkgs = import inputs.nixpkgs {
-          inherit system;
           config.allowUnfree = true;
         };
 
         modules = [
-          ./${hostName}/home.nix # host specific home-manager configuration
+          ./${host}/home.nix # host specific home-manager configuration
           ../overlays
           ../home-manager
           ../modules/home-manager
         ];
       };
 in {
-  vm = mkHost {hostName = "vm";};
-  desktop = mkHost {hostName = "desktop";};
-  desktop-generic = mkHost {hostName = "desktop";};
-  laptop = mkHost {hostName = "laptop";};
+  vm = mkHost "vm";
+  desktop = mkHost "desktop";
+  desktop-generic = mkHost "desktop";
+  laptop = mkHost "laptop";
 }

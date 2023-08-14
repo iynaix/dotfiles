@@ -4,14 +4,13 @@
   isNixOS,
   lib,
   pkgs,
-  system,
   ...
 }: let
   cfg = config.iynaix.hyprland;
   # screenshot with rofi options to preselect
   hypr-screenshot = pkgs.writeShellApplication {
     name = "hypr-screenshot";
-    runtimeInputs = [inputs.hyprwm-contrib.packages.${system}.grimblast];
+    runtimeInputs = [inputs.hyprwm-contrib.packages.${pkgs.system}.grimblast];
     text = ''
       _rofi() {
           rofi -dmenu -sep '|' -disable-history true -cycle true -lines 4 -theme-str "mainbox { children: [listview]; }" "$@"
@@ -67,7 +66,7 @@ in {
         hypr-ocr
         hypr-screenshot
       ]
-      ++ (lib.optionals isNixOS (with inputs.hyprwm-contrib.packages.${system}; [
+      ++ (lib.optionals isNixOS (with inputs.hyprwm-contrib.packages.${pkgs.system}; [
         grimblast
         hyprprop
       ]));

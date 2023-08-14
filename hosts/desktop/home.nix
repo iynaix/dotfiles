@@ -39,7 +39,7 @@ in {
     wallust.gtk = false;
     pathofbuilding.enable = true;
     trimage.enable = false;
-    vlc.enable = false;
+    vlc.enable = true;
   };
 
   home = {

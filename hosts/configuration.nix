@@ -60,8 +60,10 @@
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = ["networkmanager" "wheel"];
-    shell = pkgs.zsh;
   };
+
+  # default to zsh for all users
+  users.defaultUserShell = pkgs.zsh;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

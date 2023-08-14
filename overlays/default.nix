@@ -85,12 +85,6 @@
           '';
         });
 
-        # fix gnome keyring error
-        # https://github.com/NixOS/nixpkgs/pull/248167
-        vscode = super.vscode.overrideAttrs (oldAttrs: {
-          runtimeDependencies = (oldAttrs.runtimeDependencies or []) ++ [pkgs.libsecret];
-        });
-
         # creating an overlay for buildRustPackage overlay
         # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
         #   wallust = super.wallust.overrideAttrs (oldAttrs: rec {

@@ -4,7 +4,6 @@
   lib,
   config,
   inputs,
-  system,
   ...
 }: let
   cfg = config.iynaix.hyprland;
@@ -33,7 +32,7 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${system}.hyprland;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       settings = {
         monitor = cfg.monitors ++ [",preferred,auto,auto"];
 

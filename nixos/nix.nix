@@ -71,6 +71,10 @@ in {
       sync-wallpapers
     ];
 
+  programs.zsh.shellAliases = {
+    nsw = "nswitch";
+  };
+
   # enable flakes
   nix = {
     settings = {

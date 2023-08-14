@@ -2,7 +2,7 @@
   lib,
   config,
   inputs,
-  system,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix-nixos.hyprland-nixos;
@@ -20,7 +20,7 @@ in {
     programs.hyprland.enable = true;
 
     environment.systemPackages = [
-      inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland
+      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
     ];
   };
 }
