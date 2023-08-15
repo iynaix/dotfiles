@@ -55,11 +55,15 @@ in {
       lib.mapAttrs (name: value: "cd ${value}") config.iynaix.shortcuts;
 
     initExtra = ''
-      function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+      function md() {
+          [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
+      }
       compdef _directories md
 
       # Suppress output of loud commands you don't want to hear from
-      q() { "$@" > /dev/null 2>&1; }
+      q() {
+          "$@" > /dev/null 2>&1;
+      }
 
       # create a new devenv environment
       mkdevenv() {
@@ -108,8 +112,12 @@ in {
           fi
       }
 
-      function _set_block_cursor() { _set_cursor '\e[2 q' }
-      function _set_beam_cursor() { _set_cursor '\e[6 q' }
+      function _set_block_cursor() {
+          _set_cursor '\e[2 q'
+      }
+      function _set_beam_cursor() {
+          _set_cursor '\e[6 q'
+      }
 
       function zle-keymap-select {
         if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then

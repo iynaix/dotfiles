@@ -38,16 +38,11 @@ in {
     home.packages = [hyprMonitors];
 
     # start hyprland
-    programs.zsh = let
-      hyprlandInit = ''
-        if [ "$(tty)" = "/dev/tty1" ]; then
-          exec Hyprland &> /dev/null
-        fi
-      '';
-    in {
-      loginExtra = hyprlandInit;
-      profileExtra = hyprlandInit;
-    };
+    programs.zsh.profileExtra = ''
+      if [ "$(tty)" = "/dev/tty1" ]; then
+        exec Hyprland &> /dev/null
+      fi
+    '';
 
     wayland.windowManager.hyprland.settings = {
       exec-once = [
