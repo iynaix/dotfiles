@@ -39,13 +39,17 @@ in {
     enable = true;
 
     settings = {
-      preview = true;
+      # dupfilefmt = "%b - copy.%e";
+      cleaner = "${lf-kitty-cleaner}/bin/lf-kitty-cleaner";
       dirfirst = true;
       drawbox = true;
       hidden = true;
       icons = true;
+      incfilter = true;
+      mouse = true;
+      preview = true;
       promptfmt = "\\033[34;1m%d\\033[0m\\033[1m%f\\033[0m";
-      ratios = "1:1";
+      ratios = [1 1];
       smartcase = true;
     };
 
@@ -151,14 +155,6 @@ in {
           })
           config.iynaix.shortcuts)
       );
-
-    extraConfig = ''
-      # Options not exposed by nix
-      # set dupfilefmt "%b - copy.%e"
-      set incfilter true
-      set mouse true
-      set cleaner ${lf-kitty-cleaner}/bin/lf-kitty-cleaner
-    '';
   };
 
   # setup icons for lf

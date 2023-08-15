@@ -43,4 +43,8 @@ in {
     hmupd8
     ngc
   ];
+
+  programs.zsh.shellAliases = {
+    hsw = "hswitch";
+  };
 }
