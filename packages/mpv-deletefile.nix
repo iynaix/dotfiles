@@ -3,14 +3,14 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "mpv-deletefile";
   version = "19ea069abcb794d1bf8fac2f59b50d71ab992130";
 
   src = fetchFromGitHub {
     owner = "zenyd";
     repo = "mpv-scripts";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OBCuzCtgfSwj0i/rBNranuu4LRc47jObwQIJgQQoerg=";
   };
 
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/zenyd/mpv-scripts";
     license = lib.licenses.gpl3;
   };
-}
+})

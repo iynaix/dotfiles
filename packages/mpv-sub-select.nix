@@ -2,14 +2,14 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "mpv-sub-select";
   version = "a23111e181b0051854cc543a31bee4f6741183ac";
 
   src = fetchFromGitHub {
     owner = "CogentRedTester";
     repo = "mpv-sub-select";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-dwg8Trp6EqiNHrKVn//4V1jEwzZdwt5uFsHSyBOebGI=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     description = "Automatiacally skip chapters based on title";
     homepage = "https://github.com/CogentRedTester/mpv-sub-select";
   };
-}
+})

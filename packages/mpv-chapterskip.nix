@@ -2,14 +2,14 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "mpv-chapterskip";
   version = "b26825316e3329882206ae78dc903ebc4613f039";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "chapterskip";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     description = "Automatiacally skip chapters based on title";
     homepage = "https://github.com/po5/chapterskip";
   };
-}
+})
