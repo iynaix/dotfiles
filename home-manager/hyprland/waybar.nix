@@ -24,14 +24,6 @@ in {
 
       # use patched waybar from hyprland
       package = pkgs.waybar.override {hyprlandSupport = true;};
-      # .overrideAttrs (oldAttrs: {
-      #     # use latest waybar from git
-      #   src = pkgs.fetchgit {
-      #     url = "https://github.com/Alexays/Waybar";
-      #     rev = "0.9.20";
-      #     sha256 = "sha256-aViAMgZzxmXrZhIXD15TwbJeF9PpRwKIDadjeKhB2hE=";
-      #   };
-      # });
     };
 
     iynaix.wallust.entries = {

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{...}: {
   nixpkgs.overlays = [
     (
       self: super: {
@@ -19,14 +19,16 @@
 
         # add icon and .desktop file
         path-of-building = super.path-of-building.overrideAttrs (oldAttrs: rec {
-          data = oldAttrs.data.overrideAttrs (oldDataAttrs: {
-            src = super.fetchFromGitHub {
-              owner = "PathOfBuildingCommunity";
-              repo = "PathOfBuilding";
-              rev = "v2.31.2";
-              hash = "sha256-E178uYVQ+B08h1lM7h+hwfMb08VZK+r25pD4haT1tc8=";
-            };
-          });
+          # passthru =
+          #   oldAttrs.passthru
+          #   // oldAttrs.passthru.data.overrideAttrs (oldDataAttrs: {
+          #     src = super.fetchFromGitHub {
+          #       owner = "PathOfBuildingCommunity";
+          #       repo = "PathOfBuilding";
+          #       rev = "v2.31.2";
+          #       hash = "sha256-E178uYVQ+B08h1lM7h+hwfMb08VZK+r25pD4haT1tc8=";
+          #     };
+          #   });
 
           installPhase =
             oldAttrs.installPhase
@@ -96,6 +98,18 @@
         #       allowBuiltinFetchGit = true;
         #     };
         #   });
+
+        # transmission dark mode, the default theme is hideous
+        waybar = super.waybar.overrideAttrs (oldAttrs: rec {
+          version = "0.9.22";
+
+          # use latest waybar from git
+          src = super.fetchgit {
+            url = "https://github.com/Alexays/Waybar";
+            rev = version;
+            sha256 = "sha256-4VZG3laTs8JGtHsNQC7ka7iNF4jR0cIYzZiwx9Ilbmg=";
+          };
+        });
       }
     )
   ];
