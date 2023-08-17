@@ -13,6 +13,9 @@
   boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];
+  # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
+  # https://unix.stackexchange.com/a/253401
+  boot.blacklistedKernelModules = ["amdgpu"];
   boot.extraModulePackages = [];
 
   swapDevices = [];
