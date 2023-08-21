@@ -39,6 +39,8 @@
         then "1"
         else "0";
       "NIXPKGS_ALLOW_UNFREE" = "1";
+      # silence direnv
+      "DIRENV_LOG_FORMAT" = "";
     };
 
     packages = with pkgs;
@@ -53,6 +55,7 @@
         libreoffice
         trash-cli
       ]
+      ++ (lib.optional config.iynaix.helix.enable helix)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
 

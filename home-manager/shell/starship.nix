@@ -53,12 +53,18 @@
       };
       nix_shell = {
         format = "[$symbol]($style)";
+        symbol = "❄️ ";
         style = "blue";
       };
       # python = {
       #   format = "[$virtualenv]($style) ";
       #   style = "bright-black";
       # };
+
+      # [custom.direnv]
+      # format = "[\\[direnv\\]]($style) "
+      # style = "fg:yellow dimmed"
+      # when = "printenv DIRENV_FILE"
     };
   };
 

@@ -32,7 +32,6 @@ in {
         btop = "btop --preset 2";
         isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
         nano = "nvim";
-        nsh = "nix-shell -p";
         open = "xdg-open";
         pj = "openproj";
         py = "python";

@@ -7,12 +7,14 @@
   # build flake but don't switch
   hmbuild = pkgs.writeShellScriptBin "hmbuild" ''
     pushd ~/projects/dotfiles
+    git add .
     home-manager build --flake ".#''${1:-${host}}"
     popd
   '';
   # switch home-manager via nix flake
   hmswitch = pkgs.writeShellScriptBin "hmswitch" ''
     pushd ~/projects/dotfiles
+    git add .
     home-manager switch --flake ".#''${1:-${host}}"
     popd
   '';
@@ -46,5 +48,6 @@ in {
 
   programs.zsh.shellAliases = {
     hsw = "hswitch";
+    nsh = "nix-shell --command zsh -p";
   };
 }

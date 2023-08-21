@@ -16,17 +16,23 @@
   # build flake but don't switch
   nbuild = pkgs.writeShellScriptBin "nbuild" ''
     pushd ~/projects/dotfiles
+    git add .
     sudo nixos-rebuild build --flake ".#''${1:-${host}}"
     popd
   '';
   # switch via nix flake
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
-    runtimeInputs = [nix-current-generation];
+    runtimeInputs = [nix-current-generation pkgs.nvd];
     text = ''
       pushd ~/projects/dotfiles
-      sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && \
-      echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+      git add .
+      prev=$(readlink /run/current-system)
+
+      sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && {
+        nvd diff "$prev" "$(readlink /run/current-system)"
+        echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+      }
       popd
     '';
   };
@@ -34,6 +40,7 @@
   upd8 = pkgs.writeShellApplication {
     name = "upd8";
     runtimeInputs = [nswitch];
+    # command ls -d /nix/var/nix/profiles/* | rg link | sort | tail -n2 | xargs -d '\n' nvd diff
     text = ''
       pushd ~/projects/dotfiles
       nix flake update

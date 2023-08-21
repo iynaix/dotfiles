@@ -84,32 +84,16 @@
           '';
         });
 
-        # creating an overlay for buildRustPackage overlay
-        # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-        #   wallust = super.wallust.overrideAttrs (oldAttrs: rec {
-        #     src = pkgs.fetchgit {
-        #       url = "https://codeberg.org/explosion-mental/wallust.git";
-        #       rev = "2.5.1";
-        #       sha256 = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
-        #     };
+        # waybar = super.waybar.overrideAttrs (oldAttrs: rec {
+        #   version = "0.9.22";
 
-        #     cargoDeps = pkgs.rustPlatform.importCargoLock {
-        #       lockFile = src + "/Cargo.lock";
-        #       allowBuiltinFetchGit = true;
-        #     };
-        #   });
-
-        # transmission dark mode, the default theme is hideous
-        waybar = super.waybar.overrideAttrs (oldAttrs: rec {
-          version = "0.9.22";
-
-          # use latest waybar from git
-          src = super.fetchgit {
-            url = "https://github.com/Alexays/Waybar";
-            rev = version;
-            sha256 = "sha256-4VZG3laTs8JGtHsNQC7ka7iNF4jR0cIYzZiwx9Ilbmg=";
-          };
-        });
+        #   # use latest waybar from git
+        #   src = super.fetchgit {
+        #     url = "https://github.com/Alexays/Waybar";
+        #     rev = version;
+        #     sha256 = "sha256-4VZG3laTs8JGtHsNQC7ka7iNF4jR0cIYzZiwx9Ilbmg=";
+        #   };
+        # });
       }
     )
   ];
