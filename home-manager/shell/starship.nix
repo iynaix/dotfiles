@@ -1,6 +1,7 @@
 {lib, ...}: {
   programs.starship = {
     enable = true;
+    enableBashIntegration = true;
     enableZshIntegration = true;
     settings = {
       add_newline = false;
@@ -60,13 +61,22 @@
       #   format = "[$virtualenv]($style) ";
       #   style = "bright-black";
       # };
-
-      # [custom.direnv]
-      # format = "[\\[direnv\\]]($style) "
-      # style = "fg:yellow dimmed"
-      # when = "printenv DIRENV_FILE"
     };
   };
+
+  # some sort of race condition with kitty and starship
+  # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
+  programs.kitty.shellIntegration.enableBashIntegration = false;
+
+  programs.bash.initExtra = ''
+    my_precmd() {
+        echo ""
+    }
+    export PROMPT_COMMAND=my_precmd
+
+    # By defining starship after, PROMPT_COMMAND is wrapped by the init script
+    eval "$(starship init bash)"
+  '';
 
   programs.zsh.initExtra = ''
     # disable empty line when opening new terminal, but

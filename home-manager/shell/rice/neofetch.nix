@@ -26,7 +26,7 @@ in {
     waifufetch
   ];
 
-  programs.zsh.shellAliases = {
+  home.shellAliases = {
     neofetch = "neofetch --config ${./neofetch.conf}";
   };
 }

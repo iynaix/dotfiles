@@ -10,12 +10,12 @@
         output = "%(title)s.%(ext)s";
       };
     };
+  };
 
-    zsh.shellAliases = {
-      yt = "yt-dlp";
-      ytaudio = "yt --audio-format mp3 --extract-audio";
-      ytsub = "yt --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
-      ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
-    };
+  home.shellAliases = {
+    yt = "yt-dlp";
+    ytaudio = "yt --audio-format mp3 --extract-audio";
+    ytsub = "yt --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
+    ytplaylist = "yt --output '%(playlist_index)d - %(title)s.%(ext)s'";
   };
 }

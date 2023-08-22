@@ -63,49 +63,47 @@ in {
       };
       aliases = {reword = "!sh git-reword";};
     };
+  };
 
-    # extra git stuff for zsh
-    zsh = {
-      shellAliases = {
-        lg = "lazygit";
-        gaa = "git add --all";
-        gb = "git branch";
-        gbtr = "git bisect reset";
-        gcaam = "gaa && gcam";
-        gcam = "git commit --amend";
-        gco = "git checkout";
-        gdc = "git diff --cached";
-        gdi = "git diff";
-        gl = "git pull";
-        glg = "git log";
-        gm = "git merge";
-        gp = "git push";
-        glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
-        gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';
-        groot = "cd $(git rev-parse - -show-toplevel)";
-        grh = "git reset --hard";
-        gri = "git rebase --interactive";
-        gst = "git status -s -b && echo && git log | head -n 1";
-        gsub = "git submodule update --init --recursive";
-        # access github page for the repo we are currently in
-        github = "open \`git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'\`";
-        # cleanup leftover files from merges
-        mergeclean = "find . -type f -name '*.orig' -exec rm -f {} \;";
-      };
+  # extra git stuff for zsh
+  iynaix.shell.initExtra = ''
+    # delete a remote branch
+    grd() {
+        gb -D $1
+        gp origin --delete $1
+    }
 
-      initExtra = ''
-        # delete a remote branch
-        grd() {
-            gb -D $1
-            gp origin --delete $1
-        }
+    # searches git history, can never remember this stupid thing
+    gsearch() {
+        # 2nd argument is target path and subsequent arguments are passed through
+        git log -S$1 -- ''${2:-.} $*[2,-1]
+    }
+  '';
 
-        # searches git history, can never remember this stupid thing
-        gsearch() {
-            # 2nd argument is target path and subsequent arguments are passed thru
-            git log -S$1 -- ''${2:-.} $*[2,-1]
-        }
-      '';
-    };
+  home.shellAliases = {
+    lg = "lazygit";
+    gaa = "git add --all";
+    gb = "git branch";
+    gbtr = "git bisect reset";
+    gcaam = "gaa && gcam";
+    gcam = "git commit --amend";
+    gco = "git checkout";
+    gdc = "git diff --cached";
+    gdi = "git diff";
+    gl = "git pull";
+    glg = "git log";
+    gm = "git merge";
+    gp = "git push";
+    glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
+    gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';
+    groot = "cd $(git rev-parse - -show-toplevel)";
+    grh = "git reset --hard";
+    gri = "git rebase --interactive";
+    gst = "git status -s -b && echo && git log | head -n 1";
+    gsub = "git submodule update --init --recursive";
+    # access github page for the repo we are currently in
+    github = "open \`git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'\`";
+    # cleanup leftover files from merges
+    mergeclean = "find . -type f -name '*.orig' -exec rm -f {} \;";
   };
 }

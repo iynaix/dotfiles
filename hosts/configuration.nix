@@ -62,9 +62,6 @@
     extraGroups = ["networkmanager" "wheel"];
   };
 
-  # default to zsh for all users
-  users.defaultUserShell = pkgs.zsh;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -77,7 +74,6 @@
       VISUAL = "nvim";
       NIXPKGS_ALLOW_UNFREE = "1";
     };
-    shells = [pkgs.zsh];
     systemPackages = with pkgs; [
       curl
       exa
@@ -90,7 +86,6 @@
       wget
     ];
   };
-  programs.zsh.enable = true;
 
   # enable sysrq in case for kernel panic
   boot.kernel.sysctl."kernel.sysrq" = 1;

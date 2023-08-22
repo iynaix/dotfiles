@@ -15,6 +15,8 @@ in {
       monitor3 = "HDMI-A-1";
     };
 
+    # shell.package = pkgs.bash;
+
     # wayland settings
     hyprland = {
       enable = true;

@@ -68,4 +68,22 @@ in {
       description = "Fake gnome-terminal shell script so gnome opens terminal applications in the correct terminal.";
     };
   };
+
+  options.iynaix.shell = {
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.zsh;
+      description = "Default shell to use.";
+    };
+    initExtra = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = "Extra shell agnostic commands that should be run when initializing an interactive shell.";
+    };
+    profileExtra = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = "Extra shell agnostic commands that should be run when initializing a login shell.";
+    };
+  };
 }

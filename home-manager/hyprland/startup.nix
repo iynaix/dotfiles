@@ -38,7 +38,7 @@ in {
     home.packages = [hyprMonitors];
 
     # start hyprland
-    programs.zsh.profileExtra = ''
+    iynaix.shell.profileExtra = ''
       if [ "$(tty)" = "/dev/tty1" ]; then
         exec Hyprland &> /dev/null
       fi

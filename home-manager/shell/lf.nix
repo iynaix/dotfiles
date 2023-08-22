@@ -158,7 +158,7 @@ in {
   };
 
   # setup icons for lf
-  programs.zsh.initExtra = ''
+  iynaix.shell.initExtra = ''
     export LF_ICONS="\
     di=:\
     fi=:\

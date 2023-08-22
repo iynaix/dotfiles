@@ -25,7 +25,7 @@
       };
     };
 
-    programs.zsh.shellAliases = {
+    home.shellAliases = {
       # change color on ssh
       ssh = "kitten ssh --kitten=color_scheme=Dracula";
     };

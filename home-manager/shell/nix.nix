@@ -46,7 +46,7 @@ in {
     ngc
   ];
 
-  programs.zsh.shellAliases = {
+  home.shellAliases = {
     hsw = "hswitch";
     nsh = "nix-shell --command zsh -p";
   };

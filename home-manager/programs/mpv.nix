@@ -98,7 +98,7 @@
     python3Packages.subliminal
   ];
 
-  programs.zsh.shellAliases = {
+  home.shellAliases = {
     subs = "subliminal download -l 'en' -l 'eng' -s";
   };
 

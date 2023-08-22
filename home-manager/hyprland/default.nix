@@ -312,7 +312,7 @@ in {
       };
     };
 
-    programs.zsh.shellAliases = {
+    home.shellAliases = {
       hypr-log = "cat /tmp/hypr/$(command ls -t /tmp/hypr/ | head -n 1)/hyprland.log";
     };
   };

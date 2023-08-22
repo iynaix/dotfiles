@@ -18,6 +18,7 @@ in {
     ./impermanence.nix
     ./kmonad.nix
     ./nix.nix
+    ./shell.nix
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix
