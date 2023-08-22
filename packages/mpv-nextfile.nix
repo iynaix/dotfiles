@@ -3,15 +3,15 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   name = "mpv-nextfile";
-  version = "8bf148eec9773c6f663b0d2ac49993340cb18b01";
+  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-nextfile";
-    rev = finalAttrs.version;
-    hash = "sha256-gDecwfeUU1fTx0nSdpWFO1h0lGVJNkIVps2VEE0wnas=";
+    rev = "b8f7a4d6224876bf26724a9313a36e84d9ecfd81";
+    hash = "sha256-Ad98iUbumhsudGwHcYEVTV6ye6KHj5fHAx8q90UQ2QM=";
   };
 
   dontBuild = true;
@@ -31,5 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Force open next or previous file in the currently playing files directory";
     homepage = "https://github.com/jonniek/mpv-nextfile";
     license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [iynaix];
   };
-})
+}

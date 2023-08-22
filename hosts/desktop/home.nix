@@ -52,10 +52,7 @@ in {
           ffmpeg
           # vial
         ]
-        ++ (lib.optional cfg.trimage.enable
-          (callPackage ../../home-manager/programs/trimage.nix {
-            inherit (qt5) wrapQtAppsHook;
-          }))
+        ++ (lib.optional cfg.trimage.enable pkgs-iynaix.trimage)
     );
   };
 

@@ -3,14 +3,14 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   name = "mpv-deletefile";
-  version = "19ea069abcb794d1bf8fac2f59b50d71ab992130";
+  version = "unstable-2022-04-22";
 
   src = fetchFromGitHub {
     owner = "zenyd";
     repo = "mpv-scripts";
-    rev = finalAttrs.version;
+    rev = "19ea069abcb794d1bf8fac2f59b50d71ab992130";
     hash = "sha256-OBCuzCtgfSwj0i/rBNranuu4LRc47jObwQIJgQQoerg=";
   };
 
@@ -31,5 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Deletes files played through mpv";
     homepage = "https://github.com/zenyd/mpv-scripts";
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [iynaix];
   };
-})
+}

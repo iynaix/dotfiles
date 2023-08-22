@@ -2,15 +2,16 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeFontsConf,
+  lib,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "mpv-modernx";
-  version = "d053ea602d797bdd85d8b2275d7f606be067dc21";
+  version = "unstable-2023-01-12";
 
   src = fetchFromGitHub {
     owner = "cyl0";
     repo = "ModernX";
-    rev = finalAttrs.version;
+    rev = "d053ea602d797bdd85d8b2275d7f606be067dc21";
     hash = "sha256-Gpofl529VbmdN7eOThDAsNfNXNkUDDF82Rd+csXGOQg=";
   };
 
@@ -40,5 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "An MPV OSC script based on mpv-osc-modern that aims to mirror the functionality of MPV's stock OSC while with a more modern-looking interface.";
     homepage = "https://github.com/cyl0/ModernX";
+    maintainers = with lib.maintainers; [iynaix];
   };
 })

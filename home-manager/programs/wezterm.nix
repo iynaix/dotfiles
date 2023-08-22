@@ -22,9 +22,9 @@
       });
     };
 
-    home.packages = with pkgs; [
-      lsix
-      (pkgs.callPackage ../../packages/vv.nix {})
+    home.packages = [
+      pkgs.lsix
+      pkgs.pkgs-iynaix.vv
     ];
 
     programs = {

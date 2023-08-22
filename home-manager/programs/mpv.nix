@@ -82,13 +82,13 @@
         mpvScripts.seekTo
         mpvScripts.sponsorblock
         mpvScripts.thumbfast
-        (pkgs.callPackage ../../packages/mpv-chapterskip.nix {})
-        (pkgs.callPackage ../../packages/mpv-deletefile.nix {})
-        # (pkgs.callPackage ../../packages/mpv-modernx.nix {})
-        (pkgs.callPackage ../../packages/mpv-nextfile.nix {})
-        (pkgs.callPackage ../../packages/mpv-sub-select.nix {})
-        (pkgs.callPackage ../../packages/mpv-subsearch.nix {})
-        (pkgs.callPackage ../../packages/mpv-thumbfast-osc.nix {})
+        pkgs-iynaix.mpv-chapterskip
+        pkgs-iynaix.mpv-deletefile
+        # pkgs-iynaix.mpv-modernx
+        pkgs-iynaix.mpv-nextfile
+        pkgs-iynaix.mpv-sub-select
+        pkgs-iynaix.mpv-subsearch
+        pkgs-iynaix.mpv-thumbfast-osc
       ];
     };
   };

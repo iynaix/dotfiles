@@ -22,6 +22,7 @@
             ./${host} # host specific configuration
             ./${host}/hardware.nix # host specific hardware configuration
             ../overlays
+            ../packages
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager = {
@@ -60,6 +61,7 @@
         modules = [
           ./${host}/home.nix # host specific home-manager configuration
           ../overlays
+          ../packages
           ../home-manager
           ../modules/home-manager
         ];
