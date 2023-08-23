@@ -1,4 +1,4 @@
-{...}: let
+{user, ...}: let
   dotDir = ".config/zsh";
 in {
   # NOTE: see shell.nix for shared aliases and initExtra
@@ -9,7 +9,7 @@ in {
     enableCompletion = true;
     enableAutosuggestions = true;
     syntaxHighlighting.enable = true;
-    history.path = "${dotDir}/.zsh_history";
+    history.path = "/home/${user}/${dotDir}/.zsh_history";
     historySubstringSearch = {
       enable = true;
       # fix up and down arrows for substring search not working
@@ -24,6 +24,8 @@ in {
           _files -/ -W '/home/iynaix/projects/'
       }
       compdef _openproj openproj
+
+      set -o emacs
 
       function zle-keymap-select {
         if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
