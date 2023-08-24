@@ -1,9 +1,9 @@
 {
-  pkgs,
-  host,
-  lib,
   config,
+  host,
   inputs,
+  lib,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix.hyprland;
@@ -34,7 +34,14 @@ in {
       enable = true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       settings = {
-        monitor = cfg.monitors ++ [",preferred,auto,auto"];
+        # monitor = cfg.monitors ++ [",preferred,auto,auto"];
+        monitor =
+          (lib.forEach displays ({
+            name,
+            hyprland,
+            ...
+          }: "${name}, ${hyprland}"))
+          ++ [",preferred,auto,auto"];
 
         input = {
           kb_layout = "us";
@@ -278,18 +285,13 @@ in {
         ];
 
         # bind workspaces to monitors
-        workspace = [
-          "1, monitor:${displays.monitor1}"
-          "2, monitor:${displays.monitor1}"
-          "3, monitor:${displays.monitor1}"
-          "4, monitor:${displays.monitor1}"
-          "5, monitor:${displays.monitor1}"
-          "6, monitor:${displays.monitor2}"
-          "7, monitor:${displays.monitor2}"
-          "8, monitor:${displays.monitor2}"
-          "9, monitor:${displays.monitor3}"
-          "10, monitor:${displays.monitor3}"
-        ];
+        workspace = lib.concatMap ({
+          name,
+          workspaces,
+          ...
+        }:
+          lib.forEach workspaces (ws: "${toString ws}, monitor:${name}"))
+        displays;
 
         windowrulev2 = [
           # "dimaround,floating:1"

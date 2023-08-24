@@ -25,8 +25,8 @@
               src = super.fetchFromGitHub {
                 owner = "PathOfBuildingCommunity";
                 repo = "PathOfBuilding";
-                rev = "v2.32.0";
-                hash = "sha256-ayzJmitmGiOUf1Pp8nm0u6zz7bDO0bpsn/mED835plc=";
+                rev = "v2.32.1";
+                hash = "sha256-+60n7qG4/iORNcaCvU3+N5SUtvWkG9mV7lI0KkTaNyU=";
               };
             });
 
@@ -77,16 +77,19 @@
             '';
           });
 
-        # waybar = super.waybar.overrideAttrs (oldAttrs: rec {
-        #   version = "0.9.22";
+        waybar = let
+          rev = "b7a527b122831235fb36f661d415f5f3ed378d92";
+        in
+          super.waybar.overrideAttrs (oldAttrs: {
+            version = "${oldAttrs.version}-${rev}";
 
-        #   # use latest waybar from git
-        #   src = super.fetchgit {
-        #     url = "https://github.com/Alexays/Waybar";
-        #     rev = version;
-        #     sha256 = "sha256-4VZG3laTs8JGtHsNQC7ka7iNF4jR0cIYzZiwx9Ilbmg=";
-        #   };
-        # });
+            # use latest waybar from git
+            src = super.fetchgit {
+              url = "https://github.com/Alexays/Waybar";
+              rev = rev;
+              sha256 = "sha256-IAHM93wjkBLhzEFlr8tMO36DNyOy+idwKgnUBw9EkwM=";
+            };
+          });
       }
     )
   ];

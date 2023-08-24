@@ -5,27 +5,25 @@
   ...
 }: let
   cfg = config.iynaix.hyprland;
-  displays = config.iynaix.displays;
-  openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
   hyprMonitors = pkgs.writeShellApplication {
     name = "hypr-monitors";
-    text = ''
-      hyprctl dispatch moveworkspacetomonitor 1 ${displays.monitor1}
-      hyprctl dispatch moveworkspacetomonitor 2 ${displays.monitor1}
-      hyprctl dispatch moveworkspacetomonitor 3 ${displays.monitor1}
-      hyprctl dispatch moveworkspacetomonitor 4 ${displays.monitor1}
-      hyprctl dispatch moveworkspacetomonitor 5 ${displays.monitor1}
-      hyprctl dispatch moveworkspacetomonitor 6 ${displays.monitor2}
-      hyprctl dispatch moveworkspacetomonitor 7 ${displays.monitor2}
-      hyprctl dispatch moveworkspacetomonitor 8 ${displays.monitor2}
-      hyprctl dispatch moveworkspacetomonitor 9 ${displays.monitor3}
-      hyprctl dispatch moveworkspacetomonitor 10 ${displays.monitor3}
+    text = let
+      displays = config.iynaix.displays;
+      resetWorkspaces = lib.concatStringsSep "\n" (lib.concatMap ({
+        name,
+        workspaces,
+        ...
+      }:
+        lib.forEach workspaces (ws: "hyprctl dispatch moveworkspacetomonitor ${toString ws} ${name}"))
+      displays);
+    in ''
+      ${resetWorkspaces}
 
       hyprctl dispatch workspace 9
       hyprctl dispatch workspace 7
       hyprctl dispatch workspace 1
 
-      hyprctl dispatch focusmonitor ${displays.monitor1}
+      hyprctl dispatch focusmonitor ${(builtins.head displays).name}
 
       # set wallpapers again
       hypr-wallpaper --reload
@@ -45,7 +43,9 @@ in {
     '';
 
     wayland.windowManager.hyprland.settings = {
-      exec-once = [
+      exec-once = let
+        openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
+      in [
         # init ipc listener
         "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} &"
 

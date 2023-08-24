@@ -21,9 +21,6 @@ in {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
       # https://github.com/nix-community/home-manager/issues/3599
-
-      # use patched waybar from hyprland
-      package = pkgs.waybar.override {hyprlandSupport = true;};
     };
 
     iynaix.wallust.entries = {
@@ -67,7 +64,7 @@ in {
             margin = "4 4 0 4";
 
             modules-center = [
-              "wlr/workspaces"
+              "hyprland/workspaces"
             ];
 
             modules-left = [
@@ -95,9 +92,14 @@ in {
               tooltip = false;
             };
 
-            "wlr/workspaces" = {
-              on-click = "activate";
-              sort-by-number = true;
+            "hyprland/workspaces" = {
+              # TODO: pacman, remove active inverse circle
+              # format = "{icon}";
+              # format-icons = {
+              #   active = "󰮯";
+              #   default = "·";
+              #   urgent = "󰊠";
+              # };
             };
 
             "custom/nix" = {
