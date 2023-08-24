@@ -10,11 +10,13 @@
     runtimeInputs = [pkgs.git];
     text = ''
       pushd ~/projects/dotfiles
-      # add only untracked files
+
+      # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
       if [ -n "$untracked_files" ]; then
           git add "$untracked_files"
       fi
+
       home-manager build --flake ".#''${1:-${host}}"
       popd
     '';
@@ -25,11 +27,13 @@
     runtimeInputs = [pkgs.git];
     text = ''
       pushd ~/projects/dotfiles
-      # add only untracked files
+
+      # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
       if [ -n "$untracked_files" ]; then
           git add "$untracked_files"
       fi
+
       home-manager switch --flake ".#''${1:-${host}}"
       popd
     '';

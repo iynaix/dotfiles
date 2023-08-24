@@ -1,49 +1,5 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
+{config, ...}: let
   opacity = "E5";
-  # used for generation of icon_path, copied home-manager's dunst source
-  # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
-  hicolorTheme = {
-    package = pkgs.hicolor-icon-theme;
-    name = "hicolor";
-    size = "32x32";
-  };
-  basePaths = [
-    "/run/current-system/sw"
-    config.home.profileDirectory
-    hicolorTheme.package
-  ];
-  themes = [hicolorTheme];
-  categories = [
-    "actions"
-    "animations"
-    "apps"
-    "categories"
-    "devices"
-    "emblems"
-    "emotes"
-    "filesystem"
-    "intl"
-    "legacy"
-    "mimetypes"
-    "places"
-    "status"
-    "stock"
-  ];
-  mkPath = {
-    basePath,
-    theme,
-    category,
-  }: "${basePath}/share/icons/${theme.name}/${theme.size}/${category}";
-  iconPath = lib.concatMapStringsSep ":" mkPath (lib.cartesianProductOfSets {
-    basePath = basePaths;
-    theme = themes;
-    category = categories;
-  });
 in {
   services.dunst = {
     enable = true;
@@ -63,7 +19,7 @@ in {
       frame_color="{background}"
       frame_width=0
       horizontal_padding=10
-      icon_path="${iconPath}"
+      icon_path="${config.services.dunst.settings.global.icon_path}"
       max_icon_size=72
       mouse_left_click="do_action"
       mouse_middle_click="do_action"

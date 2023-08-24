@@ -19,11 +19,13 @@
     runtimeInputs = [pkgs.git];
     text = ''
       pushd ~/projects/dotfiles
-      # add only untracked files
+
+      # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
       if [ -n "$untracked_files" ]; then
           git add "$untracked_files"
       fi
+
       sudo nixos-rebuild build --flake ".#''${1:-${host}}"
       popd
     '';
@@ -34,7 +36,8 @@
     runtimeInputs = with pkgs; [nix-current-generation git nvd];
     text = ''
       pushd ~/projects/dotfiles
-      # add only untracked files
+
+      # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
       if [ -n "$untracked_files" ]; then
           git add "$untracked_files"
