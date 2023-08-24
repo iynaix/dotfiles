@@ -14,21 +14,33 @@
     sudo /run/current-system/bin/switch-to-configuration boot
   '';
   # build flake but don't switch
-  nbuild = pkgs.writeShellScriptBin "nbuild" ''
-    pushd ~/projects/dotfiles
-    git add .
-    sudo nixos-rebuild build --flake ".#''${1:-${host}}"
-    popd
-  '';
+  nbuild = pkgs.writeShellApplication {
+    name = "nbuild";
+    runtimeInputs = [pkgs.git];
+    text = ''
+      pushd ~/projects/dotfiles
+      # add only untracked files
+      untracked_files=$(git ls-files --exclude-standard --others .)
+      if [ -n "$untracked_files" ]; then
+          git add "$untracked_files"
+      fi
+      sudo nixos-rebuild build --flake ".#''${1:-${host}}"
+      popd
+    '';
+  };
   # switch via nix flake
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
-    runtimeInputs = [nix-current-generation pkgs.nvd];
+    runtimeInputs = with pkgs; [nix-current-generation git nvd];
     text = ''
       pushd ~/projects/dotfiles
-      git add .
-      prev=$(readlink /run/current-system)
+      # add only untracked files
+      untracked_files=$(git ls-files --exclude-standard --others .)
+      if [ -n "$untracked_files" ]; then
+          git add "$untracked_files"
+      fi
 
+      prev=$(readlink /run/current-system)
       sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && {
         nvd diff "$prev" "$(readlink /run/current-system)"
         echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"

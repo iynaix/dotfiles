@@ -18,7 +18,18 @@
         });
 
         # add icon and .desktop file
-        path-of-building = let
+        path-of-building = super.path-of-building.overrideAttrs (oldAttrs: {
+          passthru =
+            oldAttrs.passthru
+            // oldAttrs.passthru.data.overrideAttrs (oldDataAttrs: {
+              src = super.fetchFromGitHub {
+                owner = "PathOfBuildingCommunity";
+                repo = "PathOfBuilding";
+                rev = "v2.32.0";
+                hash = "sha256-ayzJmitmGiOUf1Pp8nm0u6zz7bDO0bpsn/mED835plc=";
+              };
+            });
+
           desktopItem = super.makeDesktopItem {
             name = "Path of Building";
             desktopName = "Path of Building";
@@ -31,25 +42,7 @@
             keywords = ["poe" "pob" "pobc" "path" "exile"];
             mimeTypes = ["x-scheme-handler/pob"];
           };
-        in
-          super.symlinkJoin {
-            name = "path-of-building";
-            paths = [
-              (super.path-of-building.overrideAttrs (oldAttrs: {
-                # passthru =
-                #   oldAttrs.passthru
-                #   // oldAttrs.passthru.data.overrideAttrs (oldDataAttrs: {
-                #     src = super.fetchFromGitHub {
-                #       owner = "PathOfBuildingCommunity";
-                #       repo = "PathOfBuilding";
-                #       rev = "v2.31.2";
-                #       hash = "sha256-E178uYVQ+B08h1lM7h+hwfMb08VZK+r25pD4haT1tc8=";
-                #     };
-                #   });
-              }))
-              desktopItem
-            ];
-          };
+        });
 
         # creating an overlay for buildRustPackage overlay
         # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3

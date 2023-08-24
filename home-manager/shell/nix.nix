@@ -5,19 +5,35 @@
 }: let
   # home manager utilities
   # build flake but don't switch
-  hmbuild = pkgs.writeShellScriptBin "hmbuild" ''
-    pushd ~/projects/dotfiles
-    git add .
-    home-manager build --flake ".#''${1:-${host}}"
-    popd
-  '';
+  hmbuild = pkgs.writeShellApplication {
+    name = "hmbuild";
+    runtimeInputs = [pkgs.git];
+    text = ''
+      pushd ~/projects/dotfiles
+      # add only untracked files
+      untracked_files=$(git ls-files --exclude-standard --others .)
+      if [ -n "$untracked_files" ]; then
+          git add "$untracked_files"
+      fi
+      home-manager build --flake ".#''${1:-${host}}"
+      popd
+    '';
+  };
   # switch home-manager via nix flake
-  hmswitch = pkgs.writeShellScriptBin "hmswitch" ''
-    pushd ~/projects/dotfiles
-    git add .
-    home-manager switch --flake ".#''${1:-${host}}"
-    popd
-  '';
+  hmswitch = pkgs.writeShellApplication {
+    name = "hmswitch";
+    runtimeInputs = [pkgs.git];
+    text = ''
+      pushd ~/projects/dotfiles
+      # add only untracked files
+      untracked_files=$(git ls-files --exclude-standard --others .)
+      if [ -n "$untracked_files" ]; then
+          git add "$untracked_files"
+      fi
+      home-manager switch --flake ".#''${1:-${host}}"
+      popd
+    '';
+  };
   # update home-manager via nix flake
   hmupd8 = pkgs.writeShellApplication {
     name = "hmupd8";
