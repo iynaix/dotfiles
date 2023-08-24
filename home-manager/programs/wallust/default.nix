@@ -72,9 +72,13 @@ in {
           cfg.entries);
       }
       // lib.mapAttrs' (
-        template: {text, ...}:
+        template: {
+          text,
+          onChange,
+          ...
+        }:
           lib.nameValuePair "wallust/${template}" {
-            inherit text;
+            inherit text onChange;
           }
       )
       cfg.entries;
