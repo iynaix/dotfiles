@@ -17,7 +17,7 @@
   # build flake but don't switch
   nbuild = pkgs.writeShellApplication {
     name = "nbuild";
-    runtimeInputs = [pkgs.git];
+    runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
       pushd ${dots}
 
@@ -27,14 +27,14 @@
           git add "$untracked_files"
       fi
 
-      sudo nixos-rebuild build --flake ".#''${1:-${host}}"
+      sudo nixos-rebuild build --flake ".#''${1:-${host}} |& nom"
       popd
     '';
   };
   # switch via nix flake
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
-    runtimeInputs = with pkgs; [nix-current-generation git nvd];
+    runtimeInputs = with pkgs; [nix-current-generation git nvd nix-output-monitor];
     text = ''
       pushd ${dots}
 
@@ -45,7 +45,7 @@
       fi
 
       prev=$(readlink /run/current-system)
-      sudo nixos-rebuild switch --flake ".#''${1:-${host}}" && {
+      sudo nixos-rebuild switch --flake ".#''${1:-${host}}" |& nom && {
         nvd diff "$prev" "$(readlink /run/current-system)"
         echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
       }

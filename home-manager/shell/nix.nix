@@ -9,7 +9,7 @@
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
     name = "hmbuild";
-    runtimeInputs = [pkgs.git];
+    runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
       pushd ${dots}
 
@@ -19,14 +19,14 @@
           git add "$untracked_files"
       fi
 
-      home-manager build --flake ".#''${1:-${host}}"
+      home-manager build --flake ".#''${1:-${host}}" |& nom
       popd
     '';
   };
   # switch home-manager via nix flake
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
-    runtimeInputs = [pkgs.git];
+    runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
       pushd ${dots}
 
@@ -36,7 +36,7 @@
           git add "$untracked_files"
       fi
 
-      home-manager switch --flake ".#''${1:-${host}}"
+      home-manager switch --flake ".#''${1:-${host}}" |& nom
       popd
     '';
   };

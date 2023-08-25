@@ -22,9 +22,10 @@
       });
     };
 
-    home.packages = [
-      pkgs.lsix
-      pkgs.pkgs-iynaix.vv
+    # terminal image utilities
+    home.packages = with pkgs; [
+      lsix
+      iynaix.vv
     ];
 
     programs = {

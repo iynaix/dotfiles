@@ -78,18 +78,22 @@
         # osc = "no";
         # border = "no";
       };
-      scripts = with pkgs; [
-        mpvScripts.seekTo
-        mpvScripts.sponsorblock
-        mpvScripts.thumbfast
-        pkgs-iynaix.mpv-chapterskip
-        pkgs-iynaix.mpv-deletefile
-        # pkgs-iynaix.mpv-modernx
-        pkgs-iynaix.mpv-nextfile
-        pkgs-iynaix.mpv-sub-select
-        pkgs-iynaix.mpv-subsearch
-        pkgs-iynaix.mpv-thumbfast-osc
-      ];
+      scripts = with pkgs.mpvScripts;
+        [
+          seekTo
+          sponsorblock
+          thumbfast
+        ]
+        # custom packaged scripts
+        ++ (with pkgs.iynaix; [
+          mpv-chapterskip
+          mpv-deletefile
+          # mpv-modernx
+          mpv-nextfile
+          mpv-sub-select
+          mpv-subsearch
+          mpv-thumbfast-osc
+        ]);
     };
   };
 

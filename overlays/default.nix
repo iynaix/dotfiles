@@ -77,19 +77,19 @@
             '';
           });
 
-        waybar = let
-          rev = "b66584308545e3da9fc4433529a684443b5eebe9";
-        in
-          super.waybar.overrideAttrs (oldAttrs: {
-            version = "${oldAttrs.version}-${rev}";
+        # waybar = let
+        #   rev = "b66584308545e3da9fc4433529a684443b5eebe9";
+        # in
+        #   super.waybar.overrideAttrs (oldAttrs: {
+        #     version = "${oldAttrs.version}-${rev}";
 
-            # use latest waybar from git
-            src = super.fetchgit {
-              url = "https://github.com/Alexays/Waybar";
-              rev = rev;
-              sha256 = "sha256-yinPPXClBu+CsD9HejciwD8EV3hBlMFBMcCH0/4TX0I=";
-            };
-          });
+        #     # use latest waybar from git
+        #     src = super.fetchgit {
+        #       url = "https://github.com/Alexays/Waybar";
+        #       rev = rev;
+        #       sha256 = "sha256-yinPPXClBu+CsD9HejciwD8EV3hBlMFBMcCH0/4TX0I=";
+        #     };
+        #   });
       }
     )
   ];

@@ -2,7 +2,7 @@
   nixpkgs.overlays = [
     (
       self: super: {
-        pkgs-iynaix = {
+        iynaix = {
           # mpv plugins
           mpv-chapterskip = pkgs.callPackage ./mpv-chapterskip.nix {};
           mpv-deletefile = pkgs.callPackage ./mpv-deletefile.nix {};
