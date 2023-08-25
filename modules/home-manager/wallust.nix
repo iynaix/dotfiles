@@ -47,10 +47,10 @@ in {
     dunst = lib.mkEnableOption "dunst" // {default = cfg.enable;};
     gtk = lib.mkEnableOption "gtk";
     rofi = lib.mkEnableOption "rofi" // {default = cfg.enable;};
+    shell = lib.mkEnableOption "shell" // {default = cfg.enable;};
     swaylock = lib.mkEnableOption "swaylock" // {default = cfg.enable;};
     waybar = lib.mkEnableOption "waybar" // {default = cfg.enable;};
     wezterm = lib.mkEnableOption "wezterm" // {default = cfg.enable;};
     zathura = lib.mkEnableOption "zathura" // {default = cfg.enable;};
-    zsh = lib.mkEnableOption "zsh" // {default = cfg.enable;};
   };
 }

@@ -121,10 +121,6 @@ in {
       sync-wallpapers
     ];
 
-  environment.shellAliases = {
-    nsw = "nswitch";
-  };
-
   # enable flakes
   nix = {
     settings = {

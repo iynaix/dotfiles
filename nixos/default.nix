@@ -5,7 +5,7 @@
   user,
   ...
 }: let
-  hmConfig = config.home-manager.users.${user};
+  hmCfg = config.home-manager.users.${user};
 in {
   imports = [
     ./audio.nix
@@ -18,7 +18,6 @@ in {
     ./impermanence.nix
     ./kmonad.nix
     ./nix.nix
-    ./shell.nix
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix
@@ -40,9 +39,15 @@ in {
         nil
         nixpkgs-fmt
       ]
-      ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmConfig.iynaix.terminal.fakeGnomeTerminal)
+      ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
       ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
-      ++ (lib.optional hmConfig.iynaix.helix.enable helix);
+      ++ (lib.optional hmCfg.iynaix.helix.enable helix);
+
+    # setup bash
+    programs.bash = {
+      interactiveShellInit = hmCfg.programs.bash.initExtra;
+      loginShellInit = hmCfg.programs.bash.profileExtra;
+    };
 
     programs.file-roller.enable = true;
 

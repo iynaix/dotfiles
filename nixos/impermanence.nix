@@ -12,11 +12,11 @@ in {
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter (lib.concatStringsSep "\n" [
       (lib.optionalString
-        (!nixosCfg.tmpfs.root)
+        (nixosCfg.tmpfs.root)
         "zfs rollback -r zroot/local/root@blank")
       (lib.optionalString
-        (!nixosCfg.tmpfs.home)
-        "zfs rollback -r zroot/local/home@blank")
+        (nixosCfg.tmpfs.home)
+        "zfs rollback -r zroot/safe/home@blank")
     ]);
 
     # replace root and /or home filesystems with tmpfs

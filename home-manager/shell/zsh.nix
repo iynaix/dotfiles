@@ -21,7 +21,7 @@ in {
       # setup completions
       compdef _directories md
       _openproj() {
-          _files -/ -W '/home/iynaix/projects/'
+          _directories -/ -W '/home/iynaix/projects/'
       }
       compdef _openproj openproj
 

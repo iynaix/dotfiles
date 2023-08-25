@@ -65,20 +65,25 @@ in {
     };
   };
 
-  # extra git stuff for zsh
-  iynaix.shell.initExtra = ''
+  # extra git functions
+  iynaix.shell.functions = {
     # delete a remote branch
-    grd() {
-        gb -D $1
-        gp origin --delete $1
-    }
-
+    grd = ''
+      gb -D $1
+      gp origin --delete $1
+    '';
     # searches git history, can never remember this stupid thing
-    gsearch() {
+    gsearch = {
+      bashBody = ''
         # 2nd argument is target path and subsequent arguments are passed through
         git log -S$1 -- ''${2:-.} $*[2,-1]
-    }
-  '';
+      '';
+      fishBody = ''
+        # 2nd argument is target path and subsequent arguments are passed through
+        git log -S$argv[1] -- ''${argv[2]:-.} $argv[3..-1]
+      '';
+    };
+  };
 
   home.shellAliases = {
     lg = "lazygit";
@@ -94,8 +99,8 @@ in {
     glg = "git log";
     gm = "git merge";
     gp = "git push";
-    glc = ''gl origin "$( git rev-parse --abbrev-ref HEAD )"'';
-    gpc = ''gp origin "$( git rev-parse --abbrev-ref HEAD )"'';
+    glc = ''gl origin "$(git rev-parse --abbrev-ref HEAD)"'';
+    gpc = ''gp origin "$(git rev-parse --abbrev-ref HEAD)"'';
     groot = "cd $(git rev-parse - -show-toplevel)";
     grh = "git reset --hard";
     gri = "git rebase --interactive";

@@ -2,6 +2,7 @@
   imports = [
     ./bash.nix
     ./btop.nix
+    ./fish.nix
     ./git.nix
     ./lf.nix
     ./neovim.nix
@@ -10,7 +11,6 @@
     ./shell.nix
     ./starship.nix
     ./tmux.nix
-    ./zsh.nix
   ];
 
   home.packages = with pkgs; [

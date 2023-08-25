@@ -167,11 +167,6 @@ nnoremap J mzJ`z
 vnoremap < <gv
 vnoremap > >gv
 
-"Edit the vimrc file
-nnoremap <silent> <leader>ev :e $HOME/.dotfiles/nvim/.vimrc<CR>
-nnoremap <silent> <leader>ez :e $HOME/.dotfiles/zsh/.zshrc<CR>
-au BufWritePost .vimrc source %
-
 set pastetoggle=<F12>
 
 " copy and paste to clipboard

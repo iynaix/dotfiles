@@ -2,7 +2,7 @@
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
     settings = {
       add_newline = false;
       line_break = {
@@ -76,12 +76,5 @@
 
     # By defining starship after, PROMPT_COMMAND is wrapped by the init script
     eval "$(starship init bash)"
-  '';
-
-  programs.zsh.initExtra = ''
-    # disable empty line when opening new terminal, but
-    # insert empty line after each command for starship
-    # https://github.com/starship/starship/issues/560#issuecomment-1318462079
-    precmd() { precmd() { echo "" } }
   '';
 }

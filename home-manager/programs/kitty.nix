@@ -22,6 +22,7 @@
         background_opacity = toString opacity;
         confirm_os_window_close = 0;
         font_features = "JetBrainsMonoNerdFontComplete-Regular +zero";
+        shell = "fish";
       };
     };
 

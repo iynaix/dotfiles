@@ -5,6 +5,18 @@
   ...
 }: let
   cfg = config.iynaix.terminal;
+  functionModule = lib.types.submodule {
+    options = {
+      bashBody = lib.mkOption {
+        type = lib.types.lines;
+        description = "The function body for bash.";
+      };
+      fishBody = lib.mkOption {
+        type = lib.types.lines;
+        description = "The function body for bash.";
+      };
+    };
+  };
 in {
   options.iynaix.terminal = {
     package = lib.mkOption {
@@ -70,20 +82,27 @@ in {
   };
 
   options.iynaix.shell = {
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.zsh;
-      description = "Default shell to use.";
-    };
     initExtra = lib.mkOption {
-      default = "";
       type = lib.types.lines;
+      default = "";
       description = "Extra shell agnostic commands that should be run when initializing an interactive shell.";
     };
     profileExtra = lib.mkOption {
-      default = "";
       type = lib.types.lines;
+      default = "";
       description = "Extra shell agnostic commands that should be run when initializing a login shell.";
+    };
+    functions = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.either lib.types.lines functionModule);
+      example = lib.literalExpression ''
+        foo = "echo foo";
+        bar = {
+          bashBody = "echo bar";
+          fishBody = "echo bar";
+        };
+      '';
+      default = {};
+      description = "Extra shell agnostic functions.";
     };
   };
 }
