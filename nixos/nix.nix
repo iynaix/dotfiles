@@ -5,6 +5,7 @@
   user,
   ...
 }: let
+  dots = "/home/${user}/projects/dotfiles";
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
     sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
@@ -18,7 +19,7 @@
     name = "nbuild";
     runtimeInputs = [pkgs.git];
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -35,7 +36,7 @@
     name = "nswitch";
     runtimeInputs = with pkgs; [nix-current-generation git nvd];
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -57,7 +58,7 @@
     runtimeInputs = [nswitch];
     # command ls -d /nix/var/nix/profiles/* | rg link | sort | tail -n2 | xargs -d '\n' nvd diff
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
       nix flake update
       nswitch
       popd
@@ -67,7 +68,7 @@
   nswitch-remote = pkgs.writeShellApplication {
     name = "nswitch-remote";
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
       sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-laptop}" switch
       popd
     '';
@@ -107,13 +108,13 @@
 in {
   environment.systemPackages =
     [
+      pkgs.nix-output-monitor
       nix-current-generation
       ndefault
       nbuild
       nswitch
       upd8
       fhs
-      pkgs.nix-output-monitor
     ]
     ++ lib.optionals (host == "desktop") [
       nswitch-remote

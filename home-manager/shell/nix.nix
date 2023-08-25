@@ -1,15 +1,17 @@
 {
   pkgs,
   host,
+  user,
   ...
 }: let
+  dots = "/home/${user}/projects/dotfiles";
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
     name = "hmbuild";
     runtimeInputs = [pkgs.git];
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -26,7 +28,7 @@
     name = "hmswitch";
     runtimeInputs = [pkgs.git];
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -43,7 +45,7 @@
     name = "hmupd8";
     runtimeInputs = [hmswitch];
     text = ''
-      pushd ~/projects/dotfiles
+      pushd ${dots}
       nix flake update
       hmswitch
       popd
@@ -68,6 +70,6 @@ in {
 
   home.shellAliases = {
     hsw = "hswitch";
-    nsh = "nix-shell --command zsh -p";
+    nsh = "nix-shell -p";
   };
 }
