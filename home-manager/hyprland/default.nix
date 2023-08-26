@@ -34,7 +34,6 @@ in {
       enable = true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       settings = {
-        # monitor = cfg.monitors ++ [",preferred,auto,auto"];
         monitor =
           (lib.forEach displays ({
             name,

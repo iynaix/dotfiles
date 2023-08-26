@@ -3,8 +3,8 @@
 set -e
 
 cat << Introduction
-This script will format the *entire* disk with a 512MB boot partition
-(labelled NIXBOOT), allocating the rest to ZFS.
+This script will format the *entire* disk with a 1GB boot partition
+(labelled NIXBOOT), 16GB of swap, then allocating the rest to ZFS.
 
 The following ZFS datasets will be created:
     - zroot/local/root (mounted at / with blank snapshot)
@@ -13,18 +13,6 @@ The following ZFS datasets will be created:
     - zroot/safe/persist (mounted at /persist)
 
 Introduction
-
-USESWAP="0";
-while true; do
-    read -p "Create a swap disk? [y/n] " yn
-    case $yn in
-        [Yy]* )
-            USESWAP="1";
-            break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
 
 # in a vm, special case
 if [[ -b "/dev/vda" ]]; then
@@ -55,9 +43,7 @@ ZFSDISK="${DISK}-part1"
 fi
 
 echo "Boot Partiton: $BOOTDISK"
-if [[ $USESWAP == "1" ]]; then
-    echo "SWAP Partiton: $SWAPDISK"
-fi
+echo "SWAP Partiton: $SWAPDISK"
 echo "ZFS Partiton: $ZFSDISK"
 
 while true; do
@@ -73,11 +59,8 @@ echo "Creating partitions"
 sudo sgdisk -Z $DISK
 sudo wipefs -a $DISK
 
-sudo sgdisk -n3:1M:+512M -t3:EF00 $DISK
-# create swap partition if USESWAP
-if [[ $USESWAP == "1" ]]; then
-    sudo sgdisk -n2:0:+16G -t2:8200 $DISK
-fi
+sudo sgdisk -n3:1M:+1G -t3:EF00 $DISK
+sudo sgdisk -n2:0:+16G -t2:8200 $DISK
 sudo sgdisk -n1:0:0 -t1:BF01 $DISK
 
 # notify kernel of partition changes
