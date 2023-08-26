@@ -1,7 +1,12 @@
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   programs.starship = {
     enable = true;
-    enableBashIntegration = true;
+    # manually implemented via bash.initExtra below
+    enableBashIntegration = lib.mkForce false;
     enableFishIntegration = true;
     settings = {
       add_newline = false;
@@ -68,13 +73,17 @@
   # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
   programs.kitty.shellIntegration.enableBashIntegration = false;
 
-  programs.bash.initExtra = ''
-    my_precmd() {
-        echo ""
-    }
-    export PROMPT_COMMAND=my_precmd
+  # fix starship prompt to only have newlines after the first command
+  # reimplement enableBashIntegration and place at end of bashrc
+  # https://github.com/starship/starship/issues/560#issuecomment-1651732556
+  programs.bash.initExtra = lib.mkOrder 2000 ''
+    if [[ $TERM != "dumb" ]]; then
+      precmd() {
+          echo '''
+      }
+      export PROMPT_COMMAND=precmd
 
-    # By defining starship after, PROMPT_COMMAND is wrapped by the init script
-    eval "$(starship init bash)"
+      eval "$(${config.home.profileDirectory}/bin/starship init bash --print-full-init)"
+    fi
   '';
 }

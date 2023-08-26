@@ -11,9 +11,19 @@
         type = lib.types.lines;
         description = "The function body for bash.";
       };
+      bashCompletion = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "The function completion body for bash.";
+      };
       fishBody = lib.mkOption {
         type = lib.types.lines;
         description = "The function body for bash.";
+      };
+      fishCompletion = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "The completion body for fish.";
       };
     };
   };
@@ -82,6 +92,11 @@ in {
   };
 
   options.iynaix.shell = {
+    interactive = lib.mkOption {
+      type = lib.types.enum ["bash" "fish"];
+      default = "fish";
+      description = "Interactive shell to use.";
+    };
     initExtra = lib.mkOption {
       type = lib.types.lines;
       default = "";

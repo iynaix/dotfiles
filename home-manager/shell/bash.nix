@@ -8,13 +8,14 @@
     if lib.isString value
     then ''
       function ${name}() {
-        ${value}
+      ${value}
       }
     ''
     else ''
       function ${name}() {
-        ${value.bashBody}
+      ${value.bashBody}
       }
+      ${value.bashCompletion}
     '')
   cfg.functions);
 in {

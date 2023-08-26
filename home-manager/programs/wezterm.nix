@@ -43,6 +43,7 @@
           end
 
           return {
+            ${lib.optionalString (config.iynaix.shell.interactive != "fish") "-- "} default_prog = { '${pkgs.fish}/bin/fish', '-l' },
             font = wezterm.font('${font}', { weight = "Regular", }),
             harfbuzz_features = { 'zero=1' },
             font_size = ${toString size},

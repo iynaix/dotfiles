@@ -48,7 +48,7 @@
     where = ''readlink -f $(which $1)'';
     # server command, runs a local server
     server = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';
-    # cd to project dir and open the virtualenv if it exists
+    # cd to project dir
     openproj = {
       bashBody = ''
         cd $HOME/projects
@@ -56,14 +56,19 @@
           cd $1;
         fi
       '';
-      bashCompletion = ''COMPREPLY=($(compgen -d -S '/' -W "$HOME/projects"))'';
+      bashCompletion = ''
+        _openproj() {
+            ( cd "$HOME/projects"; printf "%s\n" "$2"* )
+        }
+        complete -o nospace -C _openproj openproj
+      '';
       fishBody = ''
         cd $HOME/projects
         if test (count $argv) -eq 1
           cd $argv[1]
         end
       '';
-      fishCompletion = ''__fish_complete_directories "$HOME/projects/"'';
+      fishCompletion = ''find "$HOME/projects/" -maxdepth 1 -type d -exec basename {} \;'';
     };
     renamer = {
       bashBody = ''
