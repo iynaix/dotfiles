@@ -23,7 +23,7 @@ in {
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    historyFile = "$HOME/.config/bash/.bash_history";
+    historyFile = "/persist/.config/bash/.bash_history";
 
     profileExtra = cfg.profileExtra;
     initExtra = ''
@@ -51,11 +51,5 @@ in {
 
       ${cfg.initExtra}
     '';
-  };
-
-  iynaix.persist.home = {
-    files = [
-      ".config/bash/.bash_history"
-    ];
   };
 }

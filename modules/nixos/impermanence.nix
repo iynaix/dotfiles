@@ -20,16 +20,16 @@
         description = "Files to persist in home directory";
       };
     };
-    tmpfs = {
+    blank = {
       root = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable tmpfs for /";
+        description = "Enable rollback to blank for /";
       };
       home = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable tmpfs for /home";
+        description = "Enable rollback to blank for /home";
       };
     };
   };
