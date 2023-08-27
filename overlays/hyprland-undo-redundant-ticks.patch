@@ -1,0 +1,152 @@
+diff --git a/src/helpers/AnimatedVariable.cpp b/src/helpers/AnimatedVariable.cpp
+index 450826f9..2961439d 100644
+--- a/src/helpers/AnimatedVariable.cpp
++++ b/src/helpers/AnimatedVariable.cpp
+@@ -82,11 +82,8 @@ float CAnimatedVariable::getCurveValue() {
+ }
+ 
+ void CAnimatedVariable::connectToActive() {
+-    g_pAnimationManager->scheduleTick(); // otherwise the animation manager will never pick this up
+-
+     if (!m_bIsConnectedToActive)
+         g_pAnimationManager->m_vActiveAnimatedVariables.push_back(this);
+-
+     m_bIsConnectedToActive = true;
+ }
+ 
+diff --git a/src/helpers/Timer.cpp b/src/helpers/Timer.cpp
+index 6847567a..33162d30 100644
+--- a/src/helpers/Timer.cpp
++++ b/src/helpers/Timer.cpp
+@@ -14,8 +14,4 @@ int CTimer::getMillis() {
+ 
+ float CTimer::getSeconds() {
+     return std::chrono::duration_cast<std::chrono::milliseconds>(getDuration()).count() / 1000.f;
+-}
+-
+-const std::chrono::system_clock::time_point& CTimer::chrono() const {
+-    return m_tpLastReset;
+ }
+\ No newline at end of file
+diff --git a/src/helpers/Timer.hpp b/src/helpers/Timer.hpp
+index 4ab0d294..7b5bfc9d 100644
+--- a/src/helpers/Timer.hpp
++++ b/src/helpers/Timer.hpp
+@@ -4,10 +4,9 @@
+ 
+ class CTimer {
+   public:
+-    void                                         reset();
+-    float                                        getSeconds();
+-    int                                          getMillis();
+-    const std::chrono::system_clock::time_point& chrono() const;
++    void  reset();
++    float getSeconds();
++    int   getMillis();
+ 
+   private:
+     std::chrono::system_clock::time_point m_tpLastReset;
+diff --git a/src/managers/AnimationManager.cpp b/src/managers/AnimationManager.cpp
+index c37c89b8..2f2977c4 100644
+--- a/src/managers/AnimationManager.cpp
++++ b/src/managers/AnimationManager.cpp
+@@ -4,15 +4,16 @@
+ 
+ int wlTick(void* data) {
+ 
++    float refreshRate = g_pHyprRenderer->m_pMostHzMonitor ? g_pHyprRenderer->m_pMostHzMonitor->refreshRate : 60.f;
++
++    wl_event_source_timer_update(g_pAnimationManager->m_pAnimationTick, 1000 / refreshRate);
++
+     if (g_pCompositor->m_bSessionActive && g_pAnimationManager && g_pHookSystem &&
+         std::ranges::any_of(g_pCompositor->m_vMonitors, [](const auto& mon) { return mon->m_bEnabled && mon->output; })) {
+         g_pAnimationManager->tick();
+         EMIT_HOOK_EVENT("tick", nullptr);
+     }
+ 
+-    if (g_pAnimationManager && g_pAnimationManager->shouldTickForNext())
+-        g_pAnimationManager->scheduleTick();
+-
+     return 0;
+ }
+ 
+@@ -39,15 +40,10 @@ void CAnimationManager::addBezierWithName(std::string name, const Vector2D& p1,
+ 
+ void CAnimationManager::tick() {
+ 
+-    m_bTickScheduled = false;
+-
+     static std::chrono::time_point lastTick = std::chrono::high_resolution_clock::now();
+     m_fLastTickTime                         = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - lastTick).count() / 1000.0;
+     lastTick                                = std::chrono::high_resolution_clock::now();
+ 
+-    if (m_vActiveAnimatedVariables.empty())
+-        return;
+-
+     bool               animGlobalDisabled = false;
+ 
+     static auto* const PANIMENABLED = &g_pConfigManager->getConfigValuePtr("animations:enabled")->intValue;
+@@ -248,8 +244,8 @@ void CAnimationManager::tick() {
+                     const auto EXTENTS = PDECO->getWindowDecorationExtents();
+ 
+                     wlr_box    dmg = {PWINDOW->m_vRealPosition.vec().x - EXTENTS.topLeft.x, PWINDOW->m_vRealPosition.vec().y - EXTENTS.topLeft.y,
+-                                      PWINDOW->m_vRealSize.vec().x + EXTENTS.topLeft.x + EXTENTS.bottomRight.x,
+-                                      PWINDOW->m_vRealSize.vec().y + EXTENTS.topLeft.y + EXTENTS.bottomRight.y};
++                                   PWINDOW->m_vRealSize.vec().x + EXTENTS.topLeft.x + EXTENTS.bottomRight.x,
++                                   PWINDOW->m_vRealSize.vec().y + EXTENTS.topLeft.y + EXTENTS.bottomRight.y};
+ 
+                     if (!*PSHADOWIGNOREWINDOW) {
+                         // easy, damage the entire box
+@@ -508,30 +504,3 @@ CBezierCurve* CAnimationManager::getBezier(const std::string& name) {
+ std::unordered_map<std::string, CBezierCurve> CAnimationManager::getAllBeziers() {
+     return m_mBezierCurves;
+ }
+-
+-bool CAnimationManager::shouldTickForNext() {
+-    return !m_vActiveAnimatedVariables.empty();
+-}
+-
+-void CAnimationManager::scheduleTick() {
+-    if (m_bTickScheduled)
+-        return;
+-
+-    m_bTickScheduled = true;
+-
+-    const auto PMOSTHZ = g_pHyprRenderer->m_pMostHzMonitor;
+-
+-    float      refreshRate    = PMOSTHZ ? PMOSTHZ->refreshRate : 60.f;
+-    float      refreshDelayMs = std::floor(1000.0 / refreshRate);
+-
+-    if (!PMOSTHZ) {
+-        wl_event_source_timer_update(m_pAnimationTick, refreshDelayMs);
+-        return;
+-    }
+-
+-    const float SINCEPRES = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - PMOSTHZ->lastPresentationTimer.chrono()).count() / 1000.0;
+-
+-    const auto  TOPRES = std::clamp(refreshDelayMs - SINCEPRES, 1.1f, 1000.f); // we can't send 0, that will disarm it
+-
+-    wl_event_source_timer_update(m_pAnimationTick, std::floor(TOPRES));
+-}
+diff --git a/src/managers/AnimationManager.hpp b/src/managers/AnimationManager.hpp
+index cf1f19b3..6d2830fd 100644
+--- a/src/managers/AnimationManager.hpp
++++ b/src/managers/AnimationManager.hpp
+@@ -13,8 +13,6 @@ class CAnimationManager {
+     CAnimationManager();
+ 
+     void                                          tick();
+-    bool                                          shouldTickForNext();
+-    void                                          scheduleTick();
+     void                                          addBezierWithName(std::string, const Vector2D&, const Vector2D&);
+     void                                          removeAllBeziers();
+ 
+@@ -44,8 +42,6 @@ class CAnimationManager {
+ 
+     std::unordered_map<std::string, CBezierCurve> m_mBezierCurves;
+ 
+-    bool                                          m_bTickScheduled = false;
+-
+     // Anim stuff
+     void animationPopin(CWindow*, bool close = false, float minPerc = 0.f);
+     void animationSlide(CWindow*, std::string force = "", bool close = false);
