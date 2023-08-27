@@ -30,6 +30,9 @@ in {
   config = {
     services.gvfs.enable = true;
 
+    # execute shebangs that assume hardcoded shell paths
+    services.envfs.enable = true;
+
     environment.systemPackages = with pkgs;
       [
         gcr # stops errors with copilot login?

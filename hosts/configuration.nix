@@ -102,11 +102,6 @@
     driSupport = true;
   };
 
-  # fuck it, stop bothering me
-  systemd.tmpfiles.rules = [
-    "L+ /bin/bash                 - - - - /bin/sh"
-  ];
-
   # do not change this value
   system.stateVersion = "23.05";
 
