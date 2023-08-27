@@ -7,14 +7,14 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager = {
-      url = "github:nix-community/home-manager/406d34d919e9e8b831b531782cf5ef6995188566";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
-      url = "github:hyprwm/Hyprland/v0.28.0";
+      url = "github:hyprwm/Hyprland";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -33,7 +33,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # hyprNStack.url = "github:SiriusStarr/hyprNStack";
+    hyprNStack = {
+      url = "github:SiriusStarr/hyprNStack";
+      inputs.hyprland.follows = "hyprland";
+    };
   };
 
   # flake-utils is unnecessary

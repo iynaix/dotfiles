@@ -32,7 +32,7 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      # package = inputs.hyprland.packages.${pkgs.system}.hyprland;
 
       settings = {
         monitor =
@@ -81,7 +81,10 @@ in {
             else 4
           );
           border_size = 2;
-          layout = "master";
+          layout =
+            if cfg.hyprnstack
+            then "nstack"
+            else "master";
         };
 
         decoration = {
@@ -314,21 +317,26 @@ in {
       };
 
       # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
-      # plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
-      # extraConfig = ''
-      #   plugin=${pkgs.iynaix.hyprNStack}/lib/hyprNStack.so
-      #   plugin {
-      #     nstack {
-      #       layout {
-      #         orientation=left
-      #         new_is_master=0
-      #         stacks=3
-      #         # master is the same size as the stacks
-      #         mfact=0
-      #       }
-      #     }
-      #   }
-      # '';
+      plugins = lib.mkIf cfg.hyprnstack [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
+      extraConfig = lib.mkIf cfg.hyprnstack ''
+        plugin {
+          nstack {
+            layout {
+              orientation=left
+              new_is_master=0
+              stacks=${toString (
+          if host == "desktop"
+          then 3
+          else 2
+        )}
+              # disable smart gaps
+              no_gaps_when_only=0
+              # master is the same size as the stacks
+              mfact=0
+            }
+          }
+        }
+      '';
     };
 
     home.shellAliases = {

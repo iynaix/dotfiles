@@ -47,7 +47,7 @@ in {
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} &"
+        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString cfg.hyprnstack "--nstack"} &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

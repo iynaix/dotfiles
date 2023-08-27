@@ -16,6 +16,7 @@
         example = ''{ "SUPER, Return" = "exec, kitty"; }'';
         default = {};
       };
+      hyprnstack = lib.mkEnableOption "hyprNStack" // {default = true;};
     };
 
     displays = lib.mkOption {

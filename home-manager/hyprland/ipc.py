@@ -1,23 +1,20 @@
+import argparse
 import json
 import socket
-import sys
 import subprocess
-
-USE_CENTERED_MASTER = False
+import sys
 
 ULTRAWIDE = "DP-2"
 VERTICAL = "DP-4"
 SMALL = "HDMI-A-1"
 
-DEBUG = False
+IS_DESKTOP = socket.gethostname().endswith("desktop")
+USE_CENTERED_MASTER = False
 
 
 def info(cmd):
     with subprocess.Popen(["hyprctl", "-j", cmd], stdout=subprocess.PIPE) as proc:
         return json.loads(proc.stdout.read())
-
-
-IS_DESKTOP = socket.gethostname().endswith("desktop")
 
 
 def workspace_info(workspace):
@@ -30,10 +27,11 @@ def dispatch(*args):
     cmd = ["hyprctl", "dispatch", *args]
     if DEBUG:
         print("[DEBUG]", cmd)
-    subprocess.run(cmd)
+    else:
+        subprocess.run(cmd)
 
 
-def set_workspace_orientation(workspace):
+def set_workspace_orientation(workspace, nstack):
     if not IS_DESKTOP:
         return
 
@@ -44,11 +42,41 @@ def set_workspace_orientation(workspace):
             dispatch("layoutmsg", "orientationtop")
         elif wksp["monitor"] == SMALL:
             dispatch("layoutmsg", "orientationleft")
-        elif USE_CENTERED_MASTER and wksp["monitor"] == ULTRAWIDE:
-            dispatch("layoutmsg", "orientationcenter")
+        elif wksp["monitor"] == ULTRAWIDE:
+            if USE_CENTERED_MASTER:
+                dispatch("layoutmsg", "orientationcenter")
+
+        if nstack:
+            stacks = 2
+            if wksp["monitor"] == VERTICAL or wksp["monitor"] == ULTRAWIDE:
+                stacks = 3
+            dispatch("layoutmsg", "setstackcount", str(stacks))
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="hypr-ipc", description="Hyprland IPC listener for workspace events"
+    )
+
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="use centered master layout for ultrawide",
+    )
+
+    parser.add_argument(
+        "--nstack",
+        action="store_true",
+        help="use nstack layout",
+    )
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
+    args = parse_args()
+    DEBUG = args.debug
+
     while 1:
         line = sys.stdin.readline()
         [ev, ev_args] = line.split(">>")
@@ -71,10 +99,10 @@ if __name__ == "__main__":
         #     [workspace] = ev_args
         elif ev == "openwindow":
             [win_id, workspace, *_] = ev_args
-            set_workspace_orientation(workspace)
+            set_workspace_orientation(workspace, args.nstack)
         elif ev == "movewindow":
             [win_id, workspace] = ev_args
-            set_workspace_orientation(workspace)
+            set_workspace_orientation(workspace, args.nstack)
         # elif ev == "closewindow":
         #     [win_id] = ev_args
         # elif ev == "focusedmon":
