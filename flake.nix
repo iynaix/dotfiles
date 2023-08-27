@@ -32,6 +32,8 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # hyprNStack.url = "github:SiriusStarr/hyprNStack";
   };
 
   # flake-utils is unnecessary

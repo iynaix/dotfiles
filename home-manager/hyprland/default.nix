@@ -33,6 +33,7 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+
       settings = {
         monitor =
           (lib.forEach displays ({
@@ -311,6 +312,23 @@ in {
 
         # source = "~/.config/hypr/hyprland-test.conf";
       };
+
+      # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
+      # plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
+      # extraConfig = ''
+      #   plugin=${pkgs.iynaix.hyprNStack}/lib/hyprNStack.so
+      #   plugin {
+      #     nstack {
+      #       layout {
+      #         orientation=left
+      #         new_is_master=0
+      #         stacks=3
+      #         # master is the same size as the stacks
+      #         mfact=0
+      #       }
+      #     }
+      #   }
+      # '';
     };
 
     home.shellAliases = {
