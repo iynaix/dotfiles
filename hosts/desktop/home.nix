@@ -11,7 +11,7 @@ in {
     displays = [
       {
         name = "DP-2";
-        hyprland = "3440x1440@160,1440x1080,1";
+        hyprland = "3440x1440@144,1440x1080,1";
         workspaces = [1 2 3 4 5];
       }
       {
@@ -25,8 +25,6 @@ in {
         workspaces = [9 10];
       }
     ];
-
-    # shell.package = pkgs.bash;
 
     # wayland settings
     hyprland = {
