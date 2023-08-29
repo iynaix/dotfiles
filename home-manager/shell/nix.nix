@@ -70,6 +70,6 @@ in {
 
   home.shellAliases = {
     hsw = "hswitch";
-    nsh = "nix-shell -p";
+    nsh = "nix-shell --command fish -p";
   };
 }

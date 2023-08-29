@@ -21,6 +21,7 @@
         # wtf zathura registers itself to open archives
         "application/zip" = "org.gnome.FileRoller.desktop";
         "application/vnd.rar" = "org.gnome.FileRoller.desktop";
+        "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
       }
       // lib.optionalAttrs config.programs.zathura.enable {
         "application/pdf" = "org.pwmt.zathura.desktop";

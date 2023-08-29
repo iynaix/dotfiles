@@ -6,12 +6,12 @@
 }: let
   cfg = config.iynaix-nixos.docker;
 in {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable || config.iynaix-nixos.distrobox.enable) {
     users.users.${user}.extraGroups = ["docker"];
 
     virtualisation.docker = {
       enable = true;
-      storageDriver = "zfs";
+      storageDriver = lib.mkIf config.iynaix-nixos.zfs.enable "zfs";
     };
   };
 }
