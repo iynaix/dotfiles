@@ -66,4 +66,16 @@
   xdg.configFile = lib.mkIf (!isNixOS) {
     "nix/nix.conf".text = "experimental-features = nix-command flakes";
   };
+
+  # prevent symlink error for impermanence
+  # home.file."${config.xdg.cacheHome}/.keep".force = true;
+  # home.file.".cache/.keep".enable = lib.mkForce false;
+  # home.file."${config.xdg.cacheHome}/.keep".enable = lib.mkForce false;
+
+  # iynaix.persist.home = {
+  #   directories = [
+  #     ".local/state/home-manager"
+  #     ".local/state/nix/profiles"
+  #   ];
+  # };
 }

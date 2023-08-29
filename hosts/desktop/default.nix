@@ -12,6 +12,11 @@
     torrenters.enable = true;
     vercel.enable = true;
     virt-manager.enable = true;
+
+    # impermanence
+    persist.tmpfs = false;
+    persist.erase.root = true;
+    persist.erase.home = false;
   };
 
   networking.hostId = "89eaa833"; # required for zfs

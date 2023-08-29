@@ -33,6 +33,7 @@
 
                 users.${user} = {
                   imports = [
+                    inputs.impermanence.nixosModules.home-manager.impermanence
                     ./${host}/home.nix # host specific home-manager configuration
                     ../home-manager
                     ../modules/home-manager

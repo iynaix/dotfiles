@@ -55,7 +55,7 @@ in {
     services.sanoid = lib.mkIf cfg.snapshots {
       enable = true;
 
-      datasets = {
+      datasets = lib.mkIf (!config.iynaix-nixos.persist.tmpfs) {
         "zroot/safe/home" = {
           hourly = 50;
           daily = 20;

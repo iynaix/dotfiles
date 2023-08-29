@@ -342,5 +342,10 @@ in {
     home.shellAliases = {
       hypr-log = "cat /tmp/hypr/$(command ls -t /tmp/hypr/ | head -n 1)/hyprland.log";
     };
+
+    # hyprland crash reports
+    iynaix.persist.home.directories = [
+      ".hyprland"
+    ];
   };
 }

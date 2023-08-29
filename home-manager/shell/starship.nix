@@ -81,4 +81,8 @@
   #     eval "$(${config.home.profileDirectory}/bin/starship init bash --print-full-init)"
   #   fi
   # '';
+
+  iynaix.persist.home.directories = [
+    ".cache/starship"
+  ];
 }

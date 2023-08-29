@@ -4,7 +4,7 @@
   user,
   ...
 }: let
-  dots = "/home/${user}/projects/dotfiles";
+  dots = "/persist/home/${user}/projects/dotfiles";
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {

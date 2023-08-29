@@ -137,7 +137,6 @@ in {
           }
           // cfg.config);
         target = "~/.config/waybar/config";
-        onChange = "launch-waybar";
       };
 
       waybar-css = let
@@ -257,7 +256,6 @@ in {
           ${cfg.css}
         '';
         target = "~/.config/waybar/style.css";
-        onChange = "launch-waybar";
       };
     };
   };

@@ -20,7 +20,8 @@
         description = "Files to persist in home directory";
       };
     };
-    blank = {
+    tmpfs = lib.mkEnableOption "Enable tmpfs for for persist instead of snapshots";
+    erase = {
       root = lib.mkOption {
         type = lib.types.bool;
         default = false;
