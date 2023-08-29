@@ -2,6 +2,7 @@
   imports = [
     ./bash.nix
     ./btop.nix
+    ./direnv.nix
     ./fish.nix
     ./git.nix
     ./lf.nix

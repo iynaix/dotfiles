@@ -19,11 +19,6 @@
     notify = true;
   };
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
   # setup fonts for other distros, run "fc-cache -f" to refresh fonts
   fonts.fontconfig.enable = true;
 
@@ -39,8 +34,6 @@
         then "1"
         else "0";
       "NIXPKGS_ALLOW_UNFREE" = "1";
-      # silence direnv
-      "DIRENV_LOG_FORMAT" = "";
     };
 
     packages = with pkgs;
@@ -67,15 +60,9 @@
     "nix/nix.conf".text = "experimental-features = nix-command flakes";
   };
 
-  # prevent symlink error for impermanence
-  # home.file."${config.xdg.cacheHome}/.keep".force = true;
-  # home.file.".cache/.keep".enable = lib.mkForce false;
-  # home.file."${config.xdg.cacheHome}/.keep".enable = lib.mkForce false;
-
-  # iynaix.persist.home = {
-  #   directories = [
-  #     ".local/state/home-manager"
-  #     ".local/state/nix/profiles"
-  #   ];
-  # };
+  iynaix.persist.home = {
+    directories = [
+      "Pictures"
+    ];
+  };
 }
