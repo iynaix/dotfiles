@@ -16,14 +16,14 @@ in {
 
     # replace root and /or home filesystems with tmpfs
     fileSystems."/" = lib.mkIf (cfg.tmpfs && cfg.erase.root) (lib.mkForce {
-      device = "none";
+      device = "tmpfs";
       fsType = "tmpfs";
-      options = ["defaults" "size=3G" "mode=755"];
+      options = ["defaults" "size=1G" "mode=755"];
     });
     fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
-      device = "none";
+      device = "tmpfs";
       fsType = "tmpfs";
-      options = ["defaults" "size=5G" "mode=777"];
+      options = ["defaults" "size=3G" "mode=777"];
     });
 
     fileSystems."/persist".neededForBoot = true;

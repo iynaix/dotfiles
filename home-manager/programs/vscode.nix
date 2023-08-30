@@ -19,6 +19,7 @@
 
   iynaix.persist.home = {
     directories = [
+      ".console-ninja"
       ".config/Code"
       ".vscode"
     ];

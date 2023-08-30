@@ -29,9 +29,12 @@ def get_current_wallpaper():
         return str(WALLPAPERS / img)
 
 
-def random_wallpaper():
+def random_wallpaper(fallback=None):
     curr = get_current_wallpaper()
     wallpapers = []
+
+    if not WALLPAPERS.exists():
+        return fallback
 
     for f in WALLPAPERS.iterdir():
         if f.is_file() and f.suffix in [".jpg", ".jpeg", ".png"]:
@@ -39,7 +42,10 @@ def random_wallpaper():
                 continue
             wallpapers.append(f)
 
-    return random.choice(wallpapers)
+    if wallpapers:
+        return random.choice(wallpapers)
+    else:
+        return fallback
 
 
 def refresh_zathura():
@@ -257,6 +263,10 @@ def parse_args():
         help="use rofi to select a wallpaper / theme",
         choices=["wallpaper", "theme"],
     )
+    parser.add_argument(
+        "--fallback",
+        help="path to a fallback wallpaper",
+    )
     parser.add_argument("image", help="path to the wallpaper image", nargs="?")
 
     return parser.parse_args()
@@ -277,7 +287,7 @@ if __name__ == "__main__":
         rofi_wallpaper()
         exit()
 
-    wallpaper = args.image or random_wallpaper()
+    wallpaper = args.image or random_wallpaper(args.fallback)
 
     # set colors and wallpaper
     if args.theme:

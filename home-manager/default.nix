@@ -51,9 +51,6 @@
       ++ (lib.optional config.iynaix.helix.enable helix)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
-
-    # copy wallpapers
-    file."Pictures/Wallpapers/gits-catppuccin.jpg".source = ./gits-catppuccin.jpg;
   };
 
   xdg.configFile = lib.mkIf (!isNixOS) {
@@ -62,8 +59,18 @@
 
   iynaix.persist.home = {
     directories = [
-      "Documents"
-      "Pictures"
+      {
+        directory = "Desktop";
+        method = "symlink";
+      }
+      {
+        directory = "Documents";
+        method = "symlink";
+      }
+      {
+        directory = "Pictures";
+        method = "symlink";
+      }
     ];
   };
 }
