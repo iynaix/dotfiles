@@ -59,18 +59,18 @@ in {
 
     # symlinks from hdds
     # dest src
-    systemd.tmpfiles.rules =
-      (lib.optionals cfg.ironwolf22 [
-        "L+ /home/${user}/Downloads   - - - - ${ironwolf}/Downloads"
-      ])
-      ++ (lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
-        "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
-        "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
-        "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
-      ])
-      ++ (lib.optionals cfg.wdred6 [
-        "L+ /home/${user}/Videos      - - - - ${wdred}"
-      ]);
+    systemd.tmpfiles.rules = lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
+      "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
+      "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
+      "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
+    ];
+
+    # (lib.optionals cfg.ironwolf22 [
+    #   "L+ /home/${user}/Downloads   - - - - ${ironwolf}/Downloads"
+    # ])
+    # ++ (lib.optionals cfg.wdred6 [
+    #   "L+ /home/${user}/Videos      - - - - ${wdred}"
+    # ]);
 
     # add bookmarks for gtk
     home-manager.users.${user} = {
@@ -79,6 +79,14 @@ in {
         "file://${ironwolf}/TV/Current TV Current"
         "file://${ironwolf}/Movies"
       ];
+
+      # create symlinks for locations with ~
+      home.file = let
+        mkOutOfStoreSymlink = config.home-manager.users.${user}.lib.file.mkOutOfStoreSymlink;
+      in {
+        Downloads.source = lib.mkIf cfg.ironwolf22 (mkOutOfStoreSymlink "${ironwolf}/Downloads");
+        Videos.source = lib.mkIf cfg.wdred6 (mkOutOfStoreSymlink "${wdred}");
+      };
     };
 
     # dual boot windows

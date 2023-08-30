@@ -5,7 +5,6 @@
   ...
 }: let
   cfg = config.iynaix-nixos.persist;
-  hmCfg = config.home-manager.users.${user}.iynaix.persist;
 in {
   config = lib.mkIf config.iynaix-nixos.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
@@ -75,7 +74,7 @@ in {
         allowOther = true;
         removePrefixDirectory = false;
 
-        files = cfg.home.files ++ hmCfg.home.files;
+        files = [".Xauthority"] ++ cfg.home.files ++ hmCfg.home.files;
         directories =
           [
             {
@@ -92,10 +91,5 @@ in {
           ++ hmCfg.home.directories;
       };
     };
-
-    # .Xauthority must be handled specially via a symlink as the bind mount is owned by root
-    systemd.tmpfiles.rules = [
-      "L+ /home/${user}/.Xauthority - ${user} users - /persist/home/${user}/.Xauthority"
-    ];
   };
 }

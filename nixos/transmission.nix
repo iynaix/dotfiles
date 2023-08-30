@@ -6,6 +6,8 @@
   ...
 }: let
   home = "/home/${user}";
+  downloadDir = "/media/IRONWOLF22/Downloads";
+  pendingDir = "${downloadDir}/pending";
 in {
   config = lib.mkIf config.iynaix-nixos.torrenters.enable {
     services.transmission = {
@@ -27,13 +29,13 @@ in {
         details-window-height = 525;
         details-window-width = 700;
         dht-enabled = true;
-        download-dir = "${home}/Downloads/pending";
+        download-dir = pendingDir;
         download-queue-enabled = true;
         download-queue-size = 3;
         encryption = 1;
         idle-seeding-limit = 30;
         idle-seeding-limit-enabled = false;
-        incomplete-dir = "${home}/Downloads";
+        incomplete-dir = pendingDir;
         incomplete-dir-enabled = false;
         inhibit-desktop-hibernation = false;
         lpd-enabled = false;
@@ -56,7 +58,7 @@ in {
         queue-stalled-minutes = 30;
         ratio-limit = 0.1000;
         ratio-limit-enabled = true;
-        recent-download-dir-1 = "${home}/Downloads/pending";
+        recent-download-dir-1 = pendingDir;
         rename-partial-files = true;
         rpc-authentication-required = false;
         rpc-bind-address = "0.0.0.0";
@@ -99,7 +101,7 @@ in {
         upload-slots-per-torrent = 14;
         user-has-given-informed-consent = true;
         utp-enabled = true;
-        watch-dir = "${home}/Downloads";
+        watch-dir = downloadDir;
         watch-dir-enabled = false;
       };
     };
