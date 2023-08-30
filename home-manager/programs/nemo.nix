@@ -72,4 +72,11 @@
       selection-menu-move-to = true;
     };
   };
+
+  iynaix.persist.home = {
+    directories = [
+      # folder preferences such as view mode and sort order
+      ".local/share/gvfs-metadata"
+    ];
+  };
 }
