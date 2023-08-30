@@ -144,6 +144,26 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1693107069,
+        "narHash": "sha256-5dVXPchyvzmytanlwXHcmeQP9AfO/98Q6V+QtsMl5vQ=",
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "rev": "53d40cf1bea235658ef8f6e8b8a1d033e2ecbfff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1692952286,
@@ -216,6 +236,7 @@
         "hyprwm-contrib": "hyprwm-contrib",
         "impermanence": "impermanence",
         "kmonad": "kmonad",
+        "nix-index-database": "nix-index-database",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix"

@@ -17,8 +17,10 @@
     '';
   };
 
-  iynaix.persist.home.directories = [
-    ".config/Code"
-    ".vscode"
-  ];
+  iynaix.persist.home = {
+    directories = [
+      ".config/Code"
+      ".vscode"
+    ];
+  };
 }

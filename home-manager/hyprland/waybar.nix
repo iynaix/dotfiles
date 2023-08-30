@@ -6,16 +6,16 @@
   ...
 }: let
   cfg = config.iynaix.waybar;
-  reload-waybar = pkgs.writeShellScriptBin "reload-waybar" ''
-    killall -q -SIGUSR2 .waybar-wrapped
-  '';
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
-    waybar > /dev/null 2>&1 &
+
+    waybar --config $HOME/.cache/wallust/waybar-config \
+        --style $HOME/.cache/wallust/waybar-style.css \
+        > /dev/null 2>&1 &
   '';
 in {
   config = lib.mkIf cfg.enable {
-    home.packages = [launch-waybar reload-waybar];
+    home.packages = [launch-waybar];
 
     programs.waybar = {
       enable = isNixOS;
@@ -136,7 +136,7 @@ in {
             # };
           }
           // cfg.config);
-        target = "~/.config/waybar/config";
+        target = "~/.cache/wallust/waybar-config";
       };
 
       waybar-css = let
@@ -255,7 +255,7 @@ in {
 
           ${cfg.css}
         '';
-        target = "~/.config/waybar/style.css";
+        target = "~/.cache/wallust/waybar-style.css";
       };
     };
   };

@@ -33,6 +33,7 @@
 
                 users.${user} = {
                   imports = [
+                    inputs.nix-index-database.hmModules.nix-index
                     inputs.impermanence.nixosModules.home-manager.impermanence
                     ./${host}/home.nix # host specific home-manager configuration
                     ../home-manager
@@ -60,6 +61,7 @@
         };
 
         modules = [
+          inputs.nix-index-database.hmModules.nix-index
           ./${host}/home.nix # host specific home-manager configuration
           ../overlays
           ../packages
