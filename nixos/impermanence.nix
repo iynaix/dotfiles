@@ -5,6 +5,7 @@
   ...
 }: let
   cfg = config.iynaix-nixos.persist;
+  hmCfg = config.home-manager.users.${user}.iynaix.persist;
 in {
   config = lib.mkIf config.iynaix-nixos.zfs.enable {
     # root / home filesystem is destroyed and rebuilt on every boot:
@@ -20,10 +21,10 @@ in {
       fsType = "tmpfs";
       options = ["defaults" "size=3G" "mode=755"];
     });
-    fileSystems."/home" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
+    fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
       device = "none";
       fsType = "tmpfs";
-      options = ["defaults" "size=5G" "mode=755"];
+      options = ["defaults" "size=5G" "mode=777"];
     });
 
     fileSystems."/persist".neededForBoot = true;
@@ -44,22 +45,25 @@ in {
       directories = ["/var/log"] ++ cfg.root.directories;
 
       # persist for home directory
-      users.${user} = {
-        directories =
-          # [
-          #   ".local/state/home-manager"
-          #   ".local/state/nix/profiles"
-          # ]
-          # ++
-          # dconf directories are not owned by user
-          lib.optionals config.programs.dconf.enable [
-            ".cache/dconf"
-            ".config/dconf"
-          ];
-      };
+      # users.${user} = {
+      #   directories =
+      #     # [
+      #     #   ".local/state/home-manager"
+      #     #   ".local/state/nix/profiles"
+      #     # ]
+      #     # ++
+      # };
     };
 
     # https://discourse.nixos.org/t/users-users-name-createhome-not-creating-home-directory/30779/2
+    # systemd.services = {
+    #   safemcsimw = {
+    #     script = ''
+    #       chown ${user}:users /home/${user} && chmod 700 /home/${user}
+    #     '';
+    #     wantedBy = ["multi-user.target"];
+    #   };
+    # };
 
     # setup persistence for home manager
     programs.fuse.userAllowOther = true;
@@ -73,7 +77,17 @@ in {
 
         files = cfg.home.files ++ hmCfg.home.files;
         directories =
-          ["projects"]
+          [
+            {
+              directory = "projects";
+              method = "symlink";
+            }
+          ]
+          # dconf directories are not owned by user
+          ++ lib.optionals config.programs.dconf.enable [
+            ".cache/dconf"
+            ".config/dconf"
+          ]
           ++ cfg.home.directories
           ++ hmCfg.home.directories;
       };

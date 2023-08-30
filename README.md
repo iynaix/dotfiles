@@ -30,7 +30,7 @@ Substitute `desktop` with desired host (desktop / desktop-generic /laptop / vm)
 
 ```sh
 nix-shell -p nixFlakes
-sudo nixos-install --flake github:iynaix/dotfiles#desktop --root /mnt
+sudo nixos-install --flake github:iynaix/dotfiles#desktop
 ```
 
 ### Create Password Files for User and Root

@@ -62,6 +62,7 @@
 
   iynaix.persist.home = {
     directories = [
+      "Documents"
       "Pictures"
     ];
   };

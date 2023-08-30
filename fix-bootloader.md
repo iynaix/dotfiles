@@ -39,5 +39,5 @@ Change `desktop` to desired host as needed
 
 ```sh
 nix-shell -p nixFlakes
-sudo nixos-install --flake github:iynaix/dotfiles#desktop --root /mnt
+sudo nixos-install --flake github:iynaix/dotfiles#desktop
 ```

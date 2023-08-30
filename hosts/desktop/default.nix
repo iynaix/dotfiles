@@ -14,9 +14,9 @@
     virt-manager.enable = true;
 
     # impermanence
-    persist.tmpfs = false;
+    persist.tmpfs = true;
     persist.erase.root = true;
-    persist.erase.home = false;
+    persist.erase.home = true;
   };
 
   networking.hostId = "89eaa833"; # required for zfs
