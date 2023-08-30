@@ -2,7 +2,6 @@
   lib,
   config,
   pkgs,
-  user,
   ...
 }: let
   cfg = config.iynaix-nixos.hdds;
@@ -73,7 +72,7 @@ in {
     # ]);
 
     # add bookmarks for gtk
-    home-manager.users.${user} = {
+    hm = {...} @ hmCfg: {
       gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
         "file://${ironwolf}/Anime/Current Anime Current"
         "file://${ironwolf}/TV/Current TV Current"
@@ -82,7 +81,7 @@ in {
 
       # create symlinks for locations with ~
       home.file = let
-        mkOutOfStoreSymlink = config.home-manager.users.${user}.lib.file.mkOutOfStoreSymlink;
+        mkOutOfStoreSymlink = hmCfg.config.lib.file.mkOutOfStoreSymlink;
       in {
         Downloads.source = lib.mkIf cfg.ironwolf22 (mkOutOfStoreSymlink "${ironwolf}/Downloads");
         Videos.source = lib.mkIf cfg.wdred6 (mkOutOfStoreSymlink "${wdred}");

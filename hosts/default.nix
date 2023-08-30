@@ -21,6 +21,8 @@
             ./configuration.nix # shared nixos configuration across all hosts
             ./${host} # host specific configuration
             ./${host}/hardware.nix # host specific hardware configuration
+            ../nixos
+            ../modules/nixos
             ../overlays
             ../packages
             inputs.home-manager.nixosModules.home-manager
@@ -45,6 +47,8 @@
                 };
               };
             }
+            # alias for home-manager
+            (lib.mkAliasOptionModule ["hm"] ["home-manager" "users" user])
             inputs.impermanence.nixosModules.impermanence
             inputs.kmonad.nixosModules.default
             inputs.sops-nix.nixosModules.sops

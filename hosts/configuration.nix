@@ -5,12 +5,6 @@
   config,
   ...
 }: {
-  # handle desktop / window manager
-  imports = [
-    ../modules/nixos
-    ../nixos
-  ];
-
   # Bootloader.
   boot.loader = {
     # systemd-boot.enable = true;

@@ -54,27 +54,17 @@ in {
       # };
     };
 
-    # https://discourse.nixos.org/t/users-users-name-createhome-not-creating-home-directory/30779/2
-    # systemd.services = {
-    #   safemcsimw = {
-    #     script = ''
-    #       chown ${user}:users /home/${user} && chmod 700 /home/${user}
-    #     '';
-    #     wantedBy = ["multi-user.target"];
-    #   };
-    # };
-
     # setup persistence for home manager
     programs.fuse.userAllowOther = true;
-    home-manager.users.${user} = {
+    hm = {...} @ hmCfg: let
+      persistCfg = hmCfg.config.iynaix.persist;
+    in {
       systemd.user.startServices = true;
-      home.persistence."/persist/home/${user}" = let
-        hmCfg = config.home-manager.users.${user}.iynaix.persist;
-      in {
+      home.persistence."/persist/home/${user}" = {
         allowOther = true;
         removePrefixDirectory = false;
 
-        files = [".Xauthority"] ++ cfg.home.files ++ hmCfg.home.files;
+        files = [".Xauthority"] ++ cfg.home.files ++ persistCfg.home.files;
         directories =
           [
             {
@@ -88,7 +78,7 @@ in {
             ".config/dconf"
           ]
           ++ cfg.home.directories
-          ++ hmCfg.home.directories;
+          ++ persistCfg.home.directories;
       };
     };
   };

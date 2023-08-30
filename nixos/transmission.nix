@@ -41,7 +41,7 @@ in {
         lpd-enabled = false;
         message-level = 1;
         open-dialog-dir = home;
-        peer-congestion-algorithm = "";
+        peer-congestion-algoritmyhm = "";
         peer-id-ttl-hours = 6;
         peer-limit-global = 200;
         peer-limit-per-torrent = 50;
@@ -109,9 +109,7 @@ in {
     # setup port forwarding
     networking.firewall.allowedTCPPorts = [51413];
 
-    home-manager.users.${user} = {
-      home.packages = with pkgs; [transmission-remote-gtk];
-    };
+    hm.home.packages = with pkgs; [transmission-remote-gtk];
 
     iynaix-nixos.persist.home.directories = [
       ".config/transmission-daemon/resume"

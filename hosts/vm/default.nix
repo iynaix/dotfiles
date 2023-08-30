@@ -6,6 +6,11 @@
 }: {
   iynaix-nixos = {
     hyprland-nixos.enable = false;
+
+    # impermanence
+    persist.tmpfs = false;
+    persist.erase.root = false;
+    persist.erase.home = false;
   };
 
   environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland-nixos.enable {

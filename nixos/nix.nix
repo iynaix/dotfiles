@@ -27,7 +27,7 @@
           git add "$untracked_files"
       fi
 
-      sudo nixos-rebuild build --flake ".#''${1:-${host}} |& nom"
+      sudo nixos-rebuild build --flake ".#''${1:-${host}}" |& nom
       popd
     '';
   };

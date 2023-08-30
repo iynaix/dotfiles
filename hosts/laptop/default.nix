@@ -10,6 +10,11 @@
     zfs.swap = true;
     kmonad.enable = true;
 
+    # impermanence
+    persist.tmpfs = false;
+    persist.erase.root = false;
+    persist.erase.home = false;
+
     persist.root.directories = [
       "/etc/NetworkManager" # for wifi
     ];

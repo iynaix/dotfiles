@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  user,
   ...
 }: let
   cfg = config.iynaix-nixos.nvidia;
@@ -24,6 +23,6 @@ in {
 
     # NOTE: environment variables are set in hyprland config
 
-    home-manager.users.${user}.wayland.windowManager.hyprland.enableNvidiaPatches = config.iynaix-nixos.hyprland-nixos.enable;
+    hm.wayland.windowManager.hyprland.enableNvidiaPatches = config.iynaix-nixos.hyprland-nixos.enable;
   };
 }

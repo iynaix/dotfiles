@@ -24,13 +24,13 @@ in
   {
     inherit (flake) inputs;
     inherit (flake.inputs) nixpkgs;
-    inherit lib host;
+    inherit lib host user;
   }
   // rec {
     # default host
     c = flake.nixosConfigurations.${host}.config;
     co = c.iynaix-nixos;
-    hm = c.config.home-manager.users.${user};
+    hm = c.home-manager.users.${user};
     hmo = hm.iynaix;
   }
   // vars
