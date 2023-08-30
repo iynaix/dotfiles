@@ -4,6 +4,7 @@
   ...
 }: let
   cfg = config.iynaix-nixos.zfs;
+  persistCfg = config.iynaix-nixos.persist;
 in {
   config = lib.mkIf cfg.enable {
     # booting with zfs
@@ -55,7 +56,7 @@ in {
     services.sanoid = lib.mkIf cfg.snapshots {
       enable = true;
 
-      datasets = lib.mkIf (!config.iynaix-nixos.persist.tmpfs) {
+      datasets = lib.mkIf (!(persistCfg.tmpfs && persistCfg.erase.home)) {
         "zroot/safe/home" = {
           hourly = 50;
           daily = 20;

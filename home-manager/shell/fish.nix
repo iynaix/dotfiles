@@ -12,6 +12,9 @@ in {
       then value
       else value.fishBody)
     cfg.functions;
+    shellAliases = {
+      ehistory = "nvim ~/.local/share/fish/fish_history";
+    };
     shellInit = ''
       # shut up welcome message
       set fish_greeting

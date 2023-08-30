@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  host,
   ...
 }: {
   home.shellAliases =
@@ -84,6 +85,23 @@
         direnv allow; and eval (direnv export fish)
         yarn renamer
         popd
+      '';
+    };
+    # utility for creating a nix repl
+    nrepl = {
+      bashBody = ''
+        if [[ -f repl.nix ]]; then
+          nix repl --arg '"${host}"' --file ./repl.nix "$@"
+        else
+          nix repl "$@"
+        fi
+      '';
+      fishBody = ''
+        if test -f repl.nix
+          nix repl --file ./repl.nix $argv
+        else
+          nix repl $argv
+        end
       '';
     };
   };
