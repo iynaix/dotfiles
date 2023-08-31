@@ -123,8 +123,8 @@ in {
       };
     };
 
-    iynaix.persist.home = {
-      directories = [
+    iynaix.persist = {
+      home.directories = [
         ".themes"
         ".config/wallust"
         ".cache/wallust"

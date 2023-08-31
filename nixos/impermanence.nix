@@ -26,7 +26,7 @@ in {
     fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
       device = "tmpfs";
       fsType = "tmpfs";
-      options = ["defaults" "size=3G" "mode=777"];
+      options = ["defaults" "size=1G" "mode=777"];
     });
 
     fileSystems."/persist".neededForBoot = true;

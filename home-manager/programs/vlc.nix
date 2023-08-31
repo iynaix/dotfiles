@@ -9,6 +9,10 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = [pkgs.vlc];
 
-    iynaix.persist.home.directories = [".config/vlc"];
+    iynaix.persist = {
+      home.directories = [
+        ".config/vlc"
+      ];
+    };
   };
 }

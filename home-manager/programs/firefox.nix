@@ -8,9 +8,11 @@
       };
     };
 
-    iynaix.persist.home.directories = [
-      ".cache/mozilla"
-      ".mozilla"
-    ];
+    iynaix.persist = {
+      home.directories = [
+        ".cache/mozilla"
+        ".mozilla"
+      ];
+    };
   };
 }

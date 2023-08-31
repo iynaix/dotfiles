@@ -111,7 +111,9 @@
     subs = "subliminal download -l 'en' -l 'eng' -s";
   };
 
-  iynaix.persist.home.directories = [
-    ".local/state/mpv" # watch later
-  ];
+  iynaix.persist = {
+    home.directories = [
+      ".local/state/mpv" # watch later
+    ];
+  };
 }

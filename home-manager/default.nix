@@ -57,8 +57,8 @@
     "nix/nix.conf".text = "experimental-features = nix-command flakes";
   };
 
-  iynaix.persist.home = {
-    directories = [
+  iynaix.persist = {
+    home.directories = [
       {
         directory = "Desktop";
         method = "symlink";

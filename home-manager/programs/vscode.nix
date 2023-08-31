@@ -17,8 +17,8 @@
     '';
   };
 
-  iynaix.persist.home = {
-    directories = [
+  iynaix.persist = {
+    home.directories = [
       ".console-ninja"
       ".config/Code"
       ".vscode"

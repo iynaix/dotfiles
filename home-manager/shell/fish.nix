@@ -43,7 +43,9 @@ in {
       }))
   ];
 
-  iynaix.persist.home.directories = [
-    ".local/share/fish"
-  ];
+  iynaix.persist = {
+    home.directories = [
+      ".local/share/fish"
+    ];
+  };
 }

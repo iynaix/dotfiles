@@ -82,7 +82,9 @@
   #   fi
   # '';
 
-  iynaix.persist.home.directories = [
-    ".cache/starship"
-  ];
+  iynaix.persist = {
+    home.directories = [
+      ".cache/starship"
+    ];
+  };
 }

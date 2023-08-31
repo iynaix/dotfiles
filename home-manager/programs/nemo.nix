@@ -40,7 +40,7 @@
     "file:///home/iynaix/projects"
     "file:///home/iynaix/projects/dotfiles"
     "file:///home/iynaix/projects/coinfc"
-    "file:///home/iynaix/Pictures"
+    "file:///home/iynaix/Pictures/Wallpapers"
     "file:///persist Persist"
   ];
 
@@ -73,8 +73,8 @@
     };
   };
 
-  iynaix.persist.home = {
-    directories = [
+  iynaix.persist = {
+    home.directories = [
       # folder preferences such as view mode and sort order
       ".local/share/gvfs-metadata"
     ];

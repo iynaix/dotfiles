@@ -9,7 +9,9 @@
     "DIRENV_LOG_FORMAT" = "";
   };
 
-  iynaix.persist.home = {
-    directories = [".local/share/direnv"];
+  iynaix.persist = {
+    home.directories = [
+      ".local/share/direnv"
+    ];
   };
 }

@@ -31,7 +31,9 @@ in {
     ]
     ++ (lib.optional isNixOS pkgs.swww);
 
-  iynaix.persist.home.directories = [
-    ".cache/swww"
-  ];
+  iynaix.persist = {
+    home.directories = [
+      ".cache/swww"
+    ];
+  };
 }

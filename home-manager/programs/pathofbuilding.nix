@@ -9,8 +9,10 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = [pkgs.path-of-building];
 
-    iynaix.persist.home.directories = [
-      ".local/share/pobfrontend"
-    ];
+    iynaix.persist = {
+      home.directories = [
+        ".local/share/pobfrontend"
+      ];
+    };
   };
 }

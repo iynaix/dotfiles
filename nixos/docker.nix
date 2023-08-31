@@ -14,5 +14,11 @@ in {
       enable = true;
       storageDriver = lib.mkIf (config.iynaix-nixos.zfs.enable && !(persistCfg.tmpfs && persistCfg.erase.root)) "zfs";
     };
+
+    iynaix-nixos.persist = {
+      root.directories = [
+        "/var/lib/docker"
+      ];
+    };
   };
 }

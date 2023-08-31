@@ -32,6 +32,7 @@ in
     co = c.iynaix-nixos;
     hm = c.home-manager.users.${user};
     hmo = hm.iynaix;
+    pkgs = flake.nixosConfigurations.${host}.pkgs;
   }
   // vars
   // {

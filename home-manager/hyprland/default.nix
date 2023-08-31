@@ -344,8 +344,10 @@ in {
     };
 
     # hyprland crash reports
-    iynaix.persist.home.directories = [
-      ".hyprland"
-    ];
+    iynaix.persist = {
+      home.directories = [
+        ".hyprland"
+      ];
+    };
   };
 }

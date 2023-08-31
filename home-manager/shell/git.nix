@@ -111,4 +111,10 @@ in {
     # cleanup leftover files from merges
     mergeclean = "find . -type f -name '*.orig' -exec rm -f {} \;";
   };
+
+  iynaix.persist = {
+    home.directories = [
+      ".config/gh"
+    ];
+  };
 }

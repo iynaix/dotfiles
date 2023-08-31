@@ -62,8 +62,10 @@
     ];
   };
 
-  iynaix.persist.home.directories = [
-    ".local/share/nvim" # data directory
-    ".local/state/nvim" # persistent session info
-  ];
+  iynaix.persist = {
+    home.directories = [
+      ".local/share/nvim" # data directory
+      ".local/state/nvim" # persistent session info
+    ];
+  };
 }
