@@ -7,41 +7,74 @@
   ...
 }: let
   cfg = config.iynaix.hyprland;
+  screenshotDir = "$HOME/Pictures/Screenshots";
+  iso8601 = "%Y-%m-%dT%H:%M:%S%z";
   # screenshot with rofi options to preselect
   hypr-screenshot = pkgs.writeShellApplication {
     name = "hypr-screenshot";
-    runtimeInputs = [inputs.hyprwm-contrib.packages.${pkgs.system}.grimblast];
+    runtimeInputs = with pkgs; [
+      inputs.hyprwm-contrib.packages.${pkgs.system}.grimblast
+      libnotify
+      swappy
+      rofi-wayland
+    ];
     text = ''
+      mesg="Screenshots can be edited with swappy by using Alt+e"
+      theme_str="
+      * {
+          width: 1000;
+      }
+
+      window {
+          height: 625;
+      }
+
+      mainbox {
+          children: [listview,message];
+      }
+      "
+
       _rofi() {
-          rofi -dmenu -sep '|' -disable-history true -cycle true -lines 4 -theme-str "mainbox { children: [listview]; }" "$@"
+          rofi -dmenu -sep '|' -disable-history true -kb-custom-1 "Alt-e" -mesg "$mesg" -cycle true -lines 4 -theme-str "$theme_str" "$@"
       }
 
       choice=$(echo "Selection|Window|Monitor|All" | _rofi)
+      # exit code 10 is alt-e
+      exit_code=$?
 
-      img="$HOME/Pictures/Screenshots/$(date --iso-8601=seconds).png"
+      # first arg the grimblast command
+      screenshot() {
+          img="${screenshotDir}/${iso8601}.png"
+          if [ "$exit_code" -eq 10 ]; then
+              grimblast save "$1" - | swappy -f - -o "$img"
+              notify-send "Screenshot saved to $img" -i "$img"
+          else
+              grimblast --notify copysave "$1" "$img"
+          fi
+      }
 
       # small sleep delay is required so rofi menu doesnt appear in the screenshot
       case "$choice" in
-        "All")
+      "All")
           delay=$(echo "0|3|5" | _rofi "$@")
           sleep 0.5
           sleep "$delay"
-          grimblast --notify copysave screen "$img"
+          screenshot screen
           ;;
-        "Monitor")
+      "Monitor")
           delay=$(echo "0|3|5" | _rofi "$@")
           sleep 0.5
           sleep "$delay"
-          grimblast --notify copysave output "$img"
+          screenshot output
           ;;
-        "Selection")
-          grimblast --notify copysave area "$img"
+      "Selection")
+          screenshot area
           ;;
-        "Window")
+      "Window")
           delay=$(echo "0|3|5" | _rofi "$@")
           sleep 0.5
           sleep "$delay"
-          grimblast --notify copysave active "$img"
+          screenshot active
           ;;
       esac
     '';
@@ -69,7 +102,22 @@ in {
       ++ (lib.optionals isNixOS (with inputs.hyprwm-contrib.packages.${pkgs.system}; [
         grimblast
         hyprprop
+        pkgs.swappy
       ]));
+
+    # swappy conf
+    xdg.configFile."swappy/config".text = ''
+      [Default]
+      save_dir=${screenshotDir}
+      save_filename_format=${iso8601}.png
+      show_panel=false
+      line_size=5
+      text_size=20
+      text_font=sans-serif
+      paint_mode=brush
+      early_exit=false
+      fill_shape=false
+    '';
 
     wayland.windowManager.hyprland.settings = {
       bind = [
