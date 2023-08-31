@@ -35,13 +35,13 @@ in {
         encryption = 1;
         idle-seeding-limit = 30;
         idle-seeding-limit-enabled = false;
-        incomplete-dir = pendingDir;
+        incomplete-dir = downloadDir;
         incomplete-dir-enabled = false;
         inhibit-desktop-hibernation = false;
         lpd-enabled = false;
         message-level = 1;
         open-dialog-dir = home;
-        peer-congestion-algoritmyhm = "";
+        peer-congestion-algorithm = "";
         peer-id-ttl-hours = 6;
         peer-limit-global = 200;
         peer-limit-per-torrent = 50;

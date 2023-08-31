@@ -24,7 +24,7 @@ in
   {
     inherit (flake) inputs;
     inherit (flake.inputs) nixpkgs;
-    inherit lib host user;
+    inherit flake lib host user;
   }
   // rec {
     # default host

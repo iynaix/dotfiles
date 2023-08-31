@@ -8,9 +8,9 @@
       self: super: {
         # turning display off renders Hyprland unusable
         # https://github.com/hyprwm/Hyprland/issues/2917
-        hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland.overrideAttrs (o: {
-          patches = (o.patches or []) ++ [./hyprland-undo-redundant-ticks.patch];
-        });
+        # hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland.overrideAttrs (o: {
+        #   patches = (o.patches or []) ++ [./hyprland-undo-redundant-ticks.patch];
+        # });
 
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888

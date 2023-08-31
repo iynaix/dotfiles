@@ -27,6 +27,7 @@ sudo fatlabel $BOOTDISK NIXBOOT
 sudo mount -t zfs zroot/local/root /mnt
 sudo mount $BOOTDISK /mnt/boot
 sudo mount -t zfs zroot/local/nix /mnt/nix
+sudo mount -t zfs zroot/local/tmp /mnt/tmp
 sudo mount -t zfs zroot/safe/home /mnt/home
 sudo mount -t zfs zroot/safe/persist /mnt/persist
 ```

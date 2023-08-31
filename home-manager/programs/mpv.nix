@@ -43,6 +43,7 @@
 
         I = ''cycle-values vf "sub,lavfi=negate" ""''; # invert colors
 
+        # disable annoying defaults
         "1" = "ignore";
         "2" = "ignore";
         "3" = "ignore";
@@ -55,6 +56,10 @@
         "0" = "ignore";
         "/" = "ignore";
         "*" = "ignore";
+        "Alt+left" = "ignore";
+        "Alt+right" = "ignore";
+        "Alt+up" = "ignore";
+        "Alt+down" = "ignore";
       };
       config = {
         profile = "gpu-hq";
@@ -107,6 +112,6 @@
   };
 
   iynaix.persist.home.directories = [
-    ".config/mpv/watch_later"
+    ".local/state/mpv" # watch later
   ];
 }

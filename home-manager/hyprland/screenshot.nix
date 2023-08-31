@@ -42,7 +42,7 @@
       # exit code 10 is alt-e
       exit_code=$?
 
-      # first arg the grimblast command
+      # first arg is the grimblast command
       screenshot() {
           img="${screenshotDir}/${iso8601}.png"
           if [ "$exit_code" -eq 10 ]; then
