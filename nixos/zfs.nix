@@ -42,6 +42,11 @@ in {
         fsType = "zfs";
       };
 
+      "/tmp" = {
+        device = "zroot/local/tmp";
+        fsType = "zfs";
+      };
+
       "/home" = {
         device = "zroot/safe/home";
         fsType = "zfs";
@@ -56,7 +61,7 @@ in {
     services.sanoid = lib.mkIf cfg.snapshots {
       enable = true;
 
-      datasets = lib.mkIf (!(persistCfg.tmpfs && persistCfg.erase.home)) {
+      datasets = lib.mkIf (!persistCfg.erase.home) {
         "zroot/safe/home" = {
           hourly = 50;
           daily = 20;

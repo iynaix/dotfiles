@@ -9,6 +9,7 @@ This script will format the *entire* disk with a 1GB boot partition
 The following ZFS datasets will be created:
     - zroot/local/root (mounted at / with blank snapshot)
     - zroot/local/nix (mounted at /nix)
+    - zroot/local/tmp (mounted at /tmp)
     - zroot/safe/home (mounted at /home with blank snapshot)
     - zroot/safe/persist (mounted at /persist)
 
@@ -106,6 +107,11 @@ echo "Creating /nix"
 sudo zfs create -o mountpoint=legacy zroot/local/nix
 sudo mkdir -p /mnt/nix
 sudo mount -t zfs zroot/local/nix /mnt/nix
+
+echo "Creating /tmp"
+sudo zfs create -o mountpoint=legacy zroot/local/tmp
+sudo mkdir -p /mnt/tmp
+sudo mount -t zfs zroot/local/tmp /mnt/tmp
 
 echo "Creating /home"
 sudo zfs create -o mountpoint=legacy zroot/safe/home

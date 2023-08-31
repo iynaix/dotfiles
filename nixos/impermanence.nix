@@ -7,6 +7,9 @@
   cfg = config.iynaix-nixos.persist;
 in {
   config = lib.mkIf config.iynaix-nixos.zfs.enable {
+    # clear /tmp on boot
+    boot.tmp.cleanOnBoot = true;
+
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkIf (!cfg.tmpfs) (lib.mkAfter ''
@@ -41,7 +44,12 @@ in {
       hideMounts = true;
 
       files = cfg.root.files;
-      directories = ["/var/log"] ++ cfg.root.directories;
+      directories =
+        [
+          # systemd journal is stored in /var/log/journal
+          "/var/log"
+        ]
+        ++ cfg.root.directories;
 
       # persist for home directory
       # users.${user} = {
