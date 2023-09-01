@@ -14,10 +14,9 @@
       hmCfg = hostCfg.home-manager.users.${user};
     in {
       "${host}" = hostCfg;
-      "${host}Opts" = hostCfg.iynaix-nixos;
+      "${host}o" = hostCfg.iynaix-nixos;
       "${host}Hm" = hmCfg;
-      "${host}HmOpts" = hmCfg.iynaix;
-      "${host}OptsHm" = hmCfg.iynaix;
+      "${host}Hmo" = hmCfg.iynaix;
     })
     hosts);
 in

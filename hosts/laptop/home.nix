@@ -1,4 +1,4 @@
-{config, ...}: {
+{...}: {
   iynaix = {
     displays = [
       {
@@ -27,23 +27,7 @@
           };
           tooltip = false;
         };
-        modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
-        network = {
-          format = "  {essid}";
-          format-disconnected = "󰖪  Offline";
-          on-click = "~/.config/rofi/rofi-wifi-menu";
-          on-click-right = "${config.iynaix.terminal.exec} nmtui";
-          tooltip = false;
-        };
       };
-      # add rounded corners for leftmost modules-right
-      css = let
-        radius = config.iynaix.waybar.border-radius;
-      in ''
-        #network {
-          border-radius: ${radius} 0 0 ${radius};
-        }
-      '';
     };
 
     terminal.size = 10;

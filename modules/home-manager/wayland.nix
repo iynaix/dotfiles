@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   hyprlandCfg = config.wayland.windowManager.hyprland;
@@ -40,7 +41,9 @@ in {
     waybar = {
       enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
       config = lib.mkOption {
-        type = lib.types.attrs;
+        type = lib.types.submodule {
+          freeformType = (pkgs.formats.json {}).type;
+        };
         default = {};
         description = "Additional waybar config (wallust templating can be used)";
       };

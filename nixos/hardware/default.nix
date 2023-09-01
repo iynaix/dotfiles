@@ -4,5 +4,6 @@
     ./backlight.nix
     ./hdds.nix
     ./nvidia.nix
+    ./wifi.nix
   ];
 }
