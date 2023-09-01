@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  user,
   ...
 }: let
   cfg = config.iynaix-nixos.zfs;
@@ -17,12 +18,6 @@ in {
       trim.enable = true;
     };
 
-    # standard boot partition
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-label/NIXBOOT";
-      fsType = "vfat";
-    };
-
     # mount swap if specified
     swapDevices = lib.mkIf cfg.swap (lib.mkForce [
       {
@@ -30,8 +25,20 @@ in {
       }
     ]);
 
-    # standard zfs filesystem layout
-    fileSystems = {
+    # standardized filesystem layout
+    fileSystems = let
+      homeMountPoint =
+        if persistCfg.erase.home
+        then "/home/${user}"
+        else "/home";
+    in {
+      # boot partition
+      "/boot" = {
+        device = "/dev/disk/by-label/NIXBOOT";
+        fsType = "vfat";
+      };
+
+      # zfs datasets
       "/" = {
         device = "zroot/local/root";
         fsType = "zfs";
@@ -47,7 +54,7 @@ in {
         fsType = "zfs";
       };
 
-      "/home" = {
+      "${homeMountPoint}" = {
         device = "zroot/safe/home";
         fsType = "zfs";
       };
@@ -61,8 +68,8 @@ in {
     services.sanoid = lib.mkIf cfg.snapshots {
       enable = true;
 
-      datasets = lib.mkIf (!persistCfg.erase.home) {
-        "zroot/safe/home" = {
+      datasets = {
+        "zroot/safe/home" = lib.mkIf (!persistCfg.erase.home) {
           hourly = 50;
           daily = 20;
           weekly = 6;

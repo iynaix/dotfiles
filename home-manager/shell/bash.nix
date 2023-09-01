@@ -18,12 +18,16 @@
       ${value.bashCompletion}
     '')
   cfg.functions);
+  histFile = "/persist/.config/bash/.bash_history";
 in {
   # NOTE: see shell.nix for shared aliases and initExtra
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    historyFile = "/persist/.config/bash/.bash_history";
+    historyFile = histFile;
+    shellAliases = {
+      ehistory = "nvim ${histFile}";
+    };
 
     profileExtra = cfg.profileExtra;
     initExtra = ''

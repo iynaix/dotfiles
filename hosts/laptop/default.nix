@@ -13,8 +13,8 @@
 
     # impermanence
     persist.tmpfs = false;
-    persist.erase.root = false;
-    persist.erase.home = false;
+    persist.erase.root = true;
+    persist.erase.home = true;
   };
 
   networking.hostId = "abb4d116"; # required for zfs

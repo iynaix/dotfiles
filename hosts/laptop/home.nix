@@ -32,6 +32,15 @@
     };
 
     terminal.size = 10;
+
+    persist = {
+      home.directories = [
+        {
+          directory = "Downloads";
+          method = "symlink";
+        }
+      ];
+    };
   };
 
   wayland.windowManager.hyprland.settings = {

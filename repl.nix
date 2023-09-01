@@ -8,32 +8,32 @@
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
   lib = flake.inputs.nixpkgs.lib;
-  hosts = ["desktop" "laptop" "vm"];
-  vars = lib.attrsets.mergeAttrsList (builtins.map (host: let
-      hostCfg = flake.nixosConfigurations.${host}.config;
-      hmCfg = hostCfg.home-manager.users.${user};
-    in {
-      "${host}" = hostCfg;
-      "${host}o" = hostCfg.iynaix-nixos;
-      "${host}Hm" = hmCfg;
-      "${host}Hmo" = hmCfg.iynaix;
-    })
-    hosts);
-in
-  {
-    inherit (flake) inputs;
-    inherit (flake.inputs) nixpkgs;
-    inherit flake lib host user;
-  }
-  // rec {
-    # default host
-    c = flake.nixosConfigurations.${host}.config;
-    co = c.iynaix-nixos;
-    hm = c.home-manager.users.${user};
-    hmo = hm.iynaix;
-    pkgs = flake.nixosConfigurations.${host}.pkgs;
-  }
-  // vars
-  // {
-    # your code here
-  }
+in rec {
+  inherit (flake) inputs;
+  inherit (flake.inputs) nixpkgs;
+  inherit flake lib host user;
+
+  # default host
+  c = flake.nixosConfigurations.${host}.config;
+  co = c.iynaix-nixos;
+  hm = c.home-manager.users.${user};
+  hmo = hm.iynaix;
+  pkgs = flake.nixosConfigurations.${host}.pkgs;
+
+  desktop = flake.nixosConfigurations.desktop.config;
+  desktopo = desktop.iynaix-nixos;
+  desktopHm = desktop.home-manager.users.${user};
+  desktopHmo = desktopHm.iynaix;
+
+  laptop = flake.nixosConfigurations.laptop.config;
+  laptopo = laptop.iynaix-nixos;
+  laptopHm = laptop.home-manager.users.${user};
+  laptopHmo = laptopHm.iynaix;
+
+  vm = flake.nixosConfigurations.vm.config;
+  vmo = vm.iynaix-nixos;
+  vmHm = vm.home-manager.users.${user};
+  vmHmo = vmHm.iynaix;
+
+  # your code here
+}

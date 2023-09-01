@@ -17,6 +17,14 @@ in {
       ${lib.optionalString (cfg.erase.home) "zfs rollback -r zroot/safe/home@blank"}
     '');
 
+    # fix directory permissions so home-manager doesn't error out
+    systemd.services.fix-mount-permissions = lib.mkIf (!cfg.tmpfs && cfg.erase.home) {
+      script = ''
+        chown  ${user}:users /home/${user} && chmod 700 /home/${user}
+      '';
+      wantedBy = ["multi-user.target"];
+    };
+
     # replace root and /or home filesystems with tmpfs
     fileSystems."/" = lib.mkIf (cfg.tmpfs && cfg.erase.root) (lib.mkForce {
       device = "tmpfs";
