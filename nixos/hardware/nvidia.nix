@@ -7,9 +7,9 @@
 }: let
   cfg = config.iynaix-nixos.nvidia;
 in {
-  config = lib.mkIf cfg.enable (
+  config = (
     lib.mkMerge [
-      {
+      (lib.mkIf cfg.enable {
         # enable nvidia support
         services.xserver.videoDrivers = ["nvidia"];
 
@@ -36,7 +36,7 @@ in {
           ++ lib.optionals (host == "vm") [
             "WLR_RENDERER_ALLOW_SOFTWARE,1"
           ];
-      }
+      })
       {
         hm =
           if config.iynaix-nixos.hyprland.stable

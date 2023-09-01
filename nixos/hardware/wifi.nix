@@ -10,10 +10,7 @@
       wirelesstools
     ];
 
-    hm = {...} @ hmCfg: let
-      waybarCfg = hmCfg.config.iynaix.waybar;
-      radius = waybarCfg.border-radius;
-    in {
+    hm = {...} @ hmCfg: {
       # add wifi indicator to waybar
       iynaix.waybar = {
         config = {
@@ -26,12 +23,6 @@
             tooltip = false;
           };
         };
-        # add rounded corners for leftmost modules-right
-        css = ''
-          #network {
-            border-radius: ${radius} 0 0 ${radius};
-          }
-        '';
       };
     };
 

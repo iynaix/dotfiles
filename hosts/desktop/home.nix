@@ -26,18 +26,6 @@ in {
       }
     ];
 
-    # wayland settings
-    waybar = {
-      css = let
-        radius = config.iynaix.waybar.border-radius;
-      in ''
-        /* add rounded corners for leftmost modules-right */
-        #pulseaudio {
-          border-radius: ${radius} 0 0 ${radius};
-        }
-      '';
-    };
-
     wallust.gtk = false;
     pathofbuilding.enable = true;
     trimage.enable = false;

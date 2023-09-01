@@ -1,22 +1,10 @@
 {
   pkgs,
-  config,
   lib,
   isNixOS,
   ...
 }: {
   iynaix = {
-    waybar = {
-      css = let
-        radius = config.iynaix.waybar.border-radius;
-      in ''
-        /* add rounded corners for leftmost modules-right */
-        #pulseaudio {
-          border-radius: ${radius} 0 0 ${radius};
-        }
-      '';
-    };
-
     pathofbuilding.enable = false;
     trimage.enable = false;
   };

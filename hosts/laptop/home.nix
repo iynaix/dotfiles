@@ -27,6 +27,7 @@
           };
           tooltip = false;
         };
+        modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
       };
     };
 

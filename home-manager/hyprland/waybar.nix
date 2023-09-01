@@ -9,8 +9,8 @@
   launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
     killall -q .waybar-wrapped
 
-    waybar --config $HOME/.cache/wallust/waybar-config \
-        --style $HOME/.cache/wallust/waybar-style.css \
+    waybar --config $HOME/.cache/wallust/waybar.jsonc \
+        --style $HOME/.cache/wallust/waybar.css \
         > /dev/null 2>&1 &
   '';
 in {
@@ -133,20 +133,22 @@ in {
       # };
     };
 
-    iynaix.wallust.entries = {
-      waybar-config = {
+    iynaix.wallust.entries = let
+      finalWaybarCfg =
+        cfg.config
+        // {
+          # dedupe modules
+          modules-left = lib.unique cfg.config.modules-left;
+          modules-center = lib.unique cfg.config.modules-center;
+          modules-right = lib.unique cfg.config.modules-right;
+        };
+    in {
+      "waybar.jsonc" = {
         enable = config.iynaix.wallust.waybar;
-        text = builtins.toJSON (cfg.config
-          // {
-            # dedupe modules
-            modules-left = lib.unique cfg.config.modules-left;
-            modules-center = lib.unique cfg.config.modules-center;
-            modules-right = lib.unique cfg.config.modules-right;
-          });
-        target = "~/.cache/wallust/waybar-config";
+        text = builtins.toJSON finalWaybarCfg;
+        target = "~/.cache/wallust/waybar.jsonc";
       };
-
-      waybar-css = let
+      "waybar.css" = let
         separatorClass = {
           name,
           color,
@@ -181,6 +183,23 @@ in {
           }
         '';
         radius = config.iynaix.waybar.border-radius;
+        mkRadiusCss = arr: let
+          last = builtins.length arr - 1;
+        in
+          lib.concatStringsSep "\n" (
+            lib.imap0 (i: mod: let
+              className = builtins.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
+              left =
+                if i == 0
+                then radius
+                else "0";
+              right =
+                if i == last
+                then radius
+                else "0";
+            in ''#${className} { border-radius: ${left} ${right} ${right} ${left}; }'')
+            arr
+          );
       in {
         enable = config.iynaix.wallust.waybar;
         text = lib.mkDefault ''
@@ -193,21 +212,18 @@ in {
             font-weight: bold;
             color: {foreground};
             background-color: {color0};
-            border-radius: 0;
             transition: none;
             padding: 0 8px;
           }
 
           #workspaces, #workspaces button {
             padding: 0 4px 0 4px;
-            border-radius: ${radius};
           }
 
           #clock, #workspaces button.active {
             background-color: {foreground};
             color: {color0};
             margin-right: 4px;
-            border-radius: 0 ${radius} ${radius} 0;
           }
 
           #custom-nix {
@@ -216,12 +232,6 @@ in {
             margin-left: 4px;
             padding: 0 16px 0 12px;
             font-size: 16px;
-
-            /* with hyprland / window */
-            /* border-radius: ${radius} 0 0 ${radius}; */
-
-            /* standalone */
-            border-radius: ${radius};
           }
 
           #workspaces button.urgent {
@@ -243,7 +253,6 @@ in {
 
           #window {
             padding: 0 12px;
-            border-radius: 0 ${radius} ${radius} 0;
           }
 
           /* invert colors for monocle / swallowing */
@@ -260,9 +269,13 @@ in {
             background: {color0};
           }
 
+          ${mkRadiusCss finalWaybarCfg.modules-left}
+          ${mkRadiusCss finalWaybarCfg.modules-center}
+          ${mkRadiusCss finalWaybarCfg.modules-right}
+
           ${cfg.css}
         '';
-        target = "~/.cache/wallust/waybar-style.css";
+        target = "~/.cache/wallust/waybar.css";
       };
     };
   };
