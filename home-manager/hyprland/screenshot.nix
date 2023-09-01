@@ -6,7 +6,6 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.hyprland;
   screenshotDir = "$HOME/Pictures/Screenshots";
   iso8601 = "%Y-%m-%dT%H:%M:%S%z";
   # screenshot with rofi options to preselect
@@ -93,7 +92,7 @@
     '';
   };
 in {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home.packages =
       [
         hypr-ocr

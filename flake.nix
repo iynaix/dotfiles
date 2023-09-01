@@ -11,10 +11,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-hyprland = {
+      url = "github:nix-community/home-manager/c3ab5ea047e6dc73df530948f7367455749d8906";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprland-stable = {
+      url = "github:hyprwm/Hyprland/v0.28.0";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,6 +46,11 @@
     hyprNStack = {
       url = "github:SiriusStarr/hyprNStack";
       inputs.hyprland.follows = "hyprland";
+    };
+
+    hyprNStack-stable = {
+      url = "github:SiriusStarr/hyprNStack";
+      inputs.hyprland.follows = "hyprland-stable";
     };
 
     nix-index-database = {

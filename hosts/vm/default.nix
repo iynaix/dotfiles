@@ -1,20 +1,11 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   iynaix-nixos = {
-    hyprland-nixos.enable = false;
+    hyprland.enable = false;
 
     # impermanence
     persist.tmpfs = false;
     persist.erase.root = false;
     persist.erase.home = false;
-  };
-
-  environment.sessionVariables = lib.mkIf config.iynaix-nixos.hyprland-nixos.enable {
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
   };
 
   networking.hostId = "5f43c101"; # required for zfs

@@ -7,7 +7,7 @@
 
     # software
     distrobox.enable = true;
-    hyprland-nixos.enable = true;
+    hyprland.enable = true;
     sops.enable = false;
     torrenters.enable = false;
     virt-manager.enable = true;

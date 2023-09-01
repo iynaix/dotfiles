@@ -1,11 +1,10 @@
 {
   lib,
   config,
-  inputs,
   pkgs,
   ...
 }: let
-  cfg = config.iynaix-nixos.hyprland-nixos;
+  cfg = config.iynaix-nixos.hyprland;
 in {
   config = lib.mkIf cfg.enable {
     services.xserver.desktopManager.gnome.enable = lib.mkForce false;
@@ -19,8 +18,13 @@ in {
 
     programs.hyprland.enable = true;
 
+    hm.wayland.windowManager.hyprland = {
+      enable = true;
+      package = pkgs.iynaix.hyprland;
+    };
+
     environment.systemPackages = [
-      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
+      pkgs.iynaix.xdg-desktop-portal-hyprland
     ];
   };
 }

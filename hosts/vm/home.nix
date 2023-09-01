@@ -9,10 +9,5 @@
     ];
 
     pathofbuilding.enable = false;
-
-    # wayland settings
-    hyprland = {
-      enable = false;
-    };
   };
 }

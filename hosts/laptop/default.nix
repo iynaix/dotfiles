@@ -6,7 +6,7 @@
 }: {
   iynaix-nixos = {
     backlight.enable = true;
-    hyprland-nixos.enable = true;
+    hyprland.enable = true;
     zfs.swap = true;
     kmonad.enable = true;
 

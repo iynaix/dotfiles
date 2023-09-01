@@ -6,11 +6,6 @@
   ...
 }: {
   iynaix = {
-    # wayland settings
-    hyprland = {
-      enable = true;
-      nvidia = true;
-    };
     waybar = {
       css = let
         radius = config.iynaix.waybar.border-radius;

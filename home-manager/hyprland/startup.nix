@@ -4,7 +4,6 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.hyprland;
   hyprMonitors = pkgs.writeShellApplication {
     name = "hypr-monitors";
     text = let
@@ -32,7 +31,7 @@
     '';
   };
 in {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home.packages = [hyprMonitors];
 
     # start hyprland
@@ -47,7 +46,7 @@ in {
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString cfg.hyprnstack "--nstack"} &"
+        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString config.iynaix.hyprnstack "--nstack"} &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

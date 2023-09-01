@@ -8,7 +8,7 @@
     sh "$HOME/.cache/wallust/hypr-lock"
   '';
 in {
-  config = lib.mkIf config.iynaix.hyprland.enable {
+  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home.packages = [hypr-lock];
 
     wayland.windowManager.hyprland.settings = {

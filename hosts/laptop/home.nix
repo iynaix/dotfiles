@@ -10,10 +10,6 @@
 
     pathofbuilding.enable = true;
 
-    hyprland = {
-      enable = true;
-    };
-
     waybar = {
       config = {
         backlight = {

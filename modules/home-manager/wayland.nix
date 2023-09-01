@@ -1,23 +1,12 @@
 {
-  lib,
   config,
+  lib,
   ...
-}: {
+}: let
+  hyprlandCfg = config.wayland.windowManager.hyprland;
+in {
   options.iynaix = {
-    hyprland = {
-      enable = lib.mkEnableOption "Hyprland" // {default = true;};
-      nvidia = lib.mkEnableOption "Nvidia";
-      keybinds = lib.mkOption {
-        type = lib.types.attrsOf lib.types.str;
-        description = ''
-          Keybinds for Hyprland, see
-          https://wiki.hyprland.org/Configuring/Binds/
-        '';
-        example = ''{ "SUPER, Return" = "exec, kitty"; }'';
-        default = {};
-      };
-      hyprnstack = lib.mkEnableOption "hyprNStack" // {default = true;};
-    };
+    hyprnstack = lib.mkEnableOption "hyprNStack" // {default = hyprlandCfg.enable;};
 
     displays = lib.mkOption {
       type = with lib.types;
@@ -49,7 +38,7 @@
     };
 
     waybar = {
-      enable = lib.mkEnableOption "waybar" // {default = config.iynaix.hyprland.enable;};
+      enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
       config = lib.mkOption {
         type = lib.types.attrs;
         default = {};
