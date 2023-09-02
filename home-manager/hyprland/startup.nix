@@ -41,12 +41,14 @@ in {
       fi
     '';
 
-    wayland.windowManager.hyprland.settings = {
+    wayland.windowManager.hyprland.settings = let
+      hyprnstack = config.wayland.windowManager.hyprland.settings.general.layout == "nstack";
+    in {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString config.iynaix.hyprnstack "--nstack"} &"
+        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString hyprnstack "--nstack"} &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

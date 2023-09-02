@@ -7,8 +7,6 @@
   hyprlandCfg = config.wayland.windowManager.hyprland;
 in {
   options.iynaix = {
-    hyprnstack = lib.mkEnableOption "hyprNStack" // {default = hyprlandCfg.enable;};
-
     displays = lib.mkOption {
       type = with lib.types;
         listOf (

@@ -11,7 +11,6 @@ in {
     ./screenshot.nix
     ./startup.nix
     ./lock.nix
-    ./plugins.nix
     ./waybar.nix
     ./swww.nix
   ];

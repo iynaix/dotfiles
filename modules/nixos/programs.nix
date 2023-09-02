@@ -13,6 +13,7 @@ in {
     hyprland = {
       enable = lib.mkEnableOption "hyprland (nixos)";
       stable = lib.mkEnableOption "Use the stable version of Hyprland (v0.28.0)" // {default = true;};
+      hyprnstack = lib.mkEnableOption "hyprNStack" // {default = cfg.hyprland.enable;};
     };
     kmonad.enable = lib.mkEnableOption "kmonad" // {default = host == "laptop";};
     sops.enable = lib.mkEnableOption "sops" // {default = true;};

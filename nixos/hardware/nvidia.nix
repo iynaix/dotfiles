@@ -22,7 +22,7 @@ in {
           modesetting.enable = true;
           # prevents crashes with nvidia on resuming, see:
           # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
-          # powerManagement.enable = false;
+          powerManagement.enable = false;
         };
 
         hm.wayland.windowManager.hyprland.settings.env =
