@@ -61,6 +61,7 @@
     text = ''
       pushd ${dots}
       nix flake update
+      nvfetcher
       nswitch
       popd
     '';

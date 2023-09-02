@@ -51,20 +51,19 @@ in {
           };
         });
 
-        # creating an overlay for buildRustPackage overlay
-        # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-        swww = super.swww.overrideAttrs (o: rec {
-          src = super.fetchgit {
-            url = "https://github.com/Horus645/swww";
-            rev = "517fbeb0f831d43d6c88dac22380536b00e7d9f1";
-            sha256 = "sha256-Fx2e+UqBURY6Vxi6cePc0lK5gIEcWobMGfEx03ZOvAY=";
-          };
+        # use latest commmit from git
+        swww = super.swww.overrideAttrs (o:
+          sources.swww
+          // {
+            version = "${o.version}-${sources.swww.version}";
 
-          cargoDeps = super.rustPlatform.importCargoLock {
-            lockFile = src + "/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-        });
+            # creating an overlay for buildRustPackage overlay
+            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+            cargoDeps = super.rustPlatform.importCargoLock {
+              lockFile = sources.swww.src + "/Cargo.lock";
+              allowBuiltinFetchGit = true;
+            };
+          });
 
         # transmission dark mode, the default theme is hideous
         transmission = let
@@ -84,19 +83,12 @@ in {
             '';
           });
 
-        # waybar = let
-        #   rev = "b66584308545e3da9fc4433529a684443b5eebe9";
-        # in
-        #   super.waybar.overrideAttrs (o: {
-        #     version = "${o.version}-${rev}";
-
-        #     # use latest waybar from git
-        #     src = super.fetchgit {
-        #       url = "https://github.com/Alexays/Waybar";
-        #       rev = rev;
-        #       sha256 = "sha256-yinPPXClBu+CsD9HejciwD8EV3hBlMFBMcCH0/4TX0I=";
-        #     };
-        #   });
+        # use latest commmit from git
+        waybar = super.waybar.overrideAttrs (o:
+          sources.waybar
+          // {
+            version = "${o.version}-${sources.waybar.version}";
+          });
       }
     )
   ];

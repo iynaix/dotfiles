@@ -1,46 +1,41 @@
 {
   stdenvNoCC,
-  fetchFromGitHub,
   makeFontsConf,
   lib,
+  sources,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "mpv-modernx";
-  version = "unstable-2023-01-12";
+stdenvNoCC.mkDerivation (
+  finalAttrs: (sources.mpv-modernx
+    // {
+      version = "unstable-${sources.mpv-modernx.date}";
 
-  src = fetchFromGitHub {
-    owner = "cyl0";
-    repo = "ModernX";
-    rev = "d053ea602d797bdd85d8b2275d7f606be067dc21";
-    hash = "sha256-Gpofl529VbmdN7eOThDAsNfNXNkUDDF82Rd+csXGOQg=";
-  };
+      dontBuild = true;
 
-  dontBuild = true;
+      installPhase = ''
+        runHook preInstall
 
-  installPhase = ''
-    runHook preInstall
+        mkdir -p $out/share/mpv/scripts
+        cp modernx.lua $out/share/mpv/scripts/modernx.lua
+        mkdir -p $out/share/fonts/truetype
+        cp Material-Design-Iconic-Font.ttf $out/share/fonts/truetype
 
-    mkdir -p $out/share/mpv/scripts
-    cp modernx.lua $out/share/mpv/scripts/modernx.lua
-    mkdir -p $out/share/fonts/truetype
-    cp Material-Design-Iconic-Font.ttf $out/share/fonts/truetype
+        runHook postInstall
+      '';
 
-    runHook postInstall
-  '';
+      passthru.scriptName = "modernx.lua";
+      # In order for mpv to find the custom font, we need to adjust the fontconfig search path.
+      passthru.extraWrapperArgs = [
+        "--set"
+        "FONTCONFIG_FILE"
+        (toString (makeFontsConf {
+          fontDirectories = ["${finalAttrs.finalPackage}/share/fonts"];
+        }))
+      ];
 
-  passthru.scriptName = "modernx.lua";
-  # In order for mpv to find the custom font, we need to adjust the fontconfig search path.
-  passthru.extraWrapperArgs = [
-    "--set"
-    "FONTCONFIG_FILE"
-    (toString (makeFontsConf {
-      fontDirectories = ["${finalAttrs.finalPackage}/share/fonts"];
-    }))
-  ];
-
-  meta = {
-    description = "An MPV OSC script based on mpv-osc-modern that aims to mirror the functionality of MPV's stock OSC while with a more modern-looking interface.";
-    homepage = "https://github.com/cyl0/ModernX";
-    maintainers = with lib.maintainers; [iynaix];
-  };
-})
+      meta = {
+        description = "An MPV OSC script based on mpv-osc-modern that aims to mirror the functionality of MPV's stock OSC while with a more modern-looking interface.";
+        homepage = "https://github.com/cyl0/ModernX";
+        maintainers = with lib.maintainers; [iynaix];
+      };
+    })
+)
