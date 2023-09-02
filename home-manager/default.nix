@@ -12,13 +12,6 @@
     ./shell
   ];
 
-  # mounting and unmounting of disks
-  services.udiskie = {
-    enable = true;
-    automount = true;
-    notify = true;
-  };
-
   # setup fonts for other distros, run "fc-cache -f" to refresh fonts
   fonts.fontconfig.enable = true;
 
