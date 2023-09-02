@@ -1,30 +1,7 @@
-{
-  config,
-  inputs,
-  pkgs,
-  ...
-}: {
+{...}: {
   nixpkgs.overlays = [
     (
       self: super: {
-        # turning display off renders Hyprland unusable
-        # https://github.com/hyprwm/Hyprland/issues/2917
-        iynaix = let
-          hyprlandPackages =
-            if config.iynaix-nixos.hyprland.stable
-            then inputs.hyprland-stable.packages.${pkgs.system}
-            else inputs.hyprland.packages.${pkgs.system};
-          hyprNStackPackages =
-            if config.iynaix-nixos.hyprland.stable
-            then inputs.hyprNStack-stable.packages.${pkgs.system}
-            else inputs.hyprNStack.packages.${pkgs.system};
-        in
-          (super.iynaix or {})
-          // {
-            inherit (hyprlandPackages) hyprland xdg-desktop-portal-hyprland;
-            inherit (hyprNStackPackages) hyprNStack;
-          };
-
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
         imv = super.imv.overrideAttrs (o: {

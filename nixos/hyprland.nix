@@ -1,8 +1,9 @@
 {
-  lib,
   config,
-  pkgs,
   host,
+  inputs,
+  lib,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix-nixos.hyprland;
@@ -22,13 +23,13 @@ in {
     hm.wayland.windowManager.hyprland = lib.mkMerge [
       {
         enable = true;
-        package = pkgs.iynaix.hyprland;
+        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       }
       (lib.mkIf cfg.hyprnstack {
         settings.general.layout = lib.mkForce "nstack";
 
         # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
-        plugins = [pkgs.iynaix.hyprNStack];
+        plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
         extraConfig = ''
           plugin {
             nstack {
@@ -52,7 +53,7 @@ in {
     ];
 
     environment.systemPackages = [
-      pkgs.iynaix.xdg-desktop-portal-hyprland
+      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
     ];
   };
 }

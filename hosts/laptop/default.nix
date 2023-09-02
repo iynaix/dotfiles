@@ -6,7 +6,6 @@
   iynaix-nixos = {
     backlight.enable = true;
     hyprland.enable = true;
-    hyprland.stable = true;
     kmonad.enable = true;
     wifi.enable = true;
     zfs.swap = true;

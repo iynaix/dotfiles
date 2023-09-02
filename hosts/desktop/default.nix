@@ -8,7 +8,6 @@
     # software
     distrobox.enable = true;
     hyprland.enable = true;
-    hyprland.stable = true;
     syncoid.enable = true;
     torrenters.enable = true;
     vercel.enable = true;
