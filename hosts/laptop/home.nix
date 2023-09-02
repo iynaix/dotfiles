@@ -12,12 +12,6 @@
 
     waybar = {
       config = {
-        backlight = {
-          format = "{icon}  {percent}%";
-          format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
-          on-scroll-down = "brightnessctl s 1%-";
-          on-scroll-up = "brightnessctl s +1%";
-        };
         battery = {
           format = "{icon}  {capacity}%";
           format-charging = "  {capacity}%";

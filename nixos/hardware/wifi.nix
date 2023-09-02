@@ -12,7 +12,7 @@
 
     hm = {...} @ hmCfg: {
       # add wifi indicator to waybar
-      iynaix.waybar = {
+      iynaix.waybar = lib.mkIf hmCfg.config.iynaix.waybar.enable {
         config = {
           modules-right = lib.mkBefore ["network"];
           network = {

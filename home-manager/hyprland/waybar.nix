@@ -183,7 +183,15 @@ in {
           }
         '';
         radius = config.iynaix.waybar.border-radius;
-        mkRadiusCss = arr: let
+        baseModuleCss = ''
+          font-family: "Inter", "FontAwesome6Free";
+          font-weight: bold;
+          color: {foreground};
+          background-color: {color0};
+          transition: none;
+          padding: 0 8px;
+        '';
+        mkModuleCss = arr: let
           last = builtins.length arr - 1;
         in
           lib.concatStringsSep "\n" (
@@ -197,7 +205,19 @@ in {
                 if i == last
                 then radius
                 else "0";
-            in ''#${className} { border-radius: ${left} ${right} ${right} ${left}; }'')
+              padding =
+                if (i == 0 || i == last)
+                then ""
+                else ''
+                  padding-left: 12px;
+                  padding-right: 12px;
+                '';
+            in ''
+              #${className} {
+                ${baseModuleCss}
+                border-radius: ${left} ${right} ${right} ${left};
+                ${padding}
+              }'')
             arr
           );
       in {
@@ -207,13 +227,12 @@ in {
             background: transparent;
           }
 
-          #workspaces, #workspaces button, #battery, #network, #clock, #pulseaudio, #window, #backlight {
-            font-family: "Inter", "FontAwesome6Free";
-            font-weight: bold;
-            color: {foreground};
-            background-color: {color0};
-            transition: none;
-            padding: 0 8px;
+          ${mkModuleCss finalWaybarCfg.modules-left}
+          ${mkModuleCss finalWaybarCfg.modules-center}
+          ${mkModuleCss finalWaybarCfg.modules-right}
+
+          #workspaces button {
+            ${baseModuleCss}
           }
 
           #workspaces, #workspaces button {
@@ -239,20 +258,8 @@ in {
             color: {foreground};
           }
 
-          #pulseaudio, #backlight {
-            padding: 0 12px;
-          }
-
-          #network {
-            padding: 0 12px;
-          }
-
           #network.disconnected, #battery.discharging.critical {
             color: {color1};
-          }
-
-          #window {
-            padding: 0 12px;
           }
 
           /* invert colors for monocle / swallowing */
@@ -268,10 +275,6 @@ in {
           tooltip {
             background: {color0};
           }
-
-          ${mkRadiusCss finalWaybarCfg.modules-left}
-          ${mkRadiusCss finalWaybarCfg.modules-center}
-          ${mkRadiusCss finalWaybarCfg.modules-right}
 
           ${cfg.css}
         '';
