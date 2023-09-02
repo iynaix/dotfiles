@@ -1,7 +1,8 @@
 {
-  pkgs,
   host,
+  inputs,
   lib,
+  pkgs,
   user,
   ...
 }: let
@@ -115,6 +116,7 @@ in {
       nswitch
       upd8
       fhs
+      inputs.nvfetcher.packages.${pkgs.system}.default # nvfetcher
     ]
     ++ lib.optionals (host == "desktop") [
       nswitch-remote
