@@ -68,20 +68,6 @@
   # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
   programs.kitty.shellIntegration.enableBashIntegration = false;
 
-  # fix starship prompt to only have newlines after the first command
-  # reimplement enableBashIntegration and place at end of bashrc
-  # https://github.com/starship/starship/issues/560#issuecomment-1651732556
-  # programs.bash.initExtra = lib.mkOrder 2000 ''
-  #   if [[ $TERM != "dumb" ]]; then
-  #     precmd() {
-  #         echo '''
-  #     }
-  #     export PROMPT_COMMAND=precmd
-
-  #     eval "$(${config.home.profileDirectory}/bin/starship init bash --print-full-init)"
-  #   fi
-  # '';
-
   iynaix.persist = {
     home.directories = [
       ".cache/starship"

@@ -16,23 +16,23 @@ in rec {
   # default host
   c = flake.nixosConfigurations.${host}.config;
   co = c.iynaix-nixos;
-  hm = c.home-manager.users.${user};
+  hm = c.hm;
   hmo = hm.iynaix;
   pkgs = flake.nixosConfigurations.${host}.pkgs;
 
   desktop = flake.nixosConfigurations.desktop.config;
   desktopo = desktop.iynaix-nixos;
-  desktopHm = desktop.home-manager.users.${user};
+  desktopHm = desktop.hm;
   desktopHmo = desktopHm.iynaix;
 
   laptop = flake.nixosConfigurations.laptop.config;
   laptopo = laptop.iynaix-nixos;
-  laptopHm = laptop.home-manager.users.${user};
+  laptopHm = laptop.hm;
   laptopHmo = laptopHm.iynaix;
 
   vm = flake.nixosConfigurations.vm.config;
   vmo = vm.iynaix-nixos;
-  vmHm = vm.home-manager.users.${user};
+  vmHm = vm.hm;
   vmHmo = vmHm.iynaix;
 
   # your code here

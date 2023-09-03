@@ -13,6 +13,7 @@ in {
     services.transmission = {
       enable = true;
       inherit user home;
+      group = "users";
       settings = {
         alt-speed-down = 50;
         alt-speed-enabled = false;
@@ -112,8 +113,7 @@ in {
     hm.home.packages = with pkgs; [transmission-remote-gtk];
 
     iynaix-nixos.persist.home.directories = [
-      ".config/transmission-daemon/resume"
-      ".config/transmission-daemon/torrents"
+      ".config/transmission-daemon"
     ];
   };
 }

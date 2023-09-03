@@ -28,28 +28,40 @@ in {
   ];
 
   config = {
-    services.gvfs.enable = true;
-
     # automount disks
-    services.udisks2.enable = true;
+    services.gvfs.enable = true;
 
     # execute shebangs that assume hardcoded shell paths
     services.envfs.enable = true;
 
-    environment.systemPackages = with pkgs;
-      [
-        gcr # stops errors with copilot login?
-        libnotify
-        # for nixlang
-        alejandra
-        nil
-        nixpkgs-fmt
-      ]
-      ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
-      ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
-      ++ (lib.optional hmCfg.iynaix.helix.enable helix);
+    environment = {
+      etc = {
+        # git
+        "gitconfig".text = hmCfg.xdg.configFile."git/config".text;
+        # lf
+        "lf/lfrc".text = hmCfg.xdg.configFile."lf/lfrc".text;
+        "lf/icons".text = hmCfg.xdg.configFile."lf/icons".text;
+      };
+      variables = {
+        STARSHIP_CONFIG = "${hmCfg.xdg.configHome}/starship.toml";
+      };
 
-    # setup bash
+      systemPackages = with pkgs;
+        [
+          gcr # stops errors with copilot login?
+          libnotify
+          lf
+          # for nixlang
+          alejandra
+          nil
+          nixpkgs-fmt
+        ]
+        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
+        ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
+        ++ (lib.optional hmCfg.iynaix.helix.enable helix);
+    };
+
+    # set up programs to use same config as home-manager
     programs.bash = {
       interactiveShellInit = hmCfg.programs.bash.initExtra;
       loginShellInit = hmCfg.programs.bash.profileExtra;

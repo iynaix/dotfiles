@@ -1,9 +1,10 @@
 # create a cross shell config
 {
   config,
+  host,
   lib,
   pkgs,
-  host,
+  user,
   ...
 }: {
   home.shellAliases =
@@ -108,6 +109,6 @@
 
   iynaix.shell.initExtra = ''
     # wallust colorscheme
-    ${lib.optionalString (config.iynaix.wallust.shell) "cat ~/.cache/wallust/sequences"}
+    ${lib.optionalString (config.iynaix.wallust.shell) "cat /home/${user}/.cache/wallust/sequences"}
   '';
 }

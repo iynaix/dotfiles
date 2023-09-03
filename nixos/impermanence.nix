@@ -59,15 +59,7 @@ in {
         ]
         ++ cfg.root.directories;
 
-      # persist for home directory
-      # users.${user} = {
-      #   directories =
-      #     # [
-      #     #   ".local/state/home-manager"
-      #     #   ".local/state/nix/profiles"
-      #     # ]
-      #     # ++
-      # };
+      # DO NOT persist anything for home directory as it causes a race condition
     };
 
     # setup persistence for home manager
@@ -88,7 +80,6 @@ in {
               method = "symlink";
             }
           ]
-          # dconf directories are not owned by user
           ++ lib.optionals config.programs.dconf.enable [
             ".cache/dconf"
             ".config/dconf"
