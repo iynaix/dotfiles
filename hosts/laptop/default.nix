@@ -8,7 +8,6 @@
     hyprland.enable = true;
     kmonad.enable = true;
     wifi.enable = true;
-    zfs.swap = true;
 
     # impermanence
     persist.tmpfs = false;

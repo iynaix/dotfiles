@@ -68,12 +68,11 @@ sudo sgdisk -n1:0:0 -t1:BF01 $DISK
 sudo sgdisk -p $DISK > /dev/null
 sleep 5
 
-if [[ $USESWAP == "1" ]]; then
-    echo "Creating Swap"
-    sudo mkswap $SWAPDISK
-    sudo swaplabel --label "SWAP" $SWAPDISK
-    sudo swapon $SWAPDISK
-fi
+echo "Creating Swap"
+sudo mkswap $SWAPDISK
+sudo swaplabel --label "SWAP" $SWAPDISK
+sudo swapon $SWAPDISK
+
 echo "Creating Boot Disk"
 sudo mkfs.fat -F 32 $BOOTDISK
 sudo fatlabel $BOOTDISK NIXBOOT
@@ -82,7 +81,7 @@ echo "Creating base zpool"
 sudo zpool create -f \
     -o ashift=12 \
     -o autotrim=on \
-    -O compression=on \
+    -O compression=zstd \
     -O acltype=posixacl \
     -O atime=off \
     -O xattr=sa \

@@ -18,12 +18,10 @@ in {
       trim.enable = true;
     };
 
-    # mount swap if specified
-    swapDevices = lib.mkIf cfg.swap (lib.mkForce [
-      {
-        device = "/dev/disk/by-label/SWAP";
-      }
-    ]);
+    # 16GB swap created by zfs.sh
+    swapDevices = [
+      {device = "/dev/disk/by-label/SWAP";}
+    ];
 
     # standardized filesystem layout
     fileSystems = let

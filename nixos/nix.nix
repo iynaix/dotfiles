@@ -9,7 +9,13 @@
   dots = "/persist/home/${user}/projects/dotfiles";
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
-    sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
+    generations=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+    # add generation number from before desktop format
+    echo $(expr $generations + ${
+      if host == "desktop"
+      then "1196"
+      else "0"
+    })
   '';
   # set the current configuration as default to boot
   ndefault = pkgs.writeShellScriptBin "ndefault" ''
