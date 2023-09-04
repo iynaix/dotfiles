@@ -139,6 +139,26 @@
         },
         "version": "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a"
     },
+    "path-of-building": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "path-of-building",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "PathOfBuildingCommunity",
+            "repo": "PathOfBuilding",
+            "rev": "v2.33.5",
+            "sha256": "sha256-a7/xuVfsLQaSsmHVFKqDEypCunFQtHvcVISaQD1YCEs=",
+            "type": "github"
+        },
+        "version": "v2.33.5"
+    },
     "swww": {
         "cargoLocks": null,
         "date": "2023-08-28",

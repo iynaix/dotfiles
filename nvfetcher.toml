@@ -29,6 +29,10 @@ src.git= "https://github.com/po5/thumbfast"
 src.branch = "vanilla-osc"
 fetch.github = "po5/thumbfast"
 
+[path-of-building]
+src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
+fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
+
 [swww]
 src.git = "https://github.com/Horus645/swww"
 fetch.github = "Horus645/swww"

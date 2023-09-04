@@ -85,6 +85,17 @@
     };
     date = "2023-07-26";
   };
+  path-of-building = {
+    pname = "path-of-building";
+    version = "v2.33.5";
+    src = fetchFromGitHub {
+      owner = "PathOfBuildingCommunity";
+      repo = "PathOfBuilding";
+      rev = "v2.33.5";
+      fetchSubmodules = false;
+      sha256 = "sha256-a7/xuVfsLQaSsmHVFKqDEypCunFQtHvcVISaQD1YCEs=";
+    };
+  };
   swww = {
     pname = "swww";
     version = "053196e38075af6f94867865fe417026c86ae764";

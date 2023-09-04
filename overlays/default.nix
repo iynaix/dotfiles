@@ -26,16 +26,7 @@ in {
         # see below url for the latest specified version
         # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
         path-of-building = super.path-of-building.overrideAttrs (o: {
-          # passthru =
-          #   o.passthru
-          #   // oldAttrs.passthru.data.overrideAttrs (oldDataAttrs: {
-          #     src = super.fetchFromGitHub {
-          #       owner = "PathOfBuildingCommunity";
-          #       repo = "PathOfBuilding";
-          #       rev = "v2.33.0";
-          #       hash = "sha256-8w8pbiAP0zv1O7I6WfuPmQhEnBnySqSkIZoDH5hOOyw=";
-          #     };
-          #   });
+          passthru = o.passthru // o.passthru.data.overrideAttrs (_: {src = sources.path-of-building.src;});
 
           # add .desktop file with icon
           desktopItem = super.makeDesktopItem {
