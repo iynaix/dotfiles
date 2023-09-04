@@ -1,11 +1,12 @@
 {pkgs, ...}: let
+  # include generated sources from nvfetcher
   sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
 in {
   nixpkgs.overlays = [
     (
       self: super: {
-        # include generated sources from nvfetcher
-        inherit sources;
+        # include custom packages
+        iynaix = (super.iynaix or {}) // (import ../packages {inherit (super) pkgs;});
 
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888

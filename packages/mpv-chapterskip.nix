@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (
     passthru.scriptName = "chapterskip.lua";
 
     meta = {
-      description = "Automatiacally skip chapters based on title";
+      description = "Automatically skip chapters based on title";
       homepage = "https://github.com/po5/chapterskip";
       maintainers = with lib.maintainers; [iynaix];
     };

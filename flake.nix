@@ -77,6 +77,10 @@
       };
     });
 
+    packages = forAllSystems (
+      pkgs: (import ./packages {inherit pkgs;})
+    );
+
     # templates for devenv
     templates = let
       welcomeText = ''

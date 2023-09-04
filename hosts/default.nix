@@ -24,7 +24,6 @@
             ../nixos
             ../modules/nixos
             ../overlays
-            ../packages
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager = {
@@ -68,7 +67,6 @@
           inputs.nix-index-database.hmModules.nix-index
           ./${host}/home.nix # host specific home-manager configuration
           ../overlays
-          ../packages
           ../home-manager
           ../modules/home-manager
         ];
