@@ -9,6 +9,7 @@
     ./kitty.nix
     ./mpv.nix
     ./nemo.nix
+    ./obs-studio.nix
     ./pathofbuilding.nix
     ./rofi.nix
     ./vlc.nix
