@@ -85,7 +85,7 @@
   sync-wallpapers = pkgs.writeShellApplication {
     name = "sync-wallpapers";
     text = ''
-      rsync -aP --delete --no-links -e "ssh" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
+      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
     '';
   };
   # create an fhs environment to run downloaded binaries

@@ -47,7 +47,10 @@
     # create a new devenv environment
     mkdevenv = ''nix flake init --template github:iynaix/dotfiles#$1'';
     # improved which for nix
-    where = ''readlink -f $(which $1)'';
+    where = {
+      bashBody = ''readlink -f $(which $1)'';
+      fishBody = ''readlink -f (which $argv[1])'';
+    };
     # server command, runs a local server
     server = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';
     # cd to project dir

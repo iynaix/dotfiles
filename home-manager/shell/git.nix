@@ -80,7 +80,7 @@ in {
       '';
       fishBody = ''
         # 2nd argument is target path and subsequent arguments are passed through
-        git log -S$argv[1] -- ''${argv[2]:-.} $argv[3..-1]
+        git log -S$argv[1] -- $argv[2] $argv[3..-1]
       '';
     };
   };
