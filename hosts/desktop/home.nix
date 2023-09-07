@@ -36,7 +36,6 @@ in {
     packages = lib.mkIf isNixOS (
       with pkgs;
         [
-          deadbeef
           ffmpeg
           # vial
         ]

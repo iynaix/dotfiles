@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./brave.nix
+    ./deadbeef.nix
     ./dunst.nix
     ./firefox.nix
     ./gtk.nix

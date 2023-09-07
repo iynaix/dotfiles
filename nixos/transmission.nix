@@ -5,7 +5,7 @@
   config,
   ...
 }: let
-  home = "/home/${user}";
+  home = "/persist/home/${user}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in {

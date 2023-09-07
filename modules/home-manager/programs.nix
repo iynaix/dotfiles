@@ -5,6 +5,7 @@
   ...
 }: {
   options.iynaix = {
+    deadbeef.enable = lib.mkEnableOption "deadbeef" // {default = host == "desktop";};
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};
     obs-studio.enable = lib.mkEnableOption "obs-studio" // {default = isNixOS && host == "desktop";};

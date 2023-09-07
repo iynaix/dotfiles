@@ -1,22 +1,12 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   waifufetch = pkgs.writeShellScriptBin "waifufetch" ''
     ${pkgs.python3}/bin/python3 ${./waifufetch.py} "$@"
   '';
   neochallenge = pkgs.writeShellApplication {
     name = "neochallenge";
-    runtimeInputs = [waifufetch pkgs.neofetch];
+    runtimeInputs = [pkgs.neofetch];
     text = ''
-      img=$(waifufetch --image)
-
-      neofetch --${
-        if config.iynaix.terminal.package == pkgs.kitty
-        then "kitty"
-        else "sixel"
-      } "$img" "$@" --config ${./neofetch-challenge.conf}
+      neofetch --config ${./neofetch-challenge.conf}
     '';
   };
 in {
