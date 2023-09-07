@@ -22,10 +22,9 @@ in {
       interval = "*-*-* 03:14:00";
 
       commands."truenas" = {
-        source = "zroot/safe";
+        source = "zroot/safe/persist";
         target = "root@iynaix-nas:NAS/desktop-backup";
         extraArgs = ["--no-sync-snap" "--sshoption=StrictHostKeyChecking=no"];
-        recursive = true;
         localSourceAllow =
           config.services.syncoid.localSourceAllow ++ ["mount"];
         localTargetAllow =
