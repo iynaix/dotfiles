@@ -4,33 +4,10 @@
   config,
   ...
 }: let
-  hyprMonitors = pkgs.writeShellApplication {
-    name = "hypr-monitors";
-    text = let
-      displays = config.iynaix.displays;
-      resetWorkspaces = lib.concatStringsSep "\n" (lib.concatMap ({
-        name,
-        workspaces,
-        ...
-      }:
-        lib.forEach workspaces (ws: "hyprctl dispatch moveworkspacetomonitor ${toString ws} ${name}"))
-      displays);
-    in ''
-      ${resetWorkspaces}
-
-      hyprctl dispatch workspace 9
-      hyprctl dispatch workspace 7
-      hyprctl dispatch workspace 1
-
-      hyprctl dispatch focusmonitor ${(builtins.head displays).name}
-
-      # set wallpapers again
-      hypr-wallpaper --reload
-
-      launch-waybar
-    '';
-  };
-  hyprIpc = pkgs.writeShellApplication {
+  hypr-monitors = pkgs.writeShellScriptBin "hypr-monitors" ''
+    ${pkgs.python3}/bin/python ${./hypr_monitors.py} --displays '${builtins.toJSON config.iynaix.displays}'
+  '';
+  hypr-ipc = pkgs.writeShellApplication {
     name = "hypr-ipc";
     runtimeInputs = with pkgs; [python3 socat];
     text = let
@@ -44,7 +21,7 @@
   };
 in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-    home.packages = [hyprMonitors hyprIpc];
+    home.packages = [hypr-monitors hypr-ipc];
 
     # start hyprland
     iynaix.shell.profileExtra = ''
@@ -58,7 +35,7 @@ in {
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        "${hyprIpc}/bin/hypr-ipc -nstack &"
+        "${hypr-ipc}/bin/hypr-ipc &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

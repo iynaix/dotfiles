@@ -76,6 +76,8 @@ in {
       gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
         "file://${ironwolf}/Anime/Current Anime Current"
         "file://${ironwolf}/TV/Current TV Current"
+        "file://${ironwolf}/Anime Anime"
+        "file://${ironwolf}/TV TV"
         "file://${ironwolf}/Movies"
       ];
 

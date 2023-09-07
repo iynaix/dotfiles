@@ -11,6 +11,7 @@ SMALL = "HDMI-A-1"
 IS_DESKTOP = socket.gethostname().endswith("desktop")
 USE_CENTERED_MASTER = False
 
+
 def debug(*cmds, **kwargs):
     if DEBUG:
         print("[DEBUG]", *cmds, **kwargs)
@@ -69,12 +70,6 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--debug-all",
-        action="store_true",
-        help="print all events including unhandled ones",
-    )
-
-    parser.add_argument(
         "--nstack",
         action="store_true",
         help="use nstack layout",
@@ -85,15 +80,12 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    DEBUG = args.debug or args.debug_all
+    DEBUG = args.debug
 
     while 1:
         line = sys.stdin.readline()
         [ev, ev_args] = line.split(">>")
         ev_args = ev_args.strip().split(",")
-
-        if args.debug_all:
-            debug(ev, ev_args)
 
         # print("[EVENT]", ev)
         if ev == "monitoradded":
@@ -122,5 +114,4 @@ if __name__ == "__main__":
         #     [mon, workspace] = ev_args
 
         else:
-            if args.debug and not args.debug_all:
-                debug(ev, ev_args)
+            debug(ev, ev_args)
