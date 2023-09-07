@@ -34,7 +34,7 @@
     };
 
     hyprNStack = {
-      url = "github:SiriusStarr/hyprNStack";
+      url = "github:iynaix/hyprNStack";
       inputs.hyprland.follows = "hyprland";
     };
 

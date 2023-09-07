@@ -28,8 +28,10 @@ in {
       (lib.mkIf cfg.hyprnstack {
         settings.general.layout = lib.mkForce "nstack";
 
+        # plugins = ["/persist/home/iynaix/projects/hyprNStack/result/lib/libhyprNStack.so"];
+        plugins = [pkgs.iynaix.hyprNStack];
+
         # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
-        plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
         extraConfig = ''
           plugin {
             nstack {

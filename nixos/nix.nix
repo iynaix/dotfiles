@@ -84,6 +84,7 @@
   # sync wallpapers with laptop
   sync-wallpapers = pkgs.writeShellApplication {
     name = "sync-wallpapers";
+    runtimeInputs = with pkgs; [rsync];
     text = ''
       rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
     '';

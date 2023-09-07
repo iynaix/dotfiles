@@ -24,7 +24,7 @@ in {
       commands."truenas" = {
         source = "zroot/safe";
         target = "root@iynaix-nas:NAS/desktop-backup";
-        extraArgs = ["--no-sync-snap"];
+        extraArgs = ["--no-sync-snap" "--sshoption=StrictHostKeyChecking=no"];
         recursive = true;
         localSourceAllow =
           config.services.syncoid.localSourceAllow ++ ["mount"];

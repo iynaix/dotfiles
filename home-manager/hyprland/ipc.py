@@ -11,6 +11,10 @@ SMALL = "HDMI-A-1"
 IS_DESKTOP = socket.gethostname().endswith("desktop")
 USE_CENTERED_MASTER = False
 
+def debug(*cmds, **kwargs):
+    if DEBUG:
+        print("[DEBUG]", *cmds, **kwargs)
+
 
 def info(cmd):
     with subprocess.Popen(["hyprctl", "-j", cmd], stdout=subprocess.PIPE) as proc:
@@ -26,7 +30,7 @@ def workspace_info(workspace):
 def dispatch(*args):
     cmd = ["hyprctl", "dispatch", *args]
     if DEBUG:
-        print("[DEBUG]", cmd)
+        debug(cmd)
     else:
         subprocess.run(cmd)
 
@@ -61,7 +65,13 @@ def parse_args():
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="use centered master layout for ultrawide",
+        help="print unhandled events",
+    )
+
+    parser.add_argument(
+        "--debug-all",
+        action="store_true",
+        help="print all events including unhandled ones",
     )
 
     parser.add_argument(
@@ -75,12 +85,15 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    DEBUG = args.debug
+    DEBUG = args.debug or args.debug_all
 
     while 1:
         line = sys.stdin.readline()
         [ev, ev_args] = line.split(">>")
         ev_args = ev_args.strip().split(",")
+
+        if args.debug_all:
+            debug(ev, ev_args)
 
         # print("[EVENT]", ev)
         if ev == "monitoradded":
@@ -98,10 +111,10 @@ if __name__ == "__main__":
         # elif ev == "workspace":
         #     [workspace] = ev_args
         elif ev == "openwindow":
-            [win_id, workspace, *_] = ev_args
+            [_, workspace, *_] = ev_args
             set_workspace_orientation(workspace, args.nstack)
         elif ev == "movewindow":
-            [win_id, workspace] = ev_args
+            [_, workspace] = ev_args
             set_workspace_orientation(workspace, args.nstack)
         # elif ev == "closewindow":
         #     [win_id] = ev_args
@@ -109,5 +122,5 @@ if __name__ == "__main__":
         #     [mon, workspace] = ev_args
 
         else:
-            # print(ev, ev_args)
-            pass
+            if args.debug and not args.debug_all:
+                debug(ev, ev_args)

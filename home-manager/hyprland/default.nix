@@ -18,7 +18,8 @@ in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home = {
       sessionVariables = {
-        "XCURSOR_SIZE" = "24";
+        XCURSOR_SIZE = "24";
+        HYPR_LOG = "/tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
       };
 
       packages = with pkgs; [
@@ -280,6 +281,7 @@ in {
 
       windowrulev2 = [
         # "dimaround,floating:1"
+        "float,class:(wlroots)" # hyprland debug session
       ];
 
       windowrule = [
@@ -296,10 +298,6 @@ in {
       ];
 
       # source = "~/.config/hypr/hyprland-test.conf";
-    };
-
-    home.shellAliases = {
-      hypr-log = "cat /tmp/hypr/$(command ls -t /tmp/hypr/ | head -n 1)/hyprland.log";
     };
 
     # hyprland crash reports

@@ -30,9 +30,21 @@
       launch-waybar
     '';
   };
+  hyprIpc = pkgs.writeShellApplication {
+    name = "hypr-ipc";
+    runtimeInputs = with pkgs; [python3 socat];
+    text = let
+      nstackArg =
+        if config.wayland.windowManager.hyprland.settings.general.layout == "nstack"
+        then "--nstack"
+        else "";
+    in ''
+      socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | python ${./ipc.py} ${nstackArg} "$@"
+    '';
+  };
 in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-    home.packages = [hyprMonitors];
+    home.packages = [hyprMonitors hyprIpc];
 
     # start hyprland
     iynaix.shell.profileExtra = ''
@@ -41,14 +53,12 @@ in {
       fi
     '';
 
-    wayland.windowManager.hyprland.settings = let
-      hyprnstack = config.wayland.windowManager.hyprland.settings.general.layout == "nstack";
-    in {
+    wayland.windowManager.hyprland.settings = {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        "${pkgs.socat}/bin/socat - UNIX-CONNECT:/tmp/hypr/$(echo $HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString hyprnstack "--nstack"} &"
+        "${hyprIpc}/bin/hypr-ipc -nstack &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")

@@ -1,7 +1,7 @@
 {
   config,
-  lib,
   host,
+  lib,
   ...
 }: let
   cfg = config.iynaix-nixos;
