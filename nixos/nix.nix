@@ -89,6 +89,23 @@
       rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
     '';
   };
+  json2nix = pkgs.writeShellApplication {
+    name = "json2nix";
+    runtimeInputs = with pkgs; [hjson alejandra];
+    text = ''
+      json=$(echo "$1" | hjson -j 2> /dev/null)
+      nix eval --expr "builtins.fromJSON '''$json'''" | alejandra
+    '';
+  };
+  yaml2nix = pkgs.writeShellApplication {
+    name = "yaml2nix";
+    runtimeInputs = with pkgs; [yq alejandra];
+    text = ''
+      yaml=$(echo "$1" | yq)
+      nix eval --expr "builtins.fromJSON '''$yaml'''" | alejandra
+    '';
+  };
+
   # create an fhs environment to run downloaded binaries
   # https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
   fhs = let
@@ -123,6 +140,8 @@ in {
       nbuild
       nswitch
       upd8
+      json2nix
+      yaml2nix
       fhs
       inputs.nvfetcher.packages.${pkgs.system}.default # nvfetcher
     ]
