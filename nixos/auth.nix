@@ -39,7 +39,10 @@
     };
 
     # shut sudo up
-    security.sudo.extraConfig = "Defaults lecture=never";
+    security.sudo.extraConfig = ''
+      Defaults passwd_tries=10
+      Defaults lecture=never
+    '';
 
     # persist keyring and misc other secrets
     iynaix-nixos.persist.home = {

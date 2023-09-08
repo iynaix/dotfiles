@@ -236,8 +236,7 @@ in {
         "$mod_SHIFT, m, layoutmsg, removemaster"
 
         # rotate via switching master orientation
-        "$mod, r, layoutmsg, orientationnext"
-        "$mod_SHIFT, r, layoutmsg, orientationprev"
+        "$mod, r, layoutmsg, orientationcycle left top"
 
         # Scroll through existing workspaces with mainMod + scroll
         "$mod, mouse_down, workspace, e+1"

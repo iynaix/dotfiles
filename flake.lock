@@ -61,11 +61,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1694045168,
-        "narHash": "sha256-umMRTd9eQH3W1ZS/sdyffmF81XX+/d4ATPle0Ic332Q=",
+        "lastModified": 1694141130,
+        "narHash": "sha256-6pflq3FrEI7gvDLQTatpqh+ZS8e4wy1XWLE76qeyAP4=",
         "owner": "iynaix",
         "repo": "hyprNStack",
-        "rev": "e8e3b8fd8171aa413aea7e8f6ba78f918de36060",
+        "rev": "9eb5229d47666cfd8c75ff9a067372d7d409d078",
         "type": "github"
       },
       "original": {

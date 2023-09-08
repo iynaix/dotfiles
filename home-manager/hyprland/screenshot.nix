@@ -43,7 +43,7 @@
 
       # first arg is the grimblast command
       screenshot() {
-          img="${screenshotDir}/${iso8601}.png"
+          img="${screenshotDir}/$(date +${iso8601}).png"
           if [ "$exit_code" -eq 10 ]; then
               grimblast save "$1" - | swappy -f - -o "$img"
               notify-send "Screenshot saved to $img" -i "$img"
