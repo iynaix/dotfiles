@@ -7,16 +7,17 @@
   hypr-monitors = pkgs.writeShellScriptBin "hypr-monitors" ''
     ${pkgs.python3}/bin/python ${./hypr_monitors.py} --displays '${builtins.toJSON config.iynaix.displays}'
   '';
+  nstackArg =
+    if config.wayland.windowManager.hyprland.settings.general.layout == "nstack"
+    then "--nstack"
+    else "";
   hypr-ipc = pkgs.writeShellApplication {
     name = "hypr-ipc";
     runtimeInputs = with pkgs; [python3 socat];
     text = let
-      nstackArg =
-        if config.wayland.windowManager.hyprland.settings.general.layout == "nstack"
-        then "--nstack"
-        else "";
+      ipcPath = "$HOME/projects/dotfiles/home-manager/hyprland/ipc.py";
     in ''
-      socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | python ${./ipc.py} ${nstackArg} "$@"
+      socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | python "${ipcPath}" ${nstackArg} "$@"
     '';
   };
 in {
@@ -34,9 +35,6 @@ in {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
-        # init ipc listener
-        "${hypr-ipc}/bin/hypr-ipc &"
-
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")
         (openOnWorkspace 1 "brave --incognito")
@@ -65,6 +63,9 @@ in {
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
         "launch-waybar"
+
+        # init ipc listener
+        ''${pkgs.socat}/bin/socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | ${pkgs.python3}/bin/python ${./ipc.py} ${nstackArg} &''
 
         # fix gparted "cannot open display: :0" error
         "${pkgs.xorg.xhost}/bin/xhost +local:"

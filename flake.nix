@@ -65,8 +65,6 @@
 
     homeConfigurations = import ./hosts (commonInherits // {isNixOS = false;});
 
-    formatter = nixpkgs.alejandra;
-
     # devshell for working on dotfiles, provides python utilities
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {

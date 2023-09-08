@@ -1,8 +1,8 @@
 # use src.git with url to follow latest commit
 
 [mpv-chapterskip]
-src.git = "https://github.com/po5/chapterskip"
-fetch.github = "po5/chapterskip"
+src.git = "https://github.com/iynaix/chapterskip"
+fetch.github = "iynaix/chapterskip"
 
 [mpv-deletefile]
 src.git = "https://github.com/zenyd/mpv-scripts"
@@ -25,9 +25,9 @@ src.git = "https://github.com/kelciour/mpv-scripts"
 fetch.github = "kelciour/mpv-scripts"
 
 [mpv-thumbfast-osc]
-src.git= "https://github.com/po5/thumbfast"
+src.git = "https://github.com/l-jared/thumbfast"
 src.branch = "vanilla-osc"
-fetch.github = "po5/thumbfast"
+fetch.github = "l-jared/thumbfast"
 
 [path-of-building]
 src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
@@ -36,6 +36,10 @@ fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
 [swww]
 src.git = "https://github.com/Horus645/swww"
 fetch.github = "Horus645/swww"
+
+[transmission-web-soft-theme]
+src.git = "https://github.com/diesys/transmission-web-soft-theme"
+fetch.github = "diesys/transmission-web-soft-theme"
 
 [vv]
 src.github_tag = "hackerb9/vv"

@@ -3,15 +3,15 @@
 {
   mpv-chapterskip = {
     pname = "mpv-chapterskip";
-    version = "b26825316e3329882206ae78dc903ebc4613f039";
+    version = "7cec644a667dee2029f5fd772acd593333425af6";
     src = fetchFromGitHub {
-      owner = "po5";
+      owner = "iynaix";
       repo = "chapterskip";
-      rev = "b26825316e3329882206ae78dc903ebc4613f039";
+      rev = "7cec644a667dee2029f5fd772acd593333425af6";
       fetchSubmodules = false;
       sha256 = "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=";
     };
-    date = "2022-09-08";
+    date = "2023-09-08";
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
@@ -77,7 +77,7 @@
     pname = "mpv-thumbfast-osc";
     version = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
     src = fetchFromGitHub {
-      owner = "po5";
+      owner = "l-jared";
       repo = "thumbfast";
       rev = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
       fetchSubmodules = false;
@@ -108,6 +108,18 @@
     };
     date = "2023-08-28";
   };
+  transmission-web-soft-theme = {
+    pname = "transmission-web-soft-theme";
+    version = "a957b41b0303e6b74e67191311e0d2af9b60a965";
+    src = fetchFromGitHub {
+      owner = "diesys";
+      repo = "transmission-web-soft-theme";
+      rev = "a957b41b0303e6b74e67191311e0d2af9b60a965";
+      fetchSubmodules = false;
+      sha256 = "sha256-KngN44lnhv0sga0otYC9F5xoqLDDIVxobXRlhhhSmHo=";
+    };
+    date = "2021-01-28";
+  };
   vv = {
     pname = "vv";
     version = "1.9.2.1";
@@ -121,14 +133,14 @@
   };
   waybar = {
     pname = "waybar";
-    version = "80de22a15993d6ece7fbfa62858792a8c3fa207f";
+    version = "309edd05851ec16b8df0b8a4a74b8e3916a39d7e";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "80de22a15993d6ece7fbfa62858792a8c3fa207f";
+      rev = "309edd05851ec16b8df0b8a4a74b8e3916a39d7e";
       fetchSubmodules = false;
-      sha256 = "sha256-6T3mg11V8TpKuI52ss1Je26rW84qJdeEgapK7gBolBI=";
+      sha256 = "sha256-3SOI9d2UFkQldAlEeZs93R/iiVlXKOQoXNxxS7aN6RU=";
     };
-    date = "2023-09-05";
+    date = "2023-09-08";
   };
 }

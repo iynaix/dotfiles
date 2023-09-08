@@ -74,6 +74,5 @@
 in {
   vm = mkHost "vm";
   desktop = mkHost "desktop";
-  desktop-generic = mkHost "desktop";
   laptop = mkHost "laptop";
 }

@@ -26,7 +26,7 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
 ```
 ### Install from Flake
 
-Substitute `desktop` with desired host (desktop / desktop-generic /laptop / vm)
+Substitute `desktop` with desired host (desktop / laptop / vm)
 
 ```sh
 nix-shell -p nixFlakes

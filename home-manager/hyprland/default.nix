@@ -280,6 +280,7 @@ in {
 
       windowrulev2 = [
         # "dimaround,floating:1"
+        "bordersize 5,fullscreen:1" # monocle mode
         "float,class:(wlroots)" # hyprland debug session
       ];
 

@@ -84,12 +84,7 @@ in {
 
         # transmission dark mode, the default theme is hideous
         transmission = let
-          themeSrc =
-            prev.fetchzip
-            {
-              url = "https://git.eigenlab.org/sbiego/transmission-web-soft-theme/-/archive/master/transmission-web-soft-theme-master.tar.gz";
-              sha256 = "sha256-TAelzMJ8iFUhql2CX8lhysXKvYtH+cL6BCyMcpMaS9Q=";
-            };
+          themeSrc = sources.transmission-web-soft-theme.src;
         in
           prev.transmission.overrideAttrs (o: {
             # sed command taken from original install.sh script
