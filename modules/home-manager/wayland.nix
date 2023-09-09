@@ -5,6 +5,7 @@
   ...
 }: let
   hyprlandCfg = config.wayland.windowManager.hyprland;
+  waybarCfg = config.iynaix.waybar.config;
 in {
   options.iynaix = {
     displays = lib.mkOption {
@@ -38,6 +39,10 @@ in {
 
     waybar = {
       enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
+      theme = lib.mkOption {
+        type = lib.types.enum ["split" "transparent"];
+        default = "split";
+      };
       config = lib.mkOption {
         type = lib.types.submodule {
           freeformType = (pkgs.formats.json {}).type;
@@ -45,10 +50,17 @@ in {
         default = {};
         description = "Additional waybar config (wallust templating can be used)";
       };
-      css = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "Additional waybar css (wallust templating can be used)";
+      finalConfig = lib.mkOption {
+        readOnly = true;
+        default =
+          waybarCfg
+          // {
+            # dedupe modules
+            modules-left = lib.unique waybarCfg.modules-left;
+            modules-center = lib.unique waybarCfg.modules-center;
+            modules-right = lib.unique waybarCfg.modules-right;
+          };
+        description = "Final waybar config after processing. (Read-only)";
       };
       border-radius = lib.mkOption {
         type = lib.types.str;

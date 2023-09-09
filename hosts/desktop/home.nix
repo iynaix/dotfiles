@@ -26,6 +26,7 @@ in {
       }
     ];
 
+    waybar.theme = "transparent";
     wallust.gtk = false;
     pathofbuilding.enable = true;
     trimage.enable = false;

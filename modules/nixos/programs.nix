@@ -12,7 +12,11 @@ in {
     docker.enable = lib.mkEnableOption "docker" // {default = cfg.distrobox.enable;};
     hyprland = {
       enable = lib.mkEnableOption "hyprland (nixos)";
-      hyprnstack = lib.mkEnableOption "hyprNStack" // {default = cfg.hyprland.enable;};
+      plugin = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum ["hyprnstack" "hy3"]);
+        description = "Plugin to enable for hyprland";
+        default = "hyprnstack";
+      };
     };
     kmonad.enable = lib.mkEnableOption "kmonad" // {default = host == "laptop";};
     sops.enable = lib.mkEnableOption "sops" // {default = true;};

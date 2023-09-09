@@ -25,7 +25,7 @@ in {
         enable = true;
         package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       }
-      (lib.mkIf cfg.hyprnstack {
+      (lib.mkIf (cfg.plugin == "hyprnstack") {
         settings.general.layout = lib.mkForce "nstack";
 
         # plugins = ["/persist/home/iynaix/projects/hyprNStack/result/lib/libhyprNStack.so"];
