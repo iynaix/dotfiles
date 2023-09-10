@@ -70,13 +70,13 @@
     };
     systemPackages = with pkgs; [
       curl
-      exa
+      eza
       killall
       neovim
       ntfs3g
       procps
       ripgrep
-      tree # for root, normal user has an exa alias
+      tree # for root, normal user has an eza alias
       wget
     ];
   };

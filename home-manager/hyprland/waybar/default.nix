@@ -87,7 +87,7 @@ in {
       pulseaudio = {
         format = "{icon}  {volume}%";
         format-icons = ["" "" ""];
-        format-muted = "󰸈 Muted";
+        format-muted = "󰖁 Muted";
         on-click = "pamixer -t";
         on-click-right = "pavucontrol";
         scroll-step = 1;

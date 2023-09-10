@@ -20,7 +20,7 @@
       pj = "openproj";
       py = "python";
       r = "lf";
-      t = "exa --tree";
+      t = "eza --tree";
       v = "nvim";
       wget = "wget --content-disposition";
       coinfc = "openproj coinfc";
