@@ -35,6 +35,9 @@ in {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
+        # init ipc listener
+        ''${pkgs.socat}/bin/socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | ${pkgs.python3}/bin/python ${./ipc.py} ${nstackArg} &''
+
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")
         (openOnWorkspace 1 "brave --incognito")
@@ -63,9 +66,6 @@ in {
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
         "launch-waybar"
-
-        # init ipc listener
-        ''${pkgs.socat}/bin/socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | ${pkgs.python3}/bin/python ${./ipc.py} ${nstackArg} &''
 
         # fix gparted "cannot open display: :0" error
         "${pkgs.xorg.xhost}/bin/xhost +local:"

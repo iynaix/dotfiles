@@ -3,6 +3,15 @@ import json
 import socket
 import subprocess
 import sys
+import logging
+
+log_filename = "/tmp/hypr-ipc.log"
+logging.basicConfig(
+    filename=log_filename,
+    level=logging.DEBUG,  # You can adjust the log level as needed.
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+
 
 ULTRAWIDE = "DP-2"
 VERTICAL = "DP-4"
@@ -14,7 +23,7 @@ USE_CENTERED_MASTER = False
 
 def debug(*cmds, **kwargs):
     if DEBUG:
-        print("[DEBUG]", *cmds, **kwargs)
+        logging.debug(str(cmds))
 
 
 def info(cmd):
@@ -23,6 +32,7 @@ def info(cmd):
 
 
 def workspace_info(workspace):
+    workspace = workspace.replace(" silent", "")
     for wksp in info("workspaces"):
         if wksp["name"] == workspace:
             return wksp
@@ -42,7 +52,7 @@ def set_workspace_orientation(workspace, nstack):
 
     wksp = workspace_info(workspace)
 
-    if wksp["windows"]:
+    if wksp.get("windows"):
         if wksp["monitor"] == VERTICAL:
             dispatch("layoutmsg", "orientationtop")
         elif wksp["monitor"] == SMALL:
@@ -83,35 +93,39 @@ if __name__ == "__main__":
     DEBUG = args.debug
 
     while 1:
-        line = sys.stdin.readline()
-        [ev, ev_args] = line.split(">>")
-        ev_args = ev_args.strip().split(",")
+        try:
+            line = sys.stdin.readline()
+            [ev, ev_args] = line.split(">>")
+            ev_args = ev_args.strip().split(",")
 
-        # print("[EVENT]", ev)
-        if ev == "monitoradded":
-            if IS_DESKTOP:
-                subprocess.run("hypr-monitors")
+            # print("[EVENT]", ev)
+            if ev == "monitoradded":
+                if IS_DESKTOP:
+                    subprocess.run("hypr-monitors")
 
-            # always reset wallpaper and waybar
-            # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
+                # always reset wallpaper and waybar
+                # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
 
-        elif ev == "monitorremoved":
-            # focus workspace on ultrawide
-            if IS_DESKTOP:
-                dispatch("focusmonitor", ULTRAWIDE)
+            elif ev == "monitorremoved":
+                # focus workspace on ultrawide
+                if IS_DESKTOP:
+                    dispatch("focusmonitor", ULTRAWIDE)
 
-        # elif ev == "workspace":
-        #     [workspace] = ev_args
-        elif ev == "openwindow":
-            [_, workspace, *_] = ev_args
-            set_workspace_orientation(workspace, args.nstack)
-        elif ev == "movewindow":
-            [_, workspace] = ev_args
-            set_workspace_orientation(workspace, args.nstack)
-        # elif ev == "closewindow":
-        #     [win_id] = ev_args
-        # elif ev == "focusedmon":
-        #     [mon, workspace] = ev_args
+            # elif ev == "workspace":
+            #     [workspace] = ev_args
+            elif ev == "openwindow":
+                [_, workspace, *_] = ev_args
+                set_workspace_orientation(workspace, args.nstack)
+            elif ev == "movewindow":
+                [_, workspace] = ev_args
+                set_workspace_orientation(workspace, args.nstack)
+            # elif ev == "closewindow":
+            #     [win_id] = ev_args
+            # elif ev == "focusedmon":
+            #     [mon, workspace] = ev_args
 
-        else:
-            debug(ev, ev_args)
+            else:
+                debug(ev, ev_args)
+        except Exception:
+            # Log the exception
+            logging.error("Exception", exc_info=True)

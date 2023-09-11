@@ -74,9 +74,9 @@ if __name__ == "__main__":
     primary_workspaces = {1, 7, 9}
     for monitor, wksps in workspaces.items():
         # focus current workspace if monitor is already available
-        # if current_wksp := active_monitors.get(monitor):
-        #     dispatch("workspace", str(current_wksp))
-        #     continue
+        if current_wksp := active_monitors.get(monitor):
+            dispatch("workspace", str(current_wksp))
+            continue
 
         for wksp in wksps:
             if wksp in primary_workspaces:

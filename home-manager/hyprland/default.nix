@@ -118,6 +118,7 @@ in {
         new_is_master = false;
         mfact = "0.5";
         orientation = "left";
+        smart_resizing = true;
       };
 
       binds = {
