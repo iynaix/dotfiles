@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }: let
   cfg = config.iynaix-nixos.hdds;
@@ -13,18 +12,8 @@ in {
   config = lib.mkIf cfg.enable {
     # non os zfs disks
     boot.zfs.extraPools =
-      (lib.optional cfg.ironwolf22 "zfs-ironwolf22-1")
+      lib.optional cfg.ironwolf22 "zfs-ironwolf22-1"
       ++ (lib.optional cfg.wdred6 "zfs-wdred6-1");
-
-    fileSystems.${ironwolf} = lib.mkIf cfg.ironwolf22 {
-      device = ironwolf-dataset;
-      fsType = "zfs";
-    };
-
-    fileSystems.${wdred} = lib.mkIf cfg.wdred6 {
-      device = wdred-dataset;
-      fsType = "zfs";
-    };
 
     services.sanoid = lib.mkIf config.iynaix-nixos.zfs.snapshots {
       enable = true;
@@ -45,17 +34,6 @@ in {
       };
     };
 
-    # speed up zfs boot times, don't run systemd-udev-settle, see:
-    # https://github.com/Infinisil/system/commit/054d68f0660a608999fccf2f63e3f33dc7c6e0e9
-    systemd = {
-      services = {
-        zfs-import-zfs-wdred6-1.before = lib.mkForce ["media-6TBRED.mount"];
-        zfs-import-zfs-ironwolf22-1.before = lib.mkForce ["media-IRONWOLF22.mount"];
-        systemd-udev-settle.serviceConfig.ExecStart = ["" "${pkgs.coreutils}/bin/true"];
-      };
-      targets.zfs-import.after = lib.mkForce [];
-    };
-
     # symlinks from hdds
     # dest src
     systemd.tmpfiles.rules = lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
@@ -63,13 +41,6 @@ in {
       "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
       "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
     ];
-
-    # (lib.optionals cfg.ironwolf22 [
-    #   "L+ /home/${user}/Downloads   - - - - ${ironwolf}/Downloads"
-    # ])
-    # ++ (lib.optionals cfg.wdred6 [
-    #   "L+ /home/${user}/Videos      - - - - ${wdred}"
-    # ]);
 
     # add bookmarks for gtk
     hm = {...} @ hmCfg: {
