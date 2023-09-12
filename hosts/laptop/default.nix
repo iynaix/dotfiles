@@ -6,7 +6,7 @@
   iynaix-nixos = {
     backlight.enable = true;
     hyprland.enable = true;
-    kmonad.enable = true;
+    kanata.enable = true;
     wifi.enable = true;
 
     # impermanence

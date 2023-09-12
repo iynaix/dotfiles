@@ -16,7 +16,7 @@ in {
     ./hardware
     ./hyprland.nix
     ./impermanence.nix
-    ./kmonad.nix
+    ./kanata.nix
     ./nix.nix
     ./sonarr.nix
     ./sops.nix

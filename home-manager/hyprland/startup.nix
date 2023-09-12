@@ -5,7 +5,7 @@
   ...
 }: let
   hypr-monitors = pkgs.writeShellScriptBin "hypr-monitors" ''
-    ${pkgs.python3}/bin/python ${./hypr_monitors.py} --displays '${builtins.toJSON config.iynaix.displays}'
+    ${pkgs.python3}/bin/python ${./hypr_monitors.py} --displays '${builtins.toJSON config.iynaix.displays}' "$@"
   '';
   nstackArg =
     if config.wayland.windowManager.hyprland.settings.general.layout == "nstack"

@@ -3,18 +3,15 @@
   config,
   ...
 }: let
-  cfg = config.iynaix-nixos.kmonad;
+  cfg = config.iynaix-nixos.kanata;
 in {
   config = lib.mkIf cfg.enable {
-    services.kmonad = {
+    services.kanata = {
       enable = true;
 
       keyboards.laptop = {
-        device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
-        defcfg = {
-          enable = true;
-          fallthrough = true;
-        };
+        # device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
+        devices = [];
 
         config = ''
           (defsrc

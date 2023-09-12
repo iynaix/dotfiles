@@ -49,7 +49,6 @@
             # alias for home-manager
             (lib.mkAliasOptionModule ["hm"] ["home-manager" "users" user])
             inputs.impermanence.nixosModules.impermanence
-            inputs.kmonad.nixosModules.default
             inputs.sops-nix.nixosModules.sops
           ]
           ++ lib.optionals (host == "laptop") [
