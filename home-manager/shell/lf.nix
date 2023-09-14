@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  mkLfCommands = lib.mapAttrs (name: value: ''
+  mkLfCommands = lib.mapAttrs (_: value: ''
     ''${{
       ${value}
     }}

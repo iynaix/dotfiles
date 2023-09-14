@@ -30,6 +30,7 @@ in {
   config = {
     # automount disks
     services.gvfs.enable = true;
+    # services.devmon.enable = true;
 
     # execute shebangs that assume hardcoded shell paths
     services.envfs.enable = true;

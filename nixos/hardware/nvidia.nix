@@ -1,7 +1,6 @@
 {
   config,
   host,
-  inputs,
   lib,
   ...
 }: let

@@ -11,6 +11,7 @@
 
   iynaix.persist = {
     home.directories = [
+      ".cache/yarn"
       ".local/share/direnv"
     ];
   };

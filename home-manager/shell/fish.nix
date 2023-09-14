@@ -7,7 +7,7 @@
 in {
   programs.fish = {
     enable = true;
-    functions = lib.mapAttrs (name: value:
+    functions = lib.mapAttrs (_: value:
       if lib.isString value
       then value
       else value.fishBody)
@@ -31,7 +31,7 @@ in {
 
   # create completion files as needed
   xdg.configFile = lib.pipe cfg.functions [
-    (lib.filterAttrs (name: value: lib.isAttrs value && value.fishCompletion != ""))
+    (lib.filterAttrs (_: value: lib.isAttrs value && value.fishCompletion != ""))
     (lib.mapAttrs' (name: value:
       lib.nameValuePair "fish/completions/${name}.fish" {
         text = ''
