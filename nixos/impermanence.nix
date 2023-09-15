@@ -6,16 +6,16 @@
 }: let
   cfg = config.iynaix-nixos.persist;
 in {
-  config = lib.mkIf config.iynaix-nixos.zfs.enable {
+  config = {
     # clear /tmp on boot
     boot.tmp.cleanOnBoot = true;
 
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
-    boot.initrd.postDeviceCommands = lib.mkIf (!cfg.tmpfs) (lib.mkAfter ''
-      ${lib.optionalString (cfg.erase.root) "zfs rollback -r zroot/local/root@blank"}
-      ${lib.optionalString (cfg.erase.home) "zfs rollback -r zroot/safe/home@blank"}
-    '');
+    boot.initrd.postDeviceCommands = lib.mkAfter ''
+      ${lib.optionalString (!cfg.tmpfs && cfg.erase.root) "zfs rollback -r zroot/local/root@blank"}
+      ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "zfs rollback -r zroot/safe/home@blank"}
+    '';
 
     # fix directory permissions so home-manager doesn't error out
     systemd.services.fix-mount-permissions = lib.mkIf (!cfg.tmpfs && cfg.erase.home) {

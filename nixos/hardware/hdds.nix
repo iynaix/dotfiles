@@ -20,13 +20,13 @@ in {
 
       datasets = {
         ${ironwolf-dataset} = lib.mkIf cfg.ironwolf22 {
-          hourly = 0;
+          hourly = 3;
           daily = 10;
           weekly = 2;
           monthly = 0;
         };
         ${wdred-dataset} = lib.mkIf cfg.wdred6 {
-          hourly = 0;
+          hourly = 3;
           daily = 10;
           weekly = 2;
           monthly = 0;
