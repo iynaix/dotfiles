@@ -42,8 +42,6 @@
       bashBody = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
       fishBody = ''if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end'';
     };
-    # Suppress output of loud commands you don't want to hear from
-    q = ''"$@" > /dev/null 2>&1'';
     # create a new devenv environment
     mkdevenv = ''nix flake init --template github:iynaix/dotfiles#$1'';
     # improved which for nix

@@ -3,15 +3,15 @@
 {
   mpv-chapterskip = {
     pname = "mpv-chapterskip";
-    version = "7cec644a667dee2029f5fd772acd593333425af6";
+    version = "b26825316e3329882206ae78dc903ebc4613f039";
     src = fetchFromGitHub {
-      owner = "iynaix";
+      owner = "po5";
       repo = "chapterskip";
-      rev = "7cec644a667dee2029f5fd772acd593333425af6";
+      rev = "b26825316e3329882206ae78dc903ebc4613f039";
       fetchSubmodules = false;
       sha256 = "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=";
     };
-    date = "2023-09-08";
+    date = "2022-09-08";
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
@@ -77,7 +77,7 @@
     pname = "mpv-thumbfast-osc";
     version = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
     src = fetchFromGitHub {
-      owner = "l-jared";
+      owner = "po5";
       repo = "thumbfast";
       rev = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
       fetchSubmodules = false;
@@ -87,13 +87,13 @@
   };
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.34.0";
+    version = "v2.34.1";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.34.0";
+      rev = "v2.34.1";
       fetchSubmodules = false;
-      sha256 = "sha256-A672cs930wRV8DwRpah//emtsAidNnOzwtfXiiYxyd4=";
+      sha256 = "sha256-i6OCW5Vc9/LfNuiaEeelmXiqP7+WdIklRNRcgWb7L1w=";
     };
   };
   swww = {

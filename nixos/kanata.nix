@@ -24,7 +24,7 @@ in {
           )
 
           (defalias
-            superesc (tap-next-release esc met)
+            superesc (tap-hold 200 200 esc met)
             copy C-c
             paste C-v
             save C-s
