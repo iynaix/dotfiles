@@ -12,6 +12,7 @@
       ":e" = "nvim";
       ":q" = "exit";
       c = "clear";
+      cat = "bat";
       btop = "btop --preset 2";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
       nano = "nvim";
@@ -110,6 +111,6 @@
 
   iynaix.shell.initExtra = ''
     # wallust colorscheme
-    ${lib.optionalString (config.iynaix.wallust.shell) "cat /home/${user}/.cache/wallust/sequences"}
+    ${lib.optionalString (config.iynaix.wallust.shell) "command cat /home/${user}/.cache/wallust/sequences"}
   '';
 }

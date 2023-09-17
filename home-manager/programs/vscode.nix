@@ -1,5 +1,19 @@
-{pkgs, ...}: {
-  home.packages = [pkgs.vscode];
+{
+  inputs,
+  pkgs,
+  ...
+}: {
+  programs.vscode = {
+    enable = true;
+    # lock vscode to 1.81.1 because native titlebar causes vscode to crash
+    # https://github.com/microsoft/vscode/issues/184124#issuecomment-1717959995
+    package =
+      (import inputs.nixpkgs-vscode {
+        system = pkgs.system;
+        config.allowUnfree = true;
+      })
+      .vscode;
+  };
 
   # add password-store: gnome for keyring to work
   # https://github.com/microsoft/vscode/issues/187338

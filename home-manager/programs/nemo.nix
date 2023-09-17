@@ -75,6 +75,8 @@
 
   iynaix.persist = {
     home.directories = [
+      # thumbnail cache
+      ".cache/thumbnails"
       # folder preferences such as view mode and sort order
       ".local/share/gvfs-metadata"
     ];
