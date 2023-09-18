@@ -10,19 +10,8 @@
 
     pathofbuilding.enable = true;
 
-    waybar = {
-      config = {
-        battery = {
-          format = "{icon}  {capacity}%";
-          format-charging = "  {capacity}%";
-          format-icons = ["" "" "" "" ""];
-          states = {
-            critical = 20;
-          };
-          tooltip = false;
-        };
-        modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
-      };
+    waybar.config = {
+      modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
     };
 
     terminal.size = 10;

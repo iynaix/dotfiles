@@ -5,6 +5,7 @@
 }: {
   iynaix-nixos = {
     backlight.enable = true;
+    battery.enable = true;
     hyprland.enable = true;
     kanata.enable = true;
     wifi.enable = true;

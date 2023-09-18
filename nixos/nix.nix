@@ -26,7 +26,10 @@
     name = "nbuild";
     runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
-      pushd ${dots}
+      # build for current flake if a flake.nix exists
+      if [ ! -f flake.nix ]; then
+        pushd ${dots}
+      fi
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)

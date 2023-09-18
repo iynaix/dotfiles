@@ -6,10 +6,9 @@
 }: let
   cfg = config.iynaix.wallust;
 in {
-  config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
-      wallust
-    ];
+  # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
+  config = {
+    home.packages = [pkgs.wallust];
 
     # wallust config
     xdg.configFile =
@@ -25,36 +24,10 @@ in {
         # wallust config
         "wallust/wallust.toml".text =
           ''
-            # How the image is parse, in order to get the colors:
-            #  * full    - reads the whole image (more precision, slower)
-            #  * resized - resizes the image to 1/4th of the original, before parsing it (more color mixing, faster)
-            #  * thumb   - fast algo hardcoded to 512x512 (faster than resized)
-            #  * wal     - uses image magick `convert` to read the image (less colors)
             backend = "resized"
-
-            # What color space to use to produce and select the most prominent colors:
-            #  * lab      - use CIEL*a*b color space
-            #  * labmixed - variant of lab that mixes colors, if not enough colors it fallbacks to usual lab,
-            # for that reason is not recommended in small images
             color_space = "labmixed"
-
-            # Difference between similar colors, used by the colorspace:
-            #  <= 1       Not perceptible by human eyes.
-            #  1 - 2      Perceptible through close observation.
-            #  2 - 10     Perceptible at a glance.
-            #  11 - 49    Colors are more similar than opposite
-            #  100        Colors are exact opposite
             threshold = ${toString cfg.threshold}
-
-            # Use the most prominent colors in a way that makes sense, a scheme:
-            #  * dark    - 8 dark colors, color0 darkest - color7 lightest, dark background light contrast
-            #  * dark16  - same as dark but it displays 16 colors
-            #  * harddark  - same as dark but with darker hard hue colors
-            #  * light   - 8 light colors, color0 lightest - color7 darkest, light background dark contrast
-            #  * light16 - same as light but displays 16 colors
-            #  * softlight - counterpart of `harddark`
             filter = "dark16"
-
           ''
           # create entries
           + lib.concatStringsSep "\n" (lib.mapAttrsToList (template: {

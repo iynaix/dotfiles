@@ -96,11 +96,11 @@ in {
           });
 
         # use latest commmit from git
-        # waybar = super.waybar.overrideAttrs (o:
-        #   sources.waybar
-        #   // {
-        #     version = "${o.version}-${sources.waybar.version}";
-        #   });
+        waybar = prev.waybar.overrideAttrs (o:
+          sources.waybar
+          // {
+            version = "${o.version}-${sources.waybar.version}";
+          });
       }
     )
   ];

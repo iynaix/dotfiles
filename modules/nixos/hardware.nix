@@ -6,6 +6,7 @@
   options.iynaix-nixos = {
     am5.enable = lib.mkEnableOption "B650E-E motherboard";
     backlight.enable = lib.mkEnableOption "Backlight";
+    battery.enable = lib.mkEnableOption "Battery";
     nvidia.enable = lib.mkEnableOption "Nvidia GPU";
     wifi.enable = lib.mkEnableOption "Wifi";
     hdds = {

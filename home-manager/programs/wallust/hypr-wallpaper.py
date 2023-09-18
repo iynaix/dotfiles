@@ -264,6 +264,12 @@ def parse_args():
         choices=["wallpaper", "theme"],
     )
     parser.add_argument(
+        "--wallust",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="use wallust to generate colorschemes for applications",
+    )
+    parser.add_argument(
         "--fallback",
         help="path to a fallback wallpaper",
     )
@@ -294,11 +300,13 @@ if __name__ == "__main__":
         apply_theme(args.theme)
     elif args.reload:
         wall = get_current_wallpaper() or wallpaper
-        run(["wallust", wall])
+        if args.wallust:
+            run(["wallust", wall])
         swww("img", wall)
         run(["killall", "-SIGUSR2", ".waybar-wrapped"])
     else:
-        run(["wallust", wallpaper])
+        if args.wallust:
+            run(["wallust", wallpaper])
         swww("img", "--transition-type", args.transition_type, wallpaper)
 
     set_colors()
