@@ -98,10 +98,16 @@
         description = "Python dev environment";
       };
 
+      rust = {
+        inherit welcomeText;
+        path = ./templates/rust;
+        description = "Rust dev environment";
+      };
+
       js = javascript;
       ts = javascript;
-
       py = python;
+      rs = rust;
     };
   };
 }
