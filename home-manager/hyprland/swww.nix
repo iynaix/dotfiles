@@ -7,7 +7,10 @@
 }: let
   # sets a random wallpaper and changes the colors
   hypr-wallpaper = pkgs.writeShellScriptBin "hypr-wallpaper" ''
-    ${pkgs.python3}/bin/python3 ${../programs/wallust/hypr-wallpaper.py} ${lib.optionalString (!config.iynaix.wallust.enable) "--no-wallust"} --fallback "${../gits-catppuccin.jpg}" "$@"
+    ${pkgs.python3}/bin/python3 ${../programs/wallust/hypr-wallpaper.py} \
+    ${lib.optionalString (!config.iynaix.wallust.enable) "--no-wallust"} \
+    --fallback "${../gits-catppuccin.jpg}" \
+    "$@"
   '';
   preload-wallpapers = pkgs.writeShellApplication {
     name = "preload-wallpapers";

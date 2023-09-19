@@ -1,9 +1,10 @@
 import argparse
 import json
+import logging
 import socket
 import subprocess
 import sys
-import logging
+import traceback
 
 log_filename = "/tmp/hypr-ipc.log"
 logging.basicConfig(
@@ -88,20 +89,29 @@ def parse_args():
     return parser.parse_args()
 
 
+def exception_handler(exctype, value, tb):
+    logging.error("Uncaught exception", exc_info=True)
+    logging.error(exctype)
+    logging.error(value)
+    logging.error(traceback.extract_tb(tb))
+
+
 if __name__ == "__main__":
     args = parse_args()
     DEBUG = args.debug
 
-    while 1:
-        try:
-            line = sys.stdin.readline()
-            [ev, ev_args] = line.split(">>")
-            ev_args = ev_args.strip().split(",")
+    # setup global exception logging
+    sys.excepthook = exception_handler
 
-            # print("[EVENT]", ev)
-            if ev == "monitoradded":
-                if IS_DESKTOP:
-                    subprocess.run("hypr-monitors")
+    while 1:
+        line = sys.stdin.readline()
+        [ev, ev_args] = line.split(">>")
+        ev_args = ev_args.strip().split(",")
+
+        # logging.debug(f"[EVENT] {ev} {ev_args}")
+        if ev == "monitoradded":
+            if IS_DESKTOP:
+                subprocess.run("hypr-monitors")
 
                 # always reset wallpaper and waybar
                 # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
@@ -124,8 +134,5 @@ if __name__ == "__main__":
             # elif ev == "focusedmon":
             #     [mon, workspace] = ev_args
 
-            else:
-                debug(ev, ev_args)
-        except Exception:
-            # Log the exception
-            logging.error("Exception", exc_info=True)
+        else:
+            debug(ev, ev_args)

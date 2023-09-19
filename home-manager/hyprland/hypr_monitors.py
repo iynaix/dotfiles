@@ -2,9 +2,8 @@ import argparse
 import json
 import subprocess
 from collections import defaultdict
+from pathlib import Path
 from typing import DefaultDict
-
-# from pprint import pprint
 
 
 def dispatch(*args: str):
@@ -28,6 +27,12 @@ def parse_args():
     parser.add_argument(
         "--displays",
         help="JSON string of display configuration from nix",
+    )
+
+    parser.add_argument(
+        "--persistent-workspaces",
+        action="store_true",
+        help="Updates waybar config with persistent workspaces",
     )
 
     return parser.parse_args()
@@ -88,4 +93,17 @@ if __name__ == "__main__":
 
     # refresh wallpapers
     subprocess.run(["hypr-wallpaper", "--reload"])
+
+    # add persistent workspaces to waybar config before relaunching waybar
+    if args.persistent_workspaces:
+        waybar_cfg = Path("~/.cache/wallust/waybar.jsonc").expanduser()
+        with open(waybar_cfg, "r+") as f:
+            cfg = defaultdict(dict)
+            cfg.update(json.load(f))
+            cfg["hyprland/workspaces"]["persistent-workspaces"] = workspaces
+
+            # write cfg to file
+            f.seek(0)
+            f.write(json.dumps(cfg))
+
     subprocess.run(["launch-waybar"])

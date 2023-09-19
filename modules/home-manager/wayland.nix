@@ -39,10 +39,6 @@ in {
 
     waybar = {
       enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
-      theme = lib.mkOption {
-        type = lib.types.enum ["split" "transparent"];
-        default = "split";
-      };
       config = lib.mkOption {
         type = lib.types.submodule {
           freeformType = (pkgs.formats.json {}).type;
@@ -62,11 +58,16 @@ in {
           };
         description = "Final waybar config after processing. (Read-only)";
       };
+      theme = lib.mkOption {
+        type = lib.types.enum ["split" "transparent"];
+        default = "split";
+      };
       border-radius = lib.mkOption {
         type = lib.types.str;
         default = "12px";
         description = "Border-radius for waybar";
       };
+      persistent-workspaces = lib.mkEnableOption "Persistent workspaces";
     };
   };
 }

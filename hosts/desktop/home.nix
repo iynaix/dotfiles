@@ -26,7 +26,10 @@ in {
       }
     ];
 
-    waybar.theme = "transparent";
+    waybar = {
+      theme = "transparent";
+      # persistent-workspaces = true;
+    };
     wallust.gtk = false;
     pathofbuilding.enable = true;
     trimage.enable = false;
