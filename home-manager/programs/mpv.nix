@@ -97,6 +97,7 @@
         ++ (with pkgs.iynaix; [
           mpv-chapterskip
           mpv-deletefile
+          mpv-dynamic-crop
           # mpv-modernx
           mpv-nextfile
           mpv-sub-select

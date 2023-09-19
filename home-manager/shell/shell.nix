@@ -13,7 +13,7 @@
       ":q" = "exit";
       c = "clear";
       cat = "bat";
-      btop = "btop --preset 2";
+      btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
       nano = "nvim";
       nsw = "nswitch";

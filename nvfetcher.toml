@@ -8,6 +8,10 @@ fetch.github = "po5/chapterskip"
 src.git = "https://github.com/zenyd/mpv-scripts"
 fetch.github = "zenyd/mpv-scripts"
 
+[mpv-dynamic-crop]
+src.git = "https://github.com/Ashyni/mpv-scripts"
+fetch.github = "Ashyni/mpv-scripts"
+
 [mpv-modernx]
 src.git = "https://github.com/cyl0/ModernX"
 fetch.github = "cyl0/ModernX"

@@ -113,26 +113,26 @@ if __name__ == "__main__":
             if IS_DESKTOP:
                 subprocess.run("hypr-monitors")
 
-                # always reset wallpaper and waybar
-                # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
+            # always reset wallpaper and waybar
+            # subprocess.run("hypr-wallpaper", stdout=subprocess.DEVNULL)
 
-            elif ev == "monitorremoved":
-                # focus workspace on ultrawide
-                if IS_DESKTOP:
-                    dispatch("focusmonitor", ULTRAWIDE)
+        elif ev == "monitorremoved":
+            # focus workspace on ultrawide
+            if IS_DESKTOP:
+                dispatch("focusmonitor", ULTRAWIDE)
 
-            # elif ev == "workspace":
-            #     [workspace] = ev_args
-            elif ev == "openwindow":
-                [_, workspace, *_] = ev_args
-                set_workspace_orientation(workspace, args.nstack)
-            elif ev == "movewindow":
-                [_, workspace] = ev_args
-                set_workspace_orientation(workspace, args.nstack)
-            # elif ev == "closewindow":
-            #     [win_id] = ev_args
-            # elif ev == "focusedmon":
-            #     [mon, workspace] = ev_args
+        # elif ev == "workspace":
+        #     [workspace] = ev_args
+        elif ev == "openwindow":
+            [_, workspace, *_] = ev_args
+            set_workspace_orientation(workspace, args.nstack)
+        elif ev == "movewindow":
+            [_, workspace] = ev_args
+            set_workspace_orientation(workspace, args.nstack)
+        # elif ev == "closewindow":
+        #     [win_id] = ev_args
+        # elif ev == "focusedmon":
+        #     [mon, workspace] = ev_args
 
         else:
             debug(ev, ev_args)

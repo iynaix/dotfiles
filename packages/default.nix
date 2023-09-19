@@ -1,22 +1,66 @@
 {pkgs, ...}: let
-  callPackageWithSources = file: args:
-    pkgs.callPackage file (args
+  sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
+  callPackageWithSource = sourceName: args: let
+    origSource = sources.${sourceName};
+    finalPackage = pkgs.callPackage ./${sourceName}.nix (args
       // {
-        sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
+        source =
+          origSource
+          // {
+            version =
+              if (builtins.hasAttr "date" origSource)
+              then "unstable-${origSource.date}"
+              else origSource.version;
+          };
       });
+  in
+    # add maintainer info
+    finalPackage
+    // {
+      meta =
+        (finalPackage.meta or {})
+        // {
+          maintainers = [pkgs.lib.maintainers.iynaix];
+        };
+    };
+  callMpvPlugin = sourceName:
+    callPackageWithSource sourceName {
+      mkMpvPlugin = mpvArg @ {
+        outFile,
+        inFile ? outFile,
+        ...
+      }:
+        pkgs.stdenvNoCC.mkDerivation ({
+            dontBuild = true;
+
+            installPhase = ''
+              runHook preInstall
+
+              mkdir -p $out/share/mpv/scripts
+              cp ${inFile} $out/share/mpv/scripts/${outFile}
+
+              runHook postInstall
+            '';
+
+            passthru.scriptName = outFile;
+          }
+          // mpvArg);
+    };
 in {
   # mpv plugins
-  mpv-chapterskip = callPackageWithSources ./mpv-chapterskip.nix {};
-  mpv-deletefile = callPackageWithSources ./mpv-deletefile.nix {};
-  mpv-modernx = callPackageWithSources ./mpv-modernx.nix {};
-  mpv-nextfile = callPackageWithSources ./mpv-nextfile.nix {};
-  mpv-sub-select = callPackageWithSources ./mpv-sub-select.nix {};
-  mpv-subsearch = callPackageWithSources ./mpv-subsearch.nix {};
-  mpv-thumbfast-osc = callPackageWithSources ./mpv-thumbfast-osc.nix {};
+  # mpv-chapterskip = callPackageWithSource "mpv-chapterskip" {};
+  mpv-chapterskip = callMpvPlugin "mpv-chapterskip";
+  mpv-deletefile = callMpvPlugin "mpv-deletefile";
+  mpv-dynamic-crop = callMpvPlugin "mpv-dynamic-crop";
+  mpv-modernx = callPackageWithSource "mpv-modernx" {};
+  mpv-nextfile = callMpvPlugin "mpv-nextfile";
+  mpv-sub-select = callMpvPlugin "mpv-sub-select";
+  mpv-subsearch = callMpvPlugin "mpv-subsearch";
+  mpv-thumbfast-osc = callMpvPlugin "mpv-thumbfast-osc";
 
   trimage = pkgs.callPackage ./trimage.nix {
     inherit (pkgs.qt5) wrapQtAppsHook;
   };
 
-  vv = callPackageWithSources ./vv.nix {};
+  vv = callPackageWithSource "vv" {};
 }

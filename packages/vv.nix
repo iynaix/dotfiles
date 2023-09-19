@@ -4,12 +4,12 @@
   makeWrapper,
   file,
   imagemagick,
-  sources,
+  source,
 }:
 # based off derivation for lsix
 # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/graphics/lsix/default.nix
 stdenvNoCC.mkDerivation (finalAttrs:
-    sources.vv
+    source
     // {
       nativeBuildInputs = [makeWrapper];
 
@@ -28,6 +28,5 @@ stdenvNoCC.mkDerivation (finalAttrs:
         homepage = "https://github.com/hackerb9/vv";
         description = "A simple image viewer for video terminals capable of sixel graphics.";
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [iynaix];
       };
     })

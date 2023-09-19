@@ -25,6 +25,18 @@
     };
     date = "2022-04-22";
   };
+  mpv-dynamic-crop = {
+    pname = "mpv-dynamic-crop";
+    version = "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697";
+    src = fetchFromGitHub {
+      owner = "Ashyni";
+      repo = "mpv-scripts";
+      rev = "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697";
+      fetchSubmodules = false;
+      sha256 = "sha256-fv5o+Uu/0bnkRfNe/mVgXNkup7IjYw6wqafpML3mlqo=";
+    };
+    date = "2023-09-04";
+  };
   mpv-modernx = {
     pname = "mpv-modernx";
     version = "d053ea602d797bdd85d8b2275d7f606be067dc21";

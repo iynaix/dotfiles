@@ -38,7 +38,9 @@
       fi
 
       nixos-rebuild build --flake ".#''${1:-${host}}" |& nom
-      popd
+      if [ ! -f flake.nix ]; then
+        popd
+      fi
     '';
   };
   # switch via nix flake

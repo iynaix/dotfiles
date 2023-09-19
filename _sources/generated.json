@@ -39,6 +39,26 @@
         },
         "version": "19ea069abcb794d1bf8fac2f59b50d71ab992130"
     },
+    "mpv-dynamic-crop": {
+        "cargoLocks": null,
+        "date": "2023-09-04",
+        "extract": null,
+        "name": "mpv-dynamic-crop",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "Ashyni",
+            "repo": "mpv-scripts",
+            "rev": "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697",
+            "sha256": "sha256-fv5o+Uu/0bnkRfNe/mVgXNkup7IjYw6wqafpML3mlqo=",
+            "type": "github"
+        },
+        "version": "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697"
+    },
     "mpv-modernx": {
         "cargoLocks": null,
         "date": "2023-01-12",
