@@ -21,6 +21,9 @@ in {
       fi
     '';
 
+    # write monitor config to monitors.json
+    home.file.".config/hypr/monitors.json".text = builtins.toJSON config.iynaix.displays;
+
     wayland.windowManager.hyprland.settings = {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";

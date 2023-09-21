@@ -44,14 +44,26 @@
       fishBody = ''if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end'';
     };
     # create a new devenv environment
-    mkdevenv = ''nix flake init --template github:iynaix/dotfiles#$1'';
+    mkdevenv = {
+      bashBody = ''nix flake init --template github:iynaix/dotfiles#$1'';
+      fishBody = ''nix flake init --template github:iynaix/dotfiles#$argv[1]'';
+    };
     # improved which for nix
     where = {
       bashBody = ''readlink -f $(which $1)'';
       fishBody = ''readlink -f (which $argv[1])'';
     };
     # server command, runs a local server
-    server = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';
+    server = {
+      bashBody = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';
+      fishBody = ''
+        if test -n "$1"
+          ${pkgs.python3}/bin/python -m http.server "$1"
+        else
+          ${pkgs.python3}/bin/python -m http.server 8000
+        end
+      '';
+    };
     # cd to project dir
     openproj = {
       bashBody = ''
