@@ -13,6 +13,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    devenv.url = "github:cachix/devenv/v0.6.3";
+
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
@@ -64,10 +66,15 @@
 
     # devshell for working on dotfiles, provides python utilities
     devShells = forAllSystems (pkgs: {
-      default = pkgs.mkShell {
-        packages = with pkgs.python3.pkgs; [
-          flake8
-          black
+      default = inputs.devenv.lib.mkShell {
+        inherit inputs pkgs;
+        modules = [
+          ({pkgs, ...}: {
+            # devenv configuration
+            packages = [pkgs.alejandra];
+
+            languages.rust.enable = true;
+          })
         ];
       };
     });

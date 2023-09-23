@@ -71,7 +71,6 @@ fn main() {
         nstack: is_nstack(),
     };
 
-    // println!("{:?}", signature);
     let socket_path = get_hyprland_socket();
     let socket = UnixStream::connect(socket_path).expect("hyprland ipc socket not found");
 

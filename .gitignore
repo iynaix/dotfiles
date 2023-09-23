@@ -1,4 +1,5 @@
-/result
-/target
+result
+target
+.devenv
 .direnv
 .vscode
