@@ -40,6 +40,8 @@
         home-manager
         libreoffice
         trash-cli
+        # misc utilities for dotfiles written in rust
+        iynaix.dotfiles-utils
       ]
       ++ (lib.optional config.iynaix.helix.enable helix)
       # handle fonts

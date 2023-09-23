@@ -47,8 +47,10 @@
           // mpvArg);
     };
 in {
+  # rust dotfiles utils
+  dotfiles-utils = pkgs.callPackage ./dotfiles-utils {};
+
   # mpv plugins
-  # mpv-chapterskip = callPackageWithSource "mpv-chapterskip" {};
   mpv-chapterskip = callMpvPlugin "mpv-chapterskip";
   mpv-deletefile = callMpvPlugin "mpv-deletefile";
   mpv-dynamic-crop = callMpvPlugin "mpv-dynamic-crop";

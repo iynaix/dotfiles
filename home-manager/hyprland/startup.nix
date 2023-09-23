@@ -3,17 +3,8 @@
   lib,
   config,
   ...
-}: let
-  hypr-monitors = pkgs.writeShellScriptBin "hypr-monitors" ''
-    ${pkgs.python3}/bin/python ${./hypr_monitors.py} \
-      ${lib.optionalString config.iynaix.waybar.persistent-workspaces "--persistent-workspaces"} \
-      --displays '${builtins.toJSON config.iynaix.displays}' \
-      "$@"
-  '';
-in {
+}: {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-    home.packages = [hypr-monitors];
-
     # start hyprland
     iynaix.shell.profileExtra = ''
       if [ "$(tty)" = "/dev/tty1" ]; then
@@ -29,7 +20,7 @@ in {
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
       in [
         # init ipc listener
-        ''${pkgs.socat}/bin/socat - UNIX-CONNECT:"/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | ${pkgs.python3}/bin/python ${./ipc.py} ${lib.optionalString (config.wayland.windowManager.hyprland.settings.general.layout == "nstack") "--nstack"} &''
+        "hypr-ipc &"
 
         # browsers
         (openOnWorkspace 1 "brave --profile-directory=Default")
@@ -58,7 +49,7 @@ in {
         # FIXME: weird race condition with swww init, need to sleep for a second
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
-        "launch-waybar"
+        "launch-waybar &"
 
         # fix gparted "cannot open display: :0" error
         "${pkgs.xorg.xhost}/bin/xhost +local:"

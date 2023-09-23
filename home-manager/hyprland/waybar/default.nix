@@ -1,18 +1,10 @@
 {
-  pkgs,
   lib,
   config,
   isNixOS,
   ...
 }: let
   cfg = config.iynaix.waybar;
-  launch-waybar = pkgs.writeShellScriptBin "launch-waybar" ''
-    killall -q .waybar-wrapped
-
-    waybar --config $HOME/.cache/wallust/waybar.jsonc \
-        --style $HOME/.cache/wallust/waybar.css \
-        > /dev/null 2>&1 &
-  '';
 in {
   imports = [
     ./split.nix
@@ -20,8 +12,6 @@ in {
   ];
 
   config = lib.mkIf cfg.enable {
-    home.packages = [launch-waybar];
-
     programs.waybar = {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable

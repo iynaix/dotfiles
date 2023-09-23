@@ -226,11 +226,11 @@ in {
 
         # switches to the next / previous window of the same class
         # hardcoded to SUPER so it doesn't clash on VM
-        "SUPER, Tab, exec, ${pkgs.python3}/bin/python ${./same_class.py} next"
-        "SUPER_SHIFT, Tab, exec, ${pkgs.python3}/bin/python ${./same_class.py} prev"
+        "SUPER, Tab, exec, hypr-same-class next"
+        "SUPER_SHIFT, Tab, exec, hypr-same-class prev"
 
         # picture in picture mode
-        "$mod, p, exec, ${pkgs.python3}/bin/python ${./picture_in_picture.py}"
+        "$mod, p, exec, hypr-pip"
 
         # add / remove master windows
         "$mod, m, layoutmsg, addmaster"
