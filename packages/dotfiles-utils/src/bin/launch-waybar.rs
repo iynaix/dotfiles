@@ -1,55 +1,31 @@
-use clap::Parser;
-use dirs::cache_dir;
 use dotfiles_utils::{
-    cmd, get_active_monitors, get_rearranged_workspaces, load_json_file, write_json_file,
+    cmd, get_active_monitors, get_rearranged_workspaces, load_json_file, write_json_file, NixInfo,
 };
-use std::path::PathBuf;
-use std::process::Command;
 
-fn wallust_cache(path: &str) -> PathBuf {
-    let mut cache_dir = cache_dir().unwrap_or_default();
-    cache_dir.push("wallust");
-    cache_dir.push(path);
+fn use_persistent_workspaces() -> bool {
+    let nix_info: NixInfo = {
+        let mut nix_json_path = dirs::config_dir().unwrap_or_default();
+        nix_json_path.push("wallust/nix.json");
 
-    cache_dir
-}
-
-#[derive(Parser, Debug)]
-#[command(name = "launch_waybar", about = "Relaunches waybar")]
-struct Args {
-    #[arg(
-        short,
-        long,
-        value_name = "CONFIG",
-        default_value_os_t = wallust_cache("waybar.jsonc")
-    )]
-    config: PathBuf,
-
-    #[arg(
-        short,
-        long,
-        value_name = "STYLE",
-        default_value_os_t = wallust_cache("waybar.css")
-    )]
-    style: PathBuf,
-
-    #[arg(long, default_value = "false")]
-    persistent_workspaces: bool,
+        load_json_file(&nix_json_path).unwrap()
+    };
+    nix_info.persistent_workspaces
 }
 
 fn main() {
-    let args = Args::parse();
-
     cmd(&["killall", "-q", ".waybar-wrapped"]);
 
     // add / remove persistent workspaces config to waybar config before launching
     let mut waybar_config_path = dirs::cache_dir().unwrap_or_default();
     waybar_config_path.push("wallust/waybar.jsonc");
 
+    let mut waybar_css_path = dirs::cache_dir().unwrap_or_default();
+    waybar_css_path.push("wallust/waybar.css");
+
     let mut waybar_config: serde_json::Value =
         load_json_file(&waybar_config_path).expect("failed to read waybar.jsonc");
 
-    if args.persistent_workspaces {
+    if use_persistent_workspaces() {
         let active_monitors = get_active_monitors();
         let rearranged_workspaces = get_rearranged_workspaces(&active_monitors);
 
@@ -69,10 +45,12 @@ fn main() {
     write_json_file(&waybar_config_path, &waybar_config).expect("failed to write waybar.jsonc");
 
     // open waybar in the background
-    Command::new("waybar").args([
+
+    cmd(&[
+        "waybar",
         "--config",
-        args.config.to_str().unwrap(),
+        waybar_config_path.to_str().unwrap(),
         "--style",
-        args.style.to_str().unwrap(),
-    ]).spawn().expect("failed to launch waybar");
+        waybar_css_path.to_str().unwrap(),
+    ])
 }

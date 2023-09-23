@@ -32,7 +32,7 @@ pub fn cmd(cmd_args: &[&str]) {
         [head, tail @ ..] => {
             Command::new(head)
                 .args(tail)
-                .status()
+                .spawn()
                 .expect("failed to execute process");
         }
     }
@@ -43,7 +43,7 @@ pub fn hypr(hypr_args: &[&str]) {
     Command::new("hyprctl")
         .arg("dispatch")
         .args(hypr_args)
-        .status()
+        .spawn()
         .expect("failed to execute process");
 }
 
@@ -186,19 +186,13 @@ pub fn get_active_monitors() -> HashMap<String, i32> {
 pub fn get_rearranged_workspaces(
     active_monitors: &HashMap<String, i32>,
 ) -> HashMap<String, Vec<i32>> {
-    #[derive(Clone, Default, Deserialize, Debug)]
-    struct NixMonitorInfo {
-        name: String,
-        workspaces: Vec<i32>,
-    }
+    let nix_info: NixInfo = {
+        let mut nix_json_path = dirs::config_dir().unwrap_or_default();
+        nix_json_path.push("wallust/nix.json");
 
-    // read json from file ~/.config/hypr/monitors.json
-    let nix_monitors: Vec<NixMonitorInfo> = {
-        let mut monitors_json_path = dirs::config_dir().unwrap_or_default();
-        monitors_json_path.push("hypr/monitors.json");
-
-        load_json_file(&monitors_json_path).unwrap()
+        load_json_file(&nix_json_path).unwrap()
     };
+    let nix_monitors = nix_info.monitors;
 
     let mut workspaces: HashMap<String, Vec<i32>> = HashMap::new();
     for (mon_idx, mon) in nix_monitors.iter().enumerate() {
@@ -244,12 +238,20 @@ pub struct Special {
     pub cursor: String,
 }
 
+#[derive(Clone, Default, Deserialize, Debug)]
+pub struct NixMonitorInfo {
+    pub name: String,
+    pub workspaces: Vec<i32>,
+}
+
 #[derive(Debug, Clone, Default, Deserialize)]
-pub struct WallustColors {
+pub struct NixInfo {
     pub wallpaper: String,
     pub neofetch: Neofetch,
     pub alpha: String,
     pub special: Special,
+    pub persistent_workspaces: bool,
+    pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,
 }

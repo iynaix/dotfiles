@@ -1,6 +1,5 @@
 use clap::{builder::PossibleValuesParser, command, Parser, ValueEnum};
-use dirs::{cache_dir, home_dir};
-use dotfiles_utils::{cmd, hypr, hypr_monitors, load_json_file, WallustColors};
+use dotfiles_utils::{cmd, hypr, hypr_monitors, load_json_file, NixInfo};
 use rand::{seq::SliceRandom, Rng};
 use std::{
     error::Error,
@@ -25,7 +24,7 @@ const CUSTOM_THEMES: [&str; 6] = [
 ];
 
 fn wallpaper_dir() -> PathBuf {
-    let mut d = home_dir().unwrap_or_default();
+    let mut d = dirs::home_dir().unwrap_or_default();
     d.push("Pictures/Wallpapers");
     d
 }
@@ -64,9 +63,10 @@ fn all_themes() -> Vec<String> {
     preset_themes
 }
 
-fn get_wallust_colors() -> Result<WallustColors, Box<dyn Error>> {
-    let mut colors_file = cache_dir().unwrap_or_default();
-    colors_file.push("wallust/colors.json");
+fn get_wallust_colors() -> Result<NixInfo, Box<dyn Error>> {
+    // use cache version as colors need to be populated
+    let mut colors_file = dirs::cache_dir().unwrap_or_default();
+    colors_file.push("wallust/nix.json");
 
     load_json_file(&colors_file)
 }
@@ -195,7 +195,7 @@ fn rofi_wallpaper() {
 
 fn apply_wallust_theme(theme: String) {
     if CUSTOM_THEMES.contains(&theme.as_str()) {
-        let mut colorscheme_file = cache_dir().unwrap_or_default();
+        let mut colorscheme_file = dirs::config_dir().unwrap_or_default();
         colorscheme_file.push(format!("wallust/{}.json", theme));
 
         cmd(&["wallust", "cs", colorscheme_file.to_str().unwrap()])
@@ -312,7 +312,7 @@ fn swww(swww_args: &[&str]) {
     if is_daemon_running {
         Command::new("swww")
             .args(swww_args)
-            .status()
+            .spawn()
             .expect("failed to execute process");
     } else {
         // FIXME: weird race condition with swww init, need to sleep for a second
@@ -330,7 +330,7 @@ fn swww(swww_args: &[&str]) {
         if swww_init.success() {
             Command::new("swww")
                 .args(swww_args)
-                .status()
+                .spawn()
                 .expect("failed to execute process");
         }
     }
@@ -439,7 +439,7 @@ fn main() {
         }
 
         swww(&["img", &wallpaper]);
-        cmd(&["launch_waybar"])
+        cmd(&["killall", "-SIGUSR2", ".waybar-wrapped"])
     } else {
         let wallpaper = &wallpaper.expect("no wallpaper found");
 

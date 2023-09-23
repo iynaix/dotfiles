@@ -10,7 +10,7 @@ import sys
 # creates the image and returns the path to the image
 def create_image(colors=None):
     if not colors:
-        colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
+        colors = json.load(open(Path("~/.cache/wallust/nix.json").expanduser()))
     logo = colors["neofetch"]["logo"]
     c4 = colors["colors"]["color4"]
     c6 = colors["colors"]["color6"]
@@ -43,7 +43,7 @@ def create_image(colors=None):
 
 
 def waifufetch():
-    colors = json.load(open(Path("~/.cache/wallust/colors.json").expanduser()))
+    colors = json.load(open(Path("~/.cache/wallust/nix.json").expanduser()))
     neofetch_config = colors["neofetch"]["conf"]
     img = create_image(colors)
 

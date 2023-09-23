@@ -12,9 +12,6 @@
       fi
     '';
 
-    # write monitor config to monitors.json
-    home.file.".config/hypr/monitors.json".text = builtins.toJSON config.iynaix.displays;
-
     wayland.windowManager.hyprland.settings = {
       exec-once = let
         openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
@@ -49,7 +46,7 @@
         # FIXME: weird race condition with swww init, need to sleep for a second
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
-        "launch-waybar &"
+        "launch-waybar"
 
         # fix gparted "cannot open display: :0" error
         "${pkgs.xorg.xhost}/bin/xhost +local:"

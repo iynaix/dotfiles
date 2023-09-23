@@ -1,5 +1,4 @@
-use dotfiles_utils::{get_active_monitors, get_rearranged_workspaces, hypr};
-use std::process::Command;
+use dotfiles_utils::{cmd, get_active_monitors, get_rearranged_workspaces, hypr};
 
 fn main() {
     let active_monitors = get_active_monitors();
@@ -33,7 +32,5 @@ fn main() {
     hypr(&["focusmonitor", workspaces.keys().next().unwrap().as_str()]);
 
     // launch waybar
-    Command::new("launch_waybar")
-        .status()
-        .expect("failed to execute process");
+    cmd(&["launch-waybar"]);
 }
