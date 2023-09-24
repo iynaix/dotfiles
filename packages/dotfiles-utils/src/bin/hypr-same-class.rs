@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use dotfiles_utils::{hypr, hypr_clients, ActiveWindow};
+use dotfiles_utils::{hypr, ActiveWindow, Client};
 
 #[derive(Subcommand, Debug)]
 enum Direction {
@@ -9,7 +9,7 @@ enum Direction {
 
 #[derive(Parser, Debug)]
 #[command(
-    name = "hypr_same_class",
+    name = "hypr-same-class",
     about = "Focus next / prev window of same class"
 )]
 struct Args {
@@ -20,12 +20,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
     let active = ActiveWindow::new();
-
-    let clients = hypr_clients();
-    let mut same_class: Vec<_> = clients
-        .iter()
-        .filter(|client| client.class == active.class)
-        .collect();
+    let mut same_class = Client::filter_class(active.class);
 
     // sort by workspace then coordinates
     same_class.sort_by_key(|client| (client.workspace.id, client.at));

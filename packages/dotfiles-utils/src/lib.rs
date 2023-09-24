@@ -32,8 +32,8 @@ pub fn cmd(cmd_args: &[&str]) {
         [head, tail @ ..] => {
             Command::new(head)
                 .args(tail)
-                .spawn()
-                .expect("failed to execute process");
+                .status()
+                .unwrap_or_else(|_| panic!("failed to execute {}", head));
         }
     }
 }
@@ -43,7 +43,7 @@ pub fn hypr(hypr_args: &[&str]) {
     Command::new("hyprctl")
         .arg("dispatch")
         .args(hypr_args)
-        .spawn()
+        .status()
         .expect("failed to execute process");
 }
 
@@ -59,16 +59,14 @@ pub struct ActiveWindow {
 
 impl ActiveWindow {
     pub fn new() -> ActiveWindow {
-        hypr_json::<ActiveWindow>("activewindow")
+        hypr_json("activewindow")
     }
 
     pub fn get_monitor(&self) -> Monitor {
-        let monitors = hypr_monitors();
-        monitors
-            .iter()
+        Monitor::monitors()
+            .into_iter()
             .find(|m| m.id == self.monitor)
             .expect("monitor not found")
-            .clone()
     }
 }
 
@@ -111,10 +109,60 @@ impl Monitor {
             2
         }
     }
-}
 
-pub fn hypr_monitors() -> Vec<Monitor> {
-    hypr_json("monitors")
+    pub fn monitors() -> Vec<Monitor> {
+        hypr_json("monitors")
+    }
+
+    pub fn focused() -> Monitor {
+        Monitor::monitors()
+            .into_iter()
+            .find(|mon| mon.focused)
+            .expect("no focused monitor found")
+    }
+
+    pub fn active_workspaces() -> HashMap<String, i32> {
+        let mut active_monitors = HashMap::new();
+
+        Monitor::monitors().into_iter().for_each(|mon| {
+            active_monitors.insert(mon.name, mon.active_workspace.id);
+        });
+
+        active_monitors
+    }
+
+    pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
+        let nix_monitors = NixInfo::from_config().monitors;
+        let active_workspaces = Monitor::active_workspaces();
+
+        let mut workspaces: HashMap<String, Vec<i32>> = HashMap::new();
+        for (mon_idx, mon) in nix_monitors.iter().enumerate() {
+            let name = &mon.name;
+
+            match active_workspaces.get(name) {
+                // active, use current workspaces
+                Some(_) => workspaces
+                    .entry(name.to_string())
+                    .or_insert_with(Vec::new)
+                    .extend(&mon.workspaces),
+                // not active, add to the other monitors
+                None => {
+                    for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
+                        let other_name = &other_mon.name;
+
+                        if mon_idx != other_mon_idx && active_workspaces.contains_key(other_name) {
+                            workspaces
+                                .entry(other_name.to_string())
+                                .or_insert_with(Vec::new)
+                                .extend(&mon.workspaces)
+                        }
+                    }
+                }
+            }
+        }
+
+        workspaces
+    }
 }
 
 /// hyprctl clients
@@ -127,8 +175,17 @@ pub struct Client {
     pub at: Coord,
 }
 
-pub fn hypr_clients() -> Vec<Client> {
-    hypr_json("clients")
+impl Client {
+    pub fn clients() -> Vec<Client> {
+        hypr_json("clients")
+    }
+
+    pub fn filter_class(class: String) -> Vec<Client> {
+        Client::clients()
+            .into_iter()
+            .filter(|client| client.class == class)
+            .collect()
+    }
 }
 
 /// hyprctl workspaces
@@ -141,18 +198,27 @@ pub struct Workspace {
 }
 
 impl Workspace {
-    pub fn get_monitor(&self) -> Monitor {
-        let monitors = hypr_monitors();
-        monitors
-            .iter()
+    pub fn workspaces() -> Vec<Workspace> {
+        hypr_json("workspaces")
+    }
+
+    pub fn monitor(&self) -> Monitor {
+        Monitor::monitors()
+            .into_iter()
             .find(|m| m.name == self.monitor)
             .expect("monitor not found")
-            .clone()
     }
-}
 
-pub fn hypr_workspaces() -> Vec<Workspace> {
-    hypr_json("workspaces")
+    pub fn by_name(name: String) -> Workspace {
+        Workspace::workspaces()
+            .into_iter()
+            .find(|w| w.name == name)
+            .expect("workspace not found")
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.windows == 0
+    }
 }
 
 pub fn load_json_file<T>(path: &PathBuf) -> Result<T, Box<dyn std::error::Error>>
@@ -171,58 +237,6 @@ where
     let file = std::fs::File::create(path)?;
     serde_json::to_writer(file, &data)?;
     Ok(())
-}
-
-pub fn get_active_monitors() -> HashMap<String, i32> {
-    let mut active_monitors = HashMap::new();
-
-    hypr_monitors().into_iter().for_each(|mon| {
-        active_monitors.insert(mon.name, mon.active_workspace.id);
-    });
-
-    active_monitors
-}
-
-pub fn get_rearranged_workspaces(
-    active_monitors: &HashMap<String, i32>,
-) -> HashMap<String, Vec<i32>> {
-    let nix_info: NixInfo = {
-        let mut nix_json_path = dirs::config_dir().unwrap_or_default();
-        nix_json_path.push("wallust/nix.json");
-
-        load_json_file(&nix_json_path).unwrap()
-    };
-    let nix_monitors = nix_info.monitors;
-
-    let mut workspaces: HashMap<String, Vec<i32>> = HashMap::new();
-    for (mon_idx, mon) in nix_monitors.iter().enumerate() {
-        let name = &mon.name;
-
-        match active_monitors.get(name) {
-            // active, use current workspaces
-            Some(_) => {
-                workspaces
-                    .entry(name.to_string())
-                    .and_modify(|wksps| wksps.extend(&mon.workspaces))
-                    .or_insert(mon.workspaces.clone());
-            }
-            // not active, add to the other monitors
-            None => {
-                for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
-                    let other_name = &other_mon.name;
-
-                    if mon_idx != other_mon_idx && active_monitors.contains_key(other_name) {
-                        workspaces
-                            .entry(other_name.to_string())
-                            .and_modify(|wksps| wksps.extend(&mon.workspaces))
-                            .or_insert(mon.workspaces.clone());
-                    }
-                }
-            }
-        }
-    }
-
-    workspaces
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -248,10 +262,37 @@ pub struct NixMonitorInfo {
 pub struct NixInfo {
     pub wallpaper: String,
     pub neofetch: Neofetch,
-    pub alpha: String,
     pub special: Special,
     pub persistent_workspaces: bool,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,
+}
+
+impl NixInfo {
+    /// get nix info from ~/.config before wallust has processed it
+    pub fn from_config() -> NixInfo {
+        let mut path = dirs::config_dir().unwrap_or_default();
+        path.push("wallust/nix.json");
+
+        load_json_file(&path).expect("could not load ~/.config/wallust/nix.json")
+    }
+
+    /// get nix info from ~/.cache after wallust has processed it
+    pub fn from_cache() -> NixInfo {
+        let mut path = dirs::cache_dir().unwrap_or_default();
+        path.push("wallust/nix.json");
+
+        load_json_file(&path).expect("could not load ~/.cache/wallust/nix.json")
+    }
+
+    /// get a vec of colors without # prefix
+    pub fn hyprland_colors(&self) -> Vec<String> {
+        (1..16)
+            .map(|n| {
+                let k = format!("color{}", n);
+                format!("rgb({})", self.colors.get(&k).unwrap().replace('#', ""))
+            })
+            .collect()
+    }
 }

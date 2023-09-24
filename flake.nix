@@ -18,7 +18,7 @@
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
-      url = "github:hyprwm/Hyprland/6594b50e57935dd66930ccd35dba7a1b4131399d";
+      url = "github:hyprwm/Hyprland";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -64,7 +64,7 @@
 
     homeConfigurations = import ./hosts (commonInherits // {isNixOS = false;});
 
-    # devshell for working on dotfiles, provides python utilities
+    # devenv for working on dotfiles, provides rust environment
     devShells = forAllSystems (pkgs: {
       default = inputs.devenv.lib.mkShell {
         inherit inputs pkgs;

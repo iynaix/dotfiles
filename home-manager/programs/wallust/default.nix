@@ -69,7 +69,6 @@ in {
             conf = "${../../shell/rice/neofetch.conf}";
           };
           # use pywal template syntax here
-          alpha = "{alpha}";
           special = {
             background = "{background}";
             foreground = "{foreground}";

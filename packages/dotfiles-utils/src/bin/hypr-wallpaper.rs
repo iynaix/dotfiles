@@ -1,8 +1,7 @@
 use clap::{builder::PossibleValuesParser, command, Parser, ValueEnum};
-use dotfiles_utils::{cmd, hypr, hypr_monitors, load_json_file, NixInfo};
+use dotfiles_utils::{cmd, hypr, Monitor, NixInfo};
 use rand::{seq::SliceRandom, Rng};
 use std::{
-    error::Error,
     io::Write,
     path::PathBuf,
     process::{exit, Command, Stdio},
@@ -63,18 +62,8 @@ fn all_themes() -> Vec<String> {
     preset_themes
 }
 
-fn get_wallust_colors() -> Result<NixInfo, Box<dyn Error>> {
-    // use cache version as colors need to be populated
-    let mut colors_file = dirs::cache_dir().unwrap_or_default();
-    colors_file.push("wallust/nix.json");
-
-    load_json_file(&colors_file)
-}
-
 fn get_current_wallpaper() -> Option<String> {
-    let curr = get_wallust_colors()
-        .expect("could not get colors")
-        .wallpaper;
+    let curr = NixInfo::from_cache().wallpaper;
 
     let wallpaper = {
         if curr != "./foo/bar.text" {
@@ -164,7 +153,7 @@ fn rofi_wallpaper() {
     // let new_wallpaper = random_wallpaper();
     const TARGET_PERCENT: f32 = 0.3;
 
-    let mon = hypr_monitors().into_iter().find(|mon| mon.focused).unwrap();
+    let mon = Monitor::focused();
 
     let mut width = mon.width * TARGET_PERCENT;
     let mut height = mon.height * TARGET_PERCENT;
@@ -235,15 +224,7 @@ fn refresh_zathura() {
 }
 
 fn apply_colors() {
-    let colors = get_wallust_colors().expect("could not get colors");
-
-    // remove the hex prefix for colors
-    let c: Vec<_> = (0..16)
-        .map(|n| {
-            let k = format!("color{}", n);
-            colors.colors.get(&k).unwrap().replace('#', "")
-        })
-        .collect();
+    let c = NixInfo::from_cache().hyprland_colors();
 
     // update borders
     cmd(&[
@@ -286,7 +267,7 @@ fn apply_colors() {
     cmd(&["killall", "-SIGUSR2", "cava"]);
 
     // refresh waifufetch
-    cmd(&["killall", "-SIGUSR2", "python3"]);
+    cmd(&["killall", "-SIGUSR2", "waifufetch"]);
 
     // refresh waybar
     cmd(&["killall", "-SIGUSR2", ".waybar-wrapped"]);
@@ -296,49 +277,18 @@ fn apply_colors() {
 }
 
 fn swww(swww_args: &[&str]) {
-    let swww_query = Command::new("swww")
-        .arg("query")
-        .output()
-        .expect("failed to execute process");
+    // FIXME: weird race condition with swww init, need to sleep for a second
+    // https://github.com/Horus645/swww/issues/144
 
-    // check if swww daemon is running
-    let is_daemon_running = !std::str::from_utf8(&swww_query.stderr)
-        .unwrap()
-        .lines()
-        .next()
-        .unwrap_or_default()
-        .starts_with("Error");
-
-    if is_daemon_running {
-        Command::new("swww")
-            .args(swww_args)
-            .spawn()
-            .expect("failed to execute process");
-    } else {
-        // FIXME: weird race condition with swww init, need to sleep for a second
-        // https://github.com/Horus645/swww/issues/144
-
-        // sleep for a second
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
-        let swww_init = Command::new("swww")
-            .arg("init")
-            .status()
-            .expect("failed to execute swww init");
-
-        // equivalent of bash &&
-        if swww_init.success() {
-            Command::new("swww")
-                .args(swww_args)
-                .spawn()
-                .expect("failed to execute process");
-        }
-    }
+    Command::new("swww")
+        .args(swww_args)
+        .spawn()
+        .expect("failed to execute swww");
 }
 
 #[derive(Parser, Debug)]
 #[command(
-    name = "hypr_wallpaper",
+    name = "hypr-wallpaper",
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 struct Args {

@@ -1,8 +1,7 @@
-use dotfiles_utils::{cmd, get_active_monitors, get_rearranged_workspaces, hypr};
+use dotfiles_utils::{cmd, hypr, Monitor};
 
 fn main() {
-    let active_monitors = get_active_monitors();
-    let workspaces = get_rearranged_workspaces(&active_monitors);
+    let workspaces = Monitor::rearranged_workspaces();
 
     // move workspaces to monitors
     for (mon, wksps) in workspaces.iter() {

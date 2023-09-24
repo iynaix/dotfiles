@@ -1,16 +1,5 @@
-use dotfiles_utils::{
-    cmd, get_active_monitors, get_rearranged_workspaces, load_json_file, write_json_file, NixInfo,
-};
-
-fn use_persistent_workspaces() -> bool {
-    let nix_info: NixInfo = {
-        let mut nix_json_path = dirs::config_dir().unwrap_or_default();
-        nix_json_path.push("wallust/nix.json");
-
-        load_json_file(&nix_json_path).unwrap()
-    };
-    nix_info.persistent_workspaces
-}
+use dotfiles_utils::{cmd, load_json_file, write_json_file, Monitor, NixInfo};
+use std::process::Command;
 
 fn main() {
     cmd(&["killall", "-q", ".waybar-wrapped"]);
@@ -25,9 +14,8 @@ fn main() {
     let mut waybar_config: serde_json::Value =
         load_json_file(&waybar_config_path).expect("failed to read waybar.jsonc");
 
-    if use_persistent_workspaces() {
-        let active_monitors = get_active_monitors();
-        let rearranged_workspaces = get_rearranged_workspaces(&active_monitors);
+    if NixInfo::from_config().persistent_workspaces {
+        let rearranged_workspaces = Monitor::rearranged_workspaces();
 
         waybar_config["hyprland/workspaces"]["persistent-workspaces"] =
             serde_json::to_value(rearranged_workspaces).expect("failed to convert to json");
@@ -46,11 +34,15 @@ fn main() {
 
     // open waybar in the background
 
-    cmd(&[
-        "waybar",
-        "--config",
-        waybar_config_path.to_str().unwrap(),
-        "--style",
-        waybar_css_path.to_str().unwrap(),
-    ])
+    Command::new("waybar")
+        .args([
+            "--config",
+            waybar_config_path.to_str().unwrap(),
+            "--style",
+            waybar_css_path.to_str().unwrap(),
+        ])
+        .spawn()
+        .expect("failed to execute waybar");
+
+    std::process::exit(0);
 }

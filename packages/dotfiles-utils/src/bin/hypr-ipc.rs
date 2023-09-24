@@ -1,6 +1,4 @@
-use dotfiles_utils::{
-    cmd, get_active_monitors, get_rearranged_workspaces, hypr, hypr_json, hypr_workspaces,
-};
+use dotfiles_utils::{cmd, hypr, hypr_json, Monitor, Workspace};
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
@@ -39,15 +37,10 @@ fn set_workspace_orientation(workspace: String, globals: &Globals) {
     if !globals.is_desktop {
         return;
     }
-    let workspace = workspace.replace(" silent", "");
-    let workspaces = hypr_workspaces();
-    let wksp = workspaces
-        .iter()
-        .find(|w| w.name == workspace)
-        .expect("workspace not found");
 
-    if wksp.windows > 0 {
-        let mon = wksp.get_monitor();
+    let wksp = Workspace::by_name(workspace.replace(" silent", ""));
+    if !wksp.is_empty() {
+        let mon = wksp.monitor();
 
         hypr(&["layoutmsg", mon.orientation()]);
 
@@ -71,6 +64,7 @@ fn main() {
         nstack: is_nstack(),
     };
 
+    // println!("{:?}", signature);
     let socket_path = get_hyprland_socket();
     let socket = UnixStream::connect(socket_path).expect("hyprland ipc socket not found");
 
@@ -86,13 +80,12 @@ fn main() {
         match ev {
             "monitoradded" => {
                 if globals.is_desktop {
-                    cmd(&["hypr_monitors"])
+                    cmd(&["hypr-monitors"])
                 }
             }
             "monitorremoved" => {
                 if globals.is_desktop {
-                    let active_monitors = get_active_monitors();
-                    let rearranged_workspaces = get_rearranged_workspaces(&active_monitors);
+                    let rearranged_workspaces = Monitor::rearranged_workspaces();
                     // focus desktop with the most workspaces
                     let (mon_to_focus, _) = rearranged_workspaces
                         .iter()

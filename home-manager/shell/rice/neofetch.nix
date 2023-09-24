@@ -1,7 +1,4 @@
 {pkgs, ...}: let
-  waifufetch = pkgs.writeShellScriptBin "waifufetch" ''
-    ${pkgs.python3}/bin/python3 ${./waifufetch.py} "$@"
-  '';
   neochallenge = pkgs.writeShellApplication {
     name = "neochallenge";
     runtimeInputs = [pkgs.neofetch];
@@ -13,7 +10,6 @@ in {
   home.packages = with pkgs; [
     neofetch
     neochallenge
-    waifufetch
   ];
 
   home.shellAliases = {
