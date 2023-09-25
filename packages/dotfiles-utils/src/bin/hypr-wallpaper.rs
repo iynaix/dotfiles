@@ -1,5 +1,5 @@
 use clap::{builder::PossibleValuesParser, command, Parser, ValueEnum};
-use dotfiles_utils::{cmd, hypr, Monitor, NixInfo};
+use dotfiles_utils::{cmd, cmd_output, full_path, hypr, CmdOutput, Monitor, NixInfo};
 use rand::{seq::SliceRandom, Rng};
 use std::{
     io::Write,
@@ -22,27 +22,16 @@ const CUSTOM_THEMES: [&str; 6] = [
     "tokyo-night",
 ];
 
-fn wallpaper_dir() -> PathBuf {
-    let mut d = dirs::home_dir().unwrap_or_default();
-    d.push("Pictures/Wallpapers");
-    d
-}
+const WALLPAPER_DIR: &str = "~/Pictures/Wallpapers";
 
 fn wallust_preset_themes() -> Vec<String> {
-    let output = Command::new("wallust")
-        .args(["theme", "--help"])
-        .output()
-        .expect("failed to execute process");
-
-    let (_, themes) = std::str::from_utf8(&output.stdout)
-        .unwrap()
-        .lines()
+    cmd_output(["wallust", "theme", "--help"], CmdOutput::Stdout)
+        .iter()
         .max_by_key(|line| line.len())
         .unwrap()
         .rsplit_once(" values: ")
-        .unwrap();
-
-    themes
+        .unwrap()
+        .1
         .replace(']', "")
         .split(", ")
         .map(String::from)
@@ -69,20 +58,15 @@ fn get_current_wallpaper() -> Option<String> {
         if curr != "./foo/bar.text" {
             Some(curr)
         } else {
-            let output = Command::new("swww")
-                .arg("query")
-                .output()
-                .expect("failed to execute process");
-
-            let (_, img) = std::str::from_utf8(&output.stdout)
-                .unwrap()
-                .lines()
-                .next()
-                .expect("no wallpaper found")
-                .rsplit_once(": ")
-                .expect("no wallpaper found");
-
-            Some(img.to_string())
+            Some(
+                cmd_output(["swww", "query"], CmdOutput::Stdout)
+                    .first()
+                    .expect("no wallpaper found")
+                    .rsplit_once(": ")
+                    .expect("no wallpaper found")
+                    .1
+                    .to_string(),
+            )
         }
     };
 
@@ -122,7 +106,7 @@ fn rofi_theme() {
 fn get_wallpapers() -> Vec<String> {
     let curr = get_current_wallpaper().unwrap_or_default();
 
-    wallpaper_dir()
+    full_path(WALLPAPER_DIR)
         .read_dir()
         .unwrap()
         .flatten()
@@ -171,51 +155,40 @@ fn rofi_wallpaper() {
 
     hypr(&[
         "exec",
-        format!(
-            "{} imv -n {} -c '{}' {}",
-            float_rule,
-            rand_idx,
-            esc_bind,
-            wallpaper_dir().as_os_str().to_str().unwrap()
-        )
-        .as_str(),
+        format!("{float_rule} imv -n {rand_idx} -c '{esc_bind}' {WALLPAPER_DIR}").as_str(),
     ]);
 }
 
 fn apply_wallust_theme(theme: String) {
     if CUSTOM_THEMES.contains(&theme.as_str()) {
-        let mut colorscheme_file = dirs::config_dir().unwrap_or_default();
-        colorscheme_file.push(format!("wallust/{}.json", theme));
-
-        cmd(&["wallust", "cs", colorscheme_file.to_str().unwrap()])
+        let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json").as_str());
+        cmd(["wallust", "cs", colorscheme_file.to_str().unwrap()])
     } else {
-        cmd(&["wallust", "theme", &theme])
+        cmd(["wallust", "theme", &theme])
     }
 }
 
 fn refresh_zathura() {
-    let output = Command::new("dbus-send")
-        .args([
+    if let Some(zathura_pid_raw) = cmd_output(
+        [
+            "dbus-send",
             "--print-reply",
             "--dest=org.freedesktop.DBus",
             "/org/freedesktop/DBus",
             "org.freedesktop.DBus.ListNames",
-        ])
-        .output()
-        .expect("failed to execute process");
-
-    if let Some(zathura_pid_raw) = std::str::from_utf8(&output.stdout)
-        .unwrap()
-        .lines()
-        .find(|line| line.contains("org.pwmt.zathura"))
+        ],
+        CmdOutput::Stdout,
+    )
+    .iter()
+    .find(|line| line.contains("org.pwmt.zathura"))
     {
         let zathura_pid = zathura_pid_raw.split('"').max_by_key(|s| s.len()).unwrap();
 
         // send message to zathura via dbus
-        cmd(&[
+        cmd([
             "dbus-send",
             "--type=method_call",
-            format!("--dest={}", zathura_pid).as_str(),
+            format!("--dest={zathura_pid}").as_str(),
             "/org/pwmt/zathura",
             "org.pwmt.zathura.ExecuteCommand",
             "string:source",
@@ -227,16 +200,16 @@ fn apply_colors() {
     let c = NixInfo::from_cache().hyprland_colors();
 
     // update borders
-    cmd(&[
+    cmd([
         "hyprctl",
         "keyword",
         "general:col.active_border",
         &format!("{} {} 45deg", c[4], c[0]),
     ]);
-    cmd(&["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
+    cmd(["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
 
     // pink border for monocle windows
-    cmd(&[
+    cmd([
         "hyprctl",
         "keyword",
         "windowrulev2",
@@ -244,7 +217,7 @@ fn apply_colors() {
         &format!("{},fullscreen:1", &c[5]),
     ]);
     // teal border for floating windows
-    cmd(&[
+    cmd([
         "hyprctl",
         "keyword",
         "windowrulev2",
@@ -252,7 +225,7 @@ fn apply_colors() {
         &format!("{},floating:1", &c[6]),
     ]);
     // yellow border for sticky (must be floating) windows
-    cmd(&[
+    cmd([
         "hyprctl",
         "keyword",
         "windowrulev2",
@@ -264,26 +237,49 @@ fn apply_colors() {
     refresh_zathura();
 
     // refresh cava
-    cmd(&["killall", "-SIGUSR2", "cava"]);
+    cmd(["killall", "-SIGUSR2", "cava"]);
 
     // refresh waifufetch
-    cmd(&["killall", "-SIGUSR2", "waifufetch"]);
+    cmd(["killall", "-SIGUSR2", "waifufetch"]);
 
     // refresh waybar
-    cmd(&["killall", "-SIGUSR2", ".waybar-wrapped"]);
+    cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
 
     // reload gtk theme
     // reload_gtk()
 }
 
 fn swww(swww_args: &[&str]) {
-    // FIXME: weird race condition with swww init, need to sleep for a second
-    // https://github.com/Horus645/swww/issues/144
+    let is_daemon_running = !cmd_output(["swww", "query"], CmdOutput::Stderr)
+        .first()
+        .unwrap_or(&String::from(""))
+        .starts_with("Error");
 
-    Command::new("swww")
-        .args(swww_args)
-        .spawn()
-        .expect("failed to execute swww");
+    if is_daemon_running {
+        Command::new("swww")
+            .args(swww_args)
+            .spawn()
+            .expect("failed to execute process");
+    } else {
+        // FIXME: weird race condition with swww init, need to sleep for a second
+        // https://github.com/Horus645/swww/issues/144
+
+        // sleep for a second
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
+        let swww_init = Command::new("swww")
+            .arg("init")
+            .status()
+            .expect("failed to execute swww init");
+
+        // equivalent of bash &&
+        if swww_init.success() {
+            Command::new("swww")
+                .args(swww_args)
+                .spawn()
+                .expect("failed to execute process");
+        }
+    }
 }
 
 #[derive(Parser, Debug)]
@@ -385,16 +381,16 @@ fn main() {
             .expect("no wallpaper found");
 
         if !args.no_wallust {
-            cmd(&["wallust", &wallpaper])
+            cmd(["wallust", &wallpaper])
         }
 
         swww(&["img", &wallpaper]);
-        cmd(&["killall", "-SIGUSR2", ".waybar-wrapped"])
+        cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
     } else {
         let wallpaper = &wallpaper.expect("no wallpaper found");
 
         if !args.no_wallust {
-            cmd(&["wallust", wallpaper]);
+            cmd(["wallust", wallpaper]);
         }
 
         swww(&[

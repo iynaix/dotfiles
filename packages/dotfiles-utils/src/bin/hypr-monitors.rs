@@ -31,5 +31,5 @@ fn main() {
     hypr(&["focusmonitor", workspaces.keys().next().unwrap().as_str()]);
 
     // launch waybar
-    cmd(&["launch-waybar"]);
+    cmd(["launch-waybar"]);
 }

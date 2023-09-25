@@ -21,7 +21,7 @@ fn main() {
         ]);
 
         let activewindow = ActiveWindow::new();
-        let padding = 30; // target distance from corner of screen
+        const PADDING: i32 = 30; // target distance from corner of screen
 
         let mon_right: i32;
         let mon_bottom: i32;
@@ -35,8 +35,8 @@ fn main() {
             mon_right = curr_mon.x + curr_mon.width as i32;
         }
 
-        let delta_x = mon_right - padding - target_w - activewindow.at.0;
-        let delta_y = mon_bottom - padding - target_h - activewindow.at.1;
+        let delta_x = mon_right - PADDING - target_w - activewindow.at.0;
+        let delta_y = mon_bottom - PADDING - target_h - activewindow.at.1;
 
         hypr(&["moveactive", &delta_x.to_string(), &delta_y.to_string()]);
     } else {

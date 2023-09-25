@@ -1,18 +1,14 @@
-use dotfiles_utils::{cmd, load_json_file, write_json_file, Monitor, NixInfo};
+use dotfiles_utils::{cmd, full_path, json, Monitor, NixInfo};
 use std::process::Command;
 
 fn main() {
-    cmd(&["killall", "-q", ".waybar-wrapped"]);
+    cmd(["killall", "-q", ".waybar-wrapped"]);
 
     // add / remove persistent workspaces config to waybar config before launching
-    let mut waybar_config_path = dirs::cache_dir().unwrap_or_default();
-    waybar_config_path.push("wallust/waybar.jsonc");
+    let waybar_config_path = "~/.cache/wallust/waybar.jsonc";
+    let waybar_css_path = "~/.cache/wallust/waybar.css";
 
-    let mut waybar_css_path = dirs::cache_dir().unwrap_or_default();
-    waybar_css_path.push("wallust/waybar.css");
-
-    let mut waybar_config: serde_json::Value =
-        load_json_file(&waybar_config_path).expect("failed to read waybar.jsonc");
+    let mut waybar_config: serde_json::Value = json::load(waybar_config_path);
 
     if NixInfo::from_config().persistent_workspaces {
         let rearranged_workspaces = Monitor::rearranged_workspaces();
@@ -30,16 +26,16 @@ fn main() {
     }
 
     // write waybar_config back to waybar_config_file as json
-    write_json_file(&waybar_config_path, &waybar_config).expect("failed to write waybar.jsonc");
+    json::write(waybar_config_path, &waybar_config);
 
     // open waybar in the background
 
     Command::new("waybar")
         .args([
             "--config",
-            waybar_config_path.to_str().unwrap(),
+            full_path(waybar_config_path).to_str().unwrap(),
             "--style",
-            waybar_css_path.to_str().unwrap(),
+            full_path(waybar_css_path).to_str().unwrap(),
         ])
         .spawn()
         .expect("failed to execute waybar");

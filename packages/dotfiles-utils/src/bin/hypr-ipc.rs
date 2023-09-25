@@ -64,7 +64,6 @@ fn main() {
         nstack: is_nstack(),
     };
 
-    // println!("{:?}", signature);
     let socket_path = get_hyprland_socket();
     let socket = UnixStream::connect(socket_path).expect("hyprland ipc socket not found");
 
@@ -75,12 +74,12 @@ fn main() {
         let (ev, ev_args) = line.split_once(">>").unwrap();
         let ev_args: Vec<String> = ev_args.split(',').map(|s| s.to_string()).collect();
 
-        // println!("{} ---- {:?}", ev, ev_args);
+        // println!("{ev} ---- {ev_args:?}");
 
         match ev {
             "monitoradded" => {
                 if globals.is_desktop {
-                    cmd(&["hypr-monitors"])
+                    cmd(["hypr-monitors"])
                 }
             }
             "monitorremoved" => {
@@ -104,7 +103,7 @@ fn main() {
             }
             _ => {
                 // enable for debugging
-                // println!("unhandled event: {} {:?}", ev, ev_args);
+                // println!("unhandled event: {ev} {ev_args:?}");
             }
         }
     }

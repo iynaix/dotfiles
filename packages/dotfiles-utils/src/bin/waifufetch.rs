@@ -17,7 +17,7 @@ fn create_image(nix_info: &NixInfo) -> String {
     let c4 = hexless.get("color4").expect("invalid color");
     let c6 = hexless.get("color6").expect("invalid color");
 
-    let output = format!("/tmp/waifufetch-{}-{}.png", c4, c6);
+    let output = format!("/tmp/waifufetch-{c4}-{c6}.png");
 
     let magick_args = [
         logo, // replace color 1

@@ -13,6 +13,13 @@ pub struct WorkspaceId {
     pub id: i32,
 }
 
+pub fn full_path(p: &str) -> PathBuf {
+    match p.strip_prefix("~/") {
+        Some(p) => dirs::home_dir().unwrap().join(p),
+        None => PathBuf::from(p),
+    }
+}
+
 /// reads json from a hyprctl -j command
 pub fn hypr_json<T>(cmd: &str) -> T
 where
@@ -26,16 +33,61 @@ where
     serde_json::from_slice(&output.stdout).expect("failed to parse json")
 }
 
-pub fn cmd(cmd_args: &[&str]) {
-    match cmd_args {
-        [] => panic!("empty command"),
-        [head, tail @ ..] => {
-            Command::new(head)
-                .args(tail)
-                .status()
-                .unwrap_or_else(|_| panic!("failed to execute {}", head));
-        }
+/// returns a command to be executed, and the command as a string
+fn create_cmd<I, S>(cmd_args: I) -> (Command, String)
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
+    let mut args = cmd_args.into_iter();
+    let first = args.next().expect("empty command");
+    let first = first.as_ref();
+
+    let mut cmd_str = vec![first.to_string()];
+    let mut cmd = Command::new(first);
+
+    for arg in args {
+        let arg = arg.as_ref();
+        cmd_str.push(arg.to_string());
+        cmd.arg(arg);
     }
+
+    (
+        cmd,
+        format!("failed to execute {first} {}", cmd_str.join(" ")),
+    )
+}
+
+pub fn cmd<I, S>(cmd_args: I)
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
+    let (mut cmd, cmd_str) = create_cmd(cmd_args);
+    cmd.status().unwrap_or_else(|_| panic!("{cmd_str}"));
+}
+
+pub enum CmdOutput {
+    Stdout,
+    Stderr,
+}
+
+pub fn cmd_output<I, S>(cmd_args: I, from: CmdOutput) -> Vec<String>
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
+    let (mut cmd, cmd_str) = create_cmd(cmd_args);
+    let output = cmd.output().unwrap_or_else(|_| panic!("{cmd_str}"));
+
+    std::str::from_utf8(match from {
+        CmdOutput::Stdout => &output.stdout,
+        CmdOutput::Stderr => &output.stderr,
+    })
+    .unwrap()
+    .lines()
+    .map(String::from)
+    .collect()
 }
 
 /// hyprctl dispatch
@@ -135,7 +187,7 @@ impl Monitor {
         let nix_monitors = NixInfo::from_config().monitors;
         let active_workspaces = Monitor::active_workspaces();
 
-        let mut workspaces: HashMap<String, Vec<i32>> = HashMap::new();
+        let mut workspaces = HashMap::new();
         for (mon_idx, mon) in nix_monitors.iter().enumerate() {
             let name = &mon.name;
 
@@ -221,22 +273,28 @@ impl Workspace {
     }
 }
 
-pub fn load_json_file<T>(path: &PathBuf) -> Result<T, Box<dyn std::error::Error>>
-where
-    T: serde::de::DeserializeOwned,
-{
-    let contents = std::fs::read_to_string(path)?;
-    let res = serde_json::from_str(&contents)?;
-    Ok(res)
-}
+pub mod json {
+    use super::full_path;
 
-pub fn write_json_file<T>(path: &PathBuf, data: T) -> Result<(), Box<dyn std::error::Error>>
-where
-    T: serde::Serialize,
-{
-    let file = std::fs::File::create(path)?;
-    serde_json::to_writer(file, &data)?;
-    Ok(())
+    pub fn load<T>(path: &str) -> T
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        let contents = std::fs::read_to_string(full_path(path))
+            .unwrap_or_else(|_| panic!("failed to load {path}"));
+        serde_json::from_str(&contents)
+            .unwrap_or_else(|_| panic!("failed to parse json for {path}"))
+    }
+
+    pub fn write<T>(path: &str, data: T)
+    where
+        T: serde::Serialize,
+    {
+        let file = std::fs::File::create(full_path(path))
+            .unwrap_or_else(|_| panic!("failed to load {path}"));
+        serde_json::to_writer(file, &data)
+            .unwrap_or_else(|_| panic!("failed to write json to {path}"));
+    }
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -272,25 +330,19 @@ pub struct NixInfo {
 impl NixInfo {
     /// get nix info from ~/.config before wallust has processed it
     pub fn from_config() -> NixInfo {
-        let mut path = dirs::config_dir().unwrap_or_default();
-        path.push("wallust/nix.json");
-
-        load_json_file(&path).expect("could not load ~/.config/wallust/nix.json")
+        json::load("~/.config/wallust/nix.json")
     }
 
     /// get nix info from ~/.cache after wallust has processed it
     pub fn from_cache() -> NixInfo {
-        let mut path = dirs::cache_dir().unwrap_or_default();
-        path.push("wallust/nix.json");
-
-        load_json_file(&path).expect("could not load ~/.cache/wallust/nix.json")
+        json::load("~/.cache/wallust/nix.json")
     }
 
     /// get a vec of colors without # prefix
     pub fn hyprland_colors(&self) -> Vec<String> {
         (1..16)
             .map(|n| {
-                let k = format!("color{}", n);
+                let k = format!("color{n}");
                 format!("rgb({})", self.colors.get(&k).unwrap().replace('#', ""))
             })
             .collect()
