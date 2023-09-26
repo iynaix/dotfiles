@@ -77,6 +77,39 @@ fn get_current_wallpaper() -> Option<String> {
     )
 }
 
+fn swww(swww_args: &[&str]) {
+    let is_daemon_running = !cmd_output(["swww", "query"], CmdOutput::Stderr)
+        .first()
+        .unwrap_or(&String::from(""))
+        .starts_with("Error");
+
+    if is_daemon_running {
+        Command::new("swww")
+            .args(swww_args)
+            .spawn()
+            .expect("failed to execute process");
+    } else {
+        // FIXME: weird race condition with swww init, need to sleep for a second
+        // https://github.com/Horus645/swww/issues/144
+
+        // sleep for a second
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
+        let swww_init = Command::new("swww")
+            .arg("init")
+            .status()
+            .expect("failed to execute swww init");
+
+        // equivalent of bash &&
+        if swww_init.success() {
+            Command::new("swww")
+                .args(swww_args)
+                .spawn()
+                .expect("failed to execute process");
+        }
+    }
+}
+
 fn rofi_theme() {
     let themes = all_themes().join("\n");
 
@@ -117,11 +150,11 @@ fn get_wallpapers() -> Vec<String> {
                 if let Some(ext) = path.extension() {
                     match ext.to_str() {
                         Some("jpg") | Some("jpeg") | Some("png") => {
-                            if curr == *path.to_str().unwrap() {
+                            if curr == *path.to_str()? {
                                 return None;
                             }
 
-                            return Some(path.to_str().unwrap().to_string());
+                            return Some(path.to_str()?.to_string());
                         }
                         _ => {}
                     }
@@ -155,13 +188,13 @@ fn rofi_wallpaper() {
 
     hypr(&[
         "exec",
-        format!("{float_rule} imv -n {rand_idx} -c '{esc_bind}' {WALLPAPER_DIR}").as_str(),
+        &format!("{float_rule} imv -n {rand_idx} -c '{esc_bind}' {WALLPAPER_DIR}"),
     ]);
 }
 
 fn apply_wallust_theme(theme: String) {
     if CUSTOM_THEMES.contains(&theme.as_str()) {
-        let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json").as_str());
+        let colorscheme_file = full_path(&format!("~/.config/wallust/{theme}.json"));
         cmd(["wallust", "cs", colorscheme_file.to_str().unwrap()])
     } else {
         cmd(["wallust", "theme", &theme])
@@ -188,7 +221,7 @@ fn refresh_zathura() {
         cmd([
             "dbus-send",
             "--type=method_call",
-            format!("--dest={zathura_pid}").as_str(),
+            &format!("--dest={zathura_pid}"),
             "/org/pwmt/zathura",
             "org.pwmt.zathura.ExecuteCommand",
             "string:source",
@@ -242,44 +275,14 @@ fn apply_colors() {
     // refresh waifufetch
     cmd(["killall", "-SIGUSR2", "waifufetch"]);
 
+    // sleep to prevent waybar race condition
+    std::thread::sleep(std::time::Duration::from_millis(200));
+
     // refresh waybar
     cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
 
     // reload gtk theme
     // reload_gtk()
-}
-
-fn swww(swww_args: &[&str]) {
-    let is_daemon_running = !cmd_output(["swww", "query"], CmdOutput::Stderr)
-        .first()
-        .unwrap_or(&String::from(""))
-        .starts_with("Error");
-
-    if is_daemon_running {
-        Command::new("swww")
-            .args(swww_args)
-            .spawn()
-            .expect("failed to execute process");
-    } else {
-        // FIXME: weird race condition with swww init, need to sleep for a second
-        // https://github.com/Horus645/swww/issues/144
-
-        // sleep for a second
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
-        let swww_init = Command::new("swww")
-            .arg("init")
-            .status()
-            .expect("failed to execute swww init");
-
-        // equivalent of bash &&
-        if swww_init.success() {
-            Command::new("swww")
-                .args(swww_args)
-                .spawn()
-                .expect("failed to execute process");
-        }
-    }
 }
 
 #[derive(Parser, Debug)]
@@ -393,12 +396,7 @@ fn main() {
             cmd(["wallust", wallpaper]);
         }
 
-        swww(&[
-            "img",
-            "--transition-type",
-            args.transition_type.as_str(),
-            wallpaper,
-        ]);
+        swww(&["img", "--transition-type", &args.transition_type, wallpaper]);
     }
 
     apply_colors();

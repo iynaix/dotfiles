@@ -58,9 +58,9 @@ fn get_start_time(content: String) -> f32 {
 }
 
 /// gets the duration of a video in seconds
-fn get_duration(vid_path: &Path) -> f32 {
+fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
     let ffmpeg = cmd_output(
-        ["ffmpeg", "-i", vid_path.to_str().unwrap()],
+        ["ffmpeg", "-i", vid_path.as_ref().to_str().unwrap()],
         CmdOutput::Stderr,
     );
     let duration = ffmpeg
@@ -113,7 +113,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     // get index of current file
     let current_index = current_files
         .iter()
-        .position(|path| path == &PathBuf::from(&path))
+        .position(|path| path == &path.to_path_buf())
         .unwrap();
 
     current_files.get(current_index + 1).map(|p| p.to_owned())

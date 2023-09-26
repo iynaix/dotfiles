@@ -174,46 +174,45 @@ impl Monitor {
     }
 
     pub fn active_workspaces() -> HashMap<String, i32> {
-        let mut active_monitors = HashMap::new();
-
-        Monitor::monitors().into_iter().for_each(|mon| {
-            active_monitors.insert(mon.name, mon.active_workspace.id);
-        });
-
-        active_monitors
+        Monitor::monitors()
+            .into_iter()
+            .map(|mon| (mon.name, mon.active_workspace.id))
+            .collect()
     }
 
     pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
         let nix_monitors = NixInfo::from_config().monitors;
         let active_workspaces = Monitor::active_workspaces();
 
-        let mut workspaces = HashMap::new();
-        for (mon_idx, mon) in nix_monitors.iter().enumerate() {
-            let name = &mon.name;
+        nix_monitors
+            .iter()
+            .enumerate()
+            .fold(HashMap::new(), |mut acc, (mon_idx, mon)| {
+                let name = &mon.name;
+                match active_workspaces.get(name) {
+                    // active, use current workspaces
+                    Some(_) => {
+                        acc.entry(name.to_string())
+                            .or_insert_with(Vec::new)
+                            .extend(&mon.workspaces);
+                    }
+                    // not active, add to the other monitors
+                    None => {
+                        for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
+                            let other_name = &other_mon.name;
 
-            match active_workspaces.get(name) {
-                // active, use current workspaces
-                Some(_) => workspaces
-                    .entry(name.to_string())
-                    .or_insert_with(Vec::new)
-                    .extend(&mon.workspaces),
-                // not active, add to the other monitors
-                None => {
-                    for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
-                        let other_name = &other_mon.name;
-
-                        if mon_idx != other_mon_idx && active_workspaces.contains_key(other_name) {
-                            workspaces
-                                .entry(other_name.to_string())
-                                .or_insert_with(Vec::new)
-                                .extend(&mon.workspaces)
+                            if mon_idx != other_mon_idx
+                                && active_workspaces.contains_key(other_name)
+                            {
+                                acc.entry(other_name.to_string())
+                                    .or_insert_with(Vec::new)
+                                    .extend(&mon.workspaces)
+                            }
                         }
                     }
                 }
-            }
-        }
-
-        workspaces
+                acc
+            })
     }
 }
 

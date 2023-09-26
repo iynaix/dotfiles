@@ -10,7 +10,7 @@
     imagemagick
     neofetch
     nitch
-    pipes
+    pipes-rs
   ];
 
   # create xresources

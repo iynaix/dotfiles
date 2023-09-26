@@ -38,6 +38,6 @@ fn main() {
 
     hypr(&[
         "focuswindow",
-        format!("address:{}", addresses[new_idx % addresses.len()]).as_str(),
+        &format!("address:{}", addresses[new_idx % addresses.len()]),
     ]);
 }

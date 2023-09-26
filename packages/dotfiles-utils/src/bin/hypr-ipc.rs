@@ -46,11 +46,7 @@ fn set_workspace_orientation(workspace: String, globals: &Globals) {
 
         // set nstack stacks
         if globals.nstack {
-            hypr(&[
-                "layoutmsg",
-                "setstackcount",
-                mon.stacks().to_string().as_str(),
-            ]);
+            hypr(&["layoutmsg", "setstackcount", &mon.stacks().to_string()]);
         }
     }
 }

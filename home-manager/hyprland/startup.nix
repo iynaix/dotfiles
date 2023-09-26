@@ -46,12 +46,13 @@
         # FIXME: weird race condition with swww init, need to sleep for a second
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
-        "launch-waybar"
+
+        "sleep 2 && launch-waybar"
 
         # fix gparted "cannot open display: :0" error
-        "${pkgs.xorg.xhost}/bin/xhost +local:"
+        # "${pkgs.xorg.xhost}/bin/xhost +local:"
         # fix Authorization required, but no authorization protocol specified error
-        "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
+        # "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
       ];
     };
   };

@@ -102,7 +102,7 @@ in {
             background: {color0};
           }
         '';
-        target = "~/.cache/wallust/waybar.css";
+        target = "~/.config/waybar/style.css";
       };
     };
   };

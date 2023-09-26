@@ -132,7 +132,7 @@ in {
       "waybar.jsonc" = {
         enable = config.iynaix.wallust.waybar;
         text = builtins.toJSON cfg.finalConfig;
-        target = "~/.cache/wallust/waybar.jsonc";
+        target = "~/.config/waybar/config";
       };
     };
   };
