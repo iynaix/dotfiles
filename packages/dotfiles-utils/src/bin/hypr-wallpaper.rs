@@ -1,5 +1,5 @@
 use clap::{builder::PossibleValuesParser, command, Parser, ValueEnum};
-use dotfiles_utils::{cmd, cmd_output, wallpaper, CmdOutput};
+use dotfiles_utils::{cmd, cmd_output, wallpaper, CmdOutput, NixInfo};
 use rand::seq::SliceRandom;
 use std::{path::PathBuf, process::Command};
 
@@ -48,9 +48,6 @@ fn swww(swww_args: &[&str]) {
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 struct Args {
-    #[arg(long, value_name = "PATH", help = "path to a fallback wallpaper")]
-    fallback: Option<PathBuf>,
-
     #[arg(long, action, help = "reload current wallpaper")]
     reload: bool,
 
@@ -92,28 +89,20 @@ fn main() {
     let args = Args::parse();
 
     let random_wallpaper = match args.image {
-        Some(image) => Some(image.into_os_string().into_string().unwrap()),
-        None => {
-            let wallpapers = wallpaper::all();
-
-            if wallpapers.is_empty() {
-                args.fallback
-                    .map(|fallback| fallback.into_os_string().into_string().unwrap())
-            } else {
-                Some(
-                    wallpapers
-                        .choose(&mut rand::thread_rng())
-                        .unwrap()
-                        .to_string(),
-                )
-            }
-        }
+        Some(image) => std::fs::canonicalize(image)
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_string(),
+        None => wallpaper::all()
+            .choose(&mut rand::thread_rng())
+            // use fallback image if not available
+            .unwrap_or(&NixInfo::before().fallback)
+            .to_string(),
     };
 
     if args.reload {
-        let wallpaper = wallpaper::current()
-            .or(random_wallpaper)
-            .expect("no wallpaper found");
+        let wallpaper = wallpaper::current().unwrap_or(random_wallpaper);
 
         if !args.no_wallust {
             cmd(["wallust", &wallpaper])
@@ -122,13 +111,16 @@ fn main() {
         swww(&["img", &wallpaper]);
         cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
     } else {
-        let wallpaper = &random_wallpaper.expect("no wallpaper found");
-
         if !args.no_wallust {
-            cmd(["wallust", wallpaper]);
+            cmd(["wallust", &random_wallpaper]);
         }
 
-        swww(&["img", "--transition-type", &args.transition_type, wallpaper]);
+        swww(&[
+            "img",
+            "--transition-type",
+            &args.transition_type,
+            &random_wallpaper,
+        ]);
     }
 
     wallpaper::wallust_apply_colors();

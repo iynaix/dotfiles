@@ -32,12 +32,9 @@ fn main() {
         .unwrap();
 
     let new_idx: usize = match args.direction {
-        Direction::Next => active_idx + addresses.len() + 1,
-        Direction::Prev => active_idx + addresses.len() - 1,
+        Direction::Next => (active_idx + 1) % addresses.len(),
+        Direction::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
-    hypr(&[
-        "focuswindow",
-        &format!("address:{}", addresses[new_idx % addresses.len()]),
-    ]);
+    hypr(&["focuswindow", &format!("address:{}", addresses[new_idx])]);
 }

@@ -181,7 +181,7 @@ impl Monitor {
     }
 
     pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
-        let nix_monitors = NixInfo::from_config().monitors;
+        let nix_monitors = NixInfo::before().monitors;
         let active_workspaces = Monitor::active_workspaces();
 
         nix_monitors
@@ -318,6 +318,7 @@ pub struct NixMonitorInfo {
 #[derive(Debug, Clone, Default, Deserialize)]
 pub struct NixInfo {
     pub wallpaper: String,
+    pub fallback: String,
     pub neofetch: Neofetch,
     pub special: Special,
     pub persistent_workspaces: bool,
@@ -328,12 +329,12 @@ pub struct NixInfo {
 
 impl NixInfo {
     /// get nix info from ~/.config before wallust has processed it
-    pub fn from_config() -> NixInfo {
+    pub fn before() -> NixInfo {
         json::load("~/.config/wallust/nix.json")
     }
 
     /// get nix info from ~/.cache after wallust has processed it
-    pub fn from_cache() -> NixInfo {
+    pub fn after() -> NixInfo {
         json::load("~/.cache/wallust/nix.json")
     }
 
@@ -349,6 +350,8 @@ impl NixInfo {
 }
 
 pub mod wallpaper {
+    use std::fs;
+
     use crate::{cmd, cmd_output, full_path, CmdOutput, NixInfo};
 
     pub fn dir() -> String {
@@ -357,7 +360,7 @@ pub mod wallpaper {
     }
 
     pub fn current() -> Option<String> {
-        let curr = NixInfo::from_cache().wallpaper;
+        let curr = NixInfo::after().wallpaper;
 
         let wallpaper = {
             if curr != "./foo/bar.text" {
@@ -382,6 +385,7 @@ pub mod wallpaper {
         )
     }
 
+    /// returns all files in the wallpaper directory, exlcluding the current wallpaper
     pub fn all() -> Vec<String> {
         let curr = self::current().unwrap_or_default();
 
@@ -391,18 +395,15 @@ pub mod wallpaper {
             .flatten()
             .filter_map(|entry| {
                 let path = entry.path();
-
                 if path.is_file() {
                     if let Some(ext) = path.extension() {
                         match ext.to_str() {
-                            Some("jpg") | Some("jpeg") | Some("png") => {
-                                if curr == *path.to_str()? {
-                                    return None;
-                                }
-
-                                return Some(path.to_str()?.to_string());
+                            Some("jpg") | Some("jpeg") | Some("png")
+                                if curr != *path.to_str()? =>
+                            {
+                                return Some(path.to_str()?.to_string())
                             }
-                            _ => {}
+                            _ => return None,
                         }
                     }
                 }
@@ -410,6 +411,32 @@ pub mod wallpaper {
                 None
             })
             .collect()
+    }
+
+    /// creates a directory with randomly ordered wallpapers for imv to display
+    pub fn randomize_wallpapers() -> String {
+        use rand::prelude::SliceRandom;
+
+        let output_dir = "/tmp/wallpapers_random";
+
+        // delete existing dir and recreate it
+        fs::remove_dir_all(output_dir).unwrap_or(());
+        fs::create_dir(output_dir).expect("could not create random wallpaper dir");
+
+        // shuffle all wallpapers
+        let mut rng = rand::thread_rng();
+        let mut shuffled = self::all();
+        shuffled.shuffle(&mut rng);
+
+        let prefix_len = shuffled.len().to_string().len();
+        for (idx, path) in shuffled.iter().enumerate() {
+            let (_, img) = path.rsplit_once('/').unwrap();
+            let new_path = format!("{output_dir}/{:0>1$}-{img}", idx, prefix_len);
+            // create symlinks
+            std::os::unix::fs::symlink(path, new_path).expect("failed to create symlink");
+        }
+
+        output_dir.to_string()
     }
 
     fn refresh_zathura() {
@@ -442,7 +469,7 @@ pub mod wallpaper {
 
     /// applies the wallust colors to various applications
     pub fn wallust_apply_colors() {
-        let c = NixInfo::from_cache().hyprland_colors();
+        let c = NixInfo::after().hyprland_colors();
 
         // update borders
         cmd([

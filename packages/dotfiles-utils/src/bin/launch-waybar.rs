@@ -10,7 +10,7 @@ fn main() {
 
     let mut cfg: serde_json::Value = json::load(config_path);
 
-    if NixInfo::from_config().persistent_workspaces {
+    if NixInfo::before().persistent_workspaces {
         let rearranged_workspaces = Monitor::rearranged_workspaces();
 
         cfg["hyprland/workspaces"]["persistent-workspaces"] =

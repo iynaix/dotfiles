@@ -1,5 +1,8 @@
-use dotfiles_utils::{hypr, wallpaper, Monitor};
-use rand::Rng;
+use dotfiles_utils::{
+    hypr,
+    wallpaper::{self},
+    Monitor,
+};
 
 fn main() {
     const TARGET_PERCENT: f32 = 0.3;
@@ -16,15 +19,14 @@ fn main() {
 
     let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
 
-    // to behave like rofi
+    // bind esc to behave like rofi
     let esc_bind = "bind <Escape> quit";
-    let rand_idx = rand::thread_rng().gen_range(1..=wallpaper::all().len());
 
     hypr(&[
         "exec",
         &format!(
-            "{float_rule} imv -n {rand_idx} -c '{esc_bind}' {}",
-            wallpaper::dir()
+            "{float_rule} imv -c '{esc_bind}' {}",
+            &wallpaper::randomize_wallpapers()
         ),
     ]);
 }

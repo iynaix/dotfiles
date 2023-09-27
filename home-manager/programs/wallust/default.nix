@@ -62,6 +62,7 @@ in {
         enable = true;
         text = builtins.toJSON {
           wallpaper = "{wallpaper}";
+          fallback = "${../../gits-catppuccin.jpg}";
           monitors = config.iynaix.displays;
           persistent_workspaces = config.iynaix.waybar.persistent-workspaces;
           neofetch = {

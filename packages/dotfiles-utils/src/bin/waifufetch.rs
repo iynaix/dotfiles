@@ -62,7 +62,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let nix_info = NixInfo::from_cache();
+    let nix_info = NixInfo::after();
 
     if args.image {
         println!("{}", create_image(&nix_info));
@@ -92,7 +92,7 @@ fn main() {
                 SIGUSR2 => {
                     println!("received SIGUSR2");
 
-                    let nix_info = NixInfo::from_cache();
+                    let nix_info = NixInfo::after();
                     waifufetch(&nix_info);
                 }
                 _ => unreachable!(),
