@@ -252,8 +252,8 @@ in {
         "$mod, q, exec, wezterm start"
 
         # switching wallpapers or themes
-        "$mod, apostrophe, exec, hypr-wallpaper --rofi wallpaper"
-        "$mod_SHIFT, apostrophe, exec, hypr-wallpaper --rofi theme"
+        "$mod, apostrophe, exec, imv-wallpaper"
+        "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
 
         # special keys
         # "XF86AudioPlay, mpvctl playpause"

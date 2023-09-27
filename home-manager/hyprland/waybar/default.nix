@@ -97,7 +97,7 @@ in {
       "custom/nix" = {
         format = "";
         on-click = "hypr-wallpaper";
-        on-click-right = "hypr-wallpaper --rofi wallpaper";
+        on-click-right = "imv-wallpaper";
         tooltip = false;
       };
 

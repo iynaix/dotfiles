@@ -1,80 +1,12 @@
 use clap::{builder::PossibleValuesParser, command, Parser, ValueEnum};
-use dotfiles_utils::{cmd, cmd_output, full_path, hypr, CmdOutput, Monitor, NixInfo};
-use rand::{seq::SliceRandom, Rng};
-use std::{
-    io::Write,
-    path::PathBuf,
-    process::{exit, Command, Stdio},
-};
+use dotfiles_utils::{cmd, cmd_output, wallpaper, CmdOutput};
+use rand::seq::SliceRandom;
+use std::{path::PathBuf, process::Command};
 
 #[derive(Clone, ValueEnum, Debug)]
 enum RofiType {
     Wallpaper,
     Theme,
-}
-
-const CUSTOM_THEMES: [&str; 6] = [
-    "catppuccin-frappe",
-    "catppuccin-macchiato",
-    "catppuccin-mocha",
-    "decay-dark",
-    "night-owl",
-    "tokyo-night",
-];
-
-const WALLPAPER_DIR: &str = "~/Pictures/Wallpapers";
-
-fn wallust_preset_themes() -> Vec<String> {
-    cmd_output(["wallust", "theme", "--help"], CmdOutput::Stdout)
-        .iter()
-        .max_by_key(|line| line.len())
-        .unwrap()
-        .rsplit_once(" values: ")
-        .unwrap()
-        .1
-        .replace(']', "")
-        .split(", ")
-        .map(String::from)
-        .collect()
-}
-
-fn all_themes() -> Vec<String> {
-    let mut preset_themes = wallust_preset_themes();
-
-    preset_themes.extend_from_slice(
-        &CUSTOM_THEMES
-            .iter()
-            .map(|s| s.to_string())
-            .collect::<Vec<_>>(),
-    );
-    preset_themes.sort();
-    preset_themes
-}
-
-fn get_current_wallpaper() -> Option<String> {
-    let curr = NixInfo::from_cache().wallpaper;
-
-    let wallpaper = {
-        if curr != "./foo/bar.text" {
-            Some(curr)
-        } else {
-            Some(
-                cmd_output(["swww", "query"], CmdOutput::Stdout)
-                    .first()
-                    .expect("no wallpaper found")
-                    .rsplit_once(": ")
-                    .expect("no wallpaper found")
-                    .1
-                    .to_string(),
-            )
-        }
-    };
-
-    Some(
-        wallpaper
-            .expect("no wallpaper found")
-            .replace("/persist", ""),
-    )
 }
 
 fn swww(swww_args: &[&str]) {
@@ -110,181 +42,6 @@ fn swww(swww_args: &[&str]) {
     }
 }
 
-fn rofi_theme() {
-    let themes = all_themes().join("\n");
-
-    let mut rofi = Command::new("rofi")
-        .arg("-dmenu")
-        .stdout(Stdio::piped())
-        .stdin(Stdio::piped())
-        .spawn()
-        .expect("failed to execute process");
-
-    rofi.stdin
-        .as_mut()
-        .unwrap()
-        .write_all(themes.as_bytes())
-        .unwrap();
-
-    let output = rofi.wait_with_output().expect("failed to read rofi theme");
-    let selected_theme = std::str::from_utf8(&output.stdout)
-        .expect("failed to parse utf8")
-        .strip_suffix('\n')
-        .unwrap_or_default();
-
-    apply_wallust_theme(selected_theme.to_string());
-    apply_colors();
-}
-
-fn get_wallpapers() -> Vec<String> {
-    let curr = get_current_wallpaper().unwrap_or_default();
-
-    full_path(WALLPAPER_DIR)
-        .read_dir()
-        .unwrap()
-        .flatten()
-        .filter_map(|entry| {
-            let path = entry.path();
-
-            if path.is_file() {
-                if let Some(ext) = path.extension() {
-                    match ext.to_str() {
-                        Some("jpg") | Some("jpeg") | Some("png") => {
-                            if curr == *path.to_str()? {
-                                return None;
-                            }
-
-                            return Some(path.to_str()?.to_string());
-                        }
-                        _ => {}
-                    }
-                }
-            }
-
-            None
-        })
-        .collect()
-}
-
-fn rofi_wallpaper() {
-    // let new_wallpaper = random_wallpaper();
-    const TARGET_PERCENT: f32 = 0.3;
-
-    let mon = Monitor::focused();
-
-    let mut width = mon.width * TARGET_PERCENT;
-    let mut height = mon.height * TARGET_PERCENT;
-
-    // handle vertical monitor
-    if height > width {
-        std::mem::swap(&mut width, &mut height);
-    }
-
-    let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
-
-    // to behave like rofi
-    let esc_bind = "bind <Escape> quit";
-    let rand_idx = rand::thread_rng().gen_range(1..=get_wallpapers().len());
-
-    hypr(&[
-        "exec",
-        &format!("{float_rule} imv -n {rand_idx} -c '{esc_bind}' {WALLPAPER_DIR}"),
-    ]);
-}
-
-fn apply_wallust_theme(theme: String) {
-    if CUSTOM_THEMES.contains(&theme.as_str()) {
-        let colorscheme_file = full_path(&format!("~/.config/wallust/{theme}.json"));
-        cmd(["wallust", "cs", colorscheme_file.to_str().unwrap()])
-    } else {
-        cmd(["wallust", "theme", &theme])
-    }
-}
-
-fn refresh_zathura() {
-    if let Some(zathura_pid_raw) = cmd_output(
-        [
-            "dbus-send",
-            "--print-reply",
-            "--dest=org.freedesktop.DBus",
-            "/org/freedesktop/DBus",
-            "org.freedesktop.DBus.ListNames",
-        ],
-        CmdOutput::Stdout,
-    )
-    .iter()
-    .find(|line| line.contains("org.pwmt.zathura"))
-    {
-        let zathura_pid = zathura_pid_raw.split('"').max_by_key(|s| s.len()).unwrap();
-
-        // send message to zathura via dbus
-        cmd([
-            "dbus-send",
-            "--type=method_call",
-            &format!("--dest={zathura_pid}"),
-            "/org/pwmt/zathura",
-            "org.pwmt.zathura.ExecuteCommand",
-            "string:source",
-        ]);
-    }
-}
-
-fn apply_colors() {
-    let c = NixInfo::from_cache().hyprland_colors();
-
-    // update borders
-    cmd([
-        "hyprctl",
-        "keyword",
-        "general:col.active_border",
-        &format!("{} {} 45deg", c[4], c[0]),
-    ]);
-    cmd(["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
-
-    // pink border for monocle windows
-    cmd([
-        "hyprctl",
-        "keyword",
-        "windowrulev2",
-        "bordercolor",
-        &format!("{},fullscreen:1", &c[5]),
-    ]);
-    // teal border for floating windows
-    cmd([
-        "hyprctl",
-        "keyword",
-        "windowrulev2",
-        "bordercolor",
-        &format!("{},floating:1", &c[6]),
-    ]);
-    // yellow border for sticky (must be floating) windows
-    cmd([
-        "hyprctl",
-        "keyword",
-        "windowrulev2",
-        "bordercolor",
-        &format!("{},pinned:1", &c[3]),
-    ]);
-
-    // refresh zathura
-    refresh_zathura();
-
-    // refresh cava
-    cmd(["killall", "-SIGUSR2", "cava"]);
-
-    // refresh waifufetch
-    cmd(["killall", "-SIGUSR2", "waifufetch"]);
-
-    // sleep to prevent waybar race condition
-    std::thread::sleep(std::time::Duration::from_secs(1));
-
-    // refresh waybar
-    cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
-
-    // reload gtk theme
-    // reload_gtk()
-}
-
 #[derive(Parser, Debug)]
 #[command(
     name = "hypr-wallpaper",
@@ -296,9 +53,6 @@ struct Args {
 
     #[arg(long, action, help = "reload current wallpaper")]
     reload: bool,
-
-    #[arg(long, value_enum, help = "use rofi to select wallpaper or theme")]
-    rofi: Option<RofiType>,
 
     #[arg(
         long,
@@ -330,13 +84,6 @@ struct Args {
     )]
     transition_type: String,
 
-    #[arg(
-        long,
-        help = "preset theme for wallust",
-        value_parser = PossibleValuesParser::new(all_themes()),
-    )]
-    theme: Option<String>,
-
     // optional image to use, uses a random one otherwise
     image: Option<PathBuf>,
 }
@@ -344,22 +91,10 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    match args.rofi {
-        Some(RofiType::Theme) => {
-            rofi_theme();
-            exit(0)
-        }
-        Some(RofiType::Wallpaper) => {
-            rofi_wallpaper();
-            exit(0)
-        }
-        None => {}
-    }
-
-    let wallpaper = match args.image {
+    let random_wallpaper = match args.image {
         Some(image) => Some(image.into_os_string().into_string().unwrap()),
         None => {
-            let wallpapers = get_wallpapers();
+            let wallpapers = wallpaper::all();
 
             if wallpapers.is_empty() {
                 args.fallback
@@ -375,12 +110,9 @@ fn main() {
         }
     };
 
-    if let Some(theme) = args.theme {
-        apply_wallust_theme(theme);
-        exit(0)
-    } else if args.reload {
-        let wallpaper = get_current_wallpaper()
-            .or(wallpaper)
+    if args.reload {
+        let wallpaper = wallpaper::current()
+            .or(random_wallpaper)
             .expect("no wallpaper found");
 
         if !args.no_wallust {
@@ -390,7 +122,7 @@ fn main() {
         swww(&["img", &wallpaper]);
         cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
     } else {
-        let wallpaper = &wallpaper.expect("no wallpaper found");
+        let wallpaper = &random_wallpaper.expect("no wallpaper found");
 
         if !args.no_wallust {
             cmd(["wallust", wallpaper]);
@@ -399,5 +131,5 @@ fn main() {
         swww(&["img", "--transition-type", &args.transition_type, wallpaper]);
     }
 
-    apply_colors();
+    wallpaper::wallust_apply_colors();
 }

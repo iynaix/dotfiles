@@ -347,3 +347,153 @@ impl NixInfo {
             .collect()
     }
 }
+
+pub mod wallpaper {
+    use crate::{cmd, cmd_output, full_path, CmdOutput, NixInfo};
+
+    pub fn dir() -> String {
+        let dir = "~/Pictures/Wallpapers";
+        full_path(dir).to_str().unwrap().to_string()
+    }
+
+    pub fn current() -> Option<String> {
+        let curr = NixInfo::from_cache().wallpaper;
+
+        let wallpaper = {
+            if curr != "./foo/bar.text" {
+                Some(curr)
+            } else {
+                Some(
+                    cmd_output(["swww", "query"], CmdOutput::Stdout)
+                        .first()
+                        .expect("no wallpaper found")
+                        .rsplit_once(": ")
+                        .expect("no wallpaper found")
+                        .1
+                        .to_string(),
+                )
+            }
+        };
+
+        Some(
+            wallpaper
+                .expect("no wallpaper found")
+                .replace("/persist", ""),
+        )
+    }
+
+    pub fn all() -> Vec<String> {
+        let curr = self::current().unwrap_or_default();
+
+        full_path(&self::dir())
+            .read_dir()
+            .unwrap()
+            .flatten()
+            .filter_map(|entry| {
+                let path = entry.path();
+
+                if path.is_file() {
+                    if let Some(ext) = path.extension() {
+                        match ext.to_str() {
+                            Some("jpg") | Some("jpeg") | Some("png") => {
+                                if curr == *path.to_str()? {
+                                    return None;
+                                }
+
+                                return Some(path.to_str()?.to_string());
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+
+                None
+            })
+            .collect()
+    }
+
+    fn refresh_zathura() {
+        if let Some(zathura_pid_raw) = cmd_output(
+            [
+                "dbus-send",
+                "--print-reply",
+                "--dest=org.freedesktop.DBus",
+                "/org/freedesktop/DBus",
+                "org.freedesktop.DBus.ListNames",
+            ],
+            CmdOutput::Stdout,
+        )
+        .iter()
+        .find(|line| line.contains("org.pwmt.zathura"))
+        {
+            let zathura_pid = zathura_pid_raw.split('"').max_by_key(|s| s.len()).unwrap();
+
+            // send message to zathura via dbus
+            cmd([
+                "dbus-send",
+                "--type=method_call",
+                &format!("--dest={zathura_pid}"),
+                "/org/pwmt/zathura",
+                "org.pwmt.zathura.ExecuteCommand",
+                "string:source",
+            ]);
+        }
+    }
+
+    /// applies the wallust colors to various applications
+    pub fn wallust_apply_colors() {
+        let c = NixInfo::from_cache().hyprland_colors();
+
+        // update borders
+        cmd([
+            "hyprctl",
+            "keyword",
+            "general:col.active_border",
+            &format!("{} {} 45deg", c[4], c[0]),
+        ]);
+        cmd(["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
+
+        // pink border for monocle windows
+        cmd([
+            "hyprctl",
+            "keyword",
+            "windowrulev2",
+            "bordercolor",
+            &format!("{},fullscreen:1", &c[5]),
+        ]);
+        // teal border for floating windows
+        cmd([
+            "hyprctl",
+            "keyword",
+            "windowrulev2",
+            "bordercolor",
+            &format!("{},floating:1", &c[6]),
+        ]);
+        // yellow border for sticky (must be floating) windows
+        cmd([
+            "hyprctl",
+            "keyword",
+            "windowrulev2",
+            "bordercolor",
+            &format!("{},pinned:1", &c[3]),
+        ]);
+
+        // refresh zathura
+        refresh_zathura();
+
+        // refresh cava
+        cmd(["killall", "-SIGUSR2", "cava"]);
+
+        // refresh waifufetch
+        cmd(["killall", "-SIGUSR2", "waifufetch"]);
+
+        // sleep to prevent waybar race condition
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
+        // refresh waybar
+        cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
+
+        // reload gtk theme
+        // reload_gtk()
+    }
+}
