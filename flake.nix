@@ -50,12 +50,16 @@
 
   # flake-utils is unnecessary
   # https://ayats.org/blog/no-flake-utils/
-  outputs = inputs @ {nixpkgs, ...}: let
+  outputs = inputs @ {
+    nixpkgs,
+    self,
+    ...
+  }: let
     forAllSystems = function:
       nixpkgs.lib.genAttrs ["x86_64-linux"] (system: function nixpkgs.legacyPackages.${system});
     commonInherits = {
       inherit (nixpkgs) lib;
-      inherit inputs nixpkgs;
+      inherit self inputs nixpkgs;
       user = "iynaix";
       system = "x86_64-linux";
     };
@@ -82,6 +86,8 @@
     packages = forAllSystems (
       pkgs: (import ./packages {inherit pkgs;})
     );
+
+    inherit self;
 
     # templates for devenv
     templates = let

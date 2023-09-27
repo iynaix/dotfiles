@@ -32,7 +32,7 @@ in {
         package = pkgs.adw-gtk3;
       }
       else {
-        name = "Catppuccin-Mocha-Compact-Blue-dark";
+        name = "Catppuccin-Mocha-Compact-Blue-Dark";
         package = pkgs.catppuccin-gtk.override {
           accents = ["blue"];
           variant = "mocha";

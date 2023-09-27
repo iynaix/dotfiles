@@ -47,7 +47,7 @@
         # https://github.com/Horus645/swww/issues/144
         "sleep 1; swww init && hypr-wallpaper"
 
-        "sleep 2 && launch-waybar"
+        "sleep 5 && launch-waybar"
 
         # fix gparted "cannot open display: :0" error
         # "${pkgs.xorg.xhost}/bin/xhost +local:"

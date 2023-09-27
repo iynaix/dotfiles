@@ -276,7 +276,7 @@ fn apply_colors() {
     cmd(["killall", "-SIGUSR2", "waifufetch"]);
 
     // sleep to prevent waybar race condition
-    std::thread::sleep(std::time::Duration::from_millis(200));
+    std::thread::sleep(std::time::Duration::from_secs(1));
 
     // refresh waybar
     cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);

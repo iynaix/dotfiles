@@ -56,6 +56,16 @@
           git add "$untracked_files"
       fi
 
+      # nicer nixos label
+      commit_message=$(git log -1 --pretty=%B)
+      if [[ $(git diff --stat) != "" ]]; then
+        msg="(dirty) $commit_message"
+      else
+        msg="$commit_message"
+      fi
+      # truncate to 100 characters
+      export NIXOS_LABEL=''${msg:0:100}
+
       prev=$(readlink /run/current-system)
       sudo nixos-rebuild switch --flake ".#''${1:-${host}}" |& nom && {
         nvd diff "$prev" "$(readlink /run/current-system)"

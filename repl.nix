@@ -9,7 +9,7 @@
   flake = builtins.getFlake (toString ./.);
   lib = flake.inputs.nixpkgs.lib;
 in rec {
-  inherit (flake) inputs;
+  inherit (flake) inputs self;
   inherit (flake.inputs) nixpkgs;
   inherit flake lib host user;
 

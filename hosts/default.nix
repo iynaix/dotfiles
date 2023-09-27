@@ -1,13 +1,14 @@
 {
-  lib,
   inputs,
-  user,
   isNixOS,
+  lib,
+  self,
+  user,
   ...
 }: let
   mkHost = host: let
     extraSpecialArgs = {
-      inherit inputs isNixOS host user;
+      inherit self inputs isNixOS host user;
       isLaptop = host == "laptop";
     };
   in
