@@ -63,8 +63,12 @@
       else
         msg="$commit_message"
       fi
+      msg=$(echo "$msg" | tr -cd 'a-zA-Z0-9:_\.\-')
+
       # truncate to 100 characters
+      current_generation=$(nix-current-generation)
       export NIXOS_LABEL=''${msg:0:100}
+      export NIXOS_LABEL_VERSION="Generation $current_generation"
 
       prev=$(readlink /run/current-system)
       sudo nixos-rebuild switch --flake ".#''${1:-${host}}" |& nom && {
