@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   isNixOS,
   lib,
   pkgs,
@@ -12,7 +11,7 @@
   hypr-screenshot = pkgs.writeShellApplication {
     name = "hypr-screenshot";
     runtimeInputs = with pkgs; [
-      inputs.hyprwm-contrib.packages.${pkgs.system}.grimblast
+      grimblast
       libnotify
       swappy
       rofi-wayland
@@ -98,10 +97,9 @@ in {
         hypr-ocr
         hypr-screenshot
       ]
-      ++ (lib.optionals isNixOS (with inputs.hyprwm-contrib.packages.${pkgs.system}; [
+      ++ (lib.optionals isNixOS (with pkgs; [
         grimblast
-        hyprprop
-        pkgs.swappy
+        swappy
       ]));
 
     # swappy conf

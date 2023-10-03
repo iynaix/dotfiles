@@ -30,6 +30,6 @@ fn main() {
     // focus first / primary monitor
     hypr(&["focusmonitor", (workspaces.keys().next().unwrap())]);
 
-    // launch waybar
-    cmd(["launch-waybar"]);
+    // reload wallpaper
+    cmd(["hypr-wallpaper", "--reload"]);
 }

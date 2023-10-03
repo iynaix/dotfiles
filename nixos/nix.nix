@@ -69,6 +69,8 @@
       current_generation=$(nix-current-generation)
       export NIXOS_LABEL=''${msg:0:100}
       export NIXOS_LABEL_VERSION="Generation $current_generation"
+      echo "$NIXOS_LABEL"
+      echo "$NIXOS_LABEL_VERSION"
 
       prev=$(readlink /run/current-system)
       sudo nixos-rebuild switch --flake ".#''${1:-${host}}" |& nom && {

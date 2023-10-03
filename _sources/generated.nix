@@ -27,15 +27,15 @@
   };
   mpv-dynamic-crop = {
     pname = "mpv-dynamic-crop";
-    version = "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697";
+    version = "3f59de34e8c255351c49788508666e796949109c";
     src = fetchFromGitHub {
       owner = "Ashyni";
       repo = "mpv-scripts";
-      rev = "0e60cb4d71c7953f98c362f0a9898d7b6dcd2697";
+      rev = "3f59de34e8c255351c49788508666e796949109c";
       fetchSubmodules = false;
-      sha256 = "sha256-fv5o+Uu/0bnkRfNe/mVgXNkup7IjYw6wqafpML3mlqo=";
+      sha256 = "sha256-bsi52H1Ilc/TXX9BaOM00l7y37h8aZdLVF2r/y6DvNA=";
     };
-    date = "2023-09-04";
+    date = "2023-10-03";
   };
   mpv-modernx = {
     pname = "mpv-modernx";
@@ -145,14 +145,14 @@
   };
   waybar = {
     pname = "waybar";
-    version = "4c0347d9f243322352a18bdf2c4d4bbcde37163e";
+    version = "58e506a6754fae213e409bcd079d38d03f70b958";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "4c0347d9f243322352a18bdf2c4d4bbcde37163e";
+      rev = "58e506a6754fae213e409bcd079d38d03f70b958";
       fetchSubmodules = false;
-      sha256 = "sha256-Y4Gb1RH1ShDpH1w0xmhFM0UjdecP6JXbUo50mwu5kek=";
+      sha256 = "sha256-m4MTzuChqmEfg/zKoxotGhOL+lWvoT1B/lYQLnTKkMs=";
     };
-    date = "2023-09-25";
+    date = "2023-10-02";
   };
 }

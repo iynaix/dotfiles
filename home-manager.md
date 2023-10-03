@@ -35,8 +35,6 @@ Reboot.
 ### TODO
 - gtk theme doesn't seem to be working
 - hyprland stuff
-  - grimblast
   - hyprland
-  - hyprprop
   - swww
   - waybar

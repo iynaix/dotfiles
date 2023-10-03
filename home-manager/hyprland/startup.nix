@@ -30,7 +30,7 @@
         (openOnWorkspace 7 "$term")
 
         # firefox
-        (openOnWorkspace 9 "firefox-devedition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091")
+        (openOnWorkspace 9 "firefox-developer-edition https://discordapp.com/channels/@me https://web.whatsapp.com http://localhost:9091")
 
         # download desktop
         (openOnWorkspace 10 "$term nvim ~/Desktop/yt.txt")

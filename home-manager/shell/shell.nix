@@ -89,17 +89,17 @@
     };
     renamer = {
       bashBody = ''
-        pushd $HOME/projects/personal-graphql
+        pushd $HOME/projects/personal-graphql-rs
         # activate direnv
         direnv allow && eval "$(direnv export bash)"
-        yarn renamer
+        cargo run --release --bin renamer
         popd
       '';
       fishBody = ''
-        pushd $HOME/projects/personal-graphql
+        pushd $HOME/projects/personal-graphql-rs
         # activate direnv
         direnv allow; and eval (direnv export fish)
-        yarn renamer
+        cargo run --release --bin renamer
         popd
       '';
     };
