@@ -38,6 +38,7 @@
 in {
   home.packages = [
     git-reword
+    pkgs.delta
     pkgs.lazygit
   ];
 
@@ -49,14 +50,31 @@ in {
       userEmail = "iynaix@gmail.com";
       extraConfig = {
         init = {defaultBranch = "main";};
-        "branch.master" = {merge = "refs/heads/master";};
-        "branch.main" = {merge = "refs/heads/main";};
+        branch = {
+          master = {merge = "refs/heads/master";};
+          main = {merge = "refs/heads/main";};
+        };
+        core = {
+          pager = "delta";
+        };
+        interactive = {
+          diffFilter = "delta --color-only";
+        };
+        delta = {
+          navigate = true;
+          light = false;
+          # side-by-side = true;
+        };
+        merge = {
+          conflictstyle = "diff3";
+        };
         format = {
           pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
         };
         diff = {
           tool = "nvim -d";
           guitool = "code";
+          colorMoved = "default";
         };
         pull = {rebase = true;};
         push = {default = "simple";};
