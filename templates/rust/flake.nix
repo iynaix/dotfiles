@@ -25,6 +25,11 @@
               # https://devenv.sh/reference/options/
               dotenv.disableHint = true;
 
+              # setup openssl for reqwest (if used)
+              env = {
+                PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+              };
+
               languages.rust.enable = true;
             }
           ];
