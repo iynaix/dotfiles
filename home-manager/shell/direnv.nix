@@ -6,7 +6,7 @@
 
   home.sessionVariables = {
     # silence direnv
-    "DIRENV_LOG_FORMAT" = "";
+    DIRENV_LOG_FORMAT = "";
   };
 
   iynaix.persist = {

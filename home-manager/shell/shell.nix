@@ -54,6 +54,10 @@
       bashBody = ''readlink -f $(which $1)'';
       fishBody = ''readlink -f (which $argv[1])'';
     };
+    lfwhere = {
+      bashBody = ''lf $(dirname $(dirname $(readlink -f $(which $1))))'';
+      fishBody = ''lf (dirname (dirname (readlink -f (which $argv[1]))))'';
+    };
     # server command, runs a local server
     server = {
       bashBody = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';

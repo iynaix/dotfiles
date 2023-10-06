@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix.shell;
@@ -24,6 +25,9 @@ in {
       function postexec_newline --on-event fish_postexec
         echo ""
       end
+
+      # fish doesn't seem to pick up completions for dotfiles_utils?
+      set --append fish_complete_path "${pkgs.iynaix.dotfiles-utils}/share/fish/vendor_completions.d"
 
       ${cfg.initExtra}
     '';

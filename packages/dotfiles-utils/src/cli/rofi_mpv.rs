@@ -1,5 +1,8 @@
-use clap::{Parser, Subcommand};
-use dotfiles_utils::{cmd_output, full_path, CmdOutput};
+use clap::Parser;
+use dotfiles_utils::{
+    cli::{RofiMpvArgs, RofiMpvMedia},
+    cmd_output, full_path, CmdOutput,
+};
 use std::{
     fs::read_to_string,
     path::{Path, PathBuf},
@@ -7,7 +10,7 @@ use std::{
 
 type Video = (PathBuf, String);
 
-fn latest_file(media_type: Media) -> Video {
+fn latest_file(media_type: RofiMpvMedia) -> Video {
     let mut latest = PathBuf::new();
     let mut latest_content = String::new();
 
@@ -34,8 +37,8 @@ fn latest_file(media_type: Media) -> Video {
         }
 
         let is_current = match media_type {
-            Media::Anime => vid.contains("Anime/Current"),
-            Media::TV => vid.contains("TV/Current"),
+            RofiMpvMedia::Anime => vid.contains("Anime/Current"),
+            RofiMpvMedia::TV => vid.contains("TV/Current"),
         };
 
         if is_current && vid_path > latest {
@@ -119,24 +122,8 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     current_files.get(current_index + 1).map(|p| p.to_owned())
 }
 
-#[derive(Subcommand, Debug)]
-enum Media {
-    Anime,
-    TV,
-}
-
-#[derive(Parser, Debug)]
-#[command(
-    name = "rofi-media",
-    about = "Plays the next episode of anime or tv shows"
-)]
-struct Args {
-    #[command(subcommand)]
-    media: Media,
-}
-
 fn main() {
-    let args = Args::parse();
+    let args = RofiMpvArgs::parse();
 
     let video = latest_file(args.media);
 

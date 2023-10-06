@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::process::Command;
 
+pub mod cli;
+
 /// shared structs / types
 
 type Coord = (i32, i32);

@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::NixInfo;
+use dotfiles_utils::{cli::WaifuFetchArgs, NixInfo};
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
     iterator::Signals,
@@ -52,15 +52,8 @@ fn waifufetch(nix_info: &NixInfo) {
         .expect("failed to execute neofetch");
 }
 
-#[derive(Parser, Debug)]
-#[command(name = "waifufetch", about = "Neofetch, but more waifu")]
-struct Args {
-    #[arg(long, action, help = "prints path to generated image")]
-    image: bool,
-}
-
 fn main() {
-    let args = Args::parse();
+    let args = WaifuFetchArgs::parse();
 
     let nix_info = NixInfo::after();
 

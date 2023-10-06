@@ -2,8 +2,49 @@
 name = "dotfiles_utils"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "hypr-ipc"
+path = "src/cli/hypr_ipc.rs"
+
+[[bin]]
+name = "hypr-monitors"
+path = "src/cli/hypr_monitors.rs"
+
+[[bin]]
+name = "hypr-pip"
+path = "src/cli/hypr_pip.rs"
+
+[[bin]]
+name = "hypr-same-class"
+path = "src/cli/hypr_same_class.rs"
+
+[[bin]]
+name = "hypr-wallpaper"
+path = "src/cli/hypr_wallpaper.rs"
+
+[[bin]]
+name = "imv-wallpaper"
+path = "src/cli/imv_wallpaper.rs"
+
+[[bin]]
+name = "launch-waybar"
+path = "src/cli/launch_waybar.rs"
+
+[[bin]]
+name = "rofi-mpv"
+path = "src/cli/rofi_mpv.rs"
+
+[[bin]]
+name = "rofi-wallast-theme"
+path = "src/cli/rofi_wallast_theme.rs"
+
+[[bin]]
+name = "waifufetch"
+path = "src/cli/waifufetch.rs"
+
 
 [dependencies]
 clap = { version = "4.4.4", features = ["derive", "string"] }
@@ -13,6 +54,10 @@ rand = "0.8.5"
 serde = { version = "1.0.188", features = ["derive"] }
 serde_json = "1.0.107"
 signal-hook = "0.3.17"
+
+[build-dependencies]
+clap = { version = "4.4.4", features = ["derive", "string"] }
+clap_complete = "4.4.3"
 
 [profile.release]
 strip = true

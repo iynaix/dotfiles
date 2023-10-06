@@ -1,24 +1,11 @@
-use clap::{Parser, Subcommand};
-use dotfiles_utils::{hypr, ActiveWindow, Client};
-
-#[derive(Subcommand, Debug)]
-enum Direction {
-    Next,
-    Prev,
-}
-
-#[derive(Parser, Debug)]
-#[command(
-    name = "hypr-same-class",
-    about = "Focus next / prev window of same class"
-)]
-struct Args {
-    #[command(subcommand)]
-    direction: Direction,
-}
+use clap::Parser;
+use dotfiles_utils::{
+    cli::{HyprSameClassArgs, HyprSameClassDirection},
+    hypr, ActiveWindow, Client,
+};
 
 fn main() {
-    let args = Args::parse();
+    let args = HyprSameClassArgs::parse();
     let active = ActiveWindow::new();
     let mut same_class = Client::filter_class(active.class);
 
@@ -32,8 +19,8 @@ fn main() {
         .unwrap();
 
     let new_idx: usize = match args.direction {
-        Direction::Next => (active_idx + 1) % addresses.len(),
-        Direction::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
+        HyprSameClassDirection::Next => (active_idx + 1) % addresses.len(),
+        HyprSameClassDirection::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
     hypr(&["focuswindow", &format!("address:{}", addresses[new_idx])]);
