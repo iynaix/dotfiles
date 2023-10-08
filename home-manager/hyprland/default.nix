@@ -218,8 +218,10 @@ in {
         "$mod, Right, focusmonitor, +1"
 
         # move to next / previous monitor
-        "$mod_SHIFT, Left, movewindow, mon:-1"
-        "$mod_SHIFT, Right, movewindow, mon:+1"
+        "$mod_SHIFT, Left, movewindow, mon:l"
+        "$mod_SHIFT, Right, movewindow, mon:r"
+        "$mod_SHIFT, Up, movewindow, mon:u"
+        "$mod_SHIFT, Down, movewindow, mon:d"
 
         "ALT, Tab, cyclenext"
         "ALT_SHIFT, Tab, cyclenext, prev"

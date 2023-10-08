@@ -165,7 +165,20 @@ impl Monitor {
     }
 
     pub fn monitors() -> Vec<Monitor> {
-        hypr_json("monitors")
+        hypr_json::<Vec<Monitor>>("monitors")
+            .iter()
+            .map(|mon| {
+                if mon.is_vertical() {
+                    Monitor {
+                        width: mon.height,
+                        height: mon.width,
+                        ..mon.clone()
+                    }
+                } else {
+                    mon.clone()
+                }
+            })
+            .collect()
     }
 
     pub fn focused() -> Monitor {
@@ -419,11 +432,12 @@ pub mod wallpaper {
     pub fn randomize_wallpapers() -> String {
         use rand::prelude::SliceRandom;
 
-        let output_dir = "/tmp/wallpapers_random";
+        let output_dir = full_path("~/.cache/wallpapers_random");
+        let output_dir = output_dir.to_str().unwrap();
 
         // delete existing dir and recreate it
         fs::remove_dir_all(output_dir).unwrap_or(());
-        fs::create_dir(output_dir).expect("could not create random wallpaper dir");
+        fs::create_dir_all(output_dir).expect("could not create random wallpaper dir");
 
         // shuffle all wallpapers
         let mut rng = rand::thread_rng();

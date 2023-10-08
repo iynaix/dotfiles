@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{cli::WaifuFetchArgs, NixInfo};
+use dotfiles_utils::{cli::WaifuFetchArgs, full_path, NixInfo};
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
     iterator::Signals,
@@ -17,12 +17,21 @@ fn create_image(nix_info: &NixInfo) -> String {
     let c4 = hexless.get("color4").expect("invalid color");
     let c6 = hexless.get("color6").expect("invalid color");
 
-    let output = format!("/tmp/waifufetch-{c4}-{c6}.png");
+    let output_dir = full_path("~/.cache/waifufetch");
+    std::fs::create_dir_all(&output_dir).expect("failed to create output dir");
+
+    let output = full_path(&format!(
+        "{}/{}-{}.png",
+        &output_dir.to_str().unwrap(),
+        c4,
+        c6
+    ));
+    let output = output.to_str().unwrap();
 
     let magick_args = [
         logo, // replace color 1
         "-fuzz", "10%", "-fill", c4, "-opaque", "#5278c3", // replace color 2
-        "-fuzz", "10%", "-fill", c6, "-opaque", "#7fbae4", &output,
+        "-fuzz", "10%", "-fill", c6, "-opaque", "#7fbae4", output,
     ];
 
     Command::new("magick")
@@ -30,7 +39,7 @@ fn create_image(nix_info: &NixInfo) -> String {
         .status()
         .expect("failed to execute magick");
 
-    output
+    output.to_string()
 }
 
 fn waifufetch(nix_info: &NixInfo) {

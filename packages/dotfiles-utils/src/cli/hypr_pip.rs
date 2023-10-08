@@ -23,17 +23,8 @@ fn main() {
         let activewindow = ActiveWindow::new();
         const PADDING: i32 = 30; // target distance from corner of screen
 
-        let mon_right: i32;
-        let mon_bottom: i32;
-
-        // check for vertical monitor
-        if curr_mon.is_vertical() {
-            mon_bottom = curr_mon.y + curr_mon.width as i32;
-            mon_right = curr_mon.x + curr_mon.height as i32;
-        } else {
-            mon_bottom = curr_mon.y + curr_mon.height as i32;
-            mon_right = curr_mon.x + curr_mon.width as i32;
-        }
+        let mon_bottom = curr_mon.y + curr_mon.height as i32;
+        let mon_right = curr_mon.x + curr_mon.width as i32;
 
         let delta_x = mon_right - PADDING - target_w - activewindow.at.0;
         let delta_y = mon_bottom - PADDING - target_h - activewindow.at.1;
