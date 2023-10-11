@@ -5,12 +5,12 @@ This config is intended to be used with NixOS. There is *experimental* support f
 ## Features
 
 - Multiple NixOS configurations, including desktop, laptop and VM
-- Persistence via impermanence
-- Automatic ZFS snapshots
+- Persistence via impermanence (both `/` and `/home`)
+- Automatic ZFS snapshots with rotation
 - Flexible NixOS / Home Manager config via feature flags
 - sops-nix for managing secrets
 - Hyprland with waybar setup, with screen capture
-- Dynamic colorschemes using wallust
+- Dynamic colorschemes using wallust (pywal, but maintained)
 
 ## How to Install
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
@@ -27,6 +27,7 @@ Substitute `desktop` with desired host (desktop / laptop / vm)
 nix-shell -p nixFlakes
 sudo nixos-install --flake github:iynaix/dotfiles#desktop
 ```
+Reboot
 
 ### Create Password Files for User and Root
 

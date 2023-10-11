@@ -218,10 +218,26 @@ in {
         "$mod, Right, focusmonitor, +1"
 
         # move to next / previous monitor
-        "$mod_SHIFT, Left, movewindow, mon:l"
-        "$mod_SHIFT, Right, movewindow, mon:r"
-        "$mod_SHIFT, Up, movewindow, mon:u"
-        "$mod_SHIFT, Down, movewindow, mon:d"
+        "$mod_SHIFT, Left, movewindow, ${
+          if builtins.length displays < 3
+          then "mon:-1"
+          else "mon:l"
+        }"
+        "$mod_SHIFT, Right, movewindow, ${
+          if builtins.length displays < 3
+          then "mon:+1"
+          else "mon:r"
+        }"
+        "$mod_SHIFT, Up, movewindow, ${
+          if builtins.length displays < 3
+          then "mon:-1"
+          else "mon:u"
+        }"
+        "$mod_SHIFT, Down, movewindow, ${
+          if builtins.length displays < 3
+          then "mon:+1"
+          else "mon:d"
+        }"
 
         "ALT, Tab, cyclenext"
         "ALT_SHIFT, Tab, cyclenext, prev"

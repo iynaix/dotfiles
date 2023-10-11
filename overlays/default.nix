@@ -50,8 +50,12 @@ in {
 
         # see below url for the latest specified version
         # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
-        path-of-building = prev.path-of-building.overrideAttrs (o: {
-          passthru = o.passthru // o.passthru.data.overrideAttrs (_: {src = sources.path-of-building.src;});
+        path-of-building = prev.path-of-building.overrideAttrs (o: rec {
+          passthru =
+            o.passthru
+            // {
+              data = o.passthru.data.overrideAttrs (_: {src = sources.path-of-building.src;});
+            };
 
           # add .desktop file with icon
           desktopItem = prev.makeDesktopItem {
@@ -66,6 +70,12 @@ in {
             keywords = ["poe" "pob" "pobc" "path" "exile"];
             mimeTypes = ["x-scheme-handler/pob"];
           };
+
+          installPhase = ''
+            mkdir -p $out/share/applications
+            cp ${desktopItem}/share/applications/* $out/share/applications
+            ${o.installPhase}
+          '';
         });
 
         # use latest commmit from git

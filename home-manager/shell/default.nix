@@ -16,6 +16,7 @@
 
   home.packages = with pkgs; [
     bat
+    dysk # better disk info
     fd
     fzf
     htop

@@ -38,8 +38,8 @@ name = "rofi-mpv"
 path = "src/cli/rofi_mpv.rs"
 
 [[bin]]
-name = "rofi-wallast-theme"
-path = "src/cli/rofi_wallast_theme.rs"
+name = "rofi-wallust-theme"
+path = "src/cli/rofi_wallust_theme.rs"
 
 [[bin]]
 name = "waifufetch"

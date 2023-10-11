@@ -3,7 +3,9 @@
   lib,
   config,
   ...
-}: {
+}: let
+  openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
+in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     # start hyprland
     iynaix.shell.profileExtra = ''
@@ -13,9 +15,7 @@
     '';
 
     wayland.windowManager.hyprland.settings = {
-      exec-once = let
-        openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
-      in [
+      exec-once = [
         # init ipc listener
         "hypr-ipc &"
 
