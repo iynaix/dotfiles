@@ -16,6 +16,7 @@
       crate = "cargo";
       btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
+      man = "${pkgs.bat-extras.batman}/bin/batman";
       nano = "nvim";
       nsw = "nswitch";
       open = "xdg-open";

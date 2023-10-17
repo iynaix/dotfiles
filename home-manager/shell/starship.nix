@@ -22,9 +22,9 @@
         "$character"
       ];
       character = {
-        error_symbol = "[❯](red)";
-        success_symbol = "[❯](purple)";
-        vimcmd_symbol = "[❮](green)";
+        error_symbol = "[](red)";
+        success_symbol = "[](purple)";
+        vimcmd_symbol = "[](green)";
       };
       cmd_duration = {
         format = "[$duration]($style) ";

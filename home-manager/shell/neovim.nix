@@ -17,31 +17,32 @@
     plugins = with pkgs.vimPlugins; [
       bufferline-nvim
       catppuccin-nvim
+      direnv-vim
       editorconfig-nvim
+      emmet-vim
+      gitsigns-nvim
       incsearch-vim
       lualine-nvim
-      vim-numbertoggle
+      matchit-zip
       neoscroll-nvim
-      nvim-web-devicons
-      gitsigns-nvim
-      emmet-vim
-      vim-indent-object
-      nvim-colorizer-lua
+      nvim-autopairs
       nvim-bufdel
-      vim-prisma
-      vim-exchange
+      nvim-colorizer-lua
+      nvim-web-devicons
       vim-abolish
       vim-commentary
       vim-eunuch
+      vim-exchange
       vim-fugitive
+      vim-indent-object
+      vim-indexed-search
+      vim-nix
+      vim-numbertoggle
+      vim-prisma
       vim-repeat
       vim-sensible
       vim-surround
       vim-unimpaired
-      vim-indexed-search
-      matchit-zip
-      nvim-autopairs
-      vim-nix
       # lsp stuff
       nvim-lspconfig
       nvim-compe

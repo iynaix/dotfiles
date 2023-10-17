@@ -158,7 +158,7 @@ in {
   # enable flakes
   nix = {
     settings = {
-      auto-optimise-store = true; # Optimise syslinks
+      auto-optimise-store = true; # Optimise symlinks
       substituters = [
         "https://hyprland.cachix.org"
       ];

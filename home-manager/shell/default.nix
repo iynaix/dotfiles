@@ -18,6 +18,7 @@
     bat
     dysk # better disk info
     fd
+    fx
     fzf
     htop
     sd
@@ -29,7 +30,7 @@
     enable = true;
     enableAliases = true;
     icons = true;
-    extraOptions = ["--group-directories-first" "--color-scale"];
+    extraOptions = ["--group-directories-first" "--color-scale" "--header" "--octal-permissions"];
   };
 
   programs.nix-index.enable = true;
