@@ -59,19 +59,23 @@ fn main() {
             cmd(["wallust", &wallpaper])
         }
 
-        swww(&["img", &wallpaper]);
-        cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
+        if cfg!(feature = "hyprland") {
+            swww(&["img", &wallpaper]);
+            cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
+        }
     } else {
         if !args.no_wallust {
             cmd(["wallust", &random_wallpaper]);
         }
 
-        swww(&[
-            "img",
-            "--transition-type",
-            &args.transition_type,
-            &random_wallpaper,
-        ]);
+        if cfg!(feature = "hyprland") {
+            swww(&[
+                "img",
+                "--transition-type",
+                &args.transition_type,
+                &random_wallpaper,
+            ]);
+        }
     }
 
     wallpaper::wallust_apply_colors();

@@ -1,7 +1,8 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
+  user,
   ...
 }: let
   openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
@@ -50,7 +51,7 @@ in {
         "sleep 5 && launch-waybar"
 
         # fix gparted "cannot open display: :0" error
-        # "${pkgs.xorg.xhost}/bin/xhost +local:"
+        "${pkgs.xorg.xhost}/bin/xhost +local:${user}"
         # fix Authorization required, but no authorization protocol specified error
         # "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
       ];

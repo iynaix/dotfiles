@@ -487,39 +487,41 @@ pub mod wallpaper {
     pub fn wallust_apply_colors() {
         let c = NixInfo::after().hyprland_colors();
 
-        // update borders
-        cmd([
-            "hyprctl",
-            "keyword",
-            "general:col.active_border",
-            &format!("{} {} 45deg", c[4], c[0]),
-        ]);
-        cmd(["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
+        if cfg!(feature = "hyprland") {
+            // update borders
+            cmd([
+                "hyprctl",
+                "keyword",
+                "general:col.active_border",
+                &format!("{} {} 45deg", c[4], c[0]),
+            ]);
+            cmd(["hyprctl", "keyword", "general:col.inactive_border", &c[0]]);
 
-        // pink border for monocle windows
-        cmd([
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},fullscreen:1", &c[5]),
-        ]);
-        // teal border for floating windows
-        cmd([
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},floating:1", &c[6]),
-        ]);
-        // yellow border for sticky (must be floating) windows
-        cmd([
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},pinned:1", &c[3]),
-        ]);
+            // pink border for monocle windows
+            cmd([
+                "hyprctl",
+                "keyword",
+                "windowrulev2",
+                "bordercolor",
+                &format!("{},fullscreen:1", &c[5]),
+            ]);
+            // teal border for floating windows
+            cmd([
+                "hyprctl",
+                "keyword",
+                "windowrulev2",
+                "bordercolor",
+                &format!("{},floating:1", &c[6]),
+            ]);
+            // yellow border for sticky (must be floating) windows
+            cmd([
+                "hyprctl",
+                "keyword",
+                "windowrulev2",
+                "bordercolor",
+                &format!("{},pinned:1", &c[3]),
+            ]);
+        }
 
         // refresh zathura
         refresh_zathura();
@@ -530,11 +532,13 @@ pub mod wallpaper {
         // refresh waifufetch
         cmd(["killall", "-SIGUSR2", "waifufetch"]);
 
-        // sleep to prevent waybar race condition
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        if cfg!(feature = "hyprland") {
+            // sleep to prevent waybar race condition
+            std::thread::sleep(std::time::Duration::from_secs(1));
 
-        // refresh waybar
-        cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
+            // refresh waybar
+            cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
+        }
 
         // reload gtk theme
         // reload_gtk()

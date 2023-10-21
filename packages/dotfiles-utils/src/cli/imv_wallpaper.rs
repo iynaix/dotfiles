@@ -17,16 +17,18 @@ fn main() {
         std::mem::swap(&mut width, &mut height);
     }
 
-    let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
+    if cfg!(feature = "hyprland") {
+        let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
 
-    // bind esc to behave like rofi
-    let esc_bind = "bind <Escape> quit";
+        // bind esc to behave like rofi
+        let esc_bind = "bind <Escape> quit";
 
-    hypr(&[
-        "exec",
-        &format!(
-            "{float_rule} imv -c '{esc_bind}' {}",
-            &wallpaper::randomize_wallpapers()
-        ),
-    ]);
+        hypr(&[
+            "exec",
+            &format!(
+                "{float_rule} imv -c '{esc_bind}' {}",
+                &wallpaper::randomize_wallpapers()
+            ),
+        ]);
+    }
 }

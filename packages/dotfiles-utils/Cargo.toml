@@ -45,7 +45,6 @@ path = "src/cli/rofi_wallust_theme.rs"
 name = "waifufetch"
 path = "src/cli/waifufetch.rs"
 
-
 [dependencies]
 clap = { version = "4.4.4", features = ["derive", "string"] }
 dirs = "5.0.1"
@@ -58,6 +57,10 @@ signal-hook = "0.3.17"
 [build-dependencies]
 clap = { version = "4.4.4", features = ["derive", "string"] }
 clap_complete = "4.4.3"
+
+[features]
+default = ["hyprland"]
+hyprland = []
 
 [profile.release]
 strip = true

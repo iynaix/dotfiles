@@ -16,6 +16,7 @@ in {
     };
 
     hardware.nvidia = {
+      # package = config.boot.kernelPackages.nvidiaPackages.beta;
       modesetting.enable = true;
       # prevents crashes with nvidia on resuming, see:
       # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
