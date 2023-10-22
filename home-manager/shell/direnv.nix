@@ -11,6 +11,8 @@
 
   iynaix.persist = {
     home.directories = [
+      ".cargo"
+      ".cache/pip"
       ".cache/yarn"
       ".local/share/direnv"
     ];

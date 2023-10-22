@@ -41,6 +41,10 @@
     lib.mapAttrs (_: value: "cd ${value}") config.iynaix.shortcuts;
 
   iynaix.shell.functions = {
+    fdnix = {
+      bashBody = ''fd "$@" /nix/store'';
+      fishBody = ''fd $argv /nix/store'';
+    };
     md = {
       bashBody = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
       fishBody = ''if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end'';

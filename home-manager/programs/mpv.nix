@@ -9,15 +9,11 @@
       {
         alang = "jpn";
         slang = ["en" "eng"];
-        blacklist = ["signs" "songs" "translation only"];
+        blacklist = ["signs" "songs" "translation only" "forced"];
       }
       {
         alang = ["eng" "en"];
         slang = ["eng" "en"];
-      }
-      {
-        alang = "eng";
-        slang = ["forced" "no"];
       }
       {
         alang = "*";

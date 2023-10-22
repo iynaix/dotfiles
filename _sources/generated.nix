@@ -145,14 +145,14 @@
   };
   waybar = {
     pname = "waybar";
-    version = "eefd6e83367d8f7bfd0497a3901fffadd843b391";
+    version = "9ecdbcc7bc635d6930120eca0eb9ea79c51a7f93";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "eefd6e83367d8f7bfd0497a3901fffadd843b391";
+      rev = "9ecdbcc7bc635d6930120eca0eb9ea79c51a7f93";
       fetchSubmodules = false;
-      sha256 = "sha256-GeV0Pa3lrfoDoRWHrdquPtF2uaW/1Ngk9ZjtOtr6wYU=";
+      sha256 = "sha256-LLPjpjkIeKEb5uZVGQCjOVSaqao/CUloxIwBAf2Yjxk=";
     };
-    date = "2023-10-20";
+    date = "2023-10-22";
   };
 }

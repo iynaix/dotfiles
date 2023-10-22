@@ -24,7 +24,6 @@ in {
       serviceConfig.SupplementaryGroups = [config.users.groups.keys.name];
     };
 
-    # persist keyring and misc other secrets
     iynaix-nixos.persist.home = {
       directories = [
         ".config/sops"
