@@ -132,7 +132,7 @@ in {
         # animate_manual_resizes = true;
         # animate_mouse_windowdragging = true;
         # key_press_enables_dpms = true;
-        enable_swallow = true;
+        enable_swallow = false;
         swallow_regex = "^([Kk]itty|[Ww]ezterm)$";
       };
 

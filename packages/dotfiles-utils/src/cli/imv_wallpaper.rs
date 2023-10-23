@@ -1,6 +1,6 @@
 use dotfiles_utils::{
     hypr,
-    wallpaper::{self},
+    wallpaper::{self, cleanup_vertical_wallpapers},
     Monitor,
 };
 
@@ -16,6 +16,9 @@ fn main() {
     if height > width {
         std::mem::swap(&mut width, &mut height);
     }
+
+    // do some quick housekeeping to remove unused vertical wallpapers
+    cleanup_vertical_wallpapers();
 
     if cfg!(feature = "hyprland") {
         let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);

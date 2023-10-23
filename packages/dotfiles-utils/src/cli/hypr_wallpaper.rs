@@ -1,19 +1,65 @@
 use clap::Parser;
-use dotfiles_utils::{cli::HyprWallpaperArgs, cmd, cmd_output, wallpaper, CmdOutput, NixInfo};
+use dotfiles_utils::{
+    cli::HyprWallpaperArgs, cmd, cmd_output, wallpaper, CmdOutput, Monitor, NixInfo,
+};
 use rand::seq::SliceRandom;
-use std::process::Command;
+use std::{path::Path, process::Command};
 
-fn swww(swww_args: &[&str]) {
+fn swww(swww_args: &[&str], image: &String) {
+    let set_wallpapers = || {
+        // check if vertical wallpaper exists
+        let vertical_image = image.replace("Wallpapers", "WallpapersVertical");
+
+        // check if vertical monitor exists
+        let (vertical, horizontal): (Vec<_>, Vec<_>) = Monitor::monitors()
+            .into_iter()
+            .partition(|m| m.is_vertical());
+
+        if !vertical.is_empty() && Path::new(&vertical_image).exists() {
+            let vertical = vertical
+                .iter()
+                .map(|m| m.name.to_string())
+                .collect::<Vec<_>>()
+                .join(",");
+            Command::new("swww")
+                .arg("img")
+                .arg("--outputs")
+                .arg(vertical)
+                .args(swww_args)
+                .arg(vertical_image)
+                .spawn()
+                .expect("failed to execute process");
+
+            let horizontal = horizontal
+                .iter()
+                .map(|m| m.name.to_string())
+                .collect::<Vec<_>>()
+                .join(",");
+            Command::new("swww")
+                .arg("img")
+                .arg("--outputs")
+                .arg(horizontal)
+                .args(swww_args)
+                .arg(image)
+                .spawn()
+                .expect("failed to execute process");
+        } else {
+            Command::new("swww")
+                .arg("img")
+                .args(swww_args)
+                .arg(image)
+                .spawn()
+                .expect("failed to execute process");
+        }
+    };
+
     let is_daemon_running = !cmd_output(["swww", "query"], CmdOutput::Stderr)
         .first()
         .unwrap_or(&"".to_string())
         .starts_with("Error");
 
     if is_daemon_running {
-        Command::new("swww")
-            .args(swww_args)
-            .spawn()
-            .expect("failed to execute process");
+        set_wallpapers();
     } else {
         // FIXME: weird race condition with swww init, need to sleep for a second
         // https://github.com/Horus645/swww/issues/144
@@ -28,10 +74,7 @@ fn swww(swww_args: &[&str]) {
 
         // equivalent of bash &&
         if swww_init.success() {
-            Command::new("swww")
-                .args(swww_args)
-                .spawn()
-                .expect("failed to execute process");
+            set_wallpapers();
         }
     }
 }
@@ -60,7 +103,7 @@ fn main() {
         }
 
         if cfg!(feature = "hyprland") {
-            swww(&["img", &wallpaper]);
+            swww(&[], &wallpaper);
             cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
         }
     } else {
@@ -69,12 +112,10 @@ fn main() {
         }
 
         if cfg!(feature = "hyprland") {
-            swww(&[
-                "img",
-                "--transition-type",
-                &args.transition_type,
+            swww(
+                &["--transition-type", &args.transition_type],
                 &random_wallpaper,
-            ]);
+            );
         }
     }
 

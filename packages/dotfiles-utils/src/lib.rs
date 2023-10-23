@@ -365,13 +365,16 @@ impl NixInfo {
 }
 
 pub mod wallpaper {
-    use std::fs;
+    use std::{fs, path::PathBuf};
 
     use crate::{cmd, cmd_output, full_path, CmdOutput, NixInfo};
 
-    pub fn dir() -> String {
-        let dir = "~/Pictures/Wallpapers";
-        full_path(dir).to_str().unwrap().to_string()
+    pub fn dir() -> PathBuf {
+        full_path("~/Pictures/Wallpapers")
+    }
+
+    pub fn vertical_dir() -> PathBuf {
+        full_path("~/Pictures/WallpapersVertical")
     }
 
     pub fn current() -> Option<String> {
@@ -404,7 +407,7 @@ pub mod wallpaper {
     pub fn all() -> Vec<String> {
         let curr = self::current().unwrap_or_default();
 
-        full_path(&self::dir())
+        self::dir()
             .read_dir()
             .unwrap()
             .flatten()
@@ -426,6 +429,21 @@ pub mod wallpaper {
                 None
             })
             .collect()
+    }
+
+    /// remove unused vertical wallpapers
+    pub fn cleanup_vertical_wallpapers() {
+        let wallpaper_dir = self::dir();
+
+        self::vertical_dir()
+            .read_dir()
+            .unwrap()
+            .flatten()
+            .for_each(|vert_wallpaper| {
+                if !wallpaper_dir.join(vert_wallpaper.file_name()).exists() {
+                    fs::remove_file(vert_wallpaper.path()).unwrap();
+                }
+            });
     }
 
     /// creates a directory with randomly ordered wallpapers for imv to display
