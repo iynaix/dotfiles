@@ -22,6 +22,10 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    xdph = {
+      url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";

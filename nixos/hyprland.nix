@@ -18,7 +18,10 @@ in {
       text = "auth include login";
     };
 
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      portalPackage = inputs.xdph.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+    };
 
     hm.wayland.windowManager.hyprland = lib.mkMerge [
       {
@@ -54,8 +57,11 @@ in {
       })
     ];
 
-    environment.systemPackages = [
-      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
-    ];
+    xdg.portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+      ];
+    };
   };
 }

@@ -60,7 +60,7 @@ in {
       };
       theme = lib.mkOption {
         type = lib.types.enum ["split" "transparent"];
-        default = "split";
+        default = "transparent";
       };
       border-radius = lib.mkOption {
         type = lib.types.str;

@@ -27,7 +27,7 @@ in {
     ];
 
     waybar = {
-      theme = "transparent";
+      # theme = "transparent";
       # persistent-workspaces = true;
     };
     wallust.gtk = false;
