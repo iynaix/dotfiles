@@ -60,9 +60,5 @@ in {
   mpv-subsearch = callMpvPlugin "mpv-subsearch";
   mpv-thumbfast-osc = callMpvPlugin "mpv-thumbfast-osc";
 
-  trimage = pkgs.callPackage ./trimage.nix {
-    inherit (pkgs.qt5) wrapQtAppsHook;
-  };
-
   vv = callPackageWithSource "vv" {};
 }

@@ -104,13 +104,13 @@
   };
 
   # setup subliminal
-  home.packages = with pkgs; [
-    python3Packages.subliminal
-  ];
+  # home.packages = with pkgs; [
+  #   python3Packages.subliminal
+  # ];
 
-  home.shellAliases = {
-    subs = "subliminal download -l 'en' -l 'eng' -s";
-  };
+  # home.shellAliases = {
+  #   subs = "subliminal download -l 'en' -l 'eng' -s";
+  # };
 
   iynaix.persist = {
     home.directories = [

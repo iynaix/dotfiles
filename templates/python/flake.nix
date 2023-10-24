@@ -24,13 +24,18 @@
             {
               # https://devenv.sh/reference/options/
               packages = with pkgs; [
-                python3.pkgs.flake8
-                python3.pkgs.black
               ];
 
               dotenv.disableHint = true;
-              languages.python.enable = true;
-              languages.python.venv.enable = true;
+              languages.python = {
+                enable = true;
+                package = pkgs.python3.withPackages (ps:
+                  with ps; [
+                    flake8
+                    black
+                  ]);
+                venv.enable = true;
+              };
             }
           ];
         };
