@@ -5,13 +5,13 @@
     ./direnv.nix
     ./fish.nix
     ./git.nix
-    ./lf.nix
     ./neovim.nix
     ./nix.nix
     ./rice
     ./shell.nix
     ./starship.nix
     ./tmux.nix
+    ./yazi.nix
   ];
 
   home.packages = with pkgs; [
@@ -22,7 +22,6 @@
     fzf
     htop
     sd
-    vimv
     ugrep
   ];
 

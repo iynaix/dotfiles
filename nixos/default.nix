@@ -39,9 +39,6 @@ in {
       etc = {
         # git
         "gitconfig".text = hmCfg.xdg.configFile."git/config".text;
-        # lf
-        "lf/lfrc".text = hmCfg.xdg.configFile."lf/lfrc".text;
-        "lf/icons".text = hmCfg.xdg.configFile."lf/icons".text;
       };
       variables = {
         STARSHIP_CONFIG = "${hmCfg.xdg.configHome}/starship.toml";
