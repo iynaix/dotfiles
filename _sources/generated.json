@@ -181,7 +181,7 @@
     },
     "swww": {
         "cargoLocks": null,
-        "date": "2023-08-28",
+        "date": "2023-10-31",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -193,11 +193,11 @@
             "name": null,
             "owner": "Horus645",
             "repo": "swww",
-            "rev": "053196e38075af6f94867865fe417026c86ae764",
-            "sha256": "sha256-ktJBMRPwh87jelpCBiKtvcfUgV+maP2S7owLEsz5Bb0=",
+            "rev": "344ffda9afbd6b2473c547e6e4c5f8e64d866f9f",
+            "sha256": "sha256-C8b6fLhWAgyoGCQlFhiAqaaNb9h1kG4w6o7eRC5d8wU=",
             "type": "github"
         },
-        "version": "053196e38075af6f94867865fe417026c86ae764"
+        "version": "344ffda9afbd6b2473c547e6e4c5f8e64d866f9f"
     },
     "transmission-web-soft-theme": {
         "cargoLocks": null,
@@ -241,7 +241,7 @@
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2023-10-27",
+        "date": "2023-10-31",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -253,10 +253,10 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "e46f66b4687eb807b6fc9c6714e52c52d0885926",
-            "sha256": "sha256-bNzLLkkhH1MZmBneP3PH3xkED0hDWXyiaMqNWF2ilII=",
+            "rev": "b37d0df89b4667a0e3833945f1e048d6df7b4f02",
+            "sha256": "sha256-HcTJpKVKjopiOAOfxDGHrv6utg4dgEYhjCGeGFImPSs=",
             "type": "github"
         },
-        "version": "e46f66b4687eb807b6fc9c6714e52c52d0885926"
+        "version": "b37d0df89b4667a0e3833945f1e048d6df7b4f02"
     }
 }

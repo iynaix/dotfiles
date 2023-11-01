@@ -24,7 +24,6 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
 Substitute `desktop` with desired host (desktop / laptop / vm)
 
 ```sh
-nix-shell -p nixFlakes
 sudo nixos-install --flake github:iynaix/dotfiles#desktop
 ```
 Reboot

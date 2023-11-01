@@ -2,6 +2,7 @@
   config,
   host,
   lib,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix-nixos.nvidia;
@@ -22,6 +23,10 @@ in {
       # https://github.com/hyprwm/Hyprland/issues/804#issuecomment-1369994379
       powerManagement.enable = false;
     };
+
+    environment.systemPackages = [
+      pkgs.nvtop
+    ];
 
     hm.wayland.windowManager.hyprland = {
       enableNvidiaPatches = cfg.enable;

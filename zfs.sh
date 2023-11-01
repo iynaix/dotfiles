@@ -122,3 +122,6 @@ echo "Creating /persist"
 sudo zfs create -o mountpoint=legacy zroot/safe/persist
 sudo mkdir -p /mnt/persist
 sudo mount -t zfs zroot/safe/persist /mnt/persist
+
+echo "Enabling flakes"
+sudo nix-shell -p nixFlakes

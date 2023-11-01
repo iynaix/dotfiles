@@ -32,18 +32,15 @@ in {
     };
     wallust.gtk = false;
     pathofbuilding.enable = true;
-    trimage.enable = false;
     vlc.enable = true;
   };
 
   home = {
     packages = lib.mkIf isNixOS (
-      with pkgs;
-        [
-          ffmpeg
-          # vial
-        ]
-        ++ (lib.optional cfg.trimage.enable pkgs-iynaix.trimage)
+      with pkgs; [
+        ffmpeg
+        # vial
+      ]
     );
   };
 

@@ -288,15 +288,17 @@ impl Workspace {
 }
 
 pub mod json {
+    use std::{fs::File, io::BufReader};
+
     use super::full_path;
 
     pub fn load<T>(path: &str) -> T
     where
         T: serde::de::DeserializeOwned,
     {
-        let contents = std::fs::read_to_string(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {path}"));
-        serde_json::from_str(&contents)
+        let file = File::open(full_path(path)).unwrap_or_else(|_| panic!("failed to load {path}"));
+        let reader = BufReader::new(file);
+        serde_json::from_reader(reader)
             .unwrap_or_else(|_| panic!("failed to parse json for {path}"))
     }
 
