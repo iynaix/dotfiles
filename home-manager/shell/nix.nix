@@ -1,6 +1,8 @@
 {
-  pkgs,
   host,
+  isNixOS,
+  lib,
+  pkgs,
   user,
   ...
 }: let
@@ -61,15 +63,23 @@
     fi
   '';
 in {
-  home.packages = [
-    hmbuild
-    hmswitch
-    hmupd8
-    ngc
-  ];
+  config = lib.mkMerge [
+    (lib.mkIf (!isNixOS) {
+      home.packages = [
+        hmbuild
+        hmswitch
+        hmupd8
+      ];
 
-  home.shellAliases = {
-    hsw = "hswitch";
-    nsh = "nix-shell --command fish -p";
-  };
+      home.shellAliases = {
+        hsw = "hswitch";
+      };
+    })
+    {
+      home.packages = [ngc];
+      home.shellAliases = {
+        nsh = "nix-shell --command fish -p";
+      };
+    }
+  ];
 }

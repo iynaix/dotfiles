@@ -86,14 +86,6 @@
       popd
     '';
   };
-  # sync wallpapers with laptop
-  sync-wallpapers = pkgs.writeShellApplication {
-    name = "sync-wallpapers";
-    runtimeInputs = with pkgs; [rsync];
-    text = ''
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
-    '';
-  };
   json2nix = pkgs.writeShellApplication {
     name = "json2nix";
     runtimeInputs = with pkgs; [hjson alejandra];
@@ -137,22 +129,29 @@
   #     });
 in {
   environment.systemPackages =
-    [
-      pkgs.nix-output-monitor
-      nix-current-generation
-      ndefault
-      nbuild
-      nswitch
-      upd8
-      json2nix
-      yaml2nix
-      # fhs
-      inputs.nvfetcher.packages.${pkgs.system}.default # nvfetcher
-    ]
-    ++ lib.optionals (host == "desktop") [
-      nswitch-remote
-      sync-wallpapers
-    ];
+    # for nixlang / nixpkgs
+    with pkgs;
+      [
+        alejandra
+        nil
+        nixpkgs-fmt
+        nix-output-monitor
+        nixpkgs-review
+      ]
+      ++ [
+        nix-current-generation
+        ndefault
+        nbuild
+        nswitch
+        upd8
+        json2nix
+        yaml2nix
+        # fhs
+        inputs.nvfetcher.packages.${pkgs.system}.default # nvfetcher
+      ]
+      ++ lib.optionals (host == "desktop") [
+        nswitch-remote
+      ];
 
   # enable flakes
   nix = {

@@ -89,37 +89,6 @@
     inherit self;
 
     # templates for devenv
-    templates = let
-      welcomeText = ''
-        # `.devenv` and `direnv` should be added to `.gitignore`
-        ```sh
-          echo .devenv >> .gitignore
-          echo .direnv >> .gitignore
-        ```
-      '';
-    in rec {
-      javascript = {
-        inherit welcomeText;
-        path = ./templates/javascript;
-        description = "Javascript / Typescript dev environment";
-      };
-
-      python = {
-        inherit welcomeText;
-        path = ./templates/python;
-        description = "Python dev environment";
-      };
-
-      rust = {
-        inherit welcomeText;
-        path = ./templates/rust;
-        description = "Rust dev environment";
-      };
-
-      js = javascript;
-      ts = javascript;
-      py = python;
-      rs = rust;
-    };
+    templates = import ./templates;
   };
 }

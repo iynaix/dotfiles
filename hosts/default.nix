@@ -71,8 +71,11 @@
           ../modules/home-manager
         ];
       };
-in {
-  vm = mkHost "vm";
-  desktop = mkHost "desktop";
-  laptop = mkHost "laptop";
-}
+in
+  builtins.listToAttrs (map (host: {
+    name =
+      if isNixOS
+      then host
+      else "${user}@${host}";
+    value = mkHost host;
+  }) ["vm" "desktop" "laptop"])

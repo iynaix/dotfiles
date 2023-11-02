@@ -11,7 +11,7 @@ in {
     ./screenshot.nix
     ./startup.nix
     ./lock.nix
-    ./swww.nix
+    ./wallpaper.nix
     ./waybar
   ];
 

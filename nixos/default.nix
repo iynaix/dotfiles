@@ -49,10 +49,6 @@ in {
           gcr # stops errors with copilot login?
           libnotify
           lf
-          # for nixlang
-          alejandra
-          nil
-          nixpkgs-fmt
         ]
         ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
         ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
