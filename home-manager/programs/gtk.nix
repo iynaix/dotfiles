@@ -40,8 +40,8 @@ in {
         };
       };
     iconTheme = {
-      name = "Numix";
-      package = pkgs.numix-icon-theme;
+      name = "Tela-blue-dark";
+      package = pkgs.tela-icon-theme;
     };
     font = {
       name = "${config.iynaix.fonts.regular} Regular";

@@ -4,7 +4,7 @@ This config is intended to be used with NixOS. There is *experimental* support f
 
 ## Features
 
-- Multiple NixOS configurations, including desktop, laptop and VM
+- Multiple NixOS configurations, including desktop, laptops and VM
 - Persistence via impermanence (both `/` and `/home`)
 - Automatic ZFS snapshots with rotation
 - Flexible NixOS / Home Manager config via feature flags
@@ -21,7 +21,7 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
 ```
 ### Install from Flake
 
-Substitute `desktop` with desired host (desktop / laptop / vm)
+Substitute `desktop` with desired host (desktop / xps / vm)
 
 ```sh
 sudo nixos-install --flake github:iynaix/dotfiles#desktop

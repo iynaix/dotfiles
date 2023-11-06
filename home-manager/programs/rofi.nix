@@ -1,8 +1,8 @@
 {
-  pkgs,
-  lib,
   config,
   isLaptop,
+  lib,
+  pkgs,
   ...
 }: {
   home.packages = with pkgs; [rofi-power-menu rofi-wayland];

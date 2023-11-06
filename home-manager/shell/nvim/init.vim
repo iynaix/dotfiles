@@ -106,7 +106,7 @@ set virtualedit=block "virtual edit mode in visual block so can go past EOL
 set gdefault "set substitution to be global by default e.g. :s///g
 set ttyfast "set fast terminal for better redrawing
 
-set guifont=Fira\ Code\ Nerd\ Font\ Medium\ 11
+set guifont=JetBrainsMono\ Nerd\ Font\ Medium\ 11
 
 "more natural splits
 set splitright splitbelow

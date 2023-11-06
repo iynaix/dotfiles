@@ -25,10 +25,10 @@ in rec {
   desktopHm = desktop.hm;
   desktopHmo = desktopHm.iynaix;
 
-  laptop = flake.nixosConfigurations.laptop.config;
-  laptopo = laptop.iynaix-nixos;
-  laptopHm = laptop.hm;
-  laptopHmo = laptopHm.iynaix;
+  xps = flake.nixosConfigurations.xps.config;
+  xpso = xps.iynaix-nixos;
+  xpsHm = xps.hm;
+  xpsHmo = xpsHm.iynaix;
 
   vm = flake.nixosConfigurations.vm.config;
   vmo = vm.iynaix-nixos;

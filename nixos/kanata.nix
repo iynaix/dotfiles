@@ -9,6 +9,7 @@ in {
     services.kanata = {
       enable = true;
 
+      # TODO: add framework layout
       keyboards.laptop = {
         # device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
         devices = [];

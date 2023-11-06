@@ -1,6 +1,6 @@
 {
   config,
-  host,
+  isLaptop,
   lib,
   ...
 }: let
@@ -18,7 +18,7 @@ in {
         default = "hyprnstack";
       };
     };
-    kanata.enable = lib.mkEnableOption "kanata" // {default = host == "laptop";};
+    kanata.enable = lib.mkEnableOption "kanata" // {default = isLaptop;};
     sops.enable = lib.mkEnableOption "sops" // {default = true;};
     syncoid.enable = lib.mkEnableOption "syncoid";
     torrenters.enable = lib.mkEnableOption "Torrenting Applications";

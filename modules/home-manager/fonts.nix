@@ -22,7 +22,7 @@
           noto-fonts
           noto-fonts-cjk
           noto-fonts-emoji
-          (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Ubuntu"];})
+          (nerdfonts.override {fonts = ["JetBrainsMono"];})
         ];
         description = "The packages to install for the fonts";
       };

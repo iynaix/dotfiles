@@ -52,7 +52,7 @@
             inputs.impermanence.nixosModules.impermanence
             inputs.sops-nix.nixosModules.sops
           ]
-          ++ lib.optionals (host == "laptop") [
+          ++ lib.optionals (host == "xps") [
             inputs.nixos-hardware.nixosModules.dell-xps-13-9343
           ];
       }
@@ -78,4 +78,4 @@ in
       then host
       else "${user}@${host}";
     value = mkHost host;
-  }) ["vm" "desktop" "laptop"])
+  }) ["vm" "desktop" "xps"])
