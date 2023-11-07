@@ -12,8 +12,8 @@
         blacklist = ["signs" "songs" "translation only" "forced"];
       }
       {
-        alang = ["eng" "en"];
-        slang = ["eng" "en"];
+        alang = ["eng" "en" "unk" "unknown"];
+        slang = ["eng" "en" "unk" "unknown"];
       }
       {
         alang = "*";

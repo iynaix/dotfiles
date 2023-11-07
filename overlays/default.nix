@@ -36,7 +36,12 @@ in {
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
         imv = prev.imv.overrideAttrs (o: {
-          patches = (o.patches or []) ++ [./imv-disable-key-repeat-timer.patch];
+          patches =
+            (o.patches or [])
+            ++ [
+              # https://lists.sr.ht/~exec64/imv-devel/patches/39476
+              ./imv-fix-repeated-keypresses.patch
+            ];
         });
 
         # add default font to silence null font errors

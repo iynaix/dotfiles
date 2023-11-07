@@ -48,8 +48,10 @@
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
   };
 
-  xdg.configFile = lib.mkIf (!isNixOS) {
+  # stop bothering me
+  xdg.configFile = {
     "nix/nix.conf".text = "experimental-features = nix-command flakes";
+    "nixpkgs/config.nix".text = ''{ allowUnfree = true; }'';
   };
 
   iynaix.persist = {

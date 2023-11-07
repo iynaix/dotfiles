@@ -82,7 +82,7 @@
     name = "nswitch-remote";
     text = ''
       pushd ${dots}
-      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-laptop}" switch
+      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-xps}" switch
       popd
     '';
   };
