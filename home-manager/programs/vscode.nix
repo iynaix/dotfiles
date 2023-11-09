@@ -12,7 +12,16 @@
         system = pkgs.system;
         config.allowUnfree = true;
       })
-      .vscode;
+      .vscode.overrideAttrs (o: {
+        # preFixup = ''
+        #   gappsWrapperArgs+=(
+        #     # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+        #     --prefix PATH : ${pkgs.glib.bin}/bin
+        #     --add-flags "''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        #     --add-flags ${lib.escapeShellArg commandLineArgs}
+        #   )
+        # '';
+      });
   };
 
   # add password-store: gnome for keyring to work
