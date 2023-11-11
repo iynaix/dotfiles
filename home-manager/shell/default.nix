@@ -11,7 +11,7 @@
     ./shell.nix
     ./starship.nix
     ./tmux.nix
-    ./yazi.nix
+    ./yazi
   ];
 
   home.packages = with pkgs; [
