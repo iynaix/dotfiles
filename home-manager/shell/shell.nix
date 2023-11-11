@@ -123,7 +123,7 @@
       '';
       fishBody = ''
         if test -f repl.nix
-          nix repl --file ./repl.nix $argv
+          nix repl --arg '"${host}"' --file ./repl.nix $argv
         else
           nix repl $argv
         end

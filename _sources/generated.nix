@@ -87,15 +87,15 @@
   };
   mpv-thumbfast-osc = {
     pname = "mpv-thumbfast-osc";
-    version = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
+    version = "fb9d37e76b97a3a541004556ec19c0620ca308a3";
     src = fetchFromGitHub {
       owner = "po5";
       repo = "thumbfast";
-      rev = "74cba1fa846fb4bec2ce8a92b7b0b0a3209f8c2a";
+      rev = "fb9d37e76b97a3a541004556ec19c0620ca308a3";
       fetchSubmodules = false;
-      sha256 = "sha256-S8x1DkvwKF83Po+HA5YLS7g4p4odKwDm3oP61VnbFFs=";
+      sha256 = "sha256-rVXjIoYxHOG4eDpQ1ls3L6UhYsmmZ014hzQOIRBS+uk=";
     };
-    date = "2023-07-26";
+    date = "2023-11-11";
   };
   path-of-building = {
     pname = "path-of-building";

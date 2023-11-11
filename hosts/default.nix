@@ -19,7 +19,6 @@
 
         modules =
           [
-            ./configuration.nix # shared nixos configuration across all hosts
             ./${host} # host specific configuration
             ./${host}/hardware.nix # host specific hardware configuration
             ../nixos

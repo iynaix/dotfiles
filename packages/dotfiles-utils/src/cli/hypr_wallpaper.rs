@@ -87,7 +87,9 @@ fn main() {
             .unwrap()
             .to_str()
             .unwrap()
-            .to_string(),
+            .to_string()
+            // allow setting from a vertical wallpaper
+            .replace("WallpapersVertical", "Wallpapers"),
         None => wallpaper::all()
             .choose(&mut rand::thread_rng())
             // use fallback image if not available

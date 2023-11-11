@@ -10,6 +10,7 @@ in {
   imports = [
     ./audio.nix
     ./auth.nix
+    ./configuration.nix
     ./docker.nix
     ./filezilla.nix
     ./gnome3.nix

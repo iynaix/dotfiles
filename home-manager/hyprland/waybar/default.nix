@@ -76,7 +76,7 @@ in {
 
       pulseaudio = {
         format = "{icon}  {volume}%";
-        format-icons = ["" "" ""];
+        format-icons = ["󰕿" "󰖀" "󰕾"];
         format-muted = "󰖁  Muted";
         on-click = "pamixer -t";
         on-click-right = "pavucontrol";
@@ -95,7 +95,7 @@ in {
       };
 
       "custom/nix" = {
-        format = "";
+        format = "󱄅";
         on-click = "hypr-wallpaper";
         on-click-right = "imv-wallpaper";
         tooltip = false;

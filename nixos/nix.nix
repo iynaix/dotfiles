@@ -171,6 +171,7 @@ in {
       options = "--delete-older-than 2d";
     };
     package = pkgs.nixVersions.unstable;
+
     # use flakes
     extraOptions = "experimental-features = nix-command flakes";
   };

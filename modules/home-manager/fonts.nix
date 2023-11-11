@@ -18,7 +18,6 @@
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = with pkgs; [
-          font-awesome
           noto-fonts
           noto-fonts-cjk
           noto-fonts-emoji

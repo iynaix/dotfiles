@@ -10,7 +10,7 @@ in {
       "waybar.css" = let
         radius = cfg.border-radius;
         baseModuleCss = ''
-          font-family: "Inter", "FontAwesome6Free";
+          font-family: "Inter";
           font-weight: bold;
           color: {foreground};
           background-color: {color0};

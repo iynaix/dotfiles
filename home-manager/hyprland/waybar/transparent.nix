@@ -10,7 +10,7 @@ in {
       margin = lib.mkForce "0";
       clock = {
         format = lib.mkForce "󰥔   {:%H:%M}";
-        format-alt = lib.mkForce "  {:%a, %d %b %Y}";
+        format-alt = lib.mkForce "󰸗  {:%a, %d %b %Y}";
       };
     };
 
@@ -18,7 +18,7 @@ in {
       "waybar.css" = let
         radius = "0";
         baseModuleCss = ''
-          font-family: "Inter", "FontAwesome6Free";
+          font-family: "Inter";
           font-weight: bold;
           color: {foreground};
           transition: none;
