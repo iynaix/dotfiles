@@ -1,9 +1,5 @@
 # use src.git with url to follow latest commit
 
-[mpv-chapterskip]
-src.git = "https://github.com/po5/chapterskip"
-fetch.github = "po5/chapterskip"
-
 [mpv-deletefile]
 src.git = "https://github.com/zenyd/mpv-scripts"
 fetch.github = "zenyd/mpv-scripts"

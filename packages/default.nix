@@ -51,7 +51,6 @@ in {
   dotfiles-utils = pkgs.callPackage ./dotfiles-utils {};
 
   # mpv plugins
-  mpv-chapterskip = callMpvPlugin "mpv-chapterskip";
   mpv-deletefile = callMpvPlugin "mpv-deletefile";
   mpv-dynamic-crop = callMpvPlugin "mpv-dynamic-crop";
   mpv-modernx = callPackageWithSource "mpv-modernx" {};

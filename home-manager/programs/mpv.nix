@@ -85,13 +85,14 @@
       };
       scripts = with pkgs.mpvScripts;
         [
+          chapterskip
+          cutter
           seekTo
           sponsorblock
           thumbfast
         ]
         # custom packaged scripts
         ++ (with pkgs.iynaix; [
-          mpv-chapterskip
           mpv-deletefile
           mpv-dynamic-crop
           # mpv-modernx

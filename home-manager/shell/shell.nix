@@ -116,14 +116,14 @@
     nrepl = {
       bashBody = ''
         if [[ -f repl.nix ]]; then
-          nix repl --arg '"${host}"' --file ./repl.nix "$@"
+          nix repl --arg host '"${host}"' --file ./repl.nix "$@"
         else
           nix repl "$@"
         fi
       '';
       fishBody = ''
         if test -f repl.nix
-          nix repl --arg '"${host}"' --file ./repl.nix $argv
+          nix repl --arg host '"${host}"' --file ./repl.nix $argv
         else
           nix repl $argv
         end

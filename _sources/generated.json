@@ -1,24 +1,4 @@
 {
-    "mpv-chapterskip": {
-        "cargoLocks": null,
-        "date": "2022-09-08",
-        "extract": null,
-        "name": "mpv-chapterskip",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "po5",
-            "repo": "chapterskip",
-            "rev": "b26825316e3329882206ae78dc903ebc4613f039",
-            "sha256": "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=",
-            "type": "github"
-        },
-        "version": "b26825316e3329882206ae78dc903ebc4613f039"
-    },
     "mpv-deletefile": {
         "cargoLocks": null,
         "date": "2022-04-22",
