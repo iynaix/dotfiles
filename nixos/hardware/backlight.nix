@@ -19,6 +19,14 @@ in {
           on-scroll-up = "brightnessctl s +1%";
         };
       };
+
+      # add keybinds for backlight
+      wayland.windowManager.hyprland.settings = {
+        bind = [
+          ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+          ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
+        ];
+      };
     };
   };
 }

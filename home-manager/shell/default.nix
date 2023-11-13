@@ -29,7 +29,7 @@
     enable = true;
     enableAliases = true;
     icons = true;
-    extraOptions = ["--group-directories-first" "--color-scale" "--header" "--octal-permissions"];
+    extraOptions = ["--group-directories-first" "--header" "--octal-permissions"];
   };
 
   programs.nix-index.enable = true;

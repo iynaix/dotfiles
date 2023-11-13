@@ -21,8 +21,8 @@ in {
         "hypr-ipc &"
 
         # browsers
-        (openOnWorkspace 1 "brave --profile-directory=Default")
         (openOnWorkspace 1 "brave --incognito")
+        (openOnWorkspace 1 "brave --profile-directory=Default")
 
         # file manager
         (openOnWorkspace 4 "nemo")

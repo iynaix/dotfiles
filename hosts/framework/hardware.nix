@@ -8,7 +8,7 @@
   ...
 }: {
   imports = [
-    inputs.nixos-hardware.nixosModules.dell-xps-13-9343
+    inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
 
   boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "ehci_pci" "ahci" "sd_mod" "rtsx_pci_sdmmc"];
