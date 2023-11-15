@@ -40,11 +40,6 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nvfetcher = {
-      url = "github:berberman/nvfetcher/0.6.2";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   # flake-utils is unnecessary

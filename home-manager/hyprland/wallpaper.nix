@@ -39,13 +39,35 @@
       popd
     '';
   };
+  # choose vertical crop for wallpapper
+  wallpapers-choose = pkgs.writeShellApplication {
+    name = "wallpapers-choose";
+    text = ''
+      pushd ${wallpapers_proj}
+      # activate direnv
+      direnv allow && eval "$(direnv export bash)"
+      python choose.py
+      popd
+    '';
+  };
+  # delete current wallpaper
+  wallpaper-delete = pkgs.writeShellApplication {
+    name = "wallpaper-delete";
+    runtimeInputs = with pkgs; [swww iynaix.dotfiles-utils];
+    text = ''
+      swww query | awk '/image:/ {print $NF}' | sort -u | xargs rm -f
+      hypr-wallpaper
+    '';
+  };
 in {
   config = lib.mkMerge [
     (lib.mkIf (host == "desktop") {
       home.packages = [
         wallpapers-backup
+        wallpapers-choose
         wallpapers-remote
         wallpapers-process
+        wallpaper-delete
       ];
 
       gtk.gtk3.bookmarks = [

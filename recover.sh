@@ -43,7 +43,7 @@ sudo mount -t zfs zroot/tmp /mnt/tmp
 sudo mount -t zfs zroot/home /mnt/home
 sudo mount -t zfs zroot/persist /mnt/persist
 
-echo "Installing NixOS"
+echo "Reinstalling NixOS"
 while true; do
     read -rp "Which host to install? (desktop / framework / xps / vm) " host
     case $host in

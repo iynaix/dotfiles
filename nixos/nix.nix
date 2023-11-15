@@ -1,6 +1,5 @@
 {
   host,
-  inputs,
   lib,
   pkgs,
   user,
@@ -67,7 +66,7 @@
   # update via nix flake
   upd8 = pkgs.writeShellApplication {
     name = "upd8";
-    runtimeInputs = [nswitch];
+    runtimeInputs = [nswitch pkgs.nvfetcher];
     # command ls -d /nix/var/nix/profiles/* | rg link | sort | tail -n2 | xargs -d '\n' nvd diff
     text = ''
       pushd ${dots}
@@ -147,7 +146,6 @@ in {
         json2nix
         yaml2nix
         # fhs
-        inputs.nvfetcher.packages.${pkgs.system}.default # nvfetcher
       ]
       ++ lib.optionals (host == "desktop") [
         nswitch-remote
