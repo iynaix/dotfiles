@@ -40,27 +40,27 @@ in {
 
       # zfs datasets
       "/" = {
-        device = "zroot/local/root";
+        device = "zroot/root";
         fsType = "zfs";
       };
 
       "/nix" = {
-        device = "zroot/local/nix";
+        device = "zroot/nix";
         fsType = "zfs";
       };
 
       "/tmp" = {
-        device = "zroot/local/tmp";
+        device = "zroot/tmp";
         fsType = "zfs";
       };
 
       "${homeMountPoint}" = {
-        device = "zroot/safe/home";
+        device = "zroot/home";
         fsType = "zfs";
       };
 
       "/persist" = {
-        device = "zroot/safe/persist";
+        device = "zroot/persist";
         fsType = "zfs";
       };
     };
@@ -69,14 +69,14 @@ in {
       enable = true;
 
       datasets = {
-        "zroot/safe/home" = lib.mkIf (!persistCfg.erase.home) {
+        "zroot/home" = lib.mkIf (!persistCfg.erase.home) {
           hourly = 50;
           daily = 20;
           weekly = 6;
           monthly = 3;
         };
 
-        "zroot/safe/persist" = {
+        "zroot/persist" = {
           hourly = 50;
           daily = 20;
           weekly = 6;

@@ -25,8 +25,8 @@ Reboot
 ### Creating Persist Snapshot to Restore
 
 ```sh
-sudo zfs snapshot zroot/safe/persist@persist-snapshot
-sudo zfs send zroot/safe/persist@persist-snapshot > SNAPSHOT_FILE_PATH
+sudo zfs snapshot zroot/persist@persist-snapshot
+sudo zfs send zroot/persist@persist-snapshot > SNAPSHOT_FILE_PATH
 ```
 
 # System Rescue for Bootloader

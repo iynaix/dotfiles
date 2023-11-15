@@ -20,11 +20,11 @@ This script will format the *entire* disk with a 1GB boot partition
 (labelled NIXBOOT), 16GB of swap, then allocating the rest to ZFS.
 
 The following ZFS datasets will be created:
-    - zroot/local/root (mounted at / with blank snapshot)
-    - zroot/local/nix (mounted at /nix)
-    - zroot/local/tmp (mounted at /tmp)
-    - zroot/safe/home (mounted at /home with blank snapshot)
-    - zroot/safe/persist (mounted at /persist)
+    - zroot/root (mounted at / with blank snapshot)
+    - zroot/nix (mounted at /nix)
+    - zroot/tmp (mounted at /tmp)
+    - zroot/home (mounted at /home with blank snapshot)
+    - zroot/persist (mounted at /persist)
 
 Introduction
 
@@ -109,46 +109,42 @@ sudo zpool create -f \
     "$encryption_options" \
     zroot "$ZFSDISK"
 
-# create top level datasets
-sudo zfs create -o mountpoint=legacy zroot/local
-sudo zfs create -o mountpoint=legacy zroot/safe
-
 echo "Creating /"
-sudo zfs create -o mountpoint=legacy zroot/local/root
-sudo zfs snapshot zroot/local/root@blank
-sudo mount -t zfs zroot/local/root /mnt
+sudo zfs create -o mountpoint=legacy zroot/root
+sudo zfs snapshot zroot/root@blank
+sudo mount -t zfs zroot/root /mnt
 
 echo "Mounting /boot (efi)"
 sudo mkdir -p /mnt/boot
 sudo mount "$BOOTDISK" /mnt/boot
 
 echo "Creating /nix"
-sudo zfs create -o mountpoint=legacy zroot/local/nix
+sudo zfs create -o mountpoint=legacy zroot/nix
 sudo mkdir -p /mnt/nix
-sudo mount -t zfs zroot/local/nix /mnt/nix
+sudo mount -t zfs zroot/nix /mnt/nix
 
 echo "Creating /tmp"
-sudo zfs create -o mountpoint=legacy zroot/local/tmp
+sudo zfs create -o mountpoint=legacy zroot/tmp
 sudo mkdir -p /mnt/tmp
-sudo mount -t zfs zroot/local/tmp /mnt/tmp
+sudo mount -t zfs zroot/tmp /mnt/tmp
 
 echo "Creating /home"
-sudo zfs create -o mountpoint=legacy zroot/safe/home
-sudo zfs snapshot zroot/safe/home@blank
+sudo zfs create -o mountpoint=legacy zroot/home
+sudo zfs snapshot zroot/home@blank
 sudo mkdir -p /mnt/home
-sudo mount -t zfs zroot/safe/home /mnt/home
+sudo mount -t zfs zroot/home /mnt/home
 
 echo "Creating /persist"
-sudo zfs create -o mountpoint=legacy zroot/safe/persist
+sudo zfs create -o mountpoint=legacy zroot/persist
 sudo mkdir -p /mnt/persist
-sudo mount -t zfs zroot/safe/persist /mnt/persist
+sudo mount -t zfs zroot/persist /mnt/persist
 
 restore_snapshot=$(yesno "Do you want to restore from a persist snapshot?")
 if [[ $restore_snapshot == "y" ]]; then
     echo "Enter full path to snapshot: "
     read -r snapshot_file_path
     echo
-    sudo zfs receive -F zroot/safe/persist@persist-snapshot < "$snapshot_file_path"
+    sudo zfs receive -F zroot/persist@persist-snapshot < "$snapshot_file_path"
 else
     # no snapshot, prompt and write passwords to persist
     echo -n "Enter password: "

@@ -27,21 +27,21 @@ sudo zpool import -f zroot
 
 reformat_nix=$(yesno "Reformat nix?")
 if [[ $reformat_nix == "y" ]]; then
-    sudo zfs destroy -r zroot/local/nix
+    sudo zfs destroy -r zroot/nix
 
-    sudo zfs create -o mountpoint=legacy zroot/local/nix
+    sudo zfs create -o mountpoint=legacy zroot/nix
     sudo mkdir -p /mnt/nix
-    sudo mount -t zfs zroot/local/nix /mnt/nix
+    sudo mount -t zfs zroot/nix /mnt/nix
 fi
 
 echo "Mounting Disks"
 
-sudo mount -t zfs zroot/local/root /mnt
+sudo mount -t zfs zroot/root /mnt
 sudo mount $BOOTDISK /mnt/boot
-sudo mount -t zfs zroot/local/nix /mnt/nix
-sudo mount -t zfs zroot/local/tmp /mnt/tmp
-sudo mount -t zfs zroot/safe/home /mnt/home
-sudo mount -t zfs zroot/safe/persist /mnt/persist
+sudo mount -t zfs zroot/nix /mnt/nix
+sudo mount -t zfs zroot/tmp /mnt/tmp
+sudo mount -t zfs zroot/home /mnt/home
+sudo mount -t zfs zroot/persist /mnt/persist
 
 echo "Installing NixOS"
 while true; do

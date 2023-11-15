@@ -13,8 +13,8 @@ in {
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     boot.initrd.postDeviceCommands = lib.mkAfter ''
-      ${lib.optionalString (!cfg.tmpfs && cfg.erase.root) "zfs rollback -r zroot/local/root@blank"}
-      ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "zfs rollback -r zroot/safe/home@blank"}
+      ${lib.optionalString (!cfg.tmpfs && cfg.erase.root) "zfs rollback -r zroot/root@blank"}
+      ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "zfs rollback -r zroot/home@blank"}
     '';
 
     # fix directory permissions so home-manager doesn't error out

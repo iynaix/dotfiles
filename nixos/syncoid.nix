@@ -22,7 +22,7 @@ in {
       interval = "*-*-* 03:14:00";
 
       commands."truenas" = {
-        source = "zroot/safe/persist";
+        source = "zroot/persist";
         target = "root@iynaix-nas:NAS/desktop-backup";
         extraArgs = [
           "--no-sync-snap"
