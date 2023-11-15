@@ -15,33 +15,16 @@ This config is intended to be used with NixOS. There is *experimental* support f
 ## How to Install
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
 
-### Setup ZFS
-```sh
-sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/zfs.sh)
-```
-### Install from Flake
-
-Substitute `desktop` with desired host (desktop / xps / vm)
+The following install script partitions the disk, sets up the necessary datasets and installs NixOS.
 
 ```sh
-sudo nixos-install --flake github:iynaix/dotfiles#desktop
+sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)
 ```
 Reboot
 
-### Create Password Files for User and Root
-
-This is not needed if restoring from [persist snapshot](#restore-persist-from-snapshot)
-
-```sh
-mkdir -p /persist/etc/shadow
-mkpasswd -m sha-512 'PASSWORD' | sudo tee -a /persist/etc/shadow/root
-mkpasswd -m sha-512 'PASSWORD' | sudo tee -a /persist/etc/shadow/iynaix
-```
-
-### Restore Persist from Snapshot
+### Create Persist Snapshot to Restor
 
 ```sh
 sudo zfs snapshot zroot/safe/persist@persist-snapshot
-sudo zfs send zroot/safe/persist@persist-snapshot > snapshot_file_path
-sudo zfs receive -F zroot/safe/persist@persist-snapshot < snapshot_file_path
+sudo zfs send zroot/safe/persist@persist-snapshot > SNAPSHOT_FILE_PATH
 ```

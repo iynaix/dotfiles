@@ -1,6 +1,19 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -e
+
+function yesno() {
+    local prompt="$1"
+
+    while true; do
+        read -rp "$prompt [y/n] " yn
+        case $yn in
+            [Yy]* ) echo "y"; return;;
+            [Nn]* ) echo "n"; return;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
 
 cat << Introduction
 This script will format the *entire* disk with a 1GB boot partition
@@ -34,7 +47,7 @@ ls -al /dev/disk/by-id
 
 echo ""
 
-read DISKINPUT
+read -r DISKINPUT
 
 DISK="/dev/disk/by-id/${DISKINPUT}"
 
@@ -47,35 +60,41 @@ echo "Boot Partiton: $BOOTDISK"
 echo "SWAP Partiton: $SWAPDISK"
 echo "ZFS Partiton: $ZFSDISK"
 
-while true; do
-    read -p "This irreversibly formats the entire disk. Are you sure? [y/n] " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
+do_format=$(yesno "This irreversibly formats the entire disk. Are you sure?")
+if [[ $do_format == "n" ]]; then
+    exit
+fi
 
 echo "Creating partitions"
-sudo sgdisk -Z $DISK
-sudo wipefs -a $DISK
+sudo sgdisk -Z "$DISK"
+sudo wipefs -a "$DISK"
 
-sudo sgdisk -n3:1M:+1G -t3:EF00 $DISK
-sudo sgdisk -n2:0:+16G -t2:8200 $DISK
-sudo sgdisk -n1:0:0 -t1:BF01 $DISK
+sudo sgdisk -n3:1M:+1G -t3:EF00 "$DISK"
+sudo sgdisk -n2:0:+16G -t2:8200 "$DISK"
+sudo sgdisk -n1:0:0 -t1:BF01 "$DISK"
 
 # notify kernel of partition changes
-sudo sgdisk -p $DISK > /dev/null
+sudo sgdisk -p "$DISK" > /dev/null
 sleep 5
 
 echo "Creating Swap"
-sudo mkswap $SWAPDISK
-sudo swaplabel --label "SWAP" $SWAPDISK
-sudo swapon $SWAPDISK
+sudo mkswap "$SWAPDISK"
+sudo swaplabel --label "SWAP" "$SWAPDISK"
+sudo swapon "$SWAPDISK"
 
 echo "Creating Boot Disk"
-sudo mkfs.fat -F 32 $BOOTDISK
-sudo fatlabel $BOOTDISK NIXBOOT
+sudo mkfs.fat -F 32 "$BOOTDISK"
+sudo fatlabel "$BOOTDISK" NIXBOOT
+
+# setup encryption
+use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")
+if [[ $use_encryption == "y" ]]; then
+    encryption_options="-O encryption=aes-256-gcm \
+        -O keyformat=passphrase \
+        -O keylocation=prompt"
+else
+    encryption_options=""
+fi
 
 echo "Creating base zpool"
 sudo zpool create -f \
@@ -87,7 +106,8 @@ sudo zpool create -f \
     -O xattr=sa \
     -O normalization=formD \
     -O mountpoint=none \
-    zroot $ZFSDISK
+    "$encryption_options" \
+    zroot "$ZFSDISK"
 
 # create top level datasets
 sudo zfs create -o mountpoint=legacy zroot/local
@@ -100,7 +120,7 @@ sudo mount -t zfs zroot/local/root /mnt
 
 echo "Mounting /boot (efi)"
 sudo mkdir -p /mnt/boot
-sudo mount $BOOTDISK /mnt/boot
+sudo mount "$BOOTDISK" /mnt/boot
 
 echo "Creating /nix"
 sudo zfs create -o mountpoint=legacy zroot/local/nix
@@ -123,5 +143,30 @@ sudo zfs create -o mountpoint=legacy zroot/safe/persist
 sudo mkdir -p /mnt/persist
 sudo mount -t zfs zroot/safe/persist /mnt/persist
 
-echo "Enabling flakes"
-sudo nix-shell -p nixFlakes
+restore_snapshot=$(yesno "Do you want to restore from a persist snapshot?")
+if [[ $restore_snapshot == "y" ]]; then
+    echo "Enter full path to snapshot: "
+    read -r snapshot_file_path
+    echo
+    sudo zfs receive -F zroot/safe/persist@persist-snapshot < "$snapshot_file_path"
+else
+    # no snapshot, prompt and write passwords to persist
+    echo -n "Enter password: "
+    read -rs password
+    echo
+
+    mkdir -p /persist/etc/shadow
+    mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /persist/etc/shadow/root
+    mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /persist/etc/shadow/iynaix
+fi
+
+echo "Installing NixOS"
+while true; do
+    read -rp "Which host to install? (desktop / framework / xps / vm) " host
+    case $host in
+        desktop|framework|xps|vm ) break;;
+        * ) echo "Invalid host. Please select a valid host.";;
+    esac
+done
+
+sudo nix-shell -p nixFlakes --command "nixos-install --root /mnt --flake \"github:iynaix/dotfiles#$host\"; return"

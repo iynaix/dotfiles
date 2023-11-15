@@ -13,6 +13,7 @@ in {
     boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
     # boot.zfs.enableUnstable = true;
     boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    boot.zfs.requestEncryptionCredentials = cfg.encryption;
 
     services.zfs = {
       autoScrub.enable = true;

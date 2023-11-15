@@ -9,9 +9,8 @@
 in {
   config = lib.mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;
-    programs.dconf.enable = true;
+    programs.virt-manager.enable = true;
     environment.systemPackages = with pkgs; [
-      virt-manager
       virtiofsd
     ];
 
