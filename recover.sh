@@ -37,7 +37,7 @@ fi
 echo "Mounting Disks"
 
 sudo mount -t zfs zroot/root /mnt
-sudo mount $BOOTDISK /mnt/boot
+sudo mount "$BOOTDISK" /mnt/boot
 sudo mount -t zfs zroot/nix /mnt/nix
 sudo mount -t zfs zroot/tmp /mnt/tmp
 sudo mount -t zfs zroot/home /mnt/home

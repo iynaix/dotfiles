@@ -65,27 +65,35 @@ in {
     # setup persistence for home manager
     programs.fuse.userAllowOther = true;
     hm = {...} @ hmCfg: let
-      persistCfg = hmCfg.config.iynaix.persist;
+      hmPersistCfg = hmCfg.config.iynaix.persist;
     in {
       systemd.user.startServices = true;
-      home.persistence."/persist/home/${user}" = {
-        allowOther = true;
-        removePrefixDirectory = false;
+      home.persistence = {
+        "/persist/home/${user}" = {
+          allowOther = true;
+          removePrefixDirectory = false;
 
-        files = [".Xauthority"] ++ cfg.home.files ++ persistCfg.home.files;
-        directories =
-          [
-            {
-              directory = "projects";
-              method = "symlink";
-            }
-          ]
-          ++ lib.optionals config.programs.dconf.enable [
-            ".cache/dconf"
-            ".config/dconf"
-          ]
-          ++ cfg.home.directories
-          ++ persistCfg.home.directories;
+          files = [".Xauthority"] ++ cfg.home.files ++ hmPersistCfg.home.files;
+          directories =
+            [
+              {
+                directory = "projects";
+                method = "symlink";
+              }
+            ]
+            ++ lib.optionals config.programs.dconf.enable [
+              ".cache/dconf"
+              ".config/dconf"
+            ]
+            ++ cfg.home.directories
+            ++ hmPersistCfg.home.directories;
+        };
+        "/persist/cache" = {
+          allowOther = true;
+          removePrefixDirectory = false;
+
+          directories = hmPersistCfg.cache;
+        };
       };
     };
   };

@@ -63,6 +63,11 @@ in {
         device = "zroot/persist";
         fsType = "zfs";
       };
+
+      "/persist/cache" = {
+        device = "zroot/cache";
+        fsType = "zfs";
+      };
     };
 
     services.sanoid = lib.mkIf cfg.snapshots {

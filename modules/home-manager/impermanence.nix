@@ -10,5 +10,9 @@
         description = "Files to persist in home directory";
       };
     };
+    cache = lib.mkOption {
+      default = [];
+      description = "Directories to persist, but not to snapshot";
+    };
   };
 }

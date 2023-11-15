@@ -11,11 +11,13 @@
 
   iynaix.persist = {
     home.directories = [
+      ".local/share/direnv"
+    ];
+    cache = [
       ".cargo"
       ".cache/pip"
       ".cache/torch" # pytorch models
       ".cache/yarn"
-      ".local/share/direnv"
     ];
   };
 }

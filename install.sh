@@ -25,6 +25,7 @@ The following ZFS datasets will be created:
     - zroot/tmp (mounted at /tmp)
     - zroot/home (mounted at /home with blank snapshot)
     - zroot/persist (mounted at /persist)
+    - zroot/persist/cache (mounted at /persist/cache)
 
 Introduction
 
@@ -138,6 +139,11 @@ echo "Creating /persist"
 sudo zfs create -o mountpoint=legacy zroot/persist
 sudo mkdir -p /mnt/persist
 sudo mount -t zfs zroot/persist /mnt/persist
+
+echo "Creating /cache"
+sudo zfs create -o mountpoint=legacy zroot/cache
+sudo mkdir -p /mnt/cache
+sudo mount -t zfs zroot/cache /mnt/cache
 
 restore_snapshot=$(yesno "Do you want to restore from a persist snapshot?")
 if [[ $restore_snapshot == "y" ]]; then

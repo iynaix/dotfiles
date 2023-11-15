@@ -61,7 +61,7 @@ in {
     })
     {
       iynaix.persist = {
-        home.directories = [
+        cache = [
           ".cache/swww"
         ];
       };
