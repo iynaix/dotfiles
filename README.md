@@ -22,9 +22,18 @@ sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)
 ```
 Reboot
 
-### Create Persist Snapshot to Restor
+### Creating Persist Snapshot to Restore
 
 ```sh
 sudo zfs snapshot zroot/safe/persist@persist-snapshot
 sudo zfs send zroot/safe/persist@persist-snapshot > SNAPSHOT_FILE_PATH
+```
+
+# System Rescue for Bootloader
+Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
+
+The following script optionally reformats the boot partition and / or /nix dataset, then reinstalls NixOS.
+
+```sh
+sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
 ```
