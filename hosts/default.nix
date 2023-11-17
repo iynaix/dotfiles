@@ -66,11 +66,12 @@
           ../modules/home-manager
         ];
       };
-in
-  builtins.listToAttrs (map (host: {
+  hosts = builtins.listToAttrs (map (host: {
     name =
       if isNixOS
       then host
       else "${user}@${host}";
     value = mkHost host;
-  }) ["desktop" "framework" "xps" "vm"])
+  }) ["desktop" "framework" "xps" "vm"]);
+in
+  hosts // {}

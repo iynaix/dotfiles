@@ -18,7 +18,7 @@ in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home = {
       sessionVariables = {
-        XCURSOR_SIZE = "24";
+        XCURSOR_SIZE = "${toString config.home.pointerCursor.size}";
         HYPR_LOG = "/tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
       };
 

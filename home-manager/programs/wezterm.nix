@@ -44,9 +44,10 @@
 
           return {
             ${lib.optionalString (config.iynaix.shell.interactive != "fish") "-- "} default_prog = { '${pkgs.fish}/bin/fish', '-l' },
-            font = wezterm.font('${font}', { weight = "Regular", }),
+            font = wezterm.font('${font}', { weight = "Medium" }),
             harfbuzz_features = { 'zero=1' },
             font_size = ${toString size},
+            freetype_load_flags = "NO_HINTING",
             window_background_opacity = ${toString opacity},
             enable_scroll_bar = false,
             enable_tab_bar = false,
@@ -75,6 +76,26 @@
             },
           }
         '';
+
+        # TODO: remove on new wezterm release
+        # fix wezterm crashing instantly
+        # https://github.com/wez/wezterm/issues/4483
+        package = pkgs.wezterm.overrideAttrs (o: rec {
+          src = pkgs.fetchFromGitHub {
+            owner = "wez";
+            repo = o.pname;
+            rev = "721fbdf5dc39aaeacc0517e0422d06f0cf81561b";
+            fetchSubmodules = true;
+            hash = "sha256-S8i3EXUEChlf2Il3AAhfjIkqZO6PoB2PfLizOeubNnU=";
+          };
+
+          # creating an overlay for buildRustPackage overlay
+          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+          cargoDeps = pkgs.rustPlatform.importCargoLock {
+            lockFile = src + "/Cargo.lock";
+            allowBuiltinFetchGit = true;
+          };
+        });
       };
     };
 

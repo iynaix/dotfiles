@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   iynaix-nixos = {
     hyprland.enable = false;
-    zfs.encryption = true;
 
     # impermanence
     persist.tmpfs = false;

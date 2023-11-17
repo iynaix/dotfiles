@@ -71,7 +71,7 @@ in {
       ];
 
       gtk.gtk3.bookmarks = [
-        "file://${wallpapers_proj}/in Wallpapers Pending"
+        "file://${wallpapers_proj}/in Walls In"
       ];
 
       programs.imv.settings.binds = {

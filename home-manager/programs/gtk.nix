@@ -15,9 +15,9 @@ in {
     ];
 
     pointerCursor = lib.mkIf isNixOS {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 24;
+      package = pkgs.simp1e-cursors;
+      name = "Simp1e-Catppuccin-Mocha";
+      size = 28;
       gtk.enable = true;
       x11.enable = true;
     };

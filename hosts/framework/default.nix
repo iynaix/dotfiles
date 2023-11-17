@@ -9,6 +9,7 @@
     hyprland.enable = true;
     kanata.enable = false;
     wifi.enable = true;
+    zfs.encryption = true;
 
     # impermanence
     persist.tmpfs = false;
