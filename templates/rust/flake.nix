@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
+    fenix.url = "github:nix-community/fenix";
   };
 
   outputs = {
@@ -30,7 +31,10 @@
                 PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
               };
 
-              languages.rust.enable = true;
+              languages.rust = {
+                enable = true;
+                channel = "stable";
+              };
             }
           ];
         };

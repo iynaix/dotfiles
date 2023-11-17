@@ -12,7 +12,10 @@ in {
         # include custom packages
         iynaix =
           (prev.iynaix or {})
-          // (import ../packages {inherit (prev) pkgs;})
+          // (import ../packages {
+            inherit (prev) pkgs;
+            inherit inputs;
+          })
           // {
             hyprNStack = inputs.hyprNStack.packages.${pkgs.system}.hyprNStack;
           };

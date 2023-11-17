@@ -8,12 +8,14 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
+    fenix.url = "github:nix-community/fenix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    devenv.url = "github:cachix/devenv/v0.6.3";
+    devenv.url = "github:cachix/devenv";
 
     impermanence.url = "github:nix-community/impermanence";
 
@@ -71,14 +73,17 @@
             # devenv configuration
             packages = [pkgs.alejandra];
 
-            languages.rust.enable = true;
+            languages.rust = {
+              enable = true;
+              channel = "stable";
+            };
           })
         ];
       };
     });
 
     packages = forAllSystems (
-      pkgs: (import ./packages {inherit pkgs;})
+      pkgs: (import ./packages {inherit pkgs inputs;})
     );
 
     inherit self;

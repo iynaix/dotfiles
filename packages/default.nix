@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  inputs,
+  pkgs,
+  ...
+}: let
   sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
   callPackageWithSource = sourceName: args: let
     origSource = sources.${sourceName};
@@ -48,7 +52,16 @@
     };
 in {
   # rust dotfiles utils
-  dotfiles-utils = pkgs.callPackage ./dotfiles-utils {};
+  dotfiles-utils = pkgs.callPackage ./dotfiles-utils {
+    # use latest stable rust
+    rustPlatform = let
+      toolchain = inputs.fenix.packages.${pkgs.system}.stable.toolchain;
+    in
+      pkgs.makeRustPlatform {
+        cargo = toolchain;
+        rustc = toolchain;
+      };
+  };
 
   # mpv plugins
   mpv-deletefile = callMpvPlugin "mpv-deletefile";
