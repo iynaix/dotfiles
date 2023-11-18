@@ -64,6 +64,7 @@ in {
   };
 
   # mpv plugins
+  mpv-anime4k = pkgs.callPackage ./mpv-anime4k.nix {};
   mpv-deletefile = callMpvPlugin "mpv-deletefile";
   mpv-dynamic-crop = callMpvPlugin "mpv-dynamic-crop";
   mpv-modernx = callPackageWithSource "mpv-modernx" {};

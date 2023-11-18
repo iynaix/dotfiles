@@ -5,6 +5,7 @@
   ...
 }: {
   options.iynaix = {
+    anime4k.enable = lib.mkEnableOption "anime4k" // {default = true;};
     deadbeef.enable = lib.mkEnableOption "deadbeef" // {default = host == "desktop";};
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};
