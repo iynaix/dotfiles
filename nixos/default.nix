@@ -33,28 +33,40 @@ in {
     services.gvfs.enable = true;
     # services.devmon.enable = true;
 
-    # execute shebangs that assume hardcoded shell paths
-    services.envfs.enable = true;
-
     environment = {
+      # bye bye nano
+      defaultPackages = with pkgs; [perl rsync strace];
       etc = {
         # git
         "gitconfig".text = hmCfg.xdg.configFile."git/config".text;
       };
       variables = {
+        TERMINAL = hmCfg.iynaix.terminal.exec;
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+        NIXPKGS_ALLOW_UNFREE = "1";
         STARSHIP_CONFIG = "${hmCfg.xdg.configHome}/starship.toml";
       };
 
       systemPackages = with pkgs;
         [
-          gcr # stops errors with copilot login?
-          libnotify
-          lf
+          curl
+          eza
+          killall
+          neovim
+          ntfs3g
+          procps
+          ripgrep
+          tree # for root, normal user has an eza alias
+          wget
         ]
         ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
         ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
         ++ (lib.optional hmCfg.iynaix.helix.enable helix);
     };
+
+    # setup fonts
+    fonts.packages = hmCfg.iynaix.fonts.packages;
 
     # set up programs to use same config as home-manager
     programs.bash = {

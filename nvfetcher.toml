@@ -48,3 +48,8 @@ fetch.github = "hackerb9/vv"
 [waybar]
 src.git = "https://github.com/Alexays/Waybar"
 fetch.github = "Alexays/Waybar"
+
+[wezterm]
+src.git = "https://github.com/wez/wezterm"
+fetch.github = "wez/wezterm"
+git.fetchSubmodules = true

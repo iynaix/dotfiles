@@ -1,12 +1,7 @@
-{
-  lib,
-  user,
-  ...
-}: {
+{user, ...}: {
   iynaix-nixos = {
     backlight.enable = true;
     battery.enable = true;
-    hyprland.enable = true;
     kanata.enable = true;
     wifi.enable = true;
 
@@ -23,9 +18,4 @@
 
   # touchpad support
   services.xserver.libinput.enable = true;
-
-  # do not autologin on laptop!
-  services.getty.autologinUser = lib.mkForce null;
-  services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
-  security.pam.services.gdm.enableGnomeKeyring = true;
 }

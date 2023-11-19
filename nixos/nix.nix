@@ -2,6 +2,7 @@
   host,
   lib,
   pkgs,
+  self,
   user,
   ...
 }: let
@@ -67,7 +68,6 @@
   upd8 = pkgs.writeShellApplication {
     name = "upd8";
     runtimeInputs = [nswitch pkgs.nvfetcher];
-    # command ls -d /nix/var/nix/profiles/* | rg link | sort | tail -n2 | xargs -d '\n' nvd diff
     text = ''
       pushd ${dots}
       nix flake update
@@ -127,6 +127,12 @@
   #       extraOutputsToInstall = ["dev"];
   #     });
 in {
+  # execute shebangs that assume hardcoded shell paths
+  services.envfs.enable = true;
+
+  # run unpatched binaries on nixos
+  programs.nix-ld.enable = true;
+
   environment.systemPackages =
     # for nixlang / nixpkgs
     with pkgs;
@@ -150,6 +156,17 @@ in {
       ++ lib.optionals (host == "desktop") [
         nswitch-remote
       ];
+
+  # add symlink of configuration flake to nixos closure
+  # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/
+  system.extraSystemBuilderCmds = ''
+    ln -s ${self} $out/flake
+  '';
+
+  # create nix channels file
+  hm.home.file.".nix-channels".text = ''
+    https://nixos.org/channels/nixos-unstable nixos
+  '';
 
   # enable flakes
   nix = {

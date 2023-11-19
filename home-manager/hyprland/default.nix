@@ -36,7 +36,7 @@ in {
           hyprland,
           ...
         }: "${name}, ${hyprland}"))
-        ++ [",preferred,auto,auto"];
+        ++ (lib.optional (host != "desktop") ",preferred,auto,auto");
 
       input = {
         kb_layout = "us";
@@ -55,17 +55,14 @@ in {
 
       "$term" = "${config.iynaix.terminal.exec}";
 
-      general = {
-        gaps_in = (
+      general = let
+        gap =
           if host == "desktop"
           then 8
-          else 4
-        );
-        gaps_out = (
-          if host == "desktop"
-          then 8
-          else 4
-        );
+          else 4;
+      in {
+        gaps_in = gap;
+        gaps_out = gap;
         border_size = 2;
         layout = "master";
       };

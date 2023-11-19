@@ -80,22 +80,20 @@
         # TODO: remove on new wezterm release
         # fix wezterm crashing instantly
         # https://github.com/wez/wezterm/issues/4483
-        package = pkgs.wezterm.overrideAttrs (o: rec {
-          src = pkgs.fetchFromGitHub {
-            owner = "wez";
-            repo = o.pname;
-            rev = "721fbdf5dc39aaeacc0517e0422d06f0cf81561b";
-            fetchSubmodules = true;
-            hash = "sha256-S8i3EXUEChlf2Il3AAhfjIkqZO6PoB2PfLizOeubNnU=";
-          };
-
-          # creating an overlay for buildRustPackage overlay
-          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-          cargoDeps = pkgs.rustPlatform.importCargoLock {
-            lockFile = src + "/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-        });
+        package = let
+          # include generated sources from nvfetcher
+          sources = import ../../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
+        in
+          pkgs.wezterm.overrideAttrs (o:
+            sources.wezterm
+            // {
+              # creating an overlay for buildRustPackage overlay
+              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+              cargoDeps = pkgs.rustPlatform.importCargoLock {
+                lockFile = sources.wezterm.src + "/Cargo.lock";
+                allowBuiltinFetchGit = true;
+              };
+            });
       };
     };
 

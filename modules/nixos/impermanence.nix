@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.iynaix-nixos.persist = {
     root = {
       directories = lib.mkOption {
@@ -20,16 +24,16 @@
         description = "Files to persist in home directory";
       };
     };
-    tmpfs = lib.mkEnableOption "Enable tmpfs for for persist instead of snapshots";
+    tmpfs = lib.mkEnableOption "Enable tmpfs for for persist instead of snapshots" // {default = true;};
     erase = {
       root = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = config.iynaix-nixos.persist.tmpfs;
         description = "Enable rollback to blank for /";
       };
       home = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = config.iynaix-nixos.persist.tmpfs;
         description = "Enable rollback to blank for /home";
       };
     };

@@ -62,6 +62,7 @@ in {
       "/persist" = {
         device = "zroot/persist";
         fsType = "zfs";
+        neededForBoot = true;
       };
 
       "/persist/cache" = {

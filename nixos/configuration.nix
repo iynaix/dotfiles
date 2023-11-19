@@ -2,7 +2,6 @@
   pkgs,
   user,
   host,
-  config,
   ...
 }: {
   # Bootloader.
@@ -47,6 +46,8 @@
   services.xserver = {
     layout = "us";
     xkbVariant = "";
+    # bye bye xterm
+    excludePackages = [pkgs.xterm];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -59,36 +60,8 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment = {
-    variables = {
-      TERMINAL = config.home-manager.users.${user}.iynaix.terminal.exec;
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-      NIXPKGS_ALLOW_UNFREE = "1";
-    };
-    systemPackages = with pkgs; [
-      curl
-      eza
-      killall
-      neovim
-      ntfs3g
-      procps
-      ripgrep
-      tree # for root, normal user has an eza alias
-      wget
-    ];
-  };
-
   # enable sysrq in case for kernel panic
   boot.kernel.sysctl."kernel.sysrq" = 1;
-
-  # bye bye nano
-  environment.defaultPackages = [pkgs.perl pkgs.rsync pkgs.strace];
-
-  # bye bye xterm
-  services.xserver.excludePackages = [pkgs.xterm];
 
   # enable opengl
   hardware.opengl = {
@@ -101,7 +74,4 @@
 
   # do not change this value
   system.stateVersion = "23.05";
-
-  # setup fonts
-  fonts.packages = config.home-manager.users.${user}.iynaix.fonts.packages;
 }

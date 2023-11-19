@@ -1,4 +1,4 @@
-{...}: {
+{user, ...}: {
   iynaix-nixos = {
     # hardware
     am5.enable = true;
@@ -7,17 +7,13 @@
 
     # software
     distrobox.enable = true;
-    hyprland.enable = true;
     syncoid.enable = true;
     torrenters.enable = true;
     vercel.enable = true;
     virt-manager.enable = true;
-
-    # impermanence
-    persist.tmpfs = true;
-    persist.erase.root = true;
-    persist.erase.home = true;
   };
+
+  services.xserver.displayManager.autoLogin.user = user; # autologin
 
   networking.hostId = "89eaa833"; # required for zfs
 

@@ -143,4 +143,16 @@
     };
     date = "2023-11-15";
   };
+  wezterm = {
+    pname = "wezterm";
+    version = "600652583594e9f6195a6427d1fabb09068622a7";
+    src = fetchFromGitHub {
+      owner = "wez";
+      repo = "wezterm";
+      rev = "600652583594e9f6195a6427d1fabb09068622a7";
+      fetchSubmodules = true;
+      sha256 = "sha256-iwIiGRHgf2uBf2ueIzdxDtQW9Z7Gf0gXdb+0RIOH+Qo=";
+    };
+    date = "2023-11-17";
+  };
 }

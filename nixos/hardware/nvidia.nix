@@ -11,11 +11,6 @@ in {
     # enable nvidia support
     services.xserver.videoDrivers = ["nvidia"];
 
-    hardware.opengl = {
-      enable = true;
-      driSupport = true;
-    };
-
     hardware.nvidia = {
       # package = config.boot.kernelPackages.nvidiaPackages.beta;
       modesetting.enable = true;

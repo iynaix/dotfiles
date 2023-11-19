@@ -37,7 +37,8 @@ in {
       options = ["defaults" "size=1G" "mode=777"];
     });
 
-    fileSystems."/persist".neededForBoot = true;
+    # shut sudo up
+    security.sudo.extraConfig = "Defaults lecture=never";
 
     # persisting user passwords
     # https://reddit.com/r/NixOS/comments/o1er2p/tmpfs_as_root_but_without_hardcoding_your/h22f1b9/
