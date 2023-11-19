@@ -8,7 +8,19 @@
 in {
   nixpkgs.overlays = [
     (
-      final: prev: {
+      final: prev: let
+        overrideRustPackage = pkgname:
+          prev.${pkgname}.overrideAttrs (o:
+            sources.${pkgname}
+            // {
+              # creating an overlay for buildRustPackage overlay
+              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+              cargoDeps = prev.rustPlatform.importCargoLock {
+                lockFile = sources.${pkgname}.src + "/Cargo.lock";
+                allowBuiltinFetchGit = true;
+              };
+            });
+      in {
         # include custom packages
         iynaix =
           (prev.iynaix or {})
@@ -87,18 +99,7 @@ in {
         });
 
         # use latest commmit from git
-        swww = prev.swww.overrideAttrs (o:
-          sources.swww
-          // {
-            version = "${o.version}-${sources.swww.version}";
-
-            # creating an overlay for buildRustPackage overlay
-            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-            cargoDeps = prev.rustPlatform.importCargoLock {
-              lockFile = sources.swww.src + "/Cargo.lock";
-              allowBuiltinFetchGit = true;
-            };
-          });
+        swww = overrideRustPackage "swww";
 
         # transmission dark mode, the default theme is hideous
         transmission = let
@@ -119,6 +120,11 @@ in {
           // {
             version = "${o.version}-${sources.waybar.version}";
           });
+
+        # TODO: remove on new wezterm release
+        # fix wezterm crashing instantly
+        # https://github.com/wez/wezterm/issues/4483
+        wezterm = overrideRustPackage "wezterm";
       }
     )
   ];

@@ -12,7 +12,6 @@
       ":e" = "nvim";
       ":q" = "exit";
       c = "clear";
-      cat = "bat";
       crate = "cargo";
       btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';

@@ -1,8 +1,8 @@
 {
   host,
+  inputs,
   lib,
   pkgs,
-  self,
   user,
   ...
 }: let
@@ -89,16 +89,16 @@
     name = "json2nix";
     runtimeInputs = with pkgs; [hjson alejandra];
     text = ''
-      json=$(echo "$1" | hjson -j 2> /dev/null)
-      nix eval --expr "builtins.fromJSON '''$json'''" | alejandra
+      json=$(cat - | hjson -j 2> /dev/null)
+      nix eval --expr "builtins.fromJSON '''$json'''" | alejandra -q
     '';
   };
   yaml2nix = pkgs.writeShellApplication {
     name = "yaml2nix";
     runtimeInputs = with pkgs; [yq alejandra];
     text = ''
-      yaml=$(echo "$1" | yq)
-      nix eval --expr "builtins.fromJSON '''$yaml'''" | alejandra
+      yaml=$(cat - | yq)
+      nix eval --expr "builtins.fromJSON '''$yaml'''" | alejandra -q
     '';
   };
   # create an fhs environment to run downloaded binaries
@@ -142,6 +142,7 @@ in {
         nixpkgs-fmt
         nix-output-monitor
         nixpkgs-review
+        comma
       ]
       ++ [
         nix-current-generation
@@ -159,17 +160,36 @@ in {
 
   # add symlink of configuration flake to nixos closure
   # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/
-  system.extraSystemBuilderCmds = ''
-    ln -s ${self} $out/flake
-  '';
+  # system.extraSystemBuilderCmds = ''
+  #   ln -s ${self} $out/flake
+  # '';
 
-  # create nix channels file
-  hm.home.file.".nix-channels".text = ''
-    https://nixos.org/channels/nixos-unstable nixos
-  '';
-
-  # enable flakes
   nix = {
+    # use flakes
+    extraOptions = "experimental-features = nix-command flakes";
+    gc = {
+      # Automatic garbage collection
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 2d";
+    };
+    package = pkgs.nixVersions.unstable;
+    # change nix registry to use nixpkgs from flake
+    # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      nixpkgs-master = {
+        from = {
+          type = "indirect";
+          id = "nixpkgs-master";
+        };
+        to = {
+          type = "github";
+          owner = "NixOS";
+          repo = "nixpkgs";
+        };
+      };
+    };
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       substituters = [
@@ -181,15 +201,5 @@ in {
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
-    gc = {
-      # Automatic garbage collection
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 2d";
-    };
-    package = pkgs.nixVersions.unstable;
-
-    # use flakes
-    extraOptions = "experimental-features = nix-command flakes";
   };
 }

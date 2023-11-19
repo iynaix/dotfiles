@@ -1,12 +1,9 @@
 {
   pkgs,
-  config,
   lib,
   isNixOS,
   ...
-}: let
-  cfg = config.iynaix;
-in {
+}: {
   iynaix = {
     displays = [
       {
