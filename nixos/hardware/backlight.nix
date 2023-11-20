@@ -10,7 +10,7 @@ in {
     environment.systemPackages = [pkgs.brightnessctl];
 
     hm = {...} @ hmCfg: {
-      # add wifi indicator to waybar
+      # add backlight indicator to waybar
       iynaix.waybar = lib.mkIf hmCfg.config.iynaix.waybar.enable {
         config.backlight = {
           format = "{icon}  {percent}%";

@@ -61,7 +61,7 @@
   nixpkgs.config.allowUnfree = true;
 
   # enable sysrq in case for kernel panic
-  boot.kernel.sysctl."kernel.sysrq" = 1;
+  # boot.kernel.sysctl."kernel.sysrq" = 1;
 
   # enable opengl
   hardware.opengl = {

@@ -7,13 +7,20 @@
   ...
 }: let
   wallpapers_proj = "/persist/home/${user}/projects/wallpaper-utils";
+  # crop wallpaper before displaying with swww
+  swww-crop = pkgs.writeShellApplication {
+    name = "swww-crop";
+    runtimeInputs = with pkgs; [swww imagemagick];
+    text = ''
+      convert "$1" -crop "$2" - | swww img --outputs "$3" "''${@:4}" -;
+    '';
+  };
   # backup wallpapers to secondary drive
   wallpapers-backup = pkgs.writeShellApplication {
     name = "wallpapers-backup";
     runtimeInputs = with pkgs; [rsync];
     text = ''
       rsync -aP --delete --no-links "$HOME/Pictures/Wallpapers" "/media/6TBRED"
-      rsync -aP --delete --no-links "$HOME/Pictures/WallpapersVertical" "/media/6TBRED"
     '';
   };
   # sync wallpapers with laptop
@@ -22,7 +29,7 @@
     runtimeInputs = with pkgs; [rsync wallpapers-backup];
     text = ''
       wallpapers-backup
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-laptop}:$HOME/Pictures"
+      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-framework}:$HOME/Pictures"
     '';
   };
   # process wallpapers with upscaling and vertical crop
@@ -32,37 +39,38 @@
     text = ''
       wallpapers-backup
 
-      pushd ${wallpapers_proj}
+      cd ${wallpapers_proj}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      python main.py
-      popd
+      python main.py "$@"
+      cd -
     '';
   };
   # choose vertical crop for wallpapper
   wallpapers-choose = pkgs.writeShellApplication {
     name = "wallpapers-choose";
     text = ''
-      pushd ${wallpapers_proj}
+      cd ${wallpapers_proj}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      python choose.py
-      popd
+      python choose.py "$@"
+      cd -
     '';
   };
   # delete current wallpaper
   wallpaper-delete = pkgs.writeShellApplication {
     name = "wallpaper-delete";
-    runtimeInputs = with pkgs; [swww iynaix.dotfiles-utils];
+    runtimeInputs = with pkgs; [swww];
     text = ''
-      swww query | awk '/image:/ {print $NF}' | sort -u | xargs rm -f
-      hypr-wallpaper
+      wall=$(cat "$HOME/.cache/current_wallpaper")
+      if [ -n "$wall" ]; then rm "$wall"; fi
     '';
   };
 in {
   config = lib.mkMerge [
     (lib.mkIf (host == "desktop") {
       home.packages = [
+        swww-crop
         wallpapers-backup
         wallpapers-choose
         wallpapers-remote
@@ -82,10 +90,8 @@ in {
       home.packages = [pkgs.swww];
     })
     {
-      iynaix.persist = {
-        cache = [
-          ".cache/swww"
-        ];
+      home.shellAliases = {
+        current-wallpaper = "cat $HOME/.cache/current_wallpaper";
       };
     }
   ];

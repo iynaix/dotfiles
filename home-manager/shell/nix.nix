@@ -13,7 +13,7 @@
     name = "hmbuild";
     runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
-      pushd ${dots}
+      cd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -22,7 +22,7 @@
       fi
 
       home-manager build --flake ".#''${1:-${host}}" |& nom
-      popd
+      cd -
     '';
   };
   # switch home-manager via nix flake
@@ -30,7 +30,7 @@
     name = "hmswitch";
     runtimeInputs = with pkgs; [git nix-output-monitor];
     text = ''
-      pushd ${dots}
+      cd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -39,7 +39,7 @@
       fi
 
       home-manager switch --flake ".#''${1:-${host}}" |& nom
-      popd
+      cd -
     '';
   };
   # update home-manager via nix flake
@@ -47,10 +47,10 @@
     name = "hmupd8";
     runtimeInputs = [hmswitch];
     text = ''
-      pushd ${dots}
+      cd ${dots}
       nix flake update
       hmswitch
-      popd
+      cd -
     '';
   };
   # nix garbage collection

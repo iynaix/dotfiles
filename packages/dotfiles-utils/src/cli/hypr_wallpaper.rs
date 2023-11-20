@@ -1,55 +1,56 @@
 use clap::Parser;
 use dotfiles_utils::{
-    cli::HyprWallpaperArgs, cmd, cmd_output, wallpaper, CmdOutput, Monitor, NixInfo,
+    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, json, wallpaper, CmdOutput, Monitor,
+    NixInfo,
 };
 use rand::seq::SliceRandom;
-use std::{path::Path, process::Command};
+use std::{collections::HashMap, path::Path, process::Command};
 
-fn swww(swww_args: &[&str], image: &String) {
+type WallpaperInfo = HashMap<String, Option<HashMap<String, serde_json::Value>>>;
+
+fn swww_crop(swww_args: &[&str], image: &String) {
     let set_wallpapers = || {
-        // check if vertical wallpaper exists
-        let vertical_image = image.replace("Wallpapers", "WallpapersVertical");
+        // write image path to ~/.cache/current_wallpaper
+        std::fs::write(full_path("~/.cache/current_wallpaper"), image)
+            .expect("failed to write ~/.cache/current_wallpaper");
 
-        // check if vertical monitor exists
-        let (vertical, horizontal): (Vec<_>, Vec<_>) = Monitor::monitors()
-            .into_iter()
-            .partition(|m| m.is_vertical());
+        // convert image to path
+        let image = Path::new(image);
+        let fname = image
+            .file_name()
+            .expect("invalid image path")
+            .to_str()
+            .unwrap();
 
-        if !vertical.is_empty() && Path::new(&vertical_image).exists() {
-            let vertical = vertical
-                .iter()
-                .map(|m| m.name.to_string())
-                .collect::<Vec<_>>()
-                .join(",");
-            Command::new("swww")
-                .arg("img")
-                .arg("--outputs")
-                .arg(vertical)
-                .args(swww_args)
-                .arg(vertical_image)
-                .spawn()
-                .expect("failed to execute process");
+        let crops: WallpaperInfo = json::load(
+            full_path("~/Pictures/Wallpapers/wallpapers.json")
+                .to_str()
+                .unwrap(),
+        );
 
-            let horizontal = horizontal
-                .iter()
-                .map(|m| m.name.to_string())
-                .collect::<Vec<_>>()
-                .join(",");
-            Command::new("swww")
-                .arg("img")
-                .arg("--outputs")
-                .arg(horizontal)
-                .args(swww_args)
-                .arg(image)
-                .spawn()
-                .expect("failed to execute process");
-        } else {
-            Command::new("swww")
-                .arg("img")
-                .args(swww_args)
-                .arg(image)
-                .spawn()
-                .expect("failed to execute process");
+        match crops.get(fname) {
+            Some(Some(geometry)) => Monitor::monitors().iter().for_each(|m| {
+                let ratio_str = format!("{}x{}", m.width, m.height);
+
+                if let Some(serde_json::Value::String(geometry)) = geometry.get(&ratio_str) {
+                    // use custom swww-crop defined in wallpaper.nix
+                    Command::new("swww-crop")
+                        .arg(image)
+                        .arg(geometry)
+                        .arg(&m.name)
+                        .args(swww_args)
+                        .spawn()
+                        .expect("failed to set wallpaper");
+                }
+            }),
+            _ => {
+                Command::new("swww")
+                    .arg("img")
+                    .args(swww_args)
+                    .arg(image)
+                    .spawn()
+                    .expect("failed to execute process");
+            }
         }
     };
 
@@ -87,9 +88,7 @@ fn main() {
             .unwrap()
             .to_str()
             .unwrap()
-            .to_string()
-            // allow setting from a vertical wallpaper
-            .replace("WallpapersVertical", "Wallpapers"),
+            .to_string(),
         None => wallpaper::all()
             .choose(&mut rand::thread_rng())
             // use fallback image if not available
@@ -105,7 +104,7 @@ fn main() {
         }
 
         if cfg!(feature = "hyprland") {
-            swww(&[], &wallpaper);
+            swww_crop(&[], &wallpaper);
             cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
         }
     } else {
@@ -114,7 +113,7 @@ fn main() {
         }
 
         if cfg!(feature = "hyprland") {
-            swww(
+            swww_crop(
                 &["--transition-type", &args.transition_type],
                 &random_wallpaper,
             );

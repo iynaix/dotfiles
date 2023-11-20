@@ -208,7 +208,7 @@ impl Monitor {
                     // active, use current workspaces
                     Some(_) => {
                         acc.entry(name.to_string())
-                            .or_insert_with(Vec::new)
+                            .or_default()
                             .extend(&mon.workspaces);
                     }
                     // not active, add to the other monitors
@@ -220,7 +220,7 @@ impl Monitor {
                                 && active_workspaces.contains_key(other_name)
                             {
                                 acc.entry(other_name.to_string())
-                                    .or_insert_with(Vec::new)
+                                    .or_default()
                                     .extend(&mon.workspaces)
                             }
                         }
@@ -373,10 +373,6 @@ pub mod wallpaper {
         full_path("~/Pictures/Wallpapers")
     }
 
-    pub fn vertical_dir() -> PathBuf {
-        full_path("~/Pictures/WallpapersVertical")
-    }
-
     pub fn current() -> Option<String> {
         let curr = NixInfo::after().wallpaper;
 
@@ -384,15 +380,7 @@ pub mod wallpaper {
             if curr != "./foo/bar.text" {
                 Some(curr)
             } else {
-                Some(
-                    cmd_output(["swww", "query"], CmdOutput::Stdout)
-                        .first()
-                        .expect("no wallpaper found")
-                        .rsplit_once(": ")
-                        .expect("no wallpaper found")
-                        .1
-                        .to_string(),
-                )
+                fs::read_to_string(full_path("~/.cache/current_wallpaper")).ok()
             }
         };
 
@@ -429,21 +417,6 @@ pub mod wallpaper {
                 None
             })
             .collect()
-    }
-
-    /// remove unused vertical wallpapers
-    pub fn cleanup_vertical_wallpapers() {
-        let wallpaper_dir = self::dir();
-
-        self::vertical_dir()
-            .read_dir()
-            .unwrap()
-            .flatten()
-            .for_each(|vert_wallpaper| {
-                if !wallpaper_dir.join(vert_wallpaper.file_name()).exists() {
-                    fs::remove_file(vert_wallpaper.path()).unwrap();
-                }
-            });
     }
 
     /// creates a directory with randomly ordered wallpapers for imv to display

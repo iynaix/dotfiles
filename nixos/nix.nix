@@ -28,7 +28,7 @@
     text = ''
       # build for current flake if a flake.nix exists
       if [ ! -f flake.nix ]; then
-        pushd ${dots}
+        cd ${dots}
       fi
 
       # stop bothering me about untracked files
@@ -39,7 +39,7 @@
 
       nixos-rebuild build --flake ".#''${1:-${host}}" |& nom
       if [ ! -f flake.nix ]; then
-        popd
+        cd -
       fi
     '';
   };
@@ -48,7 +48,7 @@
     name = "nswitch";
     runtimeInputs = with pkgs; [nix-current-generation git nvd nix-output-monitor];
     text = ''
-      pushd ${dots}
+      cd ${dots}
 
       # stop bothering me about untracked files
       untracked_files=$(git ls-files --exclude-standard --others .)
@@ -61,7 +61,7 @@
         nvd diff "$prev" "$(readlink /run/current-system)"
         echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
       }
-      popd
+      cd -
     '';
   };
   # update via nix flake
@@ -69,20 +69,20 @@
     name = "upd8";
     runtimeInputs = [nswitch pkgs.nvfetcher];
     text = ''
-      pushd ${dots}
+      cd ${dots}
       nix flake update
       nvfetcher
       nswitch
-      popd
+      cd -
     '';
   };
   # build and push config for laptop
   nswitch-remote = pkgs.writeShellApplication {
     name = "nswitch-remote";
     text = ''
-      pushd ${dots}
+      cd ${dots}
       sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-xps}" switch
-      popd
+      cd -
     '';
   };
   json2nix = pkgs.writeShellApplication {
@@ -176,20 +176,20 @@ in {
     package = pkgs.nixVersions.unstable;
     # change nix registry to use nixpkgs from flake
     # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
-    registry = {
-      nixpkgs.flake = inputs.nixpkgs;
-      nixpkgs-master = {
-        from = {
-          type = "indirect";
-          id = "nixpkgs-master";
-        };
-        to = {
-          type = "github";
-          owner = "NixOS";
-          repo = "nixpkgs";
-        };
-      };
-    };
+    # registry = {
+    #   nixpkgs.flake = inputs.nixpkgs;
+    #   nixpkgs-master = {
+    #     from = {
+    #       type = "indirect";
+    #       id = "nixpkgs-master";
+    #     };
+    #     to = {
+    #       type = "github";
+    #       owner = "NixOS";
+    #       repo = "nixpkgs";
+    #     };
+    #   };
+    # };
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       substituters = [
