@@ -11,24 +11,20 @@
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
     name = "hmbuild";
-    runtimeInputs = with pkgs; [git nix-output-monitor];
+    runtimeInputs = [hmswitch];
     text = ''
-      cd ${dots}
-
-      # stop bothering me about untracked files
-      untracked_files=$(git ls-files --exclude-standard --others .)
-      if [ -n "$untracked_files" ]; then
-          git add "$untracked_files"
+      if [ "$#" -eq 0 ]; then
+          hmswitch --dry --configuration "${host}"
+      else
+          # provide hostname as the first argument
+          hmswitch --dry --hostname "$@"
       fi
-
-      home-manager build --flake ".#''${1:-${host}}" |& nom
-      cd -
     '';
   };
-  # switch home-manager via nix flake
+  # switch home-manager via nix flake (note you have to pass --hostname to switch to a different host)
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
-    runtimeInputs = with pkgs; [git nix-output-monitor];
+    runtimeInputs = with pkgs; [git nh];
     text = ''
       cd ${dots}
 
@@ -38,8 +34,13 @@
           git add "$untracked_files"
       fi
 
-      home-manager switch --flake ".#''${1:-${host}}" |& nom
-      cd -
+      if [ "$#" -eq 0 ]; then
+          nh home switch --nom --configuration "${host}"
+      else
+          nh home switch --nom "$@"
+      fi
+
+      cd - > /dev/null
     '';
   };
   # update home-manager via nix flake
@@ -49,17 +50,17 @@
     text = ''
       cd ${dots}
       nix flake update
-      hmswitch
-      cd -
+      hmswitch "$@"
+      cd - > /dev/null
     '';
   };
   # nix garbage collection
   ngc = pkgs.writeShellScriptBin "ngc" ''
     # sudo rm /nix/var/nix/gcroots/auto/*
-    if [[ $? -ne 0 ]]; then
-      sudo nix-collect-garbage $*
-    else
+    if [ "$#" -eq 0 ]; then
       sudo nix-collect-garbage -d
+    else
+      sudo nix-collect-garbage "$@"
     fi
   '';
 in {

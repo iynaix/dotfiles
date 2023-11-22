@@ -43,7 +43,7 @@
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
       python main.py "$@"
-      cd -
+      cd - > /dev/null
     '';
   };
   # choose vertical crop for wallpapper
@@ -54,7 +54,7 @@
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
       python choose.py "$@"
-      cd -
+      cd - > /dev/null
     '';
   };
   # delete current wallpaper

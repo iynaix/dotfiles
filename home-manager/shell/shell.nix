@@ -101,14 +101,14 @@
         # activate direnv
         direnv allow && eval "$(direnv export bash)"
         cargo run --release --bin renamer
-        cd -
+        cd - > /dev/null
       '';
       fishBody = ''
         cd $HOME/projects/personal-graphql
         # activate direnv
         direnv allow; and eval (direnv export fish)
         cargo run --release --bin renamer
-        cd -
+        cd - > /dev/null
       '';
     };
     # utility for creating a nix repl

@@ -15,22 +15,36 @@
   ];
 
   home.packages = with pkgs; [
-    bat
     dysk # better disk info
     fd
     fx
-    fzf
     htop
     sd
     ugrep
   ];
 
-  programs.eza = {
-    enable = true;
-    enableAliases = true;
-    icons = true;
-    extraOptions = ["--group-directories-first" "--header" "--octal-permissions"];
-  };
+  programs = {
+    bat.enable = true;
 
-  programs.nix-index.enable = true;
+    eza = {
+      enable = true;
+      enableAliases = true;
+      icons = true;
+      extraOptions = ["--group-directories-first" "--header" "--octal-permissions"];
+    };
+
+    fzf = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
+
+    nix-index.enable = true;
+
+    zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
+  };
 }

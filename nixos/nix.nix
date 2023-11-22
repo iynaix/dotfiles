@@ -7,6 +7,7 @@
   ...
 }: let
   dots = "/persist/home/${user}/projects/dotfiles";
+  nh = inputs.nh.packages.${pkgs.system}.default;
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
     generations=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
@@ -24,29 +25,20 @@
   # build flake but don't switch
   nbuild = pkgs.writeShellApplication {
     name = "nbuild";
-    runtimeInputs = with pkgs; [git nix-output-monitor];
+    runtimeInputs = [nswitch];
     text = ''
-      # build for current flake if a flake.nix exists
-      if [ ! -f flake.nix ]; then
-        cd ${dots}
-      fi
-
-      # stop bothering me about untracked files
-      untracked_files=$(git ls-files --exclude-standard --others .)
-      if [ -n "$untracked_files" ]; then
-          git add "$untracked_files"
-      fi
-
-      nixos-rebuild build --flake ".#''${1:-${host}}" |& nom
-      if [ ! -f flake.nix ]; then
-        cd -
+      if [ "$#" -eq 0 ]; then
+          nswitch --dry --hostname "${host}"
+      else
+          # provide hostname as the first argument
+          nswitch --dry --hostname "$@"
       fi
     '';
   };
-  # switch via nix flake
+  # switch via nix flake (note you have to pass --hostname to switch to a different host)
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
-    runtimeInputs = with pkgs; [nix-current-generation git nvd nix-output-monitor];
+    runtimeInputs = with pkgs; [git nix-current-generation nh];
     text = ''
       cd ${dots}
 
@@ -56,12 +48,14 @@
           git add "$untracked_files"
       fi
 
-      prev=$(readlink /run/current-system)
-      sudo nixos-rebuild switch --flake ".#''${1:-${host}}" |& nom && {
-        nvd diff "$prev" "$(readlink /run/current-system)"
-        echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
-      }
-      cd -
+      if [ "$#" -eq 0 ]; then
+          nh os switch --nom --hostname "${host}"
+      else
+          nh os switch --nom "$@"
+      fi
+
+      echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+      cd - > /dev/null
     '';
   };
   # update via nix flake
@@ -72,8 +66,8 @@
       cd ${dots}
       nix flake update
       nvfetcher
-      nswitch
-      cd -
+      nswitch "$@"
+      cd - > /dev/null
     '';
   };
   # build and push config for laptop
@@ -82,7 +76,7 @@
     text = ''
       cd ${dots}
       sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-xps}" switch
-      cd -
+      cd - > /dev/null
     '';
   };
   json2nix = pkgs.writeShellApplication {
@@ -133,30 +127,34 @@ in {
   # run unpatched binaries on nixos
   programs.nix-ld.enable = true;
 
-  environment.systemPackages =
-    # for nixlang / nixpkgs
-    with pkgs;
-      [
-        alejandra
-        nil
-        nixpkgs-fmt
-        nix-output-monitor
-        nixpkgs-review
-        comma
-      ]
-      ++ [
-        nix-current-generation
-        ndefault
-        nbuild
-        nswitch
-        upd8
-        json2nix
-        yaml2nix
-        # fhs
-      ]
-      ++ lib.optionals (host == "desktop") [
-        nswitch-remote
-      ];
+  environment = {
+    sessionVariables.FLAKE = dots; # configure nh
+
+    systemPackages =
+      # for nixlang / nixpkgs
+      with pkgs;
+        [
+          alejandra
+          nil
+          nixpkgs-fmt
+          nixpkgs-review
+        ]
+        ++ [
+          comma
+          nix-current-generation
+          nh
+          ndefault
+          nbuild
+          nswitch
+          upd8
+          json2nix
+          yaml2nix
+          # fhs
+        ]
+        ++ lib.optionals (host == "desktop") [
+          nswitch-remote
+        ];
+  };
 
   # add symlink of configuration flake to nixos closure
   # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/

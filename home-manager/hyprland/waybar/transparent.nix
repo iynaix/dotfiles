@@ -77,7 +77,7 @@ in {
 
           #custom-nix {
             margin-left: 12px;
-            font-size: 16px;
+            font-size: 20px;
           }
 
           #clock{
@@ -86,7 +86,7 @@ in {
 
           #workspaces button.active {
             margin-right: 4px;
-            border-bottom:  2px solid #FFFFFF;
+            border-bottom:  2px solid {foreground};
             background-color: rgba(255,255,255, 0.25);
             border-radius: 0;
           }
