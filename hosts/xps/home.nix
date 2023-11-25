@@ -9,6 +9,7 @@
     ];
 
     pathofbuilding.enable = true;
+    wezterm.enable = false;
 
     waybar.config = {
       modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];

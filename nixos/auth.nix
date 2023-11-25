@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   user,
   ...
@@ -28,6 +29,11 @@ in {
   environment.systemPackages = [pkgs.gcr]; # stops errors with copilot login?
 
   # configure autologin if enabled
+  services.xserver.displayManager.autoLogin.user = lib.mkDefault (
+    if config.boot.zfs.requestEncryptionCredentials
+    then user
+    else null
+  );
   services.getty.autologinUser = autoLoginUser;
   security.pam.services.gdm.enableGnomeKeyring = autoLoginUser != null;
 

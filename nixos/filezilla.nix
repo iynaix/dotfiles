@@ -4,7 +4,7 @@
   config,
   ...
 }: {
-  config = lib.mkIf config.iynaix-nixos.torrenters.enable {
+  config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
     hm = {
       home.packages = [pkgs.filezilla];
     };

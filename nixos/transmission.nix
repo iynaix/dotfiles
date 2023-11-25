@@ -9,7 +9,7 @@
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in {
-  config = lib.mkIf config.iynaix-nixos.torrenters.enable {
+  config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
     services.transmission = {
       enable = true;
       inherit user home;

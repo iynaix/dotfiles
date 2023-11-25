@@ -1,18 +1,13 @@
-{
-  pkgs,
-  user,
-  ...
-}: {
+{pkgs, ...}: {
   iynaix-nixos = {
     hyprland.enable = false;
+    zfs.encryption = true;
 
     # impermanence
     persist.tmpfs = false;
     persist.erase.root = false;
     persist.erase.home = false;
   };
-
-  services.xserver.displayManager.autoLogin.user = user; # autologin
 
   networking.hostId = "5f43c101"; # required for zfs
 

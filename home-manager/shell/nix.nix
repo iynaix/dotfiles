@@ -24,7 +24,10 @@
   # switch home-manager via nix flake (note you have to pass --hostname to switch to a different host)
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
-    runtimeInputs = with pkgs; [git nh];
+    runtimeInputs = with pkgs; [
+      git
+      inputs.nh.packages.${pkgs.system}.default
+    ];
     text = ''
       cd ${dots}
 

@@ -19,7 +19,7 @@
     '';
   };
 in {
-  config = lib.mkIf config.iynaix-nixos.torrenters.enable {
+  config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
     services = {
       sonarr = {
         enable = true;

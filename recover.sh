@@ -52,4 +52,4 @@ while true; do
     esac
 done
 
-sudo nix-shell -p nixFlakes --command "nixos-install --root /mnt --flake \"github:iynaix/dotfiles#$host\"; return"
+sudo nixos-install --root /mnt --flake "github:iynaix/dotfiles#$host"

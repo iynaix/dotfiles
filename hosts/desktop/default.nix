@@ -8,12 +8,12 @@
     # software
     distrobox.enable = true;
     syncoid.enable = true;
-    torrenters.enable = true;
+    bittorrent.enable = true;
     vercel.enable = true;
     virt-manager.enable = true;
   };
 
-  services.xserver.displayManager.autoLogin.user = user; # autologin
+  services.xserver.displayManager.autoLogin.user = user;
 
   networking.hostId = "89eaa833"; # required for zfs
 

@@ -90,11 +90,9 @@ sudo fatlabel "$BOOTDISK" NIXBOOT
 # setup encryption
 use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")
 if [[ $use_encryption == "y" ]]; then
-    encryption_options="-O encryption=aes-256-gcm \
-        -O keyformat=passphrase \
-        -O keylocation=prompt"
+    encryption_options=(-O encryption=aes-256-gcm -O keyformat=passphrase -O keylocation=prompt)
 else
-    encryption_options=""
+    encryption_options=()
 fi
 
 echo "Creating base zpool"
@@ -107,7 +105,7 @@ sudo zpool create -f \
     -O xattr=sa \
     -O normalization=formD \
     -O mountpoint=none \
-    "$encryption_options" \
+    "${encryption_options[@]}" \
     zroot "$ZFSDISK"
 
 echo "Creating /"
@@ -115,6 +113,7 @@ sudo zfs create -o mountpoint=legacy zroot/root
 sudo zfs snapshot zroot/root@blank
 sudo mount -t zfs zroot/root /mnt
 
+# create the boot parition after creating root
 echo "Mounting /boot (efi)"
 sudo mkdir -p /mnt/boot
 sudo mount "$BOOTDISK" /mnt/boot
@@ -157,9 +156,9 @@ else
     read -rs password
     echo
 
-    mkdir -p /persist/etc/shadow
-    mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /persist/etc/shadow/root
-    mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /persist/etc/shadow/iynaix
+    sudo mkdir -p /mnt/persist/etc/shadow
+    sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/root
+    sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/iynaix
 fi
 
 echo "Installing NixOS"
@@ -171,4 +170,4 @@ while true; do
     esac
 done
 
-sudo nix-shell -p nixFlakes --command "nixos-install --root /mnt --flake \"github:iynaix/dotfiles#$host\"; return"
+sudo nixos-install --root /mnt --flake "github:iynaix/dotfiles#$host"

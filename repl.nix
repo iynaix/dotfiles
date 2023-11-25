@@ -25,6 +25,11 @@ in rec {
   desktopHm = desktop.hm;
   desktopHmo = desktopHm.iynaix;
 
+  framework = flake.nixosConfigurations.framework.config;
+  frameworko = framework.iynaix-nixos;
+  frameworkHm = framework.hm;
+  frameworkHmo = frameworkHm.iynaix;
+
   xps = flake.nixosConfigurations.xps.config;
   xpso = xps.iynaix-nixos;
   xpsHm = xps.hm;
