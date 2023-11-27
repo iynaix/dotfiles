@@ -46,17 +46,9 @@ fn waifufetch(nix_info: &NixInfo) {
     let img = create_image(nix_info);
     let neofetch_config = &nix_info.neofetch.conf;
 
-    // assume kitty by default
-    let backend = if std::env::var("TERM").unwrap_or("xterm-kitty".to_string()) == "xterm-kitty" {
-        "--kitty"
-    } else {
-        "--sixel"
-    };
-
-    let neofetch_args = [backend, &img, "--config", neofetch_config];
-
     Command::new("neofetch")
-        .args(neofetch_args)
+        // wezterm supports kitty image protocol
+        .args(["--kitty", &img, "--config", neofetch_config])
         .status()
         .expect("failed to execute neofetch");
 }

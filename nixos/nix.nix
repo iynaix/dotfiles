@@ -156,6 +156,10 @@ in {
         ];
   };
 
+  hm.home.shellAliases = {
+    nsw = "nswitch";
+  };
+
   # add symlink of configuration flake to nixos closure
   # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/
   # system.extraSystemBuilderCmds = ''

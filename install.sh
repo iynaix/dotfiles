@@ -115,34 +115,28 @@ sudo mount -t zfs zroot/root /mnt
 
 # create the boot parition after creating root
 echo "Mounting /boot (efi)"
-sudo mkdir -p /mnt/boot
-sudo mount "$BOOTDISK" /mnt/boot
+sudo mount --mkdir "$BOOTDISK" /mnt/boot
 
 echo "Creating /nix"
 sudo zfs create -o mountpoint=legacy zroot/nix
-sudo mkdir -p /mnt/nix
-sudo mount -t zfs zroot/nix /mnt/nix
+sudo mount --mkdir -t zfs zroot/nix /mnt/nix
 
 echo "Creating /tmp"
 sudo zfs create -o mountpoint=legacy zroot/tmp
-sudo mkdir -p /mnt/tmp
-sudo mount -t zfs zroot/tmp /mnt/tmp
+sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
 
 echo "Creating /home"
 sudo zfs create -o mountpoint=legacy zroot/home
 sudo zfs snapshot zroot/home@blank
-sudo mkdir -p /mnt/home
-sudo mount -t zfs zroot/home /mnt/home
+sudo mount --mkdir -t zfs zroot/home /mnt/home
 
 echo "Creating /persist"
 sudo zfs create -o mountpoint=legacy zroot/persist
-sudo mkdir -p /mnt/persist
-sudo mount -t zfs zroot/persist /mnt/persist
+sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
 echo "Creating /cache"
 sudo zfs create -o mountpoint=legacy zroot/cache
-sudo mkdir -p /mnt/cache
-sudo mount -t zfs zroot/cache /mnt/cache
+sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 
 restore_snapshot=$(yesno "Do you want to restore from a persist snapshot?")
 if [[ $restore_snapshot == "y" ]]; then

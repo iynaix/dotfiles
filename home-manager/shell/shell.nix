@@ -12,16 +12,17 @@
       ":e" = "nvim";
       ":q" = "exit";
       c = "clear";
+      cat = "bat";
       crate = "cargo";
       btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
       man = "${pkgs.bat-extras.batman}/bin/batman";
+      mkdir = "mkdir -p";
+      mount = "mount --mkdir";
       nano = "nvim";
-      nsw = "nswitch";
       open = "xdg-open";
       pj = "openproj";
       py = "python";
-      r = "lf";
       t = "eza --tree";
       v = "nvim";
       wget = "wget --content-disposition";
@@ -30,10 +31,6 @@
       # cd aliases
       ".." = "cd ..";
       "..." = "cd ../..";
-      ".2" = "cd ../..";
-      ".3" = "cd ../../..";
-      ".4" = "cd ../../../..";
-      ".5" = "cd ../../../../..";
     }
     //
     # add shortcuts for quick cd in shell

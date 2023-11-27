@@ -161,7 +161,7 @@
     },
     "swww": {
         "cargoLocks": null,
-        "date": "2023-10-31",
+        "date": "2023-11-26",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -173,11 +173,11 @@
             "name": null,
             "owner": "Horus645",
             "repo": "swww",
-            "rev": "344ffda9afbd6b2473c547e6e4c5f8e64d866f9f",
-            "sha256": "sha256-C8b6fLhWAgyoGCQlFhiAqaaNb9h1kG4w6o7eRC5d8wU=",
+            "rev": "5db225cb88b785a1d1105b14891a91e5a850c15f",
+            "sha256": "sha256-arNxr+5kaORxDvWnGq1fBHRuSLG9uZZ1f5PRX5qP1RA=",
             "type": "github"
         },
-        "version": "344ffda9afbd6b2473c547e6e4c5f8e64d866f9f"
+        "version": "5db225cb88b785a1d1105b14891a91e5a850c15f"
     },
     "transmission-web-soft-theme": {
         "cargoLocks": null,
@@ -241,7 +241,7 @@
     },
     "wezterm": {
         "cargoLocks": null,
-        "date": "2023-11-22",
+        "date": "2023-11-24",
         "extract": null,
         "name": "wezterm",
         "passthru": null,
@@ -253,10 +253,10 @@
             "name": null,
             "owner": "wez",
             "repo": "wezterm",
-            "rev": "6a58a5ce94f186884ec70a60b5afbd728521b1c5",
-            "sha256": "sha256-QXZjGIw5LvK+frigdCYGVOjLHM3Fnnqqi5FEySaKExs=",
+            "rev": "f07cc837166dc5f29df56afb42af3d6887ec6a33",
+            "sha256": "sha256-Sk+tmAT3wuJPGLsiMAk75IuxfQmNgxTEYyqlcERxNVk=",
             "type": "github"
         },
-        "version": "6a58a5ce94f186884ec70a60b5afbd728521b1c5"
+        "version": "f07cc837166dc5f29df56afb42af3d6887ec6a33"
     }
 }
