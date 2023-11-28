@@ -4,7 +4,7 @@
   ...
 }: let
   # include generated sources from nvfetcher
-  sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
+  sources = import ./generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
 in {
   nixpkgs.overlays = [
     (

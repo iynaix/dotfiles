@@ -1,0 +1,22 @@
+{
+    "mpv-sub-select": {
+        "cargoLocks": null,
+        "date": "2023-04-23",
+        "extract": null,
+        "name": "mpv-sub-select",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "CogentRedTester",
+            "repo": "mpv-sub-select",
+            "rev": "a23111e181b0051854cc543a31bee4f6741183ac",
+            "sha256": "sha256-dwg8Trp6EqiNHrKVn//4V1jEwzZdwt5uFsHSyBOebGI=",
+            "type": "github"
+        },
+        "version": "a23111e181b0051854cc543a31bee4f6741183ac"
+    }
+}

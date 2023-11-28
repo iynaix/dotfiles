@@ -65,7 +65,18 @@
     text = ''
       cd ${dots}
       nix flake update
-      nvfetcher
+
+      # run nvfetcher for overlays
+      nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+
+      # run nvfetcher for packages
+      pkg_tomls=mapfile < <(fd nvfetcher.toml packages)
+
+      for pkg_toml in "''${pkg_tomls[@]}"; do
+          pkg_dir=$(dirname "$pkg_toml")
+          nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
+      done
+
       nswitch "$@"
       cd - > /dev/null
     '';
@@ -146,6 +157,7 @@ in {
           ndefault
           nbuild
           nswitch
+          nvfetcher
           upd8
           json2nix
           yaml2nix
@@ -178,20 +190,20 @@ in {
     package = pkgs.nixVersions.unstable;
     # change nix registry to use nixpkgs from flake
     # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
-    # registry = {
-    #   nixpkgs.flake = inputs.nixpkgs;
-    #   nixpkgs-master = {
-    #     from = {
-    #       type = "indirect";
-    #       id = "nixpkgs-master";
-    #     };
-    #     to = {
-    #       type = "github";
-    #       owner = "NixOS";
-    #       repo = "nixpkgs";
-    #     };
-    #   };
-    # };
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      nixpkgs-master = {
+        from = {
+          type = "indirect";
+          id = "nixpkgs-master";
+        };
+        to = {
+          type = "github";
+          owner = "NixOS";
+          repo = "nixpkgs";
+        };
+      };
+    };
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       substituters = [

@@ -1,0 +1,3 @@
+[mpv-sub-select]
+src.git = "https://github.com/CogentRedTester/mpv-sub-select"
+fetch.github = "CogentRedTester/mpv-sub-select"

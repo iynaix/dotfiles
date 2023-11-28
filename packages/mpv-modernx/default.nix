@@ -1,11 +1,14 @@
 {
   stdenvNoCC,
   makeFontsConf,
+  lib,
   source,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs: (source
     // {
+      version = "unstable-${source.date}";
+
       dontBuild = true;
 
       installPhase = ''
@@ -32,6 +35,7 @@ stdenvNoCC.mkDerivation (
       meta = {
         description = "An MPV OSC script based on mpv-osc-modern that aims to mirror the functionality of MPV's stock OSC while with a more modern-looking interface.";
         homepage = "https://github.com/cyl0/ModernX";
+        maintainers = [lib.maintainers.iynaix];
       };
     })
 )

@@ -1,0 +1,3 @@
+[mpv-subsearch]
+src.git = "https://github.com/kelciour/mpv-scripts"
+fetch.github = "kelciour/mpv-scripts"

@@ -1,0 +1,3 @@
+[mpv-modernx]
+src.git = "https://github.com/cyl0/ModernX"
+fetch.github = "cyl0/ModernX"

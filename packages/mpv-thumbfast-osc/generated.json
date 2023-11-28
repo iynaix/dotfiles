@@ -1,0 +1,22 @@
+{
+    "mpv-thumbfast-osc": {
+        "cargoLocks": null,
+        "date": "2023-11-11",
+        "extract": null,
+        "name": "mpv-thumbfast-osc",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "po5",
+            "repo": "thumbfast",
+            "rev": "fb9d37e76b97a3a541004556ec19c0620ca308a3",
+            "sha256": "sha256-rVXjIoYxHOG4eDpQ1ls3L6UhYsmmZ014hzQOIRBS+uk=",
+            "type": "github"
+        },
+        "version": "fb9d37e76b97a3a541004556ec19c0620ca308a3"
+    }
+}

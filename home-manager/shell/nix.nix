@@ -84,6 +84,17 @@ in {
       home.shellAliases = {
         nsh = "nix-shell --command fish -p";
       };
+
+      iynaix.shell.functions = {
+        nr = {
+          bashBody = ''
+            nix run nixpkgs#"$@"
+          '';
+          fishBody = ''
+            nix run nixpkgs#"$argv"
+          '';
+        };
+      };
     }
   ];
 }

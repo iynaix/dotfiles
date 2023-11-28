@@ -1,0 +1,102 @@
+{
+    "path-of-building": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "path-of-building",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "PathOfBuildingCommunity",
+            "repo": "PathOfBuilding",
+            "rev": "v2.34.1",
+            "sha256": "sha256-i6OCW5Vc9/LfNuiaEeelmXiqP7+WdIklRNRcgWb7L1w=",
+            "type": "github"
+        },
+        "version": "v2.34.1"
+    },
+    "swww": {
+        "cargoLocks": null,
+        "date": "2023-11-26",
+        "extract": null,
+        "name": "swww",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "Horus645",
+            "repo": "swww",
+            "rev": "5db225cb88b785a1d1105b14891a91e5a850c15f",
+            "sha256": "sha256-arNxr+5kaORxDvWnGq1fBHRuSLG9uZZ1f5PRX5qP1RA=",
+            "type": "github"
+        },
+        "version": "5db225cb88b785a1d1105b14891a91e5a850c15f"
+    },
+    "transmission-web-soft-theme": {
+        "cargoLocks": null,
+        "date": "2021-01-28",
+        "extract": null,
+        "name": "transmission-web-soft-theme",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "diesys",
+            "repo": "transmission-web-soft-theme",
+            "rev": "a957b41b0303e6b74e67191311e0d2af9b60a965",
+            "sha256": "sha256-KngN44lnhv0sga0otYC9F5xoqLDDIVxobXRlhhhSmHo=",
+            "type": "github"
+        },
+        "version": "a957b41b0303e6b74e67191311e0d2af9b60a965"
+    },
+    "waybar": {
+        "cargoLocks": null,
+        "date": "2023-11-23",
+        "extract": null,
+        "name": "waybar",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "Alexays",
+            "repo": "Waybar",
+            "rev": "1fe4a4ee9d2baed6d3c36d46eb6e1c39b67bce05",
+            "sha256": "sha256-vpW9M/vS35uJXz8bSoR50hM2yX/tVQpTnJJFkLtlEfs=",
+            "type": "github"
+        },
+        "version": "1fe4a4ee9d2baed6d3c36d46eb6e1c39b67bce05"
+    },
+    "wezterm": {
+        "cargoLocks": null,
+        "date": "2023-11-24",
+        "extract": null,
+        "name": "wezterm",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": true,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "wez",
+            "repo": "wezterm",
+            "rev": "f07cc837166dc5f29df56afb42af3d6887ec6a33",
+            "sha256": "sha256-Sk+tmAT3wuJPGLsiMAk75IuxfQmNgxTEYyqlcERxNVk=",
+            "type": "github"
+        },
+        "version": "f07cc837166dc5f29df56afb42af3d6887ec6a33"
+    }
+}

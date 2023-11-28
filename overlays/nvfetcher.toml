@@ -1,0 +1,20 @@
+[path-of-building]
+src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
+fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
+
+[swww]
+src.git = "https://github.com/Horus645/swww"
+fetch.github = "Horus645/swww"
+
+[transmission-web-soft-theme]
+src.git = "https://github.com/diesys/transmission-web-soft-theme"
+fetch.github = "diesys/transmission-web-soft-theme"
+
+[waybar]
+src.git = "https://github.com/Alexays/Waybar"
+fetch.github = "Alexays/Waybar"
+
+[wezterm]
+src.git = "https://github.com/wez/wezterm"
+fetch.github = "wez/wezterm"
+git.fetchSubmodules = true

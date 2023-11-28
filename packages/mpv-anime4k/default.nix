@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Anime4K is a set of open-source, high-quality real-time anime upscaling/denoising algorithms that can be implemented in any programming language.";
     homepage = "https://github.com/bloc97/Anime4K";
     license = licenses.mit;
-    maintainers = with maintainers; [iynaix];
+    maintainers = [lib.maintainers.iynaix];
   };
 })

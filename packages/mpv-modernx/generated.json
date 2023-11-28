@@ -1,0 +1,22 @@
+{
+    "mpv-modernx": {
+        "cargoLocks": null,
+        "date": "2023-01-12",
+        "extract": null,
+        "name": "mpv-modernx",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "cyl0",
+            "repo": "ModernX",
+            "rev": "d053ea602d797bdd85d8b2275d7f606be067dc21",
+            "sha256": "sha256-Gpofl529VbmdN7eOThDAsNfNXNkUDDF82Rd+csXGOQg=",
+            "type": "github"
+        },
+        "version": "d053ea602d797bdd85d8b2275d7f606be067dc21"
+    }
+}

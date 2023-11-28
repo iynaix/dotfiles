@@ -1,0 +1,22 @@
+{
+    "mpv-subsearch": {
+        "cargoLocks": null,
+        "date": "2019-01-24",
+        "extract": null,
+        "name": "mpv-subsearch",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "kelciour",
+            "repo": "mpv-scripts",
+            "rev": "9a5cda4fc8f0896cec27dca60a32251009c0e9c5",
+            "sha256": "sha256-BRyKJeXWFhsCDKTUNKsp+yqYpP9mzbaZMviUFXyA308=",
+            "type": "github"
+        },
+        "version": "9a5cda4fc8f0896cec27dca60a32251009c0e9c5"
+    }
+}

@@ -3,75 +3,38 @@
   pkgs,
   ...
 }: let
-  sources = import ../_sources/generated.nix {inherit (pkgs) fetchFromGitHub fetchurl fetchgit dockerTools;};
-  callPackageWithSource = sourceName: args: let
-    origSource = sources.${sourceName};
-    finalPackage = pkgs.callPackage ./${sourceName}.nix (args
-      // {
-        source =
-          origSource
-          // {
-            version =
-              if (builtins.hasAttr "date" origSource)
-              then "unstable-${origSource.date}"
-              else origSource.version;
-          };
-      });
+  lib = pkgs.lib;
+  # use latest stable rust
+  rustPlatform = let
+    toolchain = inputs.fenix.packages.${pkgs.system}.stable.toolchain;
   in
-    # add maintainer info
-    finalPackage
-    // {
-      meta =
-        (finalPackage.meta or {})
-        // {
-          maintainers = [pkgs.lib.maintainers.iynaix];
-        };
+    pkgs.makeRustPlatform {
+      cargo = toolchain;
+      rustc = toolchain;
     };
-  callMpvPlugin = sourceName:
-    callPackageWithSource sourceName {
-      mkMpvPlugin = mpvArg @ {
-        outFile,
-        inFile ? outFile,
-        ...
-      }:
-        pkgs.stdenvNoCC.mkDerivation ({
-            dontBuild = true;
-
-            installPhase = ''
-              runHook preInstall
-
-              mkdir -p $out/share/mpv/scripts
-              cp ${inFile} $out/share/mpv/scripts/${outFile}
-
-              runHook postInstall
-            '';
-
-            passthru.scriptName = outFile;
-          }
-          // mpvArg);
-    };
+  # injects a source parameter from nvfetcher
+  # adapted from viperML's config
+  # https://github.com/viperML/dotfiles/blob/master/packages/default.nix
+  w = _callPackage: path: extraOverrides: let
+    sources = pkgs.callPackages (path + "/generated.nix") {};
+    firstSource = builtins.head (builtins.attrValues sources);
+  in
+    _callPackage (path + "/default.nix") (extraOverrides
+      // {source = lib.filterAttrs (k: v: !(lib.hasPrefix "override" k)) firstSource;});
 in {
   # rust dotfiles utils
-  dotfiles-utils = pkgs.callPackage ./dotfiles-utils {
-    # use latest stable rust
-    rustPlatform = let
-      toolchain = inputs.fenix.packages.${pkgs.system}.stable.toolchain;
-    in
-      pkgs.makeRustPlatform {
-        cargo = toolchain;
-        rustc = toolchain;
-      };
-  };
+  dotfiles-utils =
+    pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
 
   # mpv plugins
-  mpv-anime4k = pkgs.callPackage ./mpv-anime4k.nix {};
-  mpv-deletefile = callMpvPlugin "mpv-deletefile";
-  mpv-dynamic-crop = callMpvPlugin "mpv-dynamic-crop";
-  mpv-modernx = callPackageWithSource "mpv-modernx" {};
-  mpv-nextfile = callMpvPlugin "mpv-nextfile";
-  mpv-sub-select = callMpvPlugin "mpv-sub-select";
-  mpv-subsearch = callMpvPlugin "mpv-subsearch";
-  mpv-thumbfast-osc = callMpvPlugin "mpv-thumbfast-osc";
+  mpv-anime4k = pkgs.callPackage ./mpv-anime4k {};
+  mpv-deletefile = w pkgs.callPackage ./mpv-deletefile {};
+  mpv-dynamic-crop = w pkgs.callPackage ./mpv-dynamic-crop {};
+  mpv-modernx = w pkgs.callPackage ./mpv-modernx {} {};
+  mpv-nextfile = w pkgs.callPackage ./mpv-nextfile {};
+  mpv-sub-select = w pkgs.callPackage ./mpv-sub-select {};
+  mpv-subsearch = w pkgs.callPackage ./mpv-subsearch {};
+  mpv-thumbfast-osc = w pkgs.callPackage ./mpv-thumbfast-osc {};
 
-  vv = callPackageWithSource "vv" {};
+  vv = w pkgs.callPackage ./vv {};
 }

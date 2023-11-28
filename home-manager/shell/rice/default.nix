@@ -11,6 +11,7 @@
     neofetch
     nitch
     pipes-rs
+    iynaix.nxfetch
   ];
 
   # create xresources

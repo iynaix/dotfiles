@@ -1,0 +1,22 @@
+{
+    "mpv-nextfile": {
+        "cargoLocks": null,
+        "date": "2023-08-09",
+        "extract": null,
+        "name": "mpv-nextfile",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "jonniek",
+            "repo": "mpv-nextfile",
+            "rev": "b8f7a4d6224876bf26724a9313a36e84d9ecfd81",
+            "sha256": "sha256-Ad98iUbumhsudGwHcYEVTV6ye6KHj5fHAx8q90UQ2QM=",
+            "type": "github"
+        },
+        "version": "b8f7a4d6224876bf26724a9313a36e84d9ecfd81"
+    }
+}

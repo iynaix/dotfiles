@@ -1,0 +1,22 @@
+{
+    "mpv-dynamic-crop": {
+        "cargoLocks": null,
+        "date": "2023-10-12",
+        "extract": null,
+        "name": "mpv-dynamic-crop",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "Ashyni",
+            "repo": "mpv-scripts",
+            "rev": "7bb1fa3a2a8193e15c88ed0b103224fa5fb41719",
+            "sha256": "sha256-5zxFbydchQwQj+CoOoEaS+cQhA8csF9EsBIDcPNDcPc=",
+            "type": "github"
+        },
+        "version": "7bb1fa3a2a8193e15c88ed0b103224fa5fb41719"
+    }
+}

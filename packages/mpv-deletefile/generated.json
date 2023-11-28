@@ -1,0 +1,22 @@
+{
+    "mpv-deletefile": {
+        "cargoLocks": null,
+        "date": "2022-04-22",
+        "extract": null,
+        "name": "mpv-deletefile",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "zenyd",
+            "repo": "mpv-scripts",
+            "rev": "19ea069abcb794d1bf8fac2f59b50d71ab992130",
+            "sha256": "sha256-OBCuzCtgfSwj0i/rBNranuu4LRc47jObwQIJgQQoerg=",
+            "type": "github"
+        },
+        "version": "19ea069abcb794d1bf8fac2f59b50d71ab992130"
+    }
+}

@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs:
         homepage = "https://github.com/hackerb9/vv";
         description = "A simple image viewer for video terminals capable of sixel graphics.";
         license = lib.licenses.gpl3;
+        maintainers = [lib.maintainers.iynaix];
       };
     })
