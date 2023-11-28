@@ -70,7 +70,7 @@
       nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
 
       # run nvfetcher for packages
-      pkg_tomls=mapfile < <(fd nvfetcher.toml packages)
+      mapfile -t pkg_tomls < <(fd nvfetcher.toml packages)
 
       for pkg_toml in "''${pkg_tomls[@]}"; do
           pkg_dir=$(dirname "$pkg_toml")

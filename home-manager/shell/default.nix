@@ -47,4 +47,8 @@
       enableFishIntegration = true;
     };
   };
+
+  iynaix.persist = {
+    home.directories = [".local/share/zoxide"];
+  };
 }

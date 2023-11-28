@@ -21,7 +21,7 @@
   in
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: v: !(lib.hasPrefix "override" k)) firstSource;});
-in {
+in rec {
   # rust dotfiles utils
   dotfiles-utils =
     pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
@@ -36,5 +36,7 @@ in {
   mpv-subsearch = w pkgs.callPackage ./mpv-subsearch {};
   mpv-thumbfast-osc = w pkgs.callPackage ./mpv-thumbfast-osc {};
 
+  open-clip-torch = pkgs.callPackage ./open-clip-torch {};
+  rclip = pkgs.callPackage ./rclip {inherit open-clip-torch;};
   vv = w pkgs.callPackage ./vv {};
 }

@@ -3,14 +3,14 @@
 {
   mpv-thumbfast-osc = {
     pname = "mpv-thumbfast-osc";
-    version = "fb9d37e76b97a3a541004556ec19c0620ca308a3";
+    version = "04819fc9ce49b67dfc2bac71c26e037bcb57b9d4";
     src = fetchFromGitHub {
       owner = "po5";
       repo = "thumbfast";
-      rev = "fb9d37e76b97a3a541004556ec19c0620ca308a3";
+      rev = "04819fc9ce49b67dfc2bac71c26e037bcb57b9d4";
       fetchSubmodules = false;
-      sha256 = "sha256-rVXjIoYxHOG4eDpQ1ls3L6UhYsmmZ014hzQOIRBS+uk=";
+      sha256 = "sha256-YLI8cCOSF1YacTOOGZxT7mfP68OhhyGm6JzVFXNsxtw=";
     };
-    date = "2023-11-11";
+    date = "2023-11-28";
   };
 }

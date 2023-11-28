@@ -1,4 +1,5 @@
 {
+  config,
   host,
   isNixOS,
   lib,
@@ -13,6 +14,13 @@
     runtimeInputs = with pkgs; [swww imagemagick];
     text = ''
       convert "$1" -crop "$2" - | swww img --outputs "$3" "''${@:4}" -;
+    '';
+  };
+  imv-search = pkgs.writeShellApplication {
+    name = "imv-search";
+    runtimeInputs = with pkgs; [imv pkgs.iynaix.rclip];
+    text = ''
+      rclip -f "$@" | imv;
     '';
   };
   # backup wallpapers to secondary drive
@@ -84,6 +92,19 @@ in {
 
       programs.imv.settings.binds = {
         m = "exec mv \"$imv_current_file\" ${wallpapers_proj}/in";
+      };
+    })
+    (lib.mkIf config.iynaix.rclip.enable {
+      home.packages = [
+        imv-search
+        pkgs.iynaix.rclip
+      ];
+
+      iynaix.persist = {
+        home.directories = [
+          ".cache/clip"
+          ".local/share/rclip"
+        ];
       };
     })
     (lib.mkIf isNixOS {

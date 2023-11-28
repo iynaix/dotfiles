@@ -6,7 +6,7 @@ use dotfiles_utils::{
 use rand::seq::SliceRandom;
 use std::{collections::HashMap, path::Path, process::Command};
 
-type WallpaperInfo = HashMap<String, Option<HashMap<String, serde_json::Value>>>;
+type WallpaperInfo = HashMap<String, HashMap<String, serde_json::Value>>;
 
 fn swww_crop(swww_args: &[&str], image: &String) {
     let set_wallpapers = || {
@@ -29,7 +29,7 @@ fn swww_crop(swww_args: &[&str], image: &String) {
         );
 
         match crops.get(fname) {
-            Some(Some(geometry)) => Monitor::monitors().iter().for_each(|m| {
+            Some(geometry) => Monitor::monitors().iter().for_each(|m| {
                 let ratio_str = format!("{}x{}", m.width, m.height);
 
                 if let Some(serde_json::Value::String(geometry)) = geometry.get(&ratio_str) {

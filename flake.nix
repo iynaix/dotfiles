@@ -23,7 +23,7 @@
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
-      url = "github:hyprwm/Hyprland/cd96ceecc551c25631783499bd92c6662c5d3616";
+      url = "github:hyprwm/Hyprland/e40e486f61f2643578b9977b86f408799dbc75fd";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 

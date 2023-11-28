@@ -38,26 +38,26 @@
   };
   waybar = {
     pname = "waybar";
-    version = "1fe4a4ee9d2baed6d3c36d46eb6e1c39b67bce05";
+    version = "58db0baaf48937554de9ce5f962e2103a33585e9";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "1fe4a4ee9d2baed6d3c36d46eb6e1c39b67bce05";
+      rev = "58db0baaf48937554de9ce5f962e2103a33585e9";
       fetchSubmodules = false;
-      sha256 = "sha256-vpW9M/vS35uJXz8bSoR50hM2yX/tVQpTnJJFkLtlEfs=";
+      sha256 = "sha256-Wqd9HuzerxP6s7bjYPQBR0NPS083lB8ApzKy6SrOtWc=";
     };
-    date = "2023-11-23";
+    date = "2023-11-28";
   };
   wezterm = {
     pname = "wezterm";
-    version = "f07cc837166dc5f29df56afb42af3d6887ec6a33";
+    version = "90ca1117bc68e3644b1763460e17cf4b6ffbf1c3";
     src = fetchFromGitHub {
       owner = "wez";
       repo = "wezterm";
-      rev = "f07cc837166dc5f29df56afb42af3d6887ec6a33";
+      rev = "90ca1117bc68e3644b1763460e17cf4b6ffbf1c3";
       fetchSubmodules = true;
-      sha256 = "sha256-Sk+tmAT3wuJPGLsiMAk75IuxfQmNgxTEYyqlcERxNVk=";
+      sha256 = "sha256-h0L+D8OOilaVPizLqVj2wYzPfrcpqVNwni79I0ebsms=";
     };
-    date = "2023-11-24";
+    date = "2023-11-28";
   };
 }

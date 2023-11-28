@@ -23,6 +23,7 @@
       }
     ];
 
+    rclip.enable = true;
     waybar = {
       # theme = "transparent";
       # persistent-workspaces = true;
