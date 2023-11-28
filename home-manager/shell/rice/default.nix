@@ -7,12 +7,15 @@
   home.packages = with pkgs; [
     cbonsai
     cmatrix
+    fastfetch
     imagemagick
     neofetch
     nitch
     pipes-rs
-    iynaix.nxfetch
   ];
+
+  # TODO: load ascii logo with fastfetch
+  # fastfetch --logo-color-1 34 --logo-color-2 36 --logo ~/Desktop/nix-logo.txt
 
   # create xresources
   xresources.properties = {

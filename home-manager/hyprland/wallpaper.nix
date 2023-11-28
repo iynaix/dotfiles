@@ -91,7 +91,7 @@ in {
     })
     {
       home.shellAliases = {
-        current-wallpaper = "cat $HOME/.cache/current_wallpaper";
+        current-wallpaper = "command cat $HOME/.cache/current_wallpaper";
       };
     }
   ];
