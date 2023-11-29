@@ -1,9 +1,6 @@
 {user, ...}: {
   iynaix-nixos = {
-    backlight.enable = true;
-    battery.enable = true;
     kanata.enable = false;
-    wifi.enable = true;
     zfs.encryption = true;
   };
 

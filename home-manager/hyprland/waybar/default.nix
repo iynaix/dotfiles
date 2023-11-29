@@ -4,14 +4,14 @@
   isNixOS,
   ...
 }: let
-  cfg = config.iynaix.waybar;
+  cfg = config.iynaix;
 in {
   imports = [
     ./split.nix
     ./transparent.nix
   ];
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.waybar.enable {
     programs.waybar = {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
@@ -19,6 +19,23 @@ in {
     };
 
     iynaix.waybar.config = {
+      backlight = lib.mkIf cfg.backlight.enable {
+        format = "{icon}  {percent}%";
+        format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
+        on-scroll-down = "brightnessctl s 1%-";
+        on-scroll-up = "brightnessctl s +1%";
+      };
+
+      battery = lib.mkIf cfg.battery.enable {
+        format = "{icon}  {capacity}%";
+        format-charging = "  {capacity}%";
+        format-icons = ["" "" "" "" ""];
+        states = {
+          critical = 20;
+        };
+        tooltip = false;
+      };
+
       clock = {
         calendar = {
           actions = {
@@ -64,13 +81,26 @@ in {
         # "hyprland/window"
       ];
 
-      modules-right = ["pulseaudio" "network" "battery" "clock"];
+      modules-right =
+        ["network" "pulseaudio"]
+        ++ (lib.optionals cfg.backlight.enable ["backlight"])
+        ++ (lib.optionals cfg.battery.enable ["battery"])
+        ++ ["clock"];
 
-      network = {
-        format-disconnected = "󰖪  Offline";
-        format-ethernet = "";
-        tooltip = false;
-      };
+      network =
+        if cfg.wifi.enable
+        then {
+          format = "  {essid}";
+          format-disconnected = "󰖪  Offline";
+          on-click = "~/.config/rofi/rofi-wifi-menu";
+          on-click-right = "${config.iynaix.terminal.exec} nmtui";
+          tooltip = false;
+        }
+        else {
+          format-disconnected = "󰖪  Offline";
+          format-ethernet = "";
+          tooltip = false;
+        };
 
       position = "top";
 
@@ -100,38 +130,12 @@ in {
         on-click-right = "imv-wallpaper";
         tooltip = false;
       };
-
-      # custom separators for future use
-      # "custom/separator-bl" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
-      # "custom/separator-br" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
-      # "custom/separator-tl" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
-      # "custom/separator-tr" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
-      # "custom/separator-right-triangle" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
-      # "custom/separator-left-triangle" = {
-      #   "format" = "";
-      #   "tooltip" = false;
-      # };
     };
 
     iynaix.wallust.entries = {
       "waybar.jsonc" = {
         enable = config.iynaix.wallust.waybar;
-        text = builtins.toJSON cfg.finalConfig;
+        text = builtins.toJSON cfg.waybar.config;
         target = "~/.config/waybar/config";
       };
     };

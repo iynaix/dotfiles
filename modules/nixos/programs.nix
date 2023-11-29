@@ -10,14 +10,7 @@ in {
     ### NIXOS LEVEL OPTIONS ###
     distrobox.enable = lib.mkEnableOption "distrobox";
     docker.enable = lib.mkEnableOption "docker" // {default = cfg.distrobox.enable;};
-    hyprland = {
-      enable = lib.mkEnableOption "hyprland (nixos)" // {default = true;};
-      plugin = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum ["hyprnstack"]);
-        description = "Plugin to enable for hyprland";
-        default = "hyprnstack";
-      };
-    };
+    hyprland.enable = lib.mkEnableOption "hyprland (nixos)" // {default = true;};
     kanata.enable = lib.mkEnableOption "kanata" // {default = isLaptop;};
     sops.enable = lib.mkEnableOption "sops" // {default = true;};
     syncoid.enable = lib.mkEnableOption "syncoid";

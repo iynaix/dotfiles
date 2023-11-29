@@ -5,7 +5,6 @@
   ...
 }: let
   hyprlandCfg = config.wayland.windowManager.hyprland;
-  waybarCfg = config.iynaix.waybar.config;
 in {
   options.iynaix = {
     displays = lib.mkOption {
@@ -37,6 +36,14 @@ in {
       description = "Config for new displays";
     };
 
+    hyprland = {
+      plugin = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum ["hyprnstack"]);
+        description = "Plugin to enable for hyprland";
+        default = "hyprnstack";
+      };
+    };
+
     waybar = {
       enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
       config = lib.mkOption {
@@ -45,18 +52,6 @@ in {
         };
         default = {};
         description = "Additional waybar config (wallust templating can be used)";
-      };
-      finalConfig = lib.mkOption {
-        readOnly = true;
-        default =
-          waybarCfg
-          // {
-            # dedupe modules
-            modules-left = lib.unique waybarCfg.modules-left;
-            modules-center = lib.unique waybarCfg.modules-center;
-            modules-right = lib.unique waybarCfg.modules-right;
-          };
-        description = "Final waybar config after processing. (Read-only)";
       };
       theme = lib.mkOption {
         type = lib.types.enum ["split" "transparent"];

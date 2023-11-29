@@ -8,11 +8,12 @@
       }
     ];
 
-    pathofbuilding.enable = true;
+    # hardware
+    backlight.enable = true;
+    battery.enable = true;
+    wifi.enable = true;
 
-    waybar.config = {
-      modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
-    };
+    pathofbuilding.enable = true;
 
     terminal.size = 10;
 

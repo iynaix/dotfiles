@@ -1,9 +1,6 @@
 {user, ...}: {
   iynaix-nixos = {
-    backlight.enable = true;
-    battery.enable = true;
     kanata.enable = true;
-    wifi.enable = true;
     zfs.encryption = true;
 
     # impermanence

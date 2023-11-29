@@ -67,9 +67,9 @@ in {
             background: rgba(0,0,0,0.3)
           }
 
-          ${mkModuleCss cfg.finalConfig.modules-left}
-          ${mkModuleCss cfg.finalConfig.modules-center}
-          ${mkModuleCss cfg.finalConfig.modules-right}
+          ${mkModuleCss cfg.config.modules-left}
+          ${mkModuleCss cfg.config.modules-center}
+          ${mkModuleCss cfg.config.modules-right}
 
           #workspaces button {
             ${baseModuleCss}

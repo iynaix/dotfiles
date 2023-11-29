@@ -8,17 +8,19 @@
   hmCfg = config.home-manager.users.${user};
 in {
   imports = [
+    ./am5.nix
     ./audio.nix
     ./auth.nix
     ./configuration.nix
     ./docker.nix
     ./filezilla.nix
     ./gnome3.nix
-    ./hardware
+    ./hdds.nix
     ./hyprland.nix
     ./impermanence.nix
     ./kanata.nix
     ./nix.nix
+    ./nvidia.nix
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix
@@ -76,8 +78,14 @@ in {
 
     programs.file-roller.enable = true;
 
-    iynaix-nixos.persist.home.directories = [
-      ".local/state/wireplumber"
-    ];
+    iynaix-nixos.persist = {
+      root.directories = lib.mkIf hmCfg.iynaix.wifi.enable [
+        "/etc/NetworkManager"
+      ];
+
+      home.directories = [
+        ".local/state/wireplumber"
+      ];
+    };
   };
 }

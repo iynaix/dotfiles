@@ -1,6 +1,5 @@
 {
   config,
-  host,
   inputs,
   lib,
   pkgs,
@@ -23,39 +22,11 @@ in {
       portalPackage = inputs.xdph.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
     };
 
-    hm.wayland.windowManager.hyprland = lib.mkMerge [
-      {
-        enable = true;
-        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-      }
-      (lib.mkIf (cfg.plugin == "hyprnstack") {
-        settings.general.layout = lib.mkForce "nstack";
-
-        # plugins = ["/persist/home/iynaix/projects/hyprNStack/result/lib/libhyprNStack.so"];
-        plugins = [pkgs.iynaix.hyprNStack];
-
-        # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
-        extraConfig = ''
-          plugin {
-            nstack {
-              layout {
-                orientation=left
-                new_is_master=0
-                stacks=${toString (
-            if host == "desktop"
-            then 3
-            else 2
-          )}
-                # disable smart gaps
-                no_gaps_when_only=0
-                # master is the same size as the stacks
-                mfact=0
-              }
-            }
-          }
-        '';
-      })
-    ];
+    # set here as legacy linux won't be able to set these
+    hm.wayland.windowManager.hyprland = {
+      enable = true;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    };
 
     xdg.portal = {
       enable = true;

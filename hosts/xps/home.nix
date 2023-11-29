@@ -8,12 +8,13 @@
       }
     ];
 
+    # hardware
+    backlight.enable = true;
+    battery.enable = true;
+    wifi.enable = true;
+
     pathofbuilding.enable = true;
     wezterm.enable = false;
-
-    waybar.config = {
-      modules-right = ["network" "pulseaudio" "backlight" "battery" "clock"];
-    };
 
     terminal.size = 10;
 
