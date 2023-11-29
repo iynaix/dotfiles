@@ -5,7 +5,12 @@
   pkgs,
   ...
 }: {
-  home.packages = with pkgs; [rofi-power-menu rofi-wayland];
+  programs.rofi = {
+    enable = true;
+    package = pkgs.rofi-wayland;
+  };
+
+  home.packages = with pkgs; [rofi-power-menu];
 
   xdg.configFile = {
     "rofi/rofi-wifi-menu" = lib.mkIf isLaptop {
@@ -18,7 +23,7 @@
   };
 
   iynaix.wallust.entries."rofi.rasi" = {
-    enable = config.iynaix.wallust.rofi;
+    enable = config.programs.rofi.enable;
     text = builtins.readFile ./rofi-iynaix.rasi;
     target = "~/.cache/wallust/rofi.rasi";
   };

@@ -28,7 +28,6 @@
       # theme = "transparent";
       # persistent-workspaces = true;
     };
-    wallust.gtk = false;
     pathofbuilding.enable = true;
     vlc.enable = true;
   };

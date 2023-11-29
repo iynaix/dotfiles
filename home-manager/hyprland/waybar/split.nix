@@ -47,7 +47,7 @@ in {
             arr
           );
       in {
-        enable = config.iynaix.wallust.waybar;
+        enable = cfg.enable && cfg.theme == "split";
         text = ''
           #waybar {
             background: transparent;

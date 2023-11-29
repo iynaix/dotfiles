@@ -19,7 +19,7 @@ in {
 
     iynaix.wallust.entries = {
       "hypr-lock" = {
-        enable = config.iynaix.wallust.swaylock;
+        enable = builtins.elem hypr-lock config.home.packages;
         text = ''
           ${pkgs.swaylock-effects}/bin/swaylock \
             --clock \

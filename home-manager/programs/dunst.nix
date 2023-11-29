@@ -7,7 +7,7 @@ in {
   };
 
   iynaix.wallust.entries.dunstrc = {
-    enable = config.iynaix.wallust.dunst;
+    enable = config.services.dunst.enable;
     text = ''
       [global]
       browser="brave -new-tab"

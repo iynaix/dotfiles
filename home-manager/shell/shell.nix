@@ -129,6 +129,6 @@
 
   iynaix.shell.initExtra = ''
     # wallust colorscheme
-    ${lib.optionalString (config.iynaix.wallust.shell) "command cat /home/${user}/.cache/wallust/sequences"}
+    ${lib.optionalString (config.iynaix.wallust.enable) "command cat /home/${user}/.cache/wallust/sequences"}
   '';
 }

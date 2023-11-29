@@ -5,7 +5,7 @@
   isNixOS,
   ...
 }: let
-  wallustCfg = config.iynaix.wallust.gtk;
+  wallustGtk = false;
   gtkColor = color: value: ''@define-color ${color} ${value};'';
 in {
   home = {
@@ -26,7 +26,7 @@ in {
   gtk = {
     enable = true;
     theme =
-      if wallustCfg
+      if wallustGtk
       then {
         name = "adw-gtk3";
         package = pkgs.adw-gtk3;
@@ -151,12 +151,12 @@ in {
     });
   in {
     gtk3-css = {
-      enable = wallustCfg;
+      enable = wallustGtk;
       text = cssText;
       target = "~/.config/gtk-3.0/gtk.css";
     };
     gtk4-css = {
-      enable = wallustCfg;
+      enable = wallustGtk;
       text = cssText;
       target = "~/.config/gtk-4.0/gtk.css";
     };

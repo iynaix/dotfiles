@@ -61,7 +61,7 @@ in {
             arr
           );
       in {
-        enable = config.iynaix.wallust.waybar;
+        enable = cfg.enable && cfg.theme == "transparent";
         text = ''
           #waybar {
             background: rgba(0,0,0,0.3)

@@ -4,8 +4,10 @@
   config,
   lib,
   ...
-}: {
-  config = lib.mkIf config.iynaix.wezterm.enable {
+}: let
+  cfg = config.iynaix.wezterm;
+in {
+  config = lib.mkIf cfg.enable {
     iynaix.terminal = {
       fakeGnomeTerminal = lib.mkIf (config.iynaix.terminal.package == pkgs.wezterm) (pkgs.writeShellApplication {
         name = "gnome-terminal";
@@ -80,7 +82,7 @@
     };
 
     iynaix.wallust.entries."wezterm.toml" = {
-      enable = config.iynaix.wallust.wezterm;
+      enable = cfg.enable;
       text = ''
         [colors]
         ansi = [

@@ -134,7 +134,7 @@ in {
 
     iynaix.wallust.entries = {
       "waybar.jsonc" = {
-        enable = config.iynaix.wallust.waybar;
+        enable = cfg.waybar.enable;
         text = builtins.toJSON cfg.waybar.config;
         target = "~/.config/waybar/config";
       };

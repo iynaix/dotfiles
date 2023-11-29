@@ -6,7 +6,6 @@
     ./programs.nix
     ./shortcuts.nix
     ./terminal.nix
-    ./wallust.nix
     ./wayland.nix
   ];
 }
