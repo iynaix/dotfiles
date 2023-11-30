@@ -24,7 +24,6 @@ in {
     ];
 
     hm.wayland.windowManager.hyprland = {
-      enableNvidiaPatches = cfg.enable;
       settings.env =
         [
           "NIXOS_OZONE_WL,1"

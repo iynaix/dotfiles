@@ -54,17 +54,18 @@
           nh os switch --nom "$@"
       fi
 
-      echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+      # only relevant if --dry is passed
+      if [[ "$*" == *"--dry"* ]]; then
+        echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
+      fi
       cd - > /dev/null
     '';
   };
-  # update via nix flake
-  upd8 = pkgs.writeShellApplication {
-    name = "upd8";
+  nv-update = pkgs.writeShellApplication {
+    name = "nv-update";
     runtimeInputs = [nswitch pkgs.nvfetcher];
     text = ''
       cd ${dots}
-      nix flake update
 
       # run nvfetcher for overlays
       nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
@@ -76,7 +77,17 @@
           pkg_dir=$(dirname "$pkg_toml")
           nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
       done
-
+      cd - > /dev/null
+    '';
+  };
+  # update via nix flake
+  upd8 = pkgs.writeShellApplication {
+    name = "upd8";
+    runtimeInputs = [nswitch pkgs.nvfetcher nv-update];
+    text = ''
+      cd ${dots}
+      nix flake update
+      nv-update
       nswitch "$@"
       cd - > /dev/null
     '';
@@ -139,7 +150,7 @@ in {
   programs.nix-ld.enable = true;
 
   environment = {
-    sessionVariables.FLAKE = dots; # configure nh
+    sessionVariables.FLAKE = dots; # forr configuring nh
 
     systemPackages =
       # for nixlang / nixpkgs
@@ -158,6 +169,7 @@ in {
           nbuild
           nswitch
           nvfetcher
+          nv-update
           upd8
           json2nix
           yaml2nix

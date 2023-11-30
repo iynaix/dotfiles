@@ -36,8 +36,6 @@ in {
     # services.devmon.enable = true;
 
     environment = {
-      # bye bye nano
-      defaultPackages = with pkgs; [perl rsync strace];
       etc = {
         # git
         "gitconfig".text = hmCfg.xdg.configFile."git/config".text;
@@ -75,6 +73,9 @@ in {
       interactiveShellInit = hmCfg.programs.bash.initExtra;
       loginShellInit = hmCfg.programs.bash.profileExtra;
     };
+
+    # bye bye nano
+    programs.nano.enable = lib.mkForce false;
 
     programs.file-roller.enable = true;
 
