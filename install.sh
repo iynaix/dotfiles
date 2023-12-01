@@ -15,6 +15,28 @@ function yesno() {
     done
 }
 
+function prompt_for_password() {
+    while true; do
+        # Prompt for password
+        read -rs -p "Enter root password: " password
+        echo "\n"
+
+        # Prompt for password confirmation
+        read -rs -p "Confirm root password: " confirm_password
+        echo "\n"
+
+        # Check if passwords match
+        if [ "$password" == "$confirm_password" ]; then
+            break
+        else
+            echo "Passwords do not match. Please try again."
+        fi
+    done
+
+    # Return the entered password
+    echo "$password"
+}
+
 cat << Introduction
 This script will format the *entire* disk with a 1GB boot partition
 (labelled NIXBOOT), 16GB of swap, then allocating the rest to ZFS.
@@ -144,15 +166,14 @@ if [[ $restore_snapshot == "y" ]]; then
     read -r snapshot_file_path
     echo
     sudo zfs receive -F zroot/persist@persist-snapshot < "$snapshot_file_path"
-else
-    # no snapshot, prompt and write passwords to persist
-    echo -n "Enter password: "
-    read -rs password
-    echo
+# else
+#     # no snapshot, prompt and write passwords to persist
+#     password=$(prompt_for_password)
+#     echo
 
-    sudo mkdir -p /mnt/persist/etc/shadow
-    sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/root
-    sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/iynaix
+#     sudo mkdir -p /mnt/persist/etc/shadow
+#     sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/root
+#     sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/iynaix
 fi
 
 echo "Installing NixOS"

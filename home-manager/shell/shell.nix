@@ -126,9 +126,4 @@
       '';
     };
   };
-
-  iynaix.shell.initExtra = ''
-    # wallust colorscheme
-    ${lib.optionalString (config.iynaix.wallust.enable) "command cat /home/${user}/.cache/wallust/sequences"}
-  '';
 }

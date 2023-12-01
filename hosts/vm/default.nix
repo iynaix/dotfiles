@@ -1,12 +1,7 @@
 {pkgs, ...}: {
   iynaix-nixos = {
-    hyprland.enable = false;
+    hyprland.enable = true;
     zfs.encryption = true;
-
-    # impermanence
-    persist.tmpfs = false;
-    persist.erase.root = false;
-    persist.erase.home = false;
   };
 
   networking.hostId = "5f43c101"; # required for zfs

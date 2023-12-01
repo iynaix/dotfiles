@@ -42,7 +42,7 @@ fn all_themes() -> Vec<String> {
 
 fn wallust_apply_theme(theme: String) {
     if CUSTOM_THEMES.contains(&theme.as_str()) {
-        let colorscheme_file = full_path(&format!("~/.config/wallust/{theme}.json"));
+        let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json"));
         cmd(["wallust", "cs", colorscheme_file.to_str().unwrap()])
     } else {
         cmd(["wallust", "theme", &theme])

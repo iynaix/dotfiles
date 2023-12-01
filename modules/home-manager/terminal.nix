@@ -97,11 +97,6 @@ in {
       default = "fish";
       description = "Interactive shell to use.";
     };
-    initExtra = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
-      description = "Extra shell agnostic commands that should be run when initializing an interactive shell.";
-    };
     profileExtra = lib.mkOption {
       type = lib.types.lines;
       default = "";
