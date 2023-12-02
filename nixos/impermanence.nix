@@ -26,8 +26,9 @@ in {
       '';
     in {
       script = ''
-        ${createOwnedDir "/persist/home"}
-        ${createOwnedDir "/persist/home/${user}"}
+        # required for home-manager to create its own profile to boot
+        ${createOwnedDir "/home/${user}/.local/state/nix/profiles"}
+        ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "chown -R ${user}:users /home/${user}"}
         ${createOwnedDir "/persist/cache"}
       '';
       wantedBy = ["multi-user.target"];

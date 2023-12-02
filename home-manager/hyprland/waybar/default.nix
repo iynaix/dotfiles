@@ -20,7 +20,7 @@ in {
 
     iynaix.waybar.config = {
       backlight = lib.mkIf cfg.backlight.enable {
-        format = "{icon}  {percent}%";
+        format = "{icon}   {percent}%";
         format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
         on-scroll-down = "brightnessctl s 1%-";
         on-scroll-up = "brightnessctl s +1%";
@@ -28,7 +28,7 @@ in {
 
       battery = lib.mkIf cfg.battery.enable {
         format = "{icon}  {capacity}%";
-        format-charging = "  {capacity}%";
+        format-charging = "   {capacity}%";
         format-icons = ["" "" "" "" ""];
         states = {
           critical = 20;
@@ -90,8 +90,8 @@ in {
       network =
         if cfg.wifi.enable
         then {
-          format = "  {essid}";
-          format-disconnected = "󰖪  Offline";
+          format = "   {essid}";
+          format-disconnected = "󰖪   Offline";
           on-click = "~/.config/rofi/rofi-wifi-menu";
           on-click-right = "${config.iynaix.terminal.exec} nmtui";
           tooltip = false;

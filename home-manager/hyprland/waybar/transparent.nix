@@ -10,7 +10,7 @@ in {
       margin = lib.mkForce "0";
       clock = {
         format = lib.mkForce "󰥔   {:%H:%M}";
-        format-alt = lib.mkForce "󰸗  {:%a, %d %b %Y}";
+        format-alt = lib.mkForce "󰸗   {:%a, %d %b %Y}";
       };
     };
 

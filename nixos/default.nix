@@ -2,11 +2,8 @@
   pkgs,
   config,
   lib,
-  user,
   ...
-}: let
-  hmCfg = config.home-manager.users.${user};
-in {
+}: {
   imports = [
     ./am5.nix
     ./audio.nix
@@ -38,14 +35,14 @@ in {
     environment = {
       etc = {
         # git
-        "gitconfig".text = hmCfg.xdg.configFile."git/config".text;
+        "gitconfig".text = config.hm.xdg.configFile."git/config".text;
       };
       variables = {
-        TERMINAL = hmCfg.iynaix.terminal.exec;
+        TERMINAL = config.hm.iynaix.terminal.exec;
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
-        STARSHIP_CONFIG = "${hmCfg.xdg.configHome}/starship.toml";
+        STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };
 
       systemPackages = with pkgs;
@@ -60,18 +57,18 @@ in {
           tree # for root, normal user has an eza alias
           wget
         ]
-        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) hmCfg.iynaix.terminal.fakeGnomeTerminal)
+        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) config.hm.iynaix.terminal.fakeGnomeTerminal)
         ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
-        ++ (lib.optional hmCfg.iynaix.helix.enable helix);
+        ++ (lib.optional config.hm.iynaix.helix.enable helix);
     };
 
     # setup fonts
-    fonts.packages = hmCfg.iynaix.fonts.packages;
+    fonts.packages = config.hm.iynaix.fonts.packages;
 
     # set up programs to use same config as home-manager
     programs.bash = {
-      interactiveShellInit = hmCfg.programs.bash.initExtra;
-      loginShellInit = hmCfg.programs.bash.profileExtra;
+      interactiveShellInit = config.hm.programs.bash.initExtra;
+      loginShellInit = config.hm.programs.bash.profileExtra;
     };
 
     # bye bye nano
@@ -80,7 +77,7 @@ in {
     programs.file-roller.enable = true;
 
     iynaix-nixos.persist = {
-      root.directories = lib.mkIf hmCfg.iynaix.wifi.enable [
+      root.directories = lib.mkIf config.hm.iynaix.wifi.enable [
         "/etc/NetworkManager"
       ];
 
