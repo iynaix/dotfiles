@@ -20,7 +20,7 @@ fn create_image(nix_info: &NixInfo) -> String {
     let output_dir = full_path("~/.cache/waifufetch");
     std::fs::create_dir_all(&output_dir).expect("failed to create output dir");
 
-    let output = full_path(&format!(
+    let output = full_path(format!(
         "{}/{}-{}.png",
         &output_dir.to_str().unwrap(),
         c4,

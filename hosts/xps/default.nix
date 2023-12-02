@@ -4,7 +4,7 @@
     zfs.encryption = true;
 
     # impermanence
-    persist.tmpfs = false;
+    persist.tmpfs = true; # change to false to test zfs impermanence
     persist.erase.root = true;
     persist.erase.home = true;
   };

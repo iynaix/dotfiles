@@ -15,7 +15,12 @@ pub struct WorkspaceId {
     pub id: i32,
 }
 
-pub fn full_path(p: &str) -> PathBuf {
+pub fn full_path<P>(p: P) -> PathBuf
+where
+    P: AsRef<std::path::Path>,
+{
+    let p = p.as_ref().to_str().unwrap();
+
     match p.strip_prefix("~/") {
         Some(p) => dirs::home_dir().unwrap().join(p),
         None => PathBuf::from(p),
@@ -290,24 +295,28 @@ impl Workspace {
 pub mod json {
     use super::full_path;
 
-    pub fn load<T>(path: &str) -> T
+    pub fn load<T, P>(path: P) -> T
     where
         T: serde::de::DeserializeOwned,
+        P: AsRef<std::path::Path>,
     {
+        let path = path.as_ref();
         let contents = std::fs::read_to_string(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {path}"));
+            .unwrap_or_else(|_| panic!("failed to load {:?}", path));
         serde_json::from_str(&contents)
-            .unwrap_or_else(|_| panic!("failed to parse json for {path}"))
+            .unwrap_or_else(|_| panic!("failed to parse json for {:?}", path))
     }
 
-    pub fn write<T>(path: &str, data: T)
+    pub fn write<T, P>(path: P, data: T)
     where
         T: serde::Serialize,
+        P: AsRef<std::path::Path>,
     {
+        let path = path.as_ref();
         let file = std::fs::File::create(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {path}"));
+            .unwrap_or_else(|_| panic!("failed to load {:?}", path));
         serde_json::to_writer(file, &data)
-            .unwrap_or_else(|_| panic!("failed to write json to {path}"));
+            .unwrap_or_else(|_| panic!("failed to write json to {:?}", path));
     }
 }
 
@@ -365,9 +374,10 @@ impl NixInfo {
 }
 
 pub mod wallpaper {
-    use std::{fs, path::PathBuf};
+    use rand::seq::SliceRandom;
 
-    use crate::{cmd, cmd_output, full_path, CmdOutput, NixInfo};
+    use crate::{cmd, cmd_output, full_path, json, CmdOutput, NixInfo};
+    use std::{collections::HashMap, fs, path::PathBuf};
 
     pub fn dir() -> PathBuf {
         full_path("~/Pictures/Wallpapers")
@@ -419,10 +429,20 @@ pub mod wallpaper {
             .collect()
     }
 
+    pub fn random() -> String {
+        if self::dir().exists() {
+            self::all()
+                .choose(&mut rand::thread_rng())
+                // use fallback image if not available
+                .unwrap_or(&NixInfo::before().fallback)
+                .to_string()
+        } else {
+            NixInfo::before().fallback
+        }
+    }
+
     /// creates a directory with randomly ordered wallpapers for imv to display
     pub fn randomize_wallpapers() -> String {
-        use rand::prelude::SliceRandom;
-
         let output_dir = full_path("~/.cache/wallpapers_random");
         let output_dir = output_dir.to_str().unwrap();
 
@@ -476,7 +496,24 @@ pub mod wallpaper {
 
     /// applies the wallust colors to various applications
     pub fn wallust_apply_colors() {
-        let c = NixInfo::after().hyprland_colors();
+        let c = if full_path("~/.cache/wallust/nix.json").exists() {
+            NixInfo::after().hyprland_colors()
+        } else {
+            #[derive(serde::Deserialize)]
+            struct Colorscheme {
+                colors: HashMap<String, String>,
+            }
+
+            let cs_path = full_path("~/.config/wallust/catppuccin-mocha.json");
+            let cs: Colorscheme = json::load(cs_path);
+
+            (1..16)
+                .map(|n| {
+                    let k = format!("color{n}");
+                    format!("rgb({})", cs.colors.get(&k).unwrap().replace('#', ""))
+                })
+                .collect()
+        };
 
         if cfg!(feature = "hyprland") {
             // update borders

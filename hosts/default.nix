@@ -11,7 +11,7 @@
       inherit self inputs isNixOS host user;
       isLaptop = host == "xps" || host == "framework";
     };
-    homeMangagerImports = [
+    homeManagerImports = [
       inputs.nix-index-database.hmModules.nix-index
       ./${host}/home.nix # host specific home-manager configuration
       ../home-manager
@@ -38,7 +38,7 @@
               inherit extraSpecialArgs;
 
               users.${user} = {
-                imports = homeMangagerImports ++ [inputs.impermanence.nixosModules.home-manager.impermanence];
+                imports = homeManagerImports ++ [inputs.impermanence.nixosModules.home-manager.impermanence];
 
                 # Let Home Manager install and manage itself.
                 programs.home-manager.enable = true;
@@ -56,7 +56,7 @@
         inherit extraSpecialArgs;
         pkgs = import inputs.nixpkgs {config.allowUnfree = true;};
 
-        modules = homeMangagerImports ++ [../overlays];
+        modules = homeManagerImports ++ [../overlays];
       };
 in
   builtins.listToAttrs (map (host: {

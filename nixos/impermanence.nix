@@ -17,10 +17,18 @@ in {
       ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "zfs rollback -r zroot/home@blank"}
     '';
 
-    # fix directory permissions so home-manager doesn't error out
-    systemd.services.fix-mount-permissions = lib.mkIf (!cfg.tmpfs && cfg.erase.home) {
+    # create and fix directory permissions so home-manager doesn't error out
+    systemd.services.fix-mount-permissions = let
+      createOwnedDir = dir: ''
+        mkdir -p ${dir}
+        chown ${user}:users ${dir}
+        chmod 700 ${dir}
+      '';
+    in {
       script = ''
-        chown  ${user}:users /home/${user} && chmod 700 /home/${user}
+        ${createOwnedDir "/persist/home"}
+        ${createOwnedDir "/persist/home/${user}"}
+        ${createOwnedDir "/persist/cache"}
       '';
       wantedBy = ["multi-user.target"];
     };

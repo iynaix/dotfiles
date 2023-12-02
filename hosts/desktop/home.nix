@@ -23,6 +23,7 @@
       }
     ];
 
+    hyprland.plugin = "hyprnstack";
     rclip.enable = true;
     waybar = {
       # theme = "transparent";

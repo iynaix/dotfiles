@@ -3,7 +3,6 @@ use dotfiles_utils::{
     cli::HyprWallpaperArgs, cmd, cmd_output, full_path, json, wallpaper, CmdOutput, Monitor,
     NixInfo,
 };
-use rand::seq::SliceRandom;
 use std::{collections::HashMap, path::Path, process::Command};
 
 type WallpaperInfo = HashMap<String, HashMap<String, serde_json::Value>>;
@@ -22,11 +21,12 @@ fn swww_crop(swww_args: &[&str], image: &String) {
             .to_str()
             .unwrap();
 
-        let crops: WallpaperInfo = json::load(
-            full_path("~/Pictures/Wallpapers/wallpapers.json")
-                .to_str()
-                .unwrap(),
-        );
+        let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
+        let crops: WallpaperInfo = if wallpapers_json.exists() {
+            json::load(wallpapers_json)
+        } else {
+            HashMap::new()
+        };
 
         match crops.get(fname) {
             Some(geometry) => Monitor::monitors().iter().for_each(|m| {
@@ -89,11 +89,13 @@ fn main() {
             .to_str()
             .unwrap()
             .to_string(),
-        None => wallpaper::all()
-            .choose(&mut rand::thread_rng())
-            // use fallback image if not available
-            .unwrap_or(&NixInfo::before().fallback)
-            .to_string(),
+        None => {
+            if full_path("~/.cache/wallust/nix.json").exists() {
+                wallpaper::random()
+            } else {
+                NixInfo::before().fallback
+            }
+        }
     };
 
     if args.reload {
