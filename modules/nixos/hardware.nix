@@ -16,7 +16,7 @@
 
     zfs = {
       enable = lib.mkEnableOption "zfs" // {default = true;};
-      encryption = lib.mkEnableOption "zfs encryption" // {default = false;};
+      encryption = lib.mkEnableOption "zfs encryption" // {default = true;};
       snapshots = lib.mkEnableOption "zfs snapshots" // {default = true;};
     };
   };

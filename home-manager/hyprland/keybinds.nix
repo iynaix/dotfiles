@@ -12,7 +12,7 @@ in {
         "$mod_SHIFT, Return, exec, rofi -show drun"
         "$mod, BackSpace, killactive,"
         "$mod, e, exec, nemo ~/Downloads"
-        "$mod_SHIFT, e, exec, $term lf ~/Downloads"
+        "$mod_SHIFT, e, exec, $term yazi ~/Downloads"
         "$mod, w, exec, brave"
         "$mod_SHIFT, w, exec, brave --incognito"
         "$mod, v, exec, $term nvim"

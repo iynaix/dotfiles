@@ -7,6 +7,7 @@
       archlinux = false;
     };
     nvidia.enable = true;
+    zfs.encryption = false;
 
     # software
     distrobox.enable = true;

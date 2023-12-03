@@ -19,11 +19,11 @@ function prompt_for_password() {
     while true; do
         # Prompt for password
         read -rs -p "Enter root password: " password
-        echo "\n"
+        printf "\n"
 
         # Prompt for password confirmation
         read -rs -p "Confirm root password: " confirm_password
-        echo "\n"
+        printf "\n"
 
         # Check if passwords match
         if [ "$password" == "$confirm_password" ]; then
@@ -151,31 +151,27 @@ sudo zfs create -o mountpoint=legacy zroot/home
 sudo zfs snapshot zroot/home@blank
 sudo mount --mkdir -t zfs zroot/home /mnt/home
 
-echo "Creating /persist"
-sudo zfs create -o mountpoint=legacy zroot/persist
-sudo mount --mkdir -t zfs zroot/persist /mnt/persist
-
 echo "Creating /cache"
 sudo zfs create -o mountpoint=legacy zroot/cache
 sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 
+# handle persist, possibly from snapshot
 restore_snapshot=$(yesno "Do you want to restore from a persist snapshot?")
 if [[ $restore_snapshot == "y" ]]; then
     echo "Enter full path to snapshot: "
     read -r snapshot_file_path
     echo
-    sudo zfs receive -F zroot/persist@persist-snapshot < "$snapshot_file_path"
-# else
-#     # no snapshot, prompt and write passwords to persist
-#     password=$(prompt_for_password)
-#     echo
 
-#     sudo mkdir -p /mnt/persist/etc/shadow
-#     sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/root
-#     sudo mkpasswd -m sha-512 "$password" 2>&1 > /dev/null | sudo tee -a /mnt/persist/etc/shadow/iynaix
+    echo "Creating /persist"
+    # shellcheck disable=SC2024 (sudo doesn't affect redirects)
+    sudo zfs receive -o mountpoint=legacy zroot/persist < "$snapshot_file_path"
+
+else
+    echo "Creating /persist"
+    sudo zfs create -o mountpoint=legacy zroot/persist
 fi
+sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
-echo "Installing NixOS"
 while true; do
     read -rp "Which host to install? (desktop / framework / xps / vm) " host
     case $host in
@@ -184,4 +180,6 @@ while true; do
     esac
 done
 
-sudo nixos-install --root /mnt --flake "github:iynaix/dotfiles#$host"
+read -rp "Enter git rev for flake (default: main): " git_rev
+echo "Installing NixOS"
+sudo nixos-install --flake "github:iynaix/dotfiles/${git_rev:-main}#$host"

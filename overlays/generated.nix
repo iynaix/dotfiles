@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.34.1";
+    version = "v2.35.2";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.34.1";
+      rev = "v2.35.2";
       fetchSubmodules = false;
-      sha256 = "sha256-i6OCW5Vc9/LfNuiaEeelmXiqP7+WdIklRNRcgWb7L1w=";
+      sha256 = "sha256-d5ktlYl5oO5x/gsiFb9/IhgNWtHHpgsdE0k54h4kzGE=";
     };
   };
   swww = {
@@ -36,28 +36,41 @@
     };
     date = "2021-01-28";
   };
+  wallust = {
+    pname = "wallust";
+    version = "2e70b416559a6c41144d19d7e9841010a746e25c";
+    src = fetchgit {
+      url = "https://codeberg.org/explosion-mental/wallust.git";
+      rev = "2e70b416559a6c41144d19d7e9841010a746e25c";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sha256 = "sha256-GndWlMeiCt2p+byCE3Gmm5W5T6+74OlgPCIxRx5DHOc=";
+    };
+    date = "2023-12-05";
+  };
   waybar = {
     pname = "waybar";
-    version = "1572bc8c75007b633b647a124b6ec6623e7bae0b";
+    version = "5f8ae44233eaa903728849bdc6b13883c7cd8f3d";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "1572bc8c75007b633b647a124b6ec6623e7bae0b";
+      rev = "5f8ae44233eaa903728849bdc6b13883c7cd8f3d";
       fetchSubmodules = false;
-      sha256 = "sha256-YdUZBLREmQuRvzwckkdI86Vo0iC8NZgcOXCy7agV+0w=";
+      sha256 = "sha256-Ixj/FOU4WbHEbP6EzWcWhujxI0DXm96nWRNOVhDQHv8=";
     };
-    date = "2023-11-30";
+    date = "2023-12-05";
   };
   wezterm = {
     pname = "wezterm";
-    version = "6d58e5196bb3a433880643a05fe5d6f19e49572a";
+    version = "e3cd2e93d0ee5f3af7f3fe0af86ffad0cf8c7ea8";
     src = fetchFromGitHub {
       owner = "wez";
       repo = "wezterm";
-      rev = "6d58e5196bb3a433880643a05fe5d6f19e49572a";
+      rev = "e3cd2e93d0ee5f3af7f3fe0af86ffad0cf8c7ea8";
       fetchSubmodules = true;
-      sha256 = "sha256-RDaDHlxbfgjO7EYQUKDPCQ8wmcebYLdaOn3lYgcSM+g=";
+      sha256 = "sha256-sj3S1fWC6j9Q/Yc+4IpLbKC3lttUWFk65ROyCdQt+Zc=";
     };
-    date = "2023-12-01";
+    date = "2023-12-03";
   };
 }

@@ -30,6 +30,11 @@ in rec {
   frameworkHm = framework.hm;
   frameworkHmo = frameworkHm.iynaix;
 
+  laptop = flake.nixosConfigurations.framework.config;
+  laptopo = framework.iynaix-nixos;
+  laptopHm = framework.hm;
+  laptopHmo = frameworkHm.iynaix;
+
   xps = flake.nixosConfigurations.xps.config;
   xpso = xps.iynaix-nixos;
   xpsHm = xps.hm;

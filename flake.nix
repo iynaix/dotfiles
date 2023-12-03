@@ -2,7 +2,7 @@
   description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/e92039b55bcd58469325ded85d4f58dd5a4eaf58";
 
     nixpkgs-vscode.url = "github:nixos/nixpkgs/db9208ab987cdeeedf78ad9b4cf3c55f5ebd269b";
 

@@ -4,7 +4,6 @@
   host,
   lib,
   pkgs,
-  user,
   ...
 }: {
   home.shellAliases =
@@ -55,9 +54,9 @@
       bashBody = ''readlink -f $(which $1)'';
       fishBody = ''readlink -f (which $argv[1])'';
     };
-    lfwhere = {
-      bashBody = ''lf $(dirname $(dirname $(readlink -f $(which $1))))'';
-      fishBody = ''lf (dirname (dirname (readlink -f (which $argv[1]))))'';
+    ywhere = {
+      bashBody = ''yazi $(dirname $(dirname $(readlink -f $(which $1))))'';
+      fishBody = ''yazi (dirname (dirname (readlink -f (which $argv[1]))))'';
     };
     # server command, runs a local server
     server = {

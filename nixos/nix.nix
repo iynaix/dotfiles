@@ -55,7 +55,7 @@
       fi
 
       # only relevant if --dry is passed
-      if [[ "$*" == *"--dry"* ]]; then
+      if [[ "$*" != *"--dry"* ]]; then
         echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
       fi
       cd - > /dev/null

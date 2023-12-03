@@ -1,6 +1,5 @@
 {
   config,
-  isLaptop,
   lib,
   pkgs,
   ...
@@ -13,7 +12,7 @@
   home.packages = with pkgs; [rofi-power-menu];
 
   xdg.configFile = {
-    "rofi/rofi-wifi-menu" = lib.mkIf isLaptop {
+    "rofi/rofi-wifi-menu" = lib.mkIf config.iynaix.wifi.enable {
       source = ./rofi-wifi-menu.sh;
     };
 

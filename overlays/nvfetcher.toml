@@ -10,6 +10,11 @@ fetch.github = "Horus645/swww"
 src.git = "https://github.com/diesys/transmission-web-soft-theme"
 fetch.github = "diesys/transmission-web-soft-theme"
 
+[wallust]
+src.git = "https://codeberg.org/explosion-mental/wallust.git"
+src.branch = "dev"
+fetch.git = "https://codeberg.org/explosion-mental/wallust.git"
+
 [waybar]
 src.git = "https://github.com/Alexays/Waybar"
 fetch.github = "Alexays/Waybar"

@@ -71,6 +71,7 @@ in {
         # see below url for the latest specified version
         # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
         path-of-building = prev.path-of-building.overrideAttrs (o: rec {
+          version = sources.path-of-building.version;
           passthru =
             o.passthru
             // {
@@ -113,6 +114,9 @@ in {
               sed -i '21i\\t\t<link href="./style/transmission/soft-theme.min.css" type="text/css" rel="stylesheet" />\n\t\t<link href="style/transmission/soft-dark-theme.min.css" type="text/css" rel="stylesheet" />\n' $out/share/transmission/web/index.html;
             '';
           });
+
+        # use dev branch
+        wallust = overrideRustPackage "wallust";
 
         # use latest commmit from git
         waybar = prev.waybar.overrideAttrs (o:

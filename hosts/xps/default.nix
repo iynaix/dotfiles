@@ -1,10 +1,9 @@
 {user, ...}: {
   iynaix-nixos = {
     kanata.enable = true;
-    zfs.encryption = true;
 
     # impermanence
-    persist.tmpfs = true; # change to false to test zfs impermanence
+    persist.tmpfs = false; # change to false to test zfs impermanence
     persist.erase.root = true;
     persist.erase.home = true;
   };

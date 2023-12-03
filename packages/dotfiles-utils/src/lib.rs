@@ -137,8 +137,8 @@ pub struct Monitor {
     pub name: String,
     pub x: i32,
     pub y: i32,
-    pub width: f32,
-    pub height: f32,
+    pub width: i32,
+    pub height: i32,
     pub active_workspace: WorkspaceId,
     pub focused: bool,
     pub transform: i8,
@@ -150,7 +150,7 @@ impl Monitor {
     }
 
     pub fn is_ultrawide(&self) -> bool {
-        self.width >= 3440.0
+        self.width >= 3440
     }
 
     pub fn orientation(&self) -> &str {

@@ -20,10 +20,6 @@ in {
 
     users.users.${user}.extraGroups = [config.users.groups.keys.name];
 
-    systemd.services.some-service = {
-      serviceConfig.SupplementaryGroups = [config.users.groups.keys.name];
-    };
-
     iynaix-nixos.persist.home = {
       directories = [
         ".config/sops"

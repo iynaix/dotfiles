@@ -5,8 +5,8 @@ fn main() {
 
     let mon = Monitor::focused();
 
-    let mut width = mon.width * TARGET_PERCENT;
-    let mut height = mon.height * TARGET_PERCENT;
+    let mut width = mon.width as f32 * TARGET_PERCENT;
+    let mut height = mon.height as f32 * TARGET_PERCENT;
 
     // handle vertical monitor
     if height > width {

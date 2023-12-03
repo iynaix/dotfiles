@@ -60,6 +60,21 @@ pub struct HyprWallpaperArgs {
     )]
     pub transition_type: String,
 
+    #[arg(
+        long,
+        value_name = "FILTER",
+        value_parser = PossibleValuesParser::new([
+            // ignore non 16 colors colorschemes
+            "dark16",
+            "hard-dark",
+            "light16",
+            "soft-light",
+            "soft-dark", // available via dev branch
+        ]),
+        help = "filter type for swww"
+    )]
+    pub filter: Option<String>,
+
     // optional image to use, uses a random one otherwise
     pub image: Option<PathBuf>,
 }

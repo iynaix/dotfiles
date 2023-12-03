@@ -1,7 +1,7 @@
 {user, ...}: {
   iynaix-nixos = {
+    # TODO: enable with new config for device
     kanata.enable = false;
-    zfs.encryption = true;
   };
 
   networking.hostId = "abb4d116"; # required for zfs

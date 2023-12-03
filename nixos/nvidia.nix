@@ -19,22 +19,19 @@ in {
       powerManagement.enable = false;
     };
 
-    environment.systemPackages = [
-      pkgs.nvtop
-    ];
-
-    hm.wayland.windowManager.hyprland = {
-      settings.env =
-        [
-          "NIXOS_OZONE_WL,1"
-          "WLR_NO_HARDWARE_CURSORS,1"
-          "LIBVA_DRIVER_NAME,nvidia"
-          "GBM_BACKEND,nvidia-drm"
-          "__GLX_VENDOR_LIBRARY_NAME,nvidia"
-        ]
-        ++ lib.optionals (host == "vm") [
-          "WLR_RENDERER_ALLOW_SOFTWARE,1"
-        ];
+    environment = {
+      systemPackages = [pkgs.nvtop];
+      sessionVariables =
+        {
+          NIXOS_OZONE_WL = "1";
+          WLR_NO_HARDWARE_CURSORS = "1";
+          LIBVA_DRIVER_NAME = "nvidia";
+          GBM_BACKEND = "nvidia-drm";
+          __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+        }
+        // lib.optionalAttrs (host == "vm") {
+          WLR_RENDERER_ALLOW_SOFTWARE = "1";
+        };
     };
   };
 }

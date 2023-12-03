@@ -22,8 +22,9 @@ if [[ $reformat_boot == "y" ]]; then
     sudo fatlabel "$BOOTDISK" NIXBOOT
 fi
 
+# -l prompts for passphrase if needed
 echo "Importing zpool"
-sudo zpool import -f zroot
+sudo zpool import -f -l zroot
 
 reformat_nix=$(yesno "Reformat nix?")
 if [[ $reformat_nix == "y" ]]; then
@@ -36,14 +37,13 @@ fi
 
 echo "Mounting Disks"
 
-sudo mount -t zfs zroot/root /mnt
-sudo mount "$BOOTDISK" /mnt/boot
-sudo mount -t zfs zroot/nix /mnt/nix
-sudo mount -t zfs zroot/tmp /mnt/tmp
-sudo mount -t zfs zroot/home /mnt/home
-sudo mount -t zfs zroot/persist /mnt/persist
+sudo mount --mkdir -t zfs zroot/root /mnt
+sudo mount --mkdir "$BOOTDISK" /mnt/boot
+sudo mount --mkdir -t zfs zroot/nix /mnt/nix
+sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
+sudo mount --mkdir -t zfs zroot/home /mnt/home
+sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
-echo "Reinstalling NixOS"
 while true; do
     read -rp "Which host to install? (desktop / framework / xps / vm) " host
     case $host in
@@ -52,4 +52,6 @@ while true; do
     esac
 done
 
-sudo nixos-install --root /mnt --flake "github:iynaix/dotfiles#$host"
+read -rp "Enter git rev for flake (default: main): " git_rev
+echo "Reinstalling NixOS"
+sudo nixos-install --flake "github:iynaix/dotfiles/${git_rev:-main}#$host"
