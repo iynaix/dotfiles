@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   displays = config.iynaix.displays;
@@ -146,14 +147,14 @@ in {
         # "XF86AudioPlay, mpvctl playpause"
 
         # audio
-        ",XF86AudioLowerVolume, exec, pamixer -d 5"
-        ",XF86AudioRaiseVolume, exec, pamixer -i 5"
+        ",XF86AudioLowerVolume, exec, ${lib.getExe pkgs.pamixer}/bin/pamixer -d 5"
+        ",XF86AudioRaiseVolume, exec, ${lib.getExe pkgs.pamixer}/bin/pamixer -i 5"
         ",XF86AudioMute, exec, pamixer -t"
       ]
       ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
       ++ lib.optionals config.iynaix.backlight.enable [
-        ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
-        ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
+        ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
+        ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"
       ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging

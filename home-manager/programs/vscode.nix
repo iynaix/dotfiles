@@ -1,27 +1,26 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.vscode = {
     enable = true;
     # lock vscode to 1.81.1 because native titlebar causes vscode to crash
     # https://github.com/microsoft/vscode/issues/184124#issuecomment-1717959995
-    package =
-      (import inputs.nixpkgs-vscode {
-        system = pkgs.system;
-        config.allowUnfree = true;
-      })
-      .vscode.overrideAttrs (o: {
-        # preFixup = ''
-        #   gappsWrapperArgs+=(
-        #     # Add gio to PATH so that moving files to the trash works when not using a desktop environment
-        #     --prefix PATH : ${pkgs.glib.bin}/bin
-        #     --add-flags "''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-        #     --add-flags ${lib.escapeShellArg commandLineArgs}
-        #   )
-        # '';
-      });
+    package = pkgs.vscode.overrideAttrs (o: let
+      version = "1.81.1";
+      plat = "linux-x64";
+    in {
+      src = pkgs.fetchurl {
+        name = "VSCode_${version}_${plat}.tar.gz";
+        url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
+        sha256 = "sha256-Tqawqu0iR0An3CZ4x3RGG0vD3x/PvQyRhVThc6SvdEg=";
+      };
+      # preFixup = ''
+      #   gappsWrapperArgs+=(
+      #     # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+      #     --prefix PATH : ${pkgs.glib.bin}/bin
+      #     --add-flags "''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      #     --add-flags ${lib.escapeShellArg commandLineArgs}
+      #   )
+      # '';
+    });
   };
 
   # add password-store: gnome for keyring to work

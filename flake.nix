@@ -2,9 +2,7 @@
   description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/e92039b55bcd58469325ded85d4f58dd5a4eaf58";
-
-    nixpkgs-vscode.url = "github:nixos/nixpkgs/db9208ab987cdeeedf78ad9b4cf3c55f5ebd269b";
+    nixpkgs.url = "github:nixos/nixpkgs/52d7a036b840ad86af74d191510e0a72311ac41a";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 

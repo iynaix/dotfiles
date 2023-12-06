@@ -2,6 +2,7 @@
   lib,
   config,
   isNixOS,
+  pkgs,
   ...
 }: let
   cfg = config.iynaix;
@@ -22,8 +23,8 @@ in {
       backlight = lib.mkIf cfg.backlight.enable {
         format = "{icon}   {percent}%";
         format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
-        on-scroll-down = "brightnessctl s 1%-";
-        on-scroll-up = "brightnessctl s +1%";
+        on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
+        on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
       };
 
       battery = lib.mkIf cfg.battery.enable {

@@ -10,9 +10,6 @@
     };
     hardware.pulseaudio.enable = false;
 
-    environment.systemPackages = with pkgs; [
-      pamixer
-      pavucontrol
-    ];
+    environment.systemPackages = with pkgs; [pavucontrol];
   };
 }
