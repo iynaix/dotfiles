@@ -27,17 +27,4 @@
       ];
     };
   };
-
-  wayland.windowManager.hyprland.settings = {
-    gestures = {
-      workspace_swipe = true;
-    };
-
-    # handle laptop lid
-    bindl = [
-      # ",switch:on:Lid Switch, exec, hyprctl keyword monitor ${displayCfg.monitor1}, 1920x1080, 0x0, 1"
-      # ",switch:off:Lid Switch, exec, hyprctl monitor ${displayCfg.monitor1}, disable"
-      ",switch:Lid Switch, exec, hypr-lock"
-    ];
-  };
 }

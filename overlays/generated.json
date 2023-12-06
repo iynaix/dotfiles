@@ -1,24 +1,4 @@
 {
-    "path-of-building": {
-        "cargoLocks": null,
-        "date": null,
-        "extract": null,
-        "name": "path-of-building",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "PathOfBuildingCommunity",
-            "repo": "PathOfBuilding",
-            "rev": "v2.35.3",
-            "sha256": "sha256-Vj7AYz3kD9XaZ/KNv8I4dHmVNzf3iKZm6b0g7SeL5ZY=",
-            "type": "github"
-        },
-        "version": "v2.35.3"
-    },
     "swww": {
         "cargoLocks": null,
         "date": "2023-11-30",
@@ -80,7 +60,7 @@
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2023-12-05",
+        "date": "2023-12-07",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -92,11 +72,11 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "5f8ae44233eaa903728849bdc6b13883c7cd8f3d",
-            "sha256": "sha256-Ixj/FOU4WbHEbP6EzWcWhujxI0DXm96nWRNOVhDQHv8=",
+            "rev": "dc208b66b3b370b05c141ba6ea06315e44563372",
+            "sha256": "sha256-wY2/UqhOu80fnThDqA0SHJG5ahelLKwfLoyX7AZ4ASE=",
             "type": "github"
         },
-        "version": "5f8ae44233eaa903728849bdc6b13883c7cd8f3d"
+        "version": "dc208b66b3b370b05c141ba6ea06315e44563372"
     },
     "wezterm": {
         "cargoLocks": null,

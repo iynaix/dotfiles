@@ -147,9 +147,9 @@ in {
         # "XF86AudioPlay, mpvctl playpause"
 
         # audio
-        ",XF86AudioLowerVolume, exec, ${lib.getExe pkgs.pamixer}/bin/pamixer -d 5"
-        ",XF86AudioRaiseVolume, exec, ${lib.getExe pkgs.pamixer}/bin/pamixer -i 5"
-        ",XF86AudioMute, exec, pamixer -t"
+        ",XF86AudioLowerVolume, exec, ${lib.getExe pkgs.pamixer} -d 5"
+        ",XF86AudioRaiseVolume, exec, ${lib.getExe pkgs.pamixer} -i 5"
+        ",XF86AudioMute, exec, ${lib.getExe pkgs.pamixer} -t"
       ]
       ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
       ++ lib.optionals config.iynaix.backlight.enable [

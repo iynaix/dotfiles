@@ -109,7 +109,7 @@ in {
         format = "{icon}  {volume}%";
         format-icons = ["󰕿" "󰖀" "󰕾"];
         format-muted = "󰖁  Muted";
-        on-click = "pamixer -t";
+        on-click = "${lib.getExe pkgs.pamixer} -t";
         on-click-right = "pavucontrol";
         scroll-step = 1;
         tooltip = false;

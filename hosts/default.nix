@@ -3,6 +3,7 @@
   isNixOS,
   lib,
   self,
+  system,
   user,
   ...
 }: let
@@ -54,7 +55,10 @@
     else
       inputs.home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs;
-        pkgs = import inputs.nixpkgs {config.allowUnfree = true;};
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
         modules = homeManagerImports ++ [../overlays];
       };

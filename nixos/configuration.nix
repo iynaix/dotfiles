@@ -28,6 +28,10 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_SG.UTF-8";
+  console = {
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+    useXkbConfig = true; # use xkb.options in tty.
+  };
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_SG.UTF-8";

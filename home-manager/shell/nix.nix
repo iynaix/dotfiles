@@ -1,5 +1,6 @@
 {
   host,
+  inputs,
   isNixOS,
   lib,
   pkgs,
@@ -7,6 +8,7 @@
   ...
 }: let
   dots = "/persist/home/${user}/projects/dotfiles";
+  nh = inputs.nh.packages.${pkgs.system}.default;
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
@@ -24,10 +26,7 @@
   # switch home-manager via nix flake (note you have to pass --hostname to switch to a different host)
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
-    runtimeInputs = with pkgs; [
-      git
-      inputs.nh.packages.${pkgs.system}.default
-    ];
+    runtimeInputs = with pkgs; [git nh];
     text = ''
       cd ${dots}
 
@@ -73,6 +72,7 @@ in {
         hmbuild
         hmswitch
         hmupd8
+        nh # nh is installed by nixos anyway
       ];
 
       home.shellAliases = {

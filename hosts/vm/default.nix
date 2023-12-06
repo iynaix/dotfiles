@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   iynaix-nixos = {
-    hyprland.enable = true;
+    hyprland.enable = false;
     zfs.encryption = false;
   };
 
