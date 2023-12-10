@@ -61,9 +61,6 @@
     extraGroups = ["networkmanager" "wheel"];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # enable sysrq in case for kernel panic
   # boot.kernel.sysctl."kernel.sysrq" = 1;
 

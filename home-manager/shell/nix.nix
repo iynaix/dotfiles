@@ -1,6 +1,5 @@
 {
   host,
-  inputs,
   isNixOS,
   lib,
   pkgs,
@@ -8,7 +7,6 @@
   ...
 }: let
   dots = "/persist/home/${user}/projects/dotfiles";
-  nh = inputs.nh.packages.${pkgs.system}.default;
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
@@ -72,7 +70,7 @@ in {
         hmbuild
         hmswitch
         hmupd8
-        nh # nh is installed by nixos anyway
+        pkgs.nh # nh is installed by nixos anyway
       ];
 
       home.shellAliases = {

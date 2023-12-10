@@ -8,6 +8,10 @@
   ...
 }: let
   mkHost = host: let
+    pkgs = import inputs.nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
     extraSpecialArgs = {
       inherit self inputs isNixOS host user;
       isLaptop = host == "xps" || host == "framework";
@@ -23,6 +27,7 @@
     then
       lib.nixosSystem {
         specialArgs = extraSpecialArgs;
+        inherit pkgs;
 
         modules = [
           ./${host} # host specific configuration
@@ -54,11 +59,7 @@
       }
     else
       inputs.home-manager.lib.homeManagerConfiguration {
-        inherit extraSpecialArgs;
-        pkgs = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
+        inherit extraSpecialArgs pkgs;
 
         modules = homeManagerImports ++ [../overlays];
       };

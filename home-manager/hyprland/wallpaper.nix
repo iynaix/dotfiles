@@ -18,7 +18,7 @@
   };
   imv-search = pkgs.writeShellApplication {
     name = "imv-search";
-    runtimeInputs = with pkgs; [imv pkgs.iynaix.rclip];
+    runtimeInputs = with pkgs; [imv rclip];
     text = ''
       rclip -f "$@" | imv;
     '';
@@ -97,7 +97,7 @@ in {
     (lib.mkIf config.iynaix.rclip.enable {
       home.packages = [
         imv-search
-        pkgs.iynaix.rclip
+        pkgs.rclip
       ];
 
       iynaix.persist = {

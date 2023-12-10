@@ -7,7 +7,6 @@
   ...
 }: let
   dots = "/persist/home/${user}/projects/dotfiles";
-  nh = inputs.nh.packages.${pkgs.system}.default;
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
     generations=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
@@ -150,21 +149,20 @@ in {
   programs.nix-ld.enable = true;
 
   environment = {
-    sessionVariables.FLAKE = dots; # forr configuring nh
+    sessionVariables.FLAKE = dots; # for configuring nh
 
     systemPackages =
       # for nixlang / nixpkgs
       with pkgs;
         [
           alejandra
+          nh
           nil
           nixpkgs-fmt
           nixpkgs-review
         ]
         ++ [
-          comma
           nix-current-generation
-          nh
           ndefault
           nbuild
           nswitch
@@ -199,7 +197,7 @@ in {
       dates = "weekly";
       options = "--delete-older-than 2d";
     };
-    package = pkgs.nixVersions.unstable;
+    # package = pkgs.nixVersions.unstable;
     # change nix registry to use nixpkgs from flake
     # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
     registry = {

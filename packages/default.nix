@@ -21,7 +21,7 @@
   in
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: v: !(lib.hasPrefix "override" k)) firstSource;});
-in rec {
+in {
   # rust dotfiles utils
   dotfiles-utils =
     pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
@@ -41,7 +41,5 @@ in rec {
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
   path-of-building = w pkgs.qt6Packages.callPackage ./path-of-building {};
 
-  open-clip-torch = pkgs.callPackage ./open-clip-torch {};
-  rclip = pkgs.callPackage ./rclip {inherit open-clip-torch;};
   vv = w pkgs.callPackage ./vv {};
 }

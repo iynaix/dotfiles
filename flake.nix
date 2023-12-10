@@ -2,7 +2,7 @@
   description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/52d7a036b840ad86af74d191510e0a72311ac41a";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
@@ -42,11 +42,6 @@
 
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nh = {
-      url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

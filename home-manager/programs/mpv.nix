@@ -170,14 +170,9 @@
       }))
   ];
 
-  # setup subliminal
-  home.packages = with pkgs; [
-    # TODO: remove override when fixed
-    (python3Packages.subliminal.overridePythonAttrs (o: {doCheck = false;}))
-  ];
-
   home.shellAliases = {
-    subs = "subliminal download -l 'en' -l 'eng' -s";
+    # subliminal is broken
+    # subs = "subliminal download -l 'en' -l 'eng' -s";
   };
 
   iynaix.persist = {

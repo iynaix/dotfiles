@@ -20,7 +20,7 @@ in {
       trim.enable = true;
     };
 
-    # 16GB swap created by zfs.sh
+    # 16GB swap
     swapDevices = [
       {device = "/dev/disk/by-label/SWAP";}
     ];
