@@ -15,9 +15,9 @@ function yesno() {
     done
 }
 
+BOOTDISK=$(readlink -f /dev/disk/by-label/NIXBOOT)
 reformat_boot=$(yesno "Reformat boot?")
 if [[ $reformat_boot == "y" ]]; then
-    BOOTDISK=/dev/disk/by-label/NIXBOOT
     sudo mkfs.fat -F 32 "$BOOTDISK"
     sudo fatlabel "$BOOTDISK" NIXBOOT
 fi

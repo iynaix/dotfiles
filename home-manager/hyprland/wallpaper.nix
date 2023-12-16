@@ -78,7 +78,6 @@ in {
   config = lib.mkMerge [
     (lib.mkIf (host == "desktop") {
       home.packages = [
-        swww-crop
         wallpapers-backup
         wallpapers-choose
         wallpapers-remote
@@ -108,7 +107,10 @@ in {
       };
     })
     (lib.mkIf isNixOS {
-      home.packages = [pkgs.swww];
+      home.packages = [
+        pkgs.swww
+        swww-crop
+      ];
     })
     {
       home.shellAliases = {

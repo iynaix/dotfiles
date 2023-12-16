@@ -3,17 +3,17 @@
 # to /etc/nixos/configuration.nix instead.
 {
   config,
-  lib,
   inputs,
+  lib,
   ...
 }: {
   imports = [
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "ehci_pci" "ahci" "sd_mod" "rtsx_pci_sdmmc"];
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = ["iwlwifi"];
+  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -21,9 +21,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s20u2.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;
   hardware.enableRedistributableFirmware = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

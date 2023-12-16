@@ -28,8 +28,8 @@ in {
       };
 
       battery = lib.mkIf cfg.battery.enable {
-        format = "{icon}  {capacity}%";
-        format-charging = "   {capacity}%";
+        format = "{icon}    {capacity}%";
+        format-charging = "     {capacity}%";
         format-icons = ["" "" "" "" ""];
         states = {
           critical = 20;

@@ -37,6 +37,7 @@ in {
     };
 
     hyprland = {
+      autostart = lib.mkEnableOption "Autostart hyprland from tty" // {default = true;};
       plugin = lib.mkOption {
         type = lib.types.nullOr (lib.types.enum ["hyprnstack"]);
         description = "Plugin to enable for hyprland";
