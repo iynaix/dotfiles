@@ -1,7 +1,6 @@
 {user, ...}: {
   iynaix-nixos = {
-    # TODO: enable with new config for device
-    kanata.enable = false;
+    kanata.enable = true;
   };
 
   # by-id doesn't seem to work with amd mobo

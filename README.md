@@ -48,7 +48,7 @@ mkpasswd -m sha-512 'USER_PASSWORD' | sudo tee -a /persist/etc/shadow/root
 mkpasswd -m sha-512 'USER_PASSWORD' | sudo tee -a /persist/etc/shadow/iynaix
 ```
 
-# System Rescue for Bootloader
+## System Rescue
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
 
 The following script optionally reformats the boot partition and / or /nix dataset, then reinstalls NixOS.
