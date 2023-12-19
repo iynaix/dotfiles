@@ -15,7 +15,7 @@ in {
     ./screenshot.nix
     ./startup.nix
     ./wallpaper.nix
-    ./waybar
+    ./waybar.nix
   ];
 
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {

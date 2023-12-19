@@ -5,14 +5,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix;
+  cfg = config.iynaix.waybar;
 in {
-  imports = [
-    ./split.nix
-    ./transparent.nix
-  ];
-
-  config = lib.mkIf cfg.waybar.enable {
+  config = lib.mkIf cfg.enable {
     programs.waybar = {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
@@ -20,14 +15,14 @@ in {
     };
 
     iynaix.waybar.config = {
-      backlight = lib.mkIf cfg.backlight.enable {
+      backlight = lib.mkIf config.iynaix.backlight.enable {
         format = "{icon}   {percent}%";
         format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
         on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
         on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
       };
 
-      battery = lib.mkIf cfg.battery.enable {
+      battery = lib.mkIf config.iynaix.battery.enable {
         format = "{icon}    {capacity}%";
         format-charging = "     {capacity}%";
         format-icons = ["" "" "" "" ""];
@@ -54,8 +49,8 @@ in {
           mode-mon-col = 3;
           on-scroll = 1;
         };
-        format = "{:%H:%M}";
-        format-alt = "{:%a, %d %b %Y}";
+        format = lib.mkForce "󰥔   {:%H:%M}";
+        format-alt = lib.mkForce "󰸗   {:%a, %d %b %Y}";
         # format = "󰥔   {:%H:%M}";
         # format-alt = "  {:%a, %d %b %Y}";
         interval = 10;
@@ -71,7 +66,7 @@ in {
       };
 
       layer = "top";
-      margin = "4 4 0 4";
+      margin = "0";
 
       modules-center = [
         "hyprland/workspaces"
@@ -84,12 +79,12 @@ in {
 
       modules-right =
         ["network" "pulseaudio"]
-        ++ (lib.optionals cfg.backlight.enable ["backlight"])
-        ++ (lib.optionals cfg.battery.enable ["battery"])
+        ++ (lib.optional config.iynaix.backlight.enable "backlight")
+        ++ (lib.optional config.iynaix.battery.enable "battery")
         ++ ["clock"];
 
       network =
-        if cfg.wifi.enable
+        if config.iynaix.wifi.enable
         then {
           format = "   {essid}";
           format-disconnected = "󰖪   Offline";
@@ -135,9 +130,81 @@ in {
 
     iynaix.wallust.entries = {
       "waybar.jsonc" = {
-        enable = cfg.waybar.enable;
-        text = builtins.toJSON cfg.waybar.config;
+        enable = cfg.enable;
+        text = builtins.toJSON cfg.config;
         target = "~/.config/waybar/config";
+      };
+      "waybar.css" = let
+        baseModuleCss = ''
+          font-family: "Inter";
+          font-weight: bold;
+          color: {foreground};
+          transition: none;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+          border-bottom:  2px solid transparent;
+        '';
+        mkModuleCss = arr: let
+          last = builtins.length arr - 1;
+        in
+          lib.concatStringsSep "\n" (
+            lib.imap0 (i: mod: let
+              className = builtins.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
+              padding =
+                if (i == 0)
+                then ''
+                  padding-right: 12px;
+                ''
+                else if (i == last)
+                then ''
+                  padding-left: 12px;
+                ''
+                else ''
+                  padding-left: 12px;
+                  padding-right: 12px;
+                '';
+            in ''
+              #${className} {
+                ${baseModuleCss}
+                ${padding}
+              }'')
+            arr
+          );
+      in {
+        enable = cfg.enable;
+        text = ''
+          * {
+            border: none;
+            border-radius: 0;
+          }
+
+          #waybar {
+            background: rgba(0,0,0,0.5)
+          }
+
+          ${mkModuleCss cfg.config.modules-left}
+          ${mkModuleCss cfg.config.modules-center}
+          ${mkModuleCss cfg.config.modules-right}
+
+          #workspaces button {
+            ${baseModuleCss}
+          }
+
+          #custom-nix {
+            margin-left: 12px;
+            font-size: 20px;
+          }
+
+          #clock{
+            margin-right: 12px;
+          }
+
+          #workspaces button.active {
+            margin-right: 4px;
+            border-bottom:  2px solid {foreground};
+            background-color: rgba(255,255,255, 0.25);
+          }
+        '';
+        target = "~/.config/waybar/style.css";
       };
     };
   };

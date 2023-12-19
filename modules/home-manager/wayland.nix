@@ -54,15 +54,6 @@ in {
         default = {};
         description = "Additional waybar config (wallust templating can be used)";
       };
-      theme = lib.mkOption {
-        type = lib.types.enum ["split" "transparent"];
-        default = "transparent";
-      };
-      border-radius = lib.mkOption {
-        type = lib.types.str;
-        default = "12px";
-        description = "Border-radius for waybar";
-      };
       persistent-workspaces = lib.mkEnableOption "Persistent workspaces";
     };
   };

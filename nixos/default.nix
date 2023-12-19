@@ -11,13 +11,13 @@
     ./configuration.nix
     ./docker.nix
     ./filezilla.nix
-    ./gnome3.nix
     ./hdds.nix
     ./hyprland.nix
     ./impermanence.nix
     ./kanata.nix
     ./nix.nix
     ./nvidia.nix
+    ./plasma.nix
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix

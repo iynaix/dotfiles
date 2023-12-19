@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.38.0";
+    version = "v2.38.2";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.38.0";
+      rev = "v2.38.2";
       fetchSubmodules = false;
-      sha256 = "sha256-413NDmgsR51yw+1R6XeA9r08gtnQNhjKEeT5ZvddTAM=";
+      sha256 = "sha256-WgnYjG47E5p0R5MXlDXN8sbh0Y9E8cZN0gMSdkHpXfw=";
     };
   };
 }
