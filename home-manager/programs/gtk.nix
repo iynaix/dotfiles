@@ -23,6 +23,11 @@ in {
     };
   };
 
+  # disable dconf first use warning
+  dconf.settings = {
+    "ca/desrt/dconf-editor" = {show-warning = false;};
+  };
+
   gtk = {
     enable = true;
     theme =

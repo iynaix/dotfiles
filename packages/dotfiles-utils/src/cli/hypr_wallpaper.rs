@@ -85,7 +85,7 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
                         Command::new("swww")
                             .arg("img")
                             .args(swww_args)
-                            .arg(&image)
+                            .arg(image)
                             .spawn()
                             .expect("failed to execute process");
                     }
@@ -95,7 +95,7 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
                 Command::new("swww")
                     .arg("img")
                     .args(swww_args)
-                    .arg(&image)
+                    .arg(image)
                     .spawn()
                     .expect("failed to execute process");
             }

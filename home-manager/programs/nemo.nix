@@ -61,7 +61,8 @@
       show-hidden-files = true;
       start-with-dual-pane = true;
       date-format-monospace = true;
-      thumbnail-limit = 100 * 1024 * 1024; # 100 mb
+      # needs to be a uint64!
+      thumbnail-limit = lib.hm.gvariant.mkUint64 (100 * 1024 * 1024); # 100 mb
     };
     "org/nemo/window-state" = {
       sidebar-bookmark-breakpoint = 0;

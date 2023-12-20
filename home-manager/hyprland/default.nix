@@ -25,6 +25,10 @@ in {
         HYPR_LOG = "/tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
       };
 
+      shellAliases = {
+        hypr-log = "less /tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
+      };
+
       packages = with pkgs; [
         # clipboard history
         cliphist
@@ -136,6 +140,8 @@ in {
           enable_swallow = false;
           swallow_regex = "^([Kk]itty|[Ww]ezterm)$";
         };
+
+        debug.disable_logs = false;
 
         # bind workspaces to monitors
         workspace = lib.concatMap ({

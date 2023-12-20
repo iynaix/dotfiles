@@ -1,6 +1,7 @@
 {
   config,
   host,
+  inputs,
   lib,
   pkgs,
   ...
@@ -8,7 +9,7 @@
   isHyprnstack = config.iynaix.hyprland.plugin == "hyprnstack";
 in {
   wayland.windowManager.hyprland = lib.mkIf isHyprnstack {
-    plugins = [pkgs.iynaix.hyprNStack];
+    plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
 
     settings.general.layout = lib.mkForce "nstack";
 

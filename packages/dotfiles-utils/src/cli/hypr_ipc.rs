@@ -3,11 +3,6 @@ use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
 
-struct Globals {
-    is_desktop: bool,
-    nstack: bool,
-}
-
 fn get_hyprland_socket() -> String {
     #[derive(Deserialize, Debug)]
     struct HyprlandInstance {
@@ -33,8 +28,8 @@ fn is_nstack() -> bool {
     opt.str == "nstack"
 }
 
-fn set_workspace_orientation(workspace: String, globals: &Globals) {
-    if !globals.is_desktop {
+fn set_workspace_orientation(workspace: String, is_desktop: bool, nstack: bool) {
+    if !is_desktop {
         return;
     }
 
@@ -45,20 +40,18 @@ fn set_workspace_orientation(workspace: String, globals: &Globals) {
         hypr(&["layoutmsg", mon.orientation()]);
 
         // set nstack stacks
-        if globals.nstack {
+        if nstack {
             hypr(&["layoutmsg", "setstackcount", &mon.stacks().to_string()]);
         }
     }
 }
 
 fn main() {
-    let globals = Globals {
-        is_desktop: gethostname::gethostname()
-            .to_str()
-            .unwrap_or_default()
-            .ends_with("desktop"),
-        nstack: is_nstack(),
-    };
+    let is_desktop = gethostname::gethostname()
+        .to_str()
+        .unwrap_or_default()
+        .ends_with("desktop");
+    let nstack = is_nstack();
 
     let socket_path = get_hyprland_socket();
     let socket = UnixStream::connect(socket_path).expect("hyprland ipc socket not found");
@@ -74,12 +67,12 @@ fn main() {
 
         match ev {
             "monitoradded" => {
-                if globals.is_desktop {
+                if is_desktop {
                     cmd(["hypr-monitors"])
                 }
             }
             "monitorremoved" => {
-                if globals.is_desktop {
+                if is_desktop {
                     let rearranged_workspaces = Monitor::rearranged_workspaces();
                     // focus desktop with the most workspaces
                     let (mon_to_focus, _) = rearranged_workspaces
@@ -91,11 +84,11 @@ fn main() {
             }
             "openwindow" => {
                 let workspace = &ev_args[1];
-                set_workspace_orientation(workspace.to_string(), &globals);
+                set_workspace_orientation(workspace.to_string(), is_desktop, nstack);
             }
             "movewindow" => {
                 let workspace = &ev_args[1];
-                set_workspace_orientation(workspace.to_string(), &globals);
+                set_workspace_orientation(workspace.to_string(), is_desktop, nstack);
             }
             _ => {
                 // enable for debugging

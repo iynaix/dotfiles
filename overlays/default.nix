@@ -27,10 +27,7 @@ in {
           // (import ../packages {
             inherit (prev) pkgs;
             inherit inputs;
-          })
-          // {
-            hyprNStack = inputs.hyprNStack.packages.${pkgs.system}.hyprNStack;
-          };
+          });
 
         # fix fish shell autocomplete error for zfs
         # https://github.com/NixOS/nixpkgs/issues/247290
