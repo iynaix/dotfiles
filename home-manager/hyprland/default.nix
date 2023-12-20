@@ -7,6 +7,7 @@
   ...
 }: let
   displays = config.iynaix.displays;
+  isVm = host == "vm" || host == "vm-amd";
 in {
   imports = [
     ./hyprnstack.nix
@@ -57,7 +58,7 @@ in {
         };
 
         "$mod" =
-          if host == "vm"
+          if isVm
           then "ALT"
           else "SUPER";
 
@@ -77,7 +78,7 @@ in {
 
         decoration = {
           rounding = 4;
-          drop_shadow = host != "vm";
+          drop_shadow = !isVm;
           shadow_range = 4;
           shadow_render_power = 3;
           "col.shadow" = "rgba(1a1a1aee)";
@@ -86,7 +87,7 @@ in {
           # dim_strength = 0.05
 
           blur = {
-            enabled = host != "vm";
+            enabled = !isVm;
             size = 2;
             passes = 3;
             new_optimizations = true;
@@ -96,7 +97,7 @@ in {
         };
 
         animations = {
-          enabled = host != "vm";
+          enabled = !isVm;
           bezier = [
             "overshot, 0.05, 0.9, 0.1, 1.05"
             "smoothOut, 0.36, 0, 0.66, -0.56"

@@ -1,6 +1,7 @@
 {user, ...}: {
   iynaix-nixos = {
     kanata.enable = true;
+    virt-manager.enable = true;
   };
 
   # by-id doesn't seem to work with amd mobo

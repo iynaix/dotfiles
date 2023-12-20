@@ -43,7 +43,14 @@ in {
   ];
 
   programs = {
-    gh.enable = true;
+    gh = {
+      enable = true;
+      # https://github.com/nix-community/home-manager/issues/4744#issuecomment-1849590426
+      settings = {
+        # Workaround for https://github.com/nix-community/home-manager/issues/4744
+        version = 1;
+      };
+    };
     git = {
       enable = true;
       userName = "Lin Xianyi";

@@ -45,9 +45,9 @@ sudo mount --mkdir -t zfs zroot/home /mnt/home
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
 while true; do
-    read -rp "Which host to install? (desktop / framework / xps / vm) " host
+    read -rp "Which host to install? (desktop / framework / xps / vm / vm-amd) " host
     case $host in
-        desktop|framework|xps|vm ) break;;
+        desktop|framework|xps|vm|vm-amd ) break;;
         * ) echo "Invalid host. Please select a valid host.";;
     esac
 done

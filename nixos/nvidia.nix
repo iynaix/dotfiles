@@ -29,7 +29,7 @@ in {
           GBM_BACKEND = "nvidia-drm";
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
         }
-        // lib.optionalAttrs (host == "vm") {
+        // lib.optionalAttrs (host == "vm" || host == "vm-amd") {
           WLR_RENDERER_ALLOW_SOFTWARE = "1";
         };
     };

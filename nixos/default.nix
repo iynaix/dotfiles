@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [
-    ./am5.nix
     ./audio.nix
     ./auth.nix
     ./configuration.nix

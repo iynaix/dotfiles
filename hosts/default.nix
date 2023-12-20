@@ -70,4 +70,4 @@ in
       then host
       else "${user}@${host}";
     value = mkHost host;
-  }) ["desktop" "framework" "xps" "vm"])
+  }) ["desktop" "framework" "xps" "vm" "vm-amd"])

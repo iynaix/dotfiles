@@ -189,8 +189,6 @@ in {
   # '';
 
   nix = {
-    # use flakes
-    extraOptions = "experimental-features = nix-command flakes";
     gc = {
       # Automatic garbage collection
       automatic = true;
@@ -216,6 +214,8 @@ in {
     };
     settings = {
       auto-optimise-store = true; # Optimise symlinks
+      # use flakes
+      experimental-features = ["nix-command" "flakes"];
       substituters = [
         "https://hyprland.cachix.org"
         "https://nix-community.cachix.org"
