@@ -54,6 +54,9 @@ in {
         "${pkgs.xorg.xhost}/bin/xhost +local:${user}"
         # fix Authorization required, but no authorization protocol specified error
         # "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
+
+        # start the polkit agent
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"
       ];
     };
   };

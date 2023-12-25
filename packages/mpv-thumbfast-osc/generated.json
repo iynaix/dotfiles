@@ -1,7 +1,7 @@
 {
     "mpv-thumbfast-osc": {
         "cargoLocks": null,
-        "date": "2023-11-28",
+        "date": "2023-12-21",
         "extract": null,
         "name": "mpv-thumbfast-osc",
         "passthru": null,
@@ -13,10 +13,10 @@
             "name": null,
             "owner": "po5",
             "repo": "thumbfast",
-            "rev": "04819fc9ce49b67dfc2bac71c26e037bcb57b9d4",
-            "sha256": "sha256-YLI8cCOSF1YacTOOGZxT7mfP68OhhyGm6JzVFXNsxtw=",
+            "rev": "5fefc9b8e995cf5e663666aa10649af799e60186",
+            "sha256": "sha256-6nICOdtPzDQUMufqCJ+g2OnPasOgp3PegnRoWw8TVBU=",
             "type": "github"
         },
-        "version": "04819fc9ce49b67dfc2bac71c26e037bcb57b9d4"
+        "version": "5fefc9b8e995cf5e663666aa10649af799e60186"
     }
 }

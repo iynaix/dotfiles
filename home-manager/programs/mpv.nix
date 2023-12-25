@@ -109,7 +109,7 @@
       (let
         shaderList = files: (
           lib.pipe (["Clamp_Highlights"] ++ files) [
-            (map (s: "${pkgs.iynaix.mpv-anime4k}/share/mpv/shaders/Anime4K_" + s + ".glsl"))
+            (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
             (arr: lib.concatStringsSep ":" arr)
           ]
         );

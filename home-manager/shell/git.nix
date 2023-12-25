@@ -25,7 +25,7 @@
           git branch savepoint;
           git reset --hard "$1";
           git commit --amend;
-          git rebase -p --onto "$START" "$1" savepoint;
+          git rebase --rebase-merges --onto "$START" "$1" savepoint;
           git checkout "$START";
           git merge savepoint;
           git branch -d savepoint;
@@ -115,7 +115,7 @@ in {
     gaa = "git add --all";
     gb = "git branch";
     gbtr = "git bisect reset";
-    gcaam = "gaa && gcam";
+    gcaam = "git add --all && git commit --amend";
     gcam = "git commit --amend";
     gco = "git checkout";
     gdc = "git diff --cached";
@@ -124,8 +124,8 @@ in {
     glg = "git log";
     gm = "git merge";
     gp = "git push";
-    glc = ''gl origin "$(git rev-parse --abbrev-ref HEAD)"'';
-    gpc = ''gp origin "$(git rev-parse --abbrev-ref HEAD)"'';
+    glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
+    gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
     groot = "cd $(git rev-parse - -show-toplevel)";
     grh = "git reset --hard";
     gri = "git rebase --interactive";

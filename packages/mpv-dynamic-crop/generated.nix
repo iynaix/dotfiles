@@ -3,14 +3,14 @@
 {
   mpv-dynamic-crop = {
     pname = "mpv-dynamic-crop";
-    version = "7bb1fa3a2a8193e15c88ed0b103224fa5fb41719";
+    version = "c79a46ba03631eb2a9b4f598aab0b723f03fc531";
     src = fetchFromGitHub {
       owner = "Ashyni";
       repo = "mpv-scripts";
-      rev = "7bb1fa3a2a8193e15c88ed0b103224fa5fb41719";
+      rev = "c79a46ba03631eb2a9b4f598aab0b723f03fc531";
       fetchSubmodules = false;
-      sha256 = "sha256-5zxFbydchQwQj+CoOoEaS+cQhA8csF9EsBIDcPNDcPc=";
+      sha256 = "sha256-W4Dj2tyJHeHLqAndrzllKs4iwMe3Tu8rfzEGBHuke6s=";
     };
-    date = "2023-10-12";
+    date = "2023-12-22";
   };
 }

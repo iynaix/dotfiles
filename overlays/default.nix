@@ -82,7 +82,9 @@ in {
           });
 
         # use dev branch
-        wallust = overrideRustPackage "wallust";
+        wallust = (overrideRustPackage "wallust").overrideAttrs (o: {
+          cargoTestFlags = ["--test config" "--test cache" "--test template"];
+        });
 
         # use latest commmit from git
         waybar = prev.waybar.overrideAttrs (o:

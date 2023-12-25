@@ -37,7 +37,7 @@
       }
 
       choice=$(echo "Selection|Window|Monitor|All" | _rofi)
-      # exit code 10 is alt-e
+      # exit code 10 is Alt-e
       exit_code=$?
 
       # first arg is the grimblast command

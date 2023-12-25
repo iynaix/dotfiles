@@ -27,7 +27,6 @@ in {
     pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
 
   # mpv plugins
-  mpv-anime4k = pkgs.callPackage ./mpv-anime4k {};
   mpv-deletefile = w pkgs.callPackage ./mpv-deletefile {};
   mpv-dynamic-crop = w pkgs.callPackage ./mpv-dynamic-crop {};
   mpv-modernx = w pkgs.callPackage ./mpv-modernx {} {};
