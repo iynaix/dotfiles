@@ -5,12 +5,14 @@
   ...
 }: let
   displays = config.iynaix.displays;
+  rofi = lib.getExe pkgs.rofi;
+  pamixer = lib.getExe pkgs.pamixer;
 in {
   wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
     bind =
       [
         "$mod, Return, exec, $term"
-        "$mod_SHIFT, Return, exec, rofi -show drun"
+        "$mod_SHIFT, Return, exec, ${rofi} -show drun"
         "$mod, BackSpace, killactive,"
         "$mod, e, exec, nemo ~/Downloads"
         "$mod_SHIFT, e, exec, $term yazi ~/Downloads"
@@ -23,8 +25,8 @@ in {
         # exit hyprland
         "$mod_SHIFT, c, exit,"
 
-        ''CTRL_ALT, Delete, exec, rofi -show power-menu -font "${config.iynaix.fonts.monospace} 14" -modi power-menu:rofi-power-menu''
-        "$mod_CTRL, v, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
+        ''CTRL_ALT, Delete, exec, ${rofi} -show power-menu -font "${config.iynaix.fonts.monospace} 14" -modi power-menu:rofi-power-menu''
+        "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu | cliphist decode | wl-copy"
 
         # reset monitors
         "CTRL_SHIFT, Escape, exec, hypr-monitors"
@@ -147,9 +149,9 @@ in {
         # "XF86AudioPlay, mpvctl playpause"
 
         # audio
-        ",XF86AudioLowerVolume, exec, ${lib.getExe pkgs.pamixer} -d 5"
-        ",XF86AudioRaiseVolume, exec, ${lib.getExe pkgs.pamixer} -i 5"
-        ",XF86AudioMute, exec, ${lib.getExe pkgs.pamixer} -t"
+        ",XF86AudioLowerVolume, exec, ${pamixer} -d 5"
+        ",XF86AudioRaiseVolume, exec, ${pamixer} -i 5"
+        ",XF86AudioMute, exec, ${pamixer} -t"
       ]
       ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
       ++ lib.optionals config.iynaix.backlight.enable [
