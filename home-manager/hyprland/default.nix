@@ -92,8 +92,6 @@ in {
             passes = 3;
             new_optimizations = true;
           };
-
-          # blurls = rofi
         };
 
         animations = {

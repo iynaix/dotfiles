@@ -14,68 +14,9 @@
       grimblast
       libnotify
       swappy
-      rofi-wayland
+      rofi
     ];
-    text = ''
-      mesg="Screenshots can be edited with swappy by using Alt+e"
-      theme_str="
-      * {
-          width: 1000;
-      }
-
-      window {
-          height: 625;
-      }
-
-      mainbox {
-          children: [listview,message];
-      }
-      "
-
-      _rofi() {
-          rofi -dmenu -sep '|' -disable-history true -kb-custom-1 "Alt-e" -mesg "$mesg" -cycle true -lines 4 -theme-str "$theme_str" "$@"
-      }
-
-      choice=$(echo "Selection|Window|Monitor|All" | _rofi)
-      # exit code 10 is Alt-e
-      exit_code=$?
-
-      # first arg is the grimblast command
-      screenshot() {
-          img="${screenshotDir}/$(date +${iso8601}).png"
-          if [ "$exit_code" -eq 10 ]; then
-              grimblast save "$1" - | swappy -f - -o "$img"
-              notify-send "Screenshot saved to $img" -i "$img"
-          else
-              grimblast --notify copysave "$1" "$img"
-          fi
-      }
-
-      # small sleep delay is required so rofi menu doesnt appear in the screenshot
-      case "$choice" in
-      "All")
-          delay=$(echo "0|3|5" | _rofi "$@")
-          sleep 0.5
-          sleep "$delay"
-          screenshot screen
-          ;;
-      "Monitor")
-          delay=$(echo "0|3|5" | _rofi "$@")
-          sleep 0.5
-          sleep "$delay"
-          screenshot output
-          ;;
-      "Selection")
-          screenshot area
-          ;;
-      "Window")
-          delay=$(echo "0|3|5" | _rofi "$@")
-          sleep 0.5
-          sleep "$delay"
-          screenshot active
-          ;;
-      esac
-    '';
+    text = builtins.replaceStrings ["@@outputPath@@"] ["${screenshotDir}/$(date +${iso8601}).png"] (builtins.readFile ./screenshot.sh);
   };
   # run ocr on selected area and copy to clipboard
   hypr-ocr = pkgs.writeShellApplication {

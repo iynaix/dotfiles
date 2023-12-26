@@ -62,7 +62,7 @@
     };
 
     # setup fonts
-    fonts.packages = config.hm.iynaix.fonts.packages;
+    fonts.packages = config.hm.iynaix.fonts.packages ++ [pkgs.iynaix.rofi-themes];
 
     # set up programs to use same config as home-manager
     programs.bash = {

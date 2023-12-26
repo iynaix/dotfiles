@@ -1,13 +1,21 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
+  nerdfonts,
   source,
 }:
-stdenv.mkDerivation (source
+stdenvNoCC.mkDerivation (source
   // {
+    buildInputs = [(nerdfonts.override {fonts = ["JetBrainsMono" "Iosevka"];})];
+
     installPhase = ''
       runHook preInstall
-      cp -r files $out
+
+      mkdir -p $out/files
+      cp -r $src/files $out
+      mkdir -p $out/share/fonts/truetype
+      cp $src/fonts/Icomoon-Feather.ttf $out/share/fonts/truetype/feather.ttf
+
       runHook postInstall
     '';
 

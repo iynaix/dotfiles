@@ -4,22 +4,20 @@
   config,
   ...
 }: let
-  hypr-lock = pkgs.writeShellScriptBin "hypr-lock" ''
-    sh "$HOME/.cache/wallust/hypr-lock"
+  lock = pkgs.writeShellScriptBin "lock" ''
+    sh "$HOME/.cache/wallust/lock"
   '';
 in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-    home.packages = [hypr-lock];
+    home.packages = [lock];
 
     wayland.windowManager.hyprland.settings = {
-      bind = [
-        "$mod, x, exec, hypr-lock"
-      ];
+      bind = ["$mod, x, exec, lock"];
     };
 
     iynaix.wallust.entries = {
-      "hypr-lock" = {
-        enable = builtins.elem hypr-lock config.home.packages;
+      "lock" = {
+        enable = builtins.elem lock config.home.packages;
         text = ''
           ${pkgs.swaylock-effects}/bin/swaylock \
             --clock \
@@ -43,7 +41,7 @@ in {
             --inside-color "00161925" \
             --separator-color "00000000"
         '';
-        target = "~/.cache/wallust/hypr-lock";
+        target = "~/.cache/wallust/lock";
       };
     };
   };

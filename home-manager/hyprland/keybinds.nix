@@ -25,8 +25,8 @@ in {
         # exit hyprland
         "$mod_SHIFT, c, exit,"
 
-        ''CTRL_ALT, Delete, exec, ${rofi} -show power-menu -font "${config.iynaix.fonts.monospace} 14" -modi power-menu:rofi-power-menu''
-        "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu | cliphist decode | wl-copy"
+        ''CTRL_ALT, Delete, exec, rofi-power-menu''
+        "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu -theme $HOME/.cache/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
 
         # reset monitors
         "CTRL_SHIFT, Escape, exec, hypr-monitors"

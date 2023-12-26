@@ -54,6 +54,8 @@ fn main() {
 
     let mut rofi = Command::new("rofi")
         .arg("-dmenu")
+        .arg("-theme")
+        .arg("~/.cache/wallust/rofi-menu.rasi")
         .stdout(Stdio::piped())
         .stdin(Stdio::piped())
         .spawn()
