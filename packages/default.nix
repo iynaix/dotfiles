@@ -40,5 +40,7 @@ in {
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
   path-of-building = w pkgs.qt6Packages.callPackage ./path-of-building {};
 
+  rofi-themes = w pkgs.callPackage ./rofi-themes {};
+
   vv = w pkgs.callPackage ./vv {};
 }
