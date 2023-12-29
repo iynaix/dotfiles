@@ -32,7 +32,7 @@ confirm_cmd() {
 	rofi -dmenu \
 		-p 'Confirmation' \
 		-mesg 'Are you Sure?' \
-		-theme "$HOME/.cache/wallust/rofi-shutdown-confirm.rasi"
+		-theme "$HOME/.cache/wallust/rofi-power-menu-confirm.rasi"
 }
 
 # Ask for confirmation

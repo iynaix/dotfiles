@@ -8,15 +8,23 @@
   rofiThemes = "${pkgs.iynaix.rofi-themes}/files";
   launcherType = 2;
   launcherStyle = 2;
-  menuType = 2;
-  menuStyle = 1;
   powermenuType = 4;
   powermenuStyle = 3;
   powermenuDir = "${rofiThemes}/powermenu/type-${toString powermenuType}";
   themeStyles =
     if cfg.theme != null
     then ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
-    else "TODO: custom theme here";
+    else ''
+      * {
+          background:     {background};
+          background-alt: {color0};
+          foreground:     {foreground};
+          selected:       {color4};
+          active:         {color6};
+          urgent:         {color1};
+      }
+    '';
+
   # replace the imports with preset theme / wallust
   fixupRofiThemesRasi = rasiPath: additionalStyles: ''
     ${themeStyles}
@@ -30,7 +38,13 @@
   rofi-power-menu = pkgs.writeShellApplication {
     name = "rofi-power-menu";
     runtimeInputs = with pkgs; [rofi iynaix.rofi-themes];
-    text = builtins.replaceStrings ["@@theme@@"] ["${powermenuDir}/style-${toString powermenuStyle}.rasi"] (builtins.readFile ./rofi-powermenu.sh);
+    text = builtins.replaceStrings ["@@theme@@"] [
+      (builtins.toFile "rofi-power-menu.rasi" ((builtins.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
+        + ''
+          * { background-window: black/60%; } // darken background
+          window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
+        ''))
+    ] (builtins.readFile ./rofi-power-menu.sh);
   };
 in {
   programs.rofi = {
@@ -42,6 +56,7 @@ in {
 
   xdg.configFile = {
     "rofi/rofi-wifi-menu" = lib.mkIf config.iynaix.wifi.enable {
+      # https://github.com/ericmurphyxyz/rofi-wifi-menu/blob/master/rofi-wifi-menu.sh
       source = ./rofi-wifi-menu.sh;
     };
 
@@ -51,12 +66,19 @@ in {
   };
 
   # add blur for rofi shutdown
-  wayland.windowManager.hyprland.settings.layerrule =
-    lib.mkIf config.wayland.windowManager.hyprland.enable ["blur,rofi"];
+  wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
+    layerrule = [
+      "blur,rofi"
+      "ignorealpha 0,rofi"
+    ];
 
-  # TODO: wallust for dynamic rofi themes
-  # TODO: rofi-wifi-menu
-  # TODO: rofi rclip?
+    # force center rofi on monitor
+    windowrulev2 = [
+      "float,class:(Rofi)"
+      "center,class:(Rofi)"
+      "rounding 12,class:(Rofi)"
+    ];
+  };
 
   iynaix.wallust.entries = {
     # default launcher
@@ -69,7 +91,11 @@ in {
     # generic single column rofi menu
     "rofi-menu.rasi" = {
       enable = config.programs.rofi.enable;
-      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString menuType}/style-${toString menuStyle}.rasi" ''
+      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        listview {
+          columns: 1;
+          lines: 6;
+        }
         prompt { enabled: false; }
         textbox-prompt-colon { enabled: false; }
       '';
@@ -78,7 +104,11 @@ in {
 
     "rofi-screenshot.rasi" = {
       enable = config.programs.rofi.enable;
-      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString menuType}/style-${toString menuStyle}.rasi" ''
+      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        listview {
+          columns: 1;
+          lines: 6;
+        }
         * { width: 1000; }
         window { height: 625; }
         mainbox {
@@ -96,10 +126,10 @@ in {
       target = "~/.cache/wallust/rofi-screenshot.rasi";
     };
 
-    "rofi-shutdown-confirm.rasi" = {
+    "rofi-power-menu-confirm.rasi" = {
       enable = config.programs.rofi.enable;
       text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" "";
-      target = "~/.cache/wallust/rofi-shutdown-confirm.rasi";
+      target = "~/.cache/wallust/rofi-power-menu-confirm.rasi";
     };
   };
 }

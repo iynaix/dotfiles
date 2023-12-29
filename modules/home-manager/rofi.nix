@@ -20,7 +20,7 @@
           "tokyonight"
           "yousai"
         ]);
-        default = "catppuccin";
+        default = null;
         description = "Rofi launcher theme";
       };
       width = lib.mkOption {

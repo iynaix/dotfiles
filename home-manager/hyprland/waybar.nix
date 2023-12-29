@@ -86,14 +86,14 @@ in {
       network =
         if config.iynaix.wifi.enable
         then {
-          format = "   {essid}";
-          format-disconnected = "󰖪   Offline";
+          format = "    {essid}";
+          format-disconnected = "󰖪    Offline";
           on-click = "~/.config/rofi/rofi-wifi-menu";
           on-click-right = "${config.iynaix.terminal.exec} nmtui";
           tooltip = false;
         }
         else {
-          format-disconnected = "󰖪  Offline";
+          format-disconnected = "󰖪    Offline";
           format-ethernet = "";
           tooltip = false;
         };

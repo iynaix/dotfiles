@@ -23,8 +23,9 @@ in {
         "$mod, period, exec, code ~/projects/dotfiles"
 
         # exit hyprland
-        "$mod_SHIFT, c, exit,"
+        "$mod_ALT, F4, exit,"
 
+        # without the rounding, the blur shows up around the corners
         ''CTRL_ALT, Delete, exec, rofi-power-menu''
         "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu -theme $HOME/.cache/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
 
