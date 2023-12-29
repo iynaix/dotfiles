@@ -96,7 +96,7 @@
     name = "nswitch-remote";
     text = ''
       cd ${dots}
-      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-xps}" switch
+      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-framework}" switch
       cd - > /dev/null
     '';
   };
@@ -158,6 +158,7 @@ in {
           alejandra
           nh
           nil
+          nix-init
           nixpkgs-fmt
           nixpkgs-review
         ]
@@ -225,5 +226,11 @@ in {
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
+  };
+
+  hm.iynaix.persist = {
+    cache = [
+      ".cache/nixpkgs-review"
+    ];
   };
 }

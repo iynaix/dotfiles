@@ -169,6 +169,10 @@ if [[ $restore_snapshot == "y" ]]; then
 else
     echo "Creating /persist"
     sudo zfs create -o mountpoint=legacy zroot/persist
+
+    sudo mkdir -p /mnt/persist/Desktop
+    sudo mkdir -p /mnt/persist/Documents
+    sudo mkdir -p /mnt/persist/Pictures
 fi
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 

@@ -16,13 +16,6 @@
       convert "$1" -crop "$2" - | swww img --outputs "$3" "''${@:4}" -;
     '';
   };
-  imv-search = pkgs.writeShellApplication {
-    name = "imv-search";
-    runtimeInputs = with pkgs; [imv rclip];
-    text = ''
-      rclip -f "$@" | imv;
-    '';
-  };
   # backup wallpapers to secondary drive
   wallpapers-backup = pkgs.writeShellApplication {
     name = "wallpapers-backup";
@@ -45,13 +38,12 @@
     name = "wallpapers-process";
     runtimeInputs = [wallpapers-backup];
     text = ''
-      wallpapers-backup
-
       cd ${wallpapers_proj}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
       python main.py "$@"
       cd - > /dev/null
+      wallpapers-backup
     '';
   };
   # choose vertical crop for wallpapper
@@ -74,6 +66,16 @@
       if [ -n "$wall" ]; then rm "$wall"; fi
     '';
   };
+  # search wallpapers with rclip
+  wallpapers-search = pkgs.writeShellApplication {
+    name = "wallpapers-search";
+    runtimeInputs = with pkgs; [rclip imv];
+    text = ''
+      cd "$HOME/Pictures/Wallpapers"
+      rclip -f "$@" | imv;
+      cd - > /dev/null
+    '';
+  };
 in {
   config = lib.mkMerge [
     (lib.mkIf (host == "desktop") {
@@ -93,11 +95,17 @@ in {
         m = "exec mv \"$imv_current_file\" ${wallpapers_proj}/in";
       };
     })
+
+    # TODO: rofi rclip?
     (lib.mkIf config.iynaix.rclip.enable {
       home.packages = [
-        imv-search
+        wallpapers-search
         pkgs.rclip
       ];
+
+      home.shellAliases = {
+        wallrg = "wallpapers-search";
+      };
 
       iynaix.persist = {
         home.directories = [

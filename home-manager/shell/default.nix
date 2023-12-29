@@ -49,6 +49,11 @@
   };
 
   iynaix.persist = {
-    home.directories = [".local/share/zoxide"];
+    home.directories = [
+      ".local/share/zoxide"
+    ];
+    cache = [
+      ".cache/nix-index"
+    ];
   };
 }

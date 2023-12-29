@@ -41,7 +41,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2023-12-20",
+        "date": "2023-12-26",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -51,12 +51,12 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "fef2929dd6967d8b913a4a3bc053e87e1a7fd91c",
-            "sha256": "sha256-qX+pU/ovRV7dA35qSA724vV9azz7dMbEyMVBzqS47Ps=",
+            "rev": "53799e06ecb0a9889a76dd08da8660fb172e01b7",
+            "sha256": "sha256-AuZRt02bFr7GzI7qe4giGgjlXK/WX+gmF4+QwD0ChXk=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
-        "version": "fef2929dd6967d8b913a4a3bc053e87e1a7fd91c"
+        "version": "53799e06ecb0a9889a76dd08da8660fb172e01b7"
     },
     "waybar": {
         "cargoLocks": null,
@@ -80,7 +80,7 @@
     },
     "wezterm": {
         "cargoLocks": null,
-        "date": "2023-12-21",
+        "date": "2023-12-28",
         "extract": null,
         "name": "wezterm",
         "passthru": null,
@@ -92,10 +92,10 @@
             "name": null,
             "owner": "wez",
             "repo": "wezterm",
-            "rev": "84ae00c868e711cf97b2bfe885892428f1131a1d",
-            "sha256": "sha256-Sx5NtapMe+CtSlW9mfxUHhzF+n9tV2j/St6pku26Rj0=",
+            "rev": "ff2743748c238e5cdd6e7cb4ed19517d08dd511f",
+            "sha256": "sha256-oogmLKoldUoAsLsDa+MmepWjVu/cuE8YjXrf+QyQ1Jo=",
             "type": "github"
         },
-        "version": "84ae00c868e711cf97b2bfe885892428f1131a1d"
+        "version": "ff2743748c238e5cdd6e7cb4ed19517d08dd511f"
     }
 }

@@ -12,7 +12,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/80679ea5074ab7190c4cce478c600057cfb5edae";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -21,7 +21,7 @@
     impermanence.url = "github:nix-community/impermanence";
 
     hyprland = {
-      url = "github:hyprwm/Hyprland";
+      url = "github:hyprwm/Hyprland/07132741bc02631966ca06ed54b55598a8487a5d";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
