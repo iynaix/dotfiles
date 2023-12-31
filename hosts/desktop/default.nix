@@ -2,10 +2,7 @@
   iynaix-nixos = {
     # hardware
     am5.enable = true;
-    hdds = {
-      enable = true;
-      archlinux = false;
-    };
+    hdds.enable = true;
     nvidia.enable = true;
     zfs.encryption = false;
 

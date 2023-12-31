@@ -11,7 +11,6 @@
       wdred6 = lib.mkEnableOption "WD Red 6TB" // {default = config.iynaix-nixos.hdds.enable;};
       ironwolf22 = lib.mkEnableOption "Ironwolf Pro 22TB" // {default = config.iynaix-nixos.hdds.enable;};
       windows = lib.mkEnableOption "Windows" // {default = config.iynaix-nixos.hdds.enable;};
-      archlinux = lib.mkEnableOption "Arch Linux" // {default = config.iynaix-nixos.hdds.enable;};
     };
 
     zfs = {

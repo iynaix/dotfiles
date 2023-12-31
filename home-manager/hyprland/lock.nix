@@ -1,5 +1,6 @@
 {
   config,
+  isLaptop,
   lib,
   pkgs,
   ...
@@ -12,7 +13,12 @@ in {
     home.packages = [lock];
 
     wayland.windowManager.hyprland.settings = {
-      bind = ["$mod, x, exec, lock"];
+      bind = ["$mod, x, exec, ${lib.getExe lock}"];
+
+      # handle laptop lid
+      bindl = lib.mkIf isLaptop [
+        ",switch:Lid Switch, exec, ${lib.getExe lock}"
+      ];
     };
 
     iynaix.wallust.entries = {
