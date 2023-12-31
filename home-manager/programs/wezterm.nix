@@ -1,8 +1,8 @@
 {
-  pkgs,
-  user,
   config,
   lib,
+  pkgs,
+  user,
   ...
 }: let
   cfg = config.iynaix.wezterm;
@@ -45,7 +45,7 @@ in {
           end
 
           return {
-            ${lib.optionalString (config.iynaix.shell.interactive != "fish") "-- "} default_prog = { '${pkgs.fish}/bin/fish', '-l' },
+            ${lib.optionalString (config.iynaix.shell.interactive != "fish") "-- "} default_prog = { '${lib.getExe pkgs.fish}', '-l' },
             font = wezterm.font('${font}', { weight = "Medium" }),
             harfbuzz_features = { 'zero=1' },
             font_size = ${toString size},

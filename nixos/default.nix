@@ -10,6 +10,7 @@
     ./configuration.nix
     ./docker.nix
     ./filezilla.nix
+    ./gh.nix
     ./hdds.nix
     ./hyprland.nix
     ./impermanence.nix

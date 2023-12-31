@@ -37,7 +37,7 @@ in {
         (openOnWorkspace 10 "$term nvim ~/Desktop/yt.txt")
         (openOnWorkspace 10 "$term")
 
-        "${pkgs.swayidle}/bin/swayidle -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
+        "${lib.getExe pkgs.swayidle} -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
 
         # focus the initial workspaces on startup
         "hyprctl dispatch workspace 9"
@@ -51,9 +51,9 @@ in {
         "sleep 5 && launch-waybar"
 
         # fix gparted "cannot open display: :0" error
-        "${pkgs.xorg.xhost}/bin/xhost +local:${user}"
+        "${lib.getExe pkgs.xorg.xhost} +local:${user}"
         # fix Authorization required, but no authorization protocol specified error
-        # "${pkgs.xorg.xhost}/bin/xhost si:localuser:root"
+        # "${lib.getExe pkgs.xorg.xhost} si:localuser:root"
 
         # start the polkit agent
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"

@@ -1,7 +1,7 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
   ...
 }: let
   lock = pkgs.writeShellScriptBin "lock" ''
@@ -19,7 +19,7 @@ in {
       "lock" = {
         enable = builtins.elem lock config.home.packages;
         text = ''
-          ${pkgs.swaylock-effects}/bin/swaylock \
+          ${lib.getExe pkgs.swaylock-effects} \
             --clock \
             --screenshots \
             --fade-in 0.2 \

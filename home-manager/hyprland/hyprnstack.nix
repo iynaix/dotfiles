@@ -28,7 +28,7 @@ in {
             # disable smart gaps
             no_gaps_when_only=0
             # master is the same size as the stacks
-            mfact=0
+            mfact=0.0
           }
         }
       }

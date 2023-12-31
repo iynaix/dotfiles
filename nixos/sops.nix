@@ -1,8 +1,8 @@
 {
-  pkgs,
-  user,
   config,
   lib,
+  pkgs,
+  user,
   ...
 }: let
   cfg = config.iynaix-nixos.sops;
@@ -12,9 +12,9 @@ in {
 
     # to edit secrets file, run "sops hosts/secrets.json"
     sops.defaultSopsFile = ../hosts/secrets.json;
-    sops.age.sshKeyPaths = ["/home/${user}/.ssh/id_ed25519"];
-    # This is using an age key that is expected to already be in the filesystem
-    sops.age.keyFile = "/home/${user}/.config/sops/age/keys.txt";
+    sops.age.sshKeyPaths = ["/persist/home/${user}/.ssh/id_ed25519"];
+    sops.gnupg.sshKeyPaths = [];
+    sops.age.keyFile = "/persist/home/${user}/.config/sops/age/keys.txt";
     # This will generate a new key if the key specified above does not exist
     sops.age.generateKey = false;
 

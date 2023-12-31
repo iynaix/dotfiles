@@ -60,12 +60,12 @@
     };
     # server command, runs a local server
     server = {
-      bashBody = ''${pkgs.python3}/bin/python -m http.server ''${1:-8000}'';
+      bashBody = ''${lib.getExe pkgs.python3} -m http.server ''${1:-8000}'';
       fishBody = ''
         if test -n "$1"
-          ${pkgs.python3}/bin/python -m http.server "$1"
+          ${lib.getExe pkgs.python3} -m http.server "$1"
         else
-          ${pkgs.python3}/bin/python -m http.server 8000
+          ${lib.getExe pkgs.python3} -m http.server 8000
         end
       '';
     };

@@ -37,10 +37,7 @@ in {
 
     exec = lib.mkOption {
       type = lib.types.str;
-      default =
-        if cfg.package == pkgs.kitty
-        then "${cfg.package}/bin/kitty"
-        else "${lib.getExe cfg.package}";
+      default = lib.getExe cfg.package;
       description = "Terminal command to execute other programs.";
     };
 

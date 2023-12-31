@@ -1,21 +1,23 @@
 {
+  config,
+  lib,
   pkgs,
   user,
-  lib,
-  config,
   ...
 }: let
   sonarr-ical-sync = pkgs.writeShellApplication {
     name = "sonarr-ical-sync";
     runtimeInputs = with pkgs; [curl netlify-cli];
-    text = ''
+    text = let
+      secrets = config.sops.secrets;
+    in ''
       outDir=/tmp/sonarr-ical-sync
       mkdir -p "$outDir"
 
-      SONARR_API_KEY="$(cat /run/secrets/sonarr_api_key)"
+      SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
       curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
 
-      NETLIFY_SITE_ID="$(cat /run/secrets/netlify_site_id)" netlify deploy --dir="$outDir" --prod
+      NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
     '';
   };
 in {
@@ -42,7 +44,7 @@ in {
     systemd.services.sonarr-ical-sync = {
       serviceConfig.Type = "oneshot";
       serviceConfig.User = user;
-      script = "${sonarr-ical-sync}/bin/sonarr-ical-sync";
+      script = lib.getExe sonarr-ical-sync;
     };
     systemd.timers.sonarr-ical-sync = {
       wantedBy = ["timers.target"];

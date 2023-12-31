@@ -1,8 +1,8 @@
 {
+  config,
+  lib,
   pkgs,
   user,
-  lib,
-  config,
   ...
 }: let
   cfg = config.iynaix-nixos.vercel;
@@ -12,7 +12,7 @@
     text = ''
       mkdir -p "/media/6TBRED/Vercel"
 
-      VERCEL_POSTGRES="$(cat /run/secrets/vercel_postgres)"
+      VERCEL_POSTGRES="$(cat ${config.sops.secrets.vercel_postgres.path})"
       pg_dump "$VERCEL_POSTGRES" --file="/media/6TBRED/Vercel/vercel-coinfc-$(date +%F).sql"
     '';
   };
@@ -23,7 +23,7 @@ in {
     systemd.services.vercel-backup = {
       serviceConfig.Type = "oneshot";
       serviceConfig.User = user;
-      script = "${vercel-backup}/bin/vercel-backup";
+      script = lib.getExe vercel-backup;
     };
     systemd.timers.vercel-backup = {
       wantedBy = ["timers.target"];

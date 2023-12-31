@@ -85,12 +85,8 @@ in {
 
       iynaix.shell.functions = {
         nr = {
-          bashBody = ''
-            nix run nixpkgs#"$@"
-          '';
-          fishBody = ''
-            nix run nixpkgs#"$argv"
-          '';
+          bashBody = ''nix run nixpkgs#"$@"'';
+          fishBody = ''nix run nixpkgs#"$argv"'';
         };
       };
     }

@@ -1,53 +1,47 @@
-{pkgs, ...}: {
-  home.packages = [
-    pkgs.delta
-    pkgs.lazygit
+{
+  lib,
+  pkgs,
+  ...
+}: {
+  home.packages = with pkgs; [
+    delta
+    lazygit
   ];
 
-  programs = {
-    gh = {
-      enable = true;
-      # https://github.com/nix-community/home-manager/issues/4744#issuecomment-1849590426
-      settings = {
-        # Workaround for https://github.com/nix-community/home-manager/issues/4744
-        version = 1;
+  programs.git = {
+    enable = true;
+    userName = "Lin Xianyi";
+    userEmail = "iynaix@gmail.com";
+    extraConfig = {
+      init = {defaultBranch = "main";};
+      branch = {
+        master = {merge = "refs/heads/master";};
+        main = {merge = "refs/heads/main";};
       };
-    };
-    git = {
-      enable = true;
-      userName = "Lin Xianyi";
-      userEmail = "iynaix@gmail.com";
-      extraConfig = {
-        init = {defaultBranch = "main";};
-        branch = {
-          master = {merge = "refs/heads/master";};
-          main = {merge = "refs/heads/main";};
-        };
-        core = {
-          pager = "delta";
-        };
-        interactive = {
-          diffFilter = "delta --color-only";
-        };
-        delta = {
-          navigate = true;
-          light = false;
-          # side-by-side = true;
-        };
-        merge = {
-          conflictstyle = "diff3";
-        };
-        format = {
-          pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
-        };
-        diff = {
-          tool = "nvim -d";
-          guitool = "code";
-          colorMoved = "default";
-        };
-        pull = {rebase = true;};
-        push = {default = "simple";};
+      core = {
+        pager = "delta";
       };
+      interactive = {
+        diffFilter = "delta --color-only";
+      };
+      delta = {
+        navigate = true;
+        light = false;
+        # side-by-side = true;
+      };
+      merge = {
+        conflictstyle = "diff3";
+      };
+      format = {
+        pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+      };
+      diff = {
+        tool = "nvim -d";
+        guitool = "code";
+        colorMoved = "default";
+      };
+      pull = {rebase = true;};
+      push = {default = "simple";};
     };
   };
 
@@ -60,14 +54,9 @@
     '';
     # searches git history, can never remember this stupid thing
     gsearch = {
-      bashBody = ''
-        # 2nd argument is target path and subsequent arguments are passed through
-        git log -S$1 -- ''${2:-.} $*[2,-1]
-      '';
-      fishBody = ''
-        # 2nd argument is target path and subsequent arguments are passed through
-        git log -S$argv[1] -- $argv[2] $argv[3..-1]
-      '';
+      # 2nd argument is target path and subsequent arguments are passed through
+      bashBody = ''git log -S$1 -- ''${2:-.} $*[2,-1]'';
+      fishBody = ''git log -S$argv[1] -- $argv[2] $argv[3..-1]'';
     };
   };
 

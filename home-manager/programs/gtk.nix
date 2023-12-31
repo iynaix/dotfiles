@@ -16,7 +16,7 @@ in {
 
     pointerCursor = lib.mkIf isNixOS {
       package = pkgs.simp1e-cursors;
-      name = "Simp1e-Catppuccin-Mocha";
+      name = "Simp1e-Catppuccin-Frappe";
       size = 28;
       gtk.enable = true;
       x11.enable = true;

@@ -1,7 +1,7 @@
 {
   config,
-  pkgs,
   lib,
+  pkgs,
   ...
 }: {
   config = lib.mkIf config.iynaix.kitty.enable {
@@ -25,7 +25,7 @@
         font_features = "JetBrainsMonoNerdFontComplete-Regular +zero";
         shell =
           if (config.iynaix.shell.interactive == "fish")
-          then "${pkgs.fish}/bin/fish"
+          then "${lib.getExe pkgs.fish}"
           else ".";
       };
     };

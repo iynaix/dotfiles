@@ -41,7 +41,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2023-12-26",
+        "date": "2023-12-30",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -51,16 +51,16 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "53799e06ecb0a9889a76dd08da8660fb172e01b7",
-            "sha256": "sha256-AuZRt02bFr7GzI7qe4giGgjlXK/WX+gmF4+QwD0ChXk=",
+            "rev": "4ff7283c80d310be18ee941fbbd12b5150a45274",
+            "sha256": "sha256-gKME+Je4OuE8VRUN9sdnoQtHNT1zsqdvurJEtdYk08c=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
-        "version": "53799e06ecb0a9889a76dd08da8660fb172e01b7"
+        "version": "4ff7283c80d310be18ee941fbbd12b5150a45274"
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2023-12-25",
+        "date": "2023-12-29",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -72,11 +72,11 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "41ebdc3cb62ee6383b7241a79af7d13a5d19fd65",
-            "sha256": "sha256-HaU7mcrSnb21DBBcv8KXG+nDijIafvOjnpk5Ora4+g8=",
+            "rev": "99d26e44ee45f19655708d621d349f3d7f1643b7",
+            "sha256": "sha256-OYIDBzNYWIt4X2VicM8nhm8SC/rJCk6uTMdzMpZVepQ=",
             "type": "github"
         },
-        "version": "41ebdc3cb62ee6383b7241a79af7d13a5d19fd65"
+        "version": "99d26e44ee45f19655708d621d349f3d7f1643b7"
     },
     "wezterm": {
         "cargoLocks": null,
