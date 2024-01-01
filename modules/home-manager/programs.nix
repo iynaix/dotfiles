@@ -5,10 +5,10 @@
   ...
 }: {
   options.iynaix = {
-    anime4k.enable = lib.mkEnableOption "anime4k" // {default = true;};
     deadbeef.enable = lib.mkEnableOption "deadbeef" // {default = host == "desktop";};
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};
+    mpv-anime.enable = lib.mkEnableOption "mpv-anime" // {default = true;};
     obs-studio.enable = lib.mkEnableOption "obs-studio" // {default = isNixOS && host == "desktop";};
     pathofbuilding.enable = lib.mkEnableOption "pathofbuilding" // {default = isNixOS;};
     rclip.enable = lib.mkEnableOption "rclip";

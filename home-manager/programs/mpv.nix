@@ -64,12 +64,28 @@
         "Alt+down" = "ignore";
       };
       config = {
+        # recommended mpv settings can be referenced here:
+        # https://iamscum.wordpress.com/guides/videoplayback-guide/mpv-conf
         profile = "gpu-hq";
         input-ipc-server = "/tmp/mpvsocket";
         # no-border = true;
         save-position-on-quit = true;
+        force-seekable = "yes";
+        cursor-autohide = 100;
+
+        # vo = "gpu-next";
+        gpu-api = "vulkan";
+
+        hwdec = "auto-copy";
+        hwdec-codecs = "all";
+
+        # forces showing subtitles while seeking through the video
+        demuxer-mkv-subtitle-preroll = "yes";
 
         sub-auto = "fuzzy";
+        # some settings fixing VOB/PGS subtitles (creating blur & changing yellow subs to gray)
+        sub-gauss = "1.0";
+        sub-gray = "yes";
         sub-use-margins = "no";
         sub-font-size = 45;
         sub-scale-by-window = "yes";
@@ -104,68 +120,57 @@
         ]);
     }
 
-    # anime 4k
-    (lib.optionalAttrs config.iynaix.anime4k.enable
-      (let
-        shaderList = files: (
-          lib.pipe (["Clamp_Highlights"] ++ files) [
-            (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
-            (arr: lib.concatStringsSep ":" arr)
-          ]
-        );
-        setShaders = text: files: ''no-osd change-list glsl-shaders set "${shaderList files}"; show-text "Anime4K: ${text} (HQ)"'';
-      in {
-        config = {
-          # Optimized shaders for higher-end GPU: Mode A (HQ)
-          # glsl-shaders = ''"~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Restore_CNN_VL.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"'';
+    # anime profile settings
+    (let
+      mpv-anime = pkgs.iynaix.mpv-anime;
+      anime4k_shaders = (
+        lib.pipe [
+          "Clamp_Highlights"
+          "Restore_CNN_VL"
+          "Upscale_CNN_x2_VL"
+          "AutoDownscalePre_x2"
+          "AutoDownscalePre_x4"
+          "Upscale_CNN_x2_M"
+        ] [
+          (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
+          (arr: lib.concatStringsSep ":" arr)
+        ]
+      );
+    in (lib.optionalAttrs config.iynaix.mpv-anime.enable
+      {
+        # auto apply anime shaders for anime videos
+        profiles.anime = {
+          profile-desc = "Anime";
+          profile-cond = "path:find('[Aa]nime')";
+          profile-restore = "copy-equal";
+
+          # https://kokomins.wordpress.com/2019/10/14/mpv-config-guide/#advanced-video-scaling-config
+          deband-iterations = 2; # Range 1-16. Higher = better quality but more GPU usage. >5 is redundant.
+          deband-threshold = 35; # Range 0-4096. Deband strength.
+          deband-range = 20; # Range 1-64. Range of deband. Too high may destroy details.
+          deband-grain = 5; # Range 0-4096. Inject grain to cover up bad banding, higher value needed for poor sources.
+
+          # set shader defaults
+          glsl-shaders = anime4k_shaders;
+
+          dscale = "mitchell";
+          cscale = "spline64"; # or ewa_lanczossoft
         };
         bindings = {
-          # clear shaders
-          "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "GLSL shaders cleared"'';
-          # Optimized shaders for higher-end GPU:
-          "CTRL+1" = setShaders "Mode A" [
-            "Restore_CNN_VL"
-            "Upscale_CNN_x2_VL"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Upscale_CNN_x2_M"
-          ];
-          "CTRL+2" = setShaders "Mode B" [
-            "Restore_CNN_Soft_VL"
-            "Upscale_CNN_x2_VL"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Upscale_CNN_x2_M"
-          ];
-          "CTRL+3" = setShaders "Mode C" [
-            "Upscale_Denoise_CNN_x2_VL"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Upscale_CNN_x2_M"
-          ];
-          "CTRL+4" = setShaders "Mode A+A" [
-            "Restore_CNN_VL"
-            "Upscale_CNN_x2_VL"
-            "Restore_CNN_M"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Upscale_CNN_x2_M"
-          ];
-          "CTRL+5" = setShaders "Mode B+B" [
-            "Restore_CNN_Soft_VL"
-            "Upscale_CNN_x2_VL"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Restore_CNN_Soft_M"
-            "Upscale_CNN_x2_M"
-          ];
-          "CTRL+6" = setShaders "Mode C+A" [
-            "Upscale_Denoise_CNN_x2_VL"
-            "AutoDownscalePre_x2"
-            "AutoDownscalePre_x4"
-            "Restore_CNN_M"
-            "Upscale_CNN_x2_M"
-          ];
+          # clear all shaders
+          "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
+          # Anime4K shaders
+          "CTRL+1" = ''no-osd change-list glsl-shaders set "${anime4k_shaders}"; show-text "Anime4K: Mode A (HQ)"'';
+          # FSRCNNX shaders
+          "CTRL+2" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_8-0-4-1_LineArt.glsl"; show-text "FSRCNNX 8 (LineArt)"'';
+          "CTRL+3" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_8-0-4-1.glsl"; show-text "FSRCNNX 8"'';
+          "CTRL+4" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_16-0-4-1.glsl"; show-text "FSRCNNX 16"'';
+          # SSimSuperRes shaders
+          "CTRL+5" = ''no-osd change-list glsl-shaders set "${mpv-anime}/SSimSuperRes.glsl"; show-text "SSimSuperRes"'';
+          # RAVU Lite shaders
+          "CTRL+6" = ''no-osd change-list glsl-shaders set "${mpv-anime}/ravu-lite-r4.hook"; show-text "Ravu Lite R4"'';
+          # NNEDI3 shaders
+          "CTRL+7" = ''no-osd change-list glsl-shaders set "${mpv-anime}/nnedi3-nns256-win8x4.hook"; show-text "NNEDI3"'';
         };
       }))
   ];

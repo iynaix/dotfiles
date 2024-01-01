@@ -35,6 +35,8 @@ in {
   mpv-subsearch = w pkgs.callPackage ./mpv-subsearch {};
   mpv-thumbfast-osc = w pkgs.callPackage ./mpv-thumbfast-osc {};
 
+  mpv-anime = w pkgs.callPackage ./mpv-anime {};
+
   # custom version of pob with a .desktop entry, overwritten as a custom package
   # as the interaction with passthru is weird
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix

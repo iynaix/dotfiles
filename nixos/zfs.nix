@@ -77,16 +77,16 @@ in {
       datasets = {
         "zroot/home" = lib.mkIf (!persistCfg.erase.home) {
           hourly = 50;
-          daily = 20;
-          weekly = 6;
-          monthly = 3;
+          daily = 15;
+          weekly = 3;
+          monthly = 1;
         };
 
         "zroot/persist" = {
           hourly = 50;
-          daily = 20;
-          weekly = 6;
-          monthly = 3;
+          daily = 15;
+          weekly = 3;
+          monthly = 1;
         };
       };
     };

@@ -1,0 +1,22 @@
+{
+    "ravu": {
+        "cargoLocks": null,
+        "date": "2023-09-13",
+        "extract": null,
+        "name": "ravu",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "bjin",
+            "repo": "mpv-prescalers",
+            "rev": "3f24e7c53085854d122bb5d6629d1d503ba29e35",
+            "sha256": "sha256-Ewk2mjw6gAolrkzg+4DmVpOxRJDG6vOzzoQHF6668T8=",
+            "type": "github"
+        },
+        "version": "3f24e7c53085854d122bb5d6629d1d503ba29e35"
+    }
+}

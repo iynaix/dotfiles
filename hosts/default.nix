@@ -45,9 +45,6 @@
 
               users.${user} = {
                 imports = homeManagerImports ++ [inputs.impermanence.nixosModules.home-manager.impermanence];
-
-                # Let Home Manager install and manage itself.
-                programs.home-manager.enable = true;
               };
             };
           }

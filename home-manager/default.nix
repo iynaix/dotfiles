@@ -48,6 +48,9 @@
       ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
   };
 
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
   # stop bothering me
   xdg.configFile = {
     "nix/nix.conf".text = "experimental-features = nix-command flakes";
