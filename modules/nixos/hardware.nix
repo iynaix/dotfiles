@@ -1,10 +1,12 @@
 {
-  lib,
   config,
+  isLaptop,
+  lib,
   ...
 }: {
   options.iynaix-nixos = {
     am5.enable = lib.mkEnableOption "B650E-E motherboard";
+    bluetooth.enable = lib.mkEnableOption "Bluetooth" // {default = isLaptop;};
     nvidia.enable = lib.mkEnableOption "Nvidia GPU";
     hdds = {
       enable = lib.mkEnableOption "Desktop HDDs";

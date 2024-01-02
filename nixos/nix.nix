@@ -196,7 +196,6 @@ in {
       dates = "weekly";
       options = "--delete-older-than 2d";
     };
-    # package = pkgs.nixVersions.unstable;
     # change nix registry to use nixpkgs from flake
     # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
     registry = {

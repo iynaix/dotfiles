@@ -7,6 +7,7 @@
   imports = [
     ./audio.nix
     ./auth.nix
+    ./bluetooth.nix
     ./configuration.nix
     ./docker.nix
     ./filezilla.nix

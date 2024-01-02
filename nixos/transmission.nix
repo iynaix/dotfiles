@@ -112,7 +112,7 @@ in {
     # setup port forwarding
     networking.firewall.allowedTCPPorts = [51413];
 
-    hm.home.packages = with pkgs; [transmission-remote-gtk];
+    # hm.home.packages = with pkgs; [transmission-remote-gtk];
 
     iynaix-nixos.persist.home.directories = [
       ".config/transmission-daemon"

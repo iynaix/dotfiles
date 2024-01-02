@@ -32,7 +32,7 @@ in {
 
         # fix fish shell autocomplete error for zfs
         # https://github.com/NixOS/nixpkgs/issues/247290
-        fish = assert (lib.assertMsg (prev.fish.version == "3.6.4") "fish: overlay is no longer needed");
+        fish = assert (lib.assertMsg (lib.hasPrefix "3.6" prev.fish.version) "fish: overlay is no longer needed");
           prev.fish.overrideAttrs (o: {
             patches =
               (o.patches or [])
