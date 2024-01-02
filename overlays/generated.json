@@ -19,26 +19,6 @@
         },
         "version": "0908f36050d545a0eb97ca0cbfc40c47fc50d6ba"
     },
-    "transmission-web-soft-theme": {
-        "cargoLocks": null,
-        "date": "2021-01-28",
-        "extract": null,
-        "name": "transmission-web-soft-theme",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "diesys",
-            "repo": "transmission-web-soft-theme",
-            "rev": "a957b41b0303e6b74e67191311e0d2af9b60a965",
-            "sha256": "sha256-KngN44lnhv0sga0otYC9F5xoqLDDIVxobXRlhhhSmHo=",
-            "type": "github"
-        },
-        "version": "a957b41b0303e6b74e67191311e0d2af9b60a965"
-    },
     "wallust": {
         "cargoLocks": null,
         "date": "2023-12-31",

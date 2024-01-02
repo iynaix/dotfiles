@@ -2,10 +2,6 @@
 src.git = "https://github.com/Horus645/swww"
 fetch.github = "Horus645/swww"
 
-[transmission-web-soft-theme]
-src.git = "https://github.com/diesys/transmission-web-soft-theme"
-fetch.github = "diesys/transmission-web-soft-theme"
-
 [wallust]
 src.git = "https://codeberg.org/explosion-mental/wallust.git"
 src.branch = "dev"

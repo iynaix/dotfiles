@@ -13,18 +13,6 @@
     };
     date = "2023-12-21";
   };
-  transmission-web-soft-theme = {
-    pname = "transmission-web-soft-theme";
-    version = "a957b41b0303e6b74e67191311e0d2af9b60a965";
-    src = fetchFromGitHub {
-      owner = "diesys";
-      repo = "transmission-web-soft-theme";
-      rev = "a957b41b0303e6b74e67191311e0d2af9b60a965";
-      fetchSubmodules = false;
-      sha256 = "sha256-KngN44lnhv0sga0otYC9F5xoqLDDIVxobXRlhhhSmHo=";
-    };
-    date = "2021-01-28";
-  };
   wallust = {
     pname = "wallust";
     version = "6711588ed32b823929c81b5e749dcd959bb0a4cd";

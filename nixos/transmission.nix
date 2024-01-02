@@ -12,6 +12,8 @@ in {
   config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
     services.transmission = {
       enable = true;
+      package = pkgs.transmission_4;
+      webHome = pkgs.flood-for-transmission;
       inherit user home;
       group = "users";
       settings = {
