@@ -32,6 +32,7 @@
     # automount disks
     services.gvfs.enable = true;
     # services.devmon.enable = true;
+    programs.dconf.enable = true;
 
     environment = {
       etc = {

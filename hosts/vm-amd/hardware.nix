@@ -1,3 +1,0 @@
-{...}: {
-  imports = [../vm/hardware.nix];
-}

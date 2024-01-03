@@ -35,9 +35,9 @@
       fi
 
       if [ "$#" -eq 0 ]; then
-          nh home switch --nom --configuration "${host}"
+          nh home switch --nom --configuration "${host}" -- --option eval-cache false
       else
-          nh home switch --nom "$@"
+          nh home switch --nom "$@" -- --option eval-cache false
       fi
 
       cd - > /dev/null

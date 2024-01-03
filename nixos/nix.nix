@@ -48,9 +48,9 @@
       fi
 
       if [ "$#" -eq 0 ]; then
-          nh os switch --nom --hostname "${host}"
+          nh os switch --nom --hostname "${host}" -- --option eval-cache false
       else
-          nh os switch --nom "$@"
+          nh os switch --nom "$@" -- --option eval-cache false
       fi
 
       # only relevant if --dry is passed

@@ -6,13 +6,13 @@
 }: {
   options.iynaix = {
     deadbeef.enable = lib.mkEnableOption "deadbeef" // {default = host == "desktop";};
+    gradience.enable = lib.mkEnableOption "gradience";
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};
     mpv-anime.enable = lib.mkEnableOption "mpv-anime" // {default = true;};
     obs-studio.enable = lib.mkEnableOption "obs-studio" // {default = isNixOS && host == "desktop";};
     pathofbuilding.enable = lib.mkEnableOption "pathofbuilding" // {default = isNixOS;};
     rclip.enable = lib.mkEnableOption "rclip";
-    trimage.enable = lib.mkEnableOption "trimage";
     vlc.enable = lib.mkEnableOption "vlc";
     wezterm.enable = lib.mkEnableOption "wezterm" // {default = isNixOS;};
     wallust = with lib.types; {

@@ -35,7 +35,7 @@
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       # don't blind me on startup
-      "${lib.getExe pkgs.brightnessctl} s 30%"
+      "${lib.getExe pkgs.brightnessctl} s 25%"
     ];
   };
 }

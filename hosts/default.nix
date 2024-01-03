@@ -60,11 +60,15 @@
 
         modules = homeManagerImports ++ [../overlays];
       };
-in
-  builtins.listToAttrs (map (host: {
+  all_hosts = builtins.listToAttrs (map (host: {
     name =
       if isNixOS
       then host
       else "${user}@${host}";
     value = mkHost host;
-  }) ["desktop" "framework" "xps" "vm" "vm-amd"])
+  }) ["desktop" "framework" "xps" "vm"]);
+in
+  all_hosts
+  // {
+    vm-amd = all_hosts.vm // {config.iynaix-nixos.hyprland.enable = true;};
+  }
