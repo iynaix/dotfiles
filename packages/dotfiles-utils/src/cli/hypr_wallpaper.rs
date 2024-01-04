@@ -1,6 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
-    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, wallpaper, CmdOutput, Monitor, NixInfo,
+    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, wallpaper, wallust, CmdOutput, Monitor,
+    NixInfo,
 };
 use serde::Deserialize;
 use std::{collections::HashMap, path::Path, process::Command};
@@ -160,8 +161,10 @@ fn main() {
             .map_or("dark16".to_string(), |info| info.filter.clone()),
     );
 
-    if !args.no_wallust {
-        cmd(["wallust", "--filter", &filter_type, &wallpaper])
+    // use colorscheme set from nix if available
+    match NixInfo::before().colorscheme {
+        Some(cs) => wallust::apply_theme(cs),
+        None => cmd(["wallust", "--filter", &filter_type, &wallpaper]),
     }
 
     if cfg!(feature = "hyprland") {

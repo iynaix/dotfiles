@@ -64,6 +64,7 @@ in {
           wallpaper = "{wallpaper}";
           fallback = "${../../gits-catppuccin.jpg}";
           monitors = config.iynaix.displays;
+          colorscheme = config.iynaix.wallust.colorscheme;
           persistent_workspaces = config.iynaix.waybar.persistent-workspaces;
           neofetch = {
             logo = "${../../shell/rice/nixos.png}";

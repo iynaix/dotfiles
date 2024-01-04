@@ -32,13 +32,6 @@ pub struct HyprWallpaperArgs {
 
     #[arg(
         long,
-        action,
-        help = "do not use wallust to generate colorschemes for programs"
-    )]
-    pub no_wallust: bool,
-
-    #[arg(
-        long,
         value_name = "TRANSITION",
         value_parser = PossibleValuesParser::new([
             "simple",

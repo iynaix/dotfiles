@@ -24,12 +24,10 @@
     ];
 
     hyprland.plugin = "hyprnstack";
-    rclip.enable = true;
-    waybar = {
-      # theme = "transparent";
-      # persistent-workspaces = true;
-    };
     pathofbuilding.enable = true;
+    rclip.enable = true;
+    # wallust.colorscheme = "tokyo-night";
+    # waybar.persistent-workspaces = true;
     vlc.enable = true;
   };
 

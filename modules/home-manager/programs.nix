@@ -17,6 +17,12 @@
     wezterm.enable = lib.mkEnableOption "wezterm" // {default = isNixOS;};
     wallust = with lib.types; {
       enable = lib.mkEnableOption "wallust" // {default = true;};
+      colorscheme = lib.mkOption {
+        type = lib.types.nullOr (lib.types.string);
+        default = null;
+        description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
+      };
+
       threshold = lib.mkOption {
         type = int;
         default = 20;

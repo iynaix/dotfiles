@@ -19,6 +19,7 @@
     wifi.enable = true;
 
     pathofbuilding.enable = true;
+    rclip.enable = true;
 
     terminal.size = 12;
 

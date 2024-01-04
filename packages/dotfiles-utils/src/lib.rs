@@ -343,6 +343,7 @@ pub struct NixMonitorInfo {
 pub struct NixInfo {
     pub wallpaper: String,
     pub fallback: String,
+    pub colorscheme: Option<String>,
     pub neofetch: Neofetch,
     pub special: Special,
     pub persistent_workspaces: bool,
@@ -370,6 +371,28 @@ impl NixInfo {
                 format!("rgb({})", self.colors.get(&k).unwrap().replace('#', ""))
             })
             .collect()
+    }
+}
+
+pub mod wallust {
+    use crate::{cmd, full_path};
+
+    pub const CUSTOM_THEMES: [&str; 6] = [
+        "catppuccin-frappe",
+        "catppuccin-macchiato",
+        "catppuccin-mocha",
+        "decay-dark",
+        "night-owl",
+        "tokyo-night",
+    ];
+
+    pub fn apply_theme(theme: String) {
+        if CUSTOM_THEMES.contains(&theme.as_str()) {
+            let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json"));
+            cmd(["wallust", "cs", colorscheme_file.to_str().unwrap()])
+        } else {
+            cmd(["wallust", "theme", &theme])
+        }
     }
 }
 
