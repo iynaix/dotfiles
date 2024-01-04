@@ -31,7 +31,7 @@
   };
 
   iynaix.wallust.entries.zathurarc = {
-    enable = config.programs.zathura.enable;
+    inherit (config.programs.zathura) enable;
     text = ''
       set default-bg                  "{color0}"
       set default-fg                  "{color10}"

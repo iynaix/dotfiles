@@ -10,7 +10,7 @@
       theme = "Catppuccin-Mocha";
       font = {
         name = font;
-        size = size;
+        inherit size;
       };
       settings = {
         enable_audio_bell = false;

@@ -8,13 +8,15 @@
 }: {
   imports = [];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-amd"];
-  # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
-  # https://unix.stackexchange.com/a/253401
-  boot.blacklistedKernelModules = ["amdgpu"];
-  boot.extraModulePackages = [];
+  boot = {
+    initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod"];
+    initrd.kernelModules = [];
+    kernelModules = ["kvm-amd"];
+    # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
+    # https://unix.stackexchange.com/a/253401
+    blacklistedKernelModules = ["amdgpu"];
+    extraModulePackages = [];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

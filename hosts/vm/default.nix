@@ -10,9 +10,11 @@
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
 
   # enable clipboard and file sharing
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
-  services.spice-webdavd.enable = true;
+  services = {
+    qemuGuest.enable = true;
+    spice-vdagentd.enable = true;
+    spice-webdavd.enable = true;
+  };
 
   # fix for spice-vdagentd not starting in wms
   systemd.user.services.spice-agent = {

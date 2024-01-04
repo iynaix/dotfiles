@@ -67,16 +67,18 @@
     # setup fonts
     fonts.packages = config.hm.iynaix.fonts.packages ++ [pkgs.iynaix.rofi-themes];
 
-    # set up programs to use same config as home-manager
-    programs.bash = {
-      interactiveShellInit = config.hm.programs.bash.initExtra;
-      loginShellInit = config.hm.programs.bash.profileExtra;
+    programs = {
+      # use same config as home-manager
+      bash = {
+        interactiveShellInit = config.hm.programs.bash.initExtra;
+        loginShellInit = config.hm.programs.bash.profileExtra;
+      };
+
+      # bye bye nano
+      nano.enable = lib.mkForce false;
+
+      file-roller.enable = true;
     };
-
-    # bye bye nano
-    programs.nano.enable = lib.mkForce false;
-
-    programs.file-roller.enable = true;
 
     # use gtk theme on qt apps
     qt = {

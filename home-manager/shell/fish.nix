@@ -32,7 +32,7 @@ in {
         set --append fish_complete_path "${pkgs.iynaix.dotfiles-utils}/share/fish/vendor_completions.d"
       ''
       # wallust colorscheme
-      + lib.optionalString (config.iynaix.wallust.enable) ''
+      + lib.optionalString config.iynaix.wallust.enable ''
         set wallust_colors "/home/${user}/.cache/wallust/sequences"
         if test -e "$wallust_colors"
             command cat "$wallust_colors"

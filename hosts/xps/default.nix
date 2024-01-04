@@ -3,9 +3,11 @@
     kanata.enable = true;
 
     # impermanence
-    persist.tmpfs = false; # change to false to test zfs impermanence
-    persist.erase.root = true;
-    persist.erase.home = true;
+    persist = {
+      tmpfs = false; # change to false to test zfs impermanence
+      erase.root = true;
+      erase.home = true;
+    };
   };
 
   networking.hostId = "abb4d116"; # required for zfs

@@ -9,7 +9,7 @@
     name = "sonarr-ical-sync";
     runtimeInputs = with pkgs; [curl netlify-cli];
     text = let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
     in ''
       outDir=/tmp/sonarr-ical-sync
       mkdir -p "$outDir"

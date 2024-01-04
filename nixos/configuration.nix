@@ -54,7 +54,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${user} = {...}: {
+  users.users.${user} = _: {
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = ["networkmanager" "wheel"];

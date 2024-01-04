@@ -83,14 +83,14 @@ in {
   iynaix.wallust.entries = {
     # default launcher
     "rofi.rasi" = {
-      enable = config.programs.rofi.enable;
+      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" "";
       target = "~/.cache/wallust/rofi.rasi";
     };
 
     # generic single column rofi menu
     "rofi-menu.rasi" = {
-      enable = config.programs.rofi.enable;
+      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
         listview {
           columns: 1;
@@ -103,7 +103,7 @@ in {
     };
 
     "rofi-screenshot.rasi" = {
-      enable = config.programs.rofi.enable;
+      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
         listview {
           columns: 1;
@@ -127,7 +127,7 @@ in {
     };
 
     "rofi-power-menu-confirm.rasi" = {
-      enable = config.programs.rofi.enable;
+      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" "";
       target = "~/.cache/wallust/rofi-power-menu-confirm.rasi";
     };

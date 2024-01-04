@@ -8,12 +8,14 @@
   persistCfg = config.iynaix-nixos.persist;
 in {
   config = lib.mkIf cfg.enable {
-    # booting with zfs
-    boot.supportedFilesystems = ["zfs"];
-    boot.zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
-    # boot.zfs.enableUnstable = true;
-    boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-    boot.zfs.requestEncryptionCredentials = cfg.encryption;
+    boot = {
+      # booting with zfs
+      supportedFilesystems = ["zfs"];
+      zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
+      # zfs.enableUnstable = true;
+      kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+      zfs.requestEncryptionCredentials = cfg.encryption;
+    };
 
     services.zfs = {
       autoScrub.enable = true;

@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  displays = config.iynaix.displays;
+  inherit (config.iynaix) displays;
   rofi = lib.getExe pkgs.rofi;
   pamixer = lib.getExe pkgs.pamixer;
 in {

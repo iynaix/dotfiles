@@ -3,10 +3,10 @@
   pkgs,
   ...
 }: let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
   # use latest stable rust
   rustPlatform = let
-    toolchain = inputs.fenix.packages.${pkgs.system}.stable.toolchain;
+    inherit (inputs.fenix.packages.${pkgs.system}.stable) toolchain;
   in
     pkgs.makeRustPlatform {
       cargo = toolchain;
@@ -20,7 +20,7 @@
     firstSource = builtins.head (builtins.attrValues sources);
   in
     _callPackage (path + "/default.nix") (extraOverrides
-      // {source = lib.filterAttrs (k: v: !(lib.hasPrefix "override" k)) firstSource;});
+      // {source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource;});
 in {
   # rust dotfiles utils
   dotfiles-utils =

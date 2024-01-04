@@ -43,7 +43,7 @@ in {
     ];
 
     # add bookmarks for gtk
-    hm = {...} @ hmCfg: {
+    hm = hmCfg: {
       gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
         "file://${ironwolf}/Anime/Current Anime Current"
         "file://${ironwolf}/TV/Current TV Current"
@@ -54,7 +54,7 @@ in {
 
       # create symlinks for locations with ~
       home.file = let
-        mkOutOfStoreSymlink = hmCfg.config.lib.file.mkOutOfStoreSymlink;
+        inherit (hmCfg.config.lib.file) mkOutOfStoreSymlink;
       in {
         Downloads.source = lib.mkIf cfg.ironwolf22 (mkOutOfStoreSymlink "${ironwolf}/Downloads");
         Videos.source = lib.mkIf cfg.wdred6 (mkOutOfStoreSymlink "${wdred}");
@@ -62,30 +62,32 @@ in {
     };
 
     # dual boot windows
-    boot.loader.grub = {
-      extraEntries = lib.concatStringsSep "\n" (lib.optional cfg.windows ''
-        menuentry "Windows 11" {
-          insmod part_gpt
-          insmod fat
-          insmod search_fs_uuid
-          insmod chain
-          search --fs-uuid --set=root FA1C-F224
-          chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-        }
-      '');
-      # ++ (lib.optional cfg.archlinux ''
-      #   menuentry "Arch Linux" {
-      #     insmod gzio
-      #     insmod part_gpt
-      #     insmod fat
-      #     search --no-floppy --fs-uuid --set=root 35EE-1411
-      #     linux /vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw rootflags=subvol=@ loglevel=3 quiet
-      #     initrd /amd-ucode.img /initramfs-linux.img
-      #   }
-      # ''));
-    };
+    boot = {
+      loader.grub = {
+        extraEntries = lib.concatStringsSep "\n" (lib.optional cfg.windows ''
+          menuentry "Windows 11" {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root FA1C-F224
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        '');
+        # ++ (lib.optional cfg.archlinux ''
+        #   menuentry "Arch Linux" {
+        #     insmod gzio
+        #     insmod part_gpt
+        #     insmod fat
+        #     search --no-floppy --fs-uuid --set=root 35EE-1411
+        #     linux /vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw rootflags=subvol=@ loglevel=3 quiet
+        #     initrd /amd-ucode.img /initramfs-linux.img
+        #   }
+        # ''));
+      };
 
-    boot.supportedFilesystems = lib.mkIf cfg.windows ["ntfs"];
+      supportedFilesystems = lib.mkIf cfg.windows ["ntfs"];
+    };
 
     # hide disks
     fileSystems = {

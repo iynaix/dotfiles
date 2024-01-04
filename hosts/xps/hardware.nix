@@ -11,10 +11,12 @@
     inputs.nixos-hardware.nixosModules.dell-xps-13-9343
   ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "ehci_pci" "ahci" "sd_mod" "rtsx_pci_sdmmc"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["iwlwifi"];
-  boot.extraModulePackages = [];
+  boot = {
+    initrd.availableKernelModules = ["xhci_pci" "nvme" "ehci_pci" "ahci" "sd_mod" "rtsx_pci_sdmmc"];
+    initrd.kernelModules = [];
+    kernelModules = ["iwlwifi"];
+    extraModulePackages = [];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

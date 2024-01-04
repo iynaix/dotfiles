@@ -122,9 +122,8 @@
 
     # anime profile settings
     (let
-      mpv-anime = pkgs.iynaix.mpv-anime;
-      anime4k_shaders = (
-        lib.pipe [
+      inherit (pkgs.iynaix) mpv-anime;
+      anime4k_shaders = lib.pipe [
           "Clamp_Highlights"
           "Restore_CNN_VL"
           "Upscale_CNN_x2_VL"
@@ -134,9 +133,8 @@
         ] [
           (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
           (arr: lib.concatStringsSep ":" arr)
-        ]
-      );
-    in (lib.optionalAttrs config.iynaix.mpv-anime.enable
+        ];
+    in lib.optionalAttrs config.iynaix.mpv-anime.enable
       {
         # auto apply anime shaders for anime videos
         profiles.anime = {
@@ -172,7 +170,7 @@
           # NNEDI3 shaders
           "CTRL+7" = ''no-osd change-list glsl-shaders set "${mpv-anime}/nnedi3-nns256-win8x4.hook"; show-text "NNEDI3"'';
         };
-      }))
+      })
   ];
 
   home.shellAliases = {

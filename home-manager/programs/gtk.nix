@@ -8,11 +8,7 @@
   gradienceCfg = config.iynaix.gradience;
 in {
   home = {
-    packages =
-      [
-        # pkgs.gnome.dconf-editor
-      ]
-      ++ lib.optionals gradienceCfg.enable [pkgs.gradience];
+    packages = lib.optionals gradienceCfg.enable [pkgs.gradience];
 
     pointerCursor = lib.mkIf isNixOS {
       package = pkgs.simp1e-cursors;

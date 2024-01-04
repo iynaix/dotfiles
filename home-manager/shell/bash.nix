@@ -30,7 +30,7 @@ in {
       ehistory = "nvim ${histFile}";
     };
 
-    profileExtra = cfg.profileExtra;
+    inherit (cfg) profileExtra;
     initExtra =
       ''
         ${bashFunctions}
@@ -56,7 +56,7 @@ in {
         _set_beam_cursor
       ''
       # wallust colorscheme
-      + lib.optionalString (config.iynaix.wallust.enable) ''
+      + lib.optionalString config.iynaix.wallust.enable ''
         wallust_colors="/home/${user}/.cache/wallust/sequences"
         if [ -e "$wallust_colors" ]; then
           command cat "$wallust_colors"

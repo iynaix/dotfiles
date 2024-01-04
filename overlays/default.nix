@@ -9,9 +9,9 @@
 in {
   nixpkgs.overlays = [
     (
-      final: prev: let
+      _: prev: let
         overrideRustPackage = pkgname:
-          prev.${pkgname}.overrideAttrs (o:
+          prev.${pkgname}.overrideAttrs (_:
             sources.${pkgname}
             // {
               # creating an overlay for buildRustPackage overlay

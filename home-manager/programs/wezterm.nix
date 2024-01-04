@@ -82,7 +82,7 @@ in {
     };
 
     iynaix.wallust.entries."wezterm.toml" = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
       text = ''
         [colors]
         ansi = [

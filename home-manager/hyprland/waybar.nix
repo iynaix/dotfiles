@@ -130,7 +130,7 @@ in {
 
     iynaix.wallust.entries = {
       "waybar.jsonc" = {
-        enable = cfg.enable;
+        inherit (cfg) enable;
         text = builtins.toJSON cfg.config;
         target = "~/.config/waybar/config";
       };
@@ -170,7 +170,7 @@ in {
             arr
           );
       in {
-        enable = cfg.enable;
+        inherit (cfg) enable;
         text = ''
           * {
             border: none;

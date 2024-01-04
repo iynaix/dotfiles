@@ -1,4 +1,4 @@
-{...}: {
+_: {
   programs.imv = {
     enable = true;
     settings = {

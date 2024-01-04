@@ -7,7 +7,7 @@
 }: let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  lib = flake.inputs.nixpkgs.lib;
+  inherit (flake.inputs.nixpkgs) lib;
 in rec {
   inherit (flake) inputs self;
   inherit (flake.inputs) nixpkgs;
@@ -16,9 +16,9 @@ in rec {
   # default host
   c = flake.nixosConfigurations.${host}.config;
   co = c.iynaix-nixos;
-  hm = c.hm;
+  inherit (c) hm;
   hmo = hm.iynaix;
-  pkgs = flake.nixosConfigurations.${host}.pkgs;
+  inherit (flake.nixosConfigurations.${host}) pkgs;
 
   desktop = flake.nixosConfigurations.desktop.config;
   desktopo = desktop.iynaix-nixos;

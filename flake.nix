@@ -70,6 +70,7 @@
             # devenv configuration
             packages = [pkgs.alejandra];
 
+            languages.nix.enable = true;
             languages.rust = {
               enable = true;
               channel = "stable";

@@ -12,27 +12,35 @@
     ];
   };
 
-  # fix mimetype associations
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications =
-      {
-        "inode/directory" = "nemo.desktop";
-        # wtf zathura registers itself to open archives
-        "application/zip" = "org.gnome.FileRoller.desktop";
-        "application/vnd.rar" = "org.gnome.FileRoller.desktop";
-        "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
-      }
-      // lib.optionalAttrs config.programs.zathura.enable {
-        "application/pdf" = "org.pwmt.zathura.desktop";
-      }
-      // (lib.optionalAttrs config.programs.imv.enable
+  xdg = {
+    # fix mimetype associations
+    mimeApps = {
+      enable = true;
+      defaultApplications =
         {
-          "image/jpeg" = "imv-dir.desktop";
-          "image/gif" = "imv-dir.desktop";
-          "image/webp" = "imv-dir.desktop";
-          "image/png" = "imv-dir.desktop";
-        });
+          "inode/directory" = "nemo.desktop";
+          # wtf zathura registers itself to open archives
+          "application/zip" = "org.gnome.FileRoller.desktop";
+          "application/vnd.rar" = "org.gnome.FileRoller.desktop";
+          "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+        }
+        // lib.optionalAttrs config.programs.zathura.enable {
+          "application/pdf" = "org.pwmt.zathura.desktop";
+        }
+        // (lib.optionalAttrs config.programs.imv.enable
+          {
+            "image/jpeg" = "imv-dir.desktop";
+            "image/gif" = "imv-dir.desktop";
+            "image/webp" = "imv-dir.desktop";
+            "image/png" = "imv-dir.desktop";
+          });
+    };
+
+    # other OSes seem to override this file
+    configFile = lib.mkIf (!isNixOS) {
+      "mimeapps.list".force = true;
+      "gtk-3.0/bookmarks".force = true;
+    };
   };
 
   gtk.gtk3.bookmarks = [
@@ -44,17 +52,13 @@
     "file:///persist Persist"
   ];
 
-  # other OSes seem to override this file
-  xdg.configFile."mimeapps.list".force = !isNixOS;
-  xdg.configFile."gtk-3.0/bookmarks".force = !isNixOS;
-
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      exec = config.iynaix.terminal.exec;
+      inherit (config.iynaix.terminal) exec;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      exec = config.iynaix.terminal.exec;
+      inherit (config.iynaix.terminal) exec;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

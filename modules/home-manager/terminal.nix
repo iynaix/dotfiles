@@ -69,8 +69,7 @@ in {
     # https://unix.stackexchange.com/a/642886
     fakeGnomeTerminal = lib.mkOption {
       type = lib.types.package;
-      default = (
-        pkgs.writeShellApplication {
+      default = pkgs.writeShellApplication {
           name = "gnome-terminal";
           text = ''
             shift
@@ -82,8 +81,7 @@ in {
               ${cfg.exec} "$@"
             fi
           '';
-        }
-      );
+        };
       description = "Fake gnome-terminal shell script so gnome opens terminal applications in the correct terminal.";
     };
   };

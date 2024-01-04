@@ -6,7 +6,7 @@
   pkgs,
   ...
 }: let
-  displays = config.iynaix.displays;
+  inherit (config.iynaix) displays;
   isVm = host == "vm" || host == "vm-amd";
 in {
   imports = [
