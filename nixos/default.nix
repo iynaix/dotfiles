@@ -78,6 +78,13 @@
 
     programs.file-roller.enable = true;
 
+    # use gtk theme on qt apps
+    qt = {
+      enable = true;
+      platformTheme = "gnome";
+      style = "adwaita-dark";
+    };
+
     iynaix-nixos.persist = {
       root.directories = lib.mkIf config.hm.iynaix.wifi.enable [
         "/etc/NetworkManager"
