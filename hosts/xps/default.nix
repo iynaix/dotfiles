@@ -1,7 +1,5 @@
 {user, ...}: {
   iynaix-nixos = {
-    kanata.enable = true;
-
     # impermanence
     persist = {
       tmpfs = false; # change to false to test zfs impermanence

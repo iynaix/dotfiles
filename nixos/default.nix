@@ -15,7 +15,7 @@
     ./hdds.nix
     ./hyprland.nix
     ./impermanence.nix
-    ./kanata.nix
+    ./keyd.nix
     ./nix.nix
     ./nvidia.nix
     ./plasma.nix

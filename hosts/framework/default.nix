@@ -1,6 +1,5 @@
 {user, ...}: {
   iynaix-nixos = {
-    kanata.enable = true;
     virt-manager.enable = true;
   };
 
