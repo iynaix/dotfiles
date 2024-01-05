@@ -23,12 +23,14 @@
       }
     ];
 
+    deadbeef.enable = true;
     hyprland.plugin = "hyprnstack";
+    obs-studio.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;
+    vlc.enable = true;
     # wallust.colorscheme = "tokyo-night";
     # waybar.persistent-workspaces = true;
-    vlc.enable = true;
   };
 
   home = {

@@ -34,10 +34,13 @@
           git add "$untracked_files"
       fi
 
-      if [ "$#" -eq 0 ]; then
-          nh home switch --nom --configuration "${host}" -- --option eval-cache false
+      # force switch to always use current host
+      if [[ "$*" == *"--hostname"* ]]; then
+          # Replace the word after "--hostname" with host using parameter expansion
+          cleaned_args=("''${@/--hostname [^[:space:]]*/--hostname ${host}}")
+          nh home switch --nom "''${cleaned_args[@]}" -- --option eval-cache false
       else
-          nh home switch --nom "$@" -- --option eval-cache false
+          nh home switch --nom "$@" --hostname ${host} -- --option eval-cache false
       fi
 
       cd - > /dev/null
@@ -55,14 +58,31 @@
     '';
   };
   # nix garbage collection
-  ngc = pkgs.writeShellScriptBin "ngc" ''
-    # sudo rm /nix/var/nix/gcroots/auto/*
-    if [ "$#" -eq 0 ]; then
-      sudo nix-collect-garbage -d
-    else
-      sudo nix-collect-garbage "$@"
-    fi
-  '';
+  ngc = pkgs.writeShellApplication {
+    name = "ngc";
+    text = ''
+      # sudo rm /nix/var/nix/gcroots/auto/*
+      if [ "$#" -eq 0 ]; then
+        sudo nix-collect-garbage -d
+      else
+        sudo nix-collect-garbage "$@"
+      fi
+    '';
+  };
+  nr = pkgs.writeShellApplication {
+    name = "nr";
+    runtimeInputs = [pkgs.nixFlakes];
+    text = ''
+      if [ "$#" -eq 0 ]; then
+          echo "no package specified."
+          exit 1
+      elif [ "$#" -eq 1 ]; then
+          nix run nixpkgs#"$1"
+      else
+          nix run nixpkgs#"$1" -- "''${@:2}"
+      fi
+    '';
+  };
 in {
   config = lib.mkMerge [
     (lib.mkIf (!isNixOS) {
@@ -78,16 +98,9 @@ in {
       };
     })
     {
-      home.packages = [ngc];
+      home.packages = [ngc nr];
       home.shellAliases = {
         nsh = "nix-shell --command fish -p";
-      };
-
-      iynaix.shell.functions = {
-        nr = {
-          bashBody = ''nix run nixpkgs#"$@"'';
-          fishBody = ''nix run nixpkgs#"$argv"'';
-        };
       };
     }
   ];

@@ -47,10 +47,13 @@
           git add "$untracked_files"
       fi
 
-      if [ "$#" -eq 0 ]; then
-          nh os switch --nom --hostname "${host}" -- --option eval-cache false
+      # force switch to always use current host
+      if [[ "$*" == *"--hostname"* ]]; then
+          # Replace the word after "--hostname" with host using parameter expansion
+          cleaned_args=("''${@/--hostname [^[:space:]]*/--hostname ${host}}")
+          nh os switch --nom "''${cleaned_args[@]}" -- --option eval-cache false
       else
-          nh os switch --nom "$@" -- --option eval-cache false
+          nh os switch --nom "$@" --hostname ${host} -- --option eval-cache false
       fi
 
       # only relevant if --dry is passed
@@ -60,6 +63,7 @@
       cd - > /dev/null
     '';
   };
+  # update all nvfetcher overlays and packages
   nv-update = pkgs.writeShellApplication {
     name = "nv-update";
     runtimeInputs = [nswitch pkgs.nvfetcher];

@@ -12,14 +12,9 @@
       }
     ];
 
-    # hardware
-    backlight.enable = true;
-    battery.enable = true;
-    wezterm.enable = false;
-    wifi.enable = true;
-
     pathofbuilding.enable = true;
     rclip.enable = true;
+    wezterm.enable = false;
 
     terminal.size = 12;
 

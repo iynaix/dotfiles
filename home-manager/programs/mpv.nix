@@ -123,7 +123,8 @@
     # anime profile settings
     (let
       inherit (pkgs.iynaix) mpv-anime;
-      anime4k_shaders = lib.pipe [
+      anime4k_shaders =
+        lib.pipe [
           "Clamp_Highlights"
           "Restore_CNN_VL"
           "Upscale_CNN_x2_VL"
@@ -134,7 +135,8 @@
           (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
           (arr: lib.concatStringsSep ":" arr)
         ];
-    in lib.optionalAttrs config.iynaix.mpv-anime.enable
+    in
+      lib.optionalAttrs config.iynaix.mpv-anime.enable
       {
         # auto apply anime shaders for anime videos
         profiles.anime = {
@@ -172,6 +174,11 @@
         };
       })
   ];
+
+  wayland.windowManager.hyprland.settings = {
+    # fix mpv-dynamic-crop unmaximizing the window
+    windowrulev2 = ["nomaximizerequest,class:(mpv)"];
+  };
 
   home.shellAliases = {
     # subliminal is broken

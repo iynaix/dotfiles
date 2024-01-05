@@ -1,16 +1,15 @@
 {
-  host,
   isNixOS,
   lib,
   ...
 }: {
   options.iynaix = {
-    deadbeef.enable = lib.mkEnableOption "deadbeef" // {default = host == "desktop";};
+    deadbeef.enable = lib.mkEnableOption "deadbeef";
     gradience.enable = lib.mkEnableOption "gradience";
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};
     mpv-anime.enable = lib.mkEnableOption "mpv-anime" // {default = true;};
-    obs-studio.enable = lib.mkEnableOption "obs-studio" // {default = isNixOS && host == "desktop";};
+    obs-studio.enable = lib.mkEnableOption "obs-studio";
     pathofbuilding.enable = lib.mkEnableOption "pathofbuilding" // {default = isNixOS;};
     rclip.enable = lib.mkEnableOption "rclip";
     vlc.enable = lib.mkEnableOption "vlc";
@@ -18,7 +17,7 @@
     wallust = with lib.types; {
       enable = lib.mkEnableOption "wallust" // {default = true;};
       colorscheme = lib.mkOption {
-        type = lib.types.nullOr lib.types.string;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
       };

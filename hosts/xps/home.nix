@@ -8,14 +8,7 @@ _: {
       }
     ];
 
-    # hardware
-    backlight.enable = true;
-    battery.enable = true;
-    wifi.enable = true;
-
-    pathofbuilding.enable = true;
     wezterm.enable = false;
-
     terminal.size = 10;
 
     persist = {

@@ -1,7 +1,11 @@
-{lib, ...}: {
+{
+  isLaptop,
+  lib,
+  ...
+}: {
   options.iynaix = {
-    backlight.enable = lib.mkEnableOption "Backlight";
-    battery.enable = lib.mkEnableOption "Battery";
-    wifi.enable = lib.mkEnableOption "Wifi";
+    backlight.enable = lib.mkEnableOption "Backlight" // {default = isLaptop;};
+    battery.enable = lib.mkEnableOption "Battery" // {default = isLaptop;};
+    wifi.enable = lib.mkEnableOption "Wifi" // {default = isLaptop;};
   };
 }
