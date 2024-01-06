@@ -163,7 +163,8 @@ if [[ $restore_snapshot == "y" ]]; then
     echo
 
     echo "Creating /persist"
-    # shellcheck disable=SC2024 (sudo doesn't affect redirects)
+    # disable shellcheck (sudo doesn't affect redirects)
+    # shellcheck disable=SC2024
     sudo zfs receive -o mountpoint=legacy zroot/persist < "$snapshot_file_path"
 
 else

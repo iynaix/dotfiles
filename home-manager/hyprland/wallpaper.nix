@@ -92,7 +92,7 @@ in {
       ];
 
       programs.imv.settings.binds = {
-        m = "exec mv \"$imv_current_file\" ${wallpapers_proj}/in";
+        m = "exec mv \"$imv_current_file\" ${wallpapers_proj}/in; next";
       };
     })
 

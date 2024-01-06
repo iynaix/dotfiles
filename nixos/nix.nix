@@ -104,6 +104,16 @@
       cd - > /dev/null
     '';
   };
+  # build iso images
+  nbuild-iso = pkgs.writeShellApplication {
+    name = "nbuild-iso";
+    runtimeInputs = [nswitch pkgs.nixos-generators];
+    text = ''
+      cd ${dots}
+      nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
+      cd - > /dev/null
+    '';
+  };
   json2nix = pkgs.writeShellApplication {
     name = "json2nix";
     runtimeInputs = with pkgs; [hjson alejandra];
@@ -173,6 +183,7 @@ in {
           nswitch
           nvfetcher
           nv-update
+          nbuild-iso
           upd8
           json2nix
           yaml2nix
@@ -197,8 +208,8 @@ in {
     gc = {
       # Automatic garbage collection
       automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 2d";
+      dates = "daily";
+      options = "--delete-older-than 7d";
     };
     # change nix registry to use nixpkgs from flake
     # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
