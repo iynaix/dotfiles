@@ -86,21 +86,33 @@
 in {
   config = lib.mkMerge [
     (lib.mkIf (!isNixOS) {
-      home.packages = [
-        hmbuild
-        hmswitch
-        hmupd8
-        pkgs.nh # nh is installed by nixos anyway
-      ];
+      home = {
+        packages = [
+          hmbuild
+          hmswitch
+          hmupd8
+          pkgs.nh # nh is installed by nixos anyway
+        ];
 
-      home.shellAliases = {
-        hsw = "hswitch";
+        shellAliases = {
+          hsw = "hswitch";
+        };
       };
     })
     {
-      home.packages = [ngc nr];
-      home.shellAliases = {
-        nsh = "nix-shell --command fish -p";
+      home = {
+        packages = [ngc nr];
+        shellAliases = {
+          nsh = "nix-shell --command fish -p";
+        };
+      };
+
+      programs.nix-index.enable = true;
+
+      iynaix.persist = {
+        cache = [
+          ".cache/nix-index"
+        ];
       };
     }
   ];

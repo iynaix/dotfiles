@@ -15,7 +15,7 @@
   ];
 
   home.packages = with pkgs; [
-    dysk # better disk info
+    # dysk # better disk info
     fd
     fx
     htop
@@ -39,8 +39,6 @@
       enableFishIntegration = true;
     };
 
-    nix-index.enable = true;
-
     zoxide = {
       enable = true;
       enableBashIntegration = true;
@@ -51,9 +49,6 @@
   iynaix.persist = {
     home.directories = [
       ".local/share/zoxide"
-    ];
-    cache = [
-      ".cache/nix-index"
     ];
   };
 }

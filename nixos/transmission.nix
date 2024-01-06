@@ -1,21 +1,34 @@
 {
+  config,
+  lib,
   pkgs,
   user,
-  lib,
-  config,
   ...
 }: let
   home = "/persist/home/${user}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
+  torrents-add = pkgs.writeShellApplication {
+    name = "torrents-add";
+    text = ''
+      rg -i "magnet:" "$HOME/Desktop/yt.txt" |
+        sed 's/#*//g' |
+        sed 's/^[ \t]*//;s/[ \t]*$//' |
+        xargs -I {} transmission-remote -a {}
+    '';
+  };
 in {
   config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
+    sops.secrets.transmission_rpc.owner = user;
+
     services.transmission = {
       enable = true;
       package = pkgs.transmission_4;
       webHome = pkgs.flood-for-transmission;
       inherit user home;
       group = "users";
+      # set a password for rpc via
+      credentialsFile = config.sops.secrets.transmission_rpc.path;
       settings = {
         alt-speed-down = 50;
         alt-speed-enabled = false;
@@ -68,11 +81,10 @@ in {
         rpc-enabled = true;
         rpc-host-whitelist = "";
         rpc-host-whitelist-enabled = true;
-        rpc-password = "{de6b0bebaa67b3a3b4f657633598cfd765d0f09a9/fP1YP.";
         rpc-port = 9091;
         rpc-url = "/transmission/";
         rpc-username = "";
-        rpc-whitelist = "127.0.0.1";
+        rpc-whitelist = "127.0.0.1,192.168.1.*";
         rpc-whitelist-enabled = true;
         scrape-paused-torrents-enabled = true;
         script-torrent-done-enabled = false;
@@ -108,6 +120,10 @@ in {
         watch-dir-enabled = false;
       };
     };
+
+    environment.systemPackages = [
+      torrents-add
+    ];
 
     # setup port forwarding
     networking.firewall.allowedTCPPorts = [51413];

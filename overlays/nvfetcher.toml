@@ -2,11 +2,6 @@
 src.git = "https://github.com/Horus645/swww"
 fetch.github = "Horus645/swww"
 
-[wallust]
-src.git = "https://codeberg.org/explosion-mental/wallust.git"
-src.branch = "dev"
-fetch.git = "https://codeberg.org/explosion-mental/wallust.git"
-
 [waybar]
 src.git = "https://github.com/Alexays/Waybar"
 fetch.github = "Alexays/Waybar"

@@ -13,19 +13,6 @@
     };
     date = "2023-12-21";
   };
-  wallust = {
-    pname = "wallust";
-    version = "0a6981aeef517c61371ae5f91f40851bbbfa66ca";
-    src = fetchgit {
-      url = "https://codeberg.org/explosion-mental/wallust.git";
-      rev = "0a6981aeef517c61371ae5f91f40851bbbfa66ca";
-      fetchSubmodules = false;
-      deepClone = false;
-      leaveDotGit = false;
-      sha256 = "sha256-cUaJlb91MIFP/Mtwbkhq8QP/NEmr9/Suahm7isNc8KA=";
-    };
-    date = "2024-01-01";
-  };
   waybar = {
     pname = "waybar";
     version = "4b20f522f0b357d7140a60c70e90fafb58c6bd9f";
