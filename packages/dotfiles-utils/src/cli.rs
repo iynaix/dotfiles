@@ -1,6 +1,23 @@
 use clap::{builder::PossibleValuesParser, Parser, Subcommand};
 use std::path::PathBuf;
 
+// ------------------ HYPR MONITOR ------------------
+#[derive(Parser, Debug)]
+#[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
+pub struct HyprMonitorArgs {
+    #[arg(
+        long,
+        default_value = "primary",
+        value_name = "EXTEND",
+        value_parser = PossibleValuesParser::new([
+            "primary",
+            "secondary",
+        ]),
+        help = "set new display(s) to be primary or secondary"
+    )]
+    pub extend: Option<String>,
+}
+
 // ------------------ HYPR SAME CLASS ------------------
 
 #[derive(Subcommand, Debug)]

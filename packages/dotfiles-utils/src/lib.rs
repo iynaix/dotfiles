@@ -234,6 +234,46 @@ impl Monitor {
                 acc
             })
     }
+
+    /// distribute the workspaces evenly across all monitors
+    pub fn distribute_workspaces(extend_as_primary: bool) -> HashMap<String, Vec<i32>> {
+        let workspaces: Vec<i32> = (1..10).collect();
+
+        let mut all_monitors = Monitor::monitors();
+        let nix_monitors = NixInfo::before().monitors;
+
+        // sort all_monitors, putting the nix_monitors first
+        all_monitors.sort_by_key(|a| {
+            let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
+            (
+                if extend_as_primary {
+                    is_base_monitor
+                } else {
+                    !is_base_monitor
+                },
+                a.id,
+            )
+        });
+
+        let mut start = 0;
+        all_monitors
+            .iter()
+            .enumerate()
+            .map(|(i, mon)| {
+                let len = workspaces.len() / all_monitors.len()
+                    + if i < workspaces.len() % all_monitors.len() {
+                        1
+                    } else {
+                        0
+                    };
+                let end = start + len;
+                let wksps = &workspaces[start..end];
+                start += len;
+
+                (mon.name.clone(), wksps.to_vec())
+            })
+            .collect()
+    }
 }
 
 /// hyprctl clients

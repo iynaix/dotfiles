@@ -1,7 +1,15 @@
-use dotfiles_utils::{cmd, hypr, Monitor};
+use clap::Parser;
+use dotfiles_utils::{cli::HyprMonitorArgs, cmd, hypr, Monitor, NixInfo};
 
 fn main() {
-    let workspaces = Monitor::rearranged_workspaces();
+    let args = HyprMonitorArgs::parse();
+
+    // single monitor in config probably means laptop, so distribute them
+    let workspaces = if NixInfo::before().monitors.len() == 1 {
+        Monitor::distribute_workspaces(matches!(args.extend.as_deref(), Some("primary")))
+    } else {
+        Monitor::rearranged_workspaces()
+    };
 
     // move workspaces to monitors
     for (mon, wksps) in workspaces.iter() {

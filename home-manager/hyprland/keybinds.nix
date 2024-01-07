@@ -45,30 +45,6 @@ in {
         "$mod_SHIFT, k, movewindow, u"
         "$mod_SHIFT, j, movewindow, d"
 
-        # Switch workspaces with mainMod + [0-9]
-        "$mod, 1, workspace, 1"
-        "$mod, 2, workspace, 2"
-        "$mod, 3, workspace, 3"
-        "$mod, 4, workspace, 4"
-        "$mod, 5, workspace, 5"
-        "$mod, 6, workspace, 6"
-        "$mod, 7, workspace, 7"
-        "$mod, 8, workspace, 8"
-        "$mod, 9, workspace, 9"
-        "$mod, 0, workspace, 10"
-
-        # Move active window to a workspace with mainMod + SHIFT + [0-9]
-        "$mod_SHIFT, 1, movetoworkspace, 1"
-        "$mod_SHIFT, 2, movetoworkspace, 2"
-        "$mod_SHIFT, 3, movetoworkspace, 3"
-        "$mod_SHIFT, 4, movetoworkspace, 4"
-        "$mod_SHIFT, 5, movetoworkspace, 5"
-        "$mod_SHIFT, 6, movetoworkspace, 6"
-        "$mod_SHIFT, 7, movetoworkspace, 7"
-        "$mod_SHIFT, 8, movetoworkspace, 8"
-        "$mod_SHIFT, 9, movetoworkspace, 9"
-        "$mod_SHIFT, 0, movetoworkspace, 10"
-
         "$mod, b, layoutmsg, swapwithmaster"
 
         # focus the previous / next desktop in the current monitor (DE style)
@@ -154,6 +130,19 @@ in {
         ",XF86AudioRaiseVolume, exec, ${pamixer} -i 5"
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
+      # workspace keybinds
+      ++ lib.flatten (lib.concatMap ({
+        name,
+        workspaces,
+        ...
+      }:
+        lib.forEach workspaces (ws: [
+          # Switch workspaces with mainMod + [0-9]
+          "$mod, ${toString (lib.mod ws 10)}, workspace, ${toString ws}"
+          # Move active window to a workspace with mainMod + SHIFT + [0-9]
+          "$mod_SHIFT, ${toString (lib.mod ws 10)}, movetoworkspace, ${toString ws}"
+        ]))
+      displays)
       ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
       ++ lib.optionals config.iynaix.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"

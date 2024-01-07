@@ -66,11 +66,8 @@ fn main() {
         // println!("{ev} ---- {ev_args:?}");
 
         match ev {
-            "monitoradded" => {
-                if is_desktop {
-                    cmd(["hypr-monitors"])
-                }
-            }
+            // different handling for desktop and laptops is done within hypr-monitors
+            "monitoradded" => cmd(["hypr-monitors"]),
             "monitorremoved" => {
                 if is_desktop {
                     let rearranged_workspaces = Monitor::rearranged_workspaces();

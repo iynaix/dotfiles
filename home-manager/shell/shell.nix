@@ -22,7 +22,7 @@
       open = "xdg-open";
       pj = "openproj";
       py = "python";
-      t = "eza --tree";
+      t = "eza --tree --level=3";
       v = "nvim";
       wget = "wget --content-disposition";
       coinfc = "openproj coinfc";

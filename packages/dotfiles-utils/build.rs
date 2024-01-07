@@ -20,6 +20,7 @@ pub fn generate_completions(mut cli: Command) -> Result<(), std::io::Error> {
 }
 
 fn main() -> Result<(), std::io::Error> {
+    generate_completions(HyprMonitorArgs::command())?;
     generate_completions(HyprSameClassArgs::command())?;
     generate_completions(HyprWallpaperArgs::command())?;
     generate_completions(RofiMpvArgs::command())?;
