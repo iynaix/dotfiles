@@ -8,12 +8,12 @@ fn main() {
     let target_w = (0.2 * curr_mon.width as f32) as i32;
     let target_h = (target_w as f32 / 16.0 * 9.0) as i32;
 
-    hypr(&["fakefullscreen"]);
-    hypr(&["togglefloating", "active"]);
-    hypr(&["pin", "active"]);
+    hypr(["fakefullscreen"]);
+    hypr(["togglefloating", "active"]);
+    hypr(["pin", "active"]);
 
     if !activewindow.floating {
-        hypr(&[
+        hypr([
             "resizeactive",
             "exact",
             &target_w.to_string(),
@@ -29,9 +29,9 @@ fn main() {
         let delta_x = mon_right - PADDING - target_w - activewindow.at.0;
         let delta_y = mon_bottom - PADDING - target_h - activewindow.at.1;
 
-        hypr(&["moveactive", &delta_x.to_string(), &delta_y.to_string()]);
+        hypr(["moveactive", &delta_x.to_string(), &delta_y.to_string()]);
     } else {
         // reset the border
-        hypr(&["fullscreen", "0"])
+        hypr(["fullscreen", "0"])
     }
 }

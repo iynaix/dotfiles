@@ -7,6 +7,7 @@
   inherit (config.iynaix) displays;
   rofi = lib.getExe pkgs.rofi;
   pamixer = lib.getExe pkgs.pamixer;
+  qtile_like = config.iynaix.hyprland.qtile;
 in {
   wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
     bind = let
@@ -155,19 +156,7 @@ in {
         ",XF86AudioRaiseVolume, exec, ${pamixer} -i 5"
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
-      # workspace keybinds
-      ++ lib.flatten (lib.concatMap ({
-        name,
-        workspaces,
-        ...
-      }:
-        lib.forEach workspaces (ws: [
-          # Switch workspaces with mainMod + [0-9]
-          "$mod, ${toString (lib.mod ws 10)}, workspace, ${toString ws}"
-          # Move active window to a workspace with mainMod + SHIFT + [0-9]
-          "$mod_SHIFT, ${toString (lib.mod ws 10)}, movetoworkspace, ${toString ws}"
-        ]))
-      displays)
+      ++ workspace_keybinds
       ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
       ++ lib.optionals config.iynaix.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"

@@ -1,8 +1,9 @@
 {
   config,
+  isNixOS,
   lib,
   pkgs,
-  isNixOS,
+  user,
   ...
 }: {
   xdg.configFile = {
@@ -89,6 +90,8 @@
         sub-scale-by-window = "yes";
         sub-scale-with-window = "no";
 
+        screenshot-directory = "/home/${user}/Pictures/Screenshots";
+
         slang = "en,eng,english";
         alang = "jp,jpn,japanese,en,eng,english";
 
@@ -139,7 +142,7 @@
         # auto apply anime shaders for anime videos
         profiles.anime = {
           profile-desc = "Anime";
-          profile-cond = "path:find('[Aa]nime')";
+          profile-cond = "path:find('[Aa]nime') or path:find('Erai-raws')";
           profile-restore = "copy-equal";
 
           # https://kokomins.wordpress.com/2019/10/14/mpv-config-guide/#advanced-video-scaling-config

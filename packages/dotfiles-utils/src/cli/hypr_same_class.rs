@@ -23,5 +23,5 @@ fn main() {
         HyprSameClassDirection::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
-    hypr(&["focuswindow", &format!("address:{}", addresses[new_idx])]);
+    hypr(["focuswindow", &format!("address:{}", addresses[new_idx])]);
 }

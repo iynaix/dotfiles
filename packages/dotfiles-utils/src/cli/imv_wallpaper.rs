@@ -19,7 +19,7 @@ fn main() {
         // bind esc to behave like rofi
         let esc_bind = "bind <Escape> quit";
 
-        hypr(&[
+        hypr([
             "exec",
             &format!(
                 "{float_rule} imv -c '{esc_bind}' {}",

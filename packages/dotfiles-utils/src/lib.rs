@@ -101,12 +101,18 @@ where
 }
 
 /// hyprctl dispatch
-pub fn hypr(hypr_args: &[&str]) {
-    Command::new("hyprctl")
-        .arg("dispatch")
-        .args(hypr_args)
-        .status()
-        .expect("failed to execute process");
+pub fn hypr<I, S>(hypr_args: I)
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
+    let mut cmd = Command::new("hyprctl");
+    cmd.arg("dispatch");
+
+    for arg in hypr_args {
+        cmd.arg(arg.as_ref());
+    }
+    cmd.status().expect("failed to execute process");
 }
 
 /// hyprctl activewindow
@@ -133,7 +139,6 @@ impl ActiveWindow {
 }
 
 /// hyprctl clients
-
 #[derive(Clone, Default, Deserialize, Debug)]
 pub struct Client {
     pub class: String,
@@ -176,15 +181,8 @@ impl Workspace {
             .expect("monitor not found")
     }
 
-    pub fn by_name(name: String) -> Workspace {
-        Workspace::workspaces()
-            .into_iter()
-            .find(|w| w.name == name)
-            .expect("workspace not found")
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.windows == 0
+    pub fn by_name(name: String) -> Option<Workspace> {
+        Workspace::workspaces().into_iter().find(|w| w.name == name)
     }
 }
 

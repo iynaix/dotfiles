@@ -1,4 +1,4 @@
-use dotfiles_utils::{cmd, hypr, hypr_json, monitor::Monitor, Workspace};
+use dotfiles_utils::{cmd, hypr, hypr_json, monitor::Monitor};
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
@@ -33,16 +33,14 @@ fn set_workspace_orientation(workspace: String, is_desktop: bool, nstack: bool) 
         return;
     }
 
-    let wksp = Workspace::by_name(workspace.replace(" silent", ""));
-    if !wksp.is_empty() {
-        let mon = wksp.monitor();
+    let wksp = workspace.replace(" silent", "");
+    let (mon, _) = Monitor::by_workspace(wksp);
 
-        hypr(&["layoutmsg", mon.orientation()]);
+    hypr(["layoutmsg", mon.orientation()]);
 
-        // set nstack stacks
-        if nstack {
-            hypr(&["layoutmsg", "setstackcount", &mon.stacks().to_string()]);
-        }
+    // set nstack stacks
+    if nstack {
+        hypr(["layoutmsg", "setstackcount", &mon.stacks().to_string()]);
     }
 }
 
@@ -76,7 +74,7 @@ fn main() {
                         .iter()
                         .max_by_key(|(_, wksps)| wksps.len())
                         .unwrap();
-                    hypr(&["focusmonitor", mon_to_focus])
+                    hypr(["focusmonitor", mon_to_focus])
                 }
             }
             "openwindow" => {

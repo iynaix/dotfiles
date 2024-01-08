@@ -1,6 +1,14 @@
-use crate::{hypr_json, nixinfo::NixInfo, WorkspaceId};
+use crate::{hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
 use serde::Deserialize;
 use std::collections::HashMap;
+
+#[derive(Clone, Default, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct WorkspaceRule {
+    #[serde(rename = "workspaceString")]
+    pub workspace: String,
+    pub monitor: String,
+}
 
 #[derive(Clone, Default, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -70,6 +78,29 @@ impl Monitor {
             .into_iter()
             .map(|mon| (mon.name, mon.active_workspace.id))
             .collect()
+    }
+
+    /// returns the monitor and if the workspace currently exists
+    pub fn by_workspace(wksp: String) -> (Monitor, bool) {
+        match Workspace::by_name(wksp.clone()) {
+            Some(wksp) => (wksp.monitor(), true),
+            None => {
+                // workspace is empty and doesn't exist yet, search workspace rules for the monitor
+                let workspace_rules: Vec<WorkspaceRule> = hypr_json("workspacerules");
+
+                let wksp_rule = workspace_rules
+                    .into_iter()
+                    .find(|rule| rule.workspace == wksp)
+                    .expect("workspace not found within workspace rules");
+
+                let mon = Monitor::monitors()
+                    .into_iter()
+                    .find(|mon| mon.name == wksp_rule.monitor)
+                    .expect("monitor not found from workspace rules");
+
+                (mon, false)
+            }
+        }
     }
 
     pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
