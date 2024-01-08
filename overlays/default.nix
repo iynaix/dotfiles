@@ -30,23 +30,6 @@ in {
             inherit inputs;
           });
 
-        # fix fish shell autocomplete error for zfs
-        # https://github.com/NixOS/nixpkgs/issues/247290
-        fish = assert (lib.assertMsg (lib.hasPrefix "3.6" prev.fish.version) "fish: overlay is no longer needed");
-          prev.fish.overrideAttrs (o: {
-            patches =
-              (o.patches or [])
-              ++ [
-                (pkgs.fetchpatch {
-                  name = "fix-zfs-completion.path";
-                  url = "https://github.com/fish-shell/fish-shell/commit/85504ca694ae099f023ae0febb363238d9c64e8d.patch";
-                  sha256 = "sha256-lA0M7E/Z0NjuvppC7GZA5rWdL7c+5l+3SF5yUe7nEz8=";
-                })
-              ];
-
-            checkPhase = "";
-          });
-
         # patch imv to not repeat keypresses causing waybar to launch infinitely
         # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
         imv = assert (lib.assertMsg (prev.imv.version == "4.4.0") "imv: is keypress patch still needed?");

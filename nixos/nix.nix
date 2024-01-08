@@ -244,6 +244,7 @@ in {
 
   hm.iynaix.persist = {
     cache = [
+      ".cache/nix"
       ".cache/nixpkgs-review"
     ];
   };

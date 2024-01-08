@@ -101,11 +101,15 @@ in {
           "smoothIn, 0.25, 1, 0.5, 1"
         ];
 
+        # name, onoff, speed, curve, style
+        # speed units is measured in 100ms
         animation = [
           "windows, 1, 5, overshot, slide"
           "windowsOut, 1, 4, smoothOut, slide"
           "windowsMove, 1, 4, smoothIn, slide"
           "border, 1, 5, default"
+          # 1 loop every 5 minutes
+          "borderangle, 1, ${toString (10 * 60 * 5)}, default, loop"
           "fade, 1, 5, smoothIn"
           "fadeDim, 1, 5, smoothIn"
           "workspaces, 1, 6, default"

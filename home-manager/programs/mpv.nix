@@ -73,10 +73,8 @@
         force-seekable = "yes";
         cursor-autohide = 100;
 
-        # vo = "gpu-next";
+        vo = "gpu-next";
         gpu-api = "vulkan";
-
-        hwdec = "auto-copy";
         hwdec-codecs = "all";
 
         # forces showing subtitles while seeking through the video
