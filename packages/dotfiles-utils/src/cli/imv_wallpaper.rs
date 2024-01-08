@@ -1,4 +1,4 @@
-use dotfiles_utils::{hypr, wallpaper, Monitor};
+use dotfiles_utils::{hypr, monitor::Monitor, wallpaper};
 
 fn main() {
     const TARGET_PERCENT: f32 = 0.3;

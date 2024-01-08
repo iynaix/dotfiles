@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{cli::HyprMonitorArgs, cmd, hypr, Monitor, NixInfo};
+use dotfiles_utils::{cli::HyprMonitorArgs, cmd, hypr, monitor::Monitor, nixinfo::NixInfo};
 
 fn main() {
     let args = HyprMonitorArgs::parse();

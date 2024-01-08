@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{cli::WaifuFetchArgs, full_path, NixInfo};
+use dotfiles_utils::{cli::WaifuFetchArgs, full_path, nixinfo::NixInfo};
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
     iterator::Signals,

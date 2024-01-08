@@ -1,4 +1,4 @@
-use dotfiles_utils::{cmd, full_path, json, Monitor, NixInfo};
+use dotfiles_utils::{cmd, full_path, json, monitor::Monitor, nixinfo::NixInfo};
 use std::process::Command;
 
 fn main() {

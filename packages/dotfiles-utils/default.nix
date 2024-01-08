@@ -11,6 +11,12 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ../../Cargo.lock;
 
+  # https://nixos.org/manual/nixpkgs/stable/#compiling-rust-applications-with-cargo
+  # see section "Importing a cargo lock file"
+  postPatch = ''
+    ln -s ${../../Cargo.lock} Cargo.lock
+  '';
+
   # create files for shell autocomplete
   nativeBuildInputs = [installShellFiles];
 

@@ -1,4 +1,4 @@
-use dotfiles_utils::{cmd, hypr, hypr_json, Monitor, Workspace};
+use dotfiles_utils::{cmd, hypr, hypr_json, monitor::Monitor, Workspace};
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;

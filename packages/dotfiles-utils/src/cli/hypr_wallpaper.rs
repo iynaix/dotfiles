@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
-    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, wallpaper, wallust, CmdOutput, Monitor,
-    NixInfo,
+    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, monitor::Monitor, nixinfo::NixInfo,
+    wallpaper, wallust, CmdOutput,
 };
 use serde::Deserialize;
 use std::{collections::HashMap, path::Path, process::Command};
