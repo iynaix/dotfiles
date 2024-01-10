@@ -107,7 +107,13 @@ in {
         };
       };
 
-      programs.nix-index.enable = true;
+      programs = {
+        nix-index.enable = true;
+        nixvim.plugins = {
+          nix.enable = true;
+          lsp.servers.nil_ls.enable = true;
+        };
+      };
 
       iynaix.persist = {
         cache = [

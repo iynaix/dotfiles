@@ -5,7 +5,7 @@
     ./direnv.nix
     ./fish.nix
     ./git.nix
-    ./neovim.nix
+    ./neovim
     ./nix.nix
     ./rice
     ./shell.nix
