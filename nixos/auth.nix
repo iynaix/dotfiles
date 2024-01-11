@@ -33,18 +33,6 @@ in
       security.pam.services.gdm.enableGnomeKeyring = autoLoginUser != null;
     }
 
-    # autologin
-    {
-      services = {
-        xserver.displayManager.autoLogin.user = lib.mkDefault (
-          if config.boot.zfs.requestEncryptionCredentials
-          then user
-          else null
-        );
-        getty.autologinUser = autoLoginUser;
-      };
-    }
-
     # misc
     {
       environment.systemPackages = [pkgs.gcr]; # stops errors with copilot login?

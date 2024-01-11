@@ -29,11 +29,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1704867811,
-        "narHash": "sha256-pG4O1vPpNSMjz7p/5x+/OH4tXC0thzAPbJ55kI/W5dU=",
+        "lastModified": 1704954214,
+        "narHash": "sha256-1irsqIeIfSnNJnbmev9YE0tVG4l0aSG4HjTJqWb5LxE=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "93e89638c15512db65e931f26ce36edf8cfbb4a5",
+        "rev": "4c6dd8a90b53dc9606d35c59b68168c3768fde2c",
         "type": "github"
       },
       "original": {
@@ -182,11 +182,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1704809957,
-        "narHash": "sha256-Z8sBeoeeY2O+BNqh5C+4Z1h1F1wQ2mij7yPZ2GY397M=",
+        "lastModified": 1704980804,
+        "narHash": "sha256-lPNNKdPqIYcjhhYIVwlajNt/HqVWbMOoSdNnwCvOP04=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "e13aa9e287b3365473e5897e3667ea80a899cdfb",
+        "rev": "93e804e7f8a1eb88bde6117cd5046501e66aa4bd",
         "type": "github"
       },
       "original": {
@@ -518,11 +518,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1704923462,
-        "narHash": "sha256-mm/fdctlgmCclvEY61SnLmuIdKtUOzTz6+l1/Tch0A0=",
+        "lastModified": 1704958333,
+        "narHash": "sha256-yYgtaJnaDtUzd2X5jL+Zy38rtKPEu328oy5x7cOaH+I=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "65689c5dd889091cbfd61f0d49e0a5e69243de12",
+        "rev": "0379ab34cc7bc1b846bfdbb3d6707f5c8b03ce2c",
         "type": "github"
       },
       "original": {
@@ -606,11 +606,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1704833483,
-        "narHash": "sha256-Ox01mpYmjapNYaqOu4fMS/4Ma9NLd2rVNz6d4rJmcf4=",
+        "lastModified": 1704895810,
+        "narHash": "sha256-kPFrPV6wgGF2beB+nkDI+nb4l9uC9oS4b4V6iUz/ZDw=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "ae6e73772432cfe35bb0ff6de6fdcfa908642b67",
+        "rev": "e4344f5fce3b4ca12d51bf27b9a0bd29297be3ea",
         "type": "github"
       },
       "original": {

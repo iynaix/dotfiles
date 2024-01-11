@@ -17,6 +17,12 @@ Run the following commands from a terminal on a NixOS live iso / from a tty on t
 
 The following install script partitions the disk, sets up the necessary datasets and installs NixOS.
 
+From the custom iso built via `nbuild HOST`,
+```sh
+iynaixos-install
+```
+
+From a standard ISO,
 ```sh
 sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)
 ```
@@ -38,21 +44,17 @@ sudo zfs rename zroot/persist zroot/persist-old
 sudo zfs rename zroot/persist-new zroot/persist
 ```
 
-### Create Password Files (When Not Using Persist Snapshot)
-
-This is not needed if restoring from [persist snapshot](#restore-persist-from-snapshot)
-
-```sh
-mkdir -p /persist/etc/shadow
-mkpasswd -m sha-512 'USER_PASSWORD' | sudo tee -a /persist/etc/shadow/root
-mkpasswd -m sha-512 'USER_PASSWORD' | sudo tee -a /persist/etc/shadow/iynaix
-```
-
 ## System Rescue
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
 
 The following script optionally reformats the boot partition and / or /nix dataset, then reinstalls NixOS.
 
+From the custom iso built via `nbuild HOST`,
 ```sh
-sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
+iynaixos-recover
+```
+
+From a standard ISO,
+```sh
+sh <(curl -l https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
 ```

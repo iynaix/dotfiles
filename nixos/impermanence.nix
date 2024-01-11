@@ -54,16 +54,6 @@ in {
     # shut sudo up
     security.sudo.extraConfig = "Defaults lecture=never";
 
-    # persisting user passwords
-    # https://reddit.com/r/NixOS/comments/o1er2p/tmpfs_as_root_but_without_hardcoding_your/h22f1b9/
-    users = {
-      mutableUsers = false;
-      # create a password with for root and $user with:
-      # mkpasswd -m sha-512 'PASSWORD' | sudo tee -a /persist/etc/shadow/root
-      users.root.hashedPasswordFile = "/persist/etc/shadow/root";
-      users.${user}.hashedPasswordFile = "/persist/etc/shadow/${user}";
-    };
-
     # setup persistence
     environment.persistence."/persist" = {
       hideMounts = true;
@@ -76,7 +66,7 @@ in {
         ]
         ++ cfg.root.directories;
 
-      # DO NOT persist anything for home directory as it causes a race condition
+      # NOTE: *DO NOT* persist anything from home directory as it causes a race condition
     };
 
     # setup persistence for home manager

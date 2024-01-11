@@ -41,7 +41,7 @@
     },
     "wezterm": {
         "cargoLocks": null,
-        "date": "2024-01-10",
+        "date": "2024-01-11",
         "extract": null,
         "name": "wezterm",
         "passthru": null,
@@ -53,10 +53,10 @@
             "name": null,
             "owner": "wez",
             "repo": "wezterm",
-            "rev": "90d8feaf6da13a24bb4098657d306920b3637712",
-            "sha256": "sha256-2W0EGH6YeMTp6jmukWzTbbCPiXEAn/Su6BExBxK2SMk=",
+            "rev": "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79",
+            "sha256": "sha256-bWcez8vJlZttrVmBjyXZBZIbSBE7tpu1lkVSH1T6Fw0=",
             "type": "github"
         },
-        "version": "90d8feaf6da13a24bb4098657d306920b3637712"
+        "version": "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79"
     }
 }

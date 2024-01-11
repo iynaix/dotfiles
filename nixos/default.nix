@@ -23,6 +23,7 @@
     ./sops.nix
     ./syncoid.nix
     ./transmission.nix
+    ./users.nix
     ./vercel.nix
     ./virt-manager.nix
     ./zfs.nix

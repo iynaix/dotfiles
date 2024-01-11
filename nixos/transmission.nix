@@ -12,6 +12,7 @@
     name = "torrents-add";
     runtimeInputs = with pkgs; [ripgrep transmission_4];
     text = ''
+      # || true to prevent error when no magnet links are found
       rg "magnet:" "$HOME/Desktop/yt.txt" |
         sed 's/#*//g' |
         sed 's/^[ \t]*//;s/[ \t]*$//' |
