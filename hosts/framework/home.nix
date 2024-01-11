@@ -14,7 +14,6 @@
 
     pathofbuilding.enable = true;
     rclip.enable = true;
-    wezterm.enable = false;
 
     terminal.size = 12;
 

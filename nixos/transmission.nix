@@ -10,11 +10,16 @@
   pendingDir = "${downloadDir}/pending";
   torrents-add = pkgs.writeShellApplication {
     name = "torrents-add";
+    runtimeInputs = with pkgs; [ripgrep transmission_4];
     text = ''
-      rg -i "magnet:" "$HOME/Desktop/yt.txt" |
+      rg "magnet:" "$HOME/Desktop/yt.txt" |
         sed 's/#*//g' |
         sed 's/^[ \t]*//;s/[ \t]*$//' |
-        xargs -I {} transmission-remote -a {}
+        xargs -I {} transmission-remote -a {} || true
+
+      # remove all magnet links after adding
+      rg -v "magnet:" "$HOME/Desktop/yt.txt" > "/tmp/yt.txt"
+      mv "/tmp/yt.txt" "$HOME/Desktop/yt.txt"
     '';
   };
 in {

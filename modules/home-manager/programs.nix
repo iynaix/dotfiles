@@ -13,7 +13,7 @@
     pathofbuilding.enable = lib.mkEnableOption "pathofbuilding" // {default = isNixOS;};
     rclip.enable = lib.mkEnableOption "rclip";
     vlc.enable = lib.mkEnableOption "vlc";
-    wezterm.enable = lib.mkEnableOption "wezterm" // {default = isNixOS;};
+    wezterm.enable = lib.mkEnableOption "wezterm";
     wallust = with lib.types; {
       enable = lib.mkEnableOption "wallust" // {default = true;};
       colorscheme = lib.mkOption {

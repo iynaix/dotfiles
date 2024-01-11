@@ -8,7 +8,6 @@ _: {
       }
     ];
 
-    wezterm.enable = false;
     terminal.size = 10;
 
     persist = {

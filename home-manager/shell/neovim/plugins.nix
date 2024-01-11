@@ -5,6 +5,7 @@
       comment-nvim.enable = true;
       # perform initial setup with
       # :Copilot setup
+      # TODO: switch to copilot lua?
       copilot-vim.enable = true;
       fugitive.enable = true;
       gitsigns.enable = true;

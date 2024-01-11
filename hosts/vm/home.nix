@@ -9,6 +9,5 @@ _: {
     ];
 
     pathofbuilding.enable = false;
-    wezterm.enable = false;
   };
 }

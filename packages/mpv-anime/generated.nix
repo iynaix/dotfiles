@@ -3,14 +3,14 @@
 {
   ravu = {
     pname = "ravu";
-    version = "3f24e7c53085854d122bb5d6629d1d503ba29e35";
+    version = "bfcf48a15562eda973f9713041a60eb31516586a";
     src = fetchFromGitHub {
       owner = "bjin";
       repo = "mpv-prescalers";
-      rev = "3f24e7c53085854d122bb5d6629d1d503ba29e35";
+      rev = "bfcf48a15562eda973f9713041a60eb31516586a";
       fetchSubmodules = false;
-      sha256 = "sha256-Ewk2mjw6gAolrkzg+4DmVpOxRJDG6vOzzoQHF6668T8=";
+      sha256 = "sha256-m3S/WX6AZzD3Em61V7OJ7PK2InWpsu7xzScWoc/vljA=";
     };
-    date = "2023-09-13";
+    date = "2024-01-10";
   };
 }
