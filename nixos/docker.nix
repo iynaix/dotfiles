@@ -14,8 +14,11 @@ in {
       storageDriver = lib.mkIf (config.fileSystems."/".fsType == "zfs") "zfs";
     };
 
-    iynaix-nixos.persist = {
-      root.directories = [
+    # store docker images on zroot/cache
+    environment.persistence."/persist/cache/docker" = {
+      hideMounts = true;
+
+      directories = [
         "/var/lib/docker"
       ];
     };

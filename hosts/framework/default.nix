@@ -1,6 +1,6 @@
 {user, ...}: {
   iynaix-nixos = {
-    virt-manager.enable = true;
+    vm.enable = true;
   };
 
   # by-id doesn't seem to work with amd mobo

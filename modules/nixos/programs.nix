@@ -15,6 +15,6 @@ in {
     syncoid.enable = lib.mkEnableOption "syncoid";
     bittorrent.enable = lib.mkEnableOption "Torrenting Applications";
     vercel.enable = lib.mkEnableOption "Vercel Backups";
-    virt-manager.enable = lib.mkEnableOption "virt-manager";
+    vm.enable = lib.mkEnableOption "VM support";
   };
 }

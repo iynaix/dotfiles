@@ -11,7 +11,7 @@
     syncoid.enable = true;
     bittorrent.enable = true;
     vercel.enable = true;
-    virt-manager.enable = true;
+    vm.enable = true;
   };
 
   networking.hostId = "89eaa833"; # required for zfs

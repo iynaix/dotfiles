@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.virt-manager;
+  cfg = config.iynaix-nixos.vm;
 in {
   config = lib.mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;
@@ -16,8 +16,13 @@ in {
 
     users.users.${user}.extraGroups = ["libvirtd"];
 
-    iynaix-nixos.persist.root.directories = [
-      "/var/lib/libvirt"
-    ];
+    # store VMs on zroot/cache
+    environment.persistence."/persist/cache/VMs" = {
+      hideMounts = true;
+
+      directories = [
+        "/var/lib/libvirt"
+      ];
+    };
   };
 }
