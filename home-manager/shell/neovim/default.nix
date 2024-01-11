@@ -1,4 +1,9 @@
-_: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./completion.nix
     ./keymaps.nix
@@ -87,6 +92,31 @@ _: {
         command = "set number relativenumber";
       }
     ];
+  };
+
+  # fix default neovim wrapper desktop entry to run direnv before starting
+  # adapted from notashelf, see:
+  # https://github.com/NotAShelf/nyx/blob/90915f1c6ba4944a3474f44ac036b940db860ee5/homes/notashelf/terminal/editors/neovim/default.nix#L357
+  xdg = {
+    desktopEntries.nvim = {
+      name = "Neovim";
+      genericName = "Text Editor";
+      icon = "nvim";
+
+      exec = "${pkgs.writeShellScript "nvim-direnv" ''
+        filename="$(readlink -f "$1")"
+        dirname="$(dirname "$filename")"
+
+        ${config.iynaix.terminal.exec} -d "$dirname" ${lib.getExe pkgs.bash} -c "${lib.getExe pkgs.direnv} exec . nvim '$filename'"
+      ''} %f";
+    };
+
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/plain" = "nvim.desktop";
+      };
+    };
   };
 
   iynaix.persist = {
