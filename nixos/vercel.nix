@@ -20,18 +20,20 @@ in {
   config = lib.mkIf cfg.enable {
     sops.secrets.vercel_postgres.owner = user;
 
-    systemd.services.vercel-backup = {
-      serviceConfig.Type = "oneshot";
-      serviceConfig.User = user;
-      script = lib.getExe vercel-backup;
-    };
-    systemd.timers.vercel-backup = {
-      wantedBy = ["timers.target"];
-      partOf = ["vercel-backup.service"];
-      timerConfig = {
-        # every day at 5:03am
-        OnCalendar = "*-*-* 05:03:00";
-        Unit = "vercel-backup.service";
+    systemd = {
+      services.vercel-backup = {
+        serviceConfig.Type = "oneshot";
+        serviceConfig.User = user;
+        script = lib.getExe vercel-backup;
+      };
+      timers.vercel-backup = {
+        wantedBy = ["timers.target"];
+        partOf = ["vercel-backup.service"];
+        timerConfig = {
+          # every day at 5:03am
+          OnCalendar = "*-*-* 05:03:00";
+          Unit = "vercel-backup.service";
+        };
       };
     };
 

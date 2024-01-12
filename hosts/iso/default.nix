@@ -22,6 +22,11 @@
                 runtimeInputs = [pkgs.curl];
                 text = ''sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)'';
               })
+              (pkgs.writeShellApplication {
+                name = "iynaixos-reinstall";
+                runtimeInputs = [pkgs.curl];
+                text = ''sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)'';
+              })
             ]
             ++ (with pkgs; [
               btop

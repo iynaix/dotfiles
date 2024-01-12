@@ -25,7 +25,8 @@ in {
     # set here as legacy linux won't be able to set these
     hm.wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      package = assert (lib.assertMsg (pkgs.hyprland.version == "0.33.1") "migrate to hyprland from nixpkgs");
+        inputs.hyprland.packages.${pkgs.system}.hyprland;
     };
 
     xdg.portal = {

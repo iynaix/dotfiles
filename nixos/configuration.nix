@@ -28,7 +28,9 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_SG.UTF-8";
   console = {
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+    # seems to break virtual-console service because it can't find the font
+    # https://github.com/NixOS/nixpkgs/issues/257904
+    # font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
     useXkbConfig = true; # use xkb.options in tty.
   };
 

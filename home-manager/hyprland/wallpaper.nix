@@ -57,15 +57,6 @@
       cd - > /dev/null
     '';
   };
-  # delete current wallpaper
-  wallpaper-delete = pkgs.writeShellApplication {
-    name = "wallpaper-delete";
-    runtimeInputs = with pkgs; [swww];
-    text = ''
-      wall=$(cat "$HOME/.cache/current_wallpaper")
-      if [ -n "$wall" ]; then rm "$wall"; fi
-    '';
-  };
   # search wallpapers with rclip
   wallpapers-search = pkgs.writeShellApplication {
     name = "wallpapers-search";
@@ -84,7 +75,6 @@ in {
         wallpapers-choose
         wallpapers-remote
         wallpapers-process
-        wallpaper-delete
       ];
 
       gtk.gtk3.bookmarks = [

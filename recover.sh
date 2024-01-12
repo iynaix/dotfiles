@@ -55,4 +55,4 @@ done
 
 read -rp "Enter git rev for flake (default: main): " git_rev
 echo "Reinstalling NixOS"
-sudo nixos-install --flake "github:iynaix/dotfiles/${git_rev:-main}#$host"
+sudo nixos-install --no-root-password --flake "github:iynaix/dotfiles/${git_rev:-main}#$host"
