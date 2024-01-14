@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -19,14 +18,14 @@ in {
 
     programs.hyprland = {
       enable = true;
-      portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
 
     # set here as legacy linux won't be able to set these
     hm.wayland.windowManager.hyprland = {
       enable = true;
-      package = assert (lib.assertMsg (pkgs.hyprland.version == "0.33.1") "migrate to hyprland from nixpkgs");
-        inputs.hyprland.packages.${pkgs.system}.hyprland;
+      package = assert (lib.assertMsg (pkgs.hyprland.version == "0.34.0") "hyprland: updated, sync with hyprnstack?");
+        pkgs.hyprland;
     };
 
     xdg.portal = {

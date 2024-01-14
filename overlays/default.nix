@@ -54,6 +54,12 @@ in {
           '';
         });
 
+        rclip = prev.rclip.overridePythonAttrs (o: {
+          nativeBuildInputs = o.nativeBuildInputs ++ [pkgs.python3Packages.pythonRelaxDepsHook];
+
+          pythonRelaxDeps = ["torch" "torchvision"];
+        });
+
         # use latest commmit from git
         swww = overrideRustPackage "swww";
 

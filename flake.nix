@@ -21,11 +21,6 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
-    hyprland = {
-      url = "github:hyprwm/Hyprland/v0.34.0";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +28,7 @@
 
     hyprNStack = {
       url = "github:iynaix/hyprNStack";
-      inputs.hyprland.follows = "hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nix-index-database = {
