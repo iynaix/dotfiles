@@ -157,7 +157,7 @@ in {
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
       ++ workspace_keybinds
-      ++ lib.optionals config.iynaix.wezterm.enable ["$mod, q, exec, wezterm start"]
+      ++ lib.optionals (config.iynaix.terminal.secondary != null) ["$mod, q, exec, ${lib.getExe config.iynaix.terminal.secondary}"]
       ++ lib.optionals config.iynaix.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
         ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"

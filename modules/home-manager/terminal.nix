@@ -41,6 +41,12 @@ in {
       description = "Terminal command to execute other programs.";
     };
 
+    secondary = lib.mkOption {
+      type = lib.types.nullOr lib.types.package;
+      default = pkgs.ghostty;
+      description = "Secondary terminal to use.";
+    };
+
     font = lib.mkOption {
       type = lib.types.str;
       default = config.iynaix.fonts.monospace;
@@ -60,8 +66,8 @@ in {
     };
 
     opacity = lib.mkOption {
-      type = lib.types.float;
-      default = 0.8;
+      type = lib.types.str;
+      default = "0.8";
       description = "Opacity for the terminal.";
     };
 
@@ -69,20 +75,7 @@ in {
     # https://unix.stackexchange.com/a/642886
     fakeGnomeTerminal = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.writeShellApplication {
-          name = "gnome-terminal";
-          text = ''
-            shift
-
-            TITLE="$(basename "$1")"
-            if [ -n "$TITLE" ]; then
-              ${cfg.exec} -T "$TITLE" "$@"
-            else
-              ${cfg.exec} "$@"
-            fi
-          '';
-        };
-      description = "Fake gnome-terminal shell script so gnome opens terminal applications in the correct terminal.";
+      description = "Fake gnome-terminal executable so nemo opens the correct terminal.";
     };
   };
 

@@ -21,7 +21,7 @@
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2024-01-12",
+        "date": "2024-01-14",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -33,30 +33,10 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "f744d906becbf6d06a3d95fee37af5c32061d1aa",
-            "sha256": "sha256-aiLvmd5aIFviuJNMEcSM1WC2Q8lQ4eMq8qIvUhwjEUA=",
+            "rev": "07eabc5328dc5056f667a93f58549314d10f007b",
+            "sha256": "sha256-Tbhj9nAP3PoECFWVVk3bciM+x1Vw6MVo779OqSFfZ/Y=",
             "type": "github"
         },
-        "version": "f744d906becbf6d06a3d95fee37af5c32061d1aa"
-    },
-    "wezterm": {
-        "cargoLocks": null,
-        "date": "2024-01-11",
-        "extract": null,
-        "name": "wezterm",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": true,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "wez",
-            "repo": "wezterm",
-            "rev": "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79",
-            "sha256": "sha256-bWcez8vJlZttrVmBjyXZBZIbSBE7tpu1lkVSH1T6Fw0=",
-            "type": "github"
-        },
-        "version": "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79"
+        "version": "07eabc5328dc5056f667a93f58549314d10f007b"
     }
 }

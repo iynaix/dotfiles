@@ -10,8 +10,9 @@
         torrents-add
       fi
 
-      # remove ugly unicode characters
+      # remove ugly unicode characters, sleep to wait for renames to complete
       yt-dlp -a "$HOME/Desktop/yt.txt" && \
+      sleep 3 && \
       find -L "$HOME/Downloads" -maxdepth 1 -type f \( \
         -name '*？*' \
         -o -name '*｜*' \

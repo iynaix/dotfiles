@@ -3,26 +3,44 @@
   lib,
   pkgs,
   ...
-}: {
-  config = lib.mkIf config.iynaix.kitty.enable {
-    programs.kitty = with config.iynaix.terminal; {
+}: let
+  cfg = config.iynaix.kitty;
+  terminal = config.iynaix.terminal;
+in {
+  config = lib.mkIf cfg.enable {
+    # open kitty from nemo
+    iynaix.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (pkgs.writeShellApplication {
+      name = "gnome-terminal";
+      text = ''
+        shift
+
+        TITLE="$(basename "$1")"
+        if [ -n "$TITLE" ]; then
+          ${terminal.exec} -T "$TITLE" "$@"
+        else
+          ${terminal.exec} "$@"
+        fi
+      '';
+    });
+
+    programs.kitty = {
       enable = true;
       theme = "Catppuccin-Mocha";
       font = {
-        name = font;
-        inherit size;
+        name = terminal.font;
+        inherit (terminal) size;
       };
       settings = {
         enable_audio_bell = false;
         copy_on_select = "clipboard";
         scrollback_lines = 10000;
         update_check_interval = 0;
-        window_margin_width = padding;
-        single_window_margin_width = padding;
+        window_margin_width = terminal.padding;
+        single_window_margin_width = terminal.padding;
         tab_bar_edge = "top";
-        background_opacity = toString opacity;
+        background_opacity = terminal.opacity;
         confirm_os_window_close = 0;
-        font_features = "JetBrainsMonoNerdFontComplete-Regular +zero";
+        font_features = "+zero";
         shell =
           if (config.iynaix.shell.interactive == "fish")
           then "${lib.getExe pkgs.fish}"

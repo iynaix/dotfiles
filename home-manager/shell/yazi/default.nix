@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: {
-  programs.yazi = assert (lib.assertMsg (pkgs.yazi.version == "0.1.5") "yazi updated"); {
+  programs.yazi = {
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;

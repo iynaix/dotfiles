@@ -4,6 +4,7 @@
     ./deadbeef.nix
     ./dunst.nix
     ./firefox.nix
+    ./ghostty.nix
     ./gtk.nix
     ./helix.nix
     ./imv.nix

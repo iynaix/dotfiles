@@ -87,8 +87,6 @@ in {
                 directory = "projects";
                 method = "symlink";
               }
-            ]
-            ++ lib.optionals config.programs.dconf.enable [
               ".cache/dconf"
               ".config/dconf"
             ]
