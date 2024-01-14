@@ -25,16 +25,4 @@
     };
     date = "2024-01-14";
   };
-  wezterm = {
-    pname = "wezterm";
-    version = "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79";
-    src = fetchFromGitHub {
-      owner = "wez";
-      repo = "wezterm";
-      rev = "6c36a4dda2527836af0e0aa076d5dd0bd8d3dd79";
-      fetchSubmodules = true;
-      sha256 = "sha256-bWcez8vJlZttrVmBjyXZBZIbSBE7tpu1lkVSH1T6Fw0=";
-    };
-    date = "2024-01-11";
-  };
 }

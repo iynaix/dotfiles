@@ -79,11 +79,6 @@ in {
             // {
               version = "${o.version}-${sources.waybar.version}";
             });
-
-        # fix wezterm crashing instantly on hyprland
-        # https://github.com/wez/wezterm/issues/4483
-        wezterm = assert (lib.assertMsg (prev.wezterm.version == "20230712-072601-f4abf8fd") "wezterm: overlay is no longer needed");
-          overrideRustPackage "wezterm";
       }
     )
   ];

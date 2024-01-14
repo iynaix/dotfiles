@@ -29,7 +29,6 @@
     pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = true;
-    wezterm.enable = false;
     # wallust.colorscheme = "tokyo-night";
     # waybar.persistent-workspaces = true;
   };

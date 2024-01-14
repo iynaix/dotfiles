@@ -47,7 +47,7 @@ fn waifufetch(nix_info: &NixInfo) {
     let neofetch_config = &nix_info.neofetch.conf;
 
     Command::new("neofetch")
-        // wezterm supports kitty image protocol
+        // ghostty supports kitty image protocol
         .args(["--kitty", &img, "--config", neofetch_config])
         .status()
         .expect("failed to execute neofetch");
