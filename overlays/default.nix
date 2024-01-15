@@ -9,19 +9,7 @@
 in {
   nixpkgs.overlays = [
     (
-      _: prev: let
-        overrideRustPackage = pkgname:
-          prev.${pkgname}.overrideAttrs (_:
-            sources.${pkgname}
-            // {
-              # creating an overlay for buildRustPackage overlay
-              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-              cargoDeps = prev.rustPlatform.importCargoLock {
-                lockFile = sources.${pkgname}.src + "/Cargo.lock";
-                allowBuiltinFetchGit = true;
-              };
-            });
-      in {
+      _: prev: {
         # include custom packages
         iynaix =
           (prev.iynaix or {})
@@ -55,16 +43,43 @@ in {
         });
 
         rclip = prev.rclip.overridePythonAttrs (o: {
+          version = "1.7.24";
+
+          src = prev.fetchFromGitHub {
+            owner = "yurijmikhalevich";
+            repo = "rclip";
+            rev = "v1.7.24";
+            hash = "sha256-JWtKgvSP7oaPg19vWnnCDfm7P5Uew+v9yuvH7y2eHHM=";
+          };
+
           nativeBuildInputs = o.nativeBuildInputs ++ [pkgs.python3Packages.pythonRelaxDepsHook];
 
           pythonRelaxDeps = ["torch" "torchvision"];
         });
 
         # use latest commmit from git
-        swww = overrideRustPackage "swww";
+        swww = prev.swww.overrideAttrs (_:
+          sources.swww
+          // {
+            # creating an overlay for buildRustPackage overlay
+            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+            cargoDeps = prev.rustPlatform.importCargoLock {
+              lockFile = sources.swww.src + "/Cargo.lock";
+              allowBuiltinFetchGit = true;
+            };
+          });
 
         # use dev branch
-        # wallust = overrideRustPackage "wallust";
+        # wallust = prev.wallust.overrideAttrs (_:
+        #   sources.wallust
+        #   // {
+        #     # creating an overlay for buildRustPackage overlay
+        #     # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+        #     cargoDeps = prev.rustPlatform.importCargoLock {
+        #       lockFile = sources.wallust.src + "/Cargo.lock";
+        #       allowBuiltinFetchGit = true;
+        #     };
+        #   });
 
         # use latest commmit from git
         waybar = let
@@ -85,6 +100,32 @@ in {
             // {
               version = "${o.version}-${sources.waybar.version}";
             });
+
+        # fix yazi not supporting image previews in ghostty yet
+        yazi = assert (lib.assertMsg (prev.yazi.version == "0.1.5") "yazi: overlay is no longer needed");
+          prev.yazi.overrideAttrs (
+            o: rec {
+              version = "0.2.1";
+
+              src = prev.fetchFromGitHub {
+                owner = "sxyazi";
+                repo = "yazi";
+                rev = "v${version}";
+                hash = "sha256-XdN2oP5c2lK+bR3i+Hwd4oOlccMQisbzgevHsZ8YbSQ=";
+              };
+
+              env.YAZI_GEN_COMPLETIONS = true;
+
+              # creating an overlay for buildRustPackage overlay
+              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+              cargoDeps = prev.rustPlatform.importCargoLock {
+                lockFile = src + "/Cargo.lock";
+                allowBuiltinFetchGit = true;
+              };
+
+              postInstall = lib.replaceStrings ["./config"] ["./yazi-config"] o.postInstall;
+            }
+          );
       }
     )
   ];

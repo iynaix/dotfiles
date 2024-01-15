@@ -11,7 +11,7 @@
 
     settings = {
       manager = {
-        layout = [0 1 1];
+        ratio = [0 1 1];
         sort_by = "alphabetical";
         sort_sensitive = false;
         sort_reverse = false;
