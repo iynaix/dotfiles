@@ -18,17 +18,6 @@ pub struct HyprMonitorArgs {
     pub extend: Option<String>,
 }
 
-// ------------------ HYPR QTILE ------------------
-
-#[derive(Parser, Debug)]
-#[command(
-    name = "hypr-qtile",
-    about = "Workspace switching for multiple monitors similar to qtile"
-)]
-pub struct HyprQtileArgs {
-    pub workspace: i32,
-}
-
 // ------------------ HYPR SAME CLASS ------------------
 #[derive(Subcommand, Debug)]
 pub enum HyprSameClassDirection {

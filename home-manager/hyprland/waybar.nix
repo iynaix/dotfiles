@@ -148,7 +148,7 @@ in {
         in
           lib.concatStringsSep "\n" (
             lib.imap0 (i: mod: let
-              className = builtins.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
+              className = lib.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
               padding =
                 if (i == 0)
                 then ''

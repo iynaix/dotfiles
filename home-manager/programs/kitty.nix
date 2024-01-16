@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.custom.kitty;
-  terminal = config.custom.terminal;
+  inherit (config.custom) terminal;
 in {
   config = lib.mkIf cfg.enable {
     # open kitty from nemo

@@ -28,7 +28,7 @@
   # replace the imports with preset theme / wallust
   fixupRofiThemesRasi = rasiPath: additionalStyles: ''
     ${themeStyles}
-    ${builtins.replaceStrings ["@import"] ["// @import"] (builtins.readFile rasiPath)}
+    ${lib.replaceStrings ["@import"] ["// @import"] (builtins.readFile rasiPath)}
     window {
       width: ${toString cfg.width}px;
     }
@@ -38,7 +38,7 @@
   rofi-power-menu = pkgs.writeShellApplication {
     name = "rofi-power-menu";
     runtimeInputs = with pkgs; [rofi custom.rofi-themes];
-    text = builtins.replaceStrings ["@@theme@@"] [
+    text = lib.replaceStrings ["@@theme@@"] [
       (builtins.toFile "rofi-power-menu.rasi" ((builtins.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
         + ''
           * { background-window: black/60%; } // darken background

@@ -16,7 +16,7 @@
       swappy
       rofi
     ];
-    text = builtins.replaceStrings ["@@outputPath@@"] ["${screenshotDir}/$(date +${iso8601}).png"] (builtins.readFile ./screenshot.sh);
+    text = lib.replaceStrings ["@@outputPath@@"] ["${screenshotDir}/$(date +${iso8601}).png"] (builtins.readFile ./screenshot.sh);
   };
   # run ocr on selected area and copy to clipboard
   hypr-ocr = pkgs.writeShellApplication {

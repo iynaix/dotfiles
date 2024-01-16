@@ -41,7 +41,7 @@
         "gitconfig".text = config.hm.xdg.configFile."git/config".text;
       };
       variables = {
-        TERMINAL = config.hm.custom.terminal.exec;
+        TERMINAL = lib.getExe config.hm.custom.terminal.package;
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
@@ -60,7 +60,6 @@
           tree # for root, normal user has an eza alias
           wget
         ]
-        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) config.hm.custom.terminal.fakeGnomeTerminal)
         ++ (lib.optional config.custom-nixos.distrobox.enable pkgs.distrobox)
         ++ (lib.optional config.hm.custom.helix.enable helix);
     };

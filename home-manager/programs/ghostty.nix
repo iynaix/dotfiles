@@ -5,9 +5,9 @@
   ...
 }: let
   cfg = config.custom.ghostty;
-  terminal = config.custom.terminal;
+  inherit (config.custom) terminal;
 in {
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # open ghostty from nemo
     custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.ghostty) (pkgs.writeShellApplication {
       name = "gnome-terminal";

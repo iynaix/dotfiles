@@ -11,11 +11,7 @@
 in {
   wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
     bind = let
-      workspace_keybinds = lib.flatten (lib.concatMap ({
-        name,
-        workspaces,
-        ...
-      }:
+      workspace_keybinds = lib.flatten (lib.concatMap ({workspaces, ...}:
         lib.forEach workspaces (ws_: let
           ws = toString ws_;
           ws_key = toString (lib.mod ws_ 10);
@@ -23,10 +19,10 @@ in {
           if qtile_like
           then [
             # Switch workspaces with mainMod + [0-9]
-            "$mod, ${ws_key}, hypr-qtile, ${ws}"
+            "$mod, ${ws_key}, focusworkspaceoncurrentmonitor, ${ws}"
             # Move active window to a workspace with mainMod + SHIFT + [0-9]
             "$mod_SHIFT, ${ws_key}, movetoworkspace, ${ws}"
-            "$mod_SHIFT, ${ws_key}, hypr-qtile, ${ws}"
+            "$mod_SHIFT, ${ws_key}, focusworkspaceoncurrentmonitor, ${ws}"
           ]
           else [
             # Switch workspaces with mainMod + [0-9]

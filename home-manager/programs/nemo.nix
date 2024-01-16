@@ -10,6 +10,7 @@
     packages = with pkgs; [
       cinnamon.nemo-with-extensions
       cinnamon.nemo-fileroller
+      config.custom.terminal.fakeGnomeTerminal
     ];
   };
 
@@ -56,10 +57,10 @@
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      inherit (config.custom.terminal) exec;
+      exec = lib.getExe config.custom.terminal.package;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      inherit (config.custom.terminal) exec;
+      exec = lib.getExe config.custom.terminal.package;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

@@ -18,10 +18,6 @@ name = "hypr-pip"
 path = "src/cli/hypr_pip.rs"
 
 [[bin]]
-name = "hypr-qtile"
-path = "src/cli/hypr_qtile.rs"
-
-[[bin]]
 name = "hypr-same-class"
 path = "src/cli/hypr_same_class.rs"
 
