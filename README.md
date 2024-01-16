@@ -56,5 +56,5 @@ iynaixos-recover
 
 From a standard ISO,
 ```sh
-sh <(curl -l https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
+sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
 ```

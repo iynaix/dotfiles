@@ -24,6 +24,7 @@
     ];
 
     deadbeef.enable = true;
+    ghostty.enable = true;
     hyprland.plugin = "hyprnstack";
     obs-studio.enable = true;
     pathofbuilding.enable = true;

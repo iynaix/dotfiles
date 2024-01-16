@@ -5,7 +5,7 @@
 }: {
   options.iynaix = {
     deadbeef.enable = lib.mkEnableOption "deadbeef";
-    ghostty.enable = lib.mkEnableOption "ghostty" // {default = true;};
+    ghostty.enable = lib.mkEnableOption "ghostty";
     gradience.enable = lib.mkEnableOption "gradience";
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};

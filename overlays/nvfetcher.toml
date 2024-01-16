@@ -1,6 +1,6 @@
 [swww]
 src.git = "https://github.com/Horus645/swww"
-fetch.github = "Horus645/swww"
+fetch.github = "LGFae/swww"
 
 [waybar]
 src.git = "https://github.com/Alexays/Waybar"

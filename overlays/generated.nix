@@ -3,15 +3,15 @@
 {
   swww = {
     pname = "swww";
-    version = "0908f36050d545a0eb97ca0cbfc40c47fc50d6ba";
+    version = "d60139dffe3fb7ee26814fed292fdcca2309df31";
     src = fetchFromGitHub {
-      owner = "Horus645";
+      owner = "LGFae";
       repo = "swww";
-      rev = "0908f36050d545a0eb97ca0cbfc40c47fc50d6ba";
+      rev = "d60139dffe3fb7ee26814fed292fdcca2309df31";
       fetchSubmodules = false;
-      sha256 = "sha256-NRmlctWwiUVlbB457y3e2BpWNyJ7CHpEnAYazwYQZpk=";
+      sha256 = "sha256-n7YdUmIZGu7W7cX6OvVW+wbkKjFvont4hEAhZXYDQd8=";
     };
-    date = "2023-12-21";
+    date = "2024-01-15";
   };
   waybar = {
     pname = "waybar";

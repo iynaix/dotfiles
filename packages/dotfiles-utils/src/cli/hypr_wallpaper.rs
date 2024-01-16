@@ -1,7 +1,6 @@
 use clap::Parser;
 use dotfiles_utils::{
-    cli::HyprWallpaperArgs, cmd, cmd_output, full_path, monitor::Monitor, nixinfo::NixInfo,
-    wallpaper, wallust, CmdOutput,
+    cli::HyprWallpaperArgs, cmd, full_path, monitor::Monitor, nixinfo::NixInfo, wallpaper, wallust,
 };
 use serde::Deserialize;
 use std::{collections::HashMap, path::Path, process::Command};
@@ -103,30 +102,7 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
         }
     };
 
-    let is_daemon_running = !cmd_output(["swww", "query"], CmdOutput::Stderr)
-        .first()
-        .unwrap_or(&"".to_string())
-        .starts_with("Error");
-
-    if is_daemon_running {
-        set_wallpapers();
-    } else {
-        // FIXME: weird race condition with swww init, need to sleep for a second
-        // https://github.com/Horus645/swww/issues/144
-
-        // sleep for a second
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
-        let swww_init = Command::new("swww")
-            .arg("init")
-            .status()
-            .expect("failed to execute swww init");
-
-        // equivalent of bash &&
-        if swww_init.success() {
-            set_wallpapers();
-        }
-    }
+    set_wallpapers();
 }
 
 fn main() {

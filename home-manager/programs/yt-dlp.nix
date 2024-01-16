@@ -12,7 +12,7 @@
 
       # remove ugly unicode characters, sleep to wait for renames to complete
       yt-dlp -a "$HOME/Desktop/yt.txt" && \
-      sleep 3 && \
+      sleep 5 && \
       find -L "$HOME/Downloads" -maxdepth 1 -type f \( \
         -name '*？*' \
         -o -name '*｜*' \

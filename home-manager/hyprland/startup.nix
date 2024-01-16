@@ -50,9 +50,7 @@ in {
         "hyprctl dispatch workspace 7"
         "hyprctl dispatch workspace 1"
 
-        # FIXME: weird race condition with swww init, need to sleep for a second
-        # https://github.com/Horus645/swww/issues/144
-        "sleep 1; swww init && hypr-wallpaper"
+        "swww init && hypr-wallpaper"
 
         "sleep 5 && launch-waybar"
 
