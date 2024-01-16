@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: {
-  options.iynaix = {
+  options.custom = {
     fonts = {
       regular = lib.mkOption {
         type = lib.types.str;

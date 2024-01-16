@@ -11,8 +11,8 @@ in {
     (
       _: prev: {
         # include custom packages
-        iynaix =
-          (prev.iynaix or {})
+        custom =
+          (prev.custom or {})
           // (import ../packages {
             inherit (prev) pkgs;
             inherit inputs;

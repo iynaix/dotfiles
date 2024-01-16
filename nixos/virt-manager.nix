@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.vm;
+  cfg = config.custom-nixos.vm;
 in {
   config = lib.mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;

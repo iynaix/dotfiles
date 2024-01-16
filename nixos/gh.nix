@@ -17,7 +17,7 @@
       };
     };
 
-    iynaix.shell.functions = {
+    custom.shell.functions = {
       # provide auth token for gh
       gh = let
         token_path = config.sops.secrets.github_token.path;

@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.keyd;
+  cfg = config.custom-nixos.keyd;
 in {
   config = lib.mkIf cfg.enable {
     services.keyd = {

@@ -4,8 +4,8 @@
   user,
   ...
 }: let
-  cfg = config.iynaix-nixos.zfs;
-  persistCfg = config.iynaix-nixos.persist;
+  cfg = config.custom-nixos.zfs;
+  persistCfg = config.custom-nixos.persist;
 in {
   config = lib.mkIf cfg.enable {
     boot = {

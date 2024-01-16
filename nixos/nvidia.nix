@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix-nixos.nvidia;
+  cfg = config.custom-nixos.nvidia;
 in {
   config = lib.mkIf cfg.enable {
     # enable nvidia support

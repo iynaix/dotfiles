@@ -6,7 +6,7 @@
   pkgs,
   ...
 }: let
-  isHyprnstack = config.iynaix.hyprland.plugin == "hyprnstack";
+  isHyprnstack = config.custom.hyprland.plugin == "hyprnstack";
 in {
   wayland.windowManager.hyprland = lib.mkIf isHyprnstack {
     plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];

@@ -1,5 +1,5 @@
 {user, ...}: {
-  iynaix-nixos = {
+  custom-nixos = {
     # hardware
     am5.enable = true;
     hdds.enable = true;

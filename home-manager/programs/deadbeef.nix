@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.deadbeef;
+  cfg = config.custom.deadbeef;
 in {
   config = lib.mkIf cfg.enable {
     home.packages = [pkgs.deadbeef];
 
-    iynaix.persist = {
+    custom.persist = {
       home.directories = [
         ".config/deadbeef"
       ];

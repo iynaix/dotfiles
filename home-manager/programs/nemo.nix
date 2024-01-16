@@ -1,8 +1,9 @@
 {
-  pkgs,
   config,
-  lib,
   isNixOS,
+  lib,
+  pkgs,
+  user,
   ...
 }: {
   home = {
@@ -44,21 +45,21 @@
   };
 
   gtk.gtk3.bookmarks = [
-    "file:///home/iynaix/Downloads"
-    "file:///home/iynaix/projects"
-    "file:///home/iynaix/projects/dotfiles"
-    "file:///home/iynaix/projects/coinfc"
-    "file:///home/iynaix/Pictures/Wallpapers"
+    "file:///home/${user}/Downloads"
+    "file:///home/${user}/projects"
+    "file:///home/${user}/projects/dotfiles"
+    "file:///home/${user}/projects/coinfc"
+    "file:///home/${user}/Pictures/Wallpapers"
     "file:///persist Persist"
   ];
 
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      inherit (config.iynaix.terminal) exec;
+      inherit (config.custom.terminal) exec;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      inherit (config.iynaix.terminal) exec;
+      inherit (config.custom.terminal) exec;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";
@@ -78,7 +79,7 @@
     };
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       # folder preferences such as view mode and sort order
       ".local/share/gvfs-metadata"

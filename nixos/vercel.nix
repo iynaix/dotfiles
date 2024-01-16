@@ -5,7 +5,7 @@
   user,
   ...
 }: let
-  cfg = config.iynaix-nixos.vercel;
+  cfg = config.custom-nixos.vercel;
   vercel-backup = pkgs.writeShellApplication {
     name = "vercel-backup";
     runtimeInputs = [pkgs.postgresql_15];
@@ -37,7 +37,7 @@ in {
       };
     };
 
-    iynaix-nixos.persist.home.directories = [
+    custom-nixos.persist.home.directories = [
       ".local/share/com.vercel.cli"
     ];
   };

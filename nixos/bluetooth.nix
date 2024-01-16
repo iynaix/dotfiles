@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.bluetooth;
+  cfg = config.custom-nixos.bluetooth;
 in {
   config = lib.mkIf cfg.enable {
     hardware.bluetooth = {
@@ -18,12 +18,12 @@ in {
       services.mpris-proxy.enable = true;
 
       # add bluetooth audio icon to waybar
-      iynaix.waybar.config.pulseaudio = lib.mkIf hmCfg.config.programs.waybar.enable {
+      custom.waybar.config.pulseaudio = lib.mkIf hmCfg.config.programs.waybar.enable {
         format-bluetooth = "  {volume}%";
       };
     };
 
-    iynaix-nixos.persist = {
+    custom-nixos.persist = {
       root.directories = [
         "/var/lib/bluetooth"
       ];

@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = [pkgs.brave];
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".cache/BraveSoftware"
       ".config/BraveSoftware"

@@ -71,5 +71,5 @@
 in
   all_hosts
   // {
-    vm-amd = all_hosts.vm // {config.iynaix-nixos.hyprland.enable = true;};
+    vm-amd = all_hosts.vm // {config.custom-nixos.hyprland.enable = true;};
   }

@@ -6,7 +6,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.iynaix) displays;
+  inherit (config.custom) displays;
   isVm = host == "vm" || host == "vm-amd";
 in {
   imports = [
@@ -61,7 +61,7 @@ in {
         then "ALT"
         else "SUPER";
 
-      "$term" = "${config.iynaix.terminal.exec}";
+      "$term" = "${config.custom.terminal.exec}";
 
       general = let
         gap =
@@ -181,7 +181,7 @@ in {
     };
 
     # hyprland crash reports
-    iynaix.persist = {
+    custom.persist = {
       home.directories = [
         ".hyprland"
       ];

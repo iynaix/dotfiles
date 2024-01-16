@@ -43,7 +43,7 @@
 
     # NOTE: This will require your git SSH access to the repo.
     # disable ghostty by commenting out the following input and setting
-    # the home-manager option config.iynaix.ghostty.enable = false
+    # the hm option config.custom.ghostty.enable = false
     #
     # WARNING: Do NOT pin the `nixpkgs` input, as that will
     # declare the cache useless. If you do, you will have

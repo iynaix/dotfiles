@@ -4,7 +4,7 @@
   user,
   ...
 }: let
-  cfg = config.iynaix.shell;
+  cfg = config.custom.shell;
   bashFunctions = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value:
     if lib.isString value
     then ''
@@ -56,7 +56,7 @@ in {
         _set_beam_cursor
       ''
       # wallust colorscheme
-      + lib.optionalString config.iynaix.wallust.enable ''
+      + lib.optionalString config.custom.wallust.enable ''
         wallust_colors="/home/${user}/.cache/wallust/sequences"
         if [ -e "$wallust_colors" ]; then
           command cat "$wallust_colors"

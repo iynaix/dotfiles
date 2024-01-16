@@ -27,7 +27,7 @@
     "yazi/keymap.toml".source = pkgs.substituteAll {
       src = ./keymap.toml;
 
-      extra_keymaps = lib.pipe config.iynaix.shortcuts [
+      extra_keymaps = lib.pipe config.custom.shortcuts [
         (lib.mapAttrsToList (name: value: let
           keys = lib.stringToCharacters name;
           toArr = arr: "[ ${lib.concatStringsSep ", " (map (c: ''"${c}"'') arr)} ]";

@@ -4,9 +4,9 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos;
+  cfg = config.custom-nixos;
 in {
-  options.iynaix-nixos = {
+  options.custom-nixos = {
     ### NIXOS LEVEL OPTIONS ###
     distrobox.enable = lib.mkEnableOption "distrobox";
     docker.enable = lib.mkEnableOption "docker" // {default = cfg.distrobox.enable;};

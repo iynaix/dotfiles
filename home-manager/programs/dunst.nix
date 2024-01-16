@@ -6,7 +6,7 @@ in {
     configFile = "~/.cache/wallust/dunstrc";
   };
 
-  iynaix.wallust.entries.dunstrc = {
+  custom.wallust.entries.dunstrc = {
     inherit (config.services.dunst) enable;
     text = ''
       [global]
@@ -15,7 +15,7 @@ in {
       dmenu="rofi -p dunst:"
       ellipsize="end"
       follow="mouse"
-      font="${config.iynaix.fonts.regular} Regular 12"
+      font="${config.custom.fonts.regular} Regular 12"
       frame_color="{background}"
       frame_width=0
       horizontal_padding=10

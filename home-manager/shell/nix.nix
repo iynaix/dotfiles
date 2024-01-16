@@ -115,7 +115,7 @@ in {
         };
       };
 
-      iynaix.persist = {
+      custom.persist = {
         cache = [
           ".cache/nix-index"
         ];

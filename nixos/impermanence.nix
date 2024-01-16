@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix-nixos.persist;
+  cfg = config.custom-nixos.persist;
 in {
   config = {
     boot = {
@@ -72,7 +72,7 @@ in {
     # setup persistence for home manager
     programs.fuse.userAllowOther = true;
     hm = hmCfg: let
-      hmPersistCfg = hmCfg.config.iynaix.persist;
+      hmPersistCfg = hmCfg.config.custom.persist;
     in {
       systemd.user.startServices = true;
       home.persistence = {

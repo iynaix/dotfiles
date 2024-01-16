@@ -15,30 +15,30 @@ in rec {
 
   # default host
   c = flake.nixosConfigurations.${host}.config;
-  co = c.iynaix-nixos;
+  co = c.custom-nixos;
   inherit (c) hm;
-  hmo = hm.iynaix;
+  hmo = hm.custom;
   inherit (flake.nixosConfigurations.${host}) pkgs;
 
   desktop = flake.nixosConfigurations.desktop.config;
-  desktopo = desktop.iynaix-nixos;
+  desktopo = desktop.custom-nixos;
   desktopHm = desktop.hm;
-  desktopHmo = desktopHm.iynaix;
+  desktopHmo = desktopHm.custom;
 
   framework = flake.nixosConfigurations.framework.config;
-  frameworko = framework.iynaix-nixos;
+  frameworko = framework.custom-nixos;
   frameworkHm = framework.hm;
-  frameworkHmo = frameworkHm.iynaix;
+  frameworkHmo = frameworkHm.custom;
 
   laptop = flake.nixosConfigurations.framework.config;
-  laptopo = framework.iynaix-nixos;
+  laptopo = framework.custom-nixos;
   laptopHm = framework.hm;
-  laptopHmo = frameworkHm.iynaix;
+  laptopHmo = frameworkHm.custom;
 
   vm = flake.nixosConfigurations.vm.config;
-  vmo = vm.iynaix-nixos;
+  vmo = vm.custom-nixos;
   vmHm = vm.hm;
-  vmHmo = vmHm.iynaix;
+  vmHmo = vmHm.custom;
 
   # your code here
 }

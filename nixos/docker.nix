@@ -4,9 +4,9 @@
   config,
   ...
 }: let
-  cfg = config.iynaix-nixos.docker;
+  cfg = config.custom-nixos.docker;
 in {
-  config = lib.mkIf (cfg.enable || config.iynaix-nixos.distrobox.enable) {
+  config = lib.mkIf (cfg.enable || config.custom-nixos.distrobox.enable) {
     users.users.${user}.extraGroups = ["docker"];
 
     virtualisation.docker = {

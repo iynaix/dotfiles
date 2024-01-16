@@ -33,9 +33,9 @@
     }
     //
     # add shortcuts for quick cd in shell
-    lib.mapAttrs (_: value: "cd ${value}") config.iynaix.shortcuts;
+    lib.mapAttrs (_: value: "cd ${value}") config.custom.shortcuts;
 
-  iynaix.shell.functions = {
+  custom.shell.functions = {
     fdnix = {
       bashBody = ''fd "$@" /nix/store'';
       fishBody = ''fd $argv /nix/store'';

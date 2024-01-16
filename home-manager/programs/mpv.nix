@@ -110,7 +110,7 @@
           thumbfast
         ]
         # custom packaged scripts
-        ++ (with pkgs.iynaix; [
+        ++ (with pkgs.custom; [
           mpv-deletefile
           mpv-dynamic-crop
           # mpv-modernx
@@ -123,7 +123,7 @@
 
     # anime profile settings
     (let
-      inherit (pkgs.iynaix) mpv-anime;
+      inherit (pkgs.custom) mpv-anime;
       anime4k_shaders =
         lib.pipe [
           "Clamp_Highlights"
@@ -137,7 +137,7 @@
           (arr: lib.concatStringsSep ":" arr)
         ];
     in
-      lib.optionalAttrs config.iynaix.mpv-anime.enable
+      lib.optionalAttrs config.custom.mpv-anime.enable
       {
         # auto apply anime shaders for anime videos
         profiles.anime = {
@@ -186,7 +186,7 @@
     # subs = "subliminal download -l 'en' -l 'eng' -s";
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".local/state/mpv" # watch later
     ];

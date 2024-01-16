@@ -30,7 +30,7 @@
     runtimeInputs = with pkgs; [rsync wallpapers-backup];
     text = ''
       wallpapers-backup
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-iynaix-framework}:$HOME/Pictures"
+      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-${user}-framework}:$HOME/Pictures"
     '';
   };
   # process wallpapers with upscaling and vertical crop
@@ -87,7 +87,7 @@ in {
     })
 
     # TODO: rofi rclip?
-    (lib.mkIf config.iynaix.rclip.enable {
+    (lib.mkIf config.custom.rclip.enable {
       home.packages = [
         wallpapers-search
         pkgs.rclip
@@ -97,7 +97,7 @@ in {
         wallrg = "wallpapers-search";
       };
 
-      iynaix.persist = {
+      custom.persist = {
         home.directories = [
           ".cache/clip"
           ".local/share/rclip"

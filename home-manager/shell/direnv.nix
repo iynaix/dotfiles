@@ -14,7 +14,7 @@
     DIRENV_LOG_FORMAT = "";
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".local/share/direnv"
     ];

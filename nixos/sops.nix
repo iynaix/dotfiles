@@ -24,7 +24,7 @@
 
   users.users.${user}.extraGroups = [config.users.groups.keys.name];
 
-  iynaix-nixos.persist.home = {
+  custom-nixos.persist.home = {
     directories = [
       ".config/sops"
     ];

@@ -5,7 +5,7 @@
   isNixOS,
   ...
 }: let
-  gradienceCfg = config.iynaix.gradience;
+  gradienceCfg = config.custom.gradience;
 in {
   home = {
     packages = lib.optionals gradienceCfg.enable [pkgs.gradience];
@@ -49,7 +49,7 @@ in {
       package = pkgs.tela-icon-theme;
     };
     font = {
-      name = "${config.iynaix.fonts.regular} Regular";
+      name = "${config.custom.fonts.regular} Regular";
       package = pkgs.inter;
       size = 10;
     };

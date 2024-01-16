@@ -46,7 +46,7 @@
     };
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".local/share/zoxide"
     ];

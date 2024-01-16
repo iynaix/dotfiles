@@ -30,7 +30,7 @@
     };
   };
 
-  iynaix.wallust.entries.zathurarc = {
+  custom.wallust.entries.zathurarc = {
     inherit (config.programs.zathura) enable;
     text = ''
       set default-bg                  "{color0}"

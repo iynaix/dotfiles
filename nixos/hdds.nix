@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix-nixos.hdds;
+  cfg = config.custom-nixos.hdds;
   wdred = "/media/6TBRED";
   wdred-dataset = "zfs-wdred6-1/media";
   ironwolf = "/media/IRONWOLF22";
@@ -15,7 +15,7 @@ in {
       lib.optional cfg.ironwolf22 "zfs-ironwolf22-1"
       ++ (lib.optional cfg.wdred6 "zfs-wdred6-1");
 
-    services.sanoid = lib.mkIf config.iynaix-nixos.zfs.snapshots {
+    services.sanoid = lib.mkIf config.custom-nixos.zfs.snapshots {
       enable = true;
 
       datasets = {

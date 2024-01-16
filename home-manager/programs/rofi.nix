@@ -4,8 +4,8 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.rofi;
-  rofiThemes = "${pkgs.iynaix.rofi-themes}/files";
+  cfg = config.custom.rofi;
+  rofiThemes = "${pkgs.custom.rofi-themes}/files";
   launcherType = 2;
   launcherStyle = 2;
   powermenuType = 4;
@@ -37,7 +37,7 @@
   # NOTE: rofi-power-menu only works for powermenuType = 4!
   rofi-power-menu = pkgs.writeShellApplication {
     name = "rofi-power-menu";
-    runtimeInputs = with pkgs; [rofi iynaix.rofi-themes];
+    runtimeInputs = with pkgs; [rofi custom.rofi-themes];
     text = builtins.replaceStrings ["@@theme@@"] [
       (builtins.toFile "rofi-power-menu.rasi" ((builtins.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
         + ''
@@ -55,7 +55,7 @@ in {
   home.packages = [rofi-power-menu];
 
   xdg.configFile = {
-    "rofi/rofi-wifi-menu" = lib.mkIf config.iynaix.wifi.enable {
+    "rofi/rofi-wifi-menu" = lib.mkIf config.custom.wifi.enable {
       # https://github.com/ericmurphyxyz/rofi-wifi-menu/blob/master/rofi-wifi-menu.sh
       source = ./rofi-wifi-menu.sh;
     };
@@ -80,7 +80,7 @@ in {
     ];
   };
 
-  iynaix.wallust.entries = {
+  custom.wallust.entries = {
     # default launcher
     "rofi.rasi" = {
       inherit (config.programs.rofi) enable;

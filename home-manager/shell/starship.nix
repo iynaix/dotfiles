@@ -68,7 +68,7 @@
   # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
   programs.kitty.shellIntegration.enableBashIntegration = false;
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".cache/starship"
     ];

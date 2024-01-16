@@ -1,9 +1,10 @@
 {
   config,
   lib,
+  user,
   ...
 }: let
-  cfg = config.iynaix-nixos.syncoid;
+  cfg = config.custom-nixos.syncoid;
 in {
   config = lib.mkIf cfg.enable {
     # allow syncoid to ssh into NAS
@@ -23,7 +24,7 @@ in {
 
       commands."truenas" = {
         source = "zroot/persist";
-        target = "root@iynaix-nas:NAS/desktop-backup";
+        target = "root@${user}-nas:NAS/desktop-backup";
         extraArgs = [
           "--no-sync-snap"
           "--delete-target-snapshots"
@@ -37,7 +38,7 @@ in {
     };
 
     # persist syncoid .ssh
-    iynaix-nixos.persist = {
+    custom-nixos.persist = {
       root.directories = [
         "/var/lib/syncoid"
       ];

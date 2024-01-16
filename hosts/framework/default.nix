@@ -1,5 +1,5 @@
 {user, ...}: {
-  iynaix-nixos = {
+  custom-nixos = {
     vm.enable = true;
   };
 

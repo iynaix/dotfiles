@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.kitty;
-  terminal = config.iynaix.terminal;
+  cfg = config.custom.kitty;
+  terminal = config.custom.terminal;
 in {
   config = lib.mkIf cfg.enable {
     # open kitty from nemo
-    iynaix.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (pkgs.writeShellApplication {
+    custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (pkgs.writeShellApplication {
       name = "gnome-terminal";
       text = ''
         shift
@@ -42,7 +42,7 @@ in {
         confirm_os_window_close = 0;
         font_features = "+zero";
         shell =
-          if (config.iynaix.shell.interactive == "fish")
+          if (config.custom.shell.interactive == "fish")
           then "${lib.getExe pkgs.fish}"
           else ".";
       };

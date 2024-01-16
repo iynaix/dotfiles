@@ -24,7 +24,7 @@
     '';
   };
 in {
-  config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
+  config = lib.mkIf config.custom-nixos.bittorrent.enable {
     sops.secrets.transmission_rpc.owner = user;
 
     services.transmission = {
@@ -136,7 +136,7 @@ in {
 
     # hm.home.packages = with pkgs; [transmission-remote-gtk];
 
-    iynaix-nixos.persist.home.directories = [
+    custom-nixos.persist.home.directories = [
       ".config/transmission-daemon"
     ];
   };

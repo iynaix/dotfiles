@@ -1,5 +1,5 @@
 {user, ...}: {
-  iynaix-nixos = {
+  custom-nixos = {
     # impermanence
     persist = {
       tmpfs = false; # change to false to test zfs impermanence

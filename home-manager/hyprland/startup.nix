@@ -10,7 +10,7 @@
 in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     # start hyprland
-    iynaix.shell.profileExtra = lib.mkIf config.iynaix.hyprland.autostart ''
+    custom.shell.profileExtra = lib.mkIf config.custom.hyprland.autostart ''
       if [ "$(tty)" = "/dev/tty1" ]; then
         exec Hyprland &> /dev/null
       fi

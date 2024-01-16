@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.wallust;
+  cfg = config.custom.wallust;
 in {
   # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
   config = {
@@ -56,16 +56,16 @@ in {
       )
       cfg.entries;
 
-    iynaix.wallust.entries = {
+    custom.wallust.entries = {
       # misc information for nix
       "nix.json" = {
         enable = true;
         text = builtins.toJSON {
           wallpaper = "{wallpaper}";
           fallback = "${../../gits-catppuccin.jpg}";
-          monitors = config.iynaix.displays;
-          inherit (config.iynaix.wallust) colorscheme;
-          persistent_workspaces = config.iynaix.waybar.persistent-workspaces;
+          monitors = config.custom.displays;
+          inherit (config.custom.wallust) colorscheme;
+          persistent_workspaces = config.custom.waybar.persistent-workspaces;
           neofetch = {
             logo = "${../../shell/rice/nixos.png}";
             conf = "${../../shell/rice/neofetch.conf}";
@@ -99,7 +99,7 @@ in {
       };
     };
 
-    iynaix.persist = {
+    custom.persist = {
       cache = [
         ".cache/wallust"
       ];

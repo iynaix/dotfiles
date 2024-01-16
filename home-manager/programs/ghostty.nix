@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.ghostty;
-  terminal = config.iynaix.terminal;
+  cfg = config.custom.ghostty;
+  terminal = config.custom.terminal;
 in {
   config = lib.mkIf (cfg.enable) {
     # open ghostty from nemo
-    iynaix.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.ghostty) (pkgs.writeShellApplication {
+    custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.ghostty) (pkgs.writeShellApplication {
       name = "gnome-terminal";
       text = ''
         shift
@@ -39,7 +39,7 @@ in {
         background = "#000000";
         background-opacity = terminal.opacity;
         command =
-          if (config.iynaix.shell.interactive == "fish")
+          if (config.custom.shell.interactive == "fish")
           then "${lib.getExe pkgs.fish}"
           else "${lib.getExe pkgs.bash}";
         confirm-close-surface = false;

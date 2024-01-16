@@ -44,7 +44,7 @@
     '';
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".console-ninja"
       ".config/Code"

@@ -1,5 +1,5 @@
 {lib, ...}: {
-  options.iynaix.shortcuts = lib.mkOption {
+  options.custom.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
     default = {
       h = "~";

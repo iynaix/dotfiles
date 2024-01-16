@@ -42,7 +42,7 @@
   };
 
   # extra git functions
-  iynaix.shell.functions = {
+  custom.shell.functions = {
     # delete a remote branch
     grd = ''
       gb -D $1
@@ -83,7 +83,7 @@
     mergeclean = "find . -type f -name '*.orig' -exec rm -f {} \;";
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".config/gh"
     ];

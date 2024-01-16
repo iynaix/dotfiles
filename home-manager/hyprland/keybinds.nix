@@ -4,10 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (config.iynaix) displays;
+  inherit (config.custom) displays;
   rofi = lib.getExe pkgs.rofi;
   pamixer = lib.getExe pkgs.pamixer;
-  qtile_like = config.iynaix.hyprland.qtile;
+  qtile_like = config.custom.hyprland.qtile;
 in {
   wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
     bind = let
@@ -157,8 +157,8 @@ in {
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
       ++ workspace_keybinds
-      ++ lib.optionals (config.iynaix.terminal.secondary != null) ["$mod, q, exec, ${lib.getExe config.iynaix.terminal.secondary}"]
-      ++ lib.optionals config.iynaix.backlight.enable [
+      ++ lib.optionals (config.custom.terminal.secondary != null) ["$mod, q, exec, ${lib.getExe config.custom.terminal.secondary}"]
+      ++ lib.optionals config.custom.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
         ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"
       ];

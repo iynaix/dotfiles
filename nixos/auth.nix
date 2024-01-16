@@ -51,7 +51,7 @@ in
       };
 
       # persist keyring and misc other secrets
-      iynaix-nixos.persist.home = {
+      custom-nixos.persist.home = {
         directories = [
           ".gnupg"
           ".pki"

@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  cfg = config.iynaix.terminal;
+  cfg = config.custom.terminal;
   functionModule = lib.types.submodule {
     options = {
       bashBody = lib.mkOption {
@@ -28,7 +28,7 @@
     };
   };
 in {
-  options.iynaix.terminal = {
+  options.custom.terminal = {
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.kitty;
@@ -49,7 +49,7 @@ in {
 
     font = lib.mkOption {
       type = lib.types.str;
-      default = config.iynaix.fonts.monospace;
+      default = config.custom.fonts.monospace;
       description = "Font for the terminal.";
     };
 
@@ -79,7 +79,7 @@ in {
     };
   };
 
-  options.iynaix.shell = {
+  options.custom.shell = {
     interactive = lib.mkOption {
       type = lib.types.enum ["bash" "fish"];
       default = "fish";

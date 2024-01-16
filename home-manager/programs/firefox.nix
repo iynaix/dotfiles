@@ -8,7 +8,7 @@
       };
     };
 
-    iynaix.persist = {
+    custom.persist = {
       home.directories = [
         ".cache/mozilla"
         ".mozilla"

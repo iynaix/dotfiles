@@ -1,5 +1,5 @@
 {lib, ...}: {
-  options.iynaix = {
+  options.custom = {
     rofi = {
       theme = lib.mkOption {
         type = lib.types.nullOr (lib.types.enum [

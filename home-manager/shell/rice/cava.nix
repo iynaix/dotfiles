@@ -5,7 +5,7 @@
 }: {
   home.packages = [pkgs.cava];
 
-  iynaix.wallust.entries.cava = {
+  custom.wallust.entries.cava = {
     enable = builtins.elem pkgs.cava config.home.packages;
     text = ''
       ## Configuration file for CAVA. Default values are commented out. Use either ';' or '#' for commenting.

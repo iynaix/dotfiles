@@ -1,5 +1,5 @@
 {lib, ...}: {
-  options.iynaix.persist = {
+  options.custom.persist = {
     home = {
       directories = lib.mkOption {
         default = [];

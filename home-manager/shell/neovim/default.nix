@@ -107,7 +107,7 @@
         filename="$(readlink -f "$1")"
         dirname="$(dirname "$filename")"
 
-        ${config.iynaix.terminal.exec} -d "$dirname" ${lib.getExe pkgs.bash} -c "${lib.getExe pkgs.direnv} exec . nvim '$filename'"
+        ${config.custom.terminal.exec} -d "$dirname" ${lib.getExe pkgs.bash} -c "${lib.getExe pkgs.direnv} exec . nvim '$filename'"
       ''} %f";
     };
 
@@ -119,7 +119,7 @@
     };
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".local/share/nvim" # data directory
       ".local/state/nvim" # persistent session info

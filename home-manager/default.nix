@@ -41,11 +41,11 @@
         libreoffice
         trash-cli
         # misc utilities for dotfiles written in rust
-        iynaix.dotfiles-utils
+        custom.dotfiles-utils
       ]
-      ++ (lib.optional config.iynaix.helix.enable helix)
+      ++ (lib.optional config.custom.helix.enable helix)
       # handle fonts
-      ++ (lib.optionals (!isNixOS) config.iynaix.fonts.packages);
+      ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
   };
 
   # Let Home Manager install and manage itself.
@@ -57,7 +57,7 @@
     "nixpkgs/config.nix".text = ''{ allowUnfree = true; }'';
   };
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       {
         directory = "Desktop";

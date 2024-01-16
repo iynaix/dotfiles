@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.vlc;
+  cfg = config.custom.vlc;
 in {
   config = lib.mkIf cfg.enable {
     home.packages = [pkgs.vlc];
 
-    iynaix.persist = {
+    custom.persist = {
       home.directories = [
         ".config/vlc"
       ];

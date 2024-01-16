@@ -100,7 +100,7 @@
     name = "nswitch-remote";
     text = ''
       cd ${dots}
-      sudo nixos-rebuild --target-host "root@''${1:-iynaix-laptop}" --flake ".#''${2:-framework}" switch
+      sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
       cd - > /dev/null
     '';
   };
@@ -242,7 +242,7 @@ in {
     };
   };
 
-  hm.iynaix.persist = {
+  hm.custom.persist = {
     cache = [
       ".cache/nix"
       ".cache/nixpkgs-review"

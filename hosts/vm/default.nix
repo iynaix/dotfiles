@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  iynaix-nixos = {
+  custom-nixos = {
     hyprland.enable = false;
     zfs.encryption = false;
   };

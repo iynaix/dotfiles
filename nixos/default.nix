@@ -41,7 +41,7 @@
         "gitconfig".text = config.hm.xdg.configFile."git/config".text;
       };
       variables = {
-        TERMINAL = config.hm.iynaix.terminal.exec;
+        TERMINAL = config.hm.custom.terminal.exec;
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
@@ -60,13 +60,13 @@
           tree # for root, normal user has an eza alias
           wget
         ]
-        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) config.hm.iynaix.terminal.fakeGnomeTerminal)
-        ++ (lib.optional config.iynaix-nixos.distrobox.enable pkgs.distrobox)
-        ++ (lib.optional config.hm.iynaix.helix.enable helix);
+        ++ (lib.optional (!config.services.xserver.desktopManager.gnome.enable) config.hm.custom.terminal.fakeGnomeTerminal)
+        ++ (lib.optional config.custom-nixos.distrobox.enable pkgs.distrobox)
+        ++ (lib.optional config.hm.custom.helix.enable helix);
     };
 
     # setup fonts
-    fonts.packages = config.hm.iynaix.fonts.packages ++ [pkgs.iynaix.rofi-themes];
+    fonts.packages = config.hm.custom.fonts.packages ++ [pkgs.custom.rofi-themes];
 
     programs = {
       # use same config as home-manager
@@ -88,8 +88,8 @@
       style = "adwaita-dark";
     };
 
-    iynaix-nixos.persist = {
-      root.directories = lib.mkIf config.hm.iynaix.wifi.enable [
+    custom-nixos.persist = {
+      root.directories = lib.mkIf config.hm.custom.wifi.enable [
         "/etc/NetworkManager"
       ];
 

@@ -6,7 +6,7 @@
 }: let
   hyprlandCfg = config.wayland.windowManager.hyprland;
 in {
-  options.iynaix = {
+  options.custom = {
     displays = lib.mkOption {
       type = with lib.types;
         listOf (
@@ -38,7 +38,7 @@ in {
 
     hyprland = {
       autostart = lib.mkEnableOption "Autostart hyprland from tty" // {default = true;};
-      qtile = lib.mkEnableOption "Enable qtile like behavior for workspaces";
+      qtile = lib.mkEnableOption "qtile like behavior for workspaces";
       plugin = lib.mkOption {
         type = lib.types.nullOr (lib.types.enum ["hyprnstack"]);
         description = "Plugin to enable for hyprland";

@@ -21,7 +21,7 @@
     '';
   };
 in {
-  config = lib.mkIf config.iynaix-nixos.bittorrent.enable {
+  config = lib.mkIf config.custom-nixos.bittorrent.enable {
     services = {
       sonarr = {
         enable = true;
@@ -58,7 +58,7 @@ in {
       };
     };
 
-    iynaix-nixos.persist = {
+    custom-nixos.persist = {
       root.directories = [
         "/var/lib/sonarr/.config/NzbDrone"
         "/var/lib/private/prowlarr"

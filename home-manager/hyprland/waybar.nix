@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  cfg = config.iynaix.waybar;
+  cfg = config.custom.waybar;
 in {
   config = lib.mkIf cfg.enable {
     programs.waybar = {
@@ -14,15 +14,15 @@ in {
       # https://github.com/nix-community/home-manager/issues/3599
     };
 
-    iynaix.waybar.config = {
-      backlight = lib.mkIf config.iynaix.backlight.enable {
+    custom.waybar.config = {
+      backlight = lib.mkIf config.custom.backlight.enable {
         format = "{icon}   {percent}%";
         format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
         on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
         on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
       };
 
-      battery = lib.mkIf config.iynaix.battery.enable {
+      battery = lib.mkIf config.custom.battery.enable {
         format = "{icon}    {capacity}%";
         format-charging = "     {capacity}%";
         format-icons = ["" "" "" "" ""];
@@ -79,17 +79,17 @@ in {
 
       modules-right =
         ["network" "pulseaudio"]
-        ++ (lib.optional config.iynaix.backlight.enable "backlight")
-        ++ (lib.optional config.iynaix.battery.enable "battery")
+        ++ (lib.optional config.custom.backlight.enable "backlight")
+        ++ (lib.optional config.custom.battery.enable "battery")
         ++ ["clock"];
 
       network =
-        if config.iynaix.wifi.enable
+        if config.custom.wifi.enable
         then {
           format = "    {essid}";
           format-disconnected = "󰖪    Offline";
           on-click = "~/.config/rofi/rofi-wifi-menu";
-          on-click-right = "${config.iynaix.terminal.exec} nmtui";
+          on-click-right = "${config.custom.terminal.exec} nmtui";
           tooltip = false;
         }
         else {
@@ -128,7 +128,7 @@ in {
       };
     };
 
-    iynaix.wallust.entries = {
+    custom.wallust.entries = {
       "waybar.jsonc" = {
         inherit (cfg) enable;
         text = builtins.toJSON cfg.config;

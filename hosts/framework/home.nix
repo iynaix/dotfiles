@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: {
-  iynaix = {
+  custom = {
     displays = [
       {
         name = "eDP-1";

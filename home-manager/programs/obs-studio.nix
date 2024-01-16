@@ -3,12 +3,12 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix.obs-studio;
+  cfg = config.custom.obs-studio;
 in {
   config = lib.mkIf cfg.enable {
     programs.obs-studio.enable = true;
 
-    iynaix.persist = {
+    custom.persist = {
       home.directories = [
         ".config/obs-studio"
       ];

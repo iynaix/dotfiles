@@ -1,5 +1,5 @@
 _: {
-  iynaix = {
+  custom = {
     displays = [
       {
         name = "eDP-1";

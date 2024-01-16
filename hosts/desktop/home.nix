@@ -4,7 +4,7 @@
   isNixOS,
   ...
 }: {
-  iynaix = {
+  custom = {
     displays = [
       {
         name = "DP-2";

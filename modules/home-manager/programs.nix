@@ -3,7 +3,7 @@
   lib,
   ...
 }: {
-  options.iynaix = {
+  options.custom = {
     deadbeef.enable = lib.mkEnableOption "deadbeef";
     ghostty.enable = lib.mkEnableOption "ghostty";
     gradience.enable = lib.mkEnableOption "gradience";

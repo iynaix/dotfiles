@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  cfg = config.iynaix.helix;
+  cfg = config.custom.helix;
 in {
   config = lib.mkIf cfg.enable {
     programs.helix = {

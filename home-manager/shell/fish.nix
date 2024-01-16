@@ -5,7 +5,7 @@
   user,
   ...
 }: let
-  cfg = config.iynaix.shell;
+  cfg = config.custom.shell;
 in {
   programs.fish = {
     enable = true;
@@ -29,10 +29,10 @@ in {
         end
 
         # fish doesn't seem to pick up completions for dotfiles_utils?
-        set --append fish_complete_path "${pkgs.iynaix.dotfiles-utils}/share/fish/vendor_completions.d"
+        set --append fish_complete_path "${pkgs.custom.dotfiles-utils}/share/fish/vendor_completions.d"
       ''
       # wallust colorscheme
-      + lib.optionalString config.iynaix.wallust.enable ''
+      + lib.optionalString config.custom.wallust.enable ''
         set wallust_colors "/home/${user}/.cache/wallust/sequences"
         if test -e "$wallust_colors"
             command cat "$wallust_colors"
@@ -54,7 +54,7 @@ in {
       }))
   ];
 
-  iynaix.persist = {
+  custom.persist = {
     home.directories = [
       ".local/share/fish"
     ];
