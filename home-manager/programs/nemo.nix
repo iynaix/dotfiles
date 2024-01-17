@@ -72,6 +72,7 @@
     };
     "org/nemo/window-state" = {
       sidebar-bookmark-breakpoint = 0;
+      sidebar-width = 200;
     };
     "org/nemo/preferences/menu-config" = {
       selection-menu-make-link = true;

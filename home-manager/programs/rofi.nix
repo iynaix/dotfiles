@@ -66,7 +66,7 @@ in {
   };
 
   # add blur for rofi shutdown
-  wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
+  wayland.windowManager.hyprland.settings = {
     layerrule = [
       "blur,rofi"
       "ignorealpha 0,rofi"

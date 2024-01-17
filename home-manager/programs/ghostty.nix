@@ -56,5 +56,7 @@ in {
         window-padding-x = terminal.padding;
         window-padding-y = terminal.padding;
       };
+
+    wayland.windowManager.hyprland.settings.bind = ["$mod, q, exec, ${lib.getExe pkgs.ghostty}"];
   };
 }

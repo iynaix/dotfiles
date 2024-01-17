@@ -7,6 +7,7 @@
   autoLoginUser = config.services.xserver.displayManager.autoLogin.user;
   inherit (config.sops) secrets;
 in {
+  # autologin
   services = {
     xserver.displayManager.autoLogin.user = lib.mkDefault (
       if config.boot.zfs.requestEncryptionCredentials
@@ -19,7 +20,6 @@ in {
   # setup users with persistent passwords
   # https://reddit.com/r/NixOS/comments/o1er2p/tmpfs_as_root_but_without_hardcoding_your/h22f1b9/
   # https://github.com/Mic92/sops-nix?tab=readme-ov-file#setting-a-users-password
-  # autologin
   sops.secrets = {
     rp.neededForUsers = true;
     up.neededForUsers = true;

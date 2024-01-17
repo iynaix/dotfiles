@@ -41,12 +41,6 @@ in {
       description = "Terminal command to execute other programs.";
     };
 
-    secondary = lib.mkOption {
-      type = lib.types.nullOr lib.types.package;
-      default = pkgs.ghostty;
-      description = "Secondary terminal to use.";
-    };
-
     font = lib.mkOption {
       type = lib.types.str;
       default = config.custom.fonts.monospace;

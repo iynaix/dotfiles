@@ -10,22 +10,7 @@
         torrents-add
       fi
 
-      # remove ugly unicode characters, sleep to wait for renames to complete
-      yt-dlp -a "$HOME/Desktop/yt.txt" && \
-      sleep 5 && \
-      find -L "$HOME/Downloads" -maxdepth 1 -type f \( \
-        -name '*？*' \
-        -o -name '*｜*' \
-        -o -name '*|*' \
-        -o -name '*:*' \
-        -o -name '*：*' \
-        -o -name '*—*' \) \
-        -execdir rename '？' "" {} \; \
-        -execdir rename '｜' "-" {} \; \
-        -execdir rename '|' "" {} \; \
-        -execdir rename ':' " -" {} \; \
-        -execdir rename '：' " -" {} \; \
-        -execdir rename '—' "-" {} \;
+      yt-dlp -a "$HOME/Desktop/yt.txt"
 
       cd - > /dev/null
     '';
@@ -36,10 +21,11 @@ in {
       enable = true;
       settings = {
         add-metadata = true;
-        no-mtime = true;
         format = "best[ext=mp4]";
-        sponsorblock-mark = "all";
+        no-mtime = true;
         output = "%(title)s.%(ext)s";
+        sponsorblock-mark = "all";
+        windows-filenames = true;
       };
     };
   };

@@ -117,11 +117,12 @@ in {
               };
             });
         in
-          (prev.waybar.override {inherit catch2_3;}).overrideAttrs (o:
-            sources.waybar
-            // {
-              version = "${o.version}-${sources.waybar.version}";
-            });
+          assert (lib.assertMsg (prev.waybar.version == "0.9.24") "waybar: use waybar from nixpkgs?");
+            (prev.waybar.override {inherit catch2_3;}).overrideAttrs (o:
+              sources.waybar
+              // {
+                version = "${o.version}-${sources.waybar.version}";
+              });
 
         # fix yazi not supporting image previews in ghostty yet
         yazi = assert (lib.assertMsg (prev.yazi.version == "0.1.5") "yazi: overlay is no longer needed");

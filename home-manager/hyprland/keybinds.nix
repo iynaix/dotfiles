@@ -9,7 +9,7 @@
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in {
-  wayland.windowManager.hyprland.settings = lib.mkIf config.wayland.windowManager.hyprland.enable {
+  wayland.windowManager.hyprland.settings = {
     bind = let
       workspace_keybinds = lib.flatten (lib.concatMap ({workspaces, ...}:
         lib.forEach workspaces (ws_: let
@@ -153,7 +153,6 @@ in {
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
       ++ workspace_keybinds
-      ++ lib.optionals (config.custom.terminal.secondary != null) ["$mod, q, exec, ${lib.getExe config.custom.terminal.secondary}"]
       ++ lib.optionals config.custom.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
         ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"
