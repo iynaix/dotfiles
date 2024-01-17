@@ -19,6 +19,7 @@
     ./nix.nix
     ./nvidia.nix
     ./plasma.nix
+    ./qmk.nix
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix

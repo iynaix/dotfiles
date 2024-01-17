@@ -4,6 +4,7 @@
     am5.enable = true;
     hdds.enable = true;
     nvidia.enable = true;
+    qmk.enable = false;
     zfs.encryption = false;
 
     # software
