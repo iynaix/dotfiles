@@ -136,7 +136,7 @@ in {
       };
       "waybar.css" = let
         baseModuleCss = ''
-          font-family: "Inter";
+          font-family: ${config.custom.fonts.regular};
           font-weight: bold;
           color: {foreground};
           transition: none;

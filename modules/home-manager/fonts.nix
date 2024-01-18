@@ -7,7 +7,7 @@
     fonts = {
       regular = lib.mkOption {
         type = lib.types.str;
-        default = "Inter";
+        default = "Geist Regular";
         description = "The font to use for regular text";
       };
       monospace = lib.mkOption {

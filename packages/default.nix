@@ -26,6 +26,8 @@ in {
   dotfiles-utils =
     pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
 
+  geist-font = pkgs.callPackage ./geist-font {};
+
   # mpv plugins
   mpv-deletefile = w pkgs.callPackage ./mpv-deletefile {};
   mpv-dynamic-crop = w pkgs.callPackage ./mpv-dynamic-crop {};
