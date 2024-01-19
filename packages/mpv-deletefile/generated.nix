@@ -3,14 +3,14 @@
 {
   mpv-deletefile = {
     pname = "mpv-deletefile";
-    version = "19ea069abcb794d1bf8fac2f59b50d71ab992130";
+    version = "3ad7502fe2d6575b395db5568afdf830872c85d0";
     src = fetchFromGitHub {
       owner = "zenyd";
       repo = "mpv-scripts";
-      rev = "19ea069abcb794d1bf8fac2f59b50d71ab992130";
+      rev = "3ad7502fe2d6575b395db5568afdf830872c85d0";
       fetchSubmodules = false;
-      sha256 = "sha256-OBCuzCtgfSwj0i/rBNranuu4LRc47jObwQIJgQQoerg=";
+      sha256 = "sha256-t5BV8+azCvGZG0hfx5nft013sZugrge3AC4VbUcRNOg=";
     };
-    date = "2022-04-22";
+    date = "2024-01-19";
   };
 }

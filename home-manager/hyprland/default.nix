@@ -146,12 +146,11 @@ in {
       debug.disable_logs = false;
 
       # bind workspaces to monitors
-      workspace = lib.concatMap ({
-        name,
-        workspaces,
+      workspace = pkgs.custom.lib.mapWorkspaces ({
+        workspace,
+        monitor,
         ...
-      }:
-        lib.forEach workspaces (ws: "${toString ws}, monitor:${name}"))
+      }: "${workspace}, monitor:${monitor}")
       displays;
 
       windowrulev2 = [

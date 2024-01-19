@@ -11,25 +11,25 @@
 in {
   wayland.windowManager.hyprland.settings = {
     bind = let
-      workspace_keybinds = lib.flatten (lib.concatMap ({workspaces, ...}:
-        lib.forEach workspaces (ws_: let
-          ws = toString ws_;
-          ws_key = toString (lib.mod ws_ 10);
-        in
-          if qtile_like
-          then [
-            # Switch workspaces with mainMod + [0-9]
-            "$mod, ${ws_key}, focusworkspaceoncurrentmonitor, ${ws}"
-            # Move active window to a workspace with mainMod + SHIFT + [0-9]
-            "$mod_SHIFT, ${ws_key}, movetoworkspace, ${ws}"
-            "$mod_SHIFT, ${ws_key}, focusworkspaceoncurrentmonitor, ${ws}"
-          ]
-          else [
-            # Switch workspaces with mainMod + [0-9]
-            "$mod, ${ws_key}, workspace, ${ws}"
-            # Move active window to a workspace with mainMod + SHIFT + [0-9]
-            "$mod_SHIFT, ${ws_key}, movetoworkspace, ${ws}"
-          ]))
+      workspace_keybinds = lib.flatten ((pkgs.custom.lib.mapWorkspaces ({
+        workspace,
+        key,
+        ...
+      }:
+        if qtile_like
+        then [
+          # Switch workspaces with mainMod + [0-9]
+          "$mod, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
+          # Move active window to a workspace with mainMod + SHIFT + [0-9]
+          "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
+          "$mod_SHIFT, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
+        ]
+        else [
+          # Switch workspaces with mainMod + [0-9]
+          "$mod, ${key}, workspace, ${workspace}"
+          # Move active window to a workspace with mainMod + SHIFT + [0-9]
+          "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
+        ]))
       displays);
     in
       [

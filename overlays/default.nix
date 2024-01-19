@@ -13,6 +13,7 @@ in {
         # include custom packages
         custom =
           (prev.custom or {})
+          // {lib = pkgs.callPackage ./lib.nix {};}
           // (import ../packages {
             inherit (prev) pkgs;
             inherit inputs;
@@ -123,32 +124,6 @@ in {
               // {
                 version = "${o.version}-${sources.waybar.version}";
               });
-
-        # fix yazi not supporting image previews in ghostty yet
-        yazi = assert (lib.assertMsg (prev.yazi.version == "0.1.5") "yazi: overlay is no longer needed");
-          prev.yazi.overrideAttrs (
-            o: rec {
-              version = "0.2.1";
-
-              src = prev.fetchFromGitHub {
-                owner = "sxyazi";
-                repo = "yazi";
-                rev = "v${version}";
-                hash = "sha256-XdN2oP5c2lK+bR3i+Hwd4oOlccMQisbzgevHsZ8YbSQ=";
-              };
-
-              env.YAZI_GEN_COMPLETIONS = true;
-
-              # creating an overlay for buildRustPackage overlay
-              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-              cargoDeps = prev.rustPlatform.importCargoLock {
-                lockFile = src + "/Cargo.lock";
-                allowBuiltinFetchGit = true;
-              };
-
-              postInstall = lib.replaceStrings ["./config"] ["./yazi-config"] o.postInstall;
-            }
-          );
       }
     )
   ];

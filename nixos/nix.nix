@@ -227,6 +227,10 @@ in {
         };
       };
     };
+    extraOptions = ''
+      eval-cache = false
+      warn-dirty = false
+    '';
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       # use flakes
