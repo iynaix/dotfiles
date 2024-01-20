@@ -1,6 +1,6 @@
 use rand::seq::SliceRandom;
 
-use crate::{cmd, cmd_output, full_path, json, nixinfo::NixInfo, CmdOutput};
+use crate::{cmd, cmd_output, full_path, json, nixinfo::NixInfo, CmdOutput, WAYBAR_CLASS};
 use std::{collections::HashMap, fs, path::PathBuf};
 
 pub fn dir() -> PathBuf {
@@ -187,7 +187,7 @@ pub fn wallust_apply_colors() {
         std::thread::sleep(std::time::Duration::from_secs(1));
 
         // refresh waybar
-        cmd(["killall", "-SIGUSR2", ".waybar-wrapped"]);
+        cmd(["killall", "-SIGUSR2", WAYBAR_CLASS]);
     }
 
     // reload gtk theme

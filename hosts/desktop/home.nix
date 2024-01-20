@@ -32,6 +32,7 @@
     vlc.enable = true;
     # wallust.colorscheme = "tokyo-night";
     # waybar.persistent-workspaces = true;
+    waybar.hidden = true;
   };
 
   home = {

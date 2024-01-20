@@ -56,6 +56,7 @@ in {
         description = "Additional waybar config (wallust templating can be used)";
       };
       persistent-workspaces = lib.mkEnableOption "Persistent workspaces";
+      hidden = lib.mkEnableOption "Hidden waybar by default";
     };
   };
 }

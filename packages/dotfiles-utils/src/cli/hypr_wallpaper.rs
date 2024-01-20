@@ -1,6 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs, cmd, full_path, monitor::Monitor, nixinfo::NixInfo, wallpaper, wallust,
+    WAYBAR_CLASS,
 };
 use serde::Deserialize;
 use std::{collections::HashMap, path::Path, process::Command};
@@ -146,7 +147,7 @@ fn main() {
     if cfg!(feature = "hyprland") {
         if args.reload {
             swww_crop(&[], &wallpaper, &wallpaper_info);
-            cmd(["killall", "-SIGUSR2", ".waybar-wrapped"])
+            cmd(["killall", "-SIGUSR2", WAYBAR_CLASS])
         } else {
             swww_crop(
                 &["--transition-type", &args.transition_type],

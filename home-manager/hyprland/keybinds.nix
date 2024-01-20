@@ -120,6 +120,9 @@ in {
         "SUPER, Tab, exec, hypr-same-class next"
         "SUPER_SHIFT, Tab, exec, hypr-same-class prev"
 
+        # toggle waybar
+        "$mod, a, exec, killall -SIGUSR1 .waybar-wrapped"
+
         # picture in picture mode
         "$mod, p, exec, hypr-pip"
 

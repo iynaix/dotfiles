@@ -53,7 +53,8 @@ in {
       # https://github.com/Horus645/swww/issues/144
       "sleep 1; swww init && hypr-wallpaper"
 
-      "sleep 5 && launch-waybar"
+      # start waybar hidden if enabled
+      "sleep 3 && launch-waybar"
 
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"

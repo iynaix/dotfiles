@@ -3,38 +3,42 @@
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;
-    settings = {
+    settings = let
+      dir_bg = "blue";
+      accent_style = "bg:${dir_bg} fg:black";
+    in {
       add_newline = false;
-      line_break = {
-        disabled = true;
-      };
       format = lib.concatStringsSep "" [
-        "$username"
-        "$hostname"
-        "$directory"
+        # begin left format
+        "$directory[](${dir_bg}) "
         "$git_branch"
         "$git_state"
         "$git_status"
         "$nix_shell"
-        # "$cmd_duration"
-        # "$line_break"
-        # "$python"
+        # end left format
+        "$fill"
+        # begin right format
+        "[](${dir_bg})"
+        "[ ](${accent_style})"
+        "$time"
+        # end right format
+        "$line_break"
         "$character"
       ];
+
+      # modules
       character = {
-        error_symbol = "[](red)";
+        error_symbol = "[ ](bold red)";
         success_symbol = "[](purple)";
         vimcmd_symbol = "[](green)";
       };
-      cmd_duration = {
-        format = "[$duration]($style) ";
-        style = "yellow";
-      };
       directory = {
-        style = "blue";
+        format = "[ $path ]($style)";
+        style = accent_style;
       };
       git_branch = {
-        format = "[$branch]($style)";
+        symbol = "";
+        format = "on [$symbol $branch]($style)";
         style = "yellow";
       };
       git_state = {
@@ -54,15 +58,32 @@
       };
       nix_shell = {
         format = "[$symbol]($style)";
-        symbol = "❄️ ";
-        style = "blue";
+        symbol = "";
+        style = "bright-magenta";
       };
-      # python = {
-      #   format = "[$virtualenv]($style) ";
-      #   style = "bright-black";
-      # };
+      fill = {
+        symbol = " ";
+      };
+      line_break = {
+        disabled = false;
+      };
+      time = {
+        format = "[ $time ]($style)";
+        disabled = false;
+        time_format = "%H:%M";
+        style = accent_style;
+      };
     };
   };
+
+  # add transient prompt for fish via transient.fish plugin in fish.nix
+  # the starship transience module doesn't handle empty commands properly
+  # https://github.com/starship/starship/issues/4929
+  programs.fish.interactiveShellInit = lib.mkAfter ''
+    function transient_prompt_func
+      starship module character
+    end
+  '';
 
   # some sort of race condition with kitty and starship
   # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251

@@ -28,7 +28,8 @@ in {
 
   distro-grub-themes-nixos = pkgs.callPackage ./distro-grub-themes-nixos {};
 
-  geist-font = pkgs.callPackage ./geist-font {};
+  geist-font = assert (lib.assertMsg (!lib.hasAttr "geist-font" pkgs) "geist-font: geist-font is in nixpkgs");
+    pkgs.callPackage ./geist-font {};
 
   # mpv plugins
   mpv-deletefile = w pkgs.callPackage ./mpv-deletefile {};
@@ -48,5 +49,6 @@ in {
 
   rofi-themes = w pkgs.callPackage ./rofi-themes {};
 
-  vv = w pkgs.callPackage ./vv {};
+  vv = assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
+    w pkgs.callPackage ./vv {};
 }

@@ -1,28 +1,43 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchzip,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "geist-font";
   version = "1.1.0";
 
-  src = fetchFromGitHub {
-    owner = "vercel";
-    repo = "geist-font";
-    rev = version;
-    hash = "sha256-V74Co6VlqAxROf5/RZvM9X7avygW7th3YQrlg2d3CYc=";
-  };
+  srcs = [
+    (fetchzip {
+      name = "geist-mono";
+      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.Mono.zip";
+      stripRoot = false;
+      hash = "sha256-8I4O2+bJAlUiDIhbyXzAcwXP5qpmHoh4IfrFio7IZN8=";
+    })
+    (fetchzip {
+      name = "geist-sans";
+      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.zip";
+      stripRoot = false;
+      hash = "sha256-nSN+Ql5hTd230w/u6VZyAZaPtFSaHGmMc6T1fgGTCME=";
+    })
+  ];
 
-  postInstall = ''
-    install -Dm444 packages/next/dist/fonts/geist-{mono,sans}/*.woff2 -t $out/share/fonts/woff2
+  sourceRoot = ".";
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 geist-{mono,sans}/*/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Font family created by Vercel in collaboration with Basement Studio";
     homepage = "https://vercel.com/font";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [eclairevoyant];
+    maintainers = with lib.maintainers; [eclairevoyant x0ba];
     platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [binaryBytecode];
   };
 }

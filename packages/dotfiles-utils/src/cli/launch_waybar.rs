@@ -1,8 +1,8 @@
-use dotfiles_utils::{cmd, full_path, json, monitor::Monitor, nixinfo::NixInfo};
+use dotfiles_utils::{cmd, full_path, json, monitor::Monitor, nixinfo::NixInfo, WAYBAR_CLASS};
 use std::process::Command;
 
 fn main() {
-    cmd(["killall", "-q", ".waybar-wrapped"]);
+    cmd(["killall", "-q", WAYBAR_CLASS]);
 
     // add / remove persistent workspaces config to waybar config before launching
     let config_path = full_path("~/.config/waybar/config");
@@ -32,4 +32,15 @@ fn main() {
     Command::new("waybar")
         .spawn()
         .expect("failed to execute waybar");
+
+    if NixInfo::before().waybar_hidden {
+        std::thread::sleep(std::time::Duration::from_millis(500));
+
+        // hide waybar via SIGUSR1
+        Command::new("killall")
+            .arg("-SIGUSR1")
+            .arg(WAYBAR_CLASS)
+            .status()
+            .expect("Failed to execute killall");
+    }
 }

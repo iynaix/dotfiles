@@ -14,6 +14,17 @@ in {
       then value
       else value.fishBody)
     cfg.functions;
+    plugins = [
+      {
+        name = "transient.fish";
+        src = pkgs.fetchFromGitHub {
+          owner = "zzhaolei";
+          repo = "transient.fish";
+          rev = "4fe72ab8481a1133461a2d49f24dc99835921ece";
+          hash = "sha256-0jN+5c58WW8RstQDEF1PajWHKfzKjjfcUXA3p1LsdIc=";
+        };
+      }
+    ];
     shellAliases = {
       ehistory = "nvim ~/.local/share/fish/fish_history";
     };

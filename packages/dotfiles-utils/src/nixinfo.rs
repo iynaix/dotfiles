@@ -29,6 +29,7 @@ pub struct NixInfo {
     pub neofetch: Neofetch,
     pub special: Special,
     pub persistent_workspaces: bool,
+    pub waybar_hidden: bool,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,

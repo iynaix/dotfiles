@@ -9,6 +9,8 @@ pub mod nixinfo;
 pub mod wallpaper;
 pub mod wallust;
 
+pub const WAYBAR_CLASS: &str = ".waybar-wrapped";
+
 /// shared structs / types
 
 type Coord = (i32, i32);
