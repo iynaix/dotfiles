@@ -19,6 +19,11 @@ in {
             inherit inputs;
           });
 
+        # nixos-small logo looks like ass
+        fastfetch = prev.fastfetch.overrideAttrs (o: {
+          patches = (o.patches or []) ++ [./fastfetch-nixos-old-small.patch];
+        });
+
         # easier access to ghostty
         ghostty = inputs.ghostty.packages.${pkgs.system}.default;
 
@@ -41,6 +46,11 @@ in {
               --replace '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
             ${o.postFixup}
           '';
+        });
+
+        # nixos-small logo looks like ass
+        neofetch = prev.neofetch.overrideAttrs (o: {
+          patches = (o.patches or []) ++ [./neofetch-nixos-small.patch];
         });
 
         rclip = prev.rclip.overridePythonAttrs (o: {
