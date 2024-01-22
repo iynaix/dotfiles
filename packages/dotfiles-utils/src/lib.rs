@@ -24,10 +24,10 @@ pub fn full_path<P>(p: P) -> PathBuf
 where
     P: AsRef<std::path::Path>,
 {
-    let p = p.as_ref().to_str().unwrap();
+    let p = p.as_ref().to_str().expect("invalid path");
 
     match p.strip_prefix("~/") {
-        Some(p) => dirs::home_dir().unwrap().join(p),
+        Some(p) => dirs::home_dir().expect("invalid home directory").join(p),
         None => PathBuf::from(p),
     }
 }
@@ -96,7 +96,7 @@ where
         CmdOutput::Stdout => &output.stdout,
         CmdOutput::Stderr => &output.stderr,
     })
-    .unwrap()
+    .expect("invalid utf8 from command")
     .lines()
     .map(String::from)
     .collect()

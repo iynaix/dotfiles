@@ -58,7 +58,9 @@ fn main() {
     for line in reader.lines() {
         let line = line.unwrap_or_default();
 
-        let (ev, ev_args) = line.split_once(">>").unwrap();
+        let (ev, ev_args) = line
+            .split_once(">>")
+            .expect("could not parse hyprland event");
         let ev_args: Vec<String> = ev_args.split(',').map(|s| s.to_string()).collect();
 
         // println!("{ev} ---- {ev_args:?}");
@@ -73,7 +75,7 @@ fn main() {
                     let (mon_to_focus, _) = rearranged_workspaces
                         .iter()
                         .max_by_key(|(_, wksps)| wksps.len())
-                        .unwrap();
+                        .expect("no workspaces found");
                     hypr(["focusmonitor", mon_to_focus])
                 }
             }

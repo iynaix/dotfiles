@@ -62,6 +62,15 @@ clap_complete = "4.4.3"
 default = ["hyprland"]
 hyprland = []
 
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+enum_glob_use = "deny"
+# pedantic = "deny"
+# nursery = "deny"
+unwrap_used = "deny"
+
 [profile.release]
 strip = true
 lto = true

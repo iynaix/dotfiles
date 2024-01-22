@@ -18,9 +18,16 @@ pub struct Face {
     pub ymax: u32,
 }
 
+#[derive(Debug, Default, Deserialize, Clone)]
+pub struct WallustOptions {
+    pub check_contrast: Option<bool>,
+    pub filter: Option<String>,
+    pub saturation: Option<i32>,
+    pub threshold: Option<i32>,
+}
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct WallInfo {
-    pub filter: String,
     pub faces: Vec<Face>,
     #[serde(rename = "1440x2560")]
     pub r1440x2560: String,
@@ -30,6 +37,7 @@ pub struct WallInfo {
     pub r3440x1440: String,
     #[serde(rename = "1920x1080")]
     pub r1920x1080: String,
+    pub wallust: Option<WallustOptions>,
 }
 
 impl WallInfo {
@@ -56,10 +64,13 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
         .file_name()
         .expect("invalid image path")
         .to_str()
-        .unwrap();
+        .expect("could not convert image path to str");
 
-    let reader = std::io::BufReader::new(std::fs::File::open(wallpapers_json).unwrap());
-    let mut crops: HashMap<String, WallInfo> = serde_json::from_reader(reader).unwrap();
+    let reader = std::io::BufReader::new(
+        std::fs::File::open(wallpapers_json).expect("could not open wallpapers.json"),
+    );
+    let mut crops: HashMap<String, WallInfo> =
+        serde_json::from_reader(reader).expect("could not parse wallpapers.json");
     crops.remove(fname)
 }
 
@@ -111,9 +122,9 @@ fn main() {
 
     let random_wallpaper = match args.image {
         Some(image) => std::fs::canonicalize(image)
-            .unwrap()
+            .expect("invalid image path")
             .to_str()
-            .unwrap()
+            .expect("could not convert image path to str")
             .to_string(),
         None => {
             if full_path("~/.cache/wallust/nix.json").exists() {
@@ -131,17 +142,46 @@ fn main() {
     };
 
     let wallpaper_info = get_wallpaper_info(&wallpaper);
-    // prefer provided command line flag, then wallpaper info value, then "dark16"
-    let filter_type = args.filter.unwrap_or(
-        wallpaper_info
-            .clone()
-            .map_or("dark16".to_string(), |info| info.filter.clone()),
-    );
 
     // use colorscheme set from nix if available
     match NixInfo::before().colorscheme {
         Some(cs) => wallust::apply_theme(cs),
-        None => cmd(["wallust", "--filter", &filter_type, &wallpaper]),
+        None => {
+            let mut wallust_cmd = Command::new("wallust");
+
+            // normalize the options for wallust
+            if let Some(WallInfo {
+                wallust: Some(opts),
+                ..
+            }) = &wallpaper_info
+            {
+                if let Some(true) = opts.check_contrast {
+                    wallust_cmd.arg("--check-contrast");
+                }
+                if let Some(filter) = &opts.filter {
+                    wallust_cmd.arg("--filter");
+                    if matches!(
+                        filter.as_str(),
+                        // valid values for filter, ignore light values
+                        "dark" | "dark16" | "harddark" | "harddark16" | "softdark" | "softdark16"
+                    ) {
+                        wallust_cmd.arg(filter);
+                    }
+                }
+                if let Some(saturation) = opts.saturation {
+                    wallust_cmd.arg("--saturation").arg(saturation.to_string());
+                }
+                if let Some(threshold) = opts.threshold {
+                    wallust_cmd.arg("--threshold").arg(threshold.to_string());
+                }
+            }
+
+            // finally run wallust
+            wallust_cmd
+                .arg(&wallpaper)
+                .spawn()
+                .expect("failed to execute process");
+        }
     }
 
     if cfg!(feature = "hyprland") {
@@ -157,5 +197,5 @@ fn main() {
         }
     }
 
-    wallpaper::wallust_apply_colors();
+    wallust::apply_colors();
 }

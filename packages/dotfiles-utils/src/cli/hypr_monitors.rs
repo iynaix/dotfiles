@@ -36,7 +36,10 @@ fn main() {
     }
 
     // focus first / primary monitor
-    hypr(["focusmonitor", (workspaces.keys().next().unwrap())]);
+    hypr([
+        "focusmonitor",
+        (workspaces.keys().next().expect("primary monitor not found")),
+    ]);
 
     // reload wallpaper
     cmd(["hypr-wallpaper", "--reload"]);

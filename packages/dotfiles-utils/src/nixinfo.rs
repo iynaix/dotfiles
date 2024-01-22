@@ -51,7 +51,13 @@ impl NixInfo {
         (1..16)
             .map(|n| {
                 let k = format!("color{n}");
-                format!("rgb({})", self.colors.get(&k).unwrap().replace('#', ""))
+                format!(
+                    "rgb({})",
+                    self.colors
+                        .get(&k)
+                        .expect("color not found")
+                        .replace('#', "")
+                )
             })
             .collect()
     }

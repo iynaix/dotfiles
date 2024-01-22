@@ -1,4 +1,4 @@
-use dotfiles_utils::{cmd_output, wallpaper, wallust, CmdOutput};
+use dotfiles_utils::{cmd_output, wallust, CmdOutput};
 use std::{
     io::Write,
     process::{Command, Stdio},
@@ -8,9 +8,9 @@ fn wallust_preset_themes() -> Vec<String> {
     cmd_output(["wallust", "theme", "--help"], CmdOutput::Stdout)
         .iter()
         .max_by_key(|line| line.len())
-        .unwrap()
+        .expect("could not parse wallust themes")
         .rsplit_once(" values: ")
-        .unwrap()
+        .expect("could not parse wallust themes")
         .1
         .replace(']', "")
         .split(", ")
@@ -45,9 +45,9 @@ fn main() {
 
     rofi.stdin
         .as_mut()
-        .unwrap()
+        .expect("could not read rofi stdin")
         .write_all(themes.as_bytes())
-        .unwrap();
+        .expect("could not write to rofi stdin");
 
     let output = rofi.wait_with_output().expect("failed to read rofi theme");
     let selected_theme = std::str::from_utf8(&output.stdout)
@@ -56,5 +56,5 @@ fn main() {
         .unwrap_or_default();
 
     wallust::apply_theme(selected_theme.to_string());
-    wallpaper::wallust_apply_colors();
+    wallust::apply_colors();
 }

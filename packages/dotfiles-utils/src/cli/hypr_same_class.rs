@@ -16,7 +16,7 @@ fn main() {
     let active_idx = addresses
         .iter()
         .position(|&addr| addr == &active.address)
-        .unwrap();
+        .expect("active window not found");
 
     let new_idx: usize = match args.direction {
         HyprSameClassDirection::Next => (active_idx + 1) % addresses.len(),

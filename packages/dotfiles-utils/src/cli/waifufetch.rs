@@ -22,11 +22,15 @@ fn create_image(nix_info: &NixInfo) -> String {
 
     let output = full_path(format!(
         "{}/{}-{}.png",
-        &output_dir.to_str().unwrap(),
+        &output_dir
+            .to_str()
+            .expect("could not convert output dir to str"),
         c4,
         c6
     ));
-    let output = output.to_str().unwrap();
+    let output = output
+        .to_str()
+        .expect("could not convert output dir to str");
 
     let magick_args = [
         logo, // replace color 1
@@ -72,7 +76,7 @@ fn main() {
 
     // handle SIGUSR2 to update colors
     // https://rust-cli.github.io/book/in-depth/signals.html#handling-other-types-of-signals
-    let mut signals = Signals::new([SIGINT, SIGUSR2]).unwrap();
+    let mut signals = Signals::new([SIGINT, SIGUSR2]).expect("failed to register signals");
 
     thread::spawn(move || {
         for sig in signals.forever() {

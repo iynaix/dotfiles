@@ -16,7 +16,7 @@ fn latest_file(media_type: RofiMpvMedia) -> Video {
 
     for watch_file in full_path("~/.local/state/mpv/watch_later")
         .read_dir()
-        .unwrap()
+        .expect("could not read watch_later dir")
         .flatten()
     {
         let content = read_to_string(watch_file.path()).expect("could not read watch_later file");
@@ -56,14 +56,21 @@ fn get_start_time(content: String) -> f32 {
         .find(|line| line.starts_with("start="))
         .expect("no start time found");
 
-    let (_, time) = start_line.rsplit_once('=').unwrap();
+    let (_, time) = start_line.rsplit_once('=').expect("invalid start time");
     time.parse().expect("invalid start time")
 }
 
 /// gets the duration of a video in seconds
 fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
     let ffmpeg = cmd_output(
-        ["ffmpeg", "-i", vid_path.as_ref().to_str().unwrap()],
+        [
+            "ffmpeg",
+            "-i",
+            vid_path
+                .as_ref()
+                .to_str()
+                .expect("could not convert video path to str"),
+        ],
         CmdOutput::Stderr,
     );
     let duration = ffmpeg
@@ -71,15 +78,15 @@ fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
         .find(|line| line.contains("Duration: "))
         .expect("no duration found")
         .rsplit_once("Duration: ")
-        .unwrap()
+        .expect("could not extract duration")
         .1;
 
     let duration: Vec<_> = duration
         .split_once(',')
-        .unwrap()
+        .expect("invalid duration")
         .0
         .split(':')
-        .map(|t| t.parse::<f32>().unwrap())
+        .map(|t| t.parse::<f32>().expect("invalid duration"))
         .collect();
 
     match duration.len() {
@@ -106,7 +113,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     // get list of files in the current directory
     let mut current_files: Vec<_> = path
         .read_dir()
-        .unwrap()
+        .expect("could not read current directory")
         .flatten()
         .map(|e| e.path())
         .collect();
@@ -117,7 +124,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     let current_index = current_files
         .iter()
         .position(|path| path == &path.to_path_buf())
-        .unwrap();
+        .expect("could not get index of current file");
 
     current_files.get(current_index + 1).map(|p| p.to_owned())
 }
