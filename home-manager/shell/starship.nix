@@ -6,10 +6,13 @@
     settings = let
       dir_bg = "blue";
       accent_style = "bg:${dir_bg} fg:black";
+      important_style = "bg:white fg:black";
     in {
       add_newline = false;
       format = lib.concatStringsSep "" [
         # begin left format
+        "$username"
+        "$hostname"
         "$directory[](${dir_bg}) "
         "$git_branch"
         "$git_state"
@@ -31,6 +34,14 @@
         error_symbol = "[ ](bold red)";
         success_symbol = "[](purple)";
         vimcmd_symbol = "[](green)";
+      };
+      username = {
+        style_root = important_style;
+        style_user = important_style;
+        format = "[ $user ]($style) in ";
+      };
+      hostname = {
+        style = important_style;
       };
       directory = {
         format = "[ $path ]($style)";

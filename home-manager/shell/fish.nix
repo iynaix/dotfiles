@@ -15,6 +15,7 @@ in {
       else value.fishBody)
     cfg.functions;
     plugins = [
+      # transient prompt because starship's transient prompt does not handle empty commands
       {
         name = "transient.fish";
         src = pkgs.fetchFromGitHub {
@@ -23,6 +24,16 @@ in {
           rev = "4fe72ab8481a1133461a2d49f24dc99835921ece";
           hash = "sha256-0jN+5c58WW8RstQDEF1PajWHKfzKjjfcUXA3p1LsdIc=";
         };
+      }
+      # do not add failed commands to history
+      {
+        name = "sponge";
+        src = pkgs.fishPlugins.sponge.src;
+      }
+      # notification on long running commands
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
       }
     ];
     shellAliases = {
@@ -41,6 +52,13 @@ in {
 
         # fish doesn't seem to pick up completions for dotfiles_utils?
         set --append fish_complete_path "${pkgs.custom.dotfiles-utils}/share/fish/vendor_completions.d"
+
+        # set options for plugins
+        set sponge_regex_patterns 'password|passwd'
+
+        # notify if command takes more than 10 seconds
+        set -U __done_min_cmd_duration 10000
+        set -U __done_allow_nongraphical 1
       ''
       # wallust colorscheme
       + lib.optionalString config.custom.wallust.enable ''
