@@ -1,0 +1,16 @@
+diff --git a/src/funcs/packages/getNixPkgs.nim b/src/funcs/packages/getNixPkgs.nim
+index 81bb456..5dada5a 100644
+--- a/src/funcs/packages/getNixPkgs.nim
++++ b/src/funcs/packages/getNixPkgs.nim
+@@ -1,8 +1,9 @@
+ import
+-  std/[strutils, osproc]
++  std/[strutils, osproc, os]
+ 
+ proc getNixPkgs*(): string =
+   let
+-    count = osproc.execCmdEx("nix-store -qR /run/current-system/sw ~/.nix-profile")[0]
++    username = getEnv("USER")
++    count = osproc.execCmdEx("nix-store -qR /run/current-system/sw /etc/profiles/per-user/" & username)[0]
+ 
+   result = $(count.split("\n").len - 1)

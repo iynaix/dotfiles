@@ -53,6 +53,11 @@ in {
           patches = (o.patches or []) ++ [./neofetch-nixos-small.patch];
         });
 
+        # fix nix package count for nitch
+        nitch = prev.nitch.overrideAttrs (o: {
+          patches = (o.patches or []) ++ [./nitch-nix-pkgs-count.patch];
+        });
+
         rclip = prev.rclip.overridePythonAttrs (o: {
           version = "1.7.24";
 
