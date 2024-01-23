@@ -11,10 +11,10 @@ pub fn current() -> Option<String> {
     let curr = NixInfo::after().wallpaper;
 
     let wallpaper = {
-        if curr != "./foo/bar.text" {
-            Some(curr)
-        } else {
+        if curr == "./foo/bar.text" {
             fs::read_to_string(full_path("~/.cache/current_wallpaper")).ok()
+        } else {
+            Some(curr)
         }
     };
 
@@ -38,7 +38,7 @@ pub fn all() -> Vec<String> {
             if path.is_file() {
                 if let Some(ext) = path.extension() {
                     match ext.to_str() {
-                        Some("jpg") | Some("jpeg") | Some("png") if curr != *path.to_str()? => {
+                        Some("jpg" | "jpeg" | "png") if curr != *path.to_str()? => {
                             return Some(path.to_str()?.to_string())
                         }
                         _ => return None,
@@ -80,7 +80,7 @@ pub fn randomize_wallpapers() -> String {
     let prefix_len = shuffled.len().to_string().len();
     for (idx, path) in shuffled.iter().enumerate() {
         let (_, img) = path.rsplit_once('/').expect("could not extract image name");
-        let new_path = format!("{output_dir}/{:0>1$}-{img}", idx, prefix_len);
+        let new_path = format!("{output_dir}/{idx:0>prefix_len$}-{img}");
         // create symlinks
         std::os::unix::fs::symlink(path, new_path).expect("failed to create symlink");
     }

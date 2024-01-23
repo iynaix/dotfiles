@@ -37,12 +37,12 @@ pub struct NixInfo {
 
 impl NixInfo {
     /// get nix info from ~/.config before wallust has processed it
-    pub fn before() -> NixInfo {
+    pub fn before() -> Self {
         json::load("~/.config/wallust/nix.json")
     }
 
     /// get nix info from ~/.cache after wallust has processed it
-    pub fn after() -> NixInfo {
+    pub fn after() -> Self {
         json::load("~/.cache/wallust/nix.json")
     }
 

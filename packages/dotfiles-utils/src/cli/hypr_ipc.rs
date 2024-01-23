@@ -28,13 +28,13 @@ fn is_nstack() -> bool {
     opt.str == "nstack"
 }
 
-fn set_workspace_orientation(workspace: String, is_desktop: bool, nstack: bool) {
+fn set_workspace_orientation(workspace: &str, is_desktop: bool, nstack: bool) {
     if !is_desktop {
         return;
     }
 
     let wksp = workspace.replace(" silent", "");
-    let (mon, _) = Monitor::by_workspace(wksp);
+    let (mon, _) = Monitor::by_workspace(wksp.as_str());
 
     hypr(["layoutmsg", mon.orientation()]);
 
@@ -61,7 +61,10 @@ fn main() {
         let (ev, ev_args) = line
             .split_once(">>")
             .expect("could not parse hyprland event");
-        let ev_args: Vec<String> = ev_args.split(',').map(|s| s.to_string()).collect();
+        let ev_args: Vec<String> = ev_args
+            .split(',')
+            .map(std::string::ToString::to_string)
+            .collect();
 
         // println!("{ev} ---- {ev_args:?}");
 
@@ -76,16 +79,12 @@ fn main() {
                         .iter()
                         .max_by_key(|(_, wksps)| wksps.len())
                         .expect("no workspaces found");
-                    hypr(["focusmonitor", mon_to_focus])
+                    hypr(["focusmonitor", mon_to_focus]);
                 }
             }
-            "openwindow" => {
+            "openwindow" | "movewindow" => {
                 let workspace = &ev_args[1];
-                set_workspace_orientation(workspace.to_string(), is_desktop, nstack);
-            }
-            "movewindow" => {
-                let workspace = &ev_args[1];
-                set_workspace_orientation(workspace.to_string(), is_desktop, nstack);
+                set_workspace_orientation(workspace, is_desktop, nstack);
             }
             _ => {
                 // enable for debugging

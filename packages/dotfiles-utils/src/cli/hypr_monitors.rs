@@ -12,15 +12,15 @@ fn main() {
     };
 
     // move workspaces to monitors
-    for (mon, wksps) in workspaces.iter() {
+    for (mon, wksps) in &workspaces {
         wksps
             .iter()
-            .for_each(|wksp| hypr(["moveworkspacetomonitor", &wksp.to_string(), mon]))
+            .for_each(|wksp| hypr(["moveworkspacetomonitor", &wksp.to_string(), mon]));
     }
 
     // focus workspace on monitors
     let primary_workspaces = [1, 7, 9];
-    for (_, wksps) in workspaces.iter() {
+    for wksps in workspaces.values() {
         // focus current workspace if monitor is already active
         // if let Some(wksp) = active_monitors.get(mon) {
         //     hypr(["workspace", &wksp.to_string()]);

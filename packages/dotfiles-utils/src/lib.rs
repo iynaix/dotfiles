@@ -11,8 +11,7 @@ pub mod wallust;
 
 pub const WAYBAR_CLASS: &str = ".waybar-wrapped";
 
-/// shared structs / types
-
+// shared structs / types
 type Coord = (i32, i32);
 
 #[derive(Clone, Default, Deserialize, Debug)]
@@ -84,7 +83,7 @@ pub enum CmdOutput {
     Stderr,
 }
 
-pub fn cmd_output<I, S>(cmd_args: I, from: CmdOutput) -> Vec<String>
+pub fn cmd_output<I, S>(cmd_args: I, from: &CmdOutput) -> Vec<String>
 where
     I: IntoIterator<Item = S>,
     S: AsRef<str>,
@@ -128,7 +127,7 @@ pub struct ActiveWindow {
 }
 
 impl ActiveWindow {
-    pub fn new() -> ActiveWindow {
+    pub fn new() -> Self {
         hypr_json("activewindow")
     }
 
@@ -150,12 +149,12 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn clients() -> Vec<Client> {
+    pub fn clients() -> Vec<Self> {
         hypr_json("clients")
     }
 
-    pub fn filter_class(class: String) -> Vec<Client> {
-        Client::clients()
+    pub fn filter_class(class: &str) -> Vec<Self> {
+        Self::clients()
             .into_iter()
             .filter(|client| client.class == class)
             .collect()
@@ -172,7 +171,7 @@ pub struct Workspace {
 }
 
 impl Workspace {
-    pub fn workspaces() -> Vec<Workspace> {
+    pub fn workspaces() -> Vec<Self> {
         hypr_json("workspaces")
     }
 
@@ -183,8 +182,8 @@ impl Workspace {
             .expect("monitor not found")
     }
 
-    pub fn by_name(name: String) -> Option<Workspace> {
-        Workspace::workspaces().into_iter().find(|w| w.name == name)
+    pub fn by_name(name: &str) -> Option<Self> {
+        Self::workspaces().into_iter().find(|w| w.name == name)
     }
 }
 
@@ -198,9 +197,9 @@ pub mod json {
     {
         let path = path.as_ref();
         let contents = std::fs::read_to_string(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {:?}", path));
+            .unwrap_or_else(|_| panic!("failed to load {path:?}"));
         serde_json::from_str(&contents)
-            .unwrap_or_else(|_| panic!("failed to parse json for {:?}", path))
+            .unwrap_or_else(|_| panic!("failed to parse json for {path:?}"))
     }
 
     pub fn write<T, P>(path: P, data: T)
@@ -210,8 +209,8 @@ pub mod json {
     {
         let path = path.as_ref();
         let file = std::fs::File::create(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {:?}", path));
+            .unwrap_or_else(|_| panic!("failed to load {path:?}"));
         serde_json::to_writer(file, &data)
-            .unwrap_or_else(|_| panic!("failed to write json to {:?}", path));
+            .unwrap_or_else(|_| panic!("failed to write json to {path:?}"));
     }
 }

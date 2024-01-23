@@ -1,5 +1,6 @@
 use dotfiles_utils::{hypr, ActiveWindow};
 
+#[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
 fn main() {
     let activewindow = ActiveWindow::new();
     let curr_mon = activewindow.get_monitor();
@@ -12,7 +13,12 @@ fn main() {
     hypr(["togglefloating", "active"]);
     hypr(["pin", "active"]);
 
-    if !activewindow.floating {
+    if activewindow.floating {
+        // reset the border
+        hypr(["fullscreen", "0"]);
+    } else {
+        const PADDING: i32 = 30; // target distance from corner of screen
+
         hypr([
             "resizeactive",
             "exact",
@@ -21,7 +27,6 @@ fn main() {
         ]);
 
         let activewindow = ActiveWindow::new();
-        const PADDING: i32 = 30; // target distance from corner of screen
 
         let mon_bottom = curr_mon.y + curr_mon.height;
         let mon_right = curr_mon.x + curr_mon.width;
@@ -30,8 +35,5 @@ fn main() {
         let delta_y = mon_bottom - PADDING - target_h - activewindow.at.1;
 
         hypr(["moveactive", &delta_x.to_string(), &delta_y.to_string()]);
-    } else {
-        // reset the border
-        hypr(["fullscreen", "0"])
     }
 }

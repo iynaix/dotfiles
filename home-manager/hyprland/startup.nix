@@ -54,7 +54,7 @@ in {
       "sleep 1; swww init && hypr-wallpaper"
 
       # start waybar hidden if enabled
-      "sleep 3 && launch-waybar"
+      "sleep 5 && launch-waybar"
 
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"

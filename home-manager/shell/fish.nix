@@ -30,11 +30,6 @@ in {
         name = "sponge";
         src = pkgs.fishPlugins.sponge.src;
       }
-      # notification on long running commands
-      {
-        name = "done";
-        src = pkgs.fishPlugins.done.src;
-      }
     ];
     shellAliases = {
       ehistory = "nvim ~/.local/share/fish/fish_history";
@@ -55,10 +50,6 @@ in {
 
         # set options for plugins
         set sponge_regex_patterns 'password|passwd'
-
-        # notify if command takes more than 10 seconds
-        set -U __done_min_cmd_duration 10000
-        set -U __done_allow_nongraphical 1
       ''
       # wallust colorscheme
       + lib.optionalString config.custom.wallust.enable ''

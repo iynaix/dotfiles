@@ -5,7 +5,7 @@ use std::{
 };
 
 fn wallust_preset_themes() -> Vec<String> {
-    cmd_output(["wallust", "theme", "--help"], CmdOutput::Stdout)
+    cmd_output(["wallust", "theme", "--help"], &CmdOutput::Stdout)
         .iter()
         .max_by_key(|line| line.len())
         .expect("could not parse wallust themes")
@@ -23,8 +23,8 @@ fn all_themes() -> Vec<String> {
 
     preset_themes.extend_from_slice(
         &wallust::CUSTOM_THEMES
-            .iter()
-            .map(|s| s.to_string())
+            .into_iter()
+            .map(std::string::ToString::to_string)
             .collect::<Vec<_>>(),
     );
     preset_themes.sort();
@@ -55,6 +55,6 @@ fn main() {
         .strip_suffix('\n')
         .unwrap_or_default();
 
-    wallust::apply_theme(selected_theme.to_string());
+    wallust::apply_theme(selected_theme);
     wallust::apply_colors();
 }

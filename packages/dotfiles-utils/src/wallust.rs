@@ -11,16 +11,16 @@ pub const CUSTOM_THEMES: [&str; 6] = [
     "tokyo-night",
 ];
 
-pub fn apply_theme(theme: String) {
-    if CUSTOM_THEMES.contains(&theme.as_str()) {
+pub fn apply_theme(theme: &str) {
+    if CUSTOM_THEMES.contains(&theme) {
         let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json"));
         cmd([
             "wallust",
             "cs",
             colorscheme_file.to_str().expect("invalid colorscheme file"),
-        ])
+        ]);
     } else {
-        cmd(["wallust", "theme", &theme])
+        cmd(["wallust", "theme", &theme]);
     }
 }
 
@@ -33,7 +33,7 @@ fn refresh_zathura() {
             "/org/freedesktop/DBus",
             "org.freedesktop.DBus.ListNames",
         ],
-        CmdOutput::Stdout,
+        &CmdOutput::Stdout,
     )
     .iter()
     .find(|line| line.contains("org.pwmt.zathura"))

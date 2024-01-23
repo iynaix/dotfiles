@@ -41,7 +41,7 @@ pub struct WallInfo {
 }
 
 impl WallInfo {
-    fn get_geometry(&self, width: i32, height: i32) -> Option<&String> {
+    const fn get_geometry(&self, width: i32, height: i32) -> Option<&String> {
         match (width, height) {
             (1440, 2560) => Some(&self.r1440x2560),
             (2256, 1504) => Some(&self.r2256x1504),
@@ -144,50 +144,49 @@ fn main() {
     let wallpaper_info = get_wallpaper_info(&wallpaper);
 
     // use colorscheme set from nix if available
-    match NixInfo::before().colorscheme {
-        Some(cs) => wallust::apply_theme(cs),
-        None => {
-            let mut wallust_cmd = Command::new("wallust");
+    if let Some(cs) = NixInfo::before().colorscheme {
+        wallust::apply_theme(cs.as_str());
+    } else {
+        let mut wallust_cmd = Command::new("wallust");
 
-            // normalize the options for wallust
-            if let Some(WallInfo {
-                wallust: Some(opts),
-                ..
-            }) = &wallpaper_info
-            {
-                if let Some(true) = opts.check_contrast {
-                    wallust_cmd.arg("--check-contrast");
-                }
-                if let Some(filter) = &opts.filter {
-                    wallust_cmd.arg("--filter");
-                    if matches!(
-                        filter.as_str(),
-                        // valid values for filter, ignore light values
-                        "dark" | "dark16" | "harddark" | "harddark16" | "softdark" | "softdark16"
-                    ) {
-                        wallust_cmd.arg(filter);
-                    }
-                }
-                if let Some(saturation) = opts.saturation {
-                    wallust_cmd.arg("--saturation").arg(saturation.to_string());
-                }
-                if let Some(threshold) = opts.threshold {
-                    wallust_cmd.arg("--threshold").arg(threshold.to_string());
+        // normalize the options for wallust
+        if let Some(WallInfo {
+            wallust: Some(opts),
+            ..
+        }) = &wallpaper_info
+        {
+            if opts.check_contrast == Some(true) {
+                wallust_cmd.arg("--check-contrast");
+            }
+            if let Some(filter) = &opts.filter {
+                wallust_cmd.arg("--filter");
+                if matches!(
+                    filter.as_str(),
+                    // valid values for filter, ignore light values
+                    "dark" | "dark16" | "harddark" | "harddark16" | "softdark" | "softdark16"
+                ) {
+                    wallust_cmd.arg(filter);
                 }
             }
-
-            // finally run wallust
-            wallust_cmd
-                .arg(&wallpaper)
-                .spawn()
-                .expect("failed to execute process");
+            if let Some(saturation) = opts.saturation {
+                wallust_cmd.arg("--saturation").arg(saturation.to_string());
+            }
+            if let Some(threshold) = opts.threshold {
+                wallust_cmd.arg("--threshold").arg(threshold.to_string());
+            }
         }
+
+        // finally run wallust
+        wallust_cmd
+            .arg(&wallpaper)
+            .spawn()
+            .expect("failed to execute process");
     }
 
     if cfg!(feature = "hyprland") {
         if args.reload {
             swww_crop(&[], &wallpaper, &wallpaper_info);
-            cmd(["killall", "-SIGUSR2", WAYBAR_CLASS])
+            cmd(["killall", "-SIGUSR2", WAYBAR_CLASS]);
         } else {
             swww_crop(
                 &["--transition-type", &args.transition_type],

@@ -25,15 +25,15 @@ pub struct Monitor {
 }
 
 impl Monitor {
-    pub fn is_vertical(&self) -> bool {
+    pub const fn is_vertical(&self) -> bool {
         matches!(self.transform, 1 | 3 | 5 | 7)
     }
 
-    pub fn is_ultrawide(&self) -> bool {
+    pub const fn is_ultrawide(&self) -> bool {
         self.width >= 3440
     }
 
-    pub fn orientation(&self) -> &str {
+    pub const fn orientation(&self) -> &str {
         if self.is_vertical() {
             "orientationtop"
         } else {
@@ -41,7 +41,7 @@ impl Monitor {
         }
     }
 
-    pub fn stacks(&self) -> i32 {
+    pub const fn stacks(&self) -> i32 {
         if self.is_ultrawide() || self.is_vertical() {
             3
         } else {
@@ -49,12 +49,12 @@ impl Monitor {
         }
     }
 
-    pub fn monitors() -> Vec<Monitor> {
-        hypr_json::<Vec<Monitor>>("monitors")
+    pub fn monitors() -> Vec<Self> {
+        hypr_json::<Vec<Self>>("monitors")
             .iter()
             .map(|mon| {
                 if mon.is_vertical() {
-                    Monitor {
+                    Self {
                         width: mon.height,
                         height: mon.width,
                         ..mon.clone()
@@ -66,46 +66,45 @@ impl Monitor {
             .collect()
     }
 
-    pub fn focused() -> Monitor {
-        Monitor::monitors()
+    pub fn focused() -> Self {
+        Self::monitors()
             .into_iter()
             .find(|mon| mon.focused)
             .expect("no focused monitor found")
     }
 
     pub fn active_workspaces() -> HashMap<String, i32> {
-        Monitor::monitors()
+        Self::monitors()
             .into_iter()
             .map(|mon| (mon.name, mon.active_workspace.id))
             .collect()
     }
 
     /// returns the monitor and if the workspace currently exists
-    pub fn by_workspace(wksp: String) -> (Monitor, bool) {
-        match Workspace::by_name(wksp.clone()) {
-            Some(wksp) => (wksp.monitor(), true),
-            None => {
-                // workspace is empty and doesn't exist yet, search workspace rules for the monitor
-                let workspace_rules: Vec<WorkspaceRule> = hypr_json("workspacerules");
+    pub fn by_workspace(wksp: &str) -> (Self, bool) {
+        if let Some(wksp) = Workspace::by_name(wksp) {
+            (wksp.monitor(), true)
+        } else {
+            // workspace is empty and doesn't exist yet, search workspace rules for the monitor
+            let workspace_rules: Vec<WorkspaceRule> = hypr_json("workspacerules");
 
-                let wksp_rule = workspace_rules
-                    .into_iter()
-                    .find(|rule| rule.workspace == wksp)
-                    .expect("workspace not found within workspace rules");
+            let wksp_rule = workspace_rules
+                .into_iter()
+                .find(|rule| rule.workspace == wksp)
+                .expect("workspace not found within workspace rules");
 
-                let mon = Monitor::monitors()
-                    .into_iter()
-                    .find(|mon| mon.name == wksp_rule.monitor)
-                    .expect("monitor not found from workspace rules");
+            let mon = Self::monitors()
+                .into_iter()
+                .find(|mon| mon.name == wksp_rule.monitor)
+                .expect("monitor not found from workspace rules");
 
-                (mon, false)
-            }
+            (mon, false)
         }
     }
 
     pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
         let nix_monitors = NixInfo::before().monitors;
-        let active_workspaces = Monitor::active_workspaces();
+        let active_workspaces = Self::active_workspaces();
 
         nix_monitors
             .iter()
@@ -129,7 +128,7 @@ impl Monitor {
                             {
                                 acc.entry(other_name.to_string())
                                     .or_default()
-                                    .extend(&mon.workspaces)
+                                    .extend(&mon.workspaces);
                             }
                         }
                     }
@@ -142,7 +141,7 @@ impl Monitor {
     pub fn distribute_workspaces(extend_as_primary: bool) -> HashMap<String, Vec<i32>> {
         let workspaces: Vec<i32> = (1..10).collect();
 
-        let mut all_monitors = Monitor::monitors();
+        let mut all_monitors = Self::monitors();
         let nix_monitors = NixInfo::before().monitors;
 
         // sort all_monitors, putting the nix_monitors first
@@ -164,11 +163,7 @@ impl Monitor {
             .enumerate()
             .map(|(i, mon)| {
                 let len = workspaces.len() / all_monitors.len()
-                    + if i < workspaces.len() % all_monitors.len() {
-                        1
-                    } else {
-                        0
-                    };
+                    + usize::from(i < workspaces.len() % all_monitors.len());
                 let end = start + len;
                 let wksps = &workspaces[start..end];
                 start += len;
