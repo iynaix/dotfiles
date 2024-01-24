@@ -17,7 +17,7 @@
     '';
   };
 in {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.custom-nixos.sops.enable) {
     sops.secrets.vercel_postgres.owner = user;
 
     systemd = {

@@ -15,6 +15,7 @@ in rec {
 
   # default host
   c = flake.nixosConfigurations.${host}.config;
+  inherit (flake.nixosConfigurations.${host}) config;
   o = c.custom-nixos;
   inherit (c) hm;
   hmo = hm.custom;

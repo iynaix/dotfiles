@@ -28,7 +28,7 @@ in {
       # do not add failed commands to history
       {
         name = "sponge";
-        src = pkgs.fishPlugins.sponge.src;
+        inherit (pkgs.fishPlugins.sponge) src;
       }
     ];
     shellAliases = {

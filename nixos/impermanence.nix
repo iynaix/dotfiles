@@ -58,7 +58,7 @@ in {
     environment.persistence."/persist" = {
       hideMounts = true;
 
-      inherit (cfg.root) files;
+      files = ["/etc/machine-id"] ++ cfg.root.files;
       directories =
         [
           # systemd journal is stored in /var/log/journal
@@ -80,7 +80,7 @@ in {
           allowOther = true;
           removePrefixDirectory = false;
 
-          files = [".Xauthority"] ++ cfg.home.files ++ hmPersistCfg.home.files;
+          files = cfg.home.files ++ hmPersistCfg.home.files;
           directories =
             [
               {

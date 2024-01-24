@@ -22,6 +22,12 @@
     runtimeInputs = with pkgs; [rsync];
     text = ''
       rsync -aP --delete --no-links "$HOME/Pictures/Wallpapers" "/media/6TBRED"
+      # update rclip database
+      ${lib.optionalString config.custom.rclip.enable ''
+        cd "$HOME/Pictures/Wallpapers"
+        rclip -f "cat" >  /dev/null
+        cd - > /dev/null
+      ''}
     '';
   };
   # sync wallpapers with laptop
