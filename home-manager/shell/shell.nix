@@ -44,11 +44,6 @@
       bashBody = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
       fishBody = ''if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end'';
     };
-    # create a new devenv environment
-    mkdevenv = {
-      bashBody = ''nix flake init --template github:iynaix/dotfiles#$1'';
-      fishBody = ''nix flake init --template github:iynaix/dotfiles#$argv[1]'';
-    };
     # improved which for nix
     where = {
       bashBody = ''readlink -f $(which $1)'';

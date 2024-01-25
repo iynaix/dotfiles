@@ -90,6 +90,26 @@
               enable = true;
               channel = "stable";
             };
+
+            pre-commit = {
+              hooks = {
+                alejandra = {
+                  enable = true;
+                  excludes = ["generated.nix"];
+                };
+                deadnix = {
+                  enable = true;
+                  excludes = ["generated.nix"];
+                };
+                statix = {
+                  enable = true;
+                  excludes = ["generated.nix"];
+                };
+              };
+              settings = {
+                deadnix.edit = true;
+              };
+            };
           })
         ];
       };
