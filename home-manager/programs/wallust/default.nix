@@ -96,7 +96,7 @@ in {
             color15 = "{color15}";
           };
         };
-        target = "~/.cache/wallust/nix.json";
+        target = "${config.xdg.cacheHome}/wallust/nix.json";
       };
     };
 

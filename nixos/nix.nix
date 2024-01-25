@@ -1,4 +1,5 @@
 {
+  config,
   host,
   inputs,
   lib,
@@ -6,7 +7,7 @@
   user,
   ...
 }: let
-  dots = "/persist/home/${user}/projects/dotfiles";
+  dots = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
     generations=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')

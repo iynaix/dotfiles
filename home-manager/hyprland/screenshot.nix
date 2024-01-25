@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  screenshotDir = "$HOME/Pictures/Screenshots";
+  screenshotDir = "${config.xdg.userDirs.pictures}/Screenshots";
   iso8601 = "%Y-%m-%dT%H:%M:%S%z";
   # screenshot with rofi options to preselect
   hypr-screenshot = pkgs.writeShellApplication {
@@ -23,7 +23,7 @@
     name = "hypr-ocr";
     runtimeInputs = [pkgs.tesseract5];
     text = ''
-      img="$HOME/Pictures/Screenshots/ocr.png"
+      img="${screenshotDir}/ocr.png"
 
       grimblast save area "$img"
       teserract5 "$img" - | wl-copy

@@ -176,7 +176,7 @@ in {
       gestures = lib.mkIf isLaptop {
         workspace_swipe = true;
       };
-      # source = "~/.config/hypr/hyprland-test.conf";
+      # source = "${config.xdg.configHome}/hypr/hyprland-test.conf";
     };
 
     # hyprland crash reports

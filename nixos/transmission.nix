@@ -5,22 +5,24 @@
   user,
   ...
 }: let
-  home = "/persist/home/${user}";
+  homeDir = "/persist${config.hm.home.homeDirectory}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
   torrents-add = pkgs.writeShellApplication {
     name = "torrents-add";
     runtimeInputs = with pkgs; [ripgrep transmission_4];
-    text = ''
+    text = let
+      yt_txt = "${config.hm.xdg.userDirs.desktop}/yt.txt";
+    in ''
       # || true to prevent error when no magnet links are found
-      rg "magnet:" "$HOME/Desktop/yt.txt" |
+      rg "magnet:" "${yt_txt}" |
         sed 's/#*//g' |
         sed 's/^[ \t]*//;s/[ \t]*$//' |
         xargs -I {} transmission-remote -a {} || true
 
       # remove all magnet links after adding
-      rg -v "magnet:" "$HOME/Desktop/yt.txt" > "/tmp/yt.txt"
-      mv "/tmp/yt.txt" "$HOME/Desktop/yt.txt"
+      rg -v "magnet:" "${yt_txt}" > "/tmp/yt.txt"
+      mv "/tmp/yt.txt" "${yt_txt}"
     '';
   };
 in {
@@ -30,7 +32,8 @@ in {
         enable = true;
         package = pkgs.transmission_4;
         webHome = pkgs.flood-for-transmission;
-        inherit user home;
+        inherit user;
+        home = homeDir;
         group = "users";
         settings = {
           alt-speed-down = 50;
@@ -59,7 +62,7 @@ in {
           inhibit-desktop-hibernation = false;
           lpd-enabled = false;
           message-level = 1;
-          open-dialog-dir = home;
+          open-dialog-dir = homeDir;
           peer-congestion-algorithm = "";
           peer-id-ttl-hours = 6;
           peer-limit-global = 200;

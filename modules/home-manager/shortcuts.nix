@@ -1,25 +1,31 @@
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: let
+  homeDir = config.home.homeDirectory;
+in {
   options.custom.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
     default = {
-      h = "~";
-      dots = "~/projects/dotfiles";
-      cfg = "~/.config";
-      vd = "~/Videos";
-      vaa = "~/Videos/Anime";
-      vac = "~/Videos/Anime/Current";
-      vC = "~/Videos/Courses";
-      vm = "~/Videos/Movies";
-      vt = "~/Videos/TV";
-      vtc = "~/Videos/TV/Current";
-      vtn = "~/Videos/TV/New";
-      pp = "~/projects";
-      PC = "~/Pictures";
-      Ps = "~/Pictures/Screenshots";
-      Pw = "~/Pictures/Wallpapers";
-      dd = "~/Downloads";
-      dp = "~/Downloads/pending";
-      dus = "~/Downloads/pending/Unsorted";
+      h = homeDir;
+      dots = "${homeDir}/projects/dotfiles";
+      cfg = "${homeDir}/.config";
+      vd = "${homeDir}/Videos";
+      vaa = "${homeDir}/Videos/Anime";
+      vac = "${homeDir}/Videos/Anime/Current";
+      vC = "${homeDir}/Videos/Courses";
+      vm = "${homeDir}/Videos/Movies";
+      vt = "${homeDir}/Videos/TV";
+      vtc = "${homeDir}/Videos/TV/Current";
+      vtn = "${homeDir}/Videos/TV/New";
+      pp = "${homeDir}/projects";
+      PC = "${homeDir}/Pictures";
+      Ps = "${homeDir}/Pictures/Screenshots";
+      Pw = "${homeDir}/Pictures/Wallpapers";
+      dd = "${homeDir}/Downloads";
+      dp = "${homeDir}/Downloads/pending";
+      dus = "${homeDir}/Downloads/pending/Unsorted";
     };
     description = "Shortcuts for navigating across multiple terminal programs.";
   };

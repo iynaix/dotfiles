@@ -1,9 +1,13 @@
-{pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   ytdl = pkgs.writeShellApplication {
     name = "ytdl";
     runtimeInputs = with pkgs; [yt-dlp];
     text = ''
-      cd "$HOME/Downloads"
+      cd "${config.xdg.userDirs.download}"
 
       # add and remove torrent lines
       if command -v "torrents-add" &> /dev/null; then
@@ -11,9 +15,9 @@
       fi
 
       # remove ugly unicode characters, sleep to wait for renames to complete
-      yt-dlp -a "$HOME/Desktop/yt.txt" && \
+      yt-dlp -a "${config.xdg.userDirs.desktop}/yt.txt" && \
       sleep 5 && \
-      find -L "$HOME/Downloads" -maxdepth 1 -type f \( \
+      find -L "${config.xdg.userDirs.download}" -maxdepth 1 -type f \( \
         -name '*？*' \
         -o -name '*｜*' \
         -o -name '*|*' \

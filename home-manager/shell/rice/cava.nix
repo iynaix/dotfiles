@@ -128,6 +128,6 @@
       gradient_color_5 = '{color2}'
       gradient_color_6 = '{color7}'
     '';
-    target = "~/.config/cava/config";
+    target = "${config.xdg.configHome}/cava/config";
   };
 }

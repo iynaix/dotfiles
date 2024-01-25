@@ -3,7 +3,6 @@
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }: {
   home = {
@@ -45,12 +44,14 @@
     };
   };
 
-  gtk.gtk3.bookmarks = [
-    "file:///home/${user}/Downloads"
-    "file:///home/${user}/projects"
-    "file:///home/${user}/projects/dotfiles"
-    "file:///home/${user}/projects/coinfc"
-    "file:///home/${user}/Pictures/Wallpapers"
+  gtk.gtk3.bookmarks = let
+    homeDir = config.home.homeDirectory;
+  in [
+    "file://${homeDir}/Downloads"
+    "file://${homeDir}/projects"
+    "file://${homeDir}/projects/dotfiles"
+    "file://${homeDir}/projects/coinfc"
+    "file://${homeDir}/Pictures/Wallpapers"
     "file:///persist Persist"
   ];
 

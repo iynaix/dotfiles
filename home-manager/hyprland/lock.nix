@@ -6,7 +6,7 @@
   ...
 }: let
   lock = pkgs.writeShellScriptBin "lock" ''
-    sh "$HOME/.cache/wallust/lock"
+    sh "${config.xdg.cacheHome}/wallust/lock"
   '';
 in {
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
@@ -47,7 +47,7 @@ in {
             --inside-color "00161925" \
             --separator-color "00000000"
         '';
-        target = "~/.cache/wallust/lock";
+        target = "${config.xdg.cacheHome}/wallust/lock";
       };
     };
   };

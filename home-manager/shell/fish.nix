@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }: let
   cfg = config.custom.shell;
@@ -53,7 +52,7 @@ in {
       ''
       # wallust colorscheme
       + lib.optionalString config.custom.wallust.enable ''
-        set wallust_colors "/home/${user}/.cache/wallust/sequences"
+        set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
         if test -e "$wallust_colors"
             command cat "$wallust_colors"
         end

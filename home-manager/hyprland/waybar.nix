@@ -88,7 +88,7 @@ in {
         then {
           format = "    {essid}";
           format-disconnected = "󰖪    Offline";
-          on-click = "~/.config/rofi/rofi-wifi-menu";
+          on-click = "${config.xdg.configHome}/rofi/rofi-wifi-menu";
           on-click-right = "${config.custom.terminal.exec} nmtui";
           tooltip = false;
         }
@@ -132,7 +132,7 @@ in {
       "waybar.jsonc" = {
         inherit (cfg) enable;
         text = builtins.toJSON cfg.config;
-        target = "~/.config/waybar/config";
+        target = "${config.xdg.configHome}/waybar/config";
       };
       "waybar.css" = let
         baseModuleCss = ''
@@ -204,7 +204,7 @@ in {
             background-color: rgba(255,255,255, 0.25);
           }
         '';
-        target = "~/.config/waybar/style.css";
+        target = "${config.xdg.configHome}/waybar/style.css";
       };
     };
   };

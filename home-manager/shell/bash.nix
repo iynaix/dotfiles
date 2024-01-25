@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  user,
   ...
 }: let
   cfg = config.custom.shell;
@@ -57,7 +56,7 @@ in {
       ''
       # wallust colorscheme
       + lib.optionalString config.custom.wallust.enable ''
-        wallust_colors="/home/${user}/.cache/wallust/sequences"
+        wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
         if [ -e "$wallust_colors" ]; then
           command cat "$wallust_colors"
         fi

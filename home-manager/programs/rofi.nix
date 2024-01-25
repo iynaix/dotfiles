@@ -61,7 +61,7 @@ in {
     };
 
     "rofi/config.rasi".text = ''
-      @theme "~/.cache/wallust/rofi.rasi"
+      @theme "${config.xdg.cacheHome}/wallust/rofi.rasi"
     '';
   };
 
@@ -85,7 +85,7 @@ in {
     "rofi.rasi" = {
       inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" "";
-      target = "~/.cache/wallust/rofi.rasi";
+      target = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
     # generic single column rofi menu
@@ -99,7 +99,7 @@ in {
         prompt { enabled: false; }
         textbox-prompt-colon { enabled: false; }
       '';
-      target = "~/.cache/wallust/rofi-menu.rasi";
+      target = "${config.xdg.cacheHome}/wallust/rofi-menu.rasi";
     };
 
     "rofi-screenshot.rasi" = {
@@ -123,13 +123,13 @@ in {
           text-color:                  @foreground;
         }
       '';
-      target = "~/.cache/wallust/rofi-screenshot.rasi";
+      target = "${config.xdg.cacheHome}/wallust/rofi-screenshot.rasi";
     };
 
     "rofi-power-menu-confirm.rasi" = {
       inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" "";
-      target = "~/.cache/wallust/rofi-power-menu-confirm.rasi";
+      target = "${config.xdg.cacheHome}/wallust/rofi-power-menu-confirm.rasi";
     };
   };
 }

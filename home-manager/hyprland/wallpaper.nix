@@ -7,7 +7,8 @@
   user,
   ...
 }: let
-  wallpapers_proj = "/persist/home/${user}/projects/wallpaper-utils";
+  wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
+  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-utils";
   # crop wallpaper before displaying with swww
   swww-crop = pkgs.writeShellApplication {
     name = "swww-crop";
@@ -21,10 +22,10 @@
     name = "wallpapers-backup";
     runtimeInputs = with pkgs; [rsync];
     text = ''
-      rsync -aP --delete --no-links "$HOME/Pictures/Wallpapers" "/media/6TBRED"
+      rsync -aP --delete --no-links "${wallpapers_dir}" "/media/6TBRED"
       # update rclip database
       ${lib.optionalString config.custom.rclip.enable ''
-        cd "$HOME/Pictures/Wallpapers"
+        cd "${wallpapers_dir}"
         rclip -f "cat" >  /dev/null
         cd - > /dev/null
       ''}
@@ -36,7 +37,7 @@
     runtimeInputs = with pkgs; [rsync wallpapers-backup];
     text = ''
       wallpapers-backup
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "$HOME/Pictures/Wallpapers" "${user}@''${1:-${user}-framework}:$HOME/Pictures"
+      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "${wallpapers_dir}" "${user}@''${1:-${user}-framework}:${config.xdg.userDirs.download}"
     '';
   };
   # process wallpapers with upscaling and vertical crop
@@ -68,7 +69,7 @@
     name = "wallpapers-search";
     runtimeInputs = with pkgs; [rclip imv];
     text = ''
-      cd "$HOME/Pictures/Wallpapers"
+      cd "${wallpapers_dir}"
       rclip -f "$@" | imv;
       cd - > /dev/null
     '';
@@ -120,7 +121,7 @@ in {
     })
     {
       home.shellAliases = {
-        current-wallpaper = "command cat $HOME/.cache/current_wallpaper";
+        current-wallpaper = "command cat ${config.xdg.cacheHome}/current_wallpaper";
       };
     }
   ];

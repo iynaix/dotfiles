@@ -3,7 +3,6 @@
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }: {
   xdg.configFile = {
@@ -90,7 +89,7 @@
         sub-scale-by-window = "yes";
         sub-scale-with-window = "no";
 
-        screenshot-directory = "/home/${user}/Pictures/Screenshots";
+        screenshot-directory = "${config.xdg.userDirs.pictures}/Screenshots";
 
         slang = "en,eng,english";
         alang = "jp,jpn,japanese,en,eng,english";

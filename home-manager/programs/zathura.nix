@@ -1,8 +1,4 @@
-{
-  config,
-  user,
-  ...
-}: {
+{config, ...}: {
   programs = {
     zathura = {
       enable = true;
@@ -18,7 +14,7 @@
         i = "recolor";
       };
       extraConfig = ''
-        include "/home/${user}/.cache/wallust/zathurarc"
+        include "${config.xdg.cacheHome}/wallust/zathurarc"
       '';
       options = {
         statusbar-h-padding = 0;
@@ -66,6 +62,6 @@
       set recolor                     "false"
       set recolor-keephue             "false"
     '';
-    target = "~/.cache/wallust/zathurarc";
+    target = "${config.xdg.cacheHome}/wallust/zathurarc";
   };
 }

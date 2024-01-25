@@ -3,7 +3,7 @@
 in {
   services.dunst = {
     enable = true;
-    configFile = "~/.cache/wallust/dunstrc";
+    configFile = "${config.xdg.cacheHome}/wallust/dunstrc";
   };
 
   custom.wallust.entries.dunstrc = {
@@ -43,6 +43,6 @@ in {
       foreground="{foreground}"
       timeout=10
     '';
-    target = "~/.cache/wallust/dunstrc";
+    target = "${config.xdg.cacheHome}/wallust/dunstrc";
   };
 }

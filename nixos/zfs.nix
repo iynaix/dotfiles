@@ -31,6 +31,7 @@ in {
     fileSystems = let
       homeMountPoint =
         if persistCfg.erase.home
+        # using config.hm.homeDirectory results in infinite recursion
         then "/home/${user}"
         else "/home";
     in {

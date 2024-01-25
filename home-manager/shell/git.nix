@@ -1,44 +1,36 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    delta
-    lazygit
-  ];
-
-  programs.git = {
-    enable = true;
-    userName = "Lin Xianyi";
-    userEmail = "iynaix@gmail.com";
-    extraConfig = {
-      init = {defaultBranch = "main";};
-      branch = {
-        master = {merge = "refs/heads/master";};
-        main = {merge = "refs/heads/main";};
+_: {
+  programs = {
+    git = {
+      enable = true;
+      userName = "Lin Xianyi";
+      userEmail = "iynaix@gmail.com";
+      difftastic = {
+        enable = true;
+        background = "dark";
       };
-      core = {
-        pager = "delta";
+      extraConfig = {
+        init = {defaultBranch = "main";};
+        branch = {
+          master = {merge = "refs/heads/master";};
+          main = {merge = "refs/heads/main";};
+        };
+        merge = {
+          conflictstyle = "diff3";
+        };
+        format = {
+          pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+        };
+        diff = {
+          tool = "nvim -d";
+          guitool = "code";
+          colorMoved = "default";
+        };
+        pull = {rebase = true;};
+        push = {default = "simple";};
       };
-      interactive = {
-        diffFilter = "delta --color-only";
-      };
-      delta = {
-        navigate = true;
-        light = false;
-        # side-by-side = true;
-      };
-      merge = {
-        conflictstyle = "diff3";
-      };
-      format = {
-        pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
-      };
-      diff = {
-        tool = "nvim -d";
-        guitool = "code";
-        colorMoved = "default";
-      };
-      pull = {rebase = true;};
-      push = {default = "simple";};
     };
+
+    lazygit.enable = true;
   };
 
   # extra git functions

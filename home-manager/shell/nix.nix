@@ -1,12 +1,12 @@
 {
+  config,
   host,
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }: let
-  dots = "/persist/home/${user}/projects/dotfiles";
+  dots = "/persist${config.home.homeDirectory}/projects/dotfiles";
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
