@@ -32,7 +32,7 @@ in {
       }
     ];
     shellAliases = {
-      ehistory = "nvim ~/.local/share/fish/fish_history";
+      ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
     };
     shellInit =
       ''
@@ -75,7 +75,7 @@ in {
   ];
 
   custom.persist = {
-    home.directories = [
+    cache = [
       ".local/share/fish"
     ];
   };

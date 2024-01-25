@@ -45,6 +45,10 @@ in
 
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
+      environment.variables = {
+        GNUPGHOME = "${config.hm.xdg.dataHome}/.gnupg";
+      };
+
       programs.gnupg.agent = {
         enable = true;
         enableSSHSupport = true;
@@ -53,9 +57,9 @@ in
       # persist keyring and misc other secrets
       custom-nixos.persist.home = {
         directories = [
-          ".gnupg"
           ".pki"
           ".ssh"
+          ".local/share/.gnupg"
           ".local/share/keyrings"
         ];
       };

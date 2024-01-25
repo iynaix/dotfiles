@@ -47,7 +47,7 @@
   };
 
   custom.persist = {
-    home.directories = [
+    cache = [
       ".local/share/zoxide"
     ];
   };

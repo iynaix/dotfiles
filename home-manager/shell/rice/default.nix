@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./cava.nix
     ./neofetch.nix
@@ -18,16 +22,19 @@
   # fastfetch --logo-color-1 34 --logo-color-2 36 --logo ~/Desktop/nix-logo.txt
 
   # create xresources
-  xresources.properties = {
-    "Xft.dpi" = 96;
-    "Xft.antialias" = true;
-    "Xft.hinting" = true;
-    "Xft.rgba" = "rgb";
-    "Xft.autohint" = false;
-    "Xft.hintstyle" = "hintslight";
-    "Xft.lcdfilter" = "lcddefault";
+  xresources = {
+    path = "${config.xdg.configHome}/.Xresources";
+    properties = {
+      "Xft.dpi" = 96;
+      "Xft.antialias" = true;
+      "Xft.hinting" = true;
+      "Xft.rgba" = "rgb";
+      "Xft.autohint" = false;
+      "Xft.hintstyle" = "hintslight";
+      "Xft.lcdfilter" = "lcddefault";
 
-    "*.font" = "JetBrainsMono Nerd Font Mono:Medium:size=12";
-    "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
+      "*.font" = "JetBrainsMono Nerd Font Mono:Medium:size=12";
+      "*.bold_font" = "JetBrainsMono Nerd Font Mono:Bold:size=12";
+    };
   };
 }

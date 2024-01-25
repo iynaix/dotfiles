@@ -52,9 +52,12 @@
   programs.home-manager.enable = true;
 
   # stop bothering me
-  xdg.configFile = {
-    "nix/nix.conf".text = "experimental-features = nix-command flakes";
-    "nixpkgs/config.nix".text = ''{ allowUnfree = true; }'';
+  xdg = {
+    enable = true;
+    configFile = {
+      "nix/nix.conf".text = "experimental-features = nix-command flakes";
+      "nixpkgs/config.nix".text = ''{ allowUnfree = true; }'';
+    };
   };
 
   custom.persist = {
