@@ -6,8 +6,8 @@
 }: let
   cfg = config.custom.ghostty;
   inherit (config.custom) terminal;
-in {
-  config = lib.mkIf cfg.enable {
+in
+  lib.mkIf cfg.enable {
     # open ghostty from nemo
     custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.ghostty) (pkgs.writeShellApplication {
       name = "gnome-terminal";
@@ -58,5 +58,4 @@ in {
       };
 
     wayland.windowManager.hyprland.settings.bind = ["$mod, q, exec, ${lib.getExe pkgs.ghostty}"];
-  };
-}
+  }

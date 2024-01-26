@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: {
-  programs.yazi = {
+  programs.yazi = assert (lib.assertMsg (pkgs.yazi.version == "0.2.1") "yazi: update with prepend_keymap"); {
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;

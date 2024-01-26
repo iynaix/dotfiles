@@ -83,8 +83,8 @@
       fi
     '';
   };
-in {
-  config = lib.mkMerge [
+in
+  lib.mkMerge [
     (lib.mkIf (!isNixOS) {
       home = {
         packages = [
@@ -121,5 +121,4 @@ in {
         ];
       };
     }
-  ];
-}
+  ]

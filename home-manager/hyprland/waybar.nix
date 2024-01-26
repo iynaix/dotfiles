@@ -6,8 +6,8 @@
   ...
 }: let
   cfg = config.custom.waybar;
-in {
-  config = lib.mkIf cfg.enable {
+in
+  lib.mkIf cfg.enable {
     programs.waybar = {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
@@ -207,5 +207,4 @@ in {
         target = "${config.xdg.configHome}/waybar/style.css";
       };
     };
-  };
-}
+  }

@@ -31,8 +31,8 @@
       notify-send "$(wl-paste)"
     '';
   };
-in {
-  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
+in
+  lib.mkIf config.wayland.windowManager.hyprland.enable {
     home.packages =
       [
         hypr-ocr
@@ -64,5 +64,4 @@ in {
         "$mod_CTRL, backslash, exec, hypr-ocr"
       ];
     };
-  };
-}
+  }

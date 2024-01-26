@@ -5,7 +5,6 @@
   user,
   ...
 }: let
-  cfg = config.custom-nixos.vercel;
   vercel-backup = pkgs.writeShellApplication {
     name = "vercel-backup";
     runtimeInputs = [pkgs.postgresql_15];
@@ -16,8 +15,8 @@
       pg_dump "$VERCEL_POSTGRES" --file="/media/6TBRED/Vercel/vercel-coinfc-$(date +%F).sql"
     '';
   };
-in {
-  config = lib.mkIf (cfg.enable && config.custom-nixos.sops.enable) {
+in
+  lib.mkIf (config.custom-nixos.vercel.enable && config.custom-nixos.sops.enable) {
     sops.secrets.vercel_postgres.owner = user;
 
     systemd = {
@@ -40,5 +39,4 @@ in {
     custom-nixos.persist.home.directories = [
       ".local/share/com.vercel.cli"
     ];
-  };
-}
+  }

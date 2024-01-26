@@ -8,8 +8,8 @@
   lock = pkgs.writeShellScriptBin "lock" ''
     sh "${config.xdg.cacheHome}/wallust/lock"
   '';
-in {
-  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
+in
+  lib.mkIf config.wayland.windowManager.hyprland.enable {
     home.packages = [lock];
 
     wayland.windowManager.hyprland.settings = {
@@ -50,5 +50,4 @@ in {
         target = "${config.xdg.cacheHome}/wallust/lock";
       };
     };
-  };
-}
+  }

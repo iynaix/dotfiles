@@ -74,8 +74,8 @@
       cd - > /dev/null
     '';
   };
-in {
-  config = lib.mkMerge [
+in
+  lib.mkMerge [
     (lib.mkIf (host == "desktop") {
       home.packages = [
         wallpapers-backup
@@ -124,5 +124,4 @@ in {
         current-wallpaper = "command cat ${config.xdg.cacheHome}/current_wallpaper";
       };
     }
-  ];
-}
+  ]

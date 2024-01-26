@@ -6,8 +6,8 @@
 }: let
   cfg = config.custom.kitty;
   inherit (config.custom) terminal;
-in {
-  config = lib.mkIf cfg.enable {
+in
+  lib.mkIf cfg.enable {
     # open kitty from nemo
     custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (pkgs.writeShellApplication {
       name = "gnome-terminal";
@@ -52,5 +52,4 @@ in {
       # change color on ssh
       ssh = "kitten ssh --kitten=color_scheme=Dracula";
     };
-  };
-}
+  }

@@ -20,8 +20,8 @@
       NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
     '';
   };
-in {
-  config = lib.mkIf config.custom-nixos.bittorrent.enable (lib.mkMerge [
+in
+  lib.mkIf config.custom-nixos.bittorrent.enable (lib.mkMerge [
     {
       services = {
         sonarr = {
@@ -72,5 +72,4 @@ in {
         };
       };
     })
-  ]);
-}
+  ])

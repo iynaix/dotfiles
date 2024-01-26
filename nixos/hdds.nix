@@ -8,8 +8,8 @@
   wdred-dataset = "zfs-wdred6-1/media";
   ironwolf = "/media/IRONWOLF22";
   ironwolf-dataset = "zfs-ironwolf22-1/media";
-in {
-  config = lib.mkIf cfg.enable {
+in
+  lib.mkIf cfg.enable {
     # non os zfs disks
     boot.zfs.extraPools =
       lib.optional cfg.ironwolf22 "zfs-ironwolf22-1"
@@ -109,5 +109,4 @@ in {
         options = ["nofail" "x-gvfs-hide"];
       };
     };
-  };
-}
+  }

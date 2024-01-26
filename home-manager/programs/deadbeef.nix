@@ -3,16 +3,13 @@
   lib,
   pkgs,
   ...
-}: let
-  cfg = config.custom.deadbeef;
-in {
-  config = lib.mkIf cfg.enable {
-    home.packages = [pkgs.deadbeef];
+}:
+lib.mkIf config.custom.deadbeef.enable {
+  home.packages = [pkgs.deadbeef];
 
-    custom.persist = {
-      home.directories = [
-        ".config/deadbeef"
-      ];
-    };
+  custom.persist = {
+    home.directories = [
+      ".config/deadbeef"
+    ];
   };
 }

@@ -6,8 +6,8 @@
 }: let
   cfg = config.custom-nixos.zfs;
   persistCfg = config.custom-nixos.persist;
-in {
-  config = lib.mkIf cfg.enable {
+in
+  lib.mkIf cfg.enable {
     boot = {
       # booting with zfs
       supportedFilesystems = ["zfs"];
@@ -93,5 +93,4 @@ in {
         };
       };
     };
-  };
-}
+  }

@@ -25,8 +25,8 @@
       mv "/tmp/yt.txt" "${yt_txt}"
     '';
   };
-in {
-  config = lib.mkIf config.custom-nixos.bittorrent.enable (lib.mkMerge [
+in
+  lib.mkIf config.custom-nixos.bittorrent.enable (lib.mkMerge [
     {
       services.transmission = {
         enable = true;
@@ -147,5 +147,4 @@ in {
 
       services.transmission.credentialsFile = config.sops.secrets.transmission_rpc.path;
     })
-  ]);
-}
+  ])
