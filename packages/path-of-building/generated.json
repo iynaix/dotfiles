@@ -13,10 +13,10 @@
             "name": null,
             "owner": "PathOfBuildingCommunity",
             "repo": "PathOfBuilding",
-            "rev": "v2.39.1",
-            "sha256": "sha256-whCCGV0hMKR5kpmS6jefvzvAQaa65B4V4bYkP4HQkIQ=",
+            "rev": "v2.39.2",
+            "sha256": "sha256-mq91nZRAnGXvBZSXvIqoRINvNnWCMRkjfryVj2EdB+8=",
             "type": "github"
         },
-        "version": "v2.39.1"
+        "version": "v2.39.2"
     }
 }

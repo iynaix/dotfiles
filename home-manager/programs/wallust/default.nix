@@ -67,10 +67,7 @@ in {
           inherit (config.custom.wallust) colorscheme;
           persistent_workspaces = config.custom.waybar.persistent-workspaces;
           waybar_hidden = config.custom.waybar.hidden;
-          neofetch = {
-            logo = "${../../shell/rice/nixos.png}";
-            conf = "${../../shell/rice/neofetch.conf}";
-          };
+          logo = "${../../shell/nixos.png}";
           # use pywal template syntax here
           special = {
             background = "{background}";

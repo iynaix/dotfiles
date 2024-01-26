@@ -1,25 +1,23 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: {
-  imports = [
-    ./cava.nix
-    ./neofetch.nix
-  ];
+  home = {
+    packages = with pkgs; [
+      cbonsai
+      cmatrix
+      fastfetch
+      imagemagick
+      nitch
+      pipes-rs
+    ];
 
-  home.packages = with pkgs; [
-    cbonsai
-    cmatrix
-    fastfetch
-    imagemagick
-    neofetch
-    nitch
-    pipes-rs
-  ];
-
-  # TODO: load ascii logo with fastfetch
-  # fastfetch --logo-color-1 34 --logo-color-2 36 --logo ~/Desktop/nix-logo.txt
+    shellAliases = {
+      neofetch = "${lib.getExe pkgs.fastfetch} --config neofetch";
+    };
+  };
 
   # create xresources
   xresources = {

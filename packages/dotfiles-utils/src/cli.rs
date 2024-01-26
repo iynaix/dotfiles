@@ -94,8 +94,17 @@ pub struct RofiMpvArgs {
 // ------------------ WAIFUFETCH ------------------
 
 #[derive(Parser, Debug)]
-#[command(name = "waifufetch", about = "Neofetch, but more waifu")]
+#[command(name = "waifufetch", about = "fetch, but more waifu")]
 pub struct WaifuFetchArgs {
-    #[arg(long, action, help = "prints path to generated image")]
-    pub image: bool,
+    #[arg(long, action, help = "show filled NixOS logo (default)")]
+    pub filled: bool,
+
+    #[arg(long, action, help = "show hollow NixOS logo")]
+    pub hollow: bool,
+
+    #[arg(long, action, help = "show waifu NixOS logo")]
+    pub waifu: bool,
+
+    #[arg(long, action, help = "image size")]
+    pub size: Option<i32>,
 }

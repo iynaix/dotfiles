@@ -11,8 +11,8 @@ use std::{
     time::Duration,
 };
 
-fn create_image(nix_info: &NixInfo) -> String {
-    let logo = &nix_info.neofetch.logo;
+fn create_image(nix_info: &NixInfo, args: &WaifuFetchArgs) -> String {
+    let logo = &nix_info.logo;
     let hexless = &nix_info.colors;
     let c4 = hexless.get("color4").expect("invalid color");
     let c6 = hexless.get("color6").expect("invalid color");
@@ -35,26 +35,39 @@ fn create_image(nix_info: &NixInfo) -> String {
     let magick_args = [
         logo, // replace color 1
         "-fuzz", "10%", "-fill", c4, "-opaque", "#5278c3", // replace color 2
-        "-fuzz", "10%", "-fill", c6, "-opaque", "#7fbae4", output,
+        "-fuzz", "10%", "-fill", c6, "-opaque", "#7fbae4",
     ];
+
+    let image_size = args.size.unwrap_or(400);
 
     Command::new("magick")
         .args(magick_args)
+        .args(["-resize", format!("{image_size}x{image_size}").as_str()])
+        .arg(output)
         .status()
         .expect("failed to execute magick");
 
     output.to_string()
 }
 
-fn waifufetch(nix_info: &NixInfo) {
-    let img = create_image(nix_info);
-    let neofetch_config = &nix_info.neofetch.conf;
+fn waifufetch(nix_info: &NixInfo, args: &WaifuFetchArgs) {
+    let img = create_image(nix_info, args);
 
-    Command::new("neofetch")
+    let mut fastfetch = Command::new("fastfetch");
+
+    // handle ascii logos
+    if args.filled {
+        fastfetch.args(["--logo", "nixos"]);
+    } else if args.hollow {
+        fastfetch.args(["--logo", "nixos_old_small"]);
+    } else {
         // ghostty supports kitty image protocol
-        .args(["--kitty", &img, "--config", neofetch_config])
-        .status()
-        .expect("failed to execute neofetch");
+        fastfetch.args(["--kitty-direct", &img]);
+    }
+
+    fastfetch.args(["--config", "neofetch"]);
+
+    fastfetch.status().expect("failed to execute fastfetch");
 }
 
 fn main() {
@@ -62,13 +75,13 @@ fn main() {
 
     let nix_info = NixInfo::after();
 
-    if args.image {
-        println!("{}", create_image(&nix_info));
-        std::process::exit(0)
-    }
-
     // initial display of waifufetch
-    waifufetch(&nix_info);
+    waifufetch(&nix_info, &args);
+
+    // not showing waifu, no need to wait for signal
+    if args.filled || args.hollow {
+        std::process::exit(0);
+    }
 
     // hide terminal cursor
     print!("\x1B[?25l");
@@ -91,7 +104,7 @@ fn main() {
                     println!("received SIGUSR2");
 
                     let nix_info = NixInfo::after();
-                    waifufetch(&nix_info);
+                    waifufetch(&nix_info, &args);
                 }
                 _ => unreachable!(),
             }

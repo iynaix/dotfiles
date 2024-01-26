@@ -2,12 +2,13 @@
   imports = [
     ./bash.nix
     ./btop.nix
+    ./cava.nix
     ./direnv.nix
     ./fish.nix
     ./git.nix
     ./neovim
     ./nix.nix
-    ./rice
+    ./rice.nix
     ./shell.nix
     ./starship.nix
     ./tmux.nix

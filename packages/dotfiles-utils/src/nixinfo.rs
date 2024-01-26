@@ -3,12 +3,6 @@ use serde::Deserialize;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Default, Deserialize)]
-pub struct Neofetch {
-    pub logo: String,
-    pub conf: String,
-}
-
-#[derive(Debug, Clone, Default, Deserialize)]
 pub struct Special {
     pub background: String,
     pub foreground: String,
@@ -26,7 +20,7 @@ pub struct NixInfo {
     pub wallpaper: String,
     pub fallback: String,
     pub colorscheme: Option<String>,
-    pub neofetch: Neofetch,
+    pub logo: String,
     pub special: Special,
     pub persistent_workspaces: bool,
     pub waybar_hidden: bool,
