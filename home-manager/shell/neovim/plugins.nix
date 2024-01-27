@@ -10,7 +10,6 @@
       fugitive.enable = true;
       gitsigns.enable = true;
       # harpoon.enable = true;
-
       lualine.enable = true;
       luasnip.enable = true;
       nvim-autopairs.enable = true;

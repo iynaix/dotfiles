@@ -24,7 +24,7 @@ rofi_cmd() {
 	rofi -dmenu \
 		-p "Goodbye ${USER}" \
 		-mesg "Uptime: $uptime" \
-		-theme @@theme@@
+		-theme @theme@
 }
 
 # Confirmation CMD

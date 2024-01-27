@@ -15,27 +15,24 @@
 
   xdg = {
     # fix mimetype associations
-    mimeApps = {
-      enable = true;
-      defaultApplications =
+    mimeApps.defaultApplications =
+      {
+        "inode/directory" = "nemo.desktop";
+        # wtf zathura registers itself to open archives
+        "application/zip" = "org.gnome.FileRoller.desktop";
+        "application/vnd.rar" = "org.gnome.FileRoller.desktop";
+        "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+      }
+      // lib.optionalAttrs config.programs.zathura.enable {
+        "application/pdf" = "org.pwmt.zathura.desktop";
+      }
+      // (lib.optionalAttrs config.programs.imv.enable
         {
-          "inode/directory" = "nemo.desktop";
-          # wtf zathura registers itself to open archives
-          "application/zip" = "org.gnome.FileRoller.desktop";
-          "application/vnd.rar" = "org.gnome.FileRoller.desktop";
-          "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
-        }
-        // lib.optionalAttrs config.programs.zathura.enable {
-          "application/pdf" = "org.pwmt.zathura.desktop";
-        }
-        // (lib.optionalAttrs config.programs.imv.enable
-          {
-            "image/jpeg" = "imv-dir.desktop";
-            "image/gif" = "imv-dir.desktop";
-            "image/webp" = "imv-dir.desktop";
-            "image/png" = "imv-dir.desktop";
-          });
-    };
+          "image/jpeg" = "imv-dir.desktop";
+          "image/gif" = "imv-dir.desktop";
+          "image/webp" = "imv-dir.desktop";
+          "image/png" = "imv-dir.desktop";
+        });
 
     # other OSes seem to override this file
     configFile = lib.mkIf (!isNixOS) {

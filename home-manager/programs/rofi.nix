@@ -38,7 +38,7 @@
   rofi-power-menu = pkgs.writeShellApplication {
     name = "rofi-power-menu";
     runtimeInputs = with pkgs; [rofi custom.rofi-themes];
-    text = lib.replaceStrings ["@@theme@@"] [
+    text = lib.replaceStrings ["@theme@"] [
       (builtins.toFile "rofi-power-menu.rasi" ((builtins.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
         + ''
           * { background-window: black/60%; } // darken background

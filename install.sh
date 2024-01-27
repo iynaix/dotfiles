@@ -100,13 +100,11 @@ sudo sgdisk -p "$DISK" > /dev/null
 sleep 5
 
 echo "Creating Swap"
-sudo mkswap "$SWAPDISK"
-sudo swaplabel --label "SWAP" "$SWAPDISK"
+sudo mkswap "$SWAPDISK" --label "SWAP"
 sudo swapon "$SWAPDISK"
 
 echo "Creating Boot Disk"
-sudo mkfs.fat -F 32 "$BOOTDISK"
-sudo fatlabel "$BOOTDISK" NIXBOOT
+sudo mkfs.fat -F 32 "$BOOTDISK" -n NIXBOOT
 
 # setup encryption
 use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")

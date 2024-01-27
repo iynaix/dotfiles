@@ -5,6 +5,7 @@
   ...
 }: let
   cfg = config.custom-nixos.persist;
+  homeDir = config.hm.home.homeDirectory;
 in {
   boot = {
     # clear /tmp on boot
@@ -32,8 +33,8 @@ in {
       ''
       + lib.optionalString (!cfg.tmpfs && cfg.erase.home) ''
         # required for home-manager to create its own profile to boot
-        ${(createOwnedDir "/home/${user}/.local/state/nix/profiles")}
-        ${"chown -R ${user}:users /home/${user}"}
+        ${(createOwnedDir "${config.hm.xdg.stateHome}/nix/profiles")}
+        ${"chown -R ${user}:users ${homeDir}"}
       '';
     wantedBy = ["multi-user.target"];
   };
@@ -44,6 +45,7 @@ in {
     fsType = "tmpfs";
     options = ["defaults" "size=1G" "mode=755"];
   });
+  # ${homeDir} causes infinite recursion
   fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
     device = "tmpfs";
     fsType = "tmpfs";
@@ -75,7 +77,7 @@ in {
   in {
     systemd.user.startServices = true;
     home.persistence = {
-      "/persist/home/${user}" = {
+      "/persist${homeDir}" = {
         allowOther = true;
         removePrefixDirectory = false;
 

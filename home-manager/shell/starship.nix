@@ -101,10 +101,4 @@
   # some sort of race condition with kitty and starship
   # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
   programs.kitty.shellIntegration.enableBashIntegration = false;
-
-  custom.persist = {
-    home.directories = [
-      ".cache/starship"
-    ];
-  };
 }

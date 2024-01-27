@@ -46,7 +46,6 @@
       smartindent = true;
       virtualedit = "block"; # allow cursor to move anywhere in visual block mode
       gdefault = true; # set global flag by default for substitute
-      swapfile = false;
       backup = false;
       # Use 4 spaces for <Tab> and :retab
       tabstop = 4;
@@ -55,6 +54,7 @@
       expandtab = true;
       shiftround = true; # round indent to multiple of 'shiftwidth' for > and < command
       # swap options
+      swapfile = false;
       directory = "/tmp";
       viewdir = "/tmp";
       undodir = "/tmp";
@@ -103,19 +103,32 @@
       genericName = "Text Editor";
       icon = "nvim";
 
-      exec = "${pkgs.writeShellScript "nvim-direnv" ''
-        filename="$(readlink -f "$1")"
-        dirname="$(dirname "$filename")"
+      exec = let
+        nvim-direnv = pkgs.writeShellApplication {
+          name = "nvim-direnv";
+          runtimeInputs = with pkgs; [
+            bash
+            direnv
+            jq
+            config.custom.terminal.package
+          ];
+          text = ''
+            filename="$(readlink -f "$1")"
+            dirname="$(dirname "$filename")"
+            has_direnv="$(direnv status --json | jq '.state.foundRC.allowed == 0 and .state.loadedRC.allowed == 0')"
 
-        ${config.custom.terminal.exec} -d "$dirname" ${lib.getExe pkgs.bash} -c "${lib.getExe pkgs.direnv} exec . nvim '$filename'"
-      ''} %f";
+            if [ "$has_direnv" = "true" ]; then
+              ${config.custom.terminal.exec} -d "$dirname" bash -c "direnv exec . nvim '$filename'"
+            else
+              ${config.custom.terminal.exec} -d "$dirname" bash -c "nvim '$filename'"
+            fi
+          '';
+        };
+      in "${lib.getExe nvim-direnv} %f";
     };
 
-    mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "text/plain" = "nvim.desktop";
-      };
+    mimeApps.defaultApplications = {
+      "text/plain" = "nvim.desktop";
     };
   };
 

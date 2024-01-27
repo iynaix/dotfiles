@@ -14,6 +14,9 @@ lib.mkMerge [
     # vim support
     programs.nixvim = {
       extraPlugins = [pkgs.vimPlugins.direnv-vim];
+      globals = {
+        direnv_silent_load = 1;
+      };
     };
 
     # silence direnv
