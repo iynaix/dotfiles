@@ -4,6 +4,7 @@
   system,
   ...
 }: let
+  repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   mkIso = nixpkgs: isoPath:
     lib.nixosSystem {
       inherit system;
@@ -15,25 +16,33 @@
               (pkgs.writeShellApplication {
                 name = "iynaixos-install";
                 runtimeInputs = [pkgs.curl];
-                text = ''sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)'';
+                text = ''sh <(curl -L ${repo_url}/main/install.sh)'';
               })
               (pkgs.writeShellApplication {
                 name = "iynaixos-recover";
                 runtimeInputs = [pkgs.curl];
-                text = ''sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)'';
+                text = ''sh <(curl -L ${repo_url}/main/recover.sh)'';
               })
               (pkgs.writeShellApplication {
                 name = "iynaixos-reinstall";
                 runtimeInputs = [pkgs.curl];
-                text = ''sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)'';
+                text = ''sh <(curl -L ${repo_url}/main/recover.sh)'';
               })
             ]
             ++ (with pkgs; [
               btop
               git
-              neovim
               yazi
             ]);
+
+          programs = {
+            # bye bye nano
+            nano.enable = false;
+            neovim = {
+              enable = true;
+              defaultEditor = true;
+            };
+          };
         })
       ];
     };
