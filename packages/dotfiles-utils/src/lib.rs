@@ -1,9 +1,9 @@
 use crate::monitor::Monitor;
 use serde::{de::DeserializeOwned, Deserialize};
-use std::path::PathBuf;
-use std::process::Command;
+use std::{env, path::PathBuf, process::Command};
 
 pub mod cli;
+pub mod fetch;
 pub mod monitor;
 pub mod nixinfo;
 pub mod wallpaper;
@@ -213,4 +213,22 @@ pub mod json {
         serde_json::to_writer(file, &data)
             .unwrap_or_else(|_| panic!("failed to write json to {path:?}"));
     }
+}
+
+pub fn asset_path(filename: &str) -> String {
+    let out_path = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| {
+        env::current_exe()
+            .expect("could not get current dir")
+            .ancestors()
+            .nth(2)
+            .expect("could not get base package dir")
+            .to_str()
+            .expect("could not convert base package dir to str")
+            .to_string()
+    }));
+    let asset = out_path.join("assets").join(filename);
+    asset
+        .to_str()
+        .unwrap_or_else(|| panic!("could not get asset {}", &filename))
+        .to_string()
 }

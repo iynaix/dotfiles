@@ -20,7 +20,6 @@ pub struct NixInfo {
     pub wallpaper: String,
     pub fallback: String,
     pub colorscheme: Option<String>,
-    pub logo: String,
     pub special: Special,
     pub persistent_workspaces: bool,
     pub waybar_hidden: bool,

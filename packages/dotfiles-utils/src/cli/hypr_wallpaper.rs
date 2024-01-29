@@ -1,56 +1,13 @@
 use clap::Parser;
 use dotfiles_utils::{
-    cli::HyprWallpaperArgs, cmd, full_path, monitor::Monitor, nixinfo::NixInfo, wallpaper, wallust,
-    WAYBAR_CLASS,
+    cli::HyprWallpaperArgs,
+    cmd, full_path,
+    monitor::Monitor,
+    nixinfo::NixInfo,
+    wallpaper::{self, WallInfo},
+    wallust, WAYBAR_CLASS,
 };
-use serde::Deserialize;
 use std::{collections::HashMap, path::Path, process::Command};
-
-#[derive(Debug, Default, Deserialize, Clone)]
-pub struct Face {
-    #[serde(rename = "0")]
-    pub xmin: u32,
-    #[serde(rename = "1")]
-    pub xmax: u32,
-    #[serde(rename = "2")]
-    pub ymin: u32,
-    #[serde(rename = "3")]
-    pub ymax: u32,
-}
-
-#[derive(Debug, Default, Deserialize, Clone)]
-pub struct WallustOptions {
-    pub check_contrast: Option<bool>,
-    pub filter: Option<String>,
-    pub saturation: Option<i32>,
-    pub threshold: Option<i32>,
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct WallInfo {
-    pub faces: Vec<Face>,
-    #[serde(rename = "1440x2560")]
-    pub r1440x2560: String,
-    #[serde(rename = "2256x1504")]
-    pub r2256x1504: String,
-    #[serde(rename = "3440x1440")]
-    pub r3440x1440: String,
-    #[serde(rename = "1920x1080")]
-    pub r1920x1080: String,
-    pub wallust: Option<WallustOptions>,
-}
-
-impl WallInfo {
-    const fn get_geometry(&self, width: i32, height: i32) -> Option<&String> {
-        match (width, height) {
-            (1440, 2560) => Some(&self.r1440x2560),
-            (2256, 1504) => Some(&self.r2256x1504),
-            (3440, 1440) => Some(&self.r3440x1440),
-            (1920, 1080) => Some(&self.r1920x1080),
-            _ => None,
-        }
-    }
-}
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
     let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
@@ -147,40 +104,7 @@ fn main() {
     if let Some(cs) = NixInfo::before().colorscheme {
         wallust::apply_theme(cs.as_str());
     } else {
-        let mut wallust_cmd = Command::new("wallust");
-
-        // normalize the options for wallust
-        if let Some(WallInfo {
-            wallust: Some(opts),
-            ..
-        }) = &wallpaper_info
-        {
-            if opts.check_contrast == Some(true) {
-                wallust_cmd.arg("--check-contrast");
-            }
-            if let Some(filter) = &opts.filter {
-                wallust_cmd.arg("--filter");
-                if matches!(
-                    filter.as_str(),
-                    // valid values for filter, ignore light values
-                    "dark" | "dark16" | "harddark" | "harddark16" | "softdark" | "softdark16"
-                ) {
-                    wallust_cmd.arg(filter);
-                }
-            }
-            if let Some(saturation) = opts.saturation {
-                wallust_cmd.arg("--saturation").arg(saturation.to_string());
-            }
-            if let Some(threshold) = opts.threshold {
-                wallust_cmd.arg("--threshold").arg(threshold.to_string());
-            }
-        }
-
-        // finally run wallust
-        wallust_cmd
-            .arg(&wallpaper)
-            .spawn()
-            .expect("failed to execute process");
+        wallust::from_wallpaper(&wallpaper_info, &wallpaper);
     }
 
     if cfg!(feature = "hyprland") {

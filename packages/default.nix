@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (pkgs) lib;
+  inherit (pkgs) lib callPackage;
   # use latest stable rust
   rustPlatform = let
     inherit (inputs.fenix.packages.${pkgs.system}.stable) toolchain;
@@ -21,34 +21,41 @@
   in
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource;});
-in {
   # rust dotfiles utils
   dotfiles-utils =
-    pkgs.callPackage ./dotfiles-utils {inherit rustPlatform;};
+    callPackage ./dotfiles-utils {inherit rustPlatform;};
+in {
+  inherit dotfiles-utils;
 
-  distro-grub-themes-nixos = pkgs.callPackage ./distro-grub-themes-nixos {};
+  distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos {};
 
   geist-font = assert (lib.assertMsg (!lib.hasAttr "geist-font" pkgs) "geist-font: geist-font is in nixpkgs");
-    pkgs.callPackage ./geist-font {};
+    callPackage ./geist-font {};
 
   # mpv plugins
-  mpv-deletefile = w pkgs.callPackage ./mpv-deletefile {};
-  mpv-dynamic-crop = w pkgs.callPackage ./mpv-dynamic-crop {};
-  mpv-modernx = w pkgs.callPackage ./mpv-modernx {} {};
-  mpv-nextfile = w pkgs.callPackage ./mpv-nextfile {};
-  mpv-sub-select = w pkgs.callPackage ./mpv-sub-select {};
-  mpv-subsearch = w pkgs.callPackage ./mpv-subsearch {};
-  mpv-thumbfast-osc = w pkgs.callPackage ./mpv-thumbfast-osc {};
+  mpv-deletefile = w callPackage ./mpv-deletefile {};
+  mpv-dynamic-crop = w callPackage ./mpv-dynamic-crop {};
+  mpv-modernx = callPackage ./mpv-modernx {
+    source = (callPackage ./mpv-modernx/generated.nix {}).mpv-modernx;
+  };
+  mpv-nextfile = w callPackage ./mpv-nextfile {};
+  mpv-sub-select = w callPackage ./mpv-sub-select {};
+  mpv-subsearch = w callPackage ./mpv-subsearch {};
+  mpv-thumbfast-osc = w callPackage ./mpv-thumbfast-osc {};
 
-  mpv-anime = w pkgs.callPackage ./mpv-anime {};
+  mpv-anime = w callPackage ./mpv-anime {};
 
   # custom version of pob with a .desktop entry, overwritten as a custom package
   # as the interaction with passthru is weird
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/path-of-building/default.nix
   path-of-building = w pkgs.qt6Packages.callPackage ./path-of-building {};
 
-  rofi-themes = w pkgs.callPackage ./rofi-themes {};
+  rofi-themes = w callPackage ./rofi-themes {};
 
   vv = assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
-    w pkgs.callPackage ./vv {};
+    w callPackage ./vv {};
+
+  wfetch = callPackage ./wfetch {
+    inherit dotfiles-utils;
+  };
 }

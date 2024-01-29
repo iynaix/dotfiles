@@ -1,7 +1,12 @@
 use rand::seq::SliceRandom;
+use serde::Deserialize;
 
-use crate::{full_path, nixinfo::NixInfo};
-use std::{fs, path::PathBuf};
+use crate::{full_path, nixinfo::NixInfo, wallust};
+use std::{
+    collections::HashMap,
+    fs,
+    path::{Path, PathBuf},
+};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
@@ -86,4 +91,68 @@ pub fn randomize_wallpapers() -> String {
     }
 
     output_dir.to_string()
+}
+
+#[derive(Debug, Default, Deserialize, Clone)]
+pub struct Face {
+    #[serde(rename = "0")]
+    pub xmin: u32,
+    #[serde(rename = "1")]
+    pub xmax: u32,
+    #[serde(rename = "2")]
+    pub ymin: u32,
+    #[serde(rename = "3")]
+    pub ymax: u32,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct WallInfo {
+    pub faces: Vec<Face>,
+    #[serde(rename = "1440x2560")]
+    pub r1440x2560: String,
+    #[serde(rename = "2256x1504")]
+    pub r2256x1504: String,
+    #[serde(rename = "3440x1440")]
+    pub r3440x1440: String,
+    #[serde(rename = "1920x1080")]
+    pub r1920x1080: String,
+    #[serde(rename = "1x1")]
+    pub r1x1: String,
+    pub wallust: Option<wallust::Options>,
+}
+
+impl WallInfo {
+    pub const fn get_geometry(&self, width: i32, height: i32) -> Option<&String> {
+        match (width, height) {
+            (1440, 2560) => Some(&self.r1440x2560),
+            (2256, 1504) => Some(&self.r2256x1504),
+            (3440, 1440) => Some(&self.r3440x1440),
+            (1920, 1080) => Some(&self.r1920x1080),
+            (1, 1) => Some(&self.r1x1),
+            _ => None,
+        }
+    }
+}
+
+/// reads the wallpaper info from wallpapers.json
+pub fn info(image: &String) -> Option<WallInfo> {
+    let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
+    if !wallpapers_json.exists() {
+        return None;
+    }
+
+    // convert image to path
+    let image = Path::new(image);
+    let fname = image
+        .file_name()
+        .expect("invalid image path")
+        .to_str()
+        .expect("could not convert image path to str");
+
+    let reader = std::io::BufReader::new(
+        std::fs::File::open(wallpapers_json).expect("could not open wallpapers.json"),
+    );
+    let mut crops: HashMap<String, WallInfo> =
+        serde_json::from_reader(reader).expect("could not parse wallpapers.json");
+    crops.remove(fname)
 }

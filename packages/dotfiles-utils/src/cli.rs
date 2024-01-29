@@ -91,19 +91,29 @@ pub struct RofiMpvArgs {
     pub media: RofiMpvMedia,
 }
 
-// ------------------ WAIFUFETCH ------------------
+// ------------------ WFETCH ------------------
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
-#[command(name = "waifufetch", about = "fetch, but more waifu")]
+#[command(name = "wfetch", about = "fetch, but more waifu")]
 pub struct WaifuFetchArgs {
-    #[arg(long, action, help = "show filled NixOS logo (default)")]
-    pub filled: bool,
-
     #[arg(long, action, help = "show hollow NixOS logo")]
     pub hollow: bool,
 
     #[arg(long, action, help = "show waifu NixOS logo")]
     pub waifu: bool,
+
+    #[arg(long, action, help = "show section of wallpaper")]
+    pub wallpaper: bool,
+
+    #[arg(long, action, help = "show challenge progress")]
+    pub challenge: bool,
+
+    #[arg(long, action, help = "do not listen for SIGUSR2")]
+    pub no_socket: bool,
+
+    #[arg(long, action, help = "do not show colored keys")]
+    pub no_color_keys: bool,
 
     #[arg(long, action, help = "image size")]
     pub size: Option<i32>,

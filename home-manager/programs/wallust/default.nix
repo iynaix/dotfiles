@@ -7,7 +7,7 @@
   cfg = config.custom.wallust;
 in {
   # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
-  home.packages = assert (lib.assertMsg (pkgs.wallust.version == "2.9.0") "wallust: update with new filters"); [pkgs.wallust];
+  home.packages = [pkgs.wallust];
 
   # wallust config
   xdg.configFile =
@@ -26,7 +26,7 @@ in {
           backend = "resized"
           color_space = "labmixed"
           threshold = ${toString cfg.threshold}
-          filter = "dark16"
+          palette = "dark16"
         ''
         # create entries
         + lib.concatStringsSep "\n" (lib.mapAttrsToList (template: {

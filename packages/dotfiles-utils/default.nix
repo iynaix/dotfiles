@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage {
     ln -s ${../../Cargo.lock} Cargo.lock
   '';
 
+  postInstall = ''
+    cp -r $src/assets $out
+  '';
+
   # create files for shell autocomplete
   nativeBuildInputs = [installShellFiles];
 
