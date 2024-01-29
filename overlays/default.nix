@@ -120,25 +120,9 @@ in {
           });
 
         # use latest commmit from git
-        waybar = let
-          version = "3.5.1";
-          catch2_3 = assert (lib.assertMsg (prev.catch2_3.version != version) "catch2: override is no longer needed");
-            prev.catch2_3.overrideAttrs (_: {
-              inherit version;
-              src = prev.fetchFromGitHub {
-                owner = "catchorg";
-                repo = "Catch2";
-                rev = "v${version}";
-                hash = "sha256-OyYNUfnu6h1+MfCF8O+awQ4Usad0qrdCtdZhYgOY+Vw=";
-              };
-            });
-        in
-          assert (lib.assertMsg (prev.waybar.version == "0.9.24") "waybar: use waybar from nixpkgs?");
-            (prev.waybar.override {inherit catch2_3;}).overrideAttrs (o:
-              sources.waybar
-              // {
-                version = "${o.version}-${sources.waybar.version}";
-              });
+        waybar = assert (lib.assertMsg (prev.waybar.version == "0.9.24") "waybar: use waybar from nixpkgs?");
+          prev.waybar.overrideAttrs (o:
+            sources.waybar // {version = "${o.version}-${sources.waybar.version}";});
       }
     )
   ];

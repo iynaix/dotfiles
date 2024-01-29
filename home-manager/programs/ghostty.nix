@@ -34,28 +34,27 @@ in
       lib.generators.toKeyValue {
         mkKeyValue = lib.generators.mkKeyValueDefault {} " = ";
         listsAsDuplicateKeys = true;
-      } {
-        # adjust-cell-height = 1;
-        background = "#000000";
-        background-opacity = terminal.opacity;
-        command =
-          if (config.custom.shell.interactive == "fish")
-          then "${lib.getExe pkgs.fish}"
-          else "${lib.getExe pkgs.bash}";
-        confirm-close-surface = false;
-        copy-on-select = true;
-        cursor-style = "bar";
-        font-family = terminal.font;
-        font-feature = "zero";
-        font-size = terminal.size;
-        font-style = "Medium";
-        minimum-contrast = 1.1;
-        # term = "xterm-kitty";
-        # theme = "catppuccin-mocha";
-        window-decoration = false;
-        window-padding-x = terminal.padding;
-        window-padding-y = terminal.padding;
-      };
+      }
+      config.custom.ghostty.config;
+
+    custom.ghostty.config = {
+      # adjust-cell-height = 1;
+      background = "#000000";
+      background-opacity = terminal.opacity;
+      confirm-close-surface = false;
+      copy-on-select = true;
+      cursor-style = "bar";
+      font-family = terminal.font;
+      font-feature = "zero";
+      font-size = terminal.size;
+      font-style = "Medium";
+      minimum-contrast = 1.1;
+      # term = "xterm-kitty";
+      # theme = "catppuccin-mocha";
+      window-decoration = false;
+      window-padding-x = terminal.padding;
+      window-padding-y = terminal.padding;
+    };
 
     wayland.windowManager.hyprland.settings.bind = ["$mod, q, exec, ${lib.getExe pkgs.ghostty}"];
   }

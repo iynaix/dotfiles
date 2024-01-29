@@ -5,7 +5,14 @@
 }: {
   options.custom = {
     deadbeef.enable = lib.mkEnableOption "deadbeef";
-    ghostty.enable = lib.mkEnableOption "ghostty";
+    ghostty = {
+      enable = lib.mkEnableOption "ghostty";
+      config = lib.mkOption {
+        type = lib.types.attrsOf lib.types.anything;
+        default = {};
+        description = "Extra ghostty configuration.";
+      };
+    };
     gradience.enable = lib.mkEnableOption "gradience";
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {default = isNixOS;};

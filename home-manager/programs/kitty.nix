@@ -41,10 +41,6 @@ in
         background_opacity = terminal.opacity;
         confirm_os_window_close = 0;
         font_features = "+zero";
-        shell =
-          if (config.custom.shell.interactive == "fish")
-          then "${lib.getExe pkgs.fish}"
-          else ".";
       };
     };
 
