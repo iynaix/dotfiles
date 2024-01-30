@@ -95,26 +95,54 @@ pub struct RofiMpvArgs {
 
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
-#[command(name = "wfetch", about = "fetch, but more waifu")]
+#[command(name = "wfetch", about = "iynaix's custom fetch")]
 pub struct WaifuFetchArgs {
     #[arg(long, action, help = "show hollow NixOS logo")]
     pub hollow: bool,
 
+    #[cfg(feature = "wfetch-waifu")]
     #[arg(long, action, help = "show waifu NixOS logo")]
     pub waifu: bool,
 
+    #[cfg(feature = "wfetch-wallpaper")]
     #[arg(long, action, help = "show section of wallpaper")]
     pub wallpaper: bool,
 
     #[arg(long, action, help = "show challenge progress")]
     pub challenge: bool,
 
+    #[arg(
+        long,
+        action,
+        default_value = "1675821503",
+        help = "start of the challenge as a UNIX timestamp in seconds"
+    )]
+    pub challenge_timestamp: i32,
+
+    #[arg(
+        long,
+        action,
+        default_value = "10",
+        help = "duration of challenge in years"
+    )]
+    pub challenge_years: u32,
+
+    #[arg(
+        long,
+        action,
+        default_value = "0",
+        help = "duration of challenge in months"
+    )]
+    pub challenge_months: u32,
+
+    #[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
     #[arg(long, action, help = "do not listen for SIGUSR2")]
-    pub no_socket: bool,
+    pub exit: bool,
 
     #[arg(long, action, help = "do not show colored keys")]
     pub no_color_keys: bool,
 
+    #[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
     #[arg(long, action, help = "image size")]
     pub size: Option<i32>,
 }

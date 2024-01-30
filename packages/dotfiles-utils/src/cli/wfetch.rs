@@ -1,5 +1,9 @@
 use clap::Parser;
-use dotfiles_utils::{cli::WaifuFetchArgs, fetch::create_fastfetch_config, nixinfo::NixInfo};
+use dotfiles_utils::{
+    cli::WaifuFetchArgs,
+    fetch::{arg_exit, arg_waifu, arg_wallpaper, create_fastfetch_config},
+    nixinfo::NixInfo,
+};
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
     iterator::Signals,
@@ -30,7 +34,7 @@ fn main() {
     wfetch(&nix_info, &args);
 
     // not showing waifu / wallpaper, no need to wait for signal
-    if args.no_socket || (!args.waifu && !args.wallpaper) {
+    if arg_exit(&args) || (!arg_waifu(&args) && !arg_wallpaper(&args)) {
         std::process::exit(0);
     }
 

@@ -8,7 +8,7 @@
 })
 .overrideAttrs (o: {
   # only build wfetch
-  cargoBuildFlags = ["--bin" "wfetch"];
+  cargoBuildFlags = ["--no-default-features" "--features" "hyprland" "--bin" "wfetch"];
 
   preFixup = ''
     installShellCompletion $releaseDir/build/dotfiles_utils-*/out/wfetch.{bash,fish}

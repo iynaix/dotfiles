@@ -37,7 +37,7 @@
     runtimeInputs = with pkgs; [rsync wallpapers-backup];
     text = ''
       wallpapers-backup
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "${wallpapers_dir}" "${user}@''${1:-${user}-framework}:${config.xdg.userDirs.download}"
+      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "${wallpapers_dir}" "${user}@''${1:-${user}-framework}:${config.xdg.userDirs.pictures}"
     '';
   };
   # process wallpapers with upscaling and vertical crop

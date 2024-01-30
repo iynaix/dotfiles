@@ -25,7 +25,7 @@ in {
       "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
         backend = "resized";
         color_space = "labmixed";
-        inherit (cfg) threshold;
+        threshold = 20;
         palette = "dark16";
         templates = lib.mapAttrs (filename: {
           target,
@@ -52,7 +52,7 @@ in {
     "nix.json" = {
       enable = true;
       text = lib.strings.toJSON {
-        wallpaper = "{wallpaper}";
+        wallpaper = "{{wallpaper}}";
         fallback = "${../../gits-catppuccin.jpg}";
         monitors = config.custom.displays;
         inherit (config.custom.wallust) colorscheme;

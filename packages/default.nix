@@ -55,6 +55,8 @@ in {
     w callPackage ./vv {};
 
   wfetch = callPackage ./wfetch {
+    # use rustPlatform from nixpkgs
+    inherit (pkgs) rustPlatform;
     inherit dotfiles-utils;
   };
 }

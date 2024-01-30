@@ -1,7 +1,7 @@
 use rand::seq::SliceRandom;
 use serde::Deserialize;
 
-use crate::{full_path, nixinfo::NixInfo, wallust};
+use crate::{full_path, nixinfo::NixInfo};
 use std::{
     collections::HashMap,
     fs,
@@ -118,7 +118,7 @@ pub struct WallInfo {
     pub r1920x1080: String,
     #[serde(rename = "1x1")]
     pub r1x1: String,
-    pub wallust: Option<wallust::Options>,
+    pub wallust: Option<String>,
 }
 
 impl WallInfo {

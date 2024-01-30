@@ -4,64 +4,6 @@ use crate::{
     cmd, cmd_output, full_path, json, nixinfo::NixInfo, wallpaper::WallInfo, CmdOutput,
     WAYBAR_CLASS,
 };
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum Backend {
-    Full,
-    #[default]
-    Resized,
-    Wal,
-    Thumb,
-    FastResize,
-    Kmeans,
-}
-
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum Colorspace {
-    #[default]
-    Lab,
-    LabMixed,
-    LabFast,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum Generation {
-    Interpolate,
-    Complementary,
-}
-
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum Palette {
-    Dark,
-    #[default]
-    Dark16,
-    HardDark,
-    HardDark16,
-    SoftDark,
-    SoftDark16,
-    DarkComp,
-    DarkComp16,
-    HardDarkComp,
-    HardDarkComp16,
-    SoftDarkComp,
-    SoftDarkComp16,
-}
-
-#[derive(Debug, Default, Deserialize, Clone)]
-pub struct Options {
-    pub backend: Option<Backend>,
-    pub colorspace: Option<Colorspace>,
-    pub check_contrast: Option<bool>,
-    pub generation: Option<Generation>,
-    pub palette: Option<Palette>,
-    pub saturation: Option<i32>,
-    pub threshold: Option<i32>,
-}
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -197,19 +139,6 @@ pub fn apply_colors() {
     // reload_gtk()
 }
 
-/// adds an argument to wallust if available
-fn add_arg<Arg>(cmd: &mut Command, name: &str, value: &Option<Arg>)
-where
-    Arg: Serialize,
-{
-    if let Some(value) = value {
-        cmd.arg(format!("--{name}"));
-        let parsed = serde_json::to_string(value)
-            .unwrap_or_else(|_| panic!("failed to serialize wallust {name}"));
-        cmd.arg(parsed);
-    }
-}
-
 /// runs wallust with options from wallpapers.json
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
     let mut wallust = Command::new("wallust");
@@ -221,15 +150,9 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         ..
     }) = wallpaper_info
     {
-        if opts.check_contrast == Some(true) {
-            wallust.arg("--check-contrast");
-        }
-        add_arg(&mut wallust, "backend", &opts.backend);
-        add_arg(&mut wallust, "colorspace", &opts.colorspace);
-        add_arg(&mut wallust, "generation", &opts.generation);
-        add_arg(&mut wallust, "palette", &opts.palette);
-        add_arg(&mut wallust, "saturation", &opts.saturation);
-        add_arg(&mut wallust, "threshold", &opts.threshold);
+        // split opts into flags
+        let opts: Vec<&str> = opts.split(' ').map(str::trim).collect();
+        wallust.args(opts);
     }
 
     wallust
