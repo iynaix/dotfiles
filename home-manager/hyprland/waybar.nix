@@ -40,10 +40,10 @@ in
             on-scroll-up = "shift_up";
           };
           format = {
-            days = "<span color='{color4}'><b>{}</b></span>";
-            months = "<span color='{foreground}'><b>{}</b></span>";
-            today = "<span color='{color3}'><b><u>{}</u></b></span>";
-            weekdays = "<span color='{color5}'><b>{}</b></span>";
+            days = "<span color='{{color4}}'><b>{}</b></span>";
+            months = "<span color='{{foreground}}'><b>{}</b></span>";
+            today = "<span color='{{color3}}'><b><u>{}</u></b></span>";
+            weekdays = "<span color='{{color5}}'><b>{}</b></span>";
           };
           mode = "year";
           mode-mon-col = 3;
@@ -128,23 +128,23 @@ in
       };
     };
 
-    custom.wallust.entries = {
+    custom.wallust.templates = {
       "waybar.jsonc" = {
         inherit (cfg) enable;
-        text = builtins.toJSON cfg.config;
+        text = lib.strings.toJSON cfg.config;
         target = "${config.xdg.configHome}/waybar/config";
       };
       "waybar.css" = let
         baseModuleCss = ''
           font-family: ${config.custom.fonts.regular};
           font-weight: bold;
-          color: {foreground};
+          color: {{foreground}};
           transition: none;
           text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
           border-bottom:  2px solid transparent;
         '';
         mkModuleCss = arr: let
-          last = builtins.length arr - 1;
+          last = lib.length arr - 1;
         in
           lib.concatStringsSep "\n" (
             lib.imap0 (i: mod: let
@@ -200,7 +200,7 @@ in
 
           #workspaces button.active {
             margin-right: 4px;
-            border-bottom:  2px solid {foreground};
+            border-bottom:  2px solid {{foreground}};
             background-color: rgba(255,255,255, 0.25);
           }
         '';

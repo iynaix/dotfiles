@@ -1,12 +1,13 @@
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }: {
   home.packages = [pkgs.cava];
 
-  custom.wallust.entries.cava = {
-    enable = builtins.elem pkgs.cava config.home.packages;
+  custom.wallust.templates.cava = {
+    enable = lib.elem pkgs.cava config.home.packages;
     text = ''
       ## Configuration file for CAVA. Default values are commented out. Use either ';' or '#' for commenting.
 
@@ -121,12 +122,12 @@
       # background = '#191724'
       gradient = 1
       gradient_count = 6
-      gradient_color_1 = '{color3}'
-      gradient_color_2 = '{color4}'
-      gradient_color_3 = '{color5}'
-      gradient_color_4 = '{color1}'
-      gradient_color_5 = '{color2}'
-      gradient_color_6 = '{color7}'
+      gradient_color_1 = '{{color3}}'
+      gradient_color_2 = '{{color4}}'
+      gradient_color_3 = '{{color5}}'
+      gradient_color_4 = '{{color1}}'
+      gradient_color_5 = '{{color2}}'
+      gradient_color_6 = '{{color7}}'
     '';
     target = "${config.xdg.configHome}/cava/config";
   };

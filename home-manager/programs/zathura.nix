@@ -26,38 +26,38 @@
     };
   };
 
-  custom.wallust.entries.zathurarc = {
+  custom.wallust.templates.zathurarc = {
     inherit (config.programs.zathura) enable;
     text = ''
-      set default-bg                  "{color0}"
-      set default-fg                  "{color10}"
+      set default-bg                  "{{color0}}"
+      set default-fg                  "{{color10}}"
 
-      set statusbar-fg                "{color10}"
-      set statusbar-bg                "{color0}"
+      set statusbar-fg                "{{color10}}"
+      set statusbar-bg                "{{color0}}"
 
-      set inputbar-bg                 "{color0}"
-      set inputbar-fg                 "{color15}"
+      set inputbar-bg                 "{{color0}}"
+      set inputbar-fg                 "{{color15}}"
 
-      set notification-bg             "{color0}"
-      set notification-fg             "{color15}"
+      set notification-bg             "{{color0}}"
+      set notification-fg             "{{color15}}"
 
-      set notification-error-bg       "{color0}"
-      set notification-error-fg       "{color1}"
+      set notification-error-bg       "{{color0}}"
+      set notification-error-fg       "{{color1}}"
 
-      set notification-warning-bg     "{color0}"
-      set notification-warning-fg     "{color1}"
+      set notification-warning-bg     "{{color0}}"
+      set notification-warning-fg     "{{color1}}"
 
-      set highlight-color             "{color3}"
-      set highlight-active-color      "{color4}"
+      set highlight-color             "{{color3}}"
+      set highlight-active-color      "{{color4}}"
 
-      set completion-bg               "{color10}"
-      set completion-fg               "{color4}"
+      set completion-bg               "{{color10}}"
+      set completion-fg               "{{color4}}"
 
-      set completion-highlight-fg     "{color15}"
-      set completion-highlight-bg     "{color4}"
+      set completion-highlight-fg     "{{color15}}"
+      set completion-highlight-bg     "{{color4}}"
 
-      set recolor-lightcolor          "{color0}"
-      set recolor-darkcolor           "{color15}"
+      set recolor-lightcolor          "{{color0}}"
+      set recolor-darkcolor           "{{color15}}"
 
       set recolor                     "false"
       set recolor-keephue             "false"

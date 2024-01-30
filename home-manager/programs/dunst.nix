@@ -6,7 +6,7 @@ in {
     configFile = "${config.xdg.cacheHome}/wallust/dunstrc";
   };
 
-  custom.wallust.entries.dunstrc = {
+  custom.wallust.templates.dunstrc = {
     inherit (config.services.dunst) enable;
     text = ''
       [global]
@@ -16,7 +16,7 @@ in {
       ellipsize="end"
       follow="mouse"
       font="${config.custom.fonts.regular} Regular 12"
-      frame_color="{background}"
+      frame_color="{{background}}"
       frame_width=0
       horizontal_padding=10
       icon_path="${config.services.dunst.settings.global.icon_path}"
@@ -24,23 +24,23 @@ in {
       mouse_left_click="do_action"
       mouse_middle_click="do_action"
       mouse_right_click="close_current"
-      separator_color="{color7}"
+      separator_color="{{color7}}"
       separator_height=1
       show_indicators="no"
 
       [urgency_critical]
-      background="{color1}"
-      foreground="{foreground}"
+      background="{{color1}}"
+      foreground="{{foreground}}"
       timeout=0
 
       [urgency_low]
-      background="{background}${opacity}"
-      foreground="{foreground}"
+      background="{{background}}${opacity}"
+      foreground="{{foreground}}"
       timeout=10
 
       [urgency_normal]
-      background="{background}${opacity}"
-      foreground="{foreground}"
+      background="{{background}}${opacity}"
+      foreground="{{foreground}}"
       timeout=10
     '';
     target = "${config.xdg.cacheHome}/wallust/dunstrc";

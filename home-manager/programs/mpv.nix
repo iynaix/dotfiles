@@ -7,7 +7,7 @@
 }: {
   xdg.configFile = {
     "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
-    "mpv/script-opts/sub-select.json".text = builtins.toJSON [
+    "mpv/script-opts/sub-select.json".text = lib.strings.toJSON [
       {
         alang = "jpn";
         slang = ["en" "eng"];

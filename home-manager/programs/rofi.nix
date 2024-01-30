@@ -16,19 +16,19 @@
     then ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
     else ''
       * {
-          background:     {background};
-          background-alt: {color0};
-          foreground:     {foreground};
-          selected:       {color4};
-          active:         {color6};
-          urgent:         {color1};
+          background:     {{background}};
+          background-alt: {{color0}};
+          foreground:     {{foreground}};
+          selected:       {{color4}};
+          active:         {{color6}};
+          urgent:         {{color1}};
       }
     '';
 
   # replace the imports with preset theme / wallust
   fixupRofiThemesRasi = rasiPath: additionalStyles: ''
     ${themeStyles}
-    ${lib.replaceStrings ["@import"] ["// @import"] (builtins.readFile rasiPath)}
+    ${lib.replaceStrings ["@import"] ["// @import"] (lib.readFile rasiPath)}
     window {
       width: ${toString cfg.width}px;
     }
@@ -39,12 +39,12 @@
     name = "rofi-power-menu";
     runtimeInputs = with pkgs; [rofi custom.rofi-themes];
     text = lib.replaceStrings ["@theme@"] [
-      (builtins.toFile "rofi-power-menu.rasi" ((builtins.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
+      (builtins.toFile "rofi-power-menu.rasi" ((lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
         + ''
           * { background-window: black/60%; } // darken background
           window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
         ''))
-    ] (builtins.readFile ./rofi-power-menu.sh);
+    ] (lib.readFile ./rofi-power-menu.sh);
   };
 in {
   programs.rofi = {
@@ -80,7 +80,7 @@ in {
     ];
   };
 
-  custom.wallust.entries = {
+  custom.wallust.templates = {
     # default launcher
     "rofi.rasi" = {
       inherit (config.programs.rofi) enable;

@@ -61,7 +61,7 @@
 
         modules = homeManagerImports ++ [../overlays];
       };
-  all_hosts = builtins.listToAttrs (map (host: {
+  all_hosts = lib.listToAttrs (map (host: {
     name =
       if isNixOS
       then host

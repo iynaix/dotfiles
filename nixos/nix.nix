@@ -120,7 +120,7 @@
     runtimeInputs = with pkgs; [hjson alejandra];
     text = ''
       json=$(cat - | hjson -j 2> /dev/null)
-      nix eval --expr "builtins.fromJSON '''$json'''" | alejandra -q
+      nix eval --expr "lib.strings.fromJSON '''$json'''" | alejandra -q
     '';
   };
   yaml2nix = pkgs.writeShellApplication {
@@ -128,7 +128,7 @@
     runtimeInputs = with pkgs; [yq alejandra];
     text = ''
       yaml=$(cat - | yq)
-      nix eval --expr "builtins.fromJSON '''$yaml'''" | alejandra -q
+      nix eval --expr "lib.strings.fromJSON '''$yaml'''" | alejandra -q
     '';
   };
   # create an fhs environment to run downloaded binaries

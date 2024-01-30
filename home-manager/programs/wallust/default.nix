@@ -5,6 +5,7 @@
   ...
 }: let
   cfg = config.custom.wallust;
+  tomlFormat = pkgs.formats.toml {};
 in {
   # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
   home.packages = [pkgs.wallust];
@@ -21,76 +22,55 @@ in {
       "wallust/tokyo-night.json".source = ./tokyo-night.json;
 
       # wallust config
-      "wallust/wallust.toml".text =
-        ''
-          backend = "resized"
-          color_space = "labmixed"
-          threshold = ${toString cfg.threshold}
-          palette = "dark16"
-        ''
-        # create entries
-        + lib.concatStringsSep "\n" (lib.mapAttrsToList (template: {
+      "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
+        backend = "resized";
+        color_space = "labmixed";
+        inherit (cfg) threshold;
+        palette = "dark16";
+        templates = lib.mapAttrs (filename: {
           target,
           enable,
           ...
         }:
-          if enable
-          then ''
-            [[entry]]
-            template = "${template}"
-            target = "${target}"
-          ''
-          else "")
-        cfg.entries);
+          lib.optionalAttrs enable {
+            inherit target;
+            template = filename;
+            new_engine = true;
+          })
+        cfg.templates;
+      };
     }
+    # set xdg configFile text and on change for wallust templates
     // lib.mapAttrs' (
-      template: {
-        text,
-        onChange,
-        ...
-      }:
-        lib.nameValuePair "wallust/${template}" {
-          inherit text onChange;
-        }
+      template: {text, ...}:
+        lib.nameValuePair "wallust/${template}" {inherit text;}
     )
-    cfg.entries;
+    cfg.templates;
 
-  custom.wallust.entries = {
+  custom.wallust.templates = {
     # misc information for nix
     "nix.json" = {
       enable = true;
-      text = builtins.toJSON {
+      text = lib.strings.toJSON {
         wallpaper = "{wallpaper}";
         fallback = "${../../gits-catppuccin.jpg}";
         monitors = config.custom.displays;
         inherit (config.custom.wallust) colorscheme;
         persistent_workspaces = config.custom.waybar.persistent-workspaces;
         waybar_hidden = config.custom.waybar.hidden;
-        logo = "${../../shell/nixos.png}";
         # use pywal template syntax here
         special = {
-          background = "{background}";
-          foreground = "{foreground}";
-          cursor = "{cursor}";
+          background = "{{background}}";
+          foreground = "{{foreground}}";
+          cursor = "{{cursor}}";
         };
-        colors = {
-          color0 = "{color0}";
-          color1 = "{color1}";
-          color2 = "{color2}";
-          color3 = "{color3}";
-          color4 = "{color4}";
-          color5 = "{color5}";
-          color6 = "{color6}";
-          color7 = "{color7}";
-          color8 = "{color8}";
-          color9 = "{color9}";
-          color10 = "{color10}";
-          color11 = "{color11}";
-          color12 = "{color12}";
-          color13 = "{color13}";
-          color14 = "{color14}";
-          color15 = "{color15}";
-        };
+        colors = lib.pipe (lib.range 0 15) [
+          (map (i: {
+            name = "color${toString i}";
+            value = "{{color${toString i}}}";
+          }))
+          lib.listToAttrs
+        ];
       };
       target = "${config.xdg.cacheHome}/wallust/nix.json";
     };

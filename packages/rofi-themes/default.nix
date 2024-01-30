@@ -6,6 +6,8 @@
 }:
 stdenvNoCC.mkDerivation (source
   // {
+    version = "unstable-${source.date}";
+
     buildInputs = [(nerdfonts.override {fonts = ["JetBrainsMono" "Iosevka"];})];
 
     installPhase = ''

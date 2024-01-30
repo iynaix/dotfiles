@@ -34,13 +34,13 @@
         default = 20;
       };
 
-      entries = lib.mkOption {
+      templates = lib.mkOption {
         type = attrsOf (submodule {
           options = {
             enable = lib.mkOption {
               type = bool;
               default = false;
-              description = "Enable this entry";
+              description = "Enable this template";
             };
             text = lib.mkOption {
               type = str;
@@ -50,16 +50,11 @@
               type = str;
               description = "Absolute path to the file to write the template (after templating), e.g. ~/.config/dunst/dunstrc";
             };
-            onChange = lib.mkOption {
-              type = str;
-              description = "Shell commands to run when file has changed between generations. The script will be run after the new files have been linked into place.";
-              default = "";
-            };
           };
         });
         default = [];
         description = ''
-          Example entries, which are just a file you wish to apply `wallust` generated colors to.
+          Example templates, which are just a file you wish to apply `wallust` generated colors to.
           template = "dunstrc"
         '';
       };

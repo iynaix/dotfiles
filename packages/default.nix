@@ -17,13 +17,12 @@
   # https://github.com/viperML/dotfiles/blob/master/packages/default.nix
   w = _callPackage: path: extraOverrides: let
     sources = pkgs.callPackages (path + "/generated.nix") {};
-    firstSource = builtins.head (builtins.attrValues sources);
+    firstSource = lib.head (lib.attrValues sources);
   in
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource;});
   # rust dotfiles utils
-  dotfiles-utils =
-    callPackage ./dotfiles-utils {inherit rustPlatform;};
+  dotfiles-utils = callPackage ./dotfiles-utils {inherit rustPlatform;};
 in {
   inherit dotfiles-utils;
 
