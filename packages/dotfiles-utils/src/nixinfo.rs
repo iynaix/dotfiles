@@ -22,7 +22,6 @@ pub struct NixInfo {
     pub colorscheme: Option<String>,
     pub special: Special,
     pub persistent_workspaces: bool,
-    pub waybar_hidden: bool,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,

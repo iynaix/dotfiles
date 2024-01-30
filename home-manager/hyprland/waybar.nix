@@ -57,6 +57,23 @@ in
         tooltip-format = "<tt><small>{calendar}</small></tt>";
       };
 
+      "custom/nix" = {
+        format = "󱄅";
+        on-click = "hypr-wallpaper";
+        on-click-right = "imv-wallpaper";
+        tooltip = false;
+      };
+
+      "hyprland/workspaces" = {
+        # TODO: pacman, remove active inverse circle
+        # format = "{icon}";
+        # format-icons = {
+        #   active = "󰮯";
+        #   default = "·";
+        #   urgent = "󰊠";
+        # };
+      };
+
       "hyprland/window" = {
         rewrite = {
           # strip the application name
@@ -110,22 +127,7 @@ in
         tooltip = false;
       };
 
-      "hyprland/workspaces" = {
-        # TODO: pacman, remove active inverse circle
-        # format = "{icon}";
-        # format-icons = {
-        #   active = "󰮯";
-        #   default = "·";
-        #   urgent = "󰊠";
-        # };
-      };
-
-      "custom/nix" = {
-        format = "󱄅";
-        on-click = "hypr-wallpaper";
-        on-click-right = "imv-wallpaper";
-        tooltip = false;
-      };
+      start_hidden = cfg.hidden;
     };
 
     custom.wallust.templates = {

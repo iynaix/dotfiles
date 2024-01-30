@@ -53,7 +53,6 @@ in {
       # https://github.com/Horus645/swww/issues/144
       "sleep 1; swww init && hypr-wallpaper"
 
-      # start waybar hidden if enabled
       "sleep 5 && launch-waybar"
 
       # fix gparted "cannot open display: :0" error

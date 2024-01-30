@@ -57,7 +57,6 @@ in {
         monitors = config.custom.displays;
         inherit (config.custom.wallust) colorscheme;
         persistent_workspaces = config.custom.waybar.persistent-workspaces;
-        waybar_hidden = config.custom.waybar.hidden;
         # use pywal template syntax here
         special = {
           background = "{{background}}";

@@ -36,15 +36,4 @@ fn main() {
     Command::new("waybar")
         .spawn()
         .expect("failed to execute waybar");
-
-    if NixInfo::before().waybar_hidden {
-        std::thread::sleep(std::time::Duration::from_millis(500));
-
-        // hide waybar via SIGUSR1
-        Command::new("killall")
-            .arg("-SIGUSR1")
-            .arg(WAYBAR_CLASS)
-            .status()
-            .expect("Failed to execute killall");
-    }
 }
