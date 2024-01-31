@@ -7,11 +7,6 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,41 +78,7 @@
 
     # devenv for working on dotfiles, provides rust environment
     devShells = forAllSystems (pkgs: {
-      default = inputs.devenv.lib.mkShell {
-        inherit inputs pkgs;
-        modules = [
-          ({pkgs, ...}: {
-            # devenv configuration
-            packages = [pkgs.alejandra];
-
-            languages.nix.enable = true;
-            languages.rust = {
-              enable = true;
-              channel = "stable";
-            };
-
-            pre-commit = {
-              hooks = {
-                alejandra = {
-                  enable = true;
-                  excludes = ["generated.nix"];
-                };
-                deadnix = {
-                  enable = true;
-                  excludes = ["generated.nix"];
-                };
-                statix = {
-                  enable = true;
-                  excludes = ["generated.nix"];
-                };
-              };
-              settings = {
-                deadnix.edit = true;
-              };
-            };
-          })
-        ];
-      };
+      default = import ./devenv.nix {inherit inputs pkgs;};
     });
 
     packages = forAllSystems (

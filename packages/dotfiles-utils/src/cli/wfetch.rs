@@ -1,40 +1,52 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::WaifuFetchArgs,
-    fetch::{arg_exit, arg_waifu, arg_wallpaper, create_fastfetch_config},
-    nixinfo::NixInfo,
+    fetch::{
+        arg_exit, arg_waifu, arg_wallpaper, arg_wallpaper_ascii, create_fastfetch_config,
+        show_wallpaper_ascii,
+    },
 };
+use execute::Execute;
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
     iterator::Signals,
 };
-use std::process::Command;
 use std::{
     io::{self, Write},
     thread,
     time::Duration,
 };
 
-fn wfetch(nix_info: &NixInfo, args: &WaifuFetchArgs) {
-    let mut fastfetch = Command::new("fastfetch");
-
+fn wfetch(args: &WaifuFetchArgs) {
     let config_jsonc = "/tmp/wfetch.jsonc";
-    create_fastfetch_config(args, nix_info, config_jsonc);
-    fastfetch.args(["--config", config_jsonc]);
+    create_fastfetch_config(args, config_jsonc);
 
-    fastfetch.status().expect("failed to execute fastfetch");
+    let mut fastfetch =
+        execute::command_args!("fastfetch", "--hide-cursor", "--config", config_jsonc);
+
+    if arg_wallpaper_ascii(args) {
+        show_wallpaper_ascii(args, &mut fastfetch);
+    } else {
+        fastfetch
+            .execute_output()
+            .expect("failed to execute fastfetch");
+    }
 }
 
 fn main() {
     let args = WaifuFetchArgs::parse();
 
-    let nix_info = NixInfo::after();
+    // clear screen
+    print!("\x1B[2J\x1B[1;1H");
+    io::stdout().flush().expect("Failed to flush stdout");
 
     // initial display of wfetch
-    wfetch(&nix_info, &args);
+    wfetch(&args);
 
     // not showing waifu / wallpaper, no need to wait for signal
-    if arg_exit(&args) || (!arg_waifu(&args) && !arg_wallpaper(&args)) {
+    if arg_exit(&args)
+        || (!arg_waifu(&args) && !arg_wallpaper(&args) && !arg_wallpaper_ascii(&args))
+    {
         std::process::exit(0);
     }
 
@@ -56,8 +68,7 @@ fn main() {
                     std::process::exit(0);
                 }
                 SIGUSR2 => {
-                    let nix_info = NixInfo::after();
-                    wfetch(&nix_info, &args);
+                    wfetch(&args);
                 }
                 _ => unreachable!(),
             }

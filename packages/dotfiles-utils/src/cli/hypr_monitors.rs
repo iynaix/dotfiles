@@ -1,5 +1,6 @@
 use clap::Parser;
-use dotfiles_utils::{cli::HyprMonitorArgs, cmd, hypr, monitor::Monitor, nixinfo::NixInfo};
+use dotfiles_utils::{cli::HyprMonitorArgs, hypr, monitor::Monitor, nixinfo::NixInfo};
+use execute::Execute;
 
 fn main() {
     let args = HyprMonitorArgs::parse();
@@ -42,5 +43,7 @@ fn main() {
     ]);
 
     // reload wallpaper
-    cmd(["hypr-wallpaper", "--reload"]);
+    execute::command!("hypr-wallpaper --reload")
+        .execute()
+        .expect("failed to reload wallpaper");
 }

@@ -1,8 +1,10 @@
-use dotfiles_utils::{cmd, full_path, json, monitor::Monitor, nixinfo::NixInfo, WAYBAR_CLASS};
-use std::process::Command;
+use dotfiles_utils::{full_path, json, monitor::Monitor, nixinfo::NixInfo, WAYBAR_CLASS};
+use execute::Execute;
 
 fn main() {
-    cmd(["killall", "-q", WAYBAR_CLASS]);
+    execute::command_args!("killall", "-q", WAYBAR_CLASS)
+        .execute()
+        .expect("failed to kill waybar");
 
     // add / remove persistent workspaces config to waybar config before launching
     let config_path = full_path("~/.config/waybar/config");
@@ -33,7 +35,7 @@ fn main() {
     }
 
     // open waybar in the background
-    Command::new("waybar")
-        .spawn()
+    execute::command!("waybar")
+        .execute()
         .expect("failed to execute waybar");
 }

@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::{RofiMpvArgs, RofiMpvMedia},
-    cmd_output, full_path, CmdOutput,
+    full_path, CommandUtf8,
 };
 use std::{
     fs::read_to_string,
@@ -62,17 +62,15 @@ fn get_start_time(content: &str) -> f32 {
 
 /// gets the duration of a video in seconds
 fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
-    let ffmpeg = cmd_output(
-        [
-            "ffmpeg",
-            "-i",
-            vid_path
-                .as_ref()
-                .to_str()
-                .expect("could not convert video path to str"),
-        ],
-        &CmdOutput::Stderr,
-    );
+    let ffmpeg = execute::command_args!(
+        "ffmpeg",
+        "-i",
+        vid_path
+            .as_ref()
+            .to_str()
+            .expect("could not convert video path to str"),
+    )
+    .execute_stderr_lines();
     let duration = ffmpeg
         .iter()
         .find(|line| line.contains("Duration: "))

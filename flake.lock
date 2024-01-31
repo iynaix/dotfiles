@@ -21,27 +21,6 @@
         "type": "github"
       }
     },
-    "fenix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-analyzer-src": "rust-analyzer-src"
-      },
-      "locked": {
-        "lastModified": 1706682087,
-        "narHash": "sha256-9AQQhjTRcVlqwOxM8im6wR+vDT1N0efUX7pvAyfAzLE=",
-        "owner": "nix-community",
-        "repo": "fenix",
-        "rev": "7e29c0af8b70147f1f23c1387a0d774209889d1b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "fenix",
-        "type": "github"
-      }
-    },
     "firefox-addons": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -51,11 +30,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1706647585,
-        "narHash": "sha256-HwAWgXIUn0a2FIS5Mye0sAZj1BZ4++YKWzIPM7coFjs=",
+        "lastModified": 1706771346,
+        "narHash": "sha256-otIEjJTT/DbN3O0m63/hPt2hOKcly73JLTFJuUCzT9Q=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "9343a32ef3fc2d3be2f3c5266a09c63cc5019438",
+        "rev": "48373ddc7f0e125078cc138d70b5982a85fc82f4",
         "type": "gitlab"
       },
       "original": {
@@ -258,11 +237,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1706652300,
-        "narHash": "sha256-YsK5kgYytRM66OtVwqEGfQaAGVPjodG8OnL75g1ODiA=",
+        "lastModified": 1706757068,
+        "narHash": "sha256-YT3PKl1017fY10hUS7JnbnWJI7JggLdPXSJ2skQebF0=",
         "ref": "refs/heads/main",
-        "rev": "b8422717d32e1740f48fe9b534da30535abf8a86",
-        "revCount": 4877,
+        "rev": "1647115b1ffd26ba28810c9829142163c829e2ec",
+        "revCount": 4893,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -344,11 +323,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1706473109,
-        "narHash": "sha256-iyuAvpKTsq2u23Cr07RcV5XlfKExrG8gRpF75hf1uVc=",
+        "lastModified": 1706746258,
+        "narHash": "sha256-9iNK1cP/dxCFh1NYVLJHijoJxlT3bXxTQToMDNZtjzU=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d634c3abafa454551f2083b054cd95c3f287be61",
+        "rev": "2db6a2a42930ffff0ffd690dec3f2c0b6f4fe66d",
         "type": "github"
       },
       "original": {
@@ -576,11 +555,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1706182238,
-        "narHash": "sha256-Ti7CerGydU7xyrP/ow85lHsOpf+XMx98kQnPoQCSi1g=",
+        "lastModified": 1706781693,
+        "narHash": "sha256-a0PuIeh+hUXXWWQWQ1wFWyNsCiUUCFKVXSUiHpyxlVQ=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "f84eaffc35d1a655e84749228cde19922fcf55f1",
+        "rev": "83ce5906a5b9a798ef2e653ddc12491c1b9e9929",
         "type": "github"
       },
       "original": {
@@ -848,7 +827,6 @@
     "root": {
       "inputs": {
         "devenv": "devenv",
-        "fenix": "fenix",
         "firefox-addons": "firefox-addons",
         "ghostty": "ghostty",
         "home-manager": "home-manager",
@@ -860,23 +838,6 @@
         "nixpkgs-stable": "nixpkgs-stable_3",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix"
-      }
-    },
-    "rust-analyzer-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1706641601,
-        "narHash": "sha256-/4U323L9F6wlBGvGBoE3+D6Af+dLJA+mq0QXbuNxohc=",
-        "owner": "rust-lang",
-        "repo": "rust-analyzer",
-        "rev": "9a832c47e85e94496e10e1e81636d3d89afeb0d4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rust-lang",
-        "ref": "nightly",
-        "repo": "rust-analyzer",
-        "type": "github"
       }
     },
     "sops-nix": {

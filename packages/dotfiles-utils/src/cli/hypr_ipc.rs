@@ -1,4 +1,5 @@
-use dotfiles_utils::{cmd, hypr, hypr_json, monitor::Monitor};
+use dotfiles_utils::{hypr, hypr_json, monitor::Monitor};
+use execute::Execute;
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
@@ -70,7 +71,11 @@ fn main() {
 
         match ev {
             // different handling for desktop and laptops is done within hypr-monitors
-            "monitoradded" => cmd(["hypr-monitors"]),
+            "monitoradded" => {
+                execute::command!("hypr-monitors")
+                    .execute()
+                    .expect("failed to run hypr-monitors");
+            }
             "monitorremoved" => {
                 if is_desktop {
                     let rearranged_workspaces = Monitor::rearranged_workspaces();

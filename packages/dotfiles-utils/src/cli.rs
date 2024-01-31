@@ -108,6 +108,10 @@ pub struct WaifuFetchArgs {
     #[arg(long, action, help = "show section of wallpaper")]
     pub wallpaper: bool,
 
+    #[cfg(feature = "wfetch-wallpaper")]
+    #[arg(long, action, help = "show section of wallpaper in ascii")]
+    pub wallpaper_ascii: bool,
+
     #[arg(long, action, help = "show challenge progress")]
     pub challenge: bool,
 

@@ -1,17 +1,5 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   inherit (pkgs) lib callPackage;
-  # use latest stable rust
-  rustPlatform = let
-    inherit (inputs.fenix.packages.${pkgs.system}.stable) toolchain;
-  in
-    pkgs.makeRustPlatform {
-      cargo = toolchain;
-      rustc = toolchain;
-    };
   # injects a source parameter from nvfetcher
   # adapted from viperML's config
   # https://github.com/viperML/dotfiles/blob/master/packages/default.nix
@@ -22,7 +10,7 @@
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource;});
   # rust dotfiles utils
-  dotfiles-utils = callPackage ./dotfiles-utils {inherit rustPlatform;};
+  dotfiles-utils = callPackage ./dotfiles-utils {};
 in {
   inherit dotfiles-utils;
 
@@ -54,9 +42,5 @@ in {
   vv = assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
     w callPackage ./vv {};
 
-  wfetch = callPackage ./wfetch {
-    # use rustPlatform from nixpkgs
-    inherit (pkgs) rustPlatform;
-    inherit dotfiles-utils;
-  };
+  wfetch = callPackage ./wfetch {inherit dotfiles-utils;};
 }

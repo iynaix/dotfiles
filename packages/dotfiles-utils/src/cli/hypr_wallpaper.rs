@@ -1,13 +1,14 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    cmd, full_path,
+    full_path,
     monitor::Monitor,
     nixinfo::NixInfo,
     wallpaper::{self, WallInfo},
     wallust, WAYBAR_CLASS,
 };
-use std::{collections::HashMap, path::Path, process::Command};
+use execute::Execute;
+use std::{collections::HashMap, path::Path};
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
     let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
@@ -41,32 +42,31 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
             Some(info) => Monitor::monitors().iter().for_each(|m| {
                 match info.get_geometry(m.width, m.height) {
                     Some(geometry) => {
-                        // use custom swww-crop defined in wallpaper.nix
-                        Command::new("swww-crop")
-                            .arg(image)
-                            .arg(geometry)
-                            .arg(&m.name)
-                            .args(swww_args)
-                            .spawn()
+                        let mut imagemagick =
+                            execute::command_args!("convert", image, "-crop", geometry, "-");
+
+                        let mut swww = execute::command_args!("swww", "img");
+                        swww.args(["--outputs", &m.name]).args(swww_args).arg("-");
+
+                        imagemagick
+                            .execute_multiple(&mut [&mut swww])
                             .expect("failed to set wallpaper");
                     }
                     None => {
-                        Command::new("swww")
-                            .arg("img")
+                        execute::command_args!("swww", "img")
                             .args(swww_args)
                             .arg(image)
-                            .spawn()
-                            .expect("failed to execute process");
+                            .execute()
+                            .expect("failed to set wallpaper");
                     }
                 }
             }),
             _ => {
-                Command::new("swww")
-                    .arg("img")
+                execute::command_args!("swww", "img")
                     .args(swww_args)
                     .arg(image)
-                    .spawn()
-                    .expect("failed to execute process");
+                    .execute()
+                    .expect("failed to set wallpaper");
             }
         }
     };
@@ -110,7 +110,9 @@ fn main() {
     if cfg!(feature = "hyprland") {
         if args.reload {
             swww_crop(&[], &wallpaper, &wallpaper_info);
-            cmd(["killall", "-SIGUSR2", WAYBAR_CLASS]);
+            execute::command_args!("killall", "-SIGUSR2", WAYBAR_CLASS)
+                .execute()
+                .expect("could not reload waybar");
         } else {
             swww_crop(
                 &["--transition-type", &args.transition_type],

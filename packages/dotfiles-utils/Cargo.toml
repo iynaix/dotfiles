@@ -49,6 +49,7 @@ path = "src/cli/wfetch.rs"
 chrono = "0.4.33"
 clap = { version = "4.4.4", features = ["derive", "string"] }
 dirs = "5.0.1"
+execute = "0.2.13"
 gethostname = "0.4.3"
 image = "0.24.8"
 rand = "0.8.5"

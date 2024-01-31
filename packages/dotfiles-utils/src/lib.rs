@@ -1,6 +1,7 @@
 use crate::monitor::Monitor;
+use execute::Execute;
 use serde::{de::DeserializeOwned, Deserialize};
-use std::{env, path::PathBuf, process::Command};
+use std::{env, path::PathBuf, process::Stdio};
 
 pub mod cli;
 pub mod fetch;
@@ -36,69 +37,46 @@ pub fn hypr_json<T>(cmd: &str) -> T
 where
     T: DeserializeOwned,
 {
-    let output = Command::new("hyprctl")
-        .args(["-j", cmd])
-        .output()
+    let output = execute::command_args!("hyprctl", "-j", cmd)
+        .stdout(Stdio::piped())
+        .execute_output()
         .expect("failed to execute process");
 
     serde_json::from_slice(&output.stdout).expect("failed to parse json")
 }
 
-/// returns a command to be executed, and the command as a string
-fn create_cmd<I, S>(cmd_args: I) -> (Command, String)
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<str>,
-{
-    let mut args = cmd_args.into_iter();
-    let first = args.next().expect("empty command");
-    let first = first.as_ref();
+fn command_output_to_lines(output: &[u8]) -> Vec<String> {
+    String::from_utf8(output.to_vec())
+        .expect("invalid utf8 from command")
+        .lines()
+        .map(String::from)
+        .collect()
+}
 
-    let mut cmd_str = vec![first.to_string()];
-    let mut cmd = Command::new(first);
+pub trait CommandUtf8 {
+    fn execute_stdout_lines(&mut self) -> Vec<String>;
 
-    for arg in args {
-        let arg = arg.as_ref();
-        cmd_str.push(arg.to_string());
-        cmd.arg(arg);
+    fn execute_stderr_lines(&mut self) -> Vec<String>;
+}
+
+impl CommandUtf8 for std::process::Command {
+    fn execute_stdout_lines(&mut self) -> Vec<String> {
+        let output = self
+            .stdout(Stdio::piped())
+            .execute_output()
+            .expect("failed to execute process");
+
+        command_output_to_lines(&output.stdout)
     }
 
-    (
-        cmd,
-        format!("failed to execute {first} {}", cmd_str.join(" ")),
-    )
-}
+    fn execute_stderr_lines(&mut self) -> Vec<String> {
+        let output = self
+            .stderr(Stdio::piped())
+            .execute_output()
+            .expect("failed to execute process");
 
-pub fn cmd<I, S>(cmd_args: I)
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<str>,
-{
-    let (mut cmd, cmd_str) = create_cmd(cmd_args);
-    cmd.status().unwrap_or_else(|_| panic!("{cmd_str}"));
-}
-
-pub enum CmdOutput {
-    Stdout,
-    Stderr,
-}
-
-pub fn cmd_output<I, S>(cmd_args: I, from: &CmdOutput) -> Vec<String>
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<str>,
-{
-    let (mut cmd, cmd_str) = create_cmd(cmd_args);
-    let output = cmd.output().unwrap_or_else(|_| panic!("{cmd_str}"));
-
-    std::str::from_utf8(match from {
-        CmdOutput::Stdout => &output.stdout,
-        CmdOutput::Stderr => &output.stderr,
-    })
-    .expect("invalid utf8 from command")
-    .lines()
-    .map(String::from)
-    .collect()
+        command_output_to_lines(&output.stderr)
+    }
 }
 
 /// hyprctl dispatch
@@ -107,13 +85,12 @@ where
     I: IntoIterator<Item = S>,
     S: AsRef<str>,
 {
-    let mut cmd = Command::new("hyprctl");
-    cmd.arg("dispatch");
+    let mut cmd = execute::command_args!("hyprctl", "dispatch");
 
     for arg in hypr_args {
         cmd.arg(arg.as_ref());
     }
-    cmd.status().expect("failed to execute process");
+    cmd.execute().expect("failed to execute hyprctl");
 }
 
 /// hyprctl activewindow

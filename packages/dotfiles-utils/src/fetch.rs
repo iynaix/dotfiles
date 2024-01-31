@@ -1,14 +1,15 @@
 use crate::{
     asset_path,
     cli::WaifuFetchArgs,
-    cmd_output, full_path, json,
+    full_path, json,
     nixinfo::NixInfo,
     wallpaper::{self, WallInfo},
-    CmdOutput,
+    CommandUtf8,
 };
 use chrono::{DateTime, Datelike, NaiveDate, Timelike};
+use execute::Execute;
 use serde_json::{json, Value};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 #[cfg(feature = "wfetch-waifu")]
 pub const fn arg_waifu(args: &WaifuFetchArgs) -> bool {
@@ -27,6 +28,16 @@ pub const fn arg_wallpaper(args: &WaifuFetchArgs) -> bool {
 
 #[cfg(not(feature = "wfetch-wallpaper"))]
 pub const fn arg_wallpaper(_args: &WaifuFetchArgs) -> bool {
+    false
+}
+
+#[cfg(feature = "wfetch-wallpaper")]
+pub const fn arg_wallpaper_ascii(args: &WaifuFetchArgs) -> bool {
+    args.wallpaper_ascii
+}
+
+#[cfg(not(feature = "wfetch-wallpaper"))]
+pub const fn arg_wallpaper_ascii(_args: &WaifuFetchArgs) -> bool {
     false
 }
 
@@ -50,7 +61,7 @@ pub const fn arg_image_size(_args: &WaifuFetchArgs) -> Option<i32> {
     None
 }
 
-fn create_output_image(filename: String) -> String {
+fn create_output_file(filename: String) -> String {
     let output_dir = full_path("~/.cache/wfetch");
     std::fs::create_dir_all(&output_dir).expect("failed to create output dir");
 
@@ -61,33 +72,94 @@ fn create_output_image(filename: String) -> String {
         .to_string()
 }
 
-fn create_nixos_logo(nix_info: &NixInfo, args: &WaifuFetchArgs) -> String {
+fn create_nixos_logo(args: &WaifuFetchArgs) -> String {
     let logo = asset_path("nixos.png");
     let logo = logo.as_str();
-    let hexless = &nix_info.colors;
+    let hexless = NixInfo::after().colors;
     let c1 = hexless.get("color4").expect("invalid color");
     let c2 = hexless.get("color6").expect("invalid color");
 
-    let output = create_output_image(format!("{c1}-{c2}.png"));
+    let output = create_output_file(format!("{c1}-{c2}.png"));
     let image_size = arg_image_size(args).unwrap_or(if args.challenge { 420 } else { 340 });
 
-    Command::new("convert")
-        .args([
-            logo, "-fuzz", "10%", "-fill", c1, "-opaque", "#5278c3", // replace color 1
-            "-fuzz", "10%", "-fill", c2, "-opaque", "#7fbae4", // replace color 2
-        ])
-        .args(["-resize", format!("{image_size}x{image_size}").as_str()])
-        .arg(&output)
-        .status()
-        .expect("failed to execute imagemagick");
+    execute::command_args!(
+        "convert",
+        // replace color 1
+        logo,
+        "-fuzz",
+        "10%",
+        "-fill",
+        c1,
+        "-opaque",
+        "#5278c3",
+        // replace color 2
+        "-fuzz",
+        "10%",
+        "-fill",
+        c2,
+        "-opaque",
+        "#7fbae4",
+        "-resize",
+        format!("{image_size}x{image_size}"),
+        output,
+    )
+    .execute()
+    .expect("failed to create nixos logo");
 
     output
 }
 
-fn create_wallpaper_crop(args: &WaifuFetchArgs) -> String {
+/// returns full path to the wallpaper
+fn get_wallpaper() -> Result<String, Box<dyn std::error::Error>> {
+    let wallpaper =
+        std::fs::read_to_string(full_path("~/.cache/current_wallpaper")).unwrap_or_default();
+
+    if !wallpaper.is_empty() {
+        return Ok(wallpaper);
+    }
+
+    // detect using swwww
+    let wallpaper = execute::command!("swww query").execute_stdout_lines();
+    let wallpaper = wallpaper
+        .first()
+        .ok_or("swww did not return any displays")?
+        .rsplit_once("image: ")
+        .ok_or("swww did not return any displays")?
+        .1
+        .trim();
+
+    if !wallpaper.is_empty() && wallpaper != "STDIN" {
+        return Ok(wallpaper.to_string());
+    }
+
+    // detect gnome
+    execute::command!("gsettings get org.gnome.desktop.background picture-uri")
+        .stdout(Stdio::piped())
+        .execute_output()
+        .map_or_else(
+            |_| Err("could not detect wallpaper".into()),
+            |output| {
+                String::from_utf8(output.stdout).map_or_else(
+                    |_| Err("could not detect wallpaper".into()),
+                    |wallpaper| {
+                        let wallpaper = wallpaper.trim();
+                        Ok(wallpaper
+                            .strip_prefix("file://")
+                            .unwrap_or(wallpaper)
+                            .to_string())
+                    },
+                )
+            },
+        )
+}
+
+fn imagemagick_wallpaper(args: &WaifuFetchArgs) -> Command {
     // read current wallpaper
-    let wall = std::fs::read_to_string(full_path("~/.cache/current_wallpaper"))
-        .expect("could not read current wallpaper");
+    let wall = get_wallpaper().unwrap_or_else(|_| {
+        eprintln!("Error: could not detect wallpaper!");
+        std::process::exit(1);
+    });
+
     let wallpaper_info = wallpaper::info(&wall);
 
     let crop_area = if let Some(WallInfo {
@@ -108,24 +180,53 @@ fn create_wallpaper_crop(args: &WaifuFetchArgs) -> String {
     };
 
     let image_size = arg_image_size(args).unwrap_or(if args.challenge { 380 } else { 300 });
-    let output = create_output_image("wallpaper.png".to_string());
 
     // use imagemagick to crop and resize the wallpaper
-    Command::new("convert")
-        .arg(wall)
-        .args(["-crop", &crop_area])
-        .args(["-resize", format!("{image_size}x{image_size}").as_str()])
+    execute::command_args!(
+        "convert",
+        wall,
+        "-crop",
+        crop_area,
+        "-resize",
+        format!("{image_size}x{image_size}"),
+    )
+}
+
+/// creates the wallpaper image that fastfetch will display
+fn create_wallpaper_image(args: &WaifuFetchArgs) -> String {
+    let output = create_output_file("wallpaper.png".to_string());
+
+    imagemagick_wallpaper(args)
         .arg(&output)
-        .status()
+        .execute()
         .expect("failed to execute imagemagick");
 
     output
 }
 
+/// creates the wallpaper ascii that fastfetch will display
+pub fn show_wallpaper_ascii(args: &WaifuFetchArgs, fastfetch: &mut Command) {
+    let mut imagemagick = imagemagick_wallpaper(args);
+    imagemagick.arg("-");
+
+    let mut ascii_converter = Command::new("ascii-image-converter");
+    ascii_converter
+        .arg("--color")
+        .arg("--braille")
+        .arg("--width")
+        .arg("70")
+        .arg("-"); // load from stdin
+
+    imagemagick
+        .execute_multiple_output(&mut [&mut ascii_converter, fastfetch])
+        .expect("failed to show ascii wallpaper");
+}
+
 pub fn shell_module() -> serde_json::Value {
     // HACK: fastfetch detects the process as wfetch, detect it via STARSHIP_SHELL
     if std::env::var("STARSHIP_SHELL").unwrap_or_default() == "fish" {
-        let fish_version = cmd_output(["fish", "--version"], &CmdOutput::Stdout)
+        let fish_version = execute::command!("fish --version")
+            .execute_stdout_lines()
             .first()
             .expect("could not run fish")
             .split(' ')
@@ -144,7 +245,7 @@ pub fn shell_module() -> serde_json::Value {
 }
 
 #[allow(clippy::similar_names)] // gpu and cpu trips this
-pub fn create_fastfetch_config(args: &WaifuFetchArgs, nix_info: &NixInfo, config_jsonc: &str) {
+pub fn create_fastfetch_config(args: &WaifuFetchArgs, config_jsonc: &str) {
     let os = json!({ "type": "os", "key": " OS", "format": "{3}" });
     let kernel = json!({ "type": "kernel", "key": " VER", });
     let uptime = json!({ "type": "uptime", "key": "󰅐 UP", });
@@ -174,14 +275,19 @@ pub fn create_fastfetch_config(args: &WaifuFetchArgs, nix_info: &NixInfo, config
         logo = json!({
             // ghostty supports kitty image protocol
             "type": "kitty-direct",
-            "source": create_wallpaper_crop(args),
+            "source": create_wallpaper_image(args),
             "preserveAspectRatio": true,
+        });
+    } else if arg_wallpaper_ascii(args) {
+        logo = json!({
+            "type": "auto",
+            "source": "-"
         });
     } else if arg_waifu(args) {
         logo = json!({
             // ghostty supports kitty image protocol
             "type": "kitty-direct",
-            "source": create_nixos_logo(nix_info, args),
+            "source": create_nixos_logo(args),
             "preserveAspectRatio": true,
         });
     }

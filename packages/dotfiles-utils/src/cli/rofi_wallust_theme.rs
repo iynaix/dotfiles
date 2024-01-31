@@ -1,11 +1,10 @@
-use dotfiles_utils::{cmd_output, wallust, CmdOutput};
-use std::{
-    io::Write,
-    process::{Command, Stdio},
-};
+use dotfiles_utils::{wallust, CommandUtf8};
+use execute::Execute;
+use std::process::Stdio;
 
 fn wallust_preset_themes() -> Vec<String> {
-    cmd_output(["wallust", "theme", "--help"], &CmdOutput::Stdout)
+    execute::command!("wallust theme --help")
+        .execute_stdout_lines()
         .iter()
         .max_by_key(|line| line.len())
         .expect("could not parse wallust themes")
@@ -34,23 +33,14 @@ fn all_themes() -> Vec<String> {
 fn main() {
     let themes = all_themes().join("\n");
 
-    let mut rofi = Command::new("rofi")
-        .arg("-dmenu")
-        .arg("-theme")
-        .arg("~/.cache/wallust/rofi-menu.rasi")
+    let selected_theme = execute::command!("rofi -dmenu -theme ~/.cache/wallust/rofi-menu.rasi")
         .stdout(Stdio::piped())
-        .stdin(Stdio::piped())
-        .spawn()
-        .expect("failed to execute process");
+        .execute_input_output(themes.as_bytes())
+        .expect("failed to read rofi theme")
+        .stdout;
 
-    rofi.stdin
-        .as_mut()
-        .expect("could not read rofi stdin")
-        .write_all(themes.as_bytes())
-        .expect("could not write to rofi stdin");
-
-    let output = rofi.wait_with_output().expect("failed to read rofi theme");
-    let selected_theme = std::str::from_utf8(&output.stdout)
+    // let output = rofi.wait_with_output().expect("failed to read rofi theme");
+    let selected_theme = std::str::from_utf8(&selected_theme)
         .expect("failed to parse utf8")
         .strip_suffix('\n')
         .unwrap_or_default();
