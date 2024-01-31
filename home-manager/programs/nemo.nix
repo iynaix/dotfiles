@@ -80,13 +80,15 @@
   };
 
   custom.persist = {
-    home.directories = [
-      # folder preferences such as view mode and sort order
-      ".local/share/gvfs-metadata"
-    ];
-    cache = [
-      # thumbnail cache
-      ".cache/thumbnails"
-    ];
+    home = {
+      directories = [
+        # folder preferences such as view mode and sort order
+        ".local/share/gvfs-metadata"
+      ];
+      cache = [
+        # thumbnail cache
+        ".cache/thumbnails"
+      ];
+    };
   };
 }

@@ -105,12 +105,14 @@ in
       };
 
       custom.persist = {
-        home.directories = [
-          ".cache/clip"
-        ];
-        cache = [
-          ".local/share/rclip"
-        ];
+        home = {
+          directories = [
+            ".cache/clip"
+          ];
+          cache = [
+            ".local/share/rclip"
+          ];
+        };
       };
     })
     (lib.mkIf isNixOS {

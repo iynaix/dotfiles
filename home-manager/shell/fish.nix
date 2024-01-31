@@ -80,8 +80,10 @@ in {
   ];
 
   custom.persist = {
-    cache = [
-      ".local/share/fish"
-    ];
+    home = {
+      cache = [
+        ".local/share/fish"
+      ];
+    };
   };
 }

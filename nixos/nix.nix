@@ -250,9 +250,11 @@ in {
   };
 
   hm.custom.persist = {
-    cache = [
-      ".cache/nix"
-      ".cache/nixpkgs-review"
-    ];
+    home = {
+      cache = [
+        ".cache/nix"
+        ".cache/nixpkgs-review"
+      ];
+    };
   };
 }

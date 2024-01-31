@@ -116,9 +116,11 @@ in
       };
 
       custom.persist = {
-        cache = [
-          ".cache/nix-index"
-        ];
+        home = {
+          cache = [
+            ".cache/nix-index"
+          ];
+        };
       };
     }
   ]

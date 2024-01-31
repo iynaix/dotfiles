@@ -71,6 +71,7 @@ in
       "/persist/cache" = {
         device = "zroot/cache";
         fsType = "zfs";
+        neededForBoot = true;
       };
     };
 

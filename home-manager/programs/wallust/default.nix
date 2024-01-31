@@ -76,8 +76,10 @@ in {
   };
 
   custom.persist = {
-    cache = [
-      ".cache/wallust"
-    ];
+    home = {
+      cache = [
+        ".cache/wallust"
+      ];
+    };
   };
 }

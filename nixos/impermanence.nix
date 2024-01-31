@@ -56,17 +56,22 @@ in {
   security.sudo.extraConfig = "Defaults lecture=never";
 
   # setup persistence
-  environment.persistence."/persist" = {
-    hideMounts = true;
+  environment.persistence = {
+    "/persist" = {
+      hideMounts = true;
+      files = ["/etc/machine-id"] ++ cfg.root.files;
+      directories =
+        [
+          # systemd journal is stored in /var/log/journal
+          "/var/log"
+        ]
+        ++ cfg.root.directories;
+    };
 
-    files = ["/etc/machine-id"] ++ cfg.root.files;
-    directories =
-      [
-        # systemd journal is stored in /var/log/journal
-        "/var/log"
-      ]
-      ++ cfg.root.directories;
-
+    "/persist/cache" = {
+      hideMounts = true;
+      directories = cfg.root.cache;
+    };
     # NOTE: *DO NOT* persist anything from home directory as it causes a race condition
   };
 
@@ -80,7 +85,6 @@ in {
       "/persist${homeDir}" = {
         allowOther = true;
         removePrefixDirectory = false;
-
         files = cfg.home.files ++ hmPersistCfg.home.files;
         directories =
           [
@@ -97,8 +101,7 @@ in {
       "/persist/cache" = {
         allowOther = true;
         removePrefixDirectory = false;
-
-        directories = hmPersistCfg.cache;
+        directories = hmPersistCfg.home.cache;
       };
     };
   };

@@ -31,15 +31,17 @@ lib.mkMerge [
     };
 
     custom.persist = {
-      home.directories = [
-        ".local/share/direnv"
-      ];
-      cache = [
-        ".local/share/.cargo"
-        ".cache/pip"
-        ".cache/torch" # pytorch models
-        ".cache/yarn"
-      ];
+      home = {
+        directories = [
+          ".local/share/direnv"
+        ];
+        cache = [
+          ".local/share/.cargo"
+          ".cache/pip"
+          ".cache/torch" # pytorch models
+          ".cache/yarn"
+        ];
+      };
     };
   }
 

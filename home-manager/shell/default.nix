@@ -48,8 +48,10 @@
   };
 
   custom.persist = {
-    cache = [
-      ".local/share/zoxide"
-    ];
+    home = {
+      cache = [
+        ".local/share/zoxide"
+      ];
+    };
   };
 }

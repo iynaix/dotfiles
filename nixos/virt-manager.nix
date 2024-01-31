@@ -18,11 +18,11 @@ lib.mkIf config.custom-nixos.vm.enable {
   users.users.${user}.extraGroups = ["libvirtd"];
 
   # store VMs on zroot/cache
-  environment.persistence."/persist/cache/VMs" = {
-    hideMounts = true;
-
-    directories = [
-      "/var/lib/libvirt"
-    ];
+  custom-nixos.persist = {
+    root = {
+      cache = [
+        "/var/lib/libvirt"
+      ];
+    };
   };
 }

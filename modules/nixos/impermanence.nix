@@ -13,6 +13,10 @@
         default = [];
         description = "Files to persist in root filesystem";
       };
+      cache = lib.mkOption {
+        default = [];
+        description = "Directories to persist, but not to snapshot";
+      };
     };
     home = {
       directories = lib.mkOption {

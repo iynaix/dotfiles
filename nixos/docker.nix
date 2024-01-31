@@ -13,11 +13,11 @@ lib.mkIf (config.custom-nixos.docker.enable || config.custom-nixos.distrobox.ena
   };
 
   # store docker images on zroot/cache
-  environment.persistence."/persist/cache/docker" = {
-    hideMounts = true;
-
-    directories = [
-      "/var/lib/docker"
-    ];
+  custom-nixos.persist = {
+    root = {
+      cache = [
+        "/var/lib/docker"
+      ];
+    };
   };
 }
