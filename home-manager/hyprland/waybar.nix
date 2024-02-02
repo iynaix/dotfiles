@@ -49,8 +49,8 @@ in
           mode-mon-col = 3;
           on-scroll = 1;
         };
-        format = lib.mkForce "󰥔   {:%H:%M}";
-        format-alt = lib.mkForce "󰸗   {:%a, %d %b %Y}";
+        format = "󰥔   {:%H:%M}";
+        format-alt = "󰸗   {:%a, %d %b %Y}";
         # format = "󰥔   {:%H:%M}";
         # format-alt = "  {:%a, %d %b %Y}";
         interval = 10;

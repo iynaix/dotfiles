@@ -31,7 +31,7 @@ in {
       (openOnWorkspace 7 "$term")
 
       # firefox
-      (openOnWorkspace 9 "firefox-developer-edition https://discordapp.com/channels/@me https://web.whatsapp.com ${
+      (openOnWorkspace 9 "${lib.getExe config.programs.firefox.package} -P ${user} https://discordapp.com/channels/@me https://web.whatsapp.com ${
         # transmission only on desktop
         if host == "desktop"
         then "http://localhost:9091"

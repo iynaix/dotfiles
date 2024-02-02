@@ -72,7 +72,7 @@ in {
         gaps_in = gap;
         gaps_out = gap;
         border_size = 2;
-        layout = "master";
+        layout = lib.mkDefault "master";
       };
 
       decoration = {

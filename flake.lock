@@ -8,11 +8,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1706018268,
-        "narHash": "sha256-d24+re0t8b6HYGzAPZCIJed85n23RUFXQa2yuHoW0uQ=",
+        "lastModified": 1706918346,
+        "narHash": "sha256-UYbmL0db7+yQNpQ3nyW5077kmtB3fT/M0h/LhosODm4=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "ad0ae333b210e31237e1fc4a7ddab71a01785add",
+        "rev": "e4019e17e9818cc3f107cef515d23d255e43e29a",
         "type": "github"
       },
       "original": {
@@ -30,11 +30,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1706799758,
-        "narHash": "sha256-QWt5vhNCo7K2xRY1EPg35eb3b1xXQFszAI6TMwywt/U=",
+        "lastModified": 1706862672,
+        "narHash": "sha256-rrMGIt9Xc4k+VnCsWGhw6avmfSCDIGjYXSv9TyoelFI=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "6ccdd0fd5514058624e17756788a574bacdc05bf",
+        "rev": "11897e488b25e4237a14fa569b5c80c61b46eac7",
         "type": "gitlab"
       },
       "original": {
@@ -237,11 +237,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1706841751,
-        "narHash": "sha256-eZFIpRKgud8eeA18rfGydB4x72ESsBvQwzAYy94+HGQ=",
+        "lastModified": 1706910949,
+        "narHash": "sha256-YLbYQASUAnfMy3Qt/soQ+17KWRE1pNiZi1MIqSz5UUs=",
         "ref": "refs/heads/main",
-        "rev": "bcab97b1ce360467da150950d2b187111a978687",
-        "revCount": 4912,
+        "rev": "f939cee0f19c215edaa5e4f636b0386452897ebc",
+        "revCount": 4933,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -730,11 +730,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1706550542,
-        "narHash": "sha256-UcsnCG6wx++23yeER4Hg18CXWbgNpqNXcHIo5/1Y+hc=",
+        "lastModified": 1706732774,
+        "narHash": "sha256-hqJlyJk4MRpcItGYMF+3uHe8HvxNETWvlGtLuVpqLU0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "97b17f32362e475016f942bbdfda4a4a72a8a652",
+        "rev": "b8b232ae7b8b144397fdb12d20f592e5e7c1a64d",
         "type": "github"
       },
       "original": {
@@ -755,11 +755,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1706539542,
-        "narHash": "sha256-Zbd9/0iTDNwf6ePvKkISvSMK6S7kmfsPzyG5f57sVA8=",
+        "lastModified": 1706870624,
+        "narHash": "sha256-73pux7f82JcIamAsQSMy/coTJQIZt0CvMMXNwZ11qGY=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "37d124e94603f821b56072794c4800ad10252fd7",
+        "rev": "079c03228c20c9cf49ab4dda2aa65fc27233fc53",
         "type": "github"
       },
       "original": {

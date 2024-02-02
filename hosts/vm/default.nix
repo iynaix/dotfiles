@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   custom-nixos = {
     hyprland.enable = false;
     zfs.encryption = false;
@@ -21,7 +25,7 @@
     enable = true;
     wantedBy = ["graphical-session.target"];
     serviceConfig = {
-      ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagent -x";
+      ExecStart = "${lib.getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
     };
     unitConfig = {
       ConditionVirtualization = "vm";

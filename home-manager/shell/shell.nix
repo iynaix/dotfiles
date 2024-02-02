@@ -15,7 +15,7 @@
       crate = "cargo";
       btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
-      man = "${pkgs.bat-extras.batman}/bin/batman";
+      man = lib.getExe' pkgs.bat-extras.batman "batman";
       mkdir = "mkdir -p";
       mount = "mount --mkdir";
       nano = "nvim";

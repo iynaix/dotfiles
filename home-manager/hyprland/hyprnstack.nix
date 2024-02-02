@@ -11,7 +11,7 @@ in {
   wayland.windowManager.hyprland = lib.mkIf isHyprnstack {
     plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
 
-    settings.general.layout = lib.mkForce "nstack";
+    settings.general.layout = "nstack";
 
     # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
     extraConfig = ''

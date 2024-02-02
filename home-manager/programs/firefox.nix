@@ -1,25 +1,40 @@
-{pkgs, ...}: {
+{
+  inputs,
+  lib,
+  pkgs,
+  user,
+  ...
+}: let
+  firefoxPkg = pkgs.firefox-devedition-bin;
+in {
   programs = {
     # firefox dev edition
     firefox = {
       enable = true;
-      package = pkgs.firefox-devedition-bin;
+      package = firefoxPkg;
 
-      # profiles.iynaix = {
-      #   # TODO: set as default profile
-      #   # isDefault = true;
+      profiles.${user} = {
+        # TODO: define keyword searches here?
+        # search.engines = [ ];
 
-      #   # TODO: define keyword searches here?
-      #   # search.engines = [ ];
-
-      #   extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
-      #     bitwarden
-      #     darkreader
-      #     sponsorblock
-      #     ublock-origin
-      #   ];
-      # };
+        extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
+          bitwarden
+          darkreader
+          screenshot-capture-annotate
+          sponsorblock
+          ublock-origin
+        ];
+      };
     };
+  };
+
+  # overwrite desktop entry with user profile
+  xdg.desktopEntries.firefox-developer-edition = {
+    name = "Firefox Developer Edition";
+    genericName = "Web Browser";
+    exec = "${lib.getExe firefoxPkg} --name firefox -P ${user} %U";
+    icon = "${firefoxPkg}/share/icons/hicolor/128x128/apps/firefox.png";
+    categories = ["Network" "WebBrowser"];
   };
 
   custom.persist = {
