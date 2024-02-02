@@ -10,8 +10,6 @@ pub mod nixinfo;
 pub mod wallpaper;
 pub mod wallust;
 
-pub const WAYBAR_CLASS: &str = ".waybar-wrapped";
-
 // shared structs / types
 type Coord = (i32, i32);
 
@@ -61,21 +59,17 @@ pub trait CommandUtf8 {
 
 impl CommandUtf8 for std::process::Command {
     fn execute_stdout_lines(&mut self) -> Vec<String> {
-        let output = self
-            .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to execute process");
-
-        command_output_to_lines(&output.stdout)
+        self.stdout(Stdio::piped()).execute_output().map_or_else(
+            |_| Vec::new(),
+            |output| command_output_to_lines(&output.stdout),
+        )
     }
 
     fn execute_stderr_lines(&mut self) -> Vec<String> {
-        let output = self
-            .stderr(Stdio::piped())
-            .execute_output()
-            .expect("failed to execute process");
-
-        command_output_to_lines(&output.stderr)
+        self.stderr(Stdio::piped()).execute_output().map_or_else(
+            |_| Vec::new(),
+            |output| command_output_to_lines(&output.stderr),
+        )
     }
 }
 
@@ -208,4 +202,16 @@ pub fn asset_path(filename: &str) -> String {
         .to_str()
         .unwrap_or_else(|| panic!("could not get asset {}", &filename))
         .to_string()
+}
+
+pub fn execute_wrapped_process<F>(unwrapped_name: &str, process_fn: F)
+where
+    F: Fn(&str),
+{
+    let wrapped_name = &format!(".{unwrapped_name}-wrapped");
+    let sys = sysinfo::System::new_all();
+
+    if sys.processes_by_exact_name(wrapped_name).next().is_some() {
+        process_fn(wrapped_name);
+    }
 }

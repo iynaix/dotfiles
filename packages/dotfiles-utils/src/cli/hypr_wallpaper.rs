@@ -1,14 +1,14 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    full_path,
+    execute_wrapped_process, full_path,
     monitor::Monitor,
     nixinfo::NixInfo,
     wallpaper::{self, WallInfo},
-    wallust, WAYBAR_CLASS,
+    wallust,
 };
 use execute::Execute;
-use std::{collections::HashMap, path::Path};
+use std::{collections::HashMap, path::Path, process::Command};
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
     let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
@@ -42,14 +42,14 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
             Some(info) => Monitor::monitors().iter().for_each(|m| {
                 match info.get_geometry(m.width, m.height) {
                     Some(geometry) => {
-                        let mut imagemagick =
-                            execute::command_args!("convert", image, "-crop", geometry, "-");
-
-                        let mut swww = execute::command_args!("swww", "img");
-                        swww.args(["--outputs", &m.name]).args(swww_args).arg("-");
-
-                        imagemagick
-                            .execute_multiple(&mut [&mut swww])
+                        // use custom swww-crop defined in wallpaper.nix
+                        // using rust for the piping the images from imagemagick to swww seeems to be really slow?
+                        Command::new("swww-crop")
+                            .arg(image)
+                            .arg(geometry)
+                            .arg(&m.name)
+                            .args(swww_args)
+                            .spawn()
                             .expect("failed to set wallpaper");
                     }
                     None => {
@@ -102,7 +102,7 @@ fn main() {
 
     // use colorscheme set from nix if available
     if let Some(cs) = NixInfo::before().colorscheme {
-        wallust::apply_theme(cs.as_str());
+        wallust::apply_theme(&cs);
     } else {
         wallust::from_wallpaper(&wallpaper_info, &wallpaper);
     }
@@ -110,9 +110,11 @@ fn main() {
     if cfg!(feature = "hyprland") {
         if args.reload {
             swww_crop(&[], &wallpaper, &wallpaper_info);
-            execute::command_args!("killall", "-SIGUSR2", WAYBAR_CLASS)
-                .execute()
-                .expect("could not reload waybar");
+            execute_wrapped_process("waybar", |process| {
+                execute::command_args!("killall", "-SIGUSR2", process)
+                    .execute()
+                    .ok();
+            });
         } else {
             swww_crop(
                 &["--transition-type", &args.transition_type],

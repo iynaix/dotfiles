@@ -7,7 +7,6 @@
   fastfetch,
   imagemagick,
   waifu ? true,
-  wallpaper ? true,
 }:
 rustPlatform.buildRustPackage {
   pname = "dotfiles-utils";
@@ -23,11 +22,10 @@ rustPlatform.buildRustPackage {
       "--features"
       "hyprland"
     ]
-    ++ lib.optionals waifu ["--features" "wfetch-waifu"]
-    ++ lib.optionals wallpaper ["--features" "wfetch-wallpaper"];
+    ++ lib.optionals waifu ["--features" "wfetch-waifu"];
 
   # create files for shell autocomplete
-  nativeBuildInputs = [installShellFiles] ++ lib.optionals wallpaper [makeWrapper];
+  nativeBuildInputs = [installShellFiles makeWrapper];
 
   # https://nixos.org/manual/nixpkgs/stable/#compiling-rust-applications-with-cargo
   # see section "Importing a cargo lock file"
@@ -43,7 +41,7 @@ rustPlatform.buildRustPackage {
     installShellCompletion $releaseDir/build/dotfiles_utils-*/out/*.{bash,fish}
   '';
 
-  postFixup = lib.optionalString wallpaper ''
+  postFixup = ''
     wrapProgram $out/bin/wfetch \
       --prefix PATH : "${lib.makeBinPath [ascii-image-converter]}" \
       --prefix PATH : "${lib.makeBinPath [fastfetch]}" \

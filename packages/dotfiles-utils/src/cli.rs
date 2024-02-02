@@ -104,13 +104,21 @@ pub struct WaifuFetchArgs {
     #[arg(long, action, help = "show waifu NixOS logo")]
     pub waifu: bool,
 
-    #[cfg(feature = "wfetch-wallpaper")]
-    #[arg(long, action, help = "show section of wallpaper")]
-    pub wallpaper: bool,
+    #[arg(
+        long,
+        num_args = 0..=1,
+        default_missing_value = "",
+        action, help = "show section of wallpaper",
+    )]
+    pub wallpaper: Option<String>,
 
-    #[cfg(feature = "wfetch-wallpaper")]
-    #[arg(long, action, help = "show section of wallpaper in ascii")]
-    pub wallpaper_ascii: bool,
+    #[arg(
+        long,
+        num_args = 0..=1,
+        default_missing_value = "",
+        action, help = "show section of wallpaper in ascii",
+    )]
+    pub wallpaper_ascii: Option<String>,
 
     #[arg(long, action, help = "show challenge progress")]
     pub challenge: bool,
@@ -139,14 +147,15 @@ pub struct WaifuFetchArgs {
     )]
     pub challenge_months: u32,
 
-    #[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
     #[arg(long, action, help = "do not listen for SIGUSR2")]
     pub exit: bool,
 
     #[arg(long, action, help = "do not show colored keys")]
     pub no_color_keys: bool,
 
-    #[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
-    #[arg(long, action, help = "image size")]
-    pub size: Option<i32>,
+    #[arg(long, action, help = "image size in pixels")]
+    pub image_size: Option<i32>,
+
+    #[arg(long, action, default_value = "70", help = "ascii size in characters")]
+    pub ascii_size: i32,
 }

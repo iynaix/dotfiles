@@ -1,10 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::WaifuFetchArgs,
-    fetch::{
-        arg_exit, arg_waifu, arg_wallpaper, arg_wallpaper_ascii, create_fastfetch_config,
-        show_wallpaper_ascii,
-    },
+    fetch::{arg_waifu, create_fastfetch_config, show_wallpaper_ascii},
 };
 use execute::Execute;
 use signal_hook::{
@@ -24,7 +21,11 @@ fn wfetch(args: &WaifuFetchArgs) {
     let mut fastfetch =
         execute::command_args!("fastfetch", "--hide-cursor", "--config", config_jsonc);
 
-    if arg_wallpaper_ascii(args) {
+    if args.wallpaper_ascii.is_some() {
+        // clear screen
+        print!("\x1B[2J\x1B[1;1H");
+        io::stdout().flush().expect("Failed to flush stdout");
+
         show_wallpaper_ascii(args, &mut fastfetch);
     } else {
         fastfetch
@@ -44,8 +45,8 @@ fn main() {
     wfetch(&args);
 
     // not showing waifu / wallpaper, no need to wait for signal
-    if arg_exit(&args)
-        || (!arg_waifu(&args) && !arg_wallpaper(&args) && !arg_wallpaper_ascii(&args))
+    if args.exit
+        || (!arg_waifu(&args) && args.wallpaper.is_none() && args.wallpaper_ascii.is_none())
     {
         std::process::exit(0);
     }

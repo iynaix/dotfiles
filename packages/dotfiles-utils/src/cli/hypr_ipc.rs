@@ -35,7 +35,7 @@ fn set_workspace_orientation(workspace: &str, is_desktop: bool, nstack: bool) {
     }
 
     let wksp = workspace.replace(" silent", "");
-    let (mon, _) = Monitor::by_workspace(wksp.as_str());
+    let (mon, _) = Monitor::by_workspace(&wksp);
 
     hypr(["layoutmsg", mon.orientation()]);
 

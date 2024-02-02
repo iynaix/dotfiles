@@ -1,4 +1,6 @@
-use crate::{full_path, json, nixinfo::NixInfo, wallpaper::WallInfo, CommandUtf8, WAYBAR_CLASS};
+use crate::{
+    execute_wrapped_process, full_path, json, nixinfo::NixInfo, wallpaper::WallInfo, CommandUtf8,
+};
 use execute::Execute;
 use std::collections::HashMap;
 
@@ -134,21 +136,29 @@ pub fn apply_colors() {
     refresh_zathura();
 
     // refresh cava
-    execute::command!("killall -SIGUSR2 cava").execute().ok();
+    execute_wrapped_process("cava", |process| {
+        execute::command_args!("killall", "-SIGUSR2", process)
+            .execute()
+            .ok();
+    });
 
     // refresh wfetch
-    execute::command!("killall -SIGUSR2 .wfetch-wrapped")
-        .execute()
-        .ok();
+    execute_wrapped_process("wfetch", |process| {
+        execute::command_args!("killall", "-SIGUSR2", process)
+            .execute()
+            .ok();
+    });
 
     if cfg!(feature = "hyprland") {
         // sleep to prevent waybar race condition
         std::thread::sleep(std::time::Duration::from_secs(1));
 
         // refresh waybar
-        execute::command_args!("killall", "-SIGUSR2", WAYBAR_CLASS)
-            .execute()
-            .expect("failed to refresh waybar");
+        execute_wrapped_process("waybar", |process| {
+            execute::command_args!("killall", "-SIGUSR2", process)
+                .execute()
+                .ok();
+        });
     }
 
     // reload gtk theme

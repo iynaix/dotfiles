@@ -9,7 +9,7 @@ use crate::{
 use chrono::{DateTime, Datelike, NaiveDate, Timelike};
 use execute::Execute;
 use serde_json::{json, Value};
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 #[cfg(feature = "wfetch-waifu")]
 pub const fn arg_waifu(args: &WaifuFetchArgs) -> bool {
@@ -19,46 +19,6 @@ pub const fn arg_waifu(args: &WaifuFetchArgs) -> bool {
 #[cfg(not(feature = "wfetch-waifu"))]
 pub const fn arg_waifu(_args: &WaifuFetchArgs) -> bool {
     false
-}
-
-#[cfg(feature = "wfetch-wallpaper")]
-pub const fn arg_wallpaper(args: &WaifuFetchArgs) -> bool {
-    args.wallpaper
-}
-
-#[cfg(not(feature = "wfetch-wallpaper"))]
-pub const fn arg_wallpaper(_args: &WaifuFetchArgs) -> bool {
-    false
-}
-
-#[cfg(feature = "wfetch-wallpaper")]
-pub const fn arg_wallpaper_ascii(args: &WaifuFetchArgs) -> bool {
-    args.wallpaper_ascii
-}
-
-#[cfg(not(feature = "wfetch-wallpaper"))]
-pub const fn arg_wallpaper_ascii(_args: &WaifuFetchArgs) -> bool {
-    false
-}
-
-#[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
-pub const fn arg_exit(args: &WaifuFetchArgs) -> bool {
-    args.exit
-}
-
-#[cfg(not(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper")))]
-pub const fn arg_exit(_args: &WaifuFetchArgs) -> bool {
-    false
-}
-
-#[cfg(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper"))]
-pub const fn arg_image_size(args: &WaifuFetchArgs) -> Option<i32> {
-    args.size
-}
-
-#[cfg(not(any(feature = "wfetch-waifu", feature = "wfetch-wallpaper")))]
-pub const fn arg_image_size(_args: &WaifuFetchArgs) -> Option<i32> {
-    None
 }
 
 fn create_output_file(filename: String) -> String {
@@ -73,19 +33,19 @@ fn create_output_file(filename: String) -> String {
 }
 
 fn create_nixos_logo(args: &WaifuFetchArgs) -> String {
-    let logo = asset_path("nixos.png");
-    let logo = logo.as_str();
     let hexless = NixInfo::after().colors;
     let c1 = hexless.get("color4").expect("invalid color");
     let c2 = hexless.get("color6").expect("invalid color");
 
     let output = create_output_file(format!("{c1}-{c2}.png"));
-    let image_size = arg_image_size(args).unwrap_or(if args.challenge { 420 } else { 340 });
+    let image_size = args
+        .image_size
+        .unwrap_or(if args.challenge { 420 } else { 340 });
 
     execute::command_args!(
         "convert",
         // replace color 1
-        logo,
+        &asset_path("nixos.png"),
         "-fuzz",
         "10%",
         "-fill",
@@ -109,53 +69,9 @@ fn create_nixos_logo(args: &WaifuFetchArgs) -> String {
     output
 }
 
-/// returns full path to the wallpaper
-fn get_wallpaper() -> Result<String, Box<dyn std::error::Error>> {
-    let wallpaper =
-        std::fs::read_to_string(full_path("~/.cache/current_wallpaper")).unwrap_or_default();
-
-    if !wallpaper.is_empty() {
-        return Ok(wallpaper);
-    }
-
-    // detect using swwww
-    let wallpaper = execute::command!("swww query").execute_stdout_lines();
-    let wallpaper = wallpaper
-        .first()
-        .ok_or("swww did not return any displays")?
-        .rsplit_once("image: ")
-        .ok_or("swww did not return any displays")?
-        .1
-        .trim();
-
-    if !wallpaper.is_empty() && wallpaper != "STDIN" {
-        return Ok(wallpaper.to_string());
-    }
-
-    // detect gnome
-    execute::command!("gsettings get org.gnome.desktop.background picture-uri")
-        .stdout(Stdio::piped())
-        .execute_output()
-        .map_or_else(
-            |_| Err("could not detect wallpaper".into()),
-            |output| {
-                String::from_utf8(output.stdout).map_or_else(
-                    |_| Err("could not detect wallpaper".into()),
-                    |wallpaper| {
-                        let wallpaper = wallpaper.trim();
-                        Ok(wallpaper
-                            .strip_prefix("file://")
-                            .unwrap_or(wallpaper)
-                            .to_string())
-                    },
-                )
-            },
-        )
-}
-
-fn imagemagick_wallpaper(args: &WaifuFetchArgs) -> Command {
+fn imagemagick_wallpaper(args: &WaifuFetchArgs, wallpaper_arg: &Option<String>) -> Command {
     // read current wallpaper
-    let wall = get_wallpaper().unwrap_or_else(|_| {
+    let wall = wallpaper::detect(wallpaper_arg).unwrap_or_else(|| {
         eprintln!("Error: could not detect wallpaper!");
         std::process::exit(1);
     });
@@ -179,7 +95,9 @@ fn imagemagick_wallpaper(args: &WaifuFetchArgs) -> Command {
         }
     };
 
-    let image_size = arg_image_size(args).unwrap_or(if args.challenge { 380 } else { 300 });
+    let image_size = args
+        .image_size
+        .unwrap_or(if args.challenge { 380 } else { 300 });
 
     // use imagemagick to crop and resize the wallpaper
     execute::command_args!(
@@ -196,7 +114,7 @@ fn imagemagick_wallpaper(args: &WaifuFetchArgs) -> Command {
 fn create_wallpaper_image(args: &WaifuFetchArgs) -> String {
     let output = create_output_file("wallpaper.png".to_string());
 
-    imagemagick_wallpaper(args)
+    imagemagick_wallpaper(args, &args.wallpaper)
         .arg(&output)
         .execute()
         .expect("failed to execute imagemagick");
@@ -206,7 +124,7 @@ fn create_wallpaper_image(args: &WaifuFetchArgs) -> String {
 
 /// creates the wallpaper ascii that fastfetch will display
 pub fn show_wallpaper_ascii(args: &WaifuFetchArgs, fastfetch: &mut Command) {
-    let mut imagemagick = imagemagick_wallpaper(args);
+    let mut imagemagick = imagemagick_wallpaper(args, &args.wallpaper_ascii);
     imagemagick.arg("-");
 
     let mut ascii_converter = Command::new("ascii-image-converter");
@@ -214,7 +132,7 @@ pub fn show_wallpaper_ascii(args: &WaifuFetchArgs, fastfetch: &mut Command) {
         .arg("--color")
         .arg("--braille")
         .arg("--width")
-        .arg("70")
+        .arg(args.ascii_size.to_string())
         .arg("-"); // load from stdin
 
     imagemagick
@@ -271,14 +189,14 @@ pub fn create_fastfetch_config(args: &WaifuFetchArgs, config_jsonc: &str) {
                 "2": "cyan",
             }
         });
-    } else if arg_wallpaper(args) {
+    } else if args.wallpaper.is_some() {
         logo = json!({
             // ghostty supports kitty image protocol
             "type": "kitty-direct",
             "source": create_wallpaper_image(args),
             "preserveAspectRatio": true,
         });
-    } else if arg_wallpaper_ascii(args) {
+    } else if args.wallpaper_ascii.is_some() {
         logo = json!({
             "type": "auto",
             "source": "-"
@@ -356,7 +274,7 @@ fn last_day_of_month(year: i32, month: u32) -> u32 {
 
 #[allow(clippy::cast_precision_loss, clippy::cast_possible_wrap)]
 pub fn challenge_text(args: &WaifuFetchArgs) -> String {
-    let start = DateTime::parse_from_str(args.challenge_timestamp.to_string().as_str(), "%s")
+    let start = DateTime::parse_from_str(&args.challenge_timestamp.to_string(), "%s")
         .expect("could not parse start timestamp");
 
     let mths = args.challenge_months % 12;

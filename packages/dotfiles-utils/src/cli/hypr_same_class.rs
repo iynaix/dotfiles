@@ -7,7 +7,7 @@ use dotfiles_utils::{
 fn main() {
     let args = HyprSameClassArgs::parse();
     let active = ActiveWindow::new();
-    let mut same_class = Client::filter_class(active.class.as_str());
+    let mut same_class = Client::filter_class(&active.class);
 
     // sort by workspace then coordinates
     same_class.sort_by_key(|client| (client.workspace.id, client.at));
