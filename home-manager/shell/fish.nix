@@ -45,9 +45,6 @@ in {
             echo ""
           end
 
-          # fish doesn't seem to pick up completions for dotfiles_utils?
-          set --append fish_complete_path "${pkgs.custom.dotfiles-utils}/share/fish/vendor_completions.d"
-
           # set options for plugins
           set sponge_regex_patterns 'password|passwd'
         ''

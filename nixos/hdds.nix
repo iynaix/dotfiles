@@ -64,7 +64,7 @@ in
     # dual boot windows
     boot = {
       loader.grub = {
-        extraEntries = lib.concatStringsSep "\n" (lib.optional cfg.windows ''
+        extraEntries = lib.concatLines (lib.optional cfg.windows ''
           menuentry "Windows 11" {
             insmod part_gpt
             insmod fat

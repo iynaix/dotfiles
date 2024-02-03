@@ -63,13 +63,10 @@ in {
           foreground = "{{foreground}}";
           cursor = "{{cursor}}";
         };
-        colors = lib.pipe (lib.range 0 15) [
-          (map (i: {
-            name = "color${toString i}";
-            value = "{{color${toString i}}}";
-          }))
-          lib.listToAttrs
-        ];
+        colors = lib.listToAttrs (map (i: {
+          name = "color${toString i}";
+          value = "{{color${toString i}}}";
+        }) (lib.range 0 15));
       };
       target = "${config.xdg.cacheHome}/wallust/nix.json";
     };

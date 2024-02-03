@@ -31,12 +31,19 @@ in {
       (openOnWorkspace 7 "$term")
 
       # firefox
-      (openOnWorkspace 9 "${lib.getExe config.programs.firefox.package} -P ${user} https://discordapp.com/channels/@me https://web.whatsapp.com ${
-        # transmission only on desktop
-        if host == "desktop"
-        then "http://localhost:9091"
-        else ""
-      }")
+      # (if host == "desktop" then
+      (openOnWorkspace 9 (
+        lib.concatStringsSep " " ([
+            (lib.getExe config.programs.firefox.package)
+            "-P"
+            user # load user firefox profile
+            "https://discordapp.com/channels/@me"
+          ]
+          ++ lib.optionals (host == "desktop") [
+            "https://web.whatsapp.com" # requires access via local network
+            "http://localhost:9091" # transmission
+          ])
+      ))
 
       # download desktop
       (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")

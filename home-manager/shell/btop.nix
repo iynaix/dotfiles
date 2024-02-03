@@ -10,7 +10,7 @@
     };
   };
 
-  xdg.configFile."btop/themes/catppuccin-mocha.theme".text = lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: ''theme[${key}]="${value}"'') {
+  xdg.configFile."btop/themes/catppuccin-mocha.theme".text = lib.concatLines (lib.mapAttrsToList (key: value: ''theme[${key}]="${value}"'') {
     main_bg = "#1E1E2E";
     main_fg = "#CDD6F4";
     title = "#CDD6F4";

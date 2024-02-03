@@ -10,7 +10,7 @@
         important_style = "bg:white fg:black";
       in {
         add_newline = false;
-        format = lib.concatStringsSep "" [
+        format = lib.concatStrings [
           # begin left format
           "$username"
           "$hostname"

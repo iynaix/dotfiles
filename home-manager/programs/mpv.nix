@@ -123,18 +123,14 @@
     # anime profile settings
     (let
       inherit (pkgs.custom) mpv-anime;
-      anime4k_shaders =
-        lib.pipe [
-          "Clamp_Highlights"
-          "Restore_CNN_VL"
-          "Upscale_CNN_x2_VL"
-          "AutoDownscalePre_x2"
-          "AutoDownscalePre_x4"
-          "Upscale_CNN_x2_M"
-        ] [
-          (map (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl"))
-          (arr: lib.concatStringsSep ":" arr)
-        ];
+      anime4k_shaders = lib.concatMapStringsSep ":" (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl") [
+        "Clamp_Highlights"
+        "Restore_CNN_VL"
+        "Upscale_CNN_x2_VL"
+        "AutoDownscalePre_x2"
+        "AutoDownscalePre_x4"
+        "Upscale_CNN_x2_M"
+      ];
     in
       lib.optionalAttrs config.custom.mpv-anime.enable
       {

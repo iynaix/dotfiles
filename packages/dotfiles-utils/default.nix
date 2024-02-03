@@ -37,8 +37,13 @@ rustPlatform.buildRustPackage {
     cp -r $src/assets $out
   '';
 
+  # installShellCompletion $releaseDir/build/dotfiles_utils-*/out/*.{bash,fish}
   preFixup = ''
-    installShellCompletion $releaseDir/build/dotfiles_utils-*/out/*.{bash,fish}
+    OUT_DIR=$releaseDir/build/dotfiles_utils-*/out
+
+    installShellCompletion --bash $OUT_DIR/*.bash
+    installShellCompletion --fish $OUT_DIR/*.fish
+    installShellCompletion --zsh $OUT_DIR/_*
   '';
 
   postFixup = ''

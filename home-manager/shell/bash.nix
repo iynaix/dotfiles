@@ -4,7 +4,7 @@
   ...
 }: let
   cfg = config.custom.shell;
-  bashFunctions = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value:
+  bashFunctions = lib.concatLines (lib.mapAttrsToList (name: value:
     if lib.isString value
     then ''
       function ${name}() {

@@ -41,6 +41,11 @@
         # git
         "gitconfig".text = config.hm.xdg.configFile."git/config".text;
       };
+
+      # install fish completions for fish
+      # https://github.com/nix-community/home-manager/pull/2408
+      pathsToLink = ["/share/fish"];
+
       variables = {
         TERMINAL = lib.getExe config.hm.custom.terminal.package;
         EDITOR = "nvim";

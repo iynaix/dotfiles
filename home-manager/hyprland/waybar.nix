@@ -145,21 +145,15 @@ in
           text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
           border-bottom:  2px solid transparent;
         '';
-        mkModuleCss = arr: let
-          last = lib.length arr - 1;
-        in
-          lib.concatStringsSep "\n" (
-            lib.imap0 (i: mod: let
+        mkModuleCss = arr:
+          lib.concatImapStringsSep "\n" (
+            pos: mod: let
               className = lib.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
               padding =
-                if (i == 0)
-                then ''
-                  padding-right: 12px;
-                ''
-                else if (i == last)
-                then ''
-                  padding-left: 12px;
-                ''
+                if (pos == 1)
+                then "padding-right: 12px;"
+                else if (pos == lib.length arr)
+                then "padding-left: 12px;"
                 else ''
                   padding-left: 12px;
                   padding-right: 12px;
@@ -168,9 +162,9 @@ in
               #${className} {
                 ${baseModuleCss}
                 ${padding}
-              }'')
-            arr
-          );
+              }''
+          )
+          arr;
       in {
         inherit (cfg) enable;
         text = ''
