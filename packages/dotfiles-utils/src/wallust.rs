@@ -15,7 +15,7 @@ pub const CUSTOM_THEMES: [&str; 6] = [
 
 pub fn apply_theme(theme: &str) {
     if CUSTOM_THEMES.contains(&theme) {
-        let colorscheme_file = full_path(format!("~/.config/wallust/{theme}.json"));
+        let colorscheme_file = full_path(format!("~/.config/wallust/themes/{theme}.json"));
         execute::command_args!(
             "wallust",
             "cs",

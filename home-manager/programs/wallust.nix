@@ -10,18 +10,13 @@ in {
   # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
   home.packages = [pkgs.wallust];
 
-  # wallust config
   xdg.configFile =
     {
-      # custom themes in pywal format
-      "wallust/catppuccin-frappe.json".source = ./catppuccin-frappe.json;
-      "wallust/catppuccin-macchiato.json".source = ./catppuccin-macchiato.json;
-      "wallust/catppuccin-mocha.json".source = ./catppuccin-mocha.json;
-      "wallust/decay-dark.json".source = ./decay-dark.json;
-      "wallust/night-owl.json".source = ./night-owl.json;
-      "wallust/tokyo-night.json".source = ./tokyo-night.json;
-
-      # wallust config
+      # add custom themes in pywal format
+      "wallust/themes" = {
+        source = ./wallust;
+        recursive = true;
+      };
       "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
         backend = "resized";
         color_space = "labmixed";
@@ -40,12 +35,12 @@ in {
         cfg.templates;
       };
     }
+    //
     # set xdg configFile text and on change for wallust templates
-    // lib.mapAttrs' (
-      template: {text, ...}:
-        lib.nameValuePair "wallust/${template}" {inherit text;}
-    )
-    cfg.templates;
+    (lib.mapAttrs' (
+        template: {text, ...}: lib.nameValuePair "wallust/${template}" {inherit text;}
+      )
+      cfg.templates);
 
   custom.wallust.templates = {
     # misc information for nix
@@ -53,7 +48,7 @@ in {
       enable = true;
       text = lib.strings.toJSON {
         wallpaper = "{{wallpaper}}";
-        fallback = "${../../gits-catppuccin.jpg}";
+        fallback = "${../gits-catppuccin.jpg}";
         monitors = config.custom.displays;
         inherit (config.custom.wallust) colorscheme;
         persistent_workspaces = config.custom.waybar.persistent-workspaces;

@@ -21,11 +21,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprNStack = {
-      url = "github:iynaix/hyprNStack";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";

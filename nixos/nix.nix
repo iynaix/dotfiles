@@ -35,7 +35,7 @@
       fi
     '';
   };
-  # switch via nix flake (note you have to pass --hostname to switch to a different host)
+  # switch via nix flake
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
     runtimeInputs = with pkgs; [git nix-current-generation nh];

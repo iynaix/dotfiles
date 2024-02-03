@@ -19,6 +19,8 @@ in {
   geist-font = assert (lib.assertMsg (!lib.hasAttr "geist-font" pkgs) "geist-font: geist-font is in nixpkgs");
     callPackage ./geist-font {};
 
+  hyprnstack = callPackage ./hyprnstack {};
+
   # mpv plugins
   mpv-deletefile = w callPackage ./mpv-deletefile {};
   mpv-dynamic-crop = w callPackage ./mpv-dynamic-crop {};

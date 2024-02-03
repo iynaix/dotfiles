@@ -1,15 +1,12 @@
 {
   config,
   host,
-  inputs,
   lib,
   pkgs,
   ...
-}: let
-  isHyprnstack = config.custom.hyprland.plugin == "hyprnstack";
-in {
-  wayland.windowManager.hyprland = lib.mkIf isHyprnstack {
-    plugins = [inputs.hyprNStack.packages.${pkgs.system}.hyprNStack];
+}: {
+  wayland.windowManager.hyprland = lib.mkIf (config.custom.hyprland.plugin == "hyprnstack") {
+    plugins = [pkgs.custom.hyprnstack];
 
     settings.general.layout = "nstack";
 

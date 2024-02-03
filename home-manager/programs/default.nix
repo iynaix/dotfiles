@@ -16,7 +16,7 @@
     ./rofi.nix
     ./vlc.nix
     ./vscode.nix
-    ./wallust
+    ./wallust.nix
     ./yt-dlp.nix
     ./zathura.nix
   ];

@@ -21,7 +21,7 @@
       fi
     '';
   };
-  # switch home-manager via nix flake (note you have to pass --hostname to switch to a different host)
+  # switch home-manager via nix flake
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
     runtimeInputs = with pkgs; [git nh];
