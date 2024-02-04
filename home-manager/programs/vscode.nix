@@ -12,7 +12,7 @@ _: {
       	// Unique id used for correlating crash reports sent from this instance.
       	// Do not edit this value.
       	"crash-reporter-id": "2e9e4d50-af3a-4bd9-9dfb-7ded6d285cc8",
-        "password-store": "gnome"
+        "password-store": "gnome-libsecret"
       }
     '';
   };

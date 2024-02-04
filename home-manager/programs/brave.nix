@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   programs.chromium = {
     enable = true;
     package = pkgs.brave;
@@ -45,6 +49,19 @@
       # Youtube-shorts block
       {id = "jiaopdjbehhjgokpphdfgmapkobbnmjp";}
     ];
+  };
+
+  # set default browser
+  home.sessionVariables = {
+    DEFAULT_BROWSER = lib.getExe pkgs.brave;
+  };
+
+  xdg.mimeApps.defaultApplications = {
+    "text/html" = "brave.desktop";
+    "x-scheme-handler/http" = "brave.desktop";
+    "x-scheme-handler/https" = "brave.desktop";
+    "x-scheme-handler/about" = "brave.desktop";
+    "x-scheme-handler/unknown" = "brave.desktop";
   };
 
   custom.persist = {

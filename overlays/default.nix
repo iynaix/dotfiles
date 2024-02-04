@@ -97,26 +97,29 @@ in {
         #     };
         #   });
 
-        # lock vscode to 1.81.1 because native titlebar causes vscode to crash
+        # native titlebar causes vscode to crash, remove for vscode 1.86
         # https://github.com/microsoft/vscode/issues/184124#issuecomment-1717959995
-        vscode = assert (lib.assertMsg (lib.hasPrefix "1.85" prev.vscode.version) "vscode: has wayland crash been fixed?");
-          prev.vscode.overrideAttrs (_: let
-            version = "1.81.1";
+        vscode = assert (lib.assertMsg (lib.hasPrefix "1.85" prev.vscode.version) "vscode: remove overlay");
+          prev.vscode.overrideAttrs (_: rec {
+            version = "1.86.0";
             plat = "linux-x64";
-          in {
+
             src = prev.fetchurl {
               name = "VSCode_${version}_${plat}.tar.gz";
               url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-              sha256 = "sha256-Tqawqu0iR0An3CZ4x3RGG0vD3x/PvQyRhVThc6SvdEg=";
+              sha256 = "0qykchhd6cplyip4gp5s1fpv664xw2y5z0z7n6zwhwpfrld8piwb";
             };
-            # preFixup = ''
-            #   gappsWrapperArgs+=(
-            #     # Add gio to PATH so that moving files to the trash works when not using a desktop environment
-            #     --prefix PATH : ${prev.glib.bin}/bin
-            #     --add-flags "''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-            #     --add-flags ${lib.escapeShellArg commandLineArgs}
-            #   )
-            # '';
+
+            rev = "05047486b6df5eb8d44b2ecd70ea3bdf775fd937";
+
+            vscodeServer = prev.srcOnly {
+              name = "vscode-server-${rev}.tar.gz";
+              src = prev.fetchurl {
+                name = "vscode-server-${rev}.tar.gz";
+                url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
+                sha256 = "0d3g6csi2aplsy5j3v84m65mhlg0krpb2sndk0nh7gafyc5gnn28";
+              };
+            };
           });
 
         # use latest commmit from git
