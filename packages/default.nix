@@ -16,9 +16,6 @@ in {
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos {};
 
-  geist-font = assert (lib.assertMsg (!lib.hasAttr "geist-font" pkgs) "geist-font: geist-font is in nixpkgs");
-    callPackage ./geist-font {};
-
   hyprnstack = callPackage ./hyprnstack {};
 
   # mpv plugins

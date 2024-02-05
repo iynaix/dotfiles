@@ -50,7 +50,7 @@ in {
     };
     font = {
       name = "${config.custom.fonts.regular} Regular";
-      package = pkgs.custom.geist-font;
+      package = pkgs.geist-font;
       size = 10;
     };
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";

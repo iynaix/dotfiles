@@ -2,7 +2,7 @@
   description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/f649a4a4b749bb2b55cc3a7afc815d8df9dd62db";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
@@ -79,8 +79,6 @@
     packages = forAllSystems (
       pkgs: (import ./packages {inherit pkgs inputs;})
     );
-
-    inherit self;
 
     # templates for devenv
     templates = import ./templates;

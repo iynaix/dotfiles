@@ -9,7 +9,7 @@ use crate::{
 use chrono::{DateTime, Datelike, NaiveDate, Timelike};
 use execute::Execute;
 use serde_json::{json, Value};
-use std::process::Command;
+use std::{env, process::Command};
 
 #[cfg(feature = "wfetch-waifu")]
 pub const fn arg_waifu(args: &WaifuFetchArgs) -> bool {
@@ -162,14 +162,38 @@ pub fn shell_module() -> serde_json::Value {
     }
 }
 
+fn os_module() -> serde_json::Value {
+    let os = if execute::command!("uname -a")
+        .execute_stdout_lines()
+        .join(" ")
+        .contains("NixOS")
+    {
+        ""
+    } else {
+        ""
+    };
+
+    json!({ "type": "os", "key": format!("{os} OS"), "format": "{3}" })
+}
+
+fn wm_module() -> serde_json::Value {
+    let key = if env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == *"Hyprland" {
+        "󰕮"
+    } else {
+        ""
+    };
+
+    json!({ "type": "wm", "key": format!("{key} WM"), "format": "{2}" })
+}
+
 #[allow(clippy::similar_names)] // gpu and cpu trips this
 pub fn create_fastfetch_config(args: &WaifuFetchArgs, config_jsonc: &str) {
-    let os = json!({ "type": "os", "key": " OS", "format": "{3}" });
+    let os = os_module();
     let kernel = json!({ "type": "kernel", "key": " VER", });
     let uptime = json!({ "type": "uptime", "key": "󰅐 UP", });
     let packages = json!({ "type": "packages", "key": "󰏖 PKG", });
     let display = json!({ "type": "display", "key": "󰍹 RES", "compactType": "scaled" });
-    let wm = json!({ "type": "wm", "key": " WM", "format": "{2}" });
+    let wm = wm_module();
     let terminal = json!({ "type": "terminal", "key": " TER", "format": "{3}" });
     let cpu = json!({ "type": "cpu", "key": " CPU", "format": "{1} ({5})", });
     let gpu = json!({ "type": "gpu", "key": " GPU", "driverSpecific": true, "format": "{2}", "forceVulkan": true, "hideType": "integrated" });

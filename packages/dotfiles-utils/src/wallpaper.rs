@@ -177,6 +177,7 @@ fn detect_swww() -> Option<String> {
                 .unwrap_or_default()
                 .1
                 .trim()
+                .trim_matches('\'')
                 .to_string()
         })
         .filter(|wallpaper| !wallpaper.is_empty() && wallpaper != "STDIN")
@@ -213,6 +214,7 @@ fn detect_gsettings() -> Option<String> {
             .map(|wallpaper| {
                 let wallpaper = wallpaper.trim();
                 wallpaper
+                    .trim_matches('\'')
                     .strip_prefix("file://")
                     .unwrap_or(wallpaper)
                     .to_string()
@@ -228,6 +230,7 @@ pub fn detect(wallpaper_arg: &Option<String>) -> Option<String> {
         detect_iynaixos(),
         detect_swww(),
         detect_swaybg(),
+        // gnome / cinnamon / mate
         detect_gsettings(),
     ]
     .iter()

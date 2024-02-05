@@ -50,8 +50,10 @@
 
   # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
     # bye bye xterm
     excludePackages = [pkgs.xterm];
   };
