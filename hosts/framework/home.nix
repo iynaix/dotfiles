@@ -1,14 +1,22 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   custom = {
     displays = [
       {
         name = "eDP-1";
         hyprland = "2256x1504,0x0,1";
-        workspaces = [1 2 3 4 5 6 7 8 9 10];
+        workspaces = [
+          1
+          2
+          3
+          4
+          5
+          6
+          7
+          8
+          9
+          10
+        ];
       }
     ];
 

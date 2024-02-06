@@ -3,35 +3,39 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (config.custom) displays;
   rofi = lib.getExe pkgs.rofi;
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
-in {
+in
+{
   wayland.windowManager.hyprland.settings = {
-    bind = let
-      workspace_keybinds = lib.flatten ((pkgs.custom.lib.mapWorkspaces ({
-        workspace,
-        key,
-        ...
-      }:
-        if qtile_like
-        then [
-          # Switch workspaces with mainMod + [0-9]
-          "$mod, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
-          # Move active window to a workspace with mainMod + SHIFT + [0-9]
-          "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
-          "$mod_SHIFT, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
-        ]
-        else [
-          # Switch workspaces with mainMod + [0-9]
-          "$mod, ${key}, workspace, ${workspace}"
-          # Move active window to a workspace with mainMod + SHIFT + [0-9]
-          "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
-        ]))
-      displays);
-    in
+    bind =
+      let
+        workspace_keybinds = lib.flatten (
+          (pkgs.custom.lib.mapWorkspaces (
+            { workspace, key, ... }:
+            if qtile_like then
+              [
+                # Switch workspaces with mainMod + [0-9]
+                "$mod, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
+                # Move active window to a workspace with mainMod + SHIFT + [0-9]
+                "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
+                "$mod_SHIFT, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
+              ]
+            else
+              [
+                # Switch workspaces with mainMod + [0-9]
+                "$mod, ${key}, workspace, ${workspace}"
+                # Move active window to a workspace with mainMod + SHIFT + [0-9]
+                "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
+              ]
+          ))
+            displays
+        );
+      in
       [
         "$mod, Return, exec, $term"
         "$mod_SHIFT, Return, exec, ${rofi} -show drun"
@@ -48,7 +52,7 @@ in {
         "$mod_ALT, F4, exit,"
 
         # without the rounding, the blur shows up around the corners
-        ''CTRL_ALT, Delete, exec, rofi-power-menu''
+        "CTRL_ALT, Delete, exec, rofi-power-menu"
         "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
 
         # reset monitors
@@ -91,26 +95,10 @@ in {
         "$mod, Right, focusmonitor, +1"
 
         # move to next / previous monitor
-        "$mod_SHIFT, Left, movewindow, ${
-          if lib.length displays < 3
-          then "mon:-1"
-          else "mon:l"
-        }"
-        "$mod_SHIFT, Right, movewindow, ${
-          if lib.length displays < 3
-          then "mon:+1"
-          else "mon:r"
-        }"
-        "$mod_SHIFT, Up, movewindow, ${
-          if lib.length displays < 3
-          then "mon:-1"
-          else "mon:u"
-        }"
-        "$mod_SHIFT, Down, movewindow, ${
-          if lib.length displays < 3
-          then "mon:+1"
-          else "mon:d"
-        }"
+        "$mod_SHIFT, Left, movewindow, ${if lib.length displays < 3 then "mon:-1" else "mon:l"}"
+        "$mod_SHIFT, Right, movewindow, ${if lib.length displays < 3 then "mon:+1" else "mon:r"}"
+        "$mod_SHIFT, Up, movewindow, ${if lib.length displays < 3 then "mon:-1" else "mon:u"}"
+        "$mod_SHIFT, Down, movewindow, ${if lib.length displays < 3 then "mon:+1" else "mon:d"}"
 
         "ALT, Tab, cyclenext"
         "ALT_SHIFT, Tab, cyclenext, prev"

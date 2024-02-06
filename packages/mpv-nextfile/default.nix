@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (
       description = "Force open next or previous file in the currently playing files directory";
       homepage = "https://github.com/jonniek/mpv-nextfile";
       license = lib.licenses.unlicense;
-      maintainers = [lib.maintainers.iynaix];
+      maintainers = [ lib.maintainers.iynaix ];
     };
   }
 )

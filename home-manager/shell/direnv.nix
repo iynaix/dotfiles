@@ -13,7 +13,7 @@ lib.mkMerge [
 
     # vim support
     programs.nixvim = {
-      extraPlugins = [pkgs.vimPlugins.direnv-vim];
+      extraPlugins = [ pkgs.vimPlugins.direnv-vim ];
       globals = {
         direnv_silent_load = 1;
       };
@@ -25,16 +25,14 @@ lib.mkMerge [
     custom.shell.functions = {
       # create a new devenv environment
       mkdevenv = {
-        bashBody = ''nix flake init --template github:iynaix/dotfiles#$1'';
-        fishBody = ''nix flake init --template github:iynaix/dotfiles#$argv[1]'';
+        bashBody = "nix flake init --template github:iynaix/dotfiles#$1";
+        fishBody = "nix flake init --template github:iynaix/dotfiles#$argv[1]";
       };
     };
 
     custom.persist = {
       home = {
-        directories = [
-          ".local/share/direnv"
-        ];
+        directories = [ ".local/share/direnv" ];
         cache = [
           ".local/share/.cargo"
           ".cache/pip"

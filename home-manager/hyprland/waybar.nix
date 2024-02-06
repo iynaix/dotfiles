@@ -4,139 +4,158 @@
   isNixOS,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.custom.waybar;
 in
-  lib.mkIf cfg.enable {
-    programs.waybar = {
-      enable = isNixOS;
-      # do not use the systemd service as it is flaky and unreliable
-      # https://github.com/nix-community/home-manager/issues/3599
+lib.mkIf cfg.enable {
+  programs.waybar = {
+    enable = isNixOS;
+    # do not use the systemd service as it is flaky and unreliable
+    # https://github.com/nix-community/home-manager/issues/3599
+  };
+
+  custom.waybar.config = {
+    backlight = lib.mkIf config.custom.backlight.enable {
+      format = "{icon}   {percent}%";
+      format-icons = [
+        "󰃞"
+        "󰃟"
+        "󰃝"
+        "󰃠"
+      ];
+      on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
+      on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
     };
 
-    custom.waybar.config = {
-      backlight = lib.mkIf config.custom.backlight.enable {
-        format = "{icon}   {percent}%";
-        format-icons = ["󰃞" "󰃟" "󰃝" "󰃠"];
-        on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
-        on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
-      };
-
-      battery = lib.mkIf config.custom.battery.enable {
-        format = "{icon}    {capacity}%";
-        format-charging = "     {capacity}%";
-        format-icons = ["" "" "" "" ""];
-        states = {
-          critical = 20;
-        };
-        tooltip = false;
-      };
-
-      clock = {
-        calendar = {
-          actions = {
-            on-click-right = "mode";
-            on-scroll-down = "shift_down";
-            on-scroll-up = "shift_up";
-          };
-          format = {
-            days = "<span color='{{color4}}'><b>{}</b></span>";
-            months = "<span color='{{foreground}}'><b>{}</b></span>";
-            today = "<span color='{{color3}}'><b><u>{}</u></b></span>";
-            weekdays = "<span color='{{color5}}'><b>{}</b></span>";
-          };
-          mode = "year";
-          mode-mon-col = 3;
-          on-scroll = 1;
-        };
-        format = "󰥔   {:%H:%M}";
-        format-alt = "󰸗   {:%a, %d %b %Y}";
-        # format = "󰥔   {:%H:%M}";
-        # format-alt = "  {:%a, %d %b %Y}";
-        interval = 10;
-        tooltip-format = "<tt><small>{calendar}</small></tt>";
-      };
-
-      "custom/nix" = {
-        format = "󱄅";
-        on-click = "hypr-wallpaper";
-        on-click-right = "imv-wallpaper";
-        tooltip = false;
-      };
-
-      "hyprland/workspaces" = {
-        # TODO: pacman, remove active inverse circle
-        # format = "{icon}";
-        # format-icons = {
-        #   active = "󰮯";
-        #   default = "·";
-        #   urgent = "󰊠";
-        # };
-      };
-
-      "hyprland/window" = {
-        rewrite = {
-          # strip the application name
-          "(.*) - (.*)" = "$1";
-        };
-        separate-outputs = true;
-      };
-
-      layer = "top";
-      margin = "0";
-
-      modules-center = [
-        "hyprland/workspaces"
+    battery = lib.mkIf config.custom.battery.enable {
+      format = "{icon}    {capacity}%";
+      format-charging = "     {capacity}%";
+      format-icons = [
+        ""
+        ""
+        ""
+        ""
+        ""
       ];
+      states = {
+        critical = 20;
+      };
+      tooltip = false;
+    };
 
-      modules-left = [
-        "custom/nix"
-        # "hyprland/window"
-      ];
+    clock = {
+      calendar = {
+        actions = {
+          on-click-right = "mode";
+          on-scroll-down = "shift_down";
+          on-scroll-up = "shift_up";
+        };
+        format = {
+          days = "<span color='{{color4}}'><b>{}</b></span>";
+          months = "<span color='{{foreground}}'><b>{}</b></span>";
+          today = "<span color='{{color3}}'><b><u>{}</u></b></span>";
+          weekdays = "<span color='{{color5}}'><b>{}</b></span>";
+        };
+        mode = "year";
+        mode-mon-col = 3;
+        on-scroll = 1;
+      };
+      format = "󰥔   {:%H:%M}";
+      format-alt = "󰸗   {:%a, %d %b %Y}";
+      # format = "󰥔   {:%H:%M}";
+      # format-alt = "  {:%a, %d %b %Y}";
+      interval = 10;
+      tooltip-format = "<tt><small>{calendar}</small></tt>";
+    };
 
-      modules-right =
-        ["network" "pulseaudio"]
-        ++ (lib.optional config.custom.backlight.enable "backlight")
-        ++ (lib.optional config.custom.battery.enable "battery")
-        ++ ["clock"];
+    "custom/nix" = {
+      format = "󱄅";
+      on-click = "hypr-wallpaper";
+      on-click-right = "imv-wallpaper";
+      tooltip = false;
+    };
 
-      network =
-        if config.custom.wifi.enable
-        then {
+    "hyprland/workspaces" = {
+      # TODO: pacman, remove active inverse circle
+      # format = "{icon}";
+      # format-icons = {
+      #   active = "󰮯";
+      #   default = "·";
+      #   urgent = "󰊠";
+      # };
+    };
+
+    "hyprland/window" = {
+      rewrite = {
+        # strip the application name
+        "(.*) - (.*)" = "$1";
+      };
+      separate-outputs = true;
+    };
+
+    layer = "top";
+    margin = "0";
+
+    modules-center = [ "hyprland/workspaces" ];
+
+    modules-left = [
+      "custom/nix"
+      # "hyprland/window"
+    ];
+
+    modules-right =
+      [
+        "network"
+        "pulseaudio"
+      ]
+      ++ (lib.optional config.custom.backlight.enable "backlight")
+      ++ (lib.optional config.custom.battery.enable "battery")
+      ++ [ "clock" ];
+
+    network =
+      if config.custom.wifi.enable then
+        {
           format = "    {essid}";
           format-disconnected = "󰖪    Offline";
           on-click = "${config.xdg.configHome}/rofi/rofi-wifi-menu";
           on-click-right = "${config.custom.terminal.exec} nmtui";
           tooltip = false;
         }
-        else {
+      else
+        {
           format-disconnected = "󰖪    Offline";
           format-ethernet = "";
           tooltip = false;
         };
 
-      position = "top";
+    position = "top";
 
-      pulseaudio = {
-        format = "{icon}  {volume}%";
-        format-icons = ["󰕿" "󰖀" "󰕾"];
-        format-muted = "󰖁  Muted";
-        on-click = "${lib.getExe pkgs.pamixer} -t";
-        on-click-right = "pavucontrol";
-        scroll-step = 1;
-        tooltip = false;
-      };
-
-      start_hidden = cfg.hidden;
+    pulseaudio = {
+      format = "{icon}  {volume}%";
+      format-icons = [
+        "󰕿"
+        "󰖀"
+        "󰕾"
+      ];
+      format-muted = "󰖁  Muted";
+      on-click = "${lib.getExe pkgs.pamixer} -t";
+      on-click-right = "pavucontrol";
+      scroll-step = 1;
+      tooltip = false;
     };
 
-    custom.wallust.templates = {
-      "waybar.jsonc" = {
-        inherit (cfg) enable;
-        text = lib.strings.toJSON cfg.config;
-        target = "${config.xdg.configHome}/waybar/config";
-      };
-      "waybar.css" = let
+    start_hidden = cfg.hidden;
+  };
+
+  custom.wallust.templates = {
+    "waybar.jsonc" = {
+      inherit (cfg) enable;
+      text = lib.strings.toJSON cfg.config;
+      target = "${config.xdg.configHome}/waybar/config";
+    };
+    "waybar.css" =
+      let
         baseModuleCss = ''
           font-family: ${config.custom.fonts.regular};
           font-weight: bold;
@@ -145,27 +164,43 @@ in
           text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
           border-bottom:  2px solid transparent;
         '';
-        mkModuleCss = arr:
-          lib.concatImapStringsSep "\n" (
-            pos: mod: let
-              className = lib.replaceStrings ["hyprland/" "/"] ["" "-"] mod;
-              padding =
-                if (pos == 1)
-                then "padding-right: 12px;"
-                else if (pos == lib.length arr)
-                then "padding-left: 12px;"
-                else ''
-                  padding-left: 12px;
-                  padding-right: 12px;
-                '';
-            in ''
-              #${className} {
-                ${baseModuleCss}
-                ${padding}
-              }''
-          )
-          arr;
-      in {
+        mkModuleCss =
+          arr:
+          lib.concatImapStringsSep "\n"
+            (
+              pos: mod:
+              let
+                className =
+                  lib.replaceStrings
+                    [
+                      "hyprland/"
+                      "/"
+                    ]
+                    [
+                      ""
+                      "-"
+                    ]
+                    mod;
+                padding =
+                  if (pos == 1) then
+                    "padding-right: 12px;"
+                  else if (pos == lib.length arr) then
+                    "padding-left: 12px;"
+                  else
+                    ''
+                      padding-left: 12px;
+                      padding-right: 12px;
+                    '';
+              in
+              ''
+                #${className} {
+                  ${baseModuleCss}
+                  ${padding}
+                }''
+            )
+            arr;
+      in
+      {
         inherit (cfg) enable;
         text = ''
           * {
@@ -202,5 +237,5 @@ in
         '';
         target = "${config.xdg.configHome}/waybar/style.css";
       };
-    };
-  }
+  };
+}

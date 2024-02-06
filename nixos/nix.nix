@@ -6,17 +6,14 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   dots = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
   # outputs the current nixos generation
   nix-current-generation = pkgs.writeShellScriptBin "nix-current-generation" ''
     generations=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
     # add generation number from before desktop format
-    echo $(expr $generations + ${
-      if host == "desktop"
-      then "1196"
-      else "0"
-    })
+    echo $(expr $generations + ${if host == "desktop" then "1196" else "0"})
   '';
   # set the current configuration as default to boot
   ndefault = pkgs.writeShellScriptBin "ndefault" ''
@@ -25,7 +22,7 @@
   # build flake but don't switch
   nbuild = pkgs.writeShellApplication {
     name = "nbuild";
-    runtimeInputs = [nswitch];
+    runtimeInputs = [ nswitch ];
     text = ''
       if [ "$#" -eq 0 ]; then
           nswitch --dry --hostname "${host}"
@@ -38,7 +35,11 @@
   # switch via nix flake
   nswitch = pkgs.writeShellApplication {
     name = "nswitch";
-    runtimeInputs = with pkgs; [git nix-current-generation nh];
+    runtimeInputs = with pkgs; [
+      git
+      nix-current-generation
+      nh
+    ];
     text = ''
       cd ${dots}
 
@@ -67,7 +68,10 @@
   # update all nvfetcher overlays and packages
   nv-update = pkgs.writeShellApplication {
     name = "nv-update";
-    runtimeInputs = [nswitch pkgs.nvfetcher];
+    runtimeInputs = [
+      nswitch
+      pkgs.nvfetcher
+    ];
     text = ''
       cd ${dots}
 
@@ -87,7 +91,11 @@
   # update via nix flake
   upd8 = pkgs.writeShellApplication {
     name = "upd8";
-    runtimeInputs = [nswitch pkgs.nvfetcher nv-update];
+    runtimeInputs = [
+      nswitch
+      pkgs.nvfetcher
+      nv-update
+    ];
     text = ''
       cd ${dots}
       nix flake update
@@ -108,7 +116,10 @@
   # build iso images
   nbuild-iso = pkgs.writeShellApplication {
     name = "nbuild-iso";
-    runtimeInputs = [nswitch pkgs.nixos-generators];
+    runtimeInputs = [
+      nswitch
+      pkgs.nixos-generators
+    ];
     text = ''
       cd ${dots}
       nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
@@ -117,46 +128,53 @@
   };
   json2nix = pkgs.writeShellApplication {
     name = "json2nix";
-    runtimeInputs = with pkgs; [hjson alejandra];
+    runtimeInputs = with pkgs; [
+      hjson
+      nixfmt-rfc-style
+    ];
     text = ''
       json=$(cat - | hjson -j 2> /dev/null)
-      nix eval --expr "lib.strings.fromJSON '''$json'''" | alejandra -q
+      nix eval --expr "lib.strings.fromJSON '''$json'''" | nixfmt -q
     '';
   };
   yaml2nix = pkgs.writeShellApplication {
     name = "yaml2nix";
-    runtimeInputs = with pkgs; [yq alejandra];
+    runtimeInputs = with pkgs; [
+      yq
+      nixfmt-rfc-style
+    ];
     text = ''
       yaml=$(cat - | yq)
-      nix eval --expr "lib.strings.fromJSON '''$yaml'''" | alejandra -q
+      nix eval --expr "lib.strings.fromJSON '''$yaml'''" | nixfmt -q
     '';
   };
-  # create an fhs environment to run downloaded binaries
-  # https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
-  # fhs = let
-  #   base = pkgs.appimageTools.defaultFhsEnvArgs;
-  # in
-  #   pkgs.buildFHSUserEnv (base
-  #     // {
-  #       name = "fhs";
-  #       targetPkgs = pkgs: (
-  #         # pkgs.buildFHSUserEnv provides only a minimal FHS environment,
-  #         # lacking many basic packages needed by most software.
-  #         # Therefore, we need to add them manually.
-  #         #
-  #         # pkgs.appimageTools provides basic packages required by most software.
-  #         (base.targetPkgs pkgs)
-  #         ++ [
-  #           pkgs.pkg-config
-  #           pkgs.ncurses
-  #           # Feel free to add more packages here if needed.
-  #         ]
-  #       );
-  #       profile = "export FHS=1";
-  #       runScript = "bash";
-  #       extraOutputsToInstall = ["dev"];
-  #     });
-in {
+in
+# create an fhs environment to run downloaded binaries
+# https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
+# fhs = let
+#   base = pkgs.appimageTools.defaultFhsEnvArgs;
+# in
+#   pkgs.buildFHSUserEnv (base
+#     // {
+#       name = "fhs";
+#       targetPkgs = pkgs: (
+#         # pkgs.buildFHSUserEnv provides only a minimal FHS environment,
+#         # lacking many basic packages needed by most software.
+#         # Therefore, we need to add them manually.
+#         #
+#         # pkgs.appimageTools provides basic packages required by most software.
+#         (base.targetPkgs pkgs)
+#         ++ [
+#           pkgs.pkg-config
+#           pkgs.ncurses
+#           # Feel free to add more packages here if needed.
+#         ]
+#       );
+#       profile = "export FHS=1";
+#       runScript = "bash";
+#       extraOutputsToInstall = ["dev"];
+#     });
+{
   # execute shebangs that assume hardcoded shell paths
   services.envfs.enable = true;
 
@@ -169,30 +187,28 @@ in {
     systemPackages =
       # for nixlang / nixpkgs
       with pkgs;
-        [
-          alejandra
-          nh
-          nil
-          nix-init
-          nixpkgs-fmt
-          nixpkgs-review
-        ]
-        ++ [
-          nix-current-generation
-          ndefault
-          nbuild
-          nswitch
-          nvfetcher
-          nv-update
-          nbuild-iso
-          upd8
-          json2nix
-          yaml2nix
-          # fhs
-        ]
-        ++ lib.optionals (host == "desktop") [
-          nswitch-remote
-        ];
+      [
+        nixfmt-rfc-style
+        nh
+        nil
+        nix-init
+        nixpkgs-fmt
+        nixpkgs-review
+      ]
+      ++ [
+        nix-current-generation
+        ndefault
+        nbuild
+        nswitch
+        nvfetcher
+        nv-update
+        nbuild-iso
+        upd8
+        json2nix
+        yaml2nix
+        # fhs
+      ]
+      ++ lib.optionals (host == "desktop") [ nswitch-remote ];
   };
 
   hm.home.shellAliases = {
@@ -235,7 +251,10 @@ in {
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       # use flakes
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       substituters = [
         "https://hyprland.cachix.org"
         "https://nix-community.cachix.org"

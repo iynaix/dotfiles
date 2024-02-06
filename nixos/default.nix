@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./audio.nix
     ./auth.nix
@@ -44,7 +45,7 @@
 
       # install fish completions for fish
       # https://github.com/nix-community/home-manager/pull/2408
-      pathsToLink = ["/share/fish"];
+      pathsToLink = [ "/share/fish" ];
 
       variables = {
         TERMINAL = lib.getExe config.hm.custom.terminal.package;
@@ -54,7 +55,8 @@
         STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };
 
-      systemPackages = with pkgs;
+      systemPackages =
+        with pkgs;
         [
           curl
           eza
@@ -71,7 +73,7 @@
     };
 
     # setup fonts
-    fonts.packages = config.hm.custom.fonts.packages ++ [pkgs.custom.rofi-themes];
+    fonts.packages = config.hm.custom.fonts.packages ++ [ pkgs.custom.rofi-themes ];
 
     programs = {
       # use same config as home-manager
@@ -94,13 +96,9 @@
     };
 
     custom-nixos.persist = {
-      root.directories = lib.mkIf config.hm.custom.wifi.enable [
-        "/etc/NetworkManager"
-      ];
+      root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
 
-      home.directories = [
-        ".local/state/wireplumber"
-      ];
+      home.directories = [ ".local/state/wireplumber" ];
     };
   };
 }

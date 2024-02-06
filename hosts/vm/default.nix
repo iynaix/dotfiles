@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   custom-nixos = {
     hyprland.enable = false;
     zfs.encryption = false;
@@ -23,15 +20,15 @@
   # fix for spice-vdagentd not starting in wms
   systemd.user.services.spice-agent = {
     enable = true;
-    wantedBy = ["graphical-session.target"];
+    wantedBy = [ "graphical-session.target" ];
     serviceConfig = {
       ExecStart = "${lib.getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
     };
     unitConfig = {
       ConditionVirtualization = "vm";
       Description = "Spice guest session agent";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
   };
 }

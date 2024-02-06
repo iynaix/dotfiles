@@ -6,7 +6,8 @@ let
       echo .direnv >> .gitignore
     ```
   '';
-in rec {
+in
+rec {
   javascript = {
     inherit welcomeText;
     path = ./javascript;

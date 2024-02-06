@@ -4,24 +4,31 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   sonarr-ical-sync = pkgs.writeShellApplication {
     name = "sonarr-ical-sync";
-    runtimeInputs = with pkgs; [curl netlify-cli];
-    text = let
-      inherit (config.sops) secrets;
-    in ''
-      outDir=/tmp/sonarr-ical-sync
-      mkdir -p "$outDir"
+    runtimeInputs = with pkgs; [
+      curl
+      netlify-cli
+    ];
+    text =
+      let
+        inherit (config.sops) secrets;
+      in
+      ''
+        outDir=/tmp/sonarr-ical-sync
+        mkdir -p "$outDir"
 
-      SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
-      curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
+        SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
+        curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
 
-      NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
-    '';
+        NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
+      '';
   };
 in
-  lib.mkIf config.custom-nixos.bittorrent.enable (lib.mkMerge [
+lib.mkIf config.custom-nixos.bittorrent.enable (
+  lib.mkMerge [
     {
       services = {
         sonarr = {
@@ -38,9 +45,7 @@ in
           "/var/lib/sonarr/.config/NzbDrone"
           "/var/lib/private/prowlarr"
         ];
-        home.directories = [
-          ".config/netlify"
-        ];
+        home.directories = [ ".config/netlify" ];
       };
     }
 
@@ -62,8 +67,8 @@ in
           script = lib.getExe sonarr-ical-sync;
         };
         timers.sonarr-ical-sync = {
-          wantedBy = ["timers.target"];
-          partOf = ["sonarr-ical-sync.service"];
+          wantedBy = [ "timers.target" ];
+          partOf = [ "sonarr-ical-sync.service" ];
           timerConfig = {
             # every 6h at 39min past the hour
             OnCalendar = "00/6:39:00";
@@ -72,4 +77,5 @@ in
         };
       };
     })
-  ])
+  ]
+)

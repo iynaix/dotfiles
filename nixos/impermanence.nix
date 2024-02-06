@@ -3,10 +3,12 @@
   user,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.custom-nixos.persist;
   homeDir = config.hm.home.homeDirectory;
-in {
+in
+{
   boot = {
     # clear /tmp on boot
     tmp.cleanOnBoot = true;
@@ -20,37 +22,51 @@ in {
   };
 
   # create and fix directory permissions so home-manager doesn't error out
-  systemd.services.fix-mount-permissions = let
-    createOwnedDir = dir: ''
-      mkdir -p ${dir}
-      chown ${user}:users ${dir}
-      chmod 700 ${dir}
-    '';
-  in {
-    script =
-      ''
-        ${createOwnedDir "/persist/cache"}
-      ''
-      + lib.optionalString (!cfg.tmpfs && cfg.erase.home) ''
-        # required for home-manager to create its own profile to boot
-        ${(createOwnedDir "${config.hm.xdg.stateHome}/nix/profiles")}
-        ${"chown -R ${user}:users ${homeDir}"}
+  systemd.services.fix-mount-permissions =
+    let
+      createOwnedDir = dir: ''
+        mkdir -p ${dir}
+        chown ${user}:users ${dir}
+        chmod 700 ${dir}
       '';
-    wantedBy = ["multi-user.target"];
-  };
+    in
+    {
+      script =
+        ''
+          ${createOwnedDir "/persist/cache"}
+        ''
+        + lib.optionalString (!cfg.tmpfs && cfg.erase.home) ''
+          # required for home-manager to create its own profile to boot
+          ${(createOwnedDir "${config.hm.xdg.stateHome}/nix/profiles")}
+          ${"chown -R ${user}:users ${homeDir}"}
+        '';
+      wantedBy = [ "multi-user.target" ];
+    };
 
   # replace root and /or home filesystems with tmpfs
-  fileSystems."/" = lib.mkIf (cfg.tmpfs && cfg.erase.root) (lib.mkForce {
-    device = "tmpfs";
-    fsType = "tmpfs";
-    options = ["defaults" "size=1G" "mode=755"];
-  });
+  fileSystems."/" = lib.mkIf (cfg.tmpfs && cfg.erase.root) (
+    lib.mkForce {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = [
+        "defaults"
+        "size=1G"
+        "mode=755"
+      ];
+    }
+  );
   # ${homeDir} causes infinite recursion
-  fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (lib.mkForce {
-    device = "tmpfs";
-    fsType = "tmpfs";
-    options = ["defaults" "size=1G" "mode=777"];
-  });
+  fileSystems."/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (
+    lib.mkForce {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = [
+        "defaults"
+        "size=1G"
+        "mode=777"
+      ];
+    }
+  );
 
   # shut sudo up
   security.sudo.extraConfig = "Defaults lecture=never";
@@ -59,13 +75,11 @@ in {
   environment.persistence = {
     "/persist" = {
       hideMounts = true;
-      files = ["/etc/machine-id"] ++ cfg.root.files;
-      directories =
-        [
-          # systemd journal is stored in /var/log/journal
-          "/var/log"
-        ]
-        ++ cfg.root.directories;
+      files = [ "/etc/machine-id" ] ++ cfg.root.files;
+      directories = [
+        # systemd journal is stored in /var/log/journal
+        "/var/log"
+      ] ++ cfg.root.directories;
     };
 
     "/persist/cache" = {
@@ -77,32 +91,32 @@ in {
 
   # setup persistence for home manager
   programs.fuse.userAllowOther = true;
-  hm = hmCfg: let
-    hmPersistCfg = hmCfg.config.custom.persist;
-  in {
-    systemd.user.startServices = true;
-    home.persistence = {
-      "/persist${homeDir}" = {
-        allowOther = true;
-        removePrefixDirectory = false;
-        files = cfg.home.files ++ hmPersistCfg.home.files;
-        directories =
-          [
+  hm =
+    hmCfg:
+    let
+      hmPersistCfg = hmCfg.config.custom.persist;
+    in
+    {
+      systemd.user.startServices = true;
+      home.persistence = {
+        "/persist${homeDir}" = {
+          allowOther = true;
+          removePrefixDirectory = false;
+          files = cfg.home.files ++ hmPersistCfg.home.files;
+          directories = [
             {
               directory = "projects";
               method = "symlink";
             }
             ".cache/dconf"
             ".config/dconf"
-          ]
-          ++ cfg.home.directories
-          ++ hmPersistCfg.home.directories;
-      };
-      "/persist/cache" = {
-        allowOther = true;
-        removePrefixDirectory = false;
-        directories = hmPersistCfg.home.cache;
+          ] ++ cfg.home.directories ++ hmPersistCfg.home.directories;
+        };
+        "/persist/cache" = {
+          allowOther = true;
+          removePrefixDirectory = false;
+          directories = hmPersistCfg.home.cache;
+        };
       };
     };
-  };
 }

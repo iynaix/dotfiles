@@ -22,14 +22,15 @@ lib.mkIf config.custom-nixos.hyprland.enable {
   # set here as legacy linux won't be able to set these
   hm.wayland.windowManager.hyprland = {
     enable = true;
-    package = assert (lib.assertMsg (pkgs.hyprland.version == "0.34.0") "hyprland: updated, sync with hyprnstack?");
+    package =
+      assert (lib.assertMsg (pkgs.hyprland.version == "0.34.0")
+        "hyprland: updated, sync with hyprnstack?"
+      );
       pkgs.hyprland;
   };
 
   xdg.portal = {
     enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 }

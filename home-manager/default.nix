@@ -5,7 +5,8 @@
   config,
   isNixOS,
   ...
-}: {
+}:
+{
   imports = [
     ./hyprland
     ./programs
@@ -22,14 +23,12 @@
     stateVersion = "23.05";
 
     sessionVariables = {
-      __IS_NIXOS =
-        if isNixOS
-        then "1"
-        else "0";
+      __IS_NIXOS = if isNixOS then "1" else "0";
       NIXPKGS_ALLOW_UNFREE = "1";
     };
 
-    packages = with pkgs;
+    packages =
+      with pkgs;
       [
         curl
         gzip
@@ -58,7 +57,7 @@
     mimeApps.enable = true;
     configFile = {
       "nix/nix.conf".text = "experimental-features = nix-command flakes";
-      "nixpkgs/config.nix".text = ''{ allowUnfree = true; }'';
+      "nixpkgs/config.nix".text = "{ allowUnfree = true; }";
     };
   };
 

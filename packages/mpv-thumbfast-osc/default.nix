@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (
       description = "High-performance on-the-fly thumbnailer for mpv";
       homepage = "https://github.com/po5/thumbfast/vanilla-osc";
       license = lib.licenses.mpl20;
-      maintainers = [lib.maintainers.iynaix];
+      maintainers = [ lib.maintainers.iynaix ];
     };
   }
 )

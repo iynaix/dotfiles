@@ -4,11 +4,13 @@
   lib,
   isNixOS,
   ...
-}: let
+}:
+let
   gradienceCfg = config.custom.gradience;
-in {
+in
+{
   home = {
-    packages = lib.optionals gradienceCfg.enable [pkgs.gradience];
+    packages = lib.optionals gradienceCfg.enable [ pkgs.gradience ];
 
     pointerCursor = lib.mkIf isNixOS {
       package = pkgs.simp1e-cursors;
@@ -21,29 +23,36 @@ in {
 
   dconf.settings = {
     # disable dconf first use warning
-    "ca/desrt/dconf-editor" = {show-warning = false;};
+    "ca/desrt/dconf-editor" = {
+      show-warning = false;
+    };
     # set dark theme for gtk 4
-    "org/gnome/desktop/interface" = {color-scheme = "prefer-dark";};
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
   };
 
   gtk = {
     enable = true;
     theme =
-      if gradienceCfg.enable
+      if
+        gradienceCfg.enable
       # gradience-cli monet --preset-name new-theme --image-path $(current-wallpaper) --theme dark
       # gradience-cli apply --preset-name adaiwata-dark --gtk both
-      then {
-        name = "adw-gtk3";
-        package = pkgs.adw-gtk3;
-      }
-      else {
-        name = "Catppuccin-Mocha-Compact-Blue-Dark";
-        package = pkgs.catppuccin-gtk.override {
-          accents = ["blue"];
-          variant = "mocha";
-          size = "compact";
+      then
+        {
+          name = "adw-gtk3";
+          package = pkgs.adw-gtk3;
+        }
+      else
+        {
+          name = "Catppuccin-Mocha-Compact-Blue-Dark";
+          package = pkgs.catppuccin-gtk.override {
+            accents = [ "blue" ];
+            variant = "mocha";
+            size = "compact";
+          };
         };
-      };
     iconTheme = {
       name = "Tela-blue-dark";
       package = pkgs.tela-icon-theme;

@@ -3,8 +3,9 @@
   lib,
   pkgs,
   ...
-}: {
-  home.packages = [pkgs.cava];
+}:
+{
+  home.packages = [ pkgs.cava ];
 
   custom.wallust.templates.cava = {
     enable = lib.elem pkgs.cava config.home.packages;

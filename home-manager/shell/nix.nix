@@ -5,13 +5,14 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   dots = "/persist${config.home.homeDirectory}/projects/dotfiles";
   # home manager utilities
   # build flake but don't switch
   hmbuild = pkgs.writeShellApplication {
     name = "hmbuild";
-    runtimeInputs = [hmswitch];
+    runtimeInputs = [ hmswitch ];
     text = ''
       if [ "$#" -eq 0 ]; then
           hmswitch --dry --configuration "${host}"
@@ -24,7 +25,10 @@
   # switch home-manager via nix flake
   hmswitch = pkgs.writeShellApplication {
     name = "hmswitch";
-    runtimeInputs = with pkgs; [git nh];
+    runtimeInputs = with pkgs; [
+      git
+      nh
+    ];
     text = ''
       cd ${dots}
 
@@ -49,7 +53,7 @@
   # update home-manager via nix flake
   hmupd8 = pkgs.writeShellApplication {
     name = "hmupd8";
-    runtimeInputs = [hmswitch];
+    runtimeInputs = [ hmswitch ];
     text = ''
       cd ${dots}
       nix flake update
@@ -71,7 +75,7 @@
   };
   nr = pkgs.writeShellApplication {
     name = "nr";
-    runtimeInputs = [pkgs.nixFlakes];
+    runtimeInputs = [ pkgs.nixFlakes ];
     text = ''
       if [ "$#" -eq 0 ]; then
           echo "no package specified."
@@ -84,43 +88,44 @@
     '';
   };
 in
-  lib.mkMerge [
-    (lib.mkIf (!isNixOS) {
+lib.mkMerge [
+  (lib.mkIf (!isNixOS) {
+    home = {
+      packages = [
+        hmbuild
+        hmswitch
+        hmupd8
+        pkgs.nh # nh is installed by nixos anyway
+      ];
+
+      shellAliases = {
+        hsw = "hswitch";
+      };
+    };
+  })
+  {
+    home = {
+      packages = [
+        ngc
+        nr
+      ];
+      shellAliases = {
+        nsh = "nix-shell --command fish -p";
+      };
+    };
+
+    programs = {
+      nix-index.enable = true;
+      nixvim.plugins = {
+        nix.enable = true;
+        lsp.servers.nil_ls.enable = true;
+      };
+    };
+
+    custom.persist = {
       home = {
-        packages = [
-          hmbuild
-          hmswitch
-          hmupd8
-          pkgs.nh # nh is installed by nixos anyway
-        ];
-
-        shellAliases = {
-          hsw = "hswitch";
-        };
+        cache = [ ".cache/nix-index" ];
       };
-    })
-    {
-      home = {
-        packages = [ngc nr];
-        shellAliases = {
-          nsh = "nix-shell --command fish -p";
-        };
-      };
-
-      programs = {
-        nix-index.enable = true;
-        nixvim.plugins = {
-          nix.enable = true;
-          lsp.servers.nil_ls.enable = true;
-        };
-      };
-
-      custom.persist = {
-        home = {
-          cache = [
-            ".cache/nix-index"
-          ];
-        };
-      };
-    }
-  ]
+    };
+  }
+]

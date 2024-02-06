@@ -3,7 +3,8 @@
   user,
   host,
   ...
-}: {
+}:
+{
   # Bootloader.
   boot.loader = {
     efi = {
@@ -12,7 +13,7 @@
     };
     grub = {
       enable = true;
-      devices = ["nodev"];
+      devices = [ "nodev" ];
       efiSupport = true;
       theme = pkgs.custom.distro-grub-themes-nixos;
     };
@@ -55,7 +56,7 @@
       variant = "";
     };
     # bye bye xterm
-    excludePackages = [pkgs.xterm];
+    excludePackages = [ pkgs.xterm ];
   };
 
   # enable sysrq in case for kernel panic

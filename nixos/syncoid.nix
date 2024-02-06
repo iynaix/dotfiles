@@ -28,17 +28,13 @@ lib.mkIf config.custom-nixos.syncoid.enable {
         "--delete-target-snapshots"
         "--sshoption=StrictHostKeyChecking=no"
       ];
-      localSourceAllow =
-        config.services.syncoid.localSourceAllow ++ ["mount"];
-      localTargetAllow =
-        config.services.syncoid.localTargetAllow ++ ["destroy"];
+      localSourceAllow = config.services.syncoid.localSourceAllow ++ [ "mount" ];
+      localTargetAllow = config.services.syncoid.localTargetAllow ++ [ "destroy" ];
     };
   };
 
   # persist syncoid .ssh
   custom-nixos.persist = {
-    root.directories = [
-      "/var/lib/syncoid"
-    ];
+    root.directories = [ "/var/lib/syncoid" ];
   };
 }

@@ -5,7 +5,9 @@
   source,
 }:
 stdenvNoCC.mkDerivation (
-  finalAttrs: (source
+  finalAttrs:
+  (
+    source
     // {
       version = "unstable-${source.date}";
 
@@ -27,15 +29,14 @@ stdenvNoCC.mkDerivation (
       passthru.extraWrapperArgs = [
         "--set"
         "FONTCONFIG_FILE"
-        (toString (makeFontsConf {
-          fontDirectories = ["${finalAttrs.finalPackage}/share/fonts"];
-        }))
+        (toString (makeFontsConf { fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ]; }))
       ];
 
       meta = {
         description = "An MPV OSC script based on mpv-osc-modern that aims to mirror the functionality of MPV's stock OSC while with a more modern-looking interface.";
         homepage = "https://github.com/cyl0/ModernX";
-        maintainers = [lib.maintainers.iynaix];
+        maintainers = [ lib.maintainers.iynaix ];
       };
-    })
+    }
+  )
 )

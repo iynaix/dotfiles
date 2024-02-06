@@ -5,11 +5,9 @@
   ...
 }:
 lib.mkIf config.custom.deadbeef.enable {
-  home.packages = [pkgs.deadbeef];
+  home.packages = [ pkgs.deadbeef ];
 
   custom.persist = {
-    home.directories = [
-      ".config/deadbeef"
-    ];
+    home.directories = [ ".config/deadbeef" ];
   };
 }

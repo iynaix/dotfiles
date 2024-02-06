@@ -1,6 +1,8 @@
-{config, ...}: let
+{ config, ... }:
+let
   opacity = "E5";
-in {
+in
+{
   services.dunst = {
     enable = true;
     configFile = "${config.xdg.cacheHome}/wallust/dunstrc";

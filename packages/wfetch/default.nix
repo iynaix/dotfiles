@@ -16,10 +16,17 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ../../Cargo.lock;
 
-  cargoBuildFlags = lib.optionals waifu ["--no-default-features" "--features" "wfetch-waifu"];
+  cargoBuildFlags = lib.optionals waifu [
+    "--no-default-features"
+    "--features"
+    "wfetch-waifu"
+  ];
 
   # create files for shell autocomplete
-  nativeBuildInputs = [installShellFiles makeWrapper];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # https://nixos.org/manual/nixpkgs/stable/#compiling-rust-applications-with-cargo
   # see section "Importing a cargo lock file"
@@ -42,15 +49,15 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/wfetch \
-      --prefix PATH : "${lib.makeBinPath [ascii-image-converter]}" \
-      --prefix PATH : "${lib.makeBinPath [fastfetch]}" \
-      --prefix PATH : "${lib.makeBinPath [imagemagick]}"
+      --prefix PATH : "${lib.makeBinPath [ ascii-image-converter ]}" \
+      --prefix PATH : "${lib.makeBinPath [ fastfetch ]}" \
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
   '';
 
   meta = with lib; {
     description = "iynaix's custom fetch";
     homepage = "https://github.com/iynaix/dotfiles";
     license = licenses.mit;
-    maintainers = [maintainers.iynaix];
+    maintainers = [ maintainers.iynaix ];
   };
 }

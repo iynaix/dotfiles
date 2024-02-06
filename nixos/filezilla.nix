@@ -6,10 +6,8 @@
 }:
 lib.mkIf config.custom-nixos.bittorrent.enable {
   hm = {
-    home.packages = [pkgs.filezilla];
+    home.packages = [ pkgs.filezilla ];
 
-    custom.persist.home.directories = [
-      ".config/filezilla"
-    ];
+    custom.persist.home.directories = [ ".config/filezilla" ];
   };
 }

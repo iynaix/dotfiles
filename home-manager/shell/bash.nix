@@ -1,25 +1,29 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config, lib, ... }:
+let
   cfg = config.custom.shell;
-  bashFunctions = lib.concatLines (lib.mapAttrsToList (name: value:
-    if lib.isString value
-    then ''
-      function ${name}() {
-      ${value}
-      }
-    ''
-    else ''
-      function ${name}() {
-      ${value.bashBody}
-      }
-      ${value.bashCompletion}
-    '')
-  cfg.functions);
+  bashFunctions = lib.concatLines (
+    lib.mapAttrsToList
+      (
+        name: value:
+        if lib.isString value then
+          ''
+            function ${name}() {
+            ${value}
+            }
+          ''
+        else
+          ''
+            function ${name}() {
+            ${value.bashBody}
+            }
+            ${value.bashCompletion}
+          ''
+      )
+      cfg.functions
+  );
   histFile = "/persist/.config/bash/.bash_history";
-in {
+in
+{
   # NOTE: see shell.nix for shared aliases and initExtra
   programs.bash = {
     enable = true;

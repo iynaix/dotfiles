@@ -51,36 +51,39 @@
 
   # flake-utils is unnecessary
   # https://ayats.org/blog/no-flake-utils/
-  outputs = inputs @ {
-    nixpkgs,
-    self,
-    ...
-  }: let
-    forAllSystems = function:
-      nixpkgs.lib.genAttrs ["x86_64-linux"] (system: function nixpkgs.legacyPackages.${system});
-    commonInherits = {
-      inherit (nixpkgs) lib;
-      inherit self inputs nixpkgs;
-      user = "iynaix";
-      system = "x86_64-linux";
+  outputs =
+    inputs@{ nixpkgs, self, ... }:
+    let
+      forAllSystems =
+        function:
+        nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system: function nixpkgs.legacyPackages.${system});
+      commonInherits = {
+        inherit (nixpkgs) lib;
+        inherit self inputs nixpkgs;
+        user = "iynaix";
+        system = "x86_64-linux";
+      };
+    in
+    {
+      nixosConfigurations =
+        (import ./hosts (commonInherits // { isNixOS = true; }))
+        // (import ./hosts/iso (commonInherits // { isNixOS = true; }));
+
+      homeConfigurations = import ./hosts (commonInherits // { isNixOS = false; });
+
+      # devenv for working on dotfiles, provides rust environment
+      devShells = forAllSystems (
+        pkgs: {
+          default = import ./devenv.nix {
+            inherit inputs;
+            inherit (pkgs) system;
+          };
+        }
+      );
+
+      packages = forAllSystems (pkgs: (import ./packages { inherit pkgs inputs; }));
+
+      # templates for devenv
+      templates = import ./templates;
     };
-  in {
-    nixosConfigurations =
-      (import ./hosts (commonInherits // {isNixOS = true;}))
-      // (import ./hosts/iso (commonInherits // {isNixOS = true;}));
-
-    homeConfigurations = import ./hosts (commonInherits // {isNixOS = false;});
-
-    # devenv for working on dotfiles, provides rust environment
-    devShells = forAllSystems (pkgs: {
-      default = import ./devenv.nix {inherit inputs pkgs;};
-    });
-
-    packages = forAllSystems (
-      pkgs: (import ./packages {inherit pkgs inputs;})
-    );
-
-    # templates for devenv
-    templates = import ./templates;
-  };
 }

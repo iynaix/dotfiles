@@ -4,14 +4,21 @@
   # host is passed down from the nrepl via a --arg argument, defaulting to the current host
   host ? "desktop",
   ...
-}: let
+}:
+let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
   inherit (flake.inputs.nixpkgs) lib;
-in rec {
+in
+rec {
   inherit (flake) inputs self;
   inherit (flake.inputs) nixpkgs;
-  inherit flake lib host user;
+  inherit
+    flake
+    lib
+    host
+    user
+    ;
 
   # default host
   c = flake.nixosConfigurations.${host}.config;

@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (
     meta = {
       description = "Automatically skip chapters based on title";
       homepage = "https://github.com/CogentRedTester/mpv-sub-select";
-      maintainers = [lib.maintainers.iynaix];
+      maintainers = [ lib.maintainers.iynaix ];
     };
   }
 )

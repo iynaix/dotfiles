@@ -14,11 +14,11 @@ _: {
 
         snippet.expand = "luasnip";
         sources = [
-          {name = "nvim_lsp";}
-          {name = "nvim_lsp_document_symbol";}
-          {name = "nvim_lsp_signature_help";}
-          {name = "luasnip";}
-          {name = "path";}
+          { name = "nvim_lsp"; }
+          { name = "nvim_lsp_document_symbol"; }
+          { name = "nvim_lsp_signature_help"; }
+          { name = "luasnip"; }
+          { name = "path"; }
         ];
 
         mapping = {
@@ -37,7 +37,10 @@ _: {
           "<C-Space>" = "cmp.mapping.complete({})";
 
           "<Tab>" = {
-            modes = ["i" "s"];
+            modes = [
+              "i"
+              "s"
+            ];
             action = ''
               function(fallback)
                 if cmp.visible() then
@@ -54,7 +57,10 @@ _: {
           };
 
           "<S-Tab>" = {
-            modes = ["i" "s"];
+            modes = [
+              "i"
+              "s"
+            ];
             action = ''
               function(fallback)
                 if cmp.visible() then

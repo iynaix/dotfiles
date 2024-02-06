@@ -1,11 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   ytdl = pkgs.writeShellApplication {
     name = "ytdl";
-    runtimeInputs = with pkgs; [yt-dlp];
+    runtimeInputs = with pkgs; [ yt-dlp ];
     text = ''
       cd "${config.xdg.userDirs.download}"
 
@@ -34,7 +31,8 @@
       cd - > /dev/null
     '';
   };
-in {
+in
+{
   programs = {
     yt-dlp = {
       enable = true;
@@ -50,7 +48,7 @@ in {
   };
 
   home = {
-    packages = [ytdl];
+    packages = [ ytdl ];
 
     shellAliases = {
       yt = "yt-dlp";

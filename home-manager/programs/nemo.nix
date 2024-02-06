@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   home = {
     packages = with pkgs; [
       cinnamon.nemo-with-extensions
@@ -26,13 +27,12 @@
       // lib.optionalAttrs config.programs.zathura.enable {
         "application/pdf" = "org.pwmt.zathura.desktop";
       }
-      // (lib.optionalAttrs config.programs.imv.enable
-        {
-          "image/jpeg" = "imv-dir.desktop";
-          "image/gif" = "imv-dir.desktop";
-          "image/webp" = "imv-dir.desktop";
-          "image/png" = "imv-dir.desktop";
-        });
+      // (lib.optionalAttrs config.programs.imv.enable {
+        "image/jpeg" = "imv-dir.desktop";
+        "image/gif" = "imv-dir.desktop";
+        "image/webp" = "imv-dir.desktop";
+        "image/png" = "imv-dir.desktop";
+      });
 
     # other OSes seem to override this file
     configFile = lib.mkIf (!isNixOS) {
@@ -41,16 +41,18 @@
     };
   };
 
-  gtk.gtk3.bookmarks = let
-    homeDir = config.home.homeDirectory;
-  in [
-    "file://${homeDir}/Downloads"
-    "file://${homeDir}/projects"
-    "file://${homeDir}/projects/dotfiles"
-    "file://${homeDir}/projects/coinfc"
-    "file://${homeDir}/Pictures/Wallpapers"
-    "file:///persist Persist"
-  ];
+  gtk.gtk3.bookmarks =
+    let
+      homeDir = config.home.homeDirectory;
+    in
+    [
+      "file://${homeDir}/Downloads"
+      "file://${homeDir}/projects"
+      "file://${homeDir}/projects/dotfiles"
+      "file://${homeDir}/projects/coinfc"
+      "file://${homeDir}/Pictures/Wallpapers"
+      "file:///persist Persist"
+    ];
 
   dconf.settings = {
     # fix open in terminal

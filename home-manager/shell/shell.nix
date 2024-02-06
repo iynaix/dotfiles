@@ -5,7 +5,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   home.shellAliases =
     {
       ":e" = "nvim";
@@ -38,24 +39,24 @@
   custom.shell.functions = {
     fdnix = {
       bashBody = ''fd "$@" /nix/store'';
-      fishBody = ''fd $argv /nix/store'';
+      fishBody = "fd $argv /nix/store";
     };
     md = {
       bashBody = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
-      fishBody = ''if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end'';
+      fishBody = "if test (count $argv) -eq 1; and mkdir -p -- $argv[1]; and cd -- $argv[1]; end";
     };
     # improved which for nix
     where = {
-      bashBody = ''readlink -f $(which $1)'';
-      fishBody = ''readlink -f (which $argv[1])'';
+      bashBody = "readlink -f $(which $1)";
+      fishBody = "readlink -f (which $argv[1])";
     };
     ywhere = {
-      bashBody = ''yazi $(dirname $(dirname $(readlink -f $(which $1))))'';
-      fishBody = ''yazi (dirname (dirname (readlink -f (which $argv[1]))))'';
+      bashBody = "yazi $(dirname $(dirname $(readlink -f $(which $1))))";
+      fishBody = "yazi (dirname (dirname (readlink -f (which $argv[1]))))";
     };
     # server command, runs a local server
     server = {
-      bashBody = ''${lib.getExe pkgs.python3} -m http.server ''${1:-8000}'';
+      bashBody = "${lib.getExe pkgs.python3} -m http.server \${1:-8000}";
       fishBody = ''
         if test -n "$1"
           ${lib.getExe pkgs.python3} -m http.server "$1"

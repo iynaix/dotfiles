@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   imports = [
     ./brave.nix
     ./deadbeef.nix

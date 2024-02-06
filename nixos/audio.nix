@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # setup pipewire for audio
   security.rtkit.enable = true;
   services.pipewire = {
@@ -9,5 +10,5 @@
   };
   hardware.pulseaudio.enable = false;
 
-  environment.systemPackages = with pkgs; [pavucontrol];
+  environment.systemPackages = with pkgs; [ pavucontrol ];
 }

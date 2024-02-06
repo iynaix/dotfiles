@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
   cargoLock.lockFile = ../../Cargo.lock;
 
   # create files for shell autocomplete
-  nativeBuildInputs = [installShellFiles];
+  nativeBuildInputs = [ installShellFiles ];
 
   # https://nixos.org/manual/nixpkgs/stable/#compiling-rust-applications-with-cargo
   # see section "Importing a cargo lock file"
@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage {
     description = "Utilities for iynaix's dotfiles";
     homepage = "https://github.com/iynaix/dotfiles";
     license = licenses.mit;
-    maintainers = [maintainers.iynaix];
+    maintainers = [ maintainers.iynaix ];
   };
 }

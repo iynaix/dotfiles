@@ -3,12 +3,15 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   hyprlandCfg = config.wayland.windowManager.hyprland;
-in {
+in
+{
   options.custom = {
     displays = lib.mkOption {
-      type = with lib.types;
+      type =
+        with lib.types;
         listOf (
           submodule {
             options = {
@@ -32,27 +35,29 @@ in {
             };
           }
         );
-      default = [];
+      default = [ ];
       description = "Config for new displays";
     };
 
     hyprland = {
-      autostart = lib.mkEnableOption "Autostart hyprland from tty" // {default = true;};
+      autostart = lib.mkEnableOption "Autostart hyprland from tty" // {
+        default = true;
+      };
       qtile = lib.mkEnableOption "qtile like behavior for workspaces";
       plugin = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum ["hyprnstack"]);
+        type = lib.types.nullOr (lib.types.enum [ "hyprnstack" ]);
         description = "Plugin to enable for hyprland";
         default = null;
       };
     };
 
     waybar = {
-      enable = lib.mkEnableOption "waybar" // {default = hyprlandCfg.enable;};
+      enable = lib.mkEnableOption "waybar" // {
+        default = hyprlandCfg.enable;
+      };
       config = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = (pkgs.formats.json {}).type;
-        };
-        default = {};
+        type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
+        default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
       persistent-workspaces = lib.mkEnableOption "Persistent workspaces";

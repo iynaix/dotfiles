@@ -5,15 +5,19 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
-in {
+in
+{
   # start hyprland
-  custom.shell.profileExtra = lib.mkIf (config.wayland.windowManager.hyprland.enable && config.custom.hyprland.autostart) ''
-    if [ "$(tty)" = "/dev/tty1" ]; then
-      exec Hyprland &> /dev/null
-    fi
-  '';
+  custom.shell.profileExtra =
+    lib.mkIf (config.wayland.windowManager.hyprland.enable && config.custom.hyprland.autostart)
+      ''
+        if [ "$(tty)" = "/dev/tty1" ]; then
+          exec Hyprland &> /dev/null
+        fi
+      '';
 
   wayland.windowManager.hyprland.settings = {
     exec-once = [
@@ -33,7 +37,8 @@ in {
       # firefox
       # (if host == "desktop" then
       (openOnWorkspace 9 (
-        lib.concatStringsSep " " ([
+        lib.concatStringsSep " " (
+          [
             (lib.getExe config.programs.firefox.package)
             "-P"
             user # load user firefox profile
@@ -42,7 +47,8 @@ in {
           ++ lib.optionals (host == "desktop") [
             "https://web.whatsapp.com" # requires access via local network
             "http://localhost:9091" # transmission
-          ])
+          ]
+        )
       ))
 
       # download desktop

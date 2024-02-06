@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   home = {
     packages = with pkgs; [
       asciiquarium
@@ -13,7 +14,7 @@
       imagemagick
       nitch
       pipes-rs
-      (custom.wfetch.override {waifu = true;})
+      (custom.wfetch.override { waifu = true; })
     ];
 
     shellAliases = {

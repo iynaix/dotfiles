@@ -5,7 +5,7 @@
   ...
 }:
 lib.mkIf (config.custom-nixos.docker.enable || config.custom-nixos.distrobox.enable) {
-  users.users.${user}.extraGroups = ["docker"];
+  users.users.${user}.extraGroups = [ "docker" ];
 
   virtualisation.docker = {
     enable = true;
@@ -15,9 +15,7 @@ lib.mkIf (config.custom-nixos.docker.enable || config.custom-nixos.distrobox.ena
   # store docker images on zroot/cache
   custom-nixos.persist = {
     root = {
-      cache = [
-        "/var/lib/docker"
-      ];
+      cache = [ "/var/lib/docker" ];
     };
   };
 }

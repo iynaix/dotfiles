@@ -3,13 +3,15 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.custom.kitty;
   inherit (config.custom) terminal;
 in
-  lib.mkIf cfg.enable {
-    # open kitty from nemo
-    custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (pkgs.writeShellApplication {
+lib.mkIf cfg.enable {
+  # open kitty from nemo
+  custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (
+    pkgs.writeShellApplication {
       name = "gnome-terminal";
       text = ''
         shift
@@ -21,31 +23,32 @@ in
           ${terminal.exec} "$@"
         fi
       '';
-    });
+    }
+  );
 
-    programs.kitty = {
-      enable = true;
-      theme = "Catppuccin-Mocha";
-      font = {
-        name = terminal.font;
-        inherit (terminal) size;
-      };
-      settings = {
-        enable_audio_bell = false;
-        copy_on_select = "clipboard";
-        scrollback_lines = 10000;
-        update_check_interval = 0;
-        window_margin_width = terminal.padding;
-        single_window_margin_width = terminal.padding;
-        tab_bar_edge = "top";
-        background_opacity = terminal.opacity;
-        confirm_os_window_close = 0;
-        font_features = "+zero";
-      };
+  programs.kitty = {
+    enable = true;
+    theme = "Catppuccin-Mocha";
+    font = {
+      name = terminal.font;
+      inherit (terminal) size;
     };
+    settings = {
+      enable_audio_bell = false;
+      copy_on_select = "clipboard";
+      scrollback_lines = 10000;
+      update_check_interval = 0;
+      window_margin_width = terminal.padding;
+      single_window_margin_width = terminal.padding;
+      tab_bar_edge = "top";
+      background_opacity = terminal.opacity;
+      confirm_os_window_close = 0;
+      font_features = "+zero";
+    };
+  };
 
-    home.shellAliases = {
-      # change color on ssh
-      ssh = "kitten ssh --kitten=color_scheme=Dracula";
-    };
-  }
+  home.shellAliases = {
+    # change color on ssh
+    ssh = "kitten ssh --kitten=color_scheme=Dracula";
+  };
+}

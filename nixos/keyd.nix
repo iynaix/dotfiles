@@ -1,13 +1,9 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.custom-nixos.keyd.enable {
   services.keyd = {
     enable = true;
     keyboards.true = {
-      ids = ["*"];
+      ids = [ "*" ];
       settings.main = {
         capslock = "overload(meta, esc)";
         rightshift = "C-s";

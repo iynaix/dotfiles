@@ -3,38 +3,42 @@
   lib,
   user,
   ...
-}: let
+}:
+let
   cfg = config.custom-nixos.zfs;
   persistCfg = config.custom-nixos.persist;
 in
-  lib.mkIf cfg.enable {
-    boot = {
-      # booting with zfs
-      supportedFilesystems = ["zfs"];
-      zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
-      # zfs.enableUnstable = true;
-      kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-      zfs.requestEncryptionCredentials = cfg.encryption;
-    };
+lib.mkIf cfg.enable {
+  boot = {
+    # booting with zfs
+    supportedFilesystems = [ "zfs" ];
+    zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
+    # zfs.enableUnstable = true;
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    zfs.requestEncryptionCredentials = cfg.encryption;
+  };
 
-    services.zfs = {
-      autoScrub.enable = true;
-      trim.enable = true;
-    };
+  services.zfs = {
+    autoScrub.enable = true;
+    trim.enable = true;
+  };
 
-    # 16GB swap
-    swapDevices = [
-      {device = "/dev/disk/by-label/SWAP";}
-    ];
+  # 16GB swap
+  swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
-    # standardized filesystem layout
-    fileSystems = let
+  # standardized filesystem layout
+  fileSystems =
+    let
       homeMountPoint =
-        if persistCfg.erase.home
+        if
+          persistCfg.erase.home
         # using config.hm.homeDirectory results in infinite recursion
-        then "/home/${user}"
-        else "/home";
-    in {
+        then
+          "/home/${user}"
+        else
+          "/home";
+    in
+    {
       # boot partition
       "/boot" = {
         device = "/dev/disk/by-label/NIXBOOT";
@@ -75,23 +79,23 @@ in
       };
     };
 
-    services.sanoid = lib.mkIf cfg.snapshots {
-      enable = true;
+  services.sanoid = lib.mkIf cfg.snapshots {
+    enable = true;
 
-      datasets = {
-        "zroot/home" = lib.mkIf (!persistCfg.erase.home) {
-          hourly = 50;
-          daily = 15;
-          weekly = 3;
-          monthly = 1;
-        };
+    datasets = {
+      "zroot/home" = lib.mkIf (!persistCfg.erase.home) {
+        hourly = 50;
+        daily = 15;
+        weekly = 3;
+        monthly = 1;
+      };
 
-        "zroot/persist" = {
-          hourly = 50;
-          daily = 15;
-          weekly = 3;
-          monthly = 1;
-        };
+      "zroot/persist" = {
+        hourly = 50;
+        daily = 15;
+        weekly = 3;
+        monthly = 1;
       };
     };
-  }
+  };
+}

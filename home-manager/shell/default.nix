@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./bash.nix
     ./btop.nix
@@ -31,7 +32,11 @@
       enable = true;
       enableAliases = true;
       icons = true;
-      extraOptions = ["--group-directories-first" "--header" "--octal-permissions"];
+      extraOptions = [
+        "--group-directories-first"
+        "--header"
+        "--octal-permissions"
+      ];
     };
 
     fzf = {
@@ -49,9 +54,7 @@
 
   custom.persist = {
     home = {
-      cache = [
-        ".local/share/zoxide"
-      ];
+      cache = [ ".local/share/zoxide" ];
     };
   };
 }

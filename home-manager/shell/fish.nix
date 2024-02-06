@@ -3,17 +3,17 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.custom.shell;
-in {
+in
+{
   programs = {
     fish = {
       enable = true;
-      functions = lib.mapAttrs (_: value:
-        if lib.isString value
-        then value
-        else value.fishBody)
-      cfg.functions;
+      functions =
+        lib.mapAttrs (_: value: if lib.isString value then value else value.fishBody)
+          cfg.functions;
       plugins = [
         # transient prompt because starship's transient prompt does not handle empty commands
         {
@@ -65,7 +65,8 @@ in {
   # create completion files as needed
   xdg.configFile = lib.pipe cfg.functions [
     (lib.filterAttrs (_: value: lib.isAttrs value && value.fishCompletion != ""))
-    (lib.mapAttrs' (name: value:
+    (lib.mapAttrs' (
+      name: value:
       lib.nameValuePair "fish/completions/${name}.fish" {
         text = ''
           function _${name}
@@ -73,14 +74,13 @@ in {
           end
           complete --no-files --command ${name} --arguments "(_${name})"
         '';
-      }))
+      }
+    ))
   ];
 
   custom.persist = {
     home = {
-      cache = [
-        ".local/share/fish"
-      ];
+      cache = [ ".local/share/fish" ];
     };
   };
 }

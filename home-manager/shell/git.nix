@@ -9,10 +9,16 @@ _: {
         background = "dark";
       };
       extraConfig = {
-        init = {defaultBranch = "main";};
+        init = {
+          defaultBranch = "main";
+        };
         branch = {
-          master = {merge = "refs/heads/master";};
-          main = {merge = "refs/heads/main";};
+          master = {
+            merge = "refs/heads/master";
+          };
+          main = {
+            merge = "refs/heads/main";
+          };
         };
         merge = {
           conflictstyle = "diff3";
@@ -25,8 +31,12 @@ _: {
           guitool = "code";
           colorMoved = "default";
         };
-        pull = {rebase = true;};
-        push = {default = "simple";};
+        pull = {
+          rebase = true;
+        };
+        push = {
+          default = "simple";
+        };
       };
     };
 
@@ -43,8 +53,8 @@ _: {
     # searches git history, can never remember this stupid thing
     gsearch = {
       # 2nd argument is target path and subsequent arguments are passed through
-      bashBody = ''git log -S$1 -- ''${2:-.} $*[2,-1]'';
-      fishBody = ''git log -S$argv[1] -- $argv[2] $argv[3..-1]'';
+      bashBody = "git log -S$1 -- \${2:-.} $*[2,-1]";
+      fishBody = "git log -S$argv[1] -- $argv[2] $argv[3..-1]";
     };
   };
 
@@ -70,14 +80,12 @@ _: {
     gst = "git status -s -b && echo && git log | head -n 1";
     gsub = "git submodule update --init --recursive";
     # access github page for the repo we are currently in
-    github = "open \`git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'\`";
+    github = "open `git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'`";
     # cleanup leftover files from merges
-    mergeclean = "find . -type f -name '*.orig' -exec rm -f {} \;";
+    mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
   };
 
   custom.persist = {
-    home.directories = [
-      ".config/gh"
-    ];
+    home.directories = [ ".config/gh" ];
   };
 }

@@ -6,16 +6,22 @@
   inputs,
   lib,
   ...
-}: {
-  imports = [
-    inputs.nixos-hardware.nixosModules.framework-13-7040-amd
-  ];
+}:
+{
+  imports = [ inputs.nixos-hardware.nixosModules.framework-13-7040-amd ];
 
   boot = {
-    initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usb_storage" "sd_mod" "uas"];
-    initrd.kernelModules = [];
-    kernelModules = ["kvm-amd"];
-    extraModulePackages = [];
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+      "thunderbolt"
+      "usb_storage"
+      "sd_mod"
+      "uas"
+    ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

@@ -1,4 +1,5 @@
-{user, ...}: {
+{ user, ... }:
+{
   custom-nixos = {
     # hardware
     am5.enable = true;

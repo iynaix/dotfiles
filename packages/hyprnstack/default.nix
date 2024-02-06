@@ -21,12 +21,12 @@ gcc13Stdenv.mkDerivation {
 
   inherit (hyprland) nativeBuildInputs;
 
-  buildInputs = [hyprland] ++ hyprland.buildInputs;
+  buildInputs = [ hyprland ] ++ hyprland.buildInputs;
 
   meta = with lib; {
     homepage = "https://github.com/zakk4223/hyprNStack";
     description = "Hyprland HyprNStack Plugin";
-    maintainers = with maintainers; [iynaix];
+    maintainers = with maintainers; [ iynaix ];
     platforms = platforms.linux;
   };
 }

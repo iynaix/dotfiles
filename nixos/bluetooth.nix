@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 lib.mkIf config.custom-nixos.bluetooth.enable {
   hardware.bluetooth = {
     enable = true;
@@ -22,8 +18,6 @@ lib.mkIf config.custom-nixos.bluetooth.enable {
   };
 
   custom-nixos.persist = {
-    root.directories = [
-      "/var/lib/bluetooth"
-    ];
+    root.directories = [ "/var/lib/bluetooth" ];
   };
 }

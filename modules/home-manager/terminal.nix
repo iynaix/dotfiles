@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.custom.terminal;
   functionModule = lib.types.submodule {
     options = {
@@ -27,7 +28,8 @@
       };
     };
   };
-in {
+in
+{
   options.custom = {
     terminal = {
       package = lib.mkOption {
@@ -89,7 +91,7 @@ in {
             fishBody = "echo bar";
           };
         '';
-        default = {};
+        default = { };
         description = "Extra shell agnostic functions.";
       };
     };

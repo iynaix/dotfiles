@@ -5,10 +5,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (config.custom) displays;
   isVm = host == "vm" || host == "vm-amd";
-in {
+in
+{
   imports = [
     ./hyprnstack.nix
     ./keybinds.nix
@@ -39,11 +41,7 @@ in {
 
     wayland.windowManager.hyprland.settings = {
       monitor =
-        (lib.forEach displays ({
-          name,
-          hyprland,
-          ...
-        }: "${name}, ${hyprland}"))
+        (lib.forEach displays ({ name, hyprland, ... }: "${name}, ${hyprland}"))
         ++ (lib.optional (host != "desktop") ",preferred,auto,auto");
 
       input = {
@@ -56,24 +54,20 @@ in {
         };
       };
 
-      "$mod" =
-        if isVm
-        then "ALT"
-        else "SUPER";
+      "$mod" = if isVm then "ALT" else "SUPER";
 
       "$term" = "${config.custom.terminal.exec}";
 
-      general = let
-        gap =
-          if host == "desktop"
-          then 8
-          else 4;
-      in {
-        gaps_in = gap;
-        gaps_out = gap;
-        border_size = 2;
-        layout = lib.mkDefault "master";
-      };
+      general =
+        let
+          gap = if host == "desktop" then 8 else 4;
+        in
+        {
+          gaps_in = gap;
+          gaps_out = gap;
+          border_size = 2;
+          layout = lib.mkDefault "master";
+        };
 
       decoration = {
         rounding = 4;
@@ -146,12 +140,9 @@ in {
       debug.disable_logs = false;
 
       # bind workspaces to monitors
-      workspace = pkgs.custom.lib.mapWorkspaces ({
-        workspace,
-        monitor,
-        ...
-      }: "${workspace}, monitor:${monitor}")
-      displays;
+      workspace =
+        pkgs.custom.lib.mapWorkspaces ({ workspace, monitor, ... }: "${workspace}, monitor:${monitor}")
+          displays;
 
       windowrulev2 = [
         # "dimaround,floating:1"
@@ -173,17 +164,13 @@ in {
       ];
 
       # handle trackpad settings
-      gestures = lib.mkIf isLaptop {
-        workspace_swipe = true;
-      };
+      gestures = lib.mkIf isLaptop { workspace_swipe = true; };
       # source = "${config.xdg.configHome}/hypr/hyprland-test.conf";
     };
 
     # hyprland crash reports
     custom.persist = {
-      home.directories = [
-        ".cache/hyprland"
-      ];
+      home.directories = [ ".cache/hyprland" ];
     };
   };
 }

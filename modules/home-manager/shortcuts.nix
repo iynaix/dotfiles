@@ -1,10 +1,8 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config, lib, ... }:
+let
   homeDir = config.home.homeDirectory;
-in {
+in
+{
   options.custom.shortcuts = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
     default = {

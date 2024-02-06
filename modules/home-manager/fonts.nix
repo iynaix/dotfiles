@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   options.custom = {
     fonts = {
       regular = lib.mkOption {
@@ -21,7 +18,7 @@
           noto-fonts
           noto-fonts-cjk
           noto-fonts-emoji
-          (nerdfonts.override {fonts = ["JetBrainsMono"];})
+          (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];
         description = "The packages to install for the fonts";
       };

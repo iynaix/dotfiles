@@ -4,9 +4,11 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   firefoxPkg = pkgs.firefox-devedition-bin;
-in {
+in
+{
   programs = {
     # firefox dev edition
     firefox = {
@@ -34,7 +36,10 @@ in {
     genericName = "Web Browser";
     exec = "${lib.getExe firefoxPkg} --name firefox -P ${user} %U";
     icon = "${firefoxPkg}/share/icons/hicolor/128x128/apps/firefox.png";
-    categories = ["Network" "WebBrowser"];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
   };
 
   custom.persist = {

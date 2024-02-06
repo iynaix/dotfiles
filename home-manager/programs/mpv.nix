@@ -4,18 +4,37 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   xdg.configFile = {
     "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
     "mpv/script-opts/sub-select.json".text = lib.strings.toJSON [
       {
         alang = "jpn";
-        slang = ["en" "eng"];
-        blacklist = ["signs" "songs" "translation only" "forced"];
+        slang = [
+          "en"
+          "eng"
+        ];
+        blacklist = [
+          "signs"
+          "songs"
+          "translation only"
+          "forced"
+        ];
       }
       {
-        alang = ["eng" "en" "unk" "unknown"];
-        slang = ["eng" "en" "unk" "unknown"];
+        alang = [
+          "eng"
+          "en"
+          "unk"
+          "unknown"
+        ];
+        slang = [
+          "eng"
+          "en"
+          "unk"
+          "unknown"
+        ];
       }
       {
         alang = "*";
@@ -101,7 +120,8 @@
         # osc = "no";
         # border = "no";
       };
-      scripts = with pkgs.mpvScripts;
+      scripts =
+        with pkgs.mpvScripts;
         [
           chapterskip
           seekTo
@@ -121,19 +141,19 @@
     }
 
     # anime profile settings
-    (let
-      inherit (pkgs.custom) mpv-anime;
-      anime4k_shaders = lib.concatMapStringsSep ":" (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl") [
-        "Clamp_Highlights"
-        "Restore_CNN_VL"
-        "Upscale_CNN_x2_VL"
-        "AutoDownscalePre_x2"
-        "AutoDownscalePre_x4"
-        "Upscale_CNN_x2_M"
-      ];
-    in
-      lib.optionalAttrs config.custom.mpv-anime.enable
-      {
+    (
+      let
+        inherit (pkgs.custom) mpv-anime;
+        anime4k_shaders = lib.concatMapStringsSep ":" (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl") [
+          "Clamp_Highlights"
+          "Restore_CNN_VL"
+          "Upscale_CNN_x2_VL"
+          "AutoDownscalePre_x2"
+          "AutoDownscalePre_x4"
+          "Upscale_CNN_x2_M"
+        ];
+      in
+      lib.optionalAttrs config.custom.mpv-anime.enable {
         # auto apply anime shaders for anime videos
         profiles.anime = {
           profile-desc = "Anime";
@@ -168,12 +188,13 @@
           # NNEDI3 shaders
           "CTRL+7" = ''no-osd change-list glsl-shaders set "${mpv-anime}/nnedi3-nns256-win8x4.hook"; show-text "NNEDI3"'';
         };
-      })
+      }
+    )
   ];
 
   wayland.windowManager.hyprland.settings = {
     # fix mpv-dynamic-crop unmaximizing the window
-    windowrulev2 = ["nomaximizerequest,class:(mpv)"];
+    windowrulev2 = [ "nomaximizerequest,class:(mpv)" ];
   };
 
   home.shellAliases = {

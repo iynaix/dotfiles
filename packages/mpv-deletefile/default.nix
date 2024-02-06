@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (
       description = "Deletes files played through mpv";
       homepage = "https://github.com/zenyd/mpv-scripts";
       license = lib.licenses.gpl3;
-      maintainers = [lib.maintainers.iynaix];
+      maintainers = [ lib.maintainers.iynaix ];
     };
   }
 )

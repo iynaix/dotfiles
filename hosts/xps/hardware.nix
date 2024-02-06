@@ -6,16 +6,22 @@
   lib,
   inputs,
   ...
-}: {
-  imports = [
-    inputs.nixos-hardware.nixosModules.dell-xps-13-9343
-  ];
+}:
+{
+  imports = [ inputs.nixos-hardware.nixosModules.dell-xps-13-9343 ];
 
   boot = {
-    initrd.availableKernelModules = ["xhci_pci" "nvme" "ehci_pci" "ahci" "sd_mod" "rtsx_pci_sdmmc"];
-    initrd.kernelModules = [];
-    kernelModules = ["iwlwifi"];
-    extraModulePackages = [];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "nvme"
+      "ehci_pci"
+      "ahci"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+    ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "iwlwifi" ];
+    extraModulePackages = [ ];
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
