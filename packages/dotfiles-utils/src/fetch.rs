@@ -177,13 +177,29 @@ fn os_module() -> serde_json::Value {
 }
 
 fn wm_module() -> serde_json::Value {
-    let key = if env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == *"Hyprland" {
-        "󰕮"
-    } else {
-        ""
+    let mut is_de = false;
+    let key = match env::var("XDG_CURRENT_DESKTOP")
+        .unwrap_or_default()
+        .to_lowercase()
+        .as_str()
+    {
+        "hyprland" => "",
+        "gnome" => {
+            is_de = true;
+            ""
+        }
+        "kde" => {
+            is_de = true;
+            ""
+        }
+        _ => "󰕮",
     };
 
-    json!({ "type": "wm", "key": format!("{key} WM"), "format": "{2}" })
+    if is_de {
+        json!({ "type": "de", "key": format!("{key} DE"), "format": "{2} ({3})" })
+    } else {
+        json!({ "type": "wm", "key": format!("{key} WM"), "format": "{2}" })
+    }
 }
 
 #[allow(clippy::similar_names)] // gpu and cpu trips this
@@ -336,11 +352,38 @@ pub fn challenge_text(args: &WaifuFetchArgs) -> String {
     format!("{elapsed_days} Days / {total_days} Days ({percent:.2}%)")
 }
 
-pub fn challenge_block(args: &WaifuFetchArgs) -> Vec<serde_json::Value> {
-    let body = challenge_text(args);
-    let maxlen = body.len();
+pub fn challenge_title(args: &WaifuFetchArgs) -> String {
+    let mut segments: Vec<String> = Vec::new();
+    segments.push(if args.challenge_years == 0 {
+        String::new()
+    } else {
+        format!("{} YEAR", args.challenge_years)
+    });
 
-    let title = "  10 YEAR CHALLENGE  ";
+    segments.push(if args.challenge_months == 0 {
+        String::new()
+    } else {
+        format!("{} MONTH", args.challenge_months)
+    });
+
+    segments.push(match &args.challenge_type {
+        None => String::new(),
+        Some(t) => t.to_owned().to_uppercase(),
+    });
+
+    let title = segments
+        .into_iter()
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join(" ");
+
+    format!("  {title} CHALLENGE  ")
+}
+
+pub fn challenge_block(args: &WaifuFetchArgs) -> Vec<serde_json::Value> {
+    let title = challenge_title(args);
+    let body = challenge_text(args);
+    let maxlen = std::cmp::max(title.len(), body.len());
 
     let title = json!({
         "type": "custom",

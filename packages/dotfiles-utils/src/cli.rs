@@ -147,8 +147,11 @@ pub struct WaifuFetchArgs {
     )]
     pub challenge_months: u32,
 
-    #[arg(long, action, help = "do not listen for SIGUSR2")]
-    pub exit: bool,
+    #[arg(long, action, help = "type of the challenge, e.g. emacs")]
+    pub challenge_type: Option<String>,
+
+    #[arg(long, action, help = "listen for SIGUSR2")]
+    pub listen: bool,
 
     #[arg(long, action, help = "do not show colored keys")]
     pub no_color_keys: bool,

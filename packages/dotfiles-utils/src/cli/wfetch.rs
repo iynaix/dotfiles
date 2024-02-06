@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::WaifuFetchArgs,
-    fetch::{arg_waifu, create_fastfetch_config, show_wallpaper_ascii},
+    fetch::{create_fastfetch_config, show_wallpaper_ascii},
 };
 use execute::Execute;
 use signal_hook::{
@@ -45,9 +45,7 @@ fn main() {
     wfetch(&args);
 
     // not showing waifu / wallpaper, no need to wait for signal
-    if args.exit
-        || (!arg_waifu(&args) && args.wallpaper.is_none() && args.wallpaper_ascii.is_none())
-    {
+    if !args.listen {
         std::process::exit(0);
     }
 
