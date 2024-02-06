@@ -1,45 +1,8 @@
 [package]
-name = "dotfiles_utils"
+name = "wfetch"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[[bin]]
-name = "hypr-ipc"
-path = "src/cli/hypr_ipc.rs"
-
-[[bin]]
-name = "hypr-monitors"
-path = "src/cli/hypr_monitors.rs"
-
-[[bin]]
-name = "hypr-pip"
-path = "src/cli/hypr_pip.rs"
-
-[[bin]]
-name = "hypr-same-class"
-path = "src/cli/hypr_same_class.rs"
-
-[[bin]]
-name = "hypr-wallpaper"
-path = "src/cli/hypr_wallpaper.rs"
-
-[[bin]]
-name = "imv-wallpaper"
-path = "src/cli/imv_wallpaper.rs"
-
-[[bin]]
-name = "launch-waybar"
-path = "src/cli/launch_waybar.rs"
-
-[[bin]]
-name = "rofi-mpv"
-path = "src/cli/rofi_mpv.rs"
-
-[[bin]]
-name = "rofi-wallust-theme"
-path = "src/cli/rofi_wallust_theme.rs"
 
 [dependencies]
 chrono = "0.4.33"
@@ -59,8 +22,7 @@ clap = { version = "4.4.4", features = ["derive", "string"] }
 clap_complete = "4.4.3"
 
 [features]
-default = ["hyprland", "wfetch-waifu"]
-hyprland = []
+default = ["wfetch-waifu"]
 wfetch-waifu = []
 
 [lints.rust]

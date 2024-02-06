@@ -23,10 +23,7 @@ fn main() -> Result<(), std::io::Error> {
         Some(outdir) => outdir,
     };
 
-    generate_completions(HyprMonitorArgs::command(), &outdir)?;
-    generate_completions(HyprSameClassArgs::command(), &outdir)?;
-    generate_completions(HyprWallpaperArgs::command(), &outdir)?;
-    generate_completions(RofiMpvArgs::command(), &outdir)?;
+    generate_completions(WFetchArgs::command(), &outdir)?;
 
     Ok(())
 }

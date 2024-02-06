@@ -13,6 +13,7 @@
       imagemagick
       nitch
       pipes-rs
+      (custom.wfetch.override {waifu = true;})
     ];
 
     shellAliases = {

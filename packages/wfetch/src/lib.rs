@@ -1,24 +1,74 @@
-use crate::{
-    asset_path,
-    cli::WaifuFetchArgs,
-    full_path, json,
-    nixinfo::NixInfo,
-    wallpaper::{self, WallInfo},
-    CommandUtf8,
-};
+use crate::{cli::WFetchArgs, wallpaper::WallInfo};
 use chrono::{DateTime, Datelike, NaiveDate, Timelike};
 use execute::Execute;
 use serde_json::{json, Value};
-use std::{env, process::Command};
+use std::{
+    collections::HashMap,
+    env,
+    path::PathBuf,
+    process::{Command, Stdio},
+};
+
+pub mod cli;
+pub mod wallpaper;
+
+pub fn full_path<P>(p: P) -> PathBuf
+where
+    P: AsRef<std::path::Path>,
+{
+    let p = p.as_ref().to_str().expect("invalid path");
+
+    match p.strip_prefix("~/") {
+        Some(p) => dirs::home_dir().expect("invalid home directory").join(p),
+        None => PathBuf::from(p),
+    }
+}
+
+pub trait CommandUtf8 {
+    fn execute_stdout_lines(&mut self) -> Vec<String>;
+}
+
+impl CommandUtf8 for std::process::Command {
+    fn execute_stdout_lines(&mut self) -> Vec<String> {
+        self.stdout(Stdio::piped()).execute_output().map_or_else(
+            |_| Vec::new(),
+            |output| {
+                String::from_utf8(output.stdout)
+                    .expect("invalid utf8 from command")
+                    .lines()
+                    .map(String::from)
+                    .collect()
+            },
+        )
+    }
+}
 
 #[cfg(feature = "wfetch-waifu")]
-pub const fn arg_waifu(args: &WaifuFetchArgs) -> bool {
+pub const fn arg_waifu(args: &WFetchArgs) -> bool {
     args.waifu
 }
 
 #[cfg(not(feature = "wfetch-waifu"))]
-pub const fn arg_waifu(_args: &WaifuFetchArgs) -> bool {
+pub const fn arg_waifu(_args: &WFetchArgs) -> bool {
     false
+}
+
+pub fn asset_path(filename: &str) -> String {
+    let out_path = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| {
+        env::current_exe()
+            .expect("could not get current dir")
+            .ancestors()
+            .nth(2)
+            .expect("could not get base package dir")
+            .to_str()
+            .expect("could not convert base package dir to str")
+            .to_string()
+    }));
+    let asset = out_path.join("assets").join(filename);
+    asset
+        .to_str()
+        .unwrap_or_else(|| panic!("could not get asset {}", &filename))
+        .to_string()
 }
 
 fn create_output_file(filename: String) -> String {
@@ -32,8 +82,17 @@ fn create_output_file(filename: String) -> String {
         .to_string()
 }
 
-fn create_nixos_logo(args: &WaifuFetchArgs) -> String {
-    let hexless = NixInfo::after().colors;
+fn create_nixos_logo(args: &WFetchArgs) -> String {
+    let contents = std::fs::read_to_string(full_path("~/.cache/wallust/nix.json"))
+        .unwrap_or_else(|_| panic!("failed to load nix.jspn"));
+
+    let hexless = serde_json::from_str::<HashMap<String, HashMap<String, String>>>(&contents)
+        .unwrap_or_else(|_| panic!("failed to parse nix.json"));
+    let hexless = hexless
+        .get("colors")
+        .unwrap_or_else(|| panic!("failed to get colors"));
+
+    // let hexless = NixInfo::after().colors;
     let c1 = hexless.get("color4").expect("invalid color");
     let c2 = hexless.get("color6").expect("invalid color");
 
@@ -69,7 +128,7 @@ fn create_nixos_logo(args: &WaifuFetchArgs) -> String {
     output
 }
 
-fn imagemagick_wallpaper(args: &WaifuFetchArgs, wallpaper_arg: &Option<String>) -> Command {
+fn imagemagick_wallpaper(args: &WFetchArgs, wallpaper_arg: &Option<String>) -> Command {
     // read current wallpaper
     let wall = wallpaper::detect(wallpaper_arg).unwrap_or_else(|| {
         eprintln!("Error: could not detect wallpaper!");
@@ -111,7 +170,7 @@ fn imagemagick_wallpaper(args: &WaifuFetchArgs, wallpaper_arg: &Option<String>) 
 }
 
 /// creates the wallpaper image that fastfetch will display
-fn create_wallpaper_image(args: &WaifuFetchArgs) -> String {
+fn create_wallpaper_image(args: &WFetchArgs) -> String {
     let output = create_output_file("wallpaper.png".to_string());
 
     imagemagick_wallpaper(args, &args.wallpaper)
@@ -123,7 +182,7 @@ fn create_wallpaper_image(args: &WaifuFetchArgs) -> String {
 }
 
 /// creates the wallpaper ascii that fastfetch will display
-pub fn show_wallpaper_ascii(args: &WaifuFetchArgs, fastfetch: &mut Command) {
+pub fn show_wallpaper_ascii(args: &WFetchArgs, fastfetch: &mut Command) {
     let mut imagemagick = imagemagick_wallpaper(args, &args.wallpaper_ascii);
     imagemagick.arg("-");
 
@@ -203,7 +262,7 @@ fn wm_module() -> serde_json::Value {
 }
 
 #[allow(clippy::similar_names)] // gpu and cpu trips this
-pub fn create_fastfetch_config(args: &WaifuFetchArgs, config_jsonc: &str) {
+pub fn create_fastfetch_config(args: &WFetchArgs, config_jsonc: &str) {
     let os = os_module();
     let kernel = json!({ "type": "kernel", "key": " VER", });
     let uptime = json!({ "type": "uptime", "key": "󰅐 UP", });
@@ -296,7 +355,10 @@ pub fn create_fastfetch_config(args: &WaifuFetchArgs, config_jsonc: &str) {
     });
 
     // write json to file
-    json::write(config_jsonc, contents);
+    let file = std::fs::File::create(full_path(config_jsonc))
+        .unwrap_or_else(|_| panic!("failed to create json config"));
+    serde_json::to_writer(file, &contents)
+        .unwrap_or_else(|_| panic!("failed to write json config"));
 }
 
 fn term_color(color: i32, text: &String, bold: bool) -> String {
@@ -313,7 +375,7 @@ fn last_day_of_month(year: i32, month: u32) -> u32 {
 }
 
 #[allow(clippy::cast_precision_loss, clippy::cast_possible_wrap)]
-pub fn challenge_text(args: &WaifuFetchArgs) -> String {
+pub fn challenge_text(args: &WFetchArgs) -> String {
     let start = DateTime::parse_from_str(&args.challenge_timestamp.to_string(), "%s")
         .expect("could not parse start timestamp");
 
@@ -352,7 +414,7 @@ pub fn challenge_text(args: &WaifuFetchArgs) -> String {
     format!("{elapsed_days} Days / {total_days} Days ({percent:.2}%)")
 }
 
-pub fn challenge_title(args: &WaifuFetchArgs) -> String {
+pub fn challenge_title(args: &WFetchArgs) -> String {
     let mut segments: Vec<String> = Vec::new();
     segments.push(if args.challenge_years == 0 {
         String::new()
@@ -380,7 +442,7 @@ pub fn challenge_title(args: &WaifuFetchArgs) -> String {
     format!("  {title} CHALLENGE  ")
 }
 
-pub fn challenge_block(args: &WaifuFetchArgs) -> Vec<serde_json::Value> {
+pub fn challenge_block(args: &WFetchArgs) -> Vec<serde_json::Value> {
     let title = challenge_title(args);
     let body = challenge_text(args);
     let maxlen = std::cmp::max(title.len(), body.len());

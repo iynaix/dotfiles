@@ -9,10 +9,10 @@
   in
     _callPackage (path + "/default.nix") (extraOverrides
       // {source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource;});
-  # rust dotfiles utils
-  dotfiles-utils = callPackage ./dotfiles-utils {};
 in {
-  inherit dotfiles-utils;
+  # boutique rust packages
+  dotfiles-utils = callPackage ./dotfiles-utils {};
+  wfetch = callPackage ./wfetch {};
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos {};
 
@@ -40,6 +40,4 @@ in {
 
   vv = assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
     w callPackage ./vv {};
-
-  wfetch = callPackage ./wfetch {inherit dotfiles-utils;};
 }

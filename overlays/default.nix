@@ -97,31 +97,6 @@ in {
         #     };
         #   });
 
-        # native titlebar causes vscode to crash, remove for vscode 1.86
-        # https://github.com/microsoft/vscode/issues/184124#issuecomment-1717959995
-        vscode = assert (lib.assertMsg (lib.hasPrefix "1.85" prev.vscode.version) "vscode: remove overlay");
-          prev.vscode.overrideAttrs (_: rec {
-            version = "1.86.0";
-            plat = "linux-x64";
-
-            src = prev.fetchurl {
-              name = "VSCode_${version}_${plat}.tar.gz";
-              url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-              sha256 = "0qykchhd6cplyip4gp5s1fpv664xw2y5z0z7n6zwhwpfrld8piwb";
-            };
-
-            rev = "05047486b6df5eb8d44b2ecd70ea3bdf775fd937";
-
-            vscodeServer = prev.srcOnly {
-              name = "vscode-server-${rev}.tar.gz";
-              src = prev.fetchurl {
-                name = "vscode-server-${rev}.tar.gz";
-                url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-                sha256 = "0d3g6csi2aplsy5j3v84m65mhlg0krpb2sndk0nh7gafyc5gnn28";
-              };
-            };
-          });
-
         # use latest commmit from git
         waybar = assert (lib.assertMsg (prev.waybar.version == "0.9.24") "waybar: use waybar from nixpkgs?");
           prev.waybar.overrideAttrs (o:

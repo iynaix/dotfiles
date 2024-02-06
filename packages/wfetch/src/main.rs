@@ -1,8 +1,4 @@
 use clap::Parser;
-use dotfiles_utils::{
-    cli::WaifuFetchArgs,
-    fetch::{create_fastfetch_config, show_wallpaper_ascii},
-};
 use execute::Execute;
 use signal_hook::{
     consts::{SIGINT, SIGUSR2},
@@ -13,8 +9,9 @@ use std::{
     thread,
     time::Duration,
 };
+use wfetch::{cli::WFetchArgs, create_fastfetch_config, show_wallpaper_ascii};
 
-fn wfetch(args: &WaifuFetchArgs) {
+fn wfetch(args: &WFetchArgs) {
     let config_jsonc = "/tmp/wfetch.jsonc";
     create_fastfetch_config(args, config_jsonc);
 
@@ -35,7 +32,7 @@ fn wfetch(args: &WaifuFetchArgs) {
 }
 
 fn main() {
-    let args = WaifuFetchArgs::parse();
+    let args = WFetchArgs::parse();
 
     // clear screen
     print!("\x1B[2J\x1B[1;1H");

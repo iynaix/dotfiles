@@ -1,4 +1,4 @@
 [workspace]
 
-members = ["packages/dotfiles-utils"]
+members = ["packages/dotfiles-utils", "packages/wfetch"]
 resolver = "2"
