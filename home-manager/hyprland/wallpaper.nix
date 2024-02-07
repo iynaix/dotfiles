@@ -109,7 +109,7 @@ lib.mkMerge [
     ];
 
     home.shellAliases = {
-      wallrg = "wallpapers-search";
+      wallrg = "wallpapers-search -t 20";
     };
 
     custom.persist = {

@@ -51,11 +51,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1707192239,
-        "narHash": "sha256-OW7hWDLQfuV1yy5PERotp+kagQ0D6371lSPP1wqp7EQ=",
+        "lastModified": 1707278626,
+        "narHash": "sha256-rUyhz5Bafu6pwVrQZ/LV29nUFEzdTm+0fJQG+emYEng=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "e689b7bb4cb08c7cf8c4358b3cb6f36061b7b9e9",
+        "rev": "352a387143af3b32d9f0529588eb615a7c77baf0",
         "type": "gitlab"
       },
       "original": {
@@ -292,11 +292,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1707198392,
-        "narHash": "sha256-54FsPawNhG94mBmg063TodYnkVSOb1OqOXHFjI366y0=",
+        "lastModified": 1707289944,
+        "narHash": "sha256-W/SDyGhvCSs16m2qQVWDui2hh+uloaWxVSf5UIrbk7g=",
         "ref": "refs/heads/main",
-        "rev": "7256c8e0910b867ac875a4f6166dd6980da4d7e0",
-        "revCount": 5016,
+        "rev": "acbc6f77e80790d24f04974dea78cc970d3b914f",
+        "revCount": 5031,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -586,11 +586,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1706834982,
-        "narHash": "sha256-3CfxA7gZ+DVv/N9Pvw61bV5Oe/mWfxYPyVQGqp9TMJA=",
+        "lastModified": 1707211557,
+        "narHash": "sha256-LTKTzZ6fM5j8XWXf51IMBzDaOaJg9kYWLUZxoIhzRN8=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "83e571bb291161682b9c3ccd48318f115143a550",
+        "rev": "6e5cc385fc8cf5ca6495d70243074ccdea9f64c7",
         "type": "github"
       },
       "original": {
@@ -802,11 +802,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1707091250,
-        "narHash": "sha256-PZlUz9bGbg82PV3xX3JqSfrFz/ckVLNpaFOAWLu7QV8=",
+        "lastModified": 1707312238,
+        "narHash": "sha256-grc7yArqgDBuRcMBsjOFD4GfSEYbyCKd/W3y0Gqm9wE=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "a181b63aaf6431641690573723d6d2649b1cc53f",
+        "rev": "2e18333dd2c696241cde0f6aa0632738dff10c15",
         "type": "github"
       },
       "original": {
@@ -1022,11 +1022,11 @@
         "systems": "systems_5"
       },
       "locked": {
-        "lastModified": 1707286261,
-        "narHash": "sha256-5TUmoL3e9s6SURYOuJnzk81utkp1rfktnWBGu+fp0/4=",
+        "lastModified": 1707320621,
+        "narHash": "sha256-enKYtJvU2cWtCB4/dlw430iBCyLP7BZljWYqD4LYAmI=",
         "owner": "iynaix",
         "repo": "wfetch",
-        "rev": "80b54d921774cb5e28583f99b9e8bb8513b3261c",
+        "rev": "d717c349957d6bf5457b56d77d4cd92182375639",
         "type": "github"
       },
       "original": {

@@ -21,6 +21,7 @@
     fd
     fx
     htop
+    jq
     sd
     ugrep
   ];

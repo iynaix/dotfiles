@@ -5,6 +5,21 @@
   pkgs,
   ...
 }:
+let
+  shaders_dir = "${pkgs.mpv-shim-default-shaders}/share/mpv-shim-default-shaders/shaders";
+  shaderList =
+    shaders:
+    lib.concatMapStringsSep ":"
+      (s: if (lib.hasSuffix ".hook" s) then "${shaders_dir}/${s}" else "${shaders_dir}/${s}.glsl")
+      (
+        # Adds a very small amount of static noise to help with debanding.
+        [
+          "noise_static_luma.hook"
+          "noise_static_chroma.hook"
+        ]
+        ++ shaders
+      );
+in
 {
   xdg.configFile = {
     "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
@@ -99,6 +114,14 @@
         # forces showing subtitles while seeking through the video
         demuxer-mkv-subtitle-preroll = "yes";
 
+        deband = true;
+        deband_grain = 0;
+        deband_range = 12;
+        deband_threshold = 32;
+
+        dither_depth = "auto";
+        dither = "fruit";
+
         sub-auto = "fuzzy";
         # some settings fixing VOB/PGS subtitles (creating blur & changing yellow subs to gray)
         sub-gauss = "1.0";
@@ -143,8 +166,7 @@
     # anime profile settings
     (
       let
-        inherit (pkgs.custom) mpv-anime;
-        anime4k_shaders = lib.concatMapStringsSep ":" (s: "${pkgs.anime4k}/Anime4K_" + s + ".glsl") [
+        anime4k_shaders = map (s: "Anime4K_" + s) [
           "Clamp_Highlights"
           "Restore_CNN_VL"
           "Upscale_CNN_x2_VL"
@@ -152,6 +174,9 @@
           "AutoDownscalePre_x4"
           "Upscale_CNN_x2_M"
         ];
+        createShaderKeybind =
+          shaders: description:
+          ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
       in
       lib.optionalAttrs config.custom.mpv-anime.enable {
         # auto apply anime shaders for anime videos
@@ -167,27 +192,38 @@
           deband-grain = 5; # Range 0-4096. Inject grain to cover up bad banding, higher value needed for poor sources.
 
           # set shader defaults
-          glsl-shaders = anime4k_shaders;
+          glsl-shaders = shaderList anime4k_shaders;
 
           dscale = "mitchell";
           cscale = "spline64"; # or ewa_lanczossoft
         };
-        bindings = {
-          # clear all shaders
-          "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
-          # Anime4K shaders
-          "CTRL+1" = ''no-osd change-list glsl-shaders set "${anime4k_shaders}"; show-text "Anime4K: Mode A (HQ)"'';
-          # FSRCNNX shaders
-          "CTRL+2" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_8-0-4-1_LineArt.glsl"; show-text "FSRCNNX 8 (LineArt)"'';
-          "CTRL+3" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_8-0-4-1.glsl"; show-text "FSRCNNX 8"'';
-          "CTRL+4" = ''no-osd change-list glsl-shaders set "${mpv-anime}/FSRCNNX_x2_16-0-4-1.glsl"; show-text "FSRCNNX 16"'';
-          # SSimSuperRes shaders
-          "CTRL+5" = ''no-osd change-list glsl-shaders set "${mpv-anime}/SSimSuperRes.glsl"; show-text "SSimSuperRes"'';
-          # RAVU Lite shaders
-          "CTRL+6" = ''no-osd change-list glsl-shaders set "${mpv-anime}/ravu-lite-r4.hook"; show-text "Ravu Lite R4"'';
-          # NNEDI3 shaders
-          "CTRL+7" = ''no-osd change-list glsl-shaders set "${mpv-anime}/nnedi3-nns256-win8x4.hook"; show-text "NNEDI3"'';
-        };
+        bindings =
+          {
+            # clear all shaders
+            "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
+          }
+          // lib.listToAttrs (
+            lib.imap
+              (i: v: {
+                name = "CTRL+${toString i}";
+                value = v;
+              })
+              [
+                # Anime4K shaders
+                (createShaderKeybind anime4k_shaders "Anime4K: Mode A (HQ)")
+                # NVScaler shaders
+                (createShaderKeybind [ "NVScaler" ] "NVScaler x2")
+                # AMD FSR shaders
+                (createShaderKeybind [ "FSR" ] "AMD FidelityFX Super Resolution")
+                # AMD Contrast Adaptive Sharpening
+                (createShaderKeybind [ "CAS-scaled" ] "AMD FidelityFX Contrast Adaptive Sharpening")
+                # FSRCNNX shaders
+                (createShaderKeybind [ "FSRCNNX_x2_16-0-4-1" ] "FSRCNNX High")
+                (createShaderKeybind [ "FSRCNNX_x2_8-0-4-1" ] "FSRCNNX")
+                # NNEDI3 shaders
+                (createShaderKeybind [ "nnedi3-nns256-win8x6.hook" ] "NNEDI3")
+              ]
+          );
       }
     )
   ];
