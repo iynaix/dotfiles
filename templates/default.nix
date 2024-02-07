@@ -26,8 +26,15 @@ rec {
     description = "Rust dev environment";
   };
 
+  rust-stable = {
+    inherit welcomeText;
+    path = ./rust-stable;
+    description = "Rust (latest stable from fenix) dev environment";
+  };
+
   js = javascript;
   ts = javascript;
   py = python;
   rs = rust;
+  rs-stable = rust-stable;
 }

@@ -17,7 +17,6 @@ in
 {
   # boutique rust packages
   dotfiles-utils = callPackage ./dotfiles-utils { };
-  wfetch = callPackage ./wfetch { };
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 

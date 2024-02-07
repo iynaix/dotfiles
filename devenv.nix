@@ -18,12 +18,7 @@ inputs.devenv.lib.mkShell {
       { pkgs, ... }:
       {
         # devenv configuration
-        packages = with pkgs; [
-          nixfmt-rfc-style
-          ascii-image-converter # for  wfetch --wallpaper-ascii
-          fastfetch
-          imagemagick
-        ];
+        packages = with pkgs; [ nixfmt-rfc-style ];
 
         languages.nix.enable = true;
         languages.rust.enable = true;
