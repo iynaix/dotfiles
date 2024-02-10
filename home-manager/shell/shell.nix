@@ -17,6 +17,7 @@
       btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
       man = lib.getExe' pkgs.bat-extras.batman "batman";
+      mime = "xdg-mime query filetype";
       mkdir = "mkdir -p";
       mount = "mount --mkdir";
       nano = "nvim";
@@ -25,7 +26,6 @@
       py = "python";
       t = "eza -la --tree --level 3";
       v = "nvim";
-      wget = "wget --content-disposition";
       coinfc = "openproj coinfc";
 
       # cd aliases

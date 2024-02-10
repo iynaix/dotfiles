@@ -132,6 +132,7 @@
 
     mimeApps.defaultApplications = {
       "text/plain" = "nvim.desktop";
+      "application/x-shellscript" = "nvim.desktop";
     };
   };
 

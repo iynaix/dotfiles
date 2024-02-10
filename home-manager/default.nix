@@ -39,6 +39,7 @@
         home-manager
         libreoffice
         trash-cli
+        xdg-utils
         # misc utilities for dotfiles written in rust
         custom.dotfiles-utils
       ]

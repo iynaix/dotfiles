@@ -51,6 +51,7 @@
   # set default browser
   home.sessionVariables = {
     DEFAULT_BROWSER = lib.getExe pkgs.brave;
+    BROWSER = lib.getExe pkgs.brave;
   };
 
   xdg.mimeApps.defaultApplications = {
