@@ -71,26 +71,6 @@ in
         o: { patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ]; }
       );
 
-      rclip = prev.rclip.overridePythonAttrs (
-        o: {
-          version = "1.7.24";
-
-          src = prev.fetchFromGitHub {
-            owner = "yurijmikhalevich";
-            repo = "rclip";
-            rev = "v1.7.24";
-            hash = "sha256-JWtKgvSP7oaPg19vWnnCDfm7P5Uew+v9yuvH7y2eHHM=";
-          };
-
-          nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.python3Packages.pythonRelaxDepsHook ];
-
-          pythonRelaxDeps = [
-            "torch"
-            "torchvision"
-          ];
-        }
-      );
-
       # use latest commmit from git
       swww = prev.swww.overrideAttrs (
         _:

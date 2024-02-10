@@ -30,6 +30,11 @@ in
     };
   };
 
+  wayland.windowManager.hyprland.settings = {
+    # do not idle while watching videos
+    windowrule = [ "idleinhibit fullscreen,firefox-aurora" ];
+  };
+
   # overwrite desktop entry with user profile
   xdg.desktopEntries.firefox-developer-edition = {
     name = "Firefox Developer Edition";

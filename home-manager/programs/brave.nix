@@ -61,6 +61,11 @@
     "x-scheme-handler/unknown" = "brave.desktop";
   };
 
+  wayland.windowManager.hyprland.settings.windowrule = [
+    # do not idle while watching videos
+    "idleinhibit fullscreen,Brave-browser"
+  ];
+
   custom.persist = {
     home.directories = [
       ".cache/BraveSoftware"

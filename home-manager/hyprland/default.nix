@@ -48,7 +48,7 @@ in
         kb_layout = "us";
         follow_mouse = 1;
 
-        touchpad = {
+        touchpad = lib.mkIf isLaptop {
           natural_scroll = false;
           disable_while_typing = true;
         };
@@ -152,10 +152,7 @@ in
 
       windowrule = [
         # do not idle while watching videos
-        "idleinhibit fullscreen,Brave-browser"
-        "idleinhibit fullscreen,firefox-aurora"
         "idleinhibit focus,YouTube"
-        "idleinhibit focus,mpv"
       ];
 
       exec-once = [

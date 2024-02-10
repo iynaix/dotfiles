@@ -4,6 +4,7 @@
   inputs,
   lib,
   pkgs,
+  self,
   user,
   ...
 }:
@@ -267,6 +268,13 @@ in
       ];
     };
   };
+
+  # better nixos generation label
+  # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
+  system.nixos.label = lib.concatStringsSep "-" (
+    (lib.sort (x: y: x < y) config.system.nixos.tags)
+    ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
+  );
 
   hm.custom.persist = {
     home = {

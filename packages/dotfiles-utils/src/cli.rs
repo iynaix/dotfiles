@@ -46,29 +46,6 @@ pub struct HyprWallpaperArgs {
     #[arg(long, action, help = "reload current wallpaper")]
     pub reload: bool,
 
-    #[arg(
-        long,
-        value_name = "TRANSITION",
-        value_parser = PossibleValuesParser::new([
-            "simple",
-            "fade",
-            "left",
-            "right",
-            "top",
-            "bottom",
-            "wipe",
-            "wave",
-            "grow",
-            "center",
-            "any",
-            "random",
-            "outer",
-        ]),
-        default_value = "random",
-        help = "transition type for swww"
-    )]
-    pub transition_type: String,
-
     // optional image to use, uses a random one otherwise
     pub image: Option<PathBuf>,
 }

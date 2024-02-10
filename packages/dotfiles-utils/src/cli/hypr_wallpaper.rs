@@ -8,6 +8,7 @@ use dotfiles_utils::{
     wallust,
 };
 use execute::Execute;
+use rand::seq::SliceRandom;
 use std::{collections::HashMap, path::Path, process::Command};
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
@@ -116,11 +117,48 @@ fn main() {
                     .ok();
             });
         } else {
-            swww_crop(
-                &["--transition-type", &args.transition_type],
-                &wallpaper,
-                &wallpaper_info,
-            );
+            // choose a random transition, taken from ZaneyOS
+            // https://gitlab.com/Zaney/zaneyos/-/blob/main/config/scripts/wallsetter.nix
+            let transition = vec![
+                vec![
+                    "--transition-type",
+                    "wave",
+                    "--transition-angle",
+                    "120",
+                    "--transition-step",
+                    "30",
+                ],
+                vec![
+                    "--transition-type",
+                    "wipe",
+                    "--transition-angle",
+                    "30",
+                    "--transition-step",
+                    "30",
+                ],
+                vec!["--transition-type", "center", "--transition-step", "30"],
+                vec![
+                    "--transition-type",
+                    "outer",
+                    "--transition-pos",
+                    "0.3,0.8",
+                    "--transition-step",
+                    "30",
+                ],
+                vec![
+                    "--transition-type",
+                    "wipe",
+                    "--transition-angle",
+                    "270",
+                    "--transition-step",
+                    "30",
+                ],
+            ];
+            let transition = transition
+                .choose(&mut rand::thread_rng())
+                .expect("could not choose transition");
+
+            swww_crop(transition, &wallpaper, &wallpaper_info);
         }
     }
 
