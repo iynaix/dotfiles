@@ -1,24 +1,16 @@
 {
   lib,
-  stdenvNoCC,
+  buildLua,
   source,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   source
   // {
     version = "unstable-${source.date}";
 
     dontBuild = true;
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/mpv/scripts
-      cp dynamic-crop.lua $out/share/mpv/scripts/dynamic-crop.lua
-
-      runHook postInstall
-    '';
-
+    scriptPath = "dynamic-crop.lua";
     passthru.scriptName = "dynamic-crop.lua";
 
     meta = {

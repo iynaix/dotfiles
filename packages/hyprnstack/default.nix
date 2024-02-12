@@ -11,8 +11,8 @@ gcc13Stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zakk4223";
     repo = "hyprNStack";
-    rev = "5add1437f68b8116ad66a89fd8446e065bb392df";
-    sha256 = "sha256-8uvArhdtPL5CIJ1EVs5ZjjwHZVr9TWpwxwkBoZ2WF24=";
+    rev = "659ce780c6c826cffd8f7f24b0b025985099e2af";
+    sha256 = "sha256-XZCHnpRSShtZ8vp4Dg0q92jNlg2+DgxLkcWns5bdWIM=";
   };
 
   preConfigure = ''

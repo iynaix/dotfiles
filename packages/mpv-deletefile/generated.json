@@ -1,7 +1,7 @@
 {
     "mpv-deletefile": {
         "cargoLocks": null,
-        "date": "2024-01-26",
+        "date": "2024-02-12",
         "extract": null,
         "name": "mpv-deletefile",
         "passthru": null,
@@ -13,10 +13,10 @@
             "name": null,
             "owner": "zenyd",
             "repo": "mpv-scripts",
-            "rev": "7100d19d18d111ce77fc9e6e8947c0d542a86397",
-            "sha256": "sha256-hpLZDtt5q18aZ8d9LHfT852wtBosKUTJ7Bx+cbjBLcg=",
+            "rev": "9bdce0050144cb24f92475f7bdd77180e0e4c26b",
+            "sha256": "sha256-9P/8q/OZXfaJMS08acQP4h3/zUA5mKRQee0JmkXcz1w=",
             "type": "github"
         },
-        "version": "7100d19d18d111ce77fc9e6e8947c0d542a86397"
+        "version": "9bdce0050144cb24f92475f7bdd77180e0e4c26b"
     }
 }

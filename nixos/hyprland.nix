@@ -23,7 +23,7 @@ lib.mkIf config.custom-nixos.hyprland.enable {
   hm.wayland.windowManager.hyprland = {
     enable = true;
     package =
-      assert (lib.assertMsg (pkgs.hyprland.version == "0.34.0")
+      assert (lib.assertMsg (pkgs.hyprland.version == "0.35.0")
         "hyprland: updated, sync with hyprnstack?"
       );
       pkgs.hyprland;

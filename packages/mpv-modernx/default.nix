@@ -1,10 +1,10 @@
 {
-  stdenvNoCC,
-  makeFontsConf,
   lib,
+  buildLua,
+  makeFontsConf,
   source,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   finalAttrs:
   (
     source
@@ -13,18 +13,14 @@ stdenvNoCC.mkDerivation (
 
       dontBuild = true;
 
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/share/mpv/scripts
-        cp modernx.lua $out/share/mpv/scripts/modernx.lua
+      postInstall = ''
         mkdir -p $out/share/fonts/truetype
         cp Material-Design-Iconic-Font.ttf $out/share/fonts/truetype
-
-        runHook postInstall
       '';
 
+      scriptPath = "modernx.lua";
       passthru.scriptName = "modernx.lua";
+
       # In order for mpv to find the custom font, we need to adjust the fontconfig search path.
       passthru.extraWrapperArgs = [
         "--set"

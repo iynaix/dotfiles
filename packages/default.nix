@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   inherit (pkgs) lib callPackage;
+  inherit (pkgs.mpvScripts) buildLua;
   # injects a source parameter from nvfetcher
   # adapted from viperML's config
   # https://github.com/viperML/dotfiles/blob/master/packages/default.nix
@@ -23,15 +24,13 @@ in
   hyprnstack = callPackage ./hyprnstack { };
 
   # mpv plugins
-  mpv-deletefile = w callPackage ./mpv-deletefile { };
-  mpv-dynamic-crop = w callPackage ./mpv-dynamic-crop { };
-  mpv-modernx = callPackage ./mpv-modernx {
-    source = (callPackage ./mpv-modernx/generated.nix { }).mpv-modernx;
-  };
-  mpv-nextfile = w callPackage ./mpv-nextfile { };
-  mpv-sub-select = w callPackage ./mpv-sub-select { };
-  mpv-subsearch = w callPackage ./mpv-subsearch { };
-  mpv-thumbfast-osc = w callPackage ./mpv-thumbfast-osc { };
+  mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
+  mpv-dynamic-crop = w pkgs.mpvScripts.callPackage ./mpv-dynamic-crop { inherit buildLua; };
+  mpv-modernx = w pkgs.mpvScripts.callPackage ./mpv-modernx { inherit buildLua; };
+  mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
+  mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };
+  mpv-subsearch = w pkgs.mpvScripts.callPackage ./mpv-subsearch { inherit buildLua; };
+  mpv-thumbfast-osc = w pkgs.mpvScripts.callPackage ./mpv-thumbfast-osc { inherit buildLua; };
 
   # custom version of pob with a .desktop entry, overwritten as a custom package
   # as the interaction with passthru is weird

@@ -1,24 +1,16 @@
 {
   lib,
-  stdenvNoCC,
+  buildLua,
   source,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   source
   // {
     version = "unstable-${source.date}";
 
     dontBuild = true;
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/mpv/scripts
-      cp nextfile.lua $out/share/mpv/scripts/nextfile.lua
-
-      runHook postInstall
-    '';
-
+    scriptPath = "nextfile.lua";
     passthru.scriptName = "nextfile.lua";
 
     meta = {

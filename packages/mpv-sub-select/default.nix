@@ -1,22 +1,14 @@
 {
   lib,
-  stdenvNoCC,
+  buildLua,
   source,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   source
   // {
     dontBuild = true;
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/mpv/scripts
-      cp sub-select.lua $out/share/mpv/scripts/sub-select.lua
-
-      runHook postInstall
-    '';
-
+    scriptPath = "sub-select.lua";
     passthru.scriptName = "sub-select.lua";
   }
   // {

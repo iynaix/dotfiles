@@ -1,24 +1,16 @@
 {
   lib,
-  stdenvNoCC,
+  buildLua,
   source,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   source
   // {
     version = "unstable-${source.date}";
 
     dontBuild = true;
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/mpv/scripts
-      cp player/lua/osc.lua $out/share/mpv/scripts/thumbfast-osc.lua
-
-      runHook postInstall
-    '';
-
+    scriptPath = "player/lua/osc.lua";
     passthru.scriptName = "thumbfast-osc.lua";
 
     meta = {

@@ -1,26 +1,17 @@
 {
   lib,
+  buildLua,
   source,
-  stdenvNoCC,
 }:
-stdenvNoCC.mkDerivation (
+buildLua (
   source
   // {
     version = "unstable-${source.date}";
 
     dontBuild = true;
 
-    installPhase = ''
-
-      runHook preInstall
-
-      mkdir -p $out/share/mpv/scripts
-      cp delete_file.lua $out/share/mpv/scripts/deletefile.lua
-
-      runHook postInstall
-    '';
-
-    passthru.scriptName = "deletefile.lua";
+    scriptPath = "delete_file.lua";
+    passthru.scriptName = "delete_file.lua";
 
     meta = {
       description = "Deletes files played through mpv";
