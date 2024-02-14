@@ -15,8 +15,9 @@ _: {
           pyright.enable = true;
           rust-analyzer = {
             enable = true;
+            # do not install the language server
+            package = null;
             # autostart = false;
-            installLanguageServer = false;
             cmd = null;
             installCargo = false;
             installRustc = false;

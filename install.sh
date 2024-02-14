@@ -45,7 +45,6 @@ The following ZFS datasets will be created:
     - zroot/root (mounted at / with blank snapshot)
     - zroot/nix (mounted at /nix)
     - zroot/tmp (mounted at /tmp)
-    - zroot/home (mounted at /home with blank snapshot)
     - zroot/persist (mounted at /persist)
     - zroot/persist/cache (mounted at /persist/cache)
 
@@ -143,11 +142,6 @@ sudo mount --mkdir -t zfs zroot/nix /mnt/nix
 echo "Creating /tmp"
 sudo zfs create -o mountpoint=legacy zroot/tmp
 sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
-
-echo "Creating /home"
-sudo zfs create -o mountpoint=legacy zroot/home
-sudo zfs snapshot zroot/home@blank
-sudo mount --mkdir -t zfs zroot/home /mnt/home
 
 echo "Creating /cache"
 sudo zfs create -o mountpoint=legacy zroot/cache

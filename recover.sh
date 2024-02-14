@@ -40,7 +40,6 @@ sudo mount --mkdir -t zfs zroot/root /mnt
 sudo mount --mkdir "$BOOTDISK" /mnt/boot
 sudo mount --mkdir -t zfs zroot/nix /mnt/nix
 sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
-sudo mount --mkdir -t zfs zroot/home /mnt/home
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 

@@ -16,16 +16,15 @@ in
     # root / home filesystem is destroyed and rebuilt on every boot:
     # https://grahamc.com/blog/erase-your-darlings
     initrd.postDeviceCommands = lib.mkAfter ''
-      ${lib.optionalString (!cfg.tmpfs && cfg.erase.root) "zfs rollback -r zroot/root@blank"}
-      ${lib.optionalString (!cfg.tmpfs && cfg.erase.home) "zfs rollback -r zroot/home@blank"}
+      ${lib.optionalString (!cfg.tmpfs && cfg.erase) "zfs rollback -r zroot/root@blank"}
     '';
   };
 
-  # replace root and / or home filesystems with tmpfs
+  # replace root filesystem with tmpfs
   # neededForBoot is required, so there won't be permission errors creating directories or symlinks
   # https://github.com/nix-community/impermanence/issues/149#issuecomment-1806604102
   fileSystems = {
-    "/" = lib.mkIf (cfg.tmpfs && cfg.erase.root) (
+    "/" = lib.mkIf (cfg.tmpfs && cfg.erase) (
       lib.mkForce {
         device = "tmpfs";
         fsType = "tmpfs";
@@ -34,19 +33,6 @@ in
           "defaults"
           "size=1G"
           "mode=755"
-        ];
-      }
-    );
-    # ${homeDir} causes infinite recursion
-    "/home/${user}" = lib.mkIf (cfg.tmpfs && cfg.erase.home) (
-      lib.mkForce {
-        device = "tmpfs";
-        fsType = "tmpfs";
-        neededForBoot = true;
-        options = [
-          "defaults"
-          "size=1G"
-          "mode=777"
         ];
       }
     );

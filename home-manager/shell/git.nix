@@ -74,6 +74,7 @@ _: {
     gp = "git push";
     glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
     gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
+    gpatch = "git diff --no-ext-diff";
     groot = "cd $(git rev-parse - -show-toplevel)";
     grh = "git reset --hard";
     gri = "git rebase --interactive";

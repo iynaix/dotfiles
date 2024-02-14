@@ -4,8 +4,7 @@
     # impermanence
     persist = {
       tmpfs = false; # change to false to test zfs impermanence
-      erase.root = true;
-      erase.home = true;
+      erase = true;
     };
   };
 
