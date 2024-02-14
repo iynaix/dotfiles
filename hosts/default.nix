@@ -53,7 +53,7 @@ let
               inherit extraSpecialArgs;
 
               users.${user} = {
-                imports = homeManagerImports ++ [ inputs.impermanence.nixosModules.home-manager.impermanence ];
+                imports = homeManagerImports;
               };
             };
           }

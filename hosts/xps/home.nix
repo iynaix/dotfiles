@@ -22,12 +22,7 @@ _: {
     terminal.size = 10;
 
     persist = {
-      home.directories = [
-        {
-          directory = "Downloads";
-          method = "symlink";
-        }
-      ];
+      home.directories = [ "Downloads" ];
     };
   };
 }

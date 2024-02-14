@@ -12,10 +12,12 @@ lib.mkIf cfg.enable {
   boot = {
     # booting with zfs
     supportedFilesystems = [ "zfs" ];
-    zfs.devNodes = lib.mkDefault "/dev/disk/by-id";
-    # zfs.enableUnstable = true;
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-    zfs.requestEncryptionCredentials = cfg.encryption;
+    zfs = {
+      devNodes = lib.mkDefault "/dev/disk/by-id";
+      enableUnstable = true;
+      requestEncryptionCredentials = cfg.encryption;
+    };
   };
 
   services.zfs = {
@@ -49,6 +51,7 @@ lib.mkIf cfg.enable {
       "/" = {
         device = "zroot/root";
         fsType = "zfs";
+        neededForBoot = !persistCfg.tmpfs && cfg.erase.root;
       };
 
       "/nix" = {
@@ -64,6 +67,7 @@ lib.mkIf cfg.enable {
       "${homeMountPoint}" = {
         device = "zroot/home";
         fsType = "zfs";
+        neededForBoot = !persistCfg.tmpfs && cfg.erase.home;
       };
 
       "/persist" = {

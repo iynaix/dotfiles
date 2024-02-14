@@ -26,12 +26,7 @@
     terminal.size = 12;
 
     persist = {
-      home.directories = [
-        {
-          directory = "Downloads";
-          method = "symlink";
-        }
-      ];
+      home.directories = [ "Downloads" ];
     };
   };
 

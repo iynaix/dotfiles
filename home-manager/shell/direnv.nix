@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 lib.mkMerge [
@@ -46,8 +47,8 @@ lib.mkMerge [
   # rust stuff
   {
     home.sessionVariables = {
-      CARGO_HOME = "${config.xdg.dataHome}/.cargo";
-      CARGO_TARGET_DIR = "/persist/cache/cargo/target";
+      CARGO_HOME = "/persist/cache/${config.xdg.dataHome}/.cargo";
+      CARGO_TARGET_DIR = "/persist/cache/home/${user}/cargo/target";
     };
   }
 ]
