@@ -11,9 +11,13 @@ in
   programs = {
     fish = {
       enable = true;
-      functions =
-        lib.mapAttrs (_: value: if lib.isString value then value else value.fishBody)
-          cfg.functions;
+      functions = {
+        # use vi key bindings with hybrid emacs keybindings
+        fish_user_key_bindings = ''
+          fish_default_key_bindings -M insert
+          fish_vi_key_bindings --no-erase insert
+        '';
+      } // lib.mapAttrs (_: value: if lib.isString value then value else value.fishBody) cfg.functions;
       plugins = [
         # transient prompt because starship's transient prompt does not handle empty commands
         {
@@ -44,6 +48,9 @@ in
           function postexec_newline --on-event fish_postexec
             echo ""
           end
+
+          # setup vi mode
+          fish_vi_key_bindings
 
           # set options for plugins
           set sponge_regex_patterns 'password|passwd'

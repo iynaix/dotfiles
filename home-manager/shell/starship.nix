@@ -37,7 +37,7 @@
           character = {
             error_symbol = "[ ](bold red)";
             success_symbol = "[](purple)";
-            vimcmd_symbol = "[](green)";
+            vimcmd_symbol = "[](green)";
           };
           username = {
             style_root = important_style;
