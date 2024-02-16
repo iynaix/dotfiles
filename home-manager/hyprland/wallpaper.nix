@@ -42,10 +42,20 @@ let
       rsync
       wallpapers-backup
     ];
-    text = ''
-      wallpapers-backup
-      rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no" "${wallpapers_dir}" "${user}@''${1:-${user}-framework}:${config.xdg.userDirs.pictures}"
-    '';
+    text =
+      let
+        rsync = ''rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no"'';
+        remote = "\${1:-${user}-framework}";
+        rclip_dir = "${config.xdg.dataHome}/rclip";
+      in
+      ''
+        wallpapers-backup
+        ${rsync} "${wallpapers_dir}/" "${user}@${remote}:${wallpapers_dir}/"
+
+        if [ "${remote}" == "iynaix-framework" ]; then
+            ${rsync} "${rclip_dir}/" "${user}@${remote}:${rclip_dir}/"
+        fi
+      '';
   };
   # process wallpapers with upscaling and vertical crop
   wallpapers-process = pkgs.writeShellApplication {

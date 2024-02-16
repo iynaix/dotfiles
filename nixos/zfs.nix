@@ -61,6 +61,8 @@ lib.mkIf cfg.enable {
     };
   };
 
+  systemd.services.systemd-udev-settle.enable = false;
+
   services.sanoid = lib.mkIf cfg.snapshots {
     enable = true;
 
