@@ -8,11 +8,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1707817777,
-        "narHash": "sha256-vHyIs1OULQ3/91wD6xOiuayfI71JXALGA5KLnDKAcy0=",
+        "lastModified": 1708141957,
+        "narHash": "sha256-IWkw+jsVpu7HFNPbOTJaQeMYQ5/eh7ZVScPvtlSo8vc=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "5a30b9e5ac7c6167e61b1f4193d5130bb9f8defa",
+        "rev": "40b567388381137a3c49acdff5f4b6946d645a5f",
         "type": "github"
       },
       "original": {
@@ -306,11 +306,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1707929824,
-        "narHash": "sha256-2q8srkutattOns5HZzDEJKyB0/HR1x91SSeRwM4R1jU=",
+        "lastModified": 1708120795,
+        "narHash": "sha256-9I9ANFlW/v8REjWGO/Dedq1wUHrkCdp4TSmMUUxH19I=",
         "ref": "refs/heads/main",
-        "rev": "8b8cbcbfc93ec49aba51881e2d14ade1cddd1906",
-        "revCount": 5167,
+        "rev": "7cc9ea02c43c84cb8551648a0269338734a9fbea",
+        "revCount": 5177,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -600,11 +600,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1707842204,
-        "narHash": "sha256-M+HAq1qWQBi/gywaMZwX0odU+Qb/XeqVeANGKRBDOwU=",
+        "lastModified": 1708091350,
+        "narHash": "sha256-o28BJYi68qqvHipT7V2jkWxDiMS1LF9nxUsou+eFUPQ=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "f1b2f71c86a5b1941d20608db0b1e88a07d31303",
+        "rev": "106d3fec43bcea19cb2e061ca02531d54b542ce3",
         "type": "github"
       },
       "original": {
@@ -817,11 +817,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1708077799,
-        "narHash": "sha256-jiT+/pzyS8nr498tW5YfQhgiqaO6f4j/irebB2DmAlw=",
+        "lastModified": 1708092675,
+        "narHash": "sha256-v989FEEnL74uHxb5e2BNInJFbnVO5xmO3o/sX8+JwUU=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "331f0430e40435a585e110589931ba895b024c6e",
+        "rev": "ca6240ddc2f507742f52650b3ea6a74d477afe30",
         "type": "github"
       },
       "original": {
@@ -1037,11 +1037,11 @@
         "systems": "systems_5"
       },
       "locked": {
-        "lastModified": 1708084183,
-        "narHash": "sha256-odjXBJvQj8BOEWtvznrr/erelt8LmcCUTNDBH5th5M4=",
+        "lastModified": 1708249611,
+        "narHash": "sha256-whKkDr29MC6DdVXkq/fUuyFZ2cgN/HV0iMYP2w3G4x0=",
         "owner": "iynaix",
         "repo": "wfetch",
-        "rev": "e7f3d6c1877806a250103093d9fc23587a611cbf",
+        "rev": "d04ce9289579b323ecd86902fe64b370fe4e5632",
         "type": "github"
       },
       "original": {

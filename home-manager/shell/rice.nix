@@ -15,7 +15,7 @@
       imagemagick
       nitch
       pipes-rs
-      inputs.wfetch.packages.${pkgs.system}.wfetch-waifu
+      inputs.wfetch.packages.${pkgs.system}.wfetch
     ];
 
     shellAliases = {

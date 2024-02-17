@@ -194,5 +194,7 @@ where
 
     if sys.processes_by_exact_name(wrapped_name).next().is_some() {
         process_fn(wrapped_name);
+    } else {
+        process_fn(unwrapped_name);
     }
 }

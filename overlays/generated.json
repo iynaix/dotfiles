@@ -1,7 +1,7 @@
 {
     "swww": {
         "cargoLocks": null,
-        "date": "2024-02-09",
+        "date": "2024-02-14",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -13,15 +13,15 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "01e9cf86b411373c40277338fd97670723959c24",
-            "sha256": "sha256-BaHDg/Ot2bZba2I+kUtNYkxc8U8edfDAr17jB4OwP9E=",
+            "rev": "58ce3293e9a32f528c8a701dbbcf6ad4a7ac8f1f",
+            "sha256": "sha256-+h3Z3Ta2MODAzxpQ9LwYQ6Q7ZubYaYgRAxfMP1JMrxE=",
             "type": "github"
         },
-        "version": "01e9cf86b411373c40277338fd97670723959c24"
+        "version": "58ce3293e9a32f528c8a701dbbcf6ad4a7ac8f1f"
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2024-02-13",
+        "date": "2024-02-16",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -33,10 +33,10 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "28cd9dff47fa586c2a7910e6c18eefb6a93a0dd0",
-            "sha256": "sha256-goHgM2gDzlDcgxXKMQchAjmeuqaoWGPGwl4thC8V3Dg=",
+            "rev": "3cd311819be3af40f3aaec76917018a93d18c70f",
+            "sha256": "sha256-Ig/w7deBZpC3UkkHqUTt0loaKIy+mPdAZ6+hoa7lozY=",
             "type": "github"
         },
-        "version": "28cd9dff47fa586c2a7910e6c18eefb6a93a0dd0"
+        "version": "3cd311819be3af40f3aaec76917018a93d18c70f"
     }
 }

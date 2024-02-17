@@ -39,8 +39,10 @@
 
     environment = {
       etc = {
-        # git
+        # universal git settings
         "gitconfig".text = config.hm.xdg.configFile."git/config".text;
+        # get gparted to use system theme
+        "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
       };
 
       # install fish completions for fish
@@ -68,6 +70,12 @@
           tree # for root, normal user has an eza alias
           wget
         ]
+        ++
+          # install gtk theme for root, some apps like gparted only run as root
+          (with config.hm.gtk; [
+            theme.package
+            iconTheme.package
+          ])
         ++ (lib.optional config.custom-nixos.distrobox.enable pkgs.distrobox)
         ++ (lib.optional config.hm.custom.helix.enable helix);
     };
