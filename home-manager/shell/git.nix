@@ -12,6 +12,11 @@ _: {
         init = {
           defaultBranch = "main";
         };
+        alias = {
+          # blame with ignore whitespace and track movement across all commits
+          blame = "blame -w -C -C -C";
+          diff = "diff --word-diff";
+        };
         branch = {
           master = {
             merge = "refs/heads/master";
@@ -19,23 +24,33 @@ _: {
           main = {
             merge = "refs/heads/main";
           };
+          sort = "-committerdate";
         };
-        merge = {
-          conflictstyle = "diff3";
-        };
-        format = {
-          pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+        core = {
+          # use fileystem monitor daemon to speed up git status for large repos like nixpkgs
+          fsmonitor = true;
         };
         diff = {
           tool = "nvim -d";
           guitool = "code";
           colorMoved = "default";
         };
+        format = {
+          pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+        };
+        merge = {
+          conflictstyle = "diff3";
+        };
         pull = {
           rebase = true;
         };
         push = {
           default = "simple";
+        };
+        # reuse record resolution: git automatically resolves conflicts using the recorded resolution
+        rerere = {
+          enabled = true;
+          autoUpdate = true;
         };
       };
     };
@@ -66,14 +81,15 @@ _: {
     gcaam = "git add --all && git commit --amend";
     gcam = "git commit --amend";
     gco = "git checkout";
-    gdc = "git diff --cached";
     gdi = "git diff";
     gl = "git pull";
     glg = "git log";
     gm = "git merge";
     gp = "git push";
+    gpf = "git push --force-with-lease";
     glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
     gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
+    gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
     gpatch = "git diff --no-ext-diff";
     groot = "cd $(git rev-parse - -show-toplevel)";
     grh = "git reset --hard";
@@ -87,6 +103,9 @@ _: {
   };
 
   custom.persist = {
-    home.directories = [ ".config/gh" ];
+    home.directories = [
+      ".config/gh"
+      ".config/systemd" # git maintenance systemd timers
+    ];
   };
 }
