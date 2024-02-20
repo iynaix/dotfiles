@@ -71,6 +71,56 @@ in
         o: { patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ]; }
       );
 
+      path-of-building =
+        let
+          desktopItem = pkgs.makeDesktopItem {
+            name = "Path of Building";
+            desktopName = "Path of Building";
+            comment = "Offline build planner for Path of Exile";
+            exec = "pobfrontend %U";
+            terminal = false;
+            type = "Application";
+            icon = ./PathOfBuilding-logo.png;
+            categories = [ "Game" ];
+            keywords = [
+              "poe"
+              "pob"
+              "pobc"
+              "path"
+              "exile"
+            ];
+            mimeTypes = [ "x-scheme-handler/pob" ];
+          };
+          data = prev.path-of-building.passthru.data.overrideAttrs {
+            inherit (sources.path-of-building) version;
+
+            src = pkgs.fetchFromGitHub {
+              owner = "PathOfBuildingCommunity";
+              repo = "PathOfBuilding";
+              rev = "v${sources.path-of-building.version}";
+              hash = "sha256-mq91nZRAnGXvBZSXvIqoRINvNnWCMRkjfryVj2EdB+8=";
+            };
+          };
+        in
+        prev.path-of-building.overrideAttrs (
+          _: {
+            inherit (sources.path-of-building) version;
+
+            postInstall = ''
+              mkdir -p $out/share/applications
+              cp ${desktopItem}/share/applications/* $out/share/applications
+            '';
+
+            preFixup = ''
+              qtWrapperArgs+=(
+                --set LUA_PATH "$LUA_PATH"
+                --set LUA_CPATH "$LUA_CPATH"
+                --chdir "${data}"
+              )
+            '';
+          }
+        );
+
       # use latest commmit from git
       # swww = prev.swww.overrideAttrs (
       #   _:

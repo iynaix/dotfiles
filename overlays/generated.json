@@ -1,4 +1,24 @@
 {
+    "path-of-building": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "path-of-building",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "PathOfBuildingCommunity",
+            "repo": "PathOfBuilding",
+            "rev": "v2.39.3",
+            "sha256": "sha256-W4MmncDfeiuN7VeIeoPHEufTb9ncA3aA8F0JNhI9Z/o=",
+            "type": "github"
+        },
+        "version": "v2.39.3"
+    },
     "swww": {
         "cargoLocks": null,
         "date": "2024-02-18",

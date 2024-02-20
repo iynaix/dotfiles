@@ -6,6 +6,17 @@
   dockerTools,
 }:
 {
+  path-of-building = {
+    pname = "path-of-building";
+    version = "v2.39.3";
+    src = fetchFromGitHub {
+      owner = "PathOfBuildingCommunity";
+      repo = "PathOfBuilding";
+      rev = "v2.39.3";
+      fetchSubmodules = false;
+      sha256 = "sha256-W4MmncDfeiuN7VeIeoPHEufTb9ncA3aA8F0JNhI9Z/o=";
+    };
+  };
   swww = {
     pname = "swww";
     version = "a3dc064fab7db2ae5ed282b4e4ee7c68f2d2854a";
