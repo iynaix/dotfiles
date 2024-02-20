@@ -41,7 +41,7 @@
     },
     "waybar": {
         "cargoLocks": null,
-        "date": "2024-02-16",
+        "date": "2024-02-20",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -53,10 +53,10 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "3cd311819be3af40f3aaec76917018a93d18c70f",
-            "sha256": "sha256-Ig/w7deBZpC3UkkHqUTt0loaKIy+mPdAZ6+hoa7lozY=",
+            "rev": "e42635197c1856d13e980c30342f9cb4fb8e1285",
+            "sha256": "sha256-QzVKYKl4/lOkqB4+MMBhxzPyxsPPPbyHfX7HUMfv9Y4=",
             "type": "github"
         },
-        "version": "3cd311819be3af40f3aaec76917018a93d18c70f"
+        "version": "e42635197c1856d13e980c30342f9cb4fb8e1285"
     }
 }
