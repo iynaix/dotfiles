@@ -15,6 +15,7 @@
       imagemagick
       nitch
       pipes-rs
+      custom.tenki
       inputs.wfetch.packages.${pkgs.system}.wfetch
     ];
 

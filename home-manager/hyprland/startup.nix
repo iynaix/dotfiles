@@ -37,7 +37,7 @@ in
       # firefox
       # (if host == "desktop" then
       (openOnWorkspace 9 (
-        lib.concatStringsSep " " (
+        toString (
           [
             (lib.getExe config.programs.firefox.package)
             "-P"

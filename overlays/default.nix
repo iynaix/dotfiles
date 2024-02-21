@@ -40,26 +40,17 @@ in
       # patch imv to not repeat keypresses causing waybar to launch infinitely
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
       imv =
-        assert (lib.assertMsg (prev.imv.version == "4.4.0")
+        assert (lib.assertMsg (prev.imv.version == "4.5.0")
           "imv: is keypress patch still needed? is freeimage override still needed?"
         );
-        (prev.imv.override {
-          withBackends = [
-            "libtiff"
-            "libjpeg"
-            "libpng"
-            "librsvg"
-            "libheif"
-          ];
-        }).overrideAttrs
-          (
-            o: {
-              patches = (o.patches or [ ]) ++ [
-                # https://lists.sr.ht/~exec64/imv-devel/patches/39476
-                ./imv-fix-repeated-keypresses.patch
-              ];
-            }
-          );
+        prev.imv.overrideAttrs (
+          o: {
+            patches = (o.patches or [ ]) ++ [
+              # https://lists.sr.ht/~exec64/imv-devel/patches/39476
+              ./imv-fix-repeated-keypresses.patch
+            ];
+          }
+        );
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (
