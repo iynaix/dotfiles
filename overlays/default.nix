@@ -40,15 +40,26 @@ in
       # patch imv to not repeat keypresses causing waybar to launch infinitely
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
       imv =
-        assert (lib.assertMsg (prev.imv.version == "4.4.0") "imv: is keypress patch still needed?");
-        prev.imv.overrideAttrs (
-          o: {
-            patches = (o.patches or [ ]) ++ [
-              # https://lists.sr.ht/~exec64/imv-devel/patches/39476
-              ./imv-fix-repeated-keypresses.patch
-            ];
-          }
+        assert (lib.assertMsg (prev.imv.version == "4.4.0")
+          "imv: is keypress patch still needed? is freeimage override still needed?"
         );
+        (prev.imv.override {
+          withBackends = [
+            "libtiff"
+            "libjpeg"
+            "libpng"
+            "librsvg"
+            "libheif"
+          ];
+        }).overrideAttrs
+          (
+            o: {
+              patches = (o.patches or [ ]) ++ [
+                # https://lists.sr.ht/~exec64/imv-devel/patches/39476
+                ./imv-fix-repeated-keypresses.patch
+              ];
+            }
+          );
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (
@@ -91,16 +102,7 @@ in
             ];
             mimeTypes = [ "x-scheme-handler/pob" ];
           };
-          data = prev.path-of-building.passthru.data.overrideAttrs {
-            inherit (sources.path-of-building) version;
-
-            src = pkgs.fetchFromGitHub {
-              owner = "PathOfBuildingCommunity";
-              repo = "PathOfBuilding";
-              rev = "v${sources.path-of-building.version}";
-              hash = "sha256-mq91nZRAnGXvBZSXvIqoRINvNnWCMRkjfryVj2EdB+8=";
-            };
-          };
+          data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
         in
         prev.path-of-building.overrideAttrs (
           _: {

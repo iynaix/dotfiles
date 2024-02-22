@@ -73,20 +73,6 @@ let
       fi
     '';
   };
-  nr = pkgs.writeShellApplication {
-    name = "nr";
-    runtimeInputs = [ pkgs.nixFlakes ];
-    text = ''
-      if [ "$#" -eq 0 ]; then
-          echo "no package specified."
-          exit 1
-      elif [ "$#" -eq 1 ]; then
-          nix run nixpkgs#"$1"
-      else
-          nix run nixpkgs#"$1" -- "''${@:2}"
-      fi
-    '';
-  };
 in
 lib.mkMerge [
   (lib.mkIf (!isNixOS) {
@@ -105,12 +91,10 @@ lib.mkMerge [
   })
   {
     home = {
-      packages = [
-        ngc
-        nr
-      ];
+      packages = [ ngc ];
       shellAliases = {
         nsh = "nix-shell --command fish -p";
+        nix-update-input = "nix flake lock --update-input";
       };
     };
 

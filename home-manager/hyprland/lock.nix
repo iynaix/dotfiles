@@ -10,14 +10,14 @@ let
     sh "${config.xdg.cacheHome}/wallust/lock"
   '';
 in
-lib.mkIf config.wayland.windowManager.hyprland.enable {
+lib.mkIf isLaptop {
   home.packages = [ lock ];
 
   wayland.windowManager.hyprland.settings = {
     bind = [ "$mod, x, exec, ${lib.getExe lock}" ];
 
     # handle laptop lid
-    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lib.getExe lock}" ];
+    bindl = [ ",switch:Lid Switch, exec, ${lib.getExe lock}" ];
   };
 
   custom.wallust.templates = {

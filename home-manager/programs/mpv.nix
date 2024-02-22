@@ -182,8 +182,8 @@ in
         # auto apply anime shaders for anime videos
         profiles.anime = {
           profile-desc = "Anime";
-          profile-cond = "path:find('[Aa]nime') or path:find('Erai-raws') or path:find('EMBER') or path:find('[Judas]')";
-          profile-restore = "copy-equal";
+          # only activate within anime directory
+          profile-cond = "path:find('Anime/')";
 
           # https://kokomins.wordpress.com/2019/10/14/mpv-config-guide/#advanced-video-scaling-config
           deband-iterations = 2; # Range 1-16. Higher = better quality but more GPU usage. >5 is redundant.

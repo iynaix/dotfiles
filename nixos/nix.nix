@@ -23,19 +23,19 @@ let
   # build flake but don't switch
   nbuild = pkgs.writeShellApplication {
     name = "nbuild";
-    runtimeInputs = [ nswitch ];
+    runtimeInputs = [ nsw ];
     text = ''
       if [ "$#" -eq 0 ]; then
-          nswitch --dry --hostname "${host}"
+          nsw --dry --hostname "${host}"
       else
           # provide hostname as the first argument
-          nswitch --dry --hostname "$@"
+          nsw --dry --hostname "$@"
       fi
     '';
   };
   # switch via nix flake
-  nswitch = pkgs.writeShellApplication {
-    name = "nswitch";
+  nsw = pkgs.writeShellApplication {
+    name = "nsw";
     runtimeInputs = with pkgs; [
       git
       nix-current-generation
@@ -70,7 +70,7 @@ let
   nv-update = pkgs.writeShellApplication {
     name = "nv-update";
     runtimeInputs = [
-      nswitch
+      nsw
       pkgs.nvfetcher
     ];
     text = ''
@@ -93,7 +93,7 @@ let
   upd8 = pkgs.writeShellApplication {
     name = "upd8";
     runtimeInputs = [
-      nswitch
+      nsw
       pkgs.nvfetcher
       nv-update
     ];
@@ -101,30 +101,78 @@ let
       cd ${dots}
       nix flake update
       nv-update
-      nswitch "$@"
+      nsw "$@"
       cd - > /dev/null
     '';
   };
   # build and push config for laptop
-  nswitch-remote = pkgs.writeShellApplication {
-    name = "nswitch-remote";
+  nsw-remote = pkgs.writeShellApplication {
+    name = "nsw-remote";
     text = ''
       cd ${dots}
       sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
       cd - > /dev/null
     '';
   };
+  # build and run local package if possible, otherwise run from nixpkgs
+  nr = pkgs.writeShellApplication {
+    name = "nr";
+    text = ''
+      if [ "$#" -eq 0 ]; then
+          echo "no package specified."
+          exit 1
+      fi
+
+      # assume building packages in local nixpkgs if possible
+      src="nixpkgs"
+      if [[ $(pwd) =~ /nixpkgs$ ]]; then
+          src="."
+      fi
+
+      # custom package exists, build it
+      if [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+          src="."
+      fi
+
+      if [ "$#" -eq 1 ]; then
+          nix run "$src#$1"
+      else
+          nix run "$src#$1" -- "''${@:2}"
+      fi
+    '';
+  };
+  # build local package if possible, otherwise build config
+  nb = pkgs.writeShellApplication {
+    name = "nb";
+    runtimeInputs = [ nbuild ];
+    text = ''
+      if [[ $(pwd) =~ /nixpkgs$ ]]; then
+          nix build ".#$1"
+      elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+          nix build ".#$1"
+      else
+          nbuild "$@"
+      fi
+    '';
+  };
   # build iso images
   nbuild-iso = pkgs.writeShellApplication {
     name = "nbuild-iso";
     runtimeInputs = [
-      nswitch
+      nsw
       pkgs.nixos-generators
     ];
     text = ''
       cd ${dots}
       nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
       cd - > /dev/null
+    '';
+  };
+  # what depends on the given package in the current nixos install?
+  nix-depends = pkgs.writeShellApplication {
+    name = "nix-depends";
+    text = ''
+      nix why-depends "/run/current-system" "$(nix eval --raw "nixpkgs#$1.outPath")"
     '';
   };
   json2nix = pkgs.writeShellApplication {
@@ -195,25 +243,24 @@ in
         nix-init
         nixpkgs-fmt
         nixpkgs-review
+        nix-update
       ]
       ++ [
         nix-current-generation
+        nix-depends
         ndefault
-        nbuild
-        nswitch
+        nsw
         nvfetcher
         nv-update
+        nb
+        nr
         nbuild-iso
         upd8
         json2nix
         yaml2nix
         # fhs
       ]
-      ++ lib.optionals (host == "desktop") [ nswitch-remote ];
-  };
-
-  hm.home.shellAliases = {
-    nsw = "nswitch";
+      ++ lib.optionals (host == "desktop") [ nsw-remote ];
   };
 
   # add symlink of configuration flake to nixos closure
