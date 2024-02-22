@@ -81,6 +81,11 @@
     };
   };
 
+  wayland.windowManager.hyprland.settings = {
+    # disable transparency for file delete dialog
+    windowrulev2 = [ "forcergbx,floating:1,class:(nemo)" ];
+  };
+
   custom.persist = {
     home = {
       directories = [

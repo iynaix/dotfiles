@@ -91,22 +91,17 @@ in
         "$mod, s, pin"
 
         # focus next / previous monitor
-        "$mod, Left, focusmonitor, -1"
-        "$mod, Right, focusmonitor, +1"
-
+        "$mod, Tab, focusmonitor, +1"
         # move to next / previous monitor
-        "$mod_SHIFT, Left, movewindow, ${if lib.length displays < 3 then "mon:-1" else "mon:l"}"
-        "$mod_SHIFT, Right, movewindow, ${if lib.length displays < 3 then "mon:+1" else "mon:r"}"
-        "$mod_SHIFT, Up, movewindow, ${if lib.length displays < 3 then "mon:-1" else "mon:u"}"
-        "$mod_SHIFT, Down, movewindow, ${if lib.length displays < 3 then "mon:+1" else "mon:d"}"
+        "$mod_SHIFT, Tab, movewindow, mon:+1"
 
         "ALT, Tab, cyclenext"
         "ALT_SHIFT, Tab, cyclenext, prev"
 
         # switches to the next / previous window of the same class
         # hardcoded to SUPER so it doesn't clash on VM
-        "SUPER, Tab, exec, hypr-same-class next"
-        "SUPER_SHIFT, Tab, exec, hypr-same-class prev"
+        "CTRL_ALT_, Tab, exec, hypr-same-class next"
+        "CTRL_ALT_SHIFT, Tab, exec, hypr-same-class prev"
 
         # toggle waybar
         "$mod, a, exec, killall -SIGUSR1 .waybar-wrapped"

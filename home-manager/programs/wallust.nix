@@ -73,6 +73,23 @@ in
     };
   };
 
+  # setup wallust colorschemes for shells
+  programs = {
+    bash.initExtra = lib.mkIf config.custom.wallust.enable ''
+      wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
+      if [ -e "$wallust_colors" ]; then
+        command cat "$wallust_colors"
+      fi
+    '';
+
+    fish.shellInit = lib.mkIf config.custom.wallust.enable ''
+      set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
+      if test -e "$wallust_colors"
+          command cat "$wallust_colors"
+      end
+    '';
+  };
+
   custom.persist = {
     home = {
       cache = [ ".cache/wallust" ];

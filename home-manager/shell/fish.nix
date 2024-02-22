@@ -38,30 +38,17 @@ in
       shellAliases = {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
-      shellInit =
-        ''
-          # shut up welcome message
-          set fish_greeting
+      shellInit = ''
+        # shut up welcome message
+        set fish_greeting
 
-          # fix starship prompt to only have newlines after the first command
-          # https://github.com/starship/starship/issues/560#issuecomment-1465630645
-          function postexec_newline --on-event fish_postexec
-            echo ""
-          end
-
-          # setup vi mode
-          fish_vi_key_bindings
-
-          # set options for plugins
-          set sponge_regex_patterns 'password|passwd'
-        ''
-        # wallust colorscheme
-        + lib.optionalString config.custom.wallust.enable ''
-          set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
-          if test -e "$wallust_colors"
-              command cat "$wallust_colors"
-          end
-        '';
+        # set options for plugins
+        set sponge_regex_patterns 'password|passwd'
+      '';
+      # setup vi mode
+      interactiveShellInit = ''
+        fish_vi_key_bindings
+      '';
     };
   };
 

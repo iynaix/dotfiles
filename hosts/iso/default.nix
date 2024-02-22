@@ -15,29 +15,42 @@ let
         (
           { pkgs, ... }:
           {
-            environment.systemPackages =
-              [
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-install";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/install.sh)";
-                })
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-recover";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                })
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-reinstall";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                })
-              ]
-              ++ (with pkgs; [
-                btop
-                git
-                yazi
-              ]);
+            environment = {
+              systemPackages =
+                [
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-install";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/install.sh)";
+                  })
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-recover";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                  })
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-reinstall";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                  })
+                ]
+                ++ (with pkgs; [
+                  btop
+                  git
+                  eza
+                  yazi
+                ]);
+              shellAliases = {
+                eza = "eza '--icons' '--group-directories-first' '--header' '--octal-permissions' '--hyperlink'";
+                ls = "eza";
+                ll = "eza -l";
+                la = "eza -a";
+                lla = "eza -la";
+                t = "eza -la --git-ignore --icons --tree --hyperlink --level 3";
+                tree = "eza -la --git-ignore --icons --tree --hyperlink --level 3";
+                y = "yazi";
+              };
+            };
 
             programs = {
               # bye bye nano

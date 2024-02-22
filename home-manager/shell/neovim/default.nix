@@ -136,6 +136,11 @@
     };
   };
 
+  home.shellAliases = {
+    nano = "nvim";
+    v = "nvim";
+  };
+
   custom.persist = {
     home.directories = [
       ".local/share/nvim" # data directory

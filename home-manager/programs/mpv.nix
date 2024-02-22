@@ -182,7 +182,7 @@ in
         # auto apply anime shaders for anime videos
         profiles.anime = {
           profile-desc = "Anime";
-          profile-cond = "path:find('[Aa]nime') or path:find('Erai-raws')";
+          profile-cond = "path:find('[Aa]nime') or path:find('Erai-raws') or path:find('EMBER') or path:find('[Judas]')";
           profile-restore = "copy-equal";
 
           # https://kokomins.wordpress.com/2019/10/14/mpv-config-guide/#advanced-video-scaling-config

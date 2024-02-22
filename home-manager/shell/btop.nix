@@ -1,5 +1,9 @@
 { lib, ... }:
 {
+  home.shellAliases = {
+    btop = "btop --preset 0";
+  };
+
   programs.btop = {
     enable = true;
     settings = {

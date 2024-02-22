@@ -91,17 +91,26 @@
         };
     };
 
-    # add transient prompt for fish via transient.fish plugin in fish.nix
-    # the starship transience module doesn't handle empty commands properly
-    # https://github.com/starship/starship/issues/4929
-    fish.interactiveShellInit = lib.mkAfter ''
-      function transient_prompt_func
-        starship module character
-      end
-    '';
-  };
+    fish = {
+      # fix starship prompt to only have newlines after the first command
+      # https://github.com/starship/starship/issues/560#issuecomment-1465630645
+      shellInit = ''
+        function postexec_newline --on-event fish_postexec
+          echo ""
+        end
+      '';
+      # add transient prompt for fish via transient.fish plugin in fish.nix
+      # the starship transience module doesn't handle empty commands properly
+      # https://github.com/starship/starship/issues/4929
+      interactiveShellInit = lib.mkAfter ''
+        function transient_prompt_func
+          starship module character
+        end
+      '';
+    };
 
-  # some sort of race condition with kitty and starship
-  # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
-  programs.kitty.shellIntegration.enableBashIntegration = false;
+    # some sort of race condition with kitty and starship
+    # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
+    kitty.shellIntegration.enableBashIntegration = false;
+  };
 }

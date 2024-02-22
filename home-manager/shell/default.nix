@@ -5,6 +5,7 @@
     ./btop.nix
     ./cava.nix
     ./direnv.nix
+    ./eza.nix
     ./fish.nix
     ./git.nix
     ./neovim
@@ -28,17 +29,6 @@
 
   programs = {
     bat.enable = true;
-
-    eza = {
-      enable = true;
-      enableAliases = true;
-      icons = true;
-      extraOptions = [
-        "--group-directories-first"
-        "--header"
-        "--octal-permissions"
-      ];
-    };
 
     fzf = {
       enable = true;

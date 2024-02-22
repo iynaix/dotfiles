@@ -15,18 +15,14 @@
       cat = "bat";
       ccat = "command cat";
       crate = "cargo";
-      btop = "btop --preset 0";
       isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
       man = lib.getExe' pkgs.bat-extras.batman "batman";
       mime = "xdg-mime query filetype";
       mkdir = "mkdir -p";
       mount = "mount --mkdir";
-      nano = "nvim";
       open = "xdg-open";
       pj = "openproj";
       py = "python";
-      t = "eza -la --tree --level 3";
-      v = "nvim";
       coinfc = "openproj coinfc";
 
       # cd aliases

@@ -40,6 +40,7 @@
     deadbeef.enable = true;
     ghostty.enable = true;
     hyprland.plugin = "hyprnstack";
+    hyprland.qtile = false;
     obs-studio.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;

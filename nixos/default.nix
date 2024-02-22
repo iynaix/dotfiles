@@ -57,6 +57,27 @@
         STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };
 
+      # use some shell aliases from home manager
+      shellAliases =
+        {
+          inherit (config.hm.programs.bash.shellAliases)
+            eza
+            ls
+            ll
+            la
+            lla
+            ;
+        }
+        // {
+          inherit (config.hm.home.shellAliases)
+            # eza related
+            t
+            tree
+            # yazi
+            y
+            ;
+        };
+
       systemPackages =
         with pkgs;
         [
@@ -67,8 +88,7 @@
           ntfs3g
           procps
           ripgrep
-          tree # for root, normal user has an eza alias
-          wget
+          yazi
         ]
         ++
           # install gtk theme for root, some apps like gparted only run as root

@@ -89,7 +89,6 @@
   };
 
   home.shellAliases = {
-    lf = "yazi";
     y = "yazi";
   };
 }
