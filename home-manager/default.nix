@@ -35,8 +35,6 @@
         killall
         rar # includes unrar
         ripgrep
-        wget
-        home-manager
         libreoffice
         trash-cli
         xdg-utils
@@ -44,6 +42,8 @@
         custom.dotfiles-utils
       ]
       ++ (lib.optional config.custom.helix.enable helix)
+      # home-manager executable only on non-nixos
+      ++ (lib.optional (!isNixOS) home-manager)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
   };
@@ -56,10 +56,6 @@
     enable = true;
     userDirs.enable = true;
     mimeApps.enable = true;
-    configFile = {
-      "nix/nix.conf".text = "experimental-features = nix-command flakes";
-      "nixpkgs/config.nix".text = "{ allowUnfree = true; }";
-    };
   };
 
   custom.persist = {

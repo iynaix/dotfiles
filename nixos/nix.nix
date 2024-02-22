@@ -254,6 +254,7 @@ in
         nv-update
         nb
         nr
+        nbuild
         nbuild-iso
         upd8
         json2nix
@@ -295,6 +296,7 @@ in
     extraOptions = ''
       eval-cache = false
       warn-dirty = false
+      use-xdg-base-directories = true
     '';
     settings = {
       auto-optimise-store = true; # Optimise symlinks

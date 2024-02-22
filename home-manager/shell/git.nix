@@ -60,11 +60,28 @@ _: {
 
   # extra git functions
   custom.shell.functions = {
+    # create a new branch and push it to origin
+    gbc = {
+      bashBody = ''
+        git branch $1
+        git checkout $1
+      '';
+      fishBody = ''
+        git branch $argv[1]
+        git checkout $argv[1]
+      '';
+    };
     # delete a remote branch
-    grd = ''
-      gb -D $1
-      gp origin --delete $1
-    '';
+    grd = {
+      bashBody = ''
+        git branch -D $1
+        git push origin --delete $1
+      '';
+      fishBody = ''
+        git branch -D $argv[1]
+        git push origin --delete $argv[1]
+      '';
+    };
     # searches git history, can never remember this stupid thing
     gsearch = {
       # 2nd argument is target path and subsequent arguments are passed through
@@ -81,7 +98,6 @@ _: {
     gcaam = "git add --all && git commit --amend";
     gcam = "git commit --amend";
     gco = "git checkout";
-    gdi = "git diff";
     gl = "git pull";
     glg = "git log";
     gm = "git merge";
