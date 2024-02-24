@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  isLaptop,
   pkgs,
   ...
 }:
@@ -42,6 +43,9 @@ in
     hyprland = {
       autostart = lib.mkEnableOption "Autostart hyprland from tty" // {
         default = true;
+      };
+      lock = lib.mkEnableOption "locking of host" // {
+        default = isLaptop;
       };
       qtile = lib.mkEnableOption "qtile like behavior for workspaces";
       plugin = lib.mkOption {

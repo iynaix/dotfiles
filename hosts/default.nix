@@ -1,6 +1,6 @@
 {
   inputs,
-  isNixOS,
+  isNixOS ? true,
   lib,
   self,
   system,

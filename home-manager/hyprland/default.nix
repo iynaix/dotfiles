@@ -13,6 +13,7 @@ in
 {
   imports = [
     ./hyprnstack.nix
+    ./idle.nix
     ./keybinds.nix
     ./lock.nix
     ./screenshot.nix

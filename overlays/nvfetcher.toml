@@ -1,3 +1,7 @@
+[hypridle]
+src.git = "https://github.com/hyprwm/hypridle"
+fetch.github = "hyprwm/hypridle"
+
 [path-of-building]
 src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
 fetch.github = "PathOfBuildingCommunity/PathOfBuilding"

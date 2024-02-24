@@ -55,8 +55,6 @@ in
       (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")
       (openOnWorkspace 10 "$term")
 
-      "${lib.getExe pkgs.swayidle} -w timeout 480 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
-
       # focus the initial workspaces on startup
       "hyprctl dispatch workspace 9"
       "hyprctl dispatch workspace 7"

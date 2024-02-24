@@ -1,28 +1,25 @@
 {
   config,
-  isLaptop,
   lib,
   pkgs,
   ...
 }:
 let
-  lock = pkgs.writeShellScriptBin "lock" ''
-    sh "${config.xdg.cacheHome}/wallust/lock"
-  '';
+  lockEnable = config.custom.hyprland.lock;
+  lockScript = "${config.xdg.cacheHome}/wallust/lock";
 in
-lib.mkIf isLaptop {
-  home.packages = [ lock ];
-
+lib.mkIf lockEnable {
+  # NOTE: requires pam service, see nixos/hyprland.nix for implementation!
   wayland.windowManager.hyprland.settings = {
-    bind = [ "$mod, x, exec, ${lib.getExe lock}" ];
+    bind = [ "$mod, x, exec, ${lockScript}" ];
 
     # handle laptop lid
-    bindl = [ ",switch:Lid Switch, exec, ${lib.getExe lock}" ];
+    bindl = [ ",switch:Lid Switch, exec, ${lockScript}" ];
   };
 
   custom.wallust.templates = {
     "lock" = {
-      enable = lib.elem lock config.home.packages;
+      enable = lockEnable;
       text = ''
         ${lib.getExe pkgs.swaylock-effects} \
           --clock \
@@ -46,7 +43,7 @@ lib.mkIf isLaptop {
           --inside-color "00161925" \
           --separator-color "00000000"
       '';
-      target = "${config.xdg.cacheHome}/wallust/lock";
+      target = lockScript;
     };
   };
 }

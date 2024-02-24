@@ -17,25 +17,28 @@ Run the following commands from a terminal on a NixOS live iso / from a tty on t
 
 The following install script partitions the disk, sets up the necessary datasets and installs NixOS.
 
-From the custom iso built via `nbuild HOST`,
-```sh
-iynaixos-install
-```
-
 From a standard ISO,
 ```sh
 sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)
 ```
+
+From the custom iso built via `nbuild ISO_HOST`,
+```sh
+iynaixos-install
+```
 Reboot
 
-### Creating Persist Snapshot to Restore
+<details>
+<summary><h4>Creating Persist Snapshot to Restore</h4></summary>
 
 ```sh
 sudo zfs snapshot zroot/persist@persist-snapshot
 sudo zfs send zroot/persist@persist-snapshot > SNAPSHOT_FILE_PATH
 ```
+</details>
 
-### Restoring from Persist Snapshot
+<details>
+<summary><h4>Restoring from Persist Snapshot</h4></summary>
 
 ```sh
 # the rename is needed for encrypted datasets, as -F doesn't work
@@ -43,18 +46,19 @@ sudo zfs receive -o mountpoint=legacy zroot/persist-new < SNAPSHOT_FILE_PATH
 sudo zfs rename zroot/persist zroot/persist-old
 sudo zfs rename zroot/persist-new zroot/persist
 ```
+</details>
 
 ## System Rescue
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
 
 The following script optionally reformats the boot partition and / or /nix dataset, then reinstalls NixOS.
 
-From the custom iso built via `nbuild HOST`,
-```sh
-iynaixos-recover
-```
-
 From a standard ISO,
 ```sh
 sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
+```
+
+From the custom iso built via `nbuild ISO_HOST`,
+```sh
+iynaixos-recover
 ```

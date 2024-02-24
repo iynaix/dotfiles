@@ -14,6 +14,7 @@
 
   programs.nixvim = {
     enable = true;
+    enableMan = false; # do not generate manpages
 
     defaultEditor = true;
     viAlias = true;

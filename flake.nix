@@ -70,9 +70,7 @@
       };
     in
     {
-      nixosConfigurations =
-        (import ./hosts (commonInherits // { isNixOS = true; }))
-        // (import ./hosts/iso (commonInherits // { isNixOS = true; }));
+      nixosConfigurations = (import ./hosts commonInherits) // (import ./hosts/iso commonInherits);
 
       homeConfigurations = import ./hosts (commonInherits // { isNixOS = false; });
 

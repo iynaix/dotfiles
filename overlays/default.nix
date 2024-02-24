@@ -37,6 +37,10 @@ in
       # easier access to ghostty
       ghostty = inputs.ghostty.packages.${pkgs.system}.default;
 
+      hypridle =
+        assert (lib.assertMsg (prev.hypridle.version == "0.1.0") "hypridle: source overlay still needed?");
+        prev.hypridle.overrideAttrs (_: sources.hypridle);
+
       # patch imv to not repeat keypresses causing waybar to launch infinitely
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
       imv =
