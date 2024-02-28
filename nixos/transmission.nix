@@ -9,28 +9,6 @@ let
   homeDir = "/persist${config.hm.home.homeDirectory}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
-  torrents-add = pkgs.writeShellApplication {
-    name = "torrents-add";
-    runtimeInputs = with pkgs; [
-      ripgrep
-      transmission_4
-    ];
-    text =
-      let
-        yt_txt = "${config.hm.xdg.userDirs.desktop}/yt.txt";
-      in
-      ''
-        # || true to prevent error when no magnet links are found
-        rg "magnet:" "${yt_txt}" |
-          sed 's/#*//g' |
-          sed 's/^[ \t]*//;s/[ \t]*$//' |
-          xargs -I {} transmission-remote -a {} || true
-
-        # remove all magnet links after adding
-        rg -v "magnet:" "${yt_txt}" > "/tmp/yt.txt"
-        mv "/tmp/yt.txt" "${yt_txt}"
-      '';
-  };
 in
 lib.mkIf config.custom-nixos.bittorrent.enable (
   lib.mkMerge [
@@ -134,12 +112,24 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
         };
       };
 
-      environment.systemPackages = [ torrents-add ];
-
       # setup port forwarding
       networking.firewall.allowedTCPPorts = [ 51413 ];
 
-      # hm.home.packages = with pkgs; [transmission-remote-gtk];
+      # xdg handler for magnet links
+      hm = {
+        xdg = {
+          desktopEntries.transmission = {
+            name = "Transmission";
+            genericName = "BitTorrent Client";
+            icon = "transmission";
+            exec = "transmission-remote -a %U";
+          };
+
+          mimeApps.defaultApplications = {
+            "x-scheme-handler/magnet" = "transmission.desktop";
+          };
+        };
+      };
 
       custom-nixos.persist.home.directories = [ ".config/transmission-daemon" ];
     }

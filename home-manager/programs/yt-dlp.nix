@@ -5,29 +5,7 @@ let
     runtimeInputs = with pkgs; [ yt-dlp ];
     text = ''
       cd "${config.xdg.userDirs.download}"
-
-      # add and remove torrent lines
-      if command -v "torrents-add" &> /dev/null; then
-        torrents-add
-      fi
-
-      # remove ugly unicode characters, sleep to wait for renames to complete
-      yt-dlp -a "${config.xdg.userDirs.desktop}/yt.txt" && \
-      sleep 5 && \
-      find -L "${config.xdg.userDirs.download}" -maxdepth 1 -type f \( \
-        -name '*？*' \
-        -o -name '*｜*' \
-        -o -name '*|*' \
-        -o -name '*:*' \
-        -o -name '*：*' \
-        -o -name '*—*' \) \
-        -execdir rename '？' "" {} \; \
-        -execdir rename '｜' "-" {} \; \
-        -execdir rename '|' "" {} \; \
-        -execdir rename ':' " -" {} \; \
-        -execdir rename '：' " -" {} \; \
-        -execdir rename '—' "-" {} \;
-
+      yt-dlp -a "${config.xdg.userDirs.desktop}/yt.txt"
       cd - > /dev/null
     '';
   };

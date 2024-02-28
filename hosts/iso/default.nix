@@ -61,7 +61,7 @@ let
               };
             };
 
-            # quality of lie
+            # quality of life
             nix.settings = {
               experimental-features = [
                 "nix-command"

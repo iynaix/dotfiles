@@ -54,9 +54,9 @@ let
       if [[ "$*" == *"--hostname"* ]]; then
           # Replace the word after "--hostname" with host using parameter expansion
           cleaned_args=("''${@/--hostname [^[:space:]]*/--hostname ${host}}")
-          nh os switch --nom "''${cleaned_args[@]}" -- --option eval-cache false
+          nh os switch --nom "''${cleaned_args[@]}" ${dots} -- --option eval-cache false
       else
-          nh os switch --nom "$@" --hostname ${host} -- --option eval-cache false
+          nh os switch --nom "$@" --hostname ${host} ${dots} -- --option eval-cache false
       fi
 
       # only relevant if --dry is passed
@@ -231,8 +231,6 @@ in
   programs.nix-ld.enable = true;
 
   environment = {
-    sessionVariables.FLAKE = dots; # for configuring nh
-
     systemPackages =
       # for nixlang / nixpkgs
       with pkgs;
@@ -293,11 +291,13 @@ in
         };
       };
     };
-    extraOptions = ''
-      eval-cache = false
-      warn-dirty = false
-      use-xdg-base-directories = true
-    '';
+    extraOptions = lib.concatLines [
+      # re-evaluate on every rebuild instead of "cached failure of attribute" error
+      "eval-cache = false"
+      "warn-dirty = false"
+      # removes ~/.nix-profile and ~/.nix-defexpr
+      "use-xdg-base-directories = true"
+    ];
     settings = {
       auto-optimise-store = true; # Optimise symlinks
       # use flakes
@@ -310,6 +310,8 @@ in
         "https://nix-community.cachix.org"
         "https://ghostty.cachix.org"
       ];
+      # allow building and pushing of laptop config from desktop
+      trusted-users = [ user ];
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
