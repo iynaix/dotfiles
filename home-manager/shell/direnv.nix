@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   user,
   ...
 }:
@@ -14,7 +13,7 @@ lib.mkMerge [
 
     # vim support
     programs.nixvim = {
-      extraPlugins = [ pkgs.vimPlugins.direnv-vim ];
+      plugins.direnv.enable = true;
       globals = {
         direnv_silent_load = 1;
       };

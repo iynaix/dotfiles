@@ -119,18 +119,18 @@ in
         );
 
       # use latest commmit from git
-      # swww = prev.swww.overrideAttrs (
-      #   _:
-      #   sources.swww
-      #   // {
-      #     # creating an overlay for buildRustPackage overlay
-      #     # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-      #     cargoDeps = prev.rustPlatform.importCargoLock {
-      #       lockFile = sources.swww.src + "/Cargo.lock";
-      #       allowBuiltinFetchGit = true;
-      #     };
-      #   }
-      # );
+      swww = prev.swww.overrideAttrs (
+        _:
+        sources.swww
+        // {
+          # creating an overlay for buildRustPackage overlay
+          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+          cargoDeps = prev.rustPlatform.importCargoLock {
+            lockFile = sources.swww.src + "/Cargo.lock";
+            allowBuiltinFetchGit = true;
+          };
+        }
+      );
 
       # use dev branch
       # wallust = prev.wallust.overrideAttrs (_:

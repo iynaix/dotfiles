@@ -6,13 +6,12 @@
 buildLua (
   source
   // {
+    version = "0-unstable-${source.date}";
+
     dontBuild = true;
 
     scriptPath = "sub-select.lua";
     passthru.scriptName = "sub-select.lua";
-  }
-  // {
-    version = "unstable-${source.date}";
 
     meta = {
       description = "Automatically skip chapters based on title";

@@ -6,7 +6,7 @@
 buildLua (
   source
   // {
-    version = "unstable-${source.date}";
+    version = "0-unstable-${source.date}";
 
     dontBuild = true;
 

@@ -9,8 +9,6 @@ buildLua (
   (
     source
     // {
-      version = "unstable-${source.date}";
-
       dontBuild = true;
 
       postInstall = ''
