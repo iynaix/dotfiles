@@ -2,6 +2,10 @@
 src.git = "https://github.com/hyprwm/hypridle"
 fetch.github = "hyprwm/hypridle"
 
+[hyprlock]
+src.git = "https://github.com/hyprwm/hyprlock"
+fetch.github = "hyprwm/hyprlock"
+
 [path-of-building]
 src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
 fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
@@ -9,6 +13,11 @@ fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
 [swww]
 src.git = "https://github.com/Horus645/swww"
 fetch.github = "LGFae/swww"
+
+[wallust]
+src.git = "https://codeberg.org/explosion-mental/wallust.git"
+# src.branch = "dev"
+fetch.git = "https://codeberg.org/explosion-mental/wallust.git"
 
 [waybar]
 src.git = "https://github.com/Alexays/Waybar"

@@ -115,11 +115,11 @@ in
         demuxer-mkv-subtitle-preroll = "yes";
 
         deband = true;
-        deband_grain = 0;
-        deband_range = 12;
-        deband_threshold = 32;
+        deband-grain = 0;
+        deband-range = 12;
+        deband-threshold = 32;
 
-        dither_depth = "auto";
+        dither-depth = "auto";
         dither = "fruit";
 
         sub-auto = "fuzzy";
@@ -186,10 +186,10 @@ in
           profile-cond = "path:find('Anime/')";
 
           # https://kokomins.wordpress.com/2019/10/14/mpv-config-guide/#advanced-video-scaling-config
-          deband-iterations = 2; # Range 1-16. Higher = better quality but more GPU usage. >5 is redundant.
-          deband-threshold = 35; # Range 0-4096. Deband strength.
-          deband-range = 20; # Range 1-64. Range of deband. Too high may destroy details.
-          deband-grain = 5; # Range 0-4096. Inject grain to cover up bad banding, higher value needed for poor sources.
+          # deband-iterations = 2; # Range 1-16. Higher = better quality but more GPU usage. >5 is redundant.
+          # deband-threshold = 35; # Range 0-4096. Deband strength.
+          # deband-range = 20; # Range 1-64. Range of deband. Too high may destroy details.
+          # deband-grain = 5; # Range 0-4096. Inject grain to cover up bad banding, higher value needed for poor sources.
 
           # set shader defaults
           glsl-shaders = shaderList anime4k_shaders;

@@ -3,15 +3,27 @@
 {
   hypridle = {
     pname = "hypridle";
-    version = "afee84925a161bbdf890d6603086824b51423b4d";
+    version = "029f08805a2297966d295a52a6e62c3801926a52";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hypridle";
-      rev = "afee84925a161bbdf890d6603086824b51423b4d";
+      rev = "029f08805a2297966d295a52a6e62c3801926a52";
       fetchSubmodules = false;
-      sha256 = "sha256-aPHz0KJcwkuMtGK6evGosiGwcEsPISKvOQw422NDqtE=";
+      sha256 = "sha256-xi7yscjt7t8tFcJDgHzxgW15Obcp7dEghG41f6tUmRc=";
     };
-    date = "2024-02-27";
+    date = "2024-02-29";
+  };
+  hyprlock = {
+    pname = "hyprlock";
+    version = "ac757cf7aba53870da09bcc280ad5e32d355587b";
+    src = fetchFromGitHub {
+      owner = "hyprwm";
+      repo = "hyprlock";
+      rev = "ac757cf7aba53870da09bcc280ad5e32d355587b";
+      fetchSubmodules = false;
+      sha256 = "sha256-vnRuNnl3wShw8niURflAPjpmQ2KQ1a1Ft/yg8uPmPiU=";
+    };
+    date = "2024-02-29";
   };
   path-of-building = {
     pname = "path-of-building";
@@ -36,16 +48,29 @@
     };
     date = "2024-02-27";
   };
+  wallust = {
+    pname = "wallust";
+    version = "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012";
+    src = fetchgit {
+      url = "https://codeberg.org/explosion-mental/wallust.git";
+      rev = "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sha256 = "sha256-ER9QXSlVkiZMQavEQxrm0LBdnpteT2NEMPSL1L97Il8=";
+    };
+    date = "2024-02-14";
+  };
   waybar = {
     pname = "waybar";
-    version = "e79ea93d7d820813e94dd6fc49724531c56d77cb";
+    version = "bdff489850931798814da82e797ff10d71b89670";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "e79ea93d7d820813e94dd6fc49724531c56d77cb";
+      rev = "bdff489850931798814da82e797ff10d71b89670";
       fetchSubmodules = false;
-      sha256 = "sha256-qK3SBjigpVpw0HRkbW82VT+SL3Ns81rvyriIcZ5O/l0=";
+      sha256 = "sha256-BWdD+bfz/J2fyoC/oy+PR6JrRAsCkKori5wrt0yllaQ=";
     };
-    date = "2024-02-27";
+    date = "2024-03-01";
   };
 }

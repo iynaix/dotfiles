@@ -1,7 +1,7 @@
 {
     "hypridle": {
         "cargoLocks": null,
-        "date": "2024-02-27",
+        "date": "2024-02-29",
         "extract": null,
         "name": "hypridle",
         "passthru": null,
@@ -13,11 +13,31 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hypridle",
-            "rev": "afee84925a161bbdf890d6603086824b51423b4d",
-            "sha256": "sha256-aPHz0KJcwkuMtGK6evGosiGwcEsPISKvOQw422NDqtE=",
+            "rev": "029f08805a2297966d295a52a6e62c3801926a52",
+            "sha256": "sha256-xi7yscjt7t8tFcJDgHzxgW15Obcp7dEghG41f6tUmRc=",
             "type": "github"
         },
-        "version": "afee84925a161bbdf890d6603086824b51423b4d"
+        "version": "029f08805a2297966d295a52a6e62c3801926a52"
+    },
+    "hyprlock": {
+        "cargoLocks": null,
+        "date": "2024-02-29",
+        "extract": null,
+        "name": "hyprlock",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "hyprwm",
+            "repo": "hyprlock",
+            "rev": "ac757cf7aba53870da09bcc280ad5e32d355587b",
+            "sha256": "sha256-vnRuNnl3wShw8niURflAPjpmQ2KQ1a1Ft/yg8uPmPiU=",
+            "type": "github"
+        },
+        "version": "ac757cf7aba53870da09bcc280ad5e32d355587b"
     },
     "path-of-building": {
         "cargoLocks": null,
@@ -59,9 +79,28 @@
         },
         "version": "f77d1e0b4f36c0219270a953411c8edc0c7379bb"
     },
+    "wallust": {
+        "cargoLocks": null,
+        "date": "2024-02-14",
+        "extract": null,
+        "name": "wallust",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012",
+            "sha256": "sha256-ER9QXSlVkiZMQavEQxrm0LBdnpteT2NEMPSL1L97Il8=",
+            "type": "git",
+            "url": "https://codeberg.org/explosion-mental/wallust.git"
+        },
+        "version": "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012"
+    },
     "waybar": {
         "cargoLocks": null,
-        "date": "2024-02-27",
+        "date": "2024-03-01",
         "extract": null,
         "name": "waybar",
         "passthru": null,
@@ -73,10 +112,10 @@
             "name": null,
             "owner": "Alexays",
             "repo": "Waybar",
-            "rev": "e79ea93d7d820813e94dd6fc49724531c56d77cb",
-            "sha256": "sha256-qK3SBjigpVpw0HRkbW82VT+SL3Ns81rvyriIcZ5O/l0=",
+            "rev": "bdff489850931798814da82e797ff10d71b89670",
+            "sha256": "sha256-BWdD+bfz/J2fyoC/oy+PR6JrRAsCkKori5wrt0yllaQ=",
             "type": "github"
         },
-        "version": "e79ea93d7d820813e94dd6fc49724531c56d77cb"
+        "version": "bdff489850931798814da82e797ff10d71b89670"
     }
 }

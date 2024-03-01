@@ -13,7 +13,7 @@
     in
     ''
       general {
-        lock_cmd = ${lib.optionalString config.custom.hyprland.lock "${config.xdg.cacheHome}/wallust/lock"}
+        lock_cmd = ${lib.optionalString config.custom.hyprland.lock (lib.getExe pkgs.hyprlock)}
         ignore_dbus_inhibit = false
       }
 

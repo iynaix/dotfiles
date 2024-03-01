@@ -9,11 +9,6 @@ lib.mkIf config.custom-nixos.hyprland.enable {
   services.xserver.displayManager.lightdm.enable = lib.mkForce false;
   # services.xserver.displayManager.sddm.enable = lib.mkForce true;
 
-  # locking with swaylock
-  security.pam.services.swaylock = {
-    text = "auth include login";
-  };
-
   programs.hyprland = {
     enable = true;
     portalPackage = pkgs.xdg-desktop-portal-hyprland;

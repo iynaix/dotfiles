@@ -1,49 +1,87 @@
 {
   config,
+  isLaptop,
   lib,
   pkgs,
   ...
 }:
 let
   lockEnable = config.custom.hyprland.lock;
-  lockScript = "${config.xdg.cacheHome}/wallust/lock";
 in
 lib.mkIf lockEnable {
-  # NOTE: requires pam service, see nixos/hyprland.nix for implementation!
+  home.packages = [ pkgs.hyprlock ];
+
   wayland.windowManager.hyprland.settings = {
-    bind = [ "$mod, x, exec, ${lockScript}" ];
+    bind = [ "$mod, x, exec, hyprlock" ];
 
     # handle laptop lid
-    bindl = [ ",switch:Lid Switch, exec, ${lockScript}" ];
+    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, hyprlock" ];
   };
 
   custom.wallust.templates = {
-    "lock" = {
+    "hyprlock.conf" = {
       enable = lockEnable;
-      text = ''
-        ${lib.getExe pkgs.swaylock-effects} \
-          --clock \
-          --screenshots \
-          --fade-in 0.2 \
-          --font "${config.custom.fonts.regular}" \
-          --effect-blur 8x5 \
-          --effect-vignette 0.4:0.4 \
-          --indicator-radius 100 \
-          --indicator-thickness 5 \
-          --text-color "{{foreground}}" \
-          --inside-wrong-color "{{color1}}" \
-          --ring-wrong-color "{{color1}}" \
-          --inside-clear-color "{{background}}" \
-          --ring-clear-color "{{background}}" \
-          --inside-ver-color "{{color6}}" \
-          --ring-ver-color "{{color6}}" \
-          --ring-color "{{color6}}" \
-          --key-hl-color "{{color5}}" \
-          --line-color "{{color8}}" \
-          --inside-color "00161925" \
-          --separator-color "00000000"
-      '';
-      target = lockScript;
+      text =
+        let
+          rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }}, ${toString alpha})";
+        in
+        ''
+          general {
+            disable_loading_bar = false
+            grace = 0
+            hide_cursor = false
+          }
+
+          background {
+            monitor =
+            path = {{wallpaper}}
+            color = ${rgba "background" 1}
+          }
+
+          input-field {
+            monitor =
+            size = 300, 50
+            outline_thickness = 3
+            dots_size = 0.330000
+            dots_spacing = 0.150000
+            dots_center = true
+            outer_color = ${rgba "background" 0.8}
+            inner_color = ${rgba "foreground" 0.9}
+            font_color = ${rgba "background" 0.8}
+            fade_on_empty = false
+            placeholder_text =
+            hide_input = false
+
+            position = 0, -20
+            halign = center
+            valign = center
+          }
+
+          label {
+            monitor =
+            text = cmd[update:1000] echo "<b><big>$(date +"%H:%M")</big></b>"
+            color = ${rgba "foreground" 1}
+            font_size = 150
+            font_family = ${config.custom.fonts.regular}
+
+            position = 0, 90
+            halign = center
+            valign = center
+          }
+
+          label {
+            monitor =
+            text = cmd[update:1000] echo "<b><big>$(date +"%A, %B %-d")</big></b>"
+            color = ${rgba "foreground" 1}
+            font_size = 40
+            font_family = ${config.custom.fonts.regular}
+
+            position = 0, 40
+            halign = center
+            valign = center
+          }
+        '';
+      target = "${config.xdg.configHome}/hypr/hyprlock.conf";
     };
   };
 }

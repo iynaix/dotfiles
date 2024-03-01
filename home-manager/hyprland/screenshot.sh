@@ -19,6 +19,8 @@ exit_code=$?
 # first arg is the grimblast command
 screenshot() {
     img="@outputPath@"
+    mkdir -p "$(dirname "$img")"
+
     if [ "$exit_code" -eq 10 ]; then
         grimblast save "$1" - | swappy -f - -o "$img"
         notify-send "Screenshot saved to $img" -i "$img"

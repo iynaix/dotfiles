@@ -38,8 +38,12 @@ in
       ghostty = inputs.ghostty.packages.${pkgs.system}.default;
 
       hypridle =
-        assert (lib.assertMsg (prev.hypridle.version == "0.1.0") "hypridle: source overlay still needed?");
+        assert (lib.assertMsg (prev.hypridle.version == "0.1.1") "hypridle: source overlay still needed?");
         prev.hypridle.overrideAttrs (_: sources.hypridle);
+
+      hyprlock =
+        assert (lib.assertMsg (prev.hyprlock.version == "0.1.0") "hyprlock: source overlay still needed?");
+        prev.hyprlock.overrideAttrs (_: sources.hyprlock);
 
       # patch imv to not repeat keypresses causing waybar to launch infinitely
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
@@ -133,16 +137,28 @@ in
       );
 
       # use dev branch
-      # wallust = prev.wallust.overrideAttrs (_:
-      #   sources.wallust
-      #   // {
-      #     # creating an overlay for buildRustPackage overlay
-      #     # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-      #     cargoDeps = prev.rustPlatform.importCargoLock {
-      #       lockFile = sources.wallust.src + "/Cargo.lock";
-      #       allowBuiltinFetchGit = true;
-      #     };
-      #   });
+      wallust = prev.wallust.overrideAttrs (
+        o:
+        sources.wallust
+        // {
+          nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.installShellFiles ];
+
+          postInstall = ''
+            installManPage man/wallust*
+            installShellCompletion --cmd wallust \
+              --bash completions/wallust.bash \
+              --zsh completions/_wallust \
+              --fish completions/wallust.fish
+          '';
+
+          # creating an overlay for buildRustPackage overlay
+          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+          cargoDeps = prev.rustPlatform.importCargoLock {
+            lockFile = sources.wallust.src + "/Cargo.lock";
+            allowBuiltinFetchGit = true;
+          };
+        }
+      );
 
       # use latest commmit from git
       waybar =
