@@ -1,7 +1,6 @@
 {
   config,
   host,
-  inputs,
   lib,
   pkgs,
   self,
@@ -275,10 +274,7 @@ in
       dates = "daily";
       options = "--delete-older-than 7d";
     };
-    # change nix registry to use nixpkgs from flake
-    # https://www.foodogsquared.one/posts/2023-11-10-speeding-up-nixos-package-search-on-the-terminal/
     registry = {
-      nixpkgs.flake = inputs.nixpkgs;
       nixpkgs-master = {
         from = {
           type = "indirect";
@@ -304,6 +300,7 @@ in
       experimental-features = [
         "nix-command"
         "flakes"
+        "repl-flake" # allows use of a flake via nix repl ".#desktop"
       ];
       substituters = [
         "https://hyprland.cachix.org"

@@ -124,7 +124,7 @@
     };
 
     # faster boot times
-    systemd.services.NetworkManager-wait-online.enable = false;
+    # systemd.services.NetworkManager-wait-online.enable = false;
 
     custom-nixos.persist = {
       root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];

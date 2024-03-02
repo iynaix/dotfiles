@@ -38,5 +38,5 @@ in
 
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
-    w callPackage ./vv { };
+    (w callPackage ./vv { });
 }

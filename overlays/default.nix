@@ -48,9 +48,7 @@ in
       # patch imv to not repeat keypresses causing waybar to launch infinitely
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
       imv =
-        assert (lib.assertMsg (prev.imv.version == "4.5.0")
-          "imv: is keypress patch still needed? is freeimage override still needed?"
-        );
+        assert (lib.assertMsg (prev.imv.version == "4.5.0") "imv: is keypress patch still needed?");
         prev.imv.overrideAttrs (
           o: {
             patches = (o.patches or [ ]) ++ [
@@ -136,29 +134,30 @@ in
         }
       );
 
-      # use dev branch
-      wallust = prev.wallust.overrideAttrs (
-        o:
-        sources.wallust
-        // {
-          nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.installShellFiles ];
+      wallust =
+        assert (lib.assertMsg (prev.wallust.version == "2.10.0") "wallust: use wallust from nixpkgs?");
+        prev.wallust.overrideAttrs (
+          o:
+          sources.wallust
+          // {
+            nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.installShellFiles ];
 
-          postInstall = ''
-            installManPage man/wallust*
-            installShellCompletion --cmd wallust \
-              --bash completions/wallust.bash \
-              --zsh completions/_wallust \
-              --fish completions/wallust.fish
-          '';
+            postInstall = ''
+              installManPage man/wallust*
+              installShellCompletion --cmd wallust \
+                --bash completions/wallust.bash \
+                --zsh completions/_wallust \
+                --fish completions/wallust.fish
+            '';
 
-          # creating an overlay for buildRustPackage overlay
-          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-          cargoDeps = prev.rustPlatform.importCargoLock {
-            lockFile = sources.wallust.src + "/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-        }
-      );
+            # creating an overlay for buildRustPackage overlay
+            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+            cargoDeps = prev.rustPlatform.importCargoLock {
+              lockFile = sources.wallust.src + "/Cargo.lock";
+              allowBuiltinFetchGit = true;
+            };
+          }
+        );
 
       # use latest commmit from git
       waybar =
