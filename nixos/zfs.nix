@@ -3,7 +3,8 @@ let
   cfg = config.custom-nixos.zfs;
   persistCfg = config.custom-nixos.persist;
 in
-lib.mkIf cfg.enable {
+# NOTE: zfs datasets are created via install.sh
+{
   boot = {
     # booting with zfs
     supportedFilesystems = [ "zfs" ];
@@ -35,7 +36,7 @@ lib.mkIf cfg.enable {
     "/" = {
       device = "zroot/root";
       fsType = "zfs";
-      neededForBoot = !(persistCfg.tmpfs && persistCfg.erase);
+      neededForBoot = !persistCfg.tmpfs;
     };
 
     "/nix" = {

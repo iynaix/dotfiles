@@ -25,9 +25,6 @@
     nvidia.enable = lib.mkEnableOption "Nvidia GPU";
     qmk.enable = lib.mkEnableOption "QMK";
     zfs = {
-      enable = lib.mkEnableOption "zfs" // {
-        default = true;
-      };
       encryption = lib.mkEnableOption "zfs encryption" // {
         default = true;
       };
