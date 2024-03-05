@@ -5,7 +5,7 @@
   hyprland,
 }:
 gcc13Stdenv.mkDerivation {
-  pname = "hyprnstack";
+  pname = "hyprNStack";
   version = "${hyprland.version}-unstable-2024-02-29";
 
   src = fetchFromGitHub {

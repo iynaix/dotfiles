@@ -33,13 +33,10 @@ lib.mkIf cfg.enable {
     };
   };
 
-  xdg.configFile."ghostty/config".text =
-    lib.generators.toKeyValue
-      {
-        mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
-        listsAsDuplicateKeys = true;
-      }
-      config.custom.ghostty.config;
+  xdg.configFile."ghostty/config".text = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+    listsAsDuplicateKeys = true;
+  } config.custom.ghostty.config;
 
   custom.ghostty.config = {
     # adjust-cell-height = 1;

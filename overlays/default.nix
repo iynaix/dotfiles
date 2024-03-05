@@ -30,9 +30,9 @@ in
         });
 
       # nixos-small logo looks like ass
-      fastfetch = prev.fastfetch.overrideAttrs (
-        o: { patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ]; }
-      );
+      fastfetch = prev.fastfetch.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
+      });
 
       # easier access to ghostty
       ghostty = inputs.ghostty.packages.${pkgs.system}.default;
@@ -49,35 +49,31 @@ in
       # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
       imv =
         assert (lib.assertMsg (prev.imv.version == "4.5.0") "imv: is keypress patch still needed?");
-        prev.imv.overrideAttrs (
-          o: {
-            patches = (o.patches or [ ]) ++ [
-              # https://lists.sr.ht/~exec64/imv-devel/patches/39476
-              ./imv-fix-repeated-keypresses.patch
-            ];
-          }
-        );
+        prev.imv.overrideAttrs (o: {
+          patches = (o.patches or [ ]) ++ [
+            # https://lists.sr.ht/~exec64/imv-devel/patches/39476
+            ./imv-fix-repeated-keypresses.patch
+          ];
+        });
 
       # add default font to silence null font errors
-      lsix = prev.lsix.overrideAttrs (
-        o: {
-          postFixup = ''
-            substituteInPlace $out/bin/lsix \
-              --replace '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
-            ${o.postFixup}
-          '';
-        }
-      );
+      lsix = prev.lsix.overrideAttrs (o: {
+        postFixup = ''
+          substituteInPlace $out/bin/lsix \
+            --replace '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
+          ${o.postFixup}
+        '';
+      });
 
       # nixos-small logo looks like ass
-      neofetch = prev.neofetch.overrideAttrs (
-        o: { patches = (o.patches or [ ]) ++ [ ./neofetch-nixos-small.patch ]; }
-      );
+      neofetch = prev.neofetch.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [ ./neofetch-nixos-small.patch ];
+      });
 
       # fix nix package count for nitch
-      nitch = prev.nitch.overrideAttrs (
-        o: { patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ]; }
-      );
+      nitch = prev.nitch.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];
+      });
 
       path-of-building =
         let
@@ -101,24 +97,22 @@ in
           };
           data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
         in
-        prev.path-of-building.overrideAttrs (
-          _: {
-            inherit (sources.path-of-building) version;
+        prev.path-of-building.overrideAttrs (_: {
+          inherit (sources.path-of-building) version;
 
-            postInstall = ''
-              mkdir -p $out/share/applications
-              cp ${desktopItem}/share/applications/* $out/share/applications
-            '';
+          postInstall = ''
+            mkdir -p $out/share/applications
+            cp ${desktopItem}/share/applications/* $out/share/applications
+          '';
 
-            preFixup = ''
-              qtWrapperArgs+=(
-                --set LUA_PATH "$LUA_PATH"
-                --set LUA_CPATH "$LUA_CPATH"
-                --chdir "${data}"
-              )
-            '';
-          }
-        );
+          preFixup = ''
+            qtWrapperArgs+=(
+              --set LUA_PATH "$LUA_PATH"
+              --set LUA_CPATH "$LUA_CPATH"
+              --chdir "${data}"
+            )
+          '';
+        });
 
       # use latest commmit from git
       swww = prev.swww.overrideAttrs (

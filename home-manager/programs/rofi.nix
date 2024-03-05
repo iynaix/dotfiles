@@ -43,18 +43,15 @@ let
       rofi
       custom.rofi-themes
     ];
-    text =
-      lib.replaceStrings [ "@theme@" ]
-        [
-          (builtins.toFile "rofi-power-menu.rasi" (
-            (lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
-            + ''
-              * { background-window: black/60%; } // darken background
-              window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
-            ''
-          ))
-        ]
-        (lib.readFile ./rofi-power-menu.sh);
+    text = lib.replaceStrings [ "@theme@" ] [
+      (builtins.toFile "rofi-power-menu.rasi" (
+        (lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
+        + ''
+          * { background-window: black/60%; } // darken background
+          window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
+        ''
+      ))
+    ] (lib.readFile ./rofi-power-menu.sh);
   };
 in
 {

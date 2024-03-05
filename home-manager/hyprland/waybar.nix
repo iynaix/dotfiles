@@ -166,39 +166,37 @@ lib.mkIf cfg.enable {
         '';
         mkModuleCss =
           arr:
-          lib.concatImapStringsSep "\n"
-            (
-              pos: mod:
-              let
-                className =
-                  lib.replaceStrings
-                    [
-                      "hyprland/"
-                      "/"
-                    ]
-                    [
-                      ""
-                      "-"
-                    ]
-                    mod;
-                padding =
-                  if (pos == 1) then
-                    "padding-right: 12px;"
-                  else if (pos == lib.length arr) then
-                    "padding-left: 12px;"
-                  else
-                    ''
-                      padding-left: 12px;
-                      padding-right: 12px;
-                    '';
-              in
-              ''
-                #${className} {
-                  ${baseModuleCss}
-                  ${padding}
-                }''
-            )
-            arr;
+          lib.concatImapStringsSep "\n" (
+            pos: mod:
+            let
+              className =
+                lib.replaceStrings
+                  [
+                    "hyprland/"
+                    "/"
+                  ]
+                  [
+                    ""
+                    "-"
+                  ]
+                  mod;
+              padding =
+                if (pos == 1) then
+                  "padding-right: 12px;"
+                else if (pos == lib.length arr) then
+                  "padding-left: 12px;"
+                else
+                  ''
+                    padding-left: 12px;
+                    padding-right: 12px;
+                  '';
+            in
+            ''
+              #${className} {
+                ${baseModuleCss}
+                ${padding}
+              }''
+          ) arr;
       in
       {
         inherit (cfg) enable;

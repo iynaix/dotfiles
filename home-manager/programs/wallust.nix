@@ -24,25 +24,22 @@ in
         color_space = "labmixed";
         threshold = 20;
         palette = "dark16";
-        templates =
-          lib.mapAttrs
-            (
-              filename:
-              { target, enable, ... }:
-              lib.optionalAttrs enable {
-                inherit target;
-                template = filename;
-                new_engine = true;
-              }
-            )
-            cfg.templates;
+        templates = lib.mapAttrs (
+          filename:
+          { target, enable, ... }:
+          lib.optionalAttrs enable {
+            inherit target;
+            template = filename;
+            new_engine = true;
+          }
+        ) cfg.templates;
       };
     }
     //
     # set xdg configFile text and on change for wallust templates
-    (lib.mapAttrs' (template: { text, ... }: lib.nameValuePair "wallust/${template}" { inherit text; })
-      cfg.templates
-    );
+    (lib.mapAttrs' (
+      template: { text, ... }: lib.nameValuePair "wallust/${template}" { inherit text; }
+    ) cfg.templates);
 
   custom.wallust.templates = {
     # misc information for nix
@@ -61,12 +58,10 @@ in
           cursor = "{{cursor}}";
         };
         colors = lib.listToAttrs (
-          map
-            (i: {
-              name = "color${toString i}";
-              value = "{{color${toString i}}}";
-            })
-            (lib.range 0 15)
+          map (i: {
+            name = "color${toString i}";
+            value = "{{color${toString i}}}";
+          }) (lib.range 0 15)
         );
       };
       target = "${config.xdg.cacheHome}/wallust/nix.json";

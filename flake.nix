@@ -76,14 +76,12 @@
       homeConfigurations = import ./hosts (commonInherits // { isNixOS = false; });
 
       # devenv for working on dotfiles, provides rust environment
-      devShells = forAllSystems (
-        pkgs: {
-          default = import ./devenv.nix {
-            inherit inputs;
-            inherit (pkgs) system;
-          };
-        }
-      );
+      devShells = forAllSystems (pkgs: {
+        default = import ./devenv.nix {
+          inherit inputs;
+          inherit (pkgs) system;
+        };
+      });
 
       packages = forAllSystems (pkgs: (import ./packages { inherit pkgs inputs; }));
 
