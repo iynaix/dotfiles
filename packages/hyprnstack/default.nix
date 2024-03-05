@@ -5,14 +5,14 @@
   hyprland,
 }:
 gcc13Stdenv.mkDerivation {
-  pname = "hyprNStack";
-  version = "0.1";
+  pname = "hyprnstack";
+  version = "${hyprland.version}-unstable-2024-02-29";
 
   src = fetchFromGitHub {
     owner = "zakk4223";
     repo = "hyprNStack";
-    rev = "659ce780c6c826cffd8f7f24b0b025985099e2af";
-    sha256 = "sha256-XZCHnpRSShtZ8vp4Dg0q92jNlg2+DgxLkcWns5bdWIM=";
+    rev = "9bf059b8322df6fbcc918a17655fc22e308bd27a";
+    sha256 = "sha256-1E4w4/ng+0felBMtVWzczxo7GxU87GODiriVbvmue7Q=";
   };
 
   preConfigure = ''

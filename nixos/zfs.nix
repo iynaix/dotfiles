@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.custom-nixos.zfs;
   persistCfg = config.custom-nixos.persist;
@@ -11,7 +16,7 @@ in
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     zfs = {
       devNodes = lib.mkDefault "/dev/disk/by-id";
-      enableUnstable = true;
+      package = pkgs.zfs_unstable;
       requestEncryptionCredentials = cfg.encryption;
     };
   };

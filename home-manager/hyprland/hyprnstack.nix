@@ -11,7 +11,7 @@
 
     settings.general.layout = "nstack";
 
-    # use hyprNStack plugin, the home-manager options do not seem to emit the plugin section
+    # use hyprnstack plugin, the home-manager options do not seem to emit the plugin section
     extraConfig = ''
       plugin {
         nstack {

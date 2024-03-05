@@ -15,15 +15,15 @@
   };
   hyprlock = {
     pname = "hyprlock";
-    version = "19d7844f040c0290e23efc2e756ff75ce844248e";
+    version = "d1f542a75f8ee9fcf40c534729ea6e503280382c";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "19d7844f040c0290e23efc2e756ff75ce844248e";
+      rev = "d1f542a75f8ee9fcf40c534729ea6e503280382c";
       fetchSubmodules = false;
-      sha256 = "sha256-wVqvuJxTFxGJUNCWV9R4VqCHzenLDDNaKeJwMGn3A8o=";
+      sha256 = "sha256-OhjTau/FAwWBTUOhKgbfj9QH6tbF4qJ8OBz/y+kJLK0=";
     };
-    date = "2024-03-03";
+    date = "2024-03-04";
   };
   path-of-building = {
     pname = "path-of-building";
@@ -38,15 +38,15 @@
   };
   swww = {
     pname = "swww";
-    version = "f77d1e0b4f36c0219270a953411c8edc0c7379bb";
+    version = "24cc0c34c3262bee688a21070c7e41e637c03d71";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "f77d1e0b4f36c0219270a953411c8edc0c7379bb";
+      rev = "24cc0c34c3262bee688a21070c7e41e637c03d71";
       fetchSubmodules = false;
-      sha256 = "sha256-I0umponNdG0c9QIC6pxnlNA+pvRGc/jFtKLOvBS/CEY=";
+      sha256 = "sha256-QfIHfB1/5PTWHSWnwORmDsfAQzuvkbggoQm2YixY6ZU=";
     };
-    date = "2024-02-27";
+    date = "2024-03-04";
   };
   wallust = {
     pname = "wallust";
@@ -63,14 +63,14 @@
   };
   waybar = {
     pname = "waybar";
-    version = "26af1066e17758c3c732d545339fb375efdaa473";
+    version = "380607583e54489be5eda39074807d40d7844661";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "26af1066e17758c3c732d545339fb375efdaa473";
+      rev = "380607583e54489be5eda39074807d40d7844661";
       fetchSubmodules = false;
-      sha256 = "sha256-FbMo/+VxXpDGCuVcPXYHuOAbjFCB/3FbN1G/aw0T6Oo=";
+      sha256 = "sha256-HdbIBHb2evjXidV1XKDsDRWSeB0k3X1p2HvAcd4AfXc=";
     };
-    date = "2024-03-03";
+    date = "2024-03-04";
   };
 }
