@@ -9,19 +9,27 @@ _: {
     '';
 
     plugins = {
-      nvim-cmp = {
+      cmp = {
         enable = true;
 
-        snippet.expand = "luasnip";
-        sources = [
-          { name = "nvim_lsp"; }
-          { name = "nvim_lsp_document_symbol"; }
-          { name = "nvim_lsp_signature_help"; }
-          { name = "luasnip"; }
-          { name = "path"; }
-        ];
+        settings = {
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "nvim_lsp_document_symbol"; }
+            { name = "nvim_lsp_signature_help"; }
+            { name = "luasnip"; }
+            { name = "path"; }
+          ];
 
-        mapping = {
+          # use luasnip
+          snippet.expand = ''
+            function(args)
+              require('luasnip').lsp_expand(args.body)
+            end
+          '';
+        };
+
+        extraOptions.mapping = {
           "<C-b>" = "cmp.mapping.scroll_docs(-4)";
           "<C-f>" = "cmp.mapping.scroll_docs(4)";
           "<C+c>" = "cmp.mapping.abort()";
@@ -36,12 +44,8 @@ _: {
 
           "<C-Space>" = "cmp.mapping.complete({})";
 
-          "<Tab>" = {
-            modes = [
-              "i"
-              "s"
-            ];
-            action = ''
+          "<Tab>" = ''
+            cmp.mapping(
               function(fallback)
                 if cmp.visible() then
                   cmp.select_next_item()
@@ -52,27 +56,25 @@ _: {
                 else
                   fallback()
                 end
-              end
-            '';
-          };
+              end,
+              {"i", "s"}
+            )
+          '';
 
-          "<S-Tab>" = {
-            modes = [
-              "i"
-              "s"
-            ];
-            action = ''
-              function(fallback)
-                if cmp.visible() then
-                  cmp.select_prev_item()
-                elseif require("luasnip").jumpable(-1) then
-                  require("luasnip").jump(-1)
-                else
-                  fallback()
-                end
+          "<S-Tab>" = ''
+            cmp.mapping(
+            function(fallback)
+              if cmp.visible() then
+                cmp.select_prev_item()
+              elseif require("luasnip").jumpable(-1) then
+                require("luasnip").jump(-1)
+              else
+                fallback()
               end
-            '';
-          };
+            end,
+            {"i", "s"}
+            )
+          '';
         };
       };
 

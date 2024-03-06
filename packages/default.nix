@@ -34,7 +34,9 @@ in
 
   rofi-themes = w callPackage ./rofi-themes { };
 
-  tenki = w callPackage ./tenki { };
+  tenki =
+    assert (lib.assertMsg (!lib.hasAttr "tenki" pkgs) "tenki: tenki is in nixpkgs");
+    (w callPackage ./tenki { });
 
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
