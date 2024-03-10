@@ -152,7 +152,7 @@ lib.mkIf cfg.enable {
     "waybar.jsonc" = {
       inherit (cfg) enable;
       text = lib.strings.toJSON cfg.config;
-      target = "${config.xdg.configHome}/waybar/config";
+      target = "${config.xdg.configHome}/waybar/config.jsonc";
     };
     "waybar.css" =
       let

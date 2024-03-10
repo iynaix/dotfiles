@@ -15,7 +15,7 @@ buildLua (
 
     meta = {
       description = "High-performance on-the-fly thumbnailer for mpv";
-      homepage = "https://github.com/po5/thumbfast/vanilla-osc";
+      homepage = "https://github.com/po5/thumbfast/tree/vanilla-osc";
       license = lib.licenses.mpl20;
       maintainers = [ lib.maintainers.iynaix ];
     };

@@ -25,7 +25,13 @@ in
 
   # mpv plugins
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
-  mpv-dynamic-crop = w pkgs.mpvScripts.callPackage ./mpv-dynamic-crop { inherit buildLua; };
+  mpv-dynamic-crop =
+    assert (
+      lib.assertMsg (
+        !lib.hasAttr "dynamic-crop" pkgs.mpvScripts
+      ) "dynamic-crop: dynamic-crop is in nixpkgs"
+    );
+    (w pkgs.mpvScripts.callPackage ./mpv-dynamic-crop { inherit buildLua; });
   mpv-modernx = w pkgs.mpvScripts.callPackage ./mpv-modernx { inherit buildLua; };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };
@@ -34,9 +40,13 @@ in
 
   rofi-themes = w callPackage ./rofi-themes { };
 
-  tenki =
-    assert (lib.assertMsg (!lib.hasAttr "tenki" pkgs) "tenki: tenki is in nixpkgs");
-    (w callPackage ./tenki { });
+  transient-fish =
+    assert (
+      lib.assertMsg (
+        !lib.hasAttr "transient-fish" pkgs.fishPlugins
+      ) "transient-fish: transient-fish is in nixpkgs"
+    );
+    (callPackage ./transient-fish { inherit (pkgs.fishPlugins) buildFishPlugin; });
 
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");

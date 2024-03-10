@@ -21,7 +21,7 @@
     },
     "hyprlock": {
         "cargoLocks": null,
-        "date": "2024-03-06",
+        "date": "2024-03-09",
         "extract": null,
         "name": "hyprlock",
         "passthru": null,
@@ -33,11 +33,11 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hyprlock",
-            "rev": "3d6162e06ec2b957df822abe7a61a7aebba842a2",
-            "sha256": "sha256-c5DJbWcZYDp/X2ST3+2EHWSPDHLLrFbMeNy+FYWHRdk=",
+            "rev": "160fe3553fae1c2fb5f3480bada708bff9405e0b",
+            "sha256": "sha256-njx7ZjsIaOo+l9vF2FNtF1nvckHK/8gcqpN3EYitIoY=",
             "type": "github"
         },
-        "version": "3d6162e06ec2b957df822abe7a61a7aebba842a2"
+        "version": "160fe3553fae1c2fb5f3480bada708bff9405e0b"
     },
     "path-of-building": {
         "cargoLocks": null,
@@ -81,7 +81,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2024-02-14",
+        "date": "2024-03-08",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -91,12 +91,12 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012",
-            "sha256": "sha256-ER9QXSlVkiZMQavEQxrm0LBdnpteT2NEMPSL1L97Il8=",
+            "rev": "104d99fcb4ada743d45de76caa48cd899b021601",
+            "sha256": "sha256-gGyxRdv2I/3TQWrTbUjlJGsaRv4SaNE+4Zo9LMWmxk8=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
-        "version": "7c52fb414745d486a4e4fd9c9e0a5aadb8c42012"
+        "version": "104d99fcb4ada743d45de76caa48cd899b021601"
     },
     "waybar": {
         "cargoLocks": null,

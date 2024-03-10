@@ -18,23 +18,6 @@ in
           fish_vi_key_bindings --no-erase insert
         '';
       } // lib.mapAttrs (_: value: if lib.isString value then value else value.fishBody) cfg.functions;
-      plugins = [
-        # transient prompt because starship's transient prompt does not handle empty commands
-        {
-          name = "transient.fish";
-          src = pkgs.fetchFromGitHub {
-            owner = "zzhaolei";
-            repo = "transient.fish";
-            rev = "4fe72ab8481a1133461a2d49f24dc99835921ece";
-            hash = "sha256-0jN+5c58WW8RstQDEF1PajWHKfzKjjfcUXA3p1LsdIc=";
-          };
-        }
-        # do not add failed commands to history
-        {
-          name = "sponge";
-          inherit (pkgs.fishPlugins.sponge) src;
-        }
-      ];
       shellAliases = {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
@@ -51,6 +34,14 @@ in
       '';
     };
   };
+
+  # fish plugins, home-manager's programs.fish.plugins has a weird format
+  home.packages = with pkgs; [
+    # transient prompt because starship's transient prompt does not handle empty commands
+    custom.transient-fish
+    # do not add failed commands to history
+    fishPlugins.sponge
+  ];
 
   # do not generate man caches as it slows down build, removes ~/.manpath
   programs.man.generateCaches = false;

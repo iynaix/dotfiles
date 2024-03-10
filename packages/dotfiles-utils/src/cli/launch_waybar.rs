@@ -13,7 +13,7 @@ fn main() {
     });
 
     // add / remove persistent workspaces config to waybar config before launching
-    let config_path = full_path("~/.config/waybar/config");
+    let config_path = full_path("~/.config/waybar/config.jsonc");
     let config_path = config_path
         .to_str()
         .expect("could not convert config path to str");

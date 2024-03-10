@@ -1,4 +1,0 @@
-[tenki]
-src.github_tag = "ckaznable/tenki"
-fetch.github = "ckaznable/tenki"
-cargo_locks = ["Cargo.lock"]

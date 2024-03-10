@@ -12,7 +12,7 @@ gcc13Stdenv.mkDerivation {
     owner = "zakk4223";
     repo = "hyprNStack";
     rev = "9bf059b8322df6fbcc918a17655fc22e308bd27a";
-    sha256 = "sha256-1E4w4/ng+0felBMtVWzczxo7GxU87GODiriVbvmue7Q=";
+    hash = "sha256-1E4w4/ng+0felBMtVWzczxo7GxU87GODiriVbvmue7Q=";
   };
 
   preConfigure = ''

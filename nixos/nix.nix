@@ -287,15 +287,14 @@ in
         };
       };
     };
-    extraOptions = lib.concatLines [
-      # re-evaluate on every rebuild instead of "cached failure of attribute" error
-      "eval-cache = false"
-      "warn-dirty = false"
-      # removes ~/.nix-profile and ~/.nix-defexpr
-      "use-xdg-base-directories = true"
-    ];
     settings = {
       auto-optimise-store = true; # Optimise symlinks
+      # re-evaluate on every rebuild instead of "cached failure of attribute" error
+      eval-cache = false;
+      warn-dirty = false;
+      # removes ~/.nix-profile and ~/.nix-defexpr
+      use-xdg-base-directories = true;
+
       # use flakes
       experimental-features = [
         "nix-command"
