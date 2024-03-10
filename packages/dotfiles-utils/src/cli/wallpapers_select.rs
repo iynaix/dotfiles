@@ -17,14 +17,11 @@ fn main() {
     if cfg!(feature = "hyprland") {
         let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
 
-        // bind esc to behave like rofi
-        let esc_bind = "bind <Escape> quit";
-
         hypr([
             "exec",
             &format!(
-                "{float_rule} imv -c '{esc_bind}' {}",
-                &wallpaper::randomize_wallpapers()
+                "{float_rule} pqiv --shuffle '{}'",
+                &wallpaper::dir().to_str().expect("invalid wallpaper dir")
             ),
         ]);
     }

@@ -71,8 +71,8 @@ let
     '';
   };
   # choose vertical crop for wallpapper
-  wallpapers-choose = pkgs.writeShellApplication {
-    name = "wallpapers-choose";
+  wallpapers-multiple = pkgs.writeShellApplication {
+    name = "wallpapers-multiple";
     text = ''
       cd ${wallpapers_proj}
       # activate direnv
@@ -86,11 +86,11 @@ let
     name = "wallpapers-search";
     runtimeInputs = with pkgs; [
       rclip
-      imv
+      pqiv
     ];
     text = ''
       cd "${wallpapers_dir}"
-      rclip -f "$@" | imv;
+      rclip --filepath-only "$@" | pqiv --additional-from-stdin
       cd - > /dev/null
     '';
   };
@@ -99,16 +99,16 @@ lib.mkMerge [
   (lib.mkIf (host == "desktop") {
     home.packages = [
       wallpapers-backup
-      wallpapers-choose
+      wallpapers-multiple
       wallpapers-remote
       wallpapers-process
     ];
 
     gtk.gtk3.bookmarks = [ "file://${wallpapers_proj}/in Walls In" ];
 
-    programs.imv.settings.binds = {
-      m = ''exec mv "$imv_current_file" ${wallpapers_proj}/in; next'';
-    };
+    programs.pqiv.extraConfig = lib.mkAfter ''
+      m { command(mv $1 ) ${wallpapers_proj}/in}
+    '';
   })
 
   # TODO: rofi rclip?

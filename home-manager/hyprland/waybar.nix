@@ -72,7 +72,7 @@ lib.mkIf cfg.enable {
     "custom/nix" = {
       format = "󱄅";
       on-click = "hypr-wallpaper";
-      on-click-right = "imv-wallpaper";
+      on-click-right = "wallpapers-select";
       tooltip = false;
     };
 

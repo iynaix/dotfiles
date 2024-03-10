@@ -8,12 +8,12 @@
     ./ghostty.nix
     ./gtk.nix
     ./helix.nix
-    ./imv.nix
     ./kitty.nix
     ./mpv.nix
     ./nemo.nix
     ./obs-studio.nix
     ./pathofbuilding.nix
+    ./pqiv.nix
     ./rofi.nix
     ./vlc.nix
     ./vscode.nix

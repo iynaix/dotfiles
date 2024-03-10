@@ -26,8 +26,8 @@ name = "hypr-wallpaper"
 path = "src/cli/hypr_wallpaper.rs"
 
 [[bin]]
-name = "imv-wallpaper"
-path = "src/cli/imv_wallpaper.rs"
+name = "wallpapers-select"
+path = "src/cli/wallpapers_select.rs"
 
 [[bin]]
 name = "launch-waybar"

@@ -127,7 +127,7 @@ in
         "$mod, grave, exec, dunstctl history-pop"
 
         # switching wallpapers or themes
-        "$mod, apostrophe, exec, imv-wallpaper"
+        "$mod, apostrophe, exec, wallpapers-select"
         "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
 
         # special keys

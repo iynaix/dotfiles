@@ -27,11 +27,11 @@
       // lib.optionalAttrs config.programs.zathura.enable {
         "application/pdf" = "org.pwmt.zathura.desktop";
       }
-      // (lib.optionalAttrs config.programs.imv.enable {
-        "image/jpeg" = "imv-dir.desktop";
-        "image/gif" = "imv-dir.desktop";
-        "image/webp" = "imv-dir.desktop";
-        "image/png" = "imv-dir.desktop";
+      // (lib.optionalAttrs config.programs.pqiv.enable {
+        "image/jpeg" = "pqiv.desktop";
+        "image/gif" = "pqiv.desktop";
+        "image/webp" = "pqiv.desktop";
+        "image/png" = "pqiv.desktop";
       });
 
     # other OSes seem to override this file

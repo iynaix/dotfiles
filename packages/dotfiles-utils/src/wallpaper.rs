@@ -64,31 +64,6 @@ pub fn random() -> String {
     }
 }
 
-/// creates a directory with randomly ordered wallpapers for imv to display
-pub fn randomize_wallpapers() -> String {
-    let output_dir = full_path("~/.cache/wallpapers_random");
-    let output_dir = output_dir.to_str().expect("invalid output dir");
-
-    // delete existing dir and recreate it
-    fs::remove_dir_all(output_dir).unwrap_or(());
-    fs::create_dir_all(output_dir).expect("could not create random wallpaper dir");
-
-    // shuffle all wallpapers
-    let mut rng = rand::thread_rng();
-    let mut shuffled = self::all();
-    shuffled.shuffle(&mut rng);
-
-    let prefix_len = shuffled.len().to_string().len();
-    for (idx, path) in shuffled.iter().enumerate() {
-        let (_, img) = path.rsplit_once('/').expect("could not extract image name");
-        let new_path = format!("{output_dir}/{idx:0>prefix_len$}-{img}");
-        // create symlinks
-        std::os::unix::fs::symlink(path, new_path).expect("failed to create symlink");
-    }
-
-    output_dir.to_string()
-}
-
 #[derive(Debug, Default, Deserialize, Clone)]
 pub struct Face {
     #[serde(rename = "0")]

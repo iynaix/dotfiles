@@ -45,17 +45,6 @@ in
         assert (lib.assertMsg (prev.hyprlock.version == "0.1.0") "hyprlock: source overlay still needed?");
         prev.hyprlock.overrideAttrs (_: sources.hyprlock);
 
-      # patch imv to not repeat keypresses causing waybar to launch infinitely
-      # https://github.com/eXeC64/imv/issues/207#issuecomment-604076888
-      imv =
-        assert (lib.assertMsg (prev.imv.version == "4.5.0") "imv: is keypress patch still needed?");
-        prev.imv.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [
-            # https://lists.sr.ht/~exec64/imv-devel/patches/39476
-            ./imv-fix-repeated-keypresses.patch
-          ];
-        });
-
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (o: {
         postFixup = ''
