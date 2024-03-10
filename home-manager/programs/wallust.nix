@@ -21,13 +21,13 @@ in
       };
       "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
         backend = "resized";
-        color_space = "labmixed";
-        threshold = 20;
+        color_space = "lchmixed";
+        # threshold = 20;
         palette = "dark16";
         templates = lib.mapAttrs (
           filename:
-          { target, enable, ... }:
-          lib.optionalAttrs enable {
+          { target, ... }:
+          {
             inherit target;
             template = filename;
             new_engine = true;
@@ -44,7 +44,6 @@ in
   custom.wallust.templates = {
     # misc information for nix
     "nix.json" = {
-      enable = true;
       text = lib.strings.toJSON {
         wallpaper = "{{wallpaper}}";
         fallback = "${../gits-catppuccin.jpg}";

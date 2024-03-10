@@ -88,17 +88,15 @@ in
     ];
   };
 
-  custom.wallust.templates = {
+  custom.wallust.templates = lib.mkIf config.programs.rofi.enable {
     # default launcher
     "rofi.rasi" = {
-      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" "";
       target = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
     # generic single column rofi menu
     "rofi-menu.rasi" = {
-      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
         listview {
           columns: 1;
@@ -111,7 +109,6 @@ in
     };
 
     "rofi-screenshot.rasi" = {
-      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
         listview {
           columns: 1;
@@ -135,7 +132,6 @@ in
     };
 
     "rofi-power-menu-confirm.rasi" = {
-      inherit (config.programs.rofi) enable;
       text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" "";
       target = "${config.xdg.cacheHome}/wallust/rofi-power-menu-confirm.rasi";
     };

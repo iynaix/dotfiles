@@ -37,11 +37,6 @@
       templates = lib.mkOption {
         type = attrsOf (submodule {
           options = {
-            enable = lib.mkOption {
-              type = bool;
-              default = false;
-              description = "Enable this template";
-            };
             text = lib.mkOption {
               type = str;
               description = "Content of the template file";

@@ -19,8 +19,7 @@ lib.mkIf lockEnable {
   };
 
   custom.wallust.templates = {
-    "hyprlock.conf" = {
-      enable = lockEnable;
+    "hyprlock.conf" = lib.mkIf lockEnable {
       text =
         let
           rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }}, ${toString alpha})";

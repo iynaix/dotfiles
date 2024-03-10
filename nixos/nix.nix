@@ -274,6 +274,7 @@ in
       dates = "daily";
       options = "--delete-older-than 7d";
     };
+    package = pkgs.nixUnstable;
     registry = {
       nixpkgs-master = {
         from = {

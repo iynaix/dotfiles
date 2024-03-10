@@ -148,9 +148,8 @@ lib.mkIf cfg.enable {
     start_hidden = cfg.hidden;
   };
 
-  custom.wallust.templates = {
+  custom.wallust.templates = lib.mkIf cfg.enable {
     "waybar.jsonc" = {
-      inherit (cfg) enable;
       text = lib.strings.toJSON cfg.config;
       target = "${config.xdg.configHome}/waybar/config.jsonc";
     };
@@ -199,7 +198,6 @@ lib.mkIf cfg.enable {
           ) arr;
       in
       {
-        inherit (cfg) enable;
         text = ''
           * {
             border: none;

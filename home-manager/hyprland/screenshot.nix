@@ -50,18 +50,19 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
     ));
 
   # swappy conf
-  xdg.configFile."swappy/config".text = ''
-    [Default]
-    save_dir=${screenshotDir}
-    save_filename_format=${iso8601}.png
-    show_panel=false
-    line_size=5
-    text_size=20
-    text_font=sans-serif
-    paint_mode=brush
-    early_exit=false
-    fill_shape=false
-  '';
+  xdg.configFile."swappy/config".text = lib.generators.toINI { } {
+    default = {
+      save_dir = screenshotDir;
+      save_filename_format = "${iso8601}.png";
+      show_panel = false;
+      line_size = 5;
+      text_size = 20;
+      text_font = "sans-serif";
+      paint_mode = "brush";
+      early_exit = false;
+      fill_shape = false;
+    };
+  };
 
   wayland.windowManager.hyprland.settings = {
     bind = [

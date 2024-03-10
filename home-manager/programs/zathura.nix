@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   programs = {
     zathura = {
@@ -27,8 +27,7 @@
     };
   };
 
-  custom.wallust.templates.zathurarc = {
-    inherit (config.programs.zathura) enable;
+  custom.wallust.templates.zathurarc = lib.mkIf config.programs.zathura.enable {
     text = ''
       set default-bg                  "{{color0}}"
       set default-fg                  "{{color10}}"

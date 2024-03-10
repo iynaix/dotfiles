@@ -18,4 +18,11 @@
         workspaceFn workspaceArg
       )
     ) displays;
+
+  # produces ini format strings, takes a single argument of the object
+  toQuotedINI = lib.generators.toINI {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = v: if lib.isString v then "\"${v}\"" else lib.generators.mkValueStringDefault { } v;
+    } "=";
+  };
 }
