@@ -18,7 +18,7 @@ let
       imagemagick
     ];
     text = ''
-      convert "$1" -crop "$2" - | swww img --outputs "$3" "''${@:4}" -;
+      convert "$1" -crop "$2" -resize "$3" - | swww img --outputs "$4" "''${@:5}" -;
     '';
   };
   # backup wallpapers to secondary drive

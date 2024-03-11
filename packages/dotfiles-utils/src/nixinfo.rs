@@ -22,6 +22,9 @@ pub struct NixInfo {
     pub colorscheme: Option<String>,
     pub special: Special,
     pub persistent_workspaces: bool,
+    // TODO: remove when hyprlock has support for jpegs?
+    // output cropped wallpaper as jpg for hyprlock
+    pub hyprlock: bool,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,

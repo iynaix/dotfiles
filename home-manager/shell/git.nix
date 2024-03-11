@@ -94,7 +94,7 @@ _: {
     lg = "lazygit";
     gaa = "git add --all";
     gb = "git branch";
-    gbtr = "git bisect reset";
+    gbrd = "git push origin -d";
     gcaam = "git add --all && git commit --amend";
     gcam = "git commit --amend";
     gco = "git checkout";

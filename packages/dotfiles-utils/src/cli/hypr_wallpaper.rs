@@ -9,7 +9,7 @@ use dotfiles_utils::{
 };
 use execute::Execute;
 use rand::seq::SliceRandom;
-use std::{collections::HashMap, path::Path, process::Command};
+use std::{collections::HashMap, path::Path};
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
     let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
@@ -34,45 +34,60 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
 }
 
 fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
-    let set_wallpapers = || {
-        // write image path to ~/.cache/current_wallpaper
-        std::fs::write(full_path("~/.cache/current_wallpaper"), image)
-            .expect("failed to write ~/.cache/current_wallpaper");
+    // write image path to ~/.cache/current_wallpaper
+    std::fs::write(full_path("~/.cache/current_wallpaper"), image)
+        .expect("failed to write ~/.cache/current_wallpaper");
 
-        match wall_info {
-            Some(info) => Monitor::monitors().iter().for_each(|m| {
-                match info.get_geometry(m.width, m.height) {
-                    Some(geometry) => {
-                        // use custom swww-crop defined in wallpaper.nix
-                        // using rust for the piping the images from imagemagick to swww seeems to be really slow?
-                        Command::new("swww-crop")
-                            .arg(image)
-                            .arg(geometry)
-                            .arg(&m.name)
-                            .args(swww_args)
-                            .spawn()
-                            .expect("failed to set wallpaper");
-                    }
-                    None => {
-                        execute::command_args!("swww", "img")
-                            .args(swww_args)
-                            .arg(image)
-                            .execute()
-                            .expect("failed to set wallpaper");
-                    }
-                }
-            }),
-            _ => {
-                execute::command_args!("swww", "img")
-                    .args(swww_args)
-                    .arg(image)
-                    .execute()
-                    .expect("failed to set wallpaper");
-            }
+    // gather all the wallpaper args for each monitor if possible
+    let wallpaper_args = wall_info.as_ref().map_or(Vec::new(), |info| {
+        Monitor::monitors()
+            .into_iter()
+            .filter_map(|m| {
+                info.get_geometry(m.width, m.height).map(|geometry| {
+                    [
+                        geometry.to_string(),
+                        format!("{}x{}", m.width, m.height),
+                        m.name,
+                    ]
+                })
+            })
+            .collect::<Vec<_>>()
+    });
+
+    // no monitor args, set wallpaper as is for all monitors
+    if wallpaper_args.is_empty() {
+        execute::command_args!("swww", "img")
+            .args(swww_args)
+            .arg(image)
+            .execute()
+            .expect("failed to set wallpaper");
+    } else {
+        // set wallpaper for each monitor in parallel with threads
+        let handles: Vec<_> = wallpaper_args
+            .iter()
+            .map(|monitor_args| {
+                let image = image.clone();
+                let monitor_args = monitor_args.to_vec();
+                let swww_args: Vec<_> = swww_args
+                    .iter()
+                    .map(std::string::ToString::to_string)
+                    .collect();
+
+                std::thread::spawn(move || {
+                    execute::command_args!("swww-crop")
+                        .arg(image)
+                        .args(monitor_args)
+                        .args(swww_args)
+                        .execute()
+                        .expect("failed to set wallpaper");
+                })
+            })
+            .collect();
+
+        for handle in handles {
+            handle.join().expect("failed to join thread");
         }
-    };
-
-    set_wallpapers();
+    }
 }
 
 fn main() {

@@ -49,6 +49,8 @@ in
         fallback = "${../gits-catppuccin.jpg}";
         monitors = config.custom.displays;
         inherit (config.custom.wallust) colorscheme;
+        # TODO: remove when hyprlock has support for jpegs?
+        hyprlock = config.custom.hyprland.lock;
         persistent_workspaces = config.custom.waybar.persistent-workspaces;
         # use pywal template syntax here
         special = {

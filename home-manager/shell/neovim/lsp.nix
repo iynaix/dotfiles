@@ -11,6 +11,7 @@ _: {
           graphql.enable = true;
           jsonls.enable = true;
           # lua-ls.enable = true;
+          nil_ls.enable = true;
           prismals.enable = true;
           pyright.enable = true;
           rust-analyzer = {

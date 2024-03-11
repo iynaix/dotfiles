@@ -1,8 +1,9 @@
 use crate::{
-    execute_wrapped_process, full_path, json, nixinfo::NixInfo, wallpaper::WallInfo, CommandUtf8,
+    execute_wrapped_process, full_path, json, monitor::Monitor, nixinfo::NixInfo,
+    wallpaper::WallInfo, CommandUtf8,
 };
 use execute::Execute;
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -184,4 +185,48 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .arg(wallpaper)
         .execute()
         .expect("wallust: failed to set colors from wallpaper");
+
+    // crop wallpaper for lockscreen
+    let nix_info = NixInfo::before();
+    if nix_info.hyprlock {
+        if let Some(info) = wallpaper_info {
+            let nix_monitors = nix_info.monitors;
+            if let Some(m) = Monitor::monitors()
+                .iter()
+                .find(|m| nix_monitors.iter().any(|nix_mon| nix_mon.name == m.name))
+            {
+                if let Some(geometry) = info.get_geometry(m.width, m.height) {
+                    // output cropped and resized wallpaper to /tmp
+                    let with_png = full_path(wallpaper).with_extension("png");
+                    let output_fname = with_png
+                        .file_name()
+                        .expect("could not get filename of wallpaper");
+                    let output_path = PathBuf::from("/tmp").join(output_fname);
+                    let output_path = output_path.to_str().expect("invalid wallpaper path");
+
+                    execute::command("convert")
+                        .arg(wallpaper)
+                        .arg("-crop")
+                        .arg(geometry)
+                        .arg("-resize")
+                        .arg(&format!("{}x{}", m.width, m.height))
+                        .arg(output_path)
+                        .execute()
+                        .expect("failed to crop wallpaper for lockscreen");
+
+                    // replace image path in hyprlock config at ~/.config/hypr/hyprlock.conf
+                    let hyprlock_conf = full_path("~/.config/hypr/hyprlock.conf");
+
+                    if hyprlock_conf.exists() {
+                        let contents = std::fs::read_to_string(&hyprlock_conf)
+                            .expect("Could not read hyprlock.conf");
+                        let new_contents = contents.replace(wallpaper, output_path);
+
+                        std::fs::write(&hyprlock_conf, new_contents)
+                            .expect("Could not write hyprlock.conf");
+                    }
+                }
+            }
+        }
+    };
 }
