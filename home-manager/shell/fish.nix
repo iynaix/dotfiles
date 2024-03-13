@@ -36,11 +36,11 @@ in
   };
 
   # fish plugins, home-manager's programs.fish.plugins has a weird format
-  home.packages = with pkgs; [
-    # transient prompt because starship's transient prompt does not handle empty commands
-    custom.transient-fish
+  home.packages = with pkgs.fishPlugins; [
+    # used as starship's transient prompt does not handle empty commands
+    transient-fish
     # do not add failed commands to history
-    fishPlugins.sponge
+    sponge
   ];
 
   # do not generate man caches as it slows down build, removes ~/.manpath

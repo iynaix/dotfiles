@@ -3,27 +3,27 @@
 {
   hypridle = {
     pname = "hypridle";
-    version = "029f08805a2297966d295a52a6e62c3801926a52";
+    version = "4395339a2dc410bcf49f3e24f9ed3024fdb25b0a";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hypridle";
-      rev = "029f08805a2297966d295a52a6e62c3801926a52";
+      rev = "4395339a2dc410bcf49f3e24f9ed3024fdb25b0a";
       fetchSubmodules = false;
-      sha256 = "sha256-xi7yscjt7t8tFcJDgHzxgW15Obcp7dEghG41f6tUmRc=";
+      sha256 = "sha256-ZSn3wXQuRz36Ta/L+UCFKuUVG6QpwK2QmRkPjpQprU4=";
     };
-    date = "2024-02-29";
+    date = "2024-03-11";
   };
   hyprlock = {
     pname = "hyprlock";
-    version = "21d9efe5c94f1a292d181af70b32059509eada68";
+    version = "0fe10282559f02ea945f0ce8f1277cd695179442";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "21d9efe5c94f1a292d181af70b32059509eada68";
+      rev = "0fe10282559f02ea945f0ce8f1277cd695179442";
       fetchSubmodules = false;
-      sha256 = "sha256-MVPKRGV9eZWvFseddNWI+nNeKQHjePU6SC/2ZyJP1m8=";
+      sha256 = "sha256-1p6Y/8+ETaz7GQ8wsXLUTrk2dD0YN9ySOfwjRp2TSG4=";
     };
-    date = "2024-03-10";
+    date = "2024-03-13";
   };
   path-of-building = {
     pname = "path-of-building";
@@ -46,7 +46,6 @@
       fetchSubmodules = false;
       sha256 = "sha256-QfIHfB1/5PTWHSWnwORmDsfAQzuvkbggoQm2YixY6ZU=";
     };
-    date = "2024-03-04";
   };
   wallust = {
     pname = "wallust";
@@ -63,14 +62,14 @@
   };
   waybar = {
     pname = "waybar";
-    version = "4c46d7d245a6c06644d6a0e8857f7140556202ce";
+    version = "214858f413fa70166ed945f973b12b3eaddf6548";
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "4c46d7d245a6c06644d6a0e8857f7140556202ce";
+      rev = "214858f413fa70166ed945f973b12b3eaddf6548";
       fetchSubmodules = false;
-      sha256 = "sha256-9zUqV1wxUAuRRBMQCUZEf5FjIKMeTEhWTLOfL4+9EiE=";
+      sha256 = "sha256-BCtoMojRULSgiE9NcojAerKaVeav2yMovrzkBQFaUSA=";
     };
-    date = "2024-03-05";
+    date = "2024-03-12";
   };
 }

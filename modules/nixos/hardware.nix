@@ -6,7 +6,6 @@
 }:
 {
   options.custom-nixos = {
-    am5.enable = lib.mkEnableOption "B650E-E motherboard";
     bluetooth.enable = lib.mkEnableOption "Bluetooth" // {
       default = isLaptop;
     };

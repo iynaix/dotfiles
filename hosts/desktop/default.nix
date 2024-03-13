@@ -2,7 +2,6 @@
 {
   custom-nixos = {
     # hardware
-    am5.enable = true;
     hdds.enable = true;
     nvidia.enable = true;
     qmk.enable = true;

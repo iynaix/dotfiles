@@ -146,8 +146,9 @@ in
       waybar =
         let
           # Derived from subprojects/cava.wrap
-          libcava = rec {
-            version = "0.10.1";
+          version = "0.10.1";
+          libcava = {
+            inherit version;
             src = pkgs.fetchFromGitHub {
               owner = "LukashonakV";
               repo = "cava";

@@ -40,14 +40,6 @@ in
 
   rofi-themes = w callPackage ./rofi-themes { };
 
-  transient-fish =
-    assert (
-      lib.assertMsg (
-        !lib.hasAttr "transient-fish" pkgs.fishPlugins
-      ) "transient-fish: transient-fish is in nixpkgs"
-    );
-    (callPackage ./transient-fish { inherit (pkgs.fishPlugins) buildFishPlugin; });
-
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
     (w callPackage ./vv { });

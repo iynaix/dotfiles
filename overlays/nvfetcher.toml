@@ -11,7 +11,8 @@ src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
 fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
 
 [swww]
-src.git = "https://github.com/Horus645/swww"
+# src.git = "https://github.com/Horus645/swww"
+src.manual = "24cc0c34c3262bee688a21070c7e41e637c03d71"
 fetch.github = "LGFae/swww"
 
 [wallust]

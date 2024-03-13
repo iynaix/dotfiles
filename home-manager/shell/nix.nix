@@ -42,9 +42,9 @@ let
       if [[ "$*" == *"--hostname"* ]]; then
           # Replace the word after "--hostname" with host using parameter expansion
           cleaned_args=("''${@/--hostname [^[:space:]]*/--hostname ${host}}")
-          nh home switch --nom "''${cleaned_args[@]}" ${dots} -- --option eval-cache false
+          nh home switch "''${cleaned_args[@]}" ${dots} -- --option eval-cache false
       else
-          nh home switch --nom "$@" --hostname ${host} ${dots} -- --option eval-cache false
+          nh home switch "$@" --hostname ${host} ${dots} -- --option eval-cache false
       fi
 
       cd - > /dev/null

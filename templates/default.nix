@@ -6,8 +6,6 @@ let
       echo .direnv >> .gitignore
     ```
   '';
-in
-rec {
   javascript = {
     inherit welcomeText;
     path = ./javascript;
@@ -31,7 +29,14 @@ rec {
     path = ./rust-stable;
     description = "Rust (latest stable from fenix) dev environment";
   };
-
+in
+{
+  inherit
+    javascript
+    python
+    rust
+    rust-stable
+    ;
   js = javascript;
   ts = javascript;
   py = python;
