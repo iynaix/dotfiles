@@ -16,6 +16,7 @@
       nitch
       pipes-rs
       tenki
+      custom.scope-tui
       inputs.wfetch.packages.${pkgs.system}.wfetch
     ];
 

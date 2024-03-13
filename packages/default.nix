@@ -40,6 +40,10 @@ in
 
   rofi-themes = w callPackage ./rofi-themes { };
 
+  scope-tui =
+    assert (lib.assertMsg (!lib.hasAttr "scope-tui" pkgs) "scope-tui: scope-tui is in nixpkgs");
+    callPackage ./scope-tui { };
+
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
     (w callPackage ./vv { });
