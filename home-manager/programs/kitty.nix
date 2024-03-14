@@ -1,31 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 let
   cfg = config.custom.kitty;
   inherit (config.custom) terminal;
 in
 lib.mkIf cfg.enable {
-  # open kitty from nemo
-  custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.kitty) (
-    pkgs.writeShellApplication {
-      name = "gnome-terminal";
-      text = ''
-        shift
-
-        TITLE="$(basename "$1")"
-        if [ -n "$TITLE" ]; then
-          ${terminal.exec} -T "$TITLE" "$@"
-        else
-          ${terminal.exec} "$@"
-        fi
-      '';
-    }
-  );
-
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";

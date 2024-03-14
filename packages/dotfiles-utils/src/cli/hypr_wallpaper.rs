@@ -123,6 +123,9 @@ fn main() {
         wallust::from_wallpaper(&wallpaper_info, &wallpaper);
     }
 
+    // do wallust earlier to create the necessary templates
+    wallust::apply_colors();
+
     if cfg!(feature = "hyprland") {
         if args.reload {
             swww_crop(&[], &wallpaper, &wallpaper_info);
@@ -176,6 +179,4 @@ fn main() {
             swww_crop(transition, &wallpaper, &wallpaper_info);
         }
     }
-
-    wallust::apply_colors();
 }

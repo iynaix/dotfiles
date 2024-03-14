@@ -107,7 +107,7 @@ lib.mkMerge [
     gtk.gtk3.bookmarks = [ "file://${wallpapers_proj}/in Walls In" ];
 
     programs.pqiv.extraConfig = lib.mkAfter ''
-      m { command(mv $1 ) ${wallpapers_proj}/in}
+      m { command(mv $1 ${wallpapers_proj}/in) }
     '';
   })
 

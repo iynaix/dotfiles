@@ -67,13 +67,6 @@ in
         default = "0.8";
         description = "Opacity for the terminal.";
       };
-
-      # create a fake gnome-terminal shell script so xdg terminal applications open in the correct terminal
-      # https://unix.stackexchange.com/a/642886
-      fakeGnomeTerminal = lib.mkOption {
-        type = lib.types.package;
-        description = "Fake gnome-terminal executable so nemo opens the correct terminal.";
-      };
     };
 
     shell = {

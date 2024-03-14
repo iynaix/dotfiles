@@ -9,23 +9,6 @@ let
   inherit (config.custom) terminal;
 in
 lib.mkIf cfg.enable {
-  # open ghostty from nemo
-  custom.terminal.fakeGnomeTerminal = lib.mkIf (terminal.package == pkgs.ghostty) (
-    pkgs.writeShellApplication {
-      name = "gnome-terminal";
-      text = ''
-        shift
-
-        TITLE="$(basename "$1")"
-        if [ -n "$TITLE" ]; then
-          ${terminal.exec} --title "$TITLE" "$@"
-        else
-          ${terminal.exec} "$@"
-        fi
-      '';
-    }
-  );
-
   home = {
     packages = [ pkgs.ghostty ];
     sessionVariables = {
