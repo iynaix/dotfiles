@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -19,14 +20,12 @@ lib.mkMerge [
       };
     };
 
-    # silence direnv
-    home.sessionVariables.DIRENV_LOG_FORMAT = "";
+    home = {
+      # silence direnv
+      sessionVariables.DIRENV_LOG_FORMAT = "";
 
-    custom.shell.functions = {
-      # create a new devenv environment
-      mkdevenv = {
-        bashBody = "nix flake init --template github:iynaix/dotfiles#$1";
-        fishBody = "nix flake init --template github:iynaix/dotfiles#$argv[1]";
+      packages = pkgs.custom.lib.createShellScriptBins {
+        mkdevenv = "nix flake init --template github:iynaix/dotfiles#$1";
       };
     };
 

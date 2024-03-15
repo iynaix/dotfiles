@@ -6,28 +6,6 @@
 }:
 let
   cfg = config.custom.terminal;
-  functionModule = lib.types.submodule {
-    options = {
-      bashBody = lib.mkOption {
-        type = lib.types.lines;
-        description = "The function body for bash.";
-      };
-      bashCompletion = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = "The function completion body for bash.";
-      };
-      fishBody = lib.mkOption {
-        type = lib.types.lines;
-        description = "The function body for bash.";
-      };
-      fishCompletion = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = "The completion body for fish.";
-      };
-    };
-  };
 in
 {
   options.custom = {
@@ -74,18 +52,6 @@ in
         type = lib.types.lines;
         default = "";
         description = "Extra shell agnostic commands that should be run when initializing a login shell.";
-      };
-      functions = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.either lib.types.lines functionModule);
-        example = lib.literalExpression ''
-          foo = "echo foo";
-          bar = {
-            bashBody = "echo bar";
-            fishBody = "echo bar";
-          };
-        '';
-        default = { };
-        description = "Extra shell agnostic functions.";
       };
     };
   };

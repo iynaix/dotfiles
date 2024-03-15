@@ -73,6 +73,23 @@ let
       fi
     '';
   };
+  # utility for creating a nix repl, allows editing within the repl.nix
+  # https://bmcgee.ie/posts/2023/01/nix-and-its-slow-feedback-loop/
+  nrepl = pkgs.writeShellApplication {
+    name = "nrepl";
+    text = ''
+      if [[ -f repl.nix ]]; then
+        nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+      # use flake repl if not in a nix project
+      elif [[ $(find . -maxdepth 1 -name "*.nix" | wc -l) -eq 0 ]]; then
+        cd ${dots}
+        nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+        cd - > /dev/null
+      else
+        nix repl "$@"
+      fi
+    '';
+  };
 in
 lib.mkMerge [
   (lib.mkIf (!isNixOS) {
@@ -81,7 +98,7 @@ lib.mkMerge [
         hmbuild
         hmswitch
         hmupd8
-        pkgs.nh # nh is installed by nixos anyway
+        pkgs.nh # nh is installed by nixos config anyway
       ];
 
       shellAliases = {
@@ -91,7 +108,10 @@ lib.mkMerge [
   })
   {
     home = {
-      packages = [ ngc ];
+      packages = [
+        ngc
+        nrepl
+      ];
       shellAliases = {
         nsh = "nix-shell --command fish -p";
         nix-update-input = "nix flake lock --update-input";

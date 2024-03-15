@@ -146,8 +146,10 @@ let
     name = "nb";
     runtimeInputs = [ nbuild ];
     text = ''
+      if [[ $1 == ".#"* ]]; then
+          nix build "$@"
       # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
-      if [[ $(pwd) =~ /nixpkgs$ ]]; then
+      elif [[ $(pwd) =~ /nixpkgs$ ]]; then
           nix-build -A "$1"
       # dotfiles, build local package
       elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then

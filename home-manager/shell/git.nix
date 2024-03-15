@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs = {
     git = {
       enable = true;
@@ -58,64 +59,51 @@ _: {
     lazygit.enable = true;
   };
 
-  # extra git functions
-  custom.shell.functions = {
-    # create a new branch and push it to origin
-    gbc = {
-      bashBody = ''
+  home = {
+    # extra git functions
+    packages = pkgs.custom.lib.createShellScriptBins {
+      # create a new branch and push it to origin
+      gbc = ''
         git branch $1
         git checkout $1
       '';
-      fishBody = ''
-        git branch $argv[1]
-        git checkout $argv[1]
-      '';
-    };
-    # delete a remote branch
-    grd = {
-      bashBody = ''
+      # delete a remote branch
+      grd = ''
         git branch -D $1
         git push origin --delete $1
       '';
-      fishBody = ''
-        git branch -D $argv[1]
-        git push origin --delete $argv[1]
-      '';
-    };
-    # searches git history, can never remember this stupid thing
-    gsearch = {
+      # searches git history, can never remember this stupid thing
       # 2nd argument is target path and subsequent arguments are passed through
-      bashBody = "git log -S$1 -- \${2:-.} $*[2,-1]";
-      fishBody = "git log -S$argv[1] -- $argv[2] $argv[3..-1]";
+      gsearch = "git log -S$1 -- \${2:-.} $*[2,-1]";
     };
-  };
 
-  home.shellAliases = {
-    lg = "lazygit";
-    gaa = "git add --all";
-    gb = "git branch";
-    gbrd = "git push origin -d";
-    gcaam = "git add --all && git commit --amend";
-    gcam = "git commit --amend";
-    gco = "git checkout";
-    gl = "git pull";
-    glg = "git log";
-    gm = "git merge";
-    gp = "git push";
-    gpf = "git push --force-with-lease";
-    glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
-    gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
-    gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
-    gpatch = "git diff --no-ext-diff";
-    groot = "cd $(git rev-parse - -show-toplevel)";
-    grh = "git reset --hard";
-    gri = "git rebase --interactive";
-    gst = "git status -s -b && echo && git log | head -n 1";
-    gsub = "git submodule update --init --recursive";
-    # access github page for the repo we are currently in
-    github = "open `git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'`";
-    # cleanup leftover files from merges
-    mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
+    shellAliases = {
+      lg = "lazygit";
+      gaa = "git add --all";
+      gb = "git branch";
+      gbrd = "git push origin -d";
+      gcaam = "git add --all && git commit --amend";
+      gcam = "git commit --amend";
+      gco = "git checkout";
+      gl = "git pull";
+      glg = "git log";
+      gm = "git merge";
+      gp = "git push";
+      gpf = "git push --force-with-lease";
+      glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
+      gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
+      gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
+      gpatch = "git diff --no-ext-diff";
+      groot = "cd $(git rev-parse - -show-toplevel)";
+      grh = "git reset --hard";
+      gri = "git rebase --interactive";
+      gst = "git status -s -b && echo && git log | head -n 1";
+      gsub = "git submodule update --init --recursive";
+      # access github page for the repo we are currently in
+      github = "open `git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'`";
+      # cleanup leftover files from merges
+      mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
+    };
   };
 
   custom.persist = {

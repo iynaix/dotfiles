@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-let
-  cfg = config.custom.shell;
-in
 {
   programs = {
     fish = {
@@ -17,7 +14,7 @@ in
           fish_default_key_bindings -M insert
           fish_vi_key_bindings --no-erase insert
         '';
-      } // lib.mapAttrs (_: value: if lib.isString value then value else value.fishBody) cfg.functions;
+      };
       shellAliases = {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
@@ -49,22 +46,6 @@ in
   # set as default interactive shell
   programs.kitty.settings.shell = lib.mkForce (lib.getExe pkgs.fish);
   custom.ghostty.config.command = lib.mkForce (lib.getExe pkgs.fish);
-
-  # create completion files as needed
-  xdg.configFile = lib.pipe cfg.functions [
-    (lib.filterAttrs (_: value: lib.isAttrs value && value.fishCompletion != ""))
-    (lib.mapAttrs' (
-      name: value:
-      lib.nameValuePair "fish/completions/${name}.fish" {
-        text = ''
-          function _${name}
-          ${value.fishCompletion}
-          end
-          complete --no-files --command ${name} --arguments "(_${name})"
-        '';
-      }
-    ))
-  ];
 
   custom.persist = {
     home = {
