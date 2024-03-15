@@ -126,10 +126,11 @@ let
       src="nixpkgs"
       if [[ $(pwd) =~ /nixpkgs$ ]]; then
           src="."
-      fi
-
-      # custom package exists, build it
-      if [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+      # dotfiles, custom package exists, build it
+      elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+          src="."
+      # flake
+      elif [[ -f flake.nix ]]; then
           src="."
       fi
 
@@ -145,9 +146,14 @@ let
     name = "nb";
     runtimeInputs = [ nbuild ];
     text = ''
+      # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
       if [[ $(pwd) =~ /nixpkgs$ ]]; then
-          nix build ".#$1"
+          nix-build -A "$1"
+      # dotfiles, build local package
       elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+          nix build ".#$1"
+      # nix repo, build package within flake
+      elif [[ -f flake.nix ]]; then
           nix build ".#$1"
       else
           nbuild "$@"

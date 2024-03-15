@@ -76,6 +76,14 @@ lib.mkIf cfg.enable {
       tooltip = false;
     };
 
+    idle_inhibitor = lib.mkIf cfg.idle-inhibitor {
+      format = "{icon}";
+      format-icons = {
+        activated = "<span color='{{color4}}'></span>";
+        deactivated = "";
+      };
+    };
+
     "hyprland/workspaces" = {
       # TODO: pacman, remove active inverse circle
       # format = "{icon}";
@@ -102,7 +110,7 @@ lib.mkIf cfg.enable {
     modules-left = [
       "custom/nix"
       # "hyprland/window"
-    ];
+    ] ++ (lib.optional cfg.idle-inhibitor "idle_inhibitor");
 
     modules-right =
       [
@@ -155,6 +163,7 @@ lib.mkIf cfg.enable {
     };
     "waybar.css" =
       let
+        margin = "12px";
         baseModuleCss = ''
           font-family: ${config.custom.fonts.regular};
           font-weight: bold;
@@ -162,75 +171,78 @@ lib.mkIf cfg.enable {
           transition: none;
           text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
           border-bottom:  2px solid transparent;
+          padding-left: ${margin};
+          padding-right: ${margin};
         '';
-        mkModuleCss =
+        mkModuleClassName =
+          mod:
+          "#${
+            lib.replaceStrings
+              [
+                "hyprland/"
+                "/"
+              ]
+              [
+                ""
+                "-"
+              ]
+              mod
+          }";
+        mkModulesCss =
           arr:
-          lib.concatImapStringsSep "\n" (
-            pos: mod:
-            let
-              className =
-                lib.replaceStrings
-                  [
-                    "hyprland/"
-                    "/"
-                  ]
-                  [
-                    ""
-                    "-"
-                  ]
-                  mod;
-              padding =
-                if (pos == 1) then
-                  "padding-right: 12px;"
-                else if (pos == lib.length arr) then
-                  "padding-left: 12px;"
-                else
-                  ''
-                    padding-left: 12px;
-                    padding-right: 12px;
-                  '';
-            in
-            ''
-              #${className} {
-                ${baseModuleCss}
-                ${padding}
-              }''
-          ) arr;
+          lib.concatMapStringsSep "\n" (mod: ''
+            ${mkModuleClassName mod} {
+              ${baseModuleCss}
+            }'') arr;
       in
       {
-        text = ''
-          * {
-            border: none;
-            border-radius: 0;
-          }
+        text =
+          ''
+            * {
+              border: none;
+              border-radius: 0;
+            }
 
-          #waybar {
-            background: rgba(0,0,0,0.5)
-          }
+            #waybar {
+              background: rgba(0,0,0,0.5)
+            }
 
-          ${mkModuleCss cfg.config.modules-left}
-          ${mkModuleCss cfg.config.modules-center}
-          ${mkModuleCss cfg.config.modules-right}
+            ${mkModulesCss cfg.config.modules-left}
+            ${mkModulesCss cfg.config.modules-center}
+            ${mkModulesCss cfg.config.modules-right}
 
-          #workspaces button {
-            ${baseModuleCss}
-          }
+            ${mkModuleClassName "custom/nix"} {
+              font-size: 20px;
+            }
 
-          #custom-nix {
-            margin-left: 12px;
-            font-size: 20px;
-          }
+            #workspaces button {
+              ${baseModuleCss}
+              padding-left: 8px;
+              padding-right: 8px;
+            }
 
-          #clock{
-            margin-right: 12px;
-          }
-
-          #workspaces button.active {
-            margin-right: 4px;
-            border-bottom:  2px solid {{foreground}};
-            background-color: rgba(255,255,255, 0.25);
-          }
-        '';
+            #workspaces button.active {
+              border-bottom:  2px solid {{foreground}};
+              background-color: rgba(255,255,255, 0.25);
+            }
+          ''
+          + lib.optionalString cfg.idle-inhibitor ''
+            ${mkModuleClassName "idle_inhibitor"} {
+              font-size: 16px;
+            }
+          ''
+          +
+            # remove padding for the outermost modules
+            ''
+              ${mkModuleClassName (lib.head cfg.config.modules-left)} {
+                padding-left: 0;
+                margin-left: ${margin};
+              }
+              ${mkModuleClassName (lib.last cfg.config.modules-right)} {
+                padding-right: 0;
+                margin-right: ${margin};
+              }
+            '';
         target = "${config.xdg.configHome}/waybar/style.css";
       };
   };

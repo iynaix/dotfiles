@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   isLaptop,
   pkgs,
@@ -61,6 +62,9 @@ in
         type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
+      };
+      idle-inhibitor = lib.mkEnableOption "Idle inhibitor" // {
+        default = host == "desktop";
       };
       persistent-workspaces = lib.mkEnableOption "Persistent workspaces";
       hidden = lib.mkEnableOption "Hidden waybar by default";

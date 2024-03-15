@@ -21,7 +21,7 @@ in
       };
       "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
         backend = "resized";
-        color_space = "lchmixed";
+        color_space = "labmixed";
         # threshold = 20;
         palette = "dark16";
         templates = lib.mapAttrs (
