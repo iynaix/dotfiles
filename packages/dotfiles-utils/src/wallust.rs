@@ -171,14 +171,12 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
     let mut wallust = execute::command_args!("wallust", "run");
 
     // normalize the options for wallust
-    if let Some(WallInfo {
-        wallust: Some(opts),
-        ..
-    }) = wallpaper_info
-    {
+    if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {
         // split opts into flags
-        let opts: Vec<&str> = opts.split(' ').map(str::trim).collect();
-        wallust.args(opts);
+        if !opts.is_empty() {
+            let opts: Vec<&str> = opts.split(' ').map(str::trim).collect();
+            wallust.args(opts);
+        }
     }
 
     wallust

@@ -9,11 +9,12 @@ use dotfiles_utils::{
 };
 use execute::Execute;
 use rand::seq::SliceRandom;
-use std::{collections::HashMap, path::Path};
+use rayon::prelude::*;
+use std::path::Path;
 
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
-    let wallpapers_json = full_path("~/Pictures/Wallpapers/wallpapers.json");
-    if !wallpapers_json.exists() {
+    let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
+    if !wallpapers_csv.exists() {
         return None;
     }
 
@@ -26,11 +27,13 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
         .expect("could not convert image path to str");
 
     let reader = std::io::BufReader::new(
-        std::fs::File::open(wallpapers_json).expect("could not open wallpapers.json"),
+        std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
     );
-    let mut crops: HashMap<String, WallInfo> =
-        serde_json::from_reader(reader).expect("could not parse wallpapers.json");
-    crops.remove(fname)
+
+    let mut rdr = csv::Reader::from_reader(reader);
+    rdr.deserialize::<WallInfo>()
+        .flatten()
+        .find(|line| line.filename == fname)
 }
 
 fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
@@ -63,30 +66,19 @@ fn swww_crop(swww_args: &[&str], image: &String, wall_info: &Option<WallInfo>) {
             .expect("failed to set wallpaper");
     } else {
         // set wallpaper for each monitor in parallel with threads
-        let handles: Vec<_> = wallpaper_args
-            .iter()
-            .map(|monitor_args| {
-                let image = image.clone();
-                let monitor_args = monitor_args.to_vec();
-                let swww_args: Vec<_> = swww_args
-                    .iter()
-                    .map(std::string::ToString::to_string)
-                    .collect();
+        wallpaper_args.par_iter().for_each(|monitor_args| {
+            let swww_args: Vec<_> = swww_args
+                .iter()
+                .map(std::string::ToString::to_string)
+                .collect();
 
-                std::thread::spawn(move || {
-                    execute::command_args!("swww-crop")
-                        .arg(image)
-                        .args(monitor_args)
-                        .args(swww_args)
-                        .execute()
-                        .expect("failed to set wallpaper");
-                })
-            })
-            .collect();
-
-        for handle in handles {
-            handle.join().expect("failed to join thread");
-        }
+            execute::command_args!("swww-crop")
+                .arg(image)
+                .args(monitor_args)
+                .args(swww_args)
+                .execute()
+                .expect("failed to set wallpaper");
+        });
     }
 }
 

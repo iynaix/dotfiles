@@ -64,32 +64,17 @@ pub fn random() -> String {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Clone)]
-pub struct Face {
-    #[serde(rename = "0")]
-    pub xmin: u32,
-    #[serde(rename = "1")]
-    pub xmax: u32,
-    #[serde(rename = "2")]
-    pub ymin: u32,
-    #[serde(rename = "3")]
-    pub ymax: u32,
-}
-
 #[derive(Debug, Deserialize, Clone)]
 pub struct WallInfo {
-    pub faces: Vec<Face>,
-    #[serde(rename = "1440x2560")]
+    pub filename: String,
+    // faces is unused, keep it as a string
+    pub faces: String,
     pub r1440x2560: String,
-    #[serde(rename = "2256x1504")]
     pub r2256x1504: String,
-    #[serde(rename = "3440x1440")]
     pub r3440x1440: String,
-    #[serde(rename = "1920x1080")]
     pub r1920x1080: String,
-    #[serde(rename = "1x1")]
     pub r1x1: String,
-    pub wallust: Option<String>,
+    pub wallust: String,
 }
 
 impl WallInfo {

@@ -10,6 +10,7 @@
 let
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-utils";
+  wallpapers_proj_rs = "/persist${config.home.homeDirectory}/projects/rs-wallpaper-utils";
   # crop wallpaper before displaying with swww
   swww-crop = pkgs.writeShellApplication {
     name = "swww-crop";
@@ -62,10 +63,10 @@ let
     name = "wallpapers-process";
     runtimeInputs = [ wallpapers-backup ];
     text = ''
-      cd ${wallpapers_proj}
+      cd ${wallpapers_proj_rs}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      python main.py "$@"
+      cargon run "$@"
       cd - > /dev/null
       wallpapers-backup
     '';
