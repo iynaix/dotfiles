@@ -24,13 +24,13 @@
         workspaces = [
           6
           7
-          8
         ];
       }
       {
         name = "HDMI-A-1";
         hyprland = "1920x1080,1754x0,1";
         workspaces = [
+          8
           9
           10
         ];

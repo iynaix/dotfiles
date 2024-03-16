@@ -96,7 +96,6 @@
             theme.package
             iconTheme.package
           ])
-        ++ (lib.optional config.custom-nixos.distrobox.enable pkgs.distrobox)
         ++ (lib.optional config.hm.custom.helix.enable helix);
     };
 
