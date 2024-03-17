@@ -131,9 +131,14 @@
         "${lib.getExe nvim-direnv} %f";
     };
 
-    mimeApps.defaultApplications = {
-      "text/plain" = "nvim.desktop";
-      "application/x-shellscript" = "nvim.desktop";
+    mimeApps = {
+      defaultApplications = {
+        "text/plain" = "nvim.desktop";
+        "application/x-shellscript" = "nvim.desktop";
+      };
+      associations.added = {
+        "text/csv" = "nvim.desktop";
+      };
     };
   };
 
