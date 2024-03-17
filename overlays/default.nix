@@ -141,37 +141,6 @@ in
             };
           }
         );
-
-      # use latest commmit from git
-      waybar =
-        let
-          # Derived from subprojects/cava.wrap
-          version = "0.10.1";
-          libcava = {
-            inherit version;
-            src = pkgs.fetchFromGitHub {
-              owner = "LukashonakV";
-              repo = "cava";
-              rev = version;
-              hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
-            };
-          };
-        in
-        assert (lib.assertMsg (prev.waybar.version == "0.9.24") "waybar: use waybar from nixpkgs?");
-        prev.waybar.overrideAttrs (
-          o:
-          sources.waybar
-          // {
-            version = "${o.version}-${sources.waybar.version}";
-            mesonFlags = lib.remove "-Dgtk-layer-shell=enabled" o.mesonFlags;
-            postUnpack = ''
-              pushd "$sourceRoot"
-              cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-${libcava.version}
-              patchShebangs .
-              popd
-            '';
-          }
-        );
     })
   ];
 }

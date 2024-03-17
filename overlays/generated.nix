@@ -15,15 +15,15 @@
   };
   hyprlock = {
     pname = "hyprlock";
-    version = "7ee406bf9b11351e3d73e6b6b2aec7de93ba61bf";
+    version = "23224d40e4ee7ed2e9d4be831724071a305c77d6";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "7ee406bf9b11351e3d73e6b6b2aec7de93ba61bf";
+      rev = "23224d40e4ee7ed2e9d4be831724071a305c77d6";
       fetchSubmodules = false;
-      sha256 = "sha256-zi2exTT5e3OOK6P7s6IjdiUUIawhqMN4R9RiUJ+T6Fc=";
+      sha256 = "sha256-YY8grq5bv3kr6/QLa27xenthQxgMnXVyxtAfhnQHAik=";
     };
-    date = "2024-03-15";
+    date = "2024-03-17";
   };
   path-of-building = {
     pname = "path-of-building";
@@ -59,16 +59,5 @@
       sha256 = "sha256-gGyxRdv2I/3TQWrTbUjlJGsaRv4SaNE+4Zo9LMWmxk8=";
     };
     date = "2024-03-08";
-  };
-  waybar = {
-    pname = "waybar";
-    version = "0.10.0";
-    src = fetchFromGitHub {
-      owner = "Alexays";
-      repo = "Waybar";
-      rev = "0.10.0";
-      fetchSubmodules = false;
-      sha256 = "sha256-p1VRrKT2kTDy48gDXPMHlLbfcokAOFeTZXGzTeO1SAE=";
-    };
   };
 }

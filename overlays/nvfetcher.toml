@@ -19,7 +19,3 @@ fetch.github = "LGFae/swww"
 src.git = "https://codeberg.org/explosion-mental/wallust.git"
 # src.branch = "dev"
 fetch.git = "https://codeberg.org/explosion-mental/wallust.git"
-
-[waybar]
-src.github_tag = "Alexays/Waybar"
-fetch.github = "Alexays/Waybar"
