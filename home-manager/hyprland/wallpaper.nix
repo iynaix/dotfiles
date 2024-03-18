@@ -10,7 +10,7 @@
 let
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-utils";
-  wallpapers_proj_rs = "/persist${config.home.homeDirectory}/projects/rs-wallpaper-utils";
+  wallpapers_proj_rs = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
   # backup wallpapers to secondary drive
   wallpapers-backup = pkgs.writeShellApplication {
     name = "wallpapers-backup";
@@ -55,7 +55,7 @@ let
       cd ${wallpapers_proj_rs}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      cargo run "$@"
+      cargo run --bin wallpaper-pipeline "$@"
       cd - > /dev/null
       wallpapers-backup
     '';

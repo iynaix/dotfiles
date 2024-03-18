@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   user,
   ...
 }:
@@ -9,12 +8,6 @@ let
   homeDir = config.hm.home.homeDirectory;
 in
 lib.mkIf config.custom-nixos.sops.enable {
-  # sops is always enabled because github token
-  environment.systemPackages = with pkgs; [
-    age
-    sops
-  ];
-
   sops = {
     # to edit secrets file, run "sops hosts/secrets.json"
     defaultSopsFile = ../hosts/secrets.json;

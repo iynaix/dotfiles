@@ -18,7 +18,10 @@ inputs.devenv.lib.mkShell {
       { pkgs, ... }:
       {
         # devenv configuration
-        packages = with pkgs; [ nixfmt-rfc-style ];
+        packages = with pkgs; [
+          age
+          sops
+        ];
 
         languages.nix.enable = true;
         languages.rust.enable = true;

@@ -37,7 +37,7 @@ in
       lib.mapAttrs (_: value: "cd ${value}") config.custom.shortcuts;
 
     packages = pkgs.custom.lib.createShellScriptBins {
-      fdnix = ''fd "$@" /nix/store'';
+      fdnix = ''${lib.getExe pkgs.fd} "$@" /nix/store'';
       md = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
       # improved which for nix
       where = "readlink -f $(which $1)";

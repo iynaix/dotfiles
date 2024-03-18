@@ -9,6 +9,7 @@ use dotfiles_utils::{
 use execute::Execute;
 use std::path::Path;
 
+/// reads the wallpaper info from wallpapers.csv
 fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
     let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
     if !wallpapers_csv.exists() {
@@ -56,6 +57,15 @@ fn main() {
     } else {
         random_wallpaper
     };
+
+    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
+    std::fs::write(
+        dirs::runtime_dir()
+            .expect("could not get XDG_RUNTIME_DIR")
+            .join("current_wallpaper"),
+        &wallpaper,
+    )
+    .expect("failed to write $XDG_RUNTIME_DIR/current_wallpaper");
 
     let wallpaper_info = get_wallpaper_info(&wallpaper);
 

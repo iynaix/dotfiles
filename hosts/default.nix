@@ -25,13 +25,6 @@ let
           ;
         isLaptop = host == "xps" || host == "framework";
       };
-      homeManagerImports = [
-        inputs.nix-index-database.hmModules.nix-index
-        inputs.nixvim.homeManagerModules.nixvim
-        ./${host}/home.nix # host specific home-manager configuration
-        ../home-manager
-        ../modules/home-manager
-      ];
     in
     if isNixOS then
       lib.nixosSystem {
@@ -53,7 +46,13 @@ let
               inherit extraSpecialArgs;
 
               users.${user} = {
-                imports = homeManagerImports;
+                imports = [
+                  inputs.nix-index-database.hmModules.nix-index
+                  inputs.nixvim.homeManagerModules.nixvim
+                  ./${host}/home.nix # host specific home-manager configuration
+                  ../home-manager
+                  ../modules/home-manager
+                ];
               };
             };
           }
@@ -71,7 +70,16 @@ let
       inputs.home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
 
-        modules = homeManagerImports ++ [ ../overlays ];
+        modules =
+
+          [
+            inputs.nix-index-database.hmModules.nix-index
+            inputs.nixvim.homeManagerModules.nixvim
+            ./${host}/home.nix # host specific home-manager configuration
+            ../home-manager
+            ../modules/home-manager
+            ../overlays
+          ];
       };
   all_hosts = lib.listToAttrs (
     map

@@ -139,15 +139,6 @@ fn main() {
         None => wallpaper::random(),
     };
 
-    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
-    std::fs::write(
-        dirs::runtime_dir()
-            .expect("could not get XDG_RUNTIME_DIR")
-            .join("current_wallpaper"),
-        &wall,
-    )
-    .expect("failed to write $XDG_RUNTIME_DIR/current_wallpaper");
-
     let transition_args = get_random_transition();
 
     // get the WallInfo for the image if it exists

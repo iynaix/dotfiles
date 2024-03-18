@@ -221,7 +221,7 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                         let wall_re = regex::Regex::new(r"path = (.*)").expect("invalid regex");
                         // only replaces the first occurrence
                         let new_contents =
-                            wall_re.replace(&contents, &format!("path = {}", output_path));
+                            wall_re.replace(&contents, &format!("path = {output_path}"));
 
                         std::fs::write(&hyprlock_conf, new_contents.as_ref())
                             .expect("Could not write hyprlock.conf");

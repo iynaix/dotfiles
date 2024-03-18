@@ -47,6 +47,7 @@ in
         "$mod, v, exec, $term nvim"
         "$mod_SHIFT, v, exec, code"
         "$mod, period, exec, code ${config.home.homeDirectory}/projects/dotfiles"
+        "$mod_SHIFT, period, exec, code ${config.home.homeDirectory}/projects/nixpkgs"
 
         # exit hyprland
         "$mod_ALT, F4, exit,"

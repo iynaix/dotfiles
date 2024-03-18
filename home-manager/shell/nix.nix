@@ -38,6 +38,7 @@ let
     text =
       let
         subcmd = if isNixOS then "os" else "home";
+        hostFlag = if isNixOS then "hostname" else "configuration";
       in
       ''
         cd ${dots}
@@ -49,12 +50,12 @@ let
         fi
 
         # force switch to always use current host
-        if [[ "$*" == *"--hostname"* ]]; then
-            # Replace the word after "--hostname" with host using parameter expansion
-            cleaned_args=("''${@/--hostname [^[:space:]]*/--hostname ${host}}")
+        if [[ "$*" == *"--${hostFlag}"* ]]; then
+            # Replace the word after "--${hostFlag}" with host using parameter expansion
+            cleaned_args=("''${@/--${hostFlag} [^[:space:]]*/--${hostFlag} ${host}}")
             nh ${subcmd} switch "''${cleaned_args[@]}" ${dots} -- --option eval-cache false
         else
-            nh ${subcmd} switch "$@" --hostname ${host} ${dots} -- --option eval-cache false
+            nh ${subcmd} switch "$@" --${hostFlag} ${host} ${dots} -- --option eval-cache false
         fi
 
         ${lib.optionalString isNixOS ''
@@ -180,11 +181,36 @@ let
       fi
     '';
   };
+  npath = pkgs.writeShellApplication {
+    name = "npath";
+    text = ''
+      if [ "$#" -eq 0 ]; then
+          echo "no package specified."
+          exit 1
+      fi
+
+      nix eval --raw "nixpkgs#$1.outPath"
+    '';
+  };
   # what depends on the given package in the current nixos install?
   nix-depends = pkgs.writeShellApplication {
     name = "nix-depends";
+    runtimeInputs = [ npath ];
     text = ''
-      nix why-depends "/run/current-system" "$(nix eval --raw "nixpkgs#$1.outPath")"
+      if [ "$#" -eq 0 ]; then
+          echo "package not found."
+          exit 1
+      fi
+
+      parent="/run/current-system"
+      child="$(npath "$1")"
+
+      if [ "$#" -eq 2 ]; then
+        parent="$(npath "$1")"
+        child="$(npath "$2")"
+      fi
+
+      nix why-depends "$parent" "$child"
     '';
   };
   json2nix = pkgs.writeShellApplication {
@@ -231,6 +257,7 @@ in
         nrepl
         nb
         nr
+        npath
         nix-depends
         json2nix
         yaml2nix

@@ -43,7 +43,7 @@
       ]
       ++ (lib.optional config.custom.helix.enable helix)
       # home-manager executable only on non-nixos
-      ++ (lib.optional (!isNixOS) home-manager)
+      ++ (lib.optional isNixOS home-manager)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
   };
@@ -51,7 +51,6 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # stop bothering me
   xdg = {
     enable = true;
     userDirs.enable = true;
