@@ -218,9 +218,12 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                     if hyprlock_conf.exists() {
                         let contents = std::fs::read_to_string(&hyprlock_conf)
                             .expect("Could not read hyprlock.conf");
-                        let new_contents = contents.replace(wallpaper, output_path);
+                        let wall_re = regex::Regex::new(r"path = (.*)").expect("invalid regex");
+                        // only replaces the first occurrence
+                        let new_contents =
+                            wall_re.replace(&contents, &format!("path = {}", output_path));
 
-                        std::fs::write(&hyprlock_conf, new_contents)
+                        std::fs::write(&hyprlock_conf, new_contents.as_ref())
                             .expect("Could not write hyprlock.conf");
                     }
                 }
