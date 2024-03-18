@@ -42,7 +42,7 @@ in
         prev.hypridle.overrideAttrs (_: sources.hypridle);
 
       hyprlock =
-        assert (lib.assertMsg (prev.hyprlock.version == "0.1.0") "hyprlock: source overlay still needed?");
+        assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: source overlay still needed?");
         prev.hyprlock.overrideAttrs (_: sources.hyprlock);
 
       # add default font to silence null font errors

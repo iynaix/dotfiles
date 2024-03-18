@@ -35,7 +35,6 @@ lib.mkMerge [
         cache = [
           ".local/share/.cargo"
           ".cache/pip"
-          ".cache/torch" # pytorch models
           ".cache/yarn"
         ];
       };

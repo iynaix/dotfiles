@@ -67,3 +67,14 @@ pub struct RofiMpvArgs {
     #[command(subcommand)]
     pub media: RofiMpvMedia,
 }
+
+// ------------------ SWWW CROP ------------------
+#[derive(Parser, Debug)]
+#[command(
+    name = "swww-crop",
+    about = "Applies image crops for wallpapers on each monitor"
+)]
+pub struct SwwwCropArgs {
+    // optional image to use, uses a random one otherwise
+    pub image: Option<PathBuf>,
+}

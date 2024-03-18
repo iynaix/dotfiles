@@ -49,6 +49,10 @@ impl Monitor {
         }
     }
 
+    pub fn dimension_str(&self) -> String {
+        format!("{}x{}", self.width, self.height)
+    }
+
     pub fn monitors() -> Vec<Self> {
         hypr_json::<Vec<Self>>("monitors")
             .iter()

@@ -11,17 +11,6 @@ let
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-utils";
   wallpapers_proj_rs = "/persist${config.home.homeDirectory}/projects/rs-wallpaper-utils";
-  # crop wallpaper before displaying with swww
-  swww-crop = pkgs.writeShellApplication {
-    name = "swww-crop";
-    runtimeInputs = with pkgs; [
-      swww
-      imagemagick
-    ];
-    text = ''
-      convert "$1" -crop "$2" -resize "$3" - | swww img --outputs "$4" "''${@:5}" -;
-    '';
-  };
   # backup wallpapers to secondary drive
   wallpapers-backup = pkgs.writeShellApplication {
     name = "wallpapers-backup";
@@ -66,7 +55,7 @@ let
       cd ${wallpapers_proj_rs}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      cargon run "$@"
+      cargo run "$@"
       cd - > /dev/null
       wallpapers-backup
     '';
@@ -130,15 +119,10 @@ lib.mkMerge [
       };
     };
   })
-  (lib.mkIf isNixOS {
-    home.packages = [
-      pkgs.swww
-      swww-crop
-    ];
-  })
+  (lib.mkIf isNixOS { home.packages = [ pkgs.swww ]; })
   {
     home.shellAliases = {
-      current-wallpaper = "command cat ${config.xdg.cacheHome}/current_wallpaper";
+      current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
     };
   }
 ]

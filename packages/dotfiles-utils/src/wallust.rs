@@ -166,7 +166,7 @@ pub fn apply_colors() {
     // reload_gtk()
 }
 
-/// runs wallust with options from wallpapers.json
+/// runs wallust with options from wallpapers.csv
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
     let mut wallust = execute::command_args!("wallust", "run");
 

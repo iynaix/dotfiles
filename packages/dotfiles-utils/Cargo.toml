@@ -41,6 +41,10 @@ path = "src/cli/rofi_mpv.rs"
 name = "rofi-wallust-theme"
 path = "src/cli/rofi_wallust_theme.rs"
 
+[[bin]]
+name = "swww-crop"
+path = "src/cli/swww_crop.rs"
+
 [dependencies]
 clap = { version = "4.4.4", features = ["derive", "string"] }
 csv = "1.3.0"

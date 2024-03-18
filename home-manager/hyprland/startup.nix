@@ -62,9 +62,7 @@ in
 
       # FIXME: weird race condition with swww init, need to sleep for a second
       # https://github.com/Horus645/swww/issues/144
-      "sleep 1; swww init && hypr-wallpaper"
-
-      "sleep 5 && launch-waybar"
+      "sleep 1; swww init && hypr-wallpaper && launch-waybar"
 
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"

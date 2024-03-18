@@ -34,13 +34,11 @@ in
 
   gtk =
     let
-
       extraConfig = {
         gtk-application-prefer-dark-theme = 1;
         gtk-error-bell = 0;
       };
     in
-
     {
       enable = true;
       theme =
