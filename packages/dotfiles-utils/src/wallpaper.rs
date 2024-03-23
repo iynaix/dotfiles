@@ -2,7 +2,10 @@ use rand::seq::SliceRandom;
 use serde::Deserialize;
 
 use crate::{full_path, nixinfo::NixInfo};
-use std::{fs, path::PathBuf};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
@@ -26,22 +29,16 @@ pub fn current() -> Option<String> {
     )
 }
 
-/// returns all files in the wallpaper directory, exlcluding the current wallpaper
-pub fn all() -> Vec<String> {
-    let curr = self::current().unwrap_or_default();
-
-    self::dir()
-        .read_dir()
-        .expect("could not read wallpaper dir")
+fn filter_images(dir: &Path) -> impl Iterator<Item = String> {
+    dir.read_dir()
+        .unwrap_or_else(|_| panic!("could not read {:?}", &dir))
         .flatten()
         .filter_map(|entry| {
             let path = entry.path();
             if path.is_file() {
                 if let Some(ext) = path.extension() {
                     match ext.to_str() {
-                        Some("jpg" | "jpeg" | "png") if curr != *path.to_str()? => {
-                            return Some(path.to_str()?.to_string())
-                        }
+                        Some("jpg" | "jpeg" | "png") => return Some(path.to_str()?.to_string()),
                         _ => return None,
                     }
                 }
@@ -49,6 +46,15 @@ pub fn all() -> Vec<String> {
 
             None
         })
+}
+
+/// returns all files in the wallpaper directory, exlcluding the current wallpaper
+pub fn all() -> Vec<String> {
+    let curr = self::current().unwrap_or_default();
+
+    filter_images(&self::dir())
+        // do not include the current wallpaper
+        .filter(|path| curr != *path)
         .collect()
 }
 
@@ -62,6 +68,15 @@ pub fn random() -> String {
     } else {
         NixInfo::before().fallback
     }
+}
+
+pub fn random_from_dir(dir: &Path) -> String {
+    filter_images(dir)
+        .collect::<Vec<_>>()
+        .choose(&mut rand::thread_rng())
+        // use fallback image if not available
+        .unwrap_or(&NixInfo::before().fallback)
+        .to_string()
 }
 
 #[derive(Debug, Deserialize, Clone)]

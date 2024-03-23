@@ -47,7 +47,7 @@ pub struct HyprWallpaperArgs {
     pub reload: bool,
 
     // optional image to use, uses a random one otherwise
-    pub image: Option<PathBuf>,
+    pub image_or_dir: Option<PathBuf>,
 }
 
 // ------------------ ROFI MPV ------------------

@@ -37,12 +37,18 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
 fn main() {
     let args = HyprWallpaperArgs::parse();
 
-    let random_wallpaper = match args.image {
-        Some(image) => std::fs::canonicalize(image)
-            .expect("invalid image path")
-            .to_str()
-            .expect("could not convert image path to str")
-            .to_string(),
+    let random_wallpaper = match args.image_or_dir {
+        Some(image_or_dir) => {
+            if image_or_dir.is_dir() {
+                wallpaper::random_from_dir(&image_or_dir)
+            } else {
+                std::fs::canonicalize(image_or_dir)
+                    .expect("invalid path")
+                    .to_str()
+                    .expect("could not convert path to str")
+                    .to_string()
+            }
+        }
         None => {
             if full_path("~/.cache/wallust/nix.json").exists() {
                 wallpaper::random()
