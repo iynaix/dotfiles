@@ -10,4 +10,7 @@ _: {
 
   # touchpad support
   services.xserver.libinput.enable = true;
+
+  # disable thumbprint reader
+  services.fprintd.enable = false;
 }

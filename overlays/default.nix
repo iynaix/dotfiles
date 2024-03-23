@@ -42,8 +42,10 @@ in
         prev.hypridle.overrideAttrs (_: sources.hypridle);
 
       hyprlock =
-        assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: source overlay still needed?");
-        prev.hyprlock.overrideAttrs (_: sources.hyprlock);
+        assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: cmake patch still needed?");
+        prev.hyprlock.overrideAttrs (
+          o: sources.hyprlock // { patches = (o.patches or [ ]) ++ [ ./hyprlock-cmake.patch ]; }
+        );
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (o: {
