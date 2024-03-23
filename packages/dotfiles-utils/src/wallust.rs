@@ -72,7 +72,7 @@ pub fn apply_colors() {
             colors: HashMap<String, String>,
         }
 
-        let cs_path = full_path("~/.config/wallust/catppuccin-mocha.json");
+        let cs_path = full_path("~/.config/wallust/themes/catppuccin-mocha.json");
         let cs: Colorscheme = json::load(cs_path);
 
         (1..16)
