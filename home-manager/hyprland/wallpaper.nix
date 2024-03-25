@@ -9,8 +9,8 @@
 }:
 let
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
-  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-utils";
-  wallpapers_proj_rs = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
+  walls_in_dir = "${config.xdg.userDirs.pictures}/wallpapers_in";
+  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
   # backup wallpapers to secondary drive
   wallpapers-backup = pkgs.writeShellApplication {
     name = "wallpapers-backup";
@@ -48,11 +48,11 @@ let
       '';
   };
   # process wallpapers with upscaling and vertical crop
-  wallpapers-process = pkgs.writeShellApplication {
-    name = "wallpapers-process";
+  wallpapers-pipeline = pkgs.writeShellApplication {
+    name = "wallpapers-pipeline";
     runtimeInputs = [ wallpapers-backup ];
     text = ''
-      cd ${wallpapers_proj_rs}
+      cd ${wallpapers_proj}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
       cargo run --bin wallpaper-pipeline "$@"
@@ -61,13 +61,13 @@ let
     '';
   };
   # choose vertical crop for wallpapper
-  wallpapers-multiple = pkgs.writeShellApplication {
+  wallpapers-ui = pkgs.writeShellApplication {
     name = "wallpapers-multiple";
     text = ''
       cd ${wallpapers_proj}
       # activate direnv
       direnv allow && eval "$(direnv export bash)"
-      python choose.py "$@"
+      cargo run --bin wallpaper-ui "$@"
       cd - > /dev/null
     '';
   };
@@ -89,15 +89,15 @@ lib.mkMerge [
   (lib.mkIf (host == "desktop") {
     home.packages = [
       wallpapers-backup
-      wallpapers-multiple
+      wallpapers-ui
       wallpapers-remote
-      wallpapers-process
+      wallpapers-pipeline
     ];
 
-    gtk.gtk3.bookmarks = [ "file://${wallpapers_proj}/in Walls In" ];
+    gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
 
     programs.pqiv.extraConfig = lib.mkAfter ''
-      m { command(mv $1 ${wallpapers_proj}/in) }
+      m { command(mv $1 ${walls_in_dir}) }
     '';
   })
 
@@ -110,6 +110,8 @@ lib.mkMerge [
 
     home.shellAliases = {
       wallrg = "wallpapers-search -t 20";
+      # edit the current wallpaper
+      wallpaper-edit = "${lib.getExe wallpapers-ui} $XDG_RUNTIME_DIR/current_wallpaper";
     };
 
     custom.persist = {

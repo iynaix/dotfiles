@@ -33,6 +33,7 @@ lib.mkMerge [
       home = {
         directories = [ ".local/share/direnv" ];
         cache = [
+          ".cargo"
           ".local/share/.cargo"
           ".cache/pip"
           ".cache/yarn"
