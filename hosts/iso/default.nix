@@ -1,7 +1,7 @@
 {
   inputs,
   lib,
-  system,
+  system ? "x86_64-linux",
   ...
 }:
 let

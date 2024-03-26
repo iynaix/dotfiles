@@ -60,20 +60,25 @@
   outputs =
     inputs@{ nixpkgs, self, ... }:
     let
+      system = "x86_64-linux";
       forAllSystems =
-        function:
-        nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system: function nixpkgs.legacyPackages.${system});
-      commonInherits = {
+        function: nixpkgs.lib.genAttrs [ system ] (system: function nixpkgs.legacyPackages.${system});
+      commonArgs = {
         inherit (nixpkgs) lib;
         inherit self inputs nixpkgs;
-        user = "iynaix";
-        system = "x86_64-linux";
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        specialArgs = {
+          inherit self inputs;
+        };
       };
     in
     {
-      nixosConfigurations = (import ./hosts commonInherits) // (import ./hosts/iso commonInherits);
+      nixosConfigurations = (import ./hosts/nixos.nix commonArgs) // (import ./hosts/iso commonArgs);
 
-      homeConfigurations = import ./hosts (commonInherits // { isNixOS = false; });
+      homeConfigurations = import ./hosts/hm.nix commonArgs;
 
       # devenv for working on dotfiles, provides rust environment
       devShells = forAllSystems (pkgs: {
@@ -85,7 +90,7 @@
 
       packages = forAllSystems (pkgs: (import ./packages { inherit pkgs inputs; }));
 
-      # templates for devenv
+      # templates for devenvs
       templates = import ./templates;
     };
 }
