@@ -1,48 +1,40 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
     fenix.url = "github:nix-community/fenix";
   };
 
   outputs =
-    {
-      nixpkgs,
-      devenv,
-      systems,
-      ...
-    }@inputs:
-    let
-      forEachSystem = nixpkgs.lib.genAttrs (import systems);
-    in
-    {
-      devShells = forEachSystem (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
+    inputs@{ flake-parts, nixpkgs, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.devenv.flakeModule ];
+      systems = nixpkgs.lib.systems.flakeExposed;
+
+      perSystem =
         {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
-            modules = [
-              {
-                # https://devenv.sh/reference/options/
-                dotenv.disableHint = true;
+          config,
+          self',
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          # Per-system attributes can be defined here. The self' and inputs'
+          # module parameters provide easy access to attributes of the same
+          # system.
+          devenv.shells.default = {
+            # https://devenv.sh/reference/options/
+            dotenv.disableHint = true;
 
-                # setup openssl for reqwest (if used)
-                env = {
-                  PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-                };
+            packages = with pkgs; [ ];
 
-                languages.rust = {
-                  enable = true;
-                  channel = "stable";
-                };
-              }
-            ];
+            languages.rust = {
+              enable = true;
+              channel = "stable";
+            };
           };
-        }
-      );
+        };
     };
 }

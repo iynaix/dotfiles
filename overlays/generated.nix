@@ -15,25 +15,25 @@
   };
   hyprlock = {
     pname = "hyprlock";
-    version = "2448774de3532e8fdc65b329831ff37208e20f38";
+    version = "87fce7923fef1143b3a473abb2fc873e67664475";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "2448774de3532e8fdc65b329831ff37208e20f38";
+      rev = "87fce7923fef1143b3a473abb2fc873e67664475";
       fetchSubmodules = false;
-      sha256 = "sha256-AF5i25DEYK7bLevSivoNwyLlQ55sLgTIBJaiS8WWEvU=";
+      sha256 = "sha256-d0Shu3dqdJj9QKR3dnE4Mh8t66hUlfLGZl+9A9JsoI8=";
     };
-    date = "2024-03-23";
+    date = "2024-03-24";
   };
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.40.1";
+    version = "v2.41.0";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.40.1";
+      rev = "v2.41.0";
       fetchSubmodules = false;
-      sha256 = "sha256-ZrnD3KX8pn14sKB3FzhNhxHChAKA5pHkWdn7576XjwE=";
+      sha256 = "sha256-XoRoKvlfBtlKyur1AZ+VjYc5URyX2/fof05h6Vs+vok=";
     };
   };
   swww = {

@@ -30,7 +30,10 @@ inputs.devenv.lib.mkShell {
           hooks = {
             deadnix = {
               enable = true;
-              excludes = [ "generated.nix" ];
+              excludes = [
+                "generated.nix"
+                "templates/.*/flake.nix"
+              ];
             };
             nixfmt = {
               enable = true;

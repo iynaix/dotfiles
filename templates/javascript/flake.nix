@@ -1,41 +1,36 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
   };
 
   outputs =
-    {
-      nixpkgs,
-      devenv,
-      systems,
-      ...
-    }@inputs:
-    let
-      forEachSystem = nixpkgs.lib.genAttrs (import systems);
-    in
-    {
-      devShells = forEachSystem (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
-            modules = [
-              {
-                # https://devenv.sh/reference/options/
-                packages = [ ];
+    inputs@{ flake-parts, nixpkgs, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.devenv.flakeModule ];
+      systems = nixpkgs.lib.systems.flakeExposed;
 
-                dotenv.disableHint = true;
-                languages.javascript.enable = true;
-                languages.typescript.enable = true;
-              }
-            ];
+      perSystem =
+        {
+          config,
+          self',
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          # Per-system attributes can be defined here. The self' and inputs'
+          # module parameters provide easy access to attributes of the same
+          # system.
+          devenv.shells.default = {
+            # https://devenv.sh/reference/options/
+            packages = [ ];
+
+            dotenv.disableHint = true;
+            languages.javascript.enable = true;
+            languages.typescript.enable = true;
           };
-        }
-      );
+        };
     };
 }
