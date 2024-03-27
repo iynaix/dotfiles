@@ -19,7 +19,7 @@ lib.mkIf config.custom-nixos.hyprland.enable {
     enable = true;
     package =
       assert (
-        lib.assertMsg (pkgs.hyprland.version == "0.36.0") "hyprland: updated, sync with hyprnstack?"
+        lib.assertMsg (pkgs.hyprland.version == "0.37.1") "hyprland: updated, sync with hyprnstack?"
       );
       pkgs.hyprland;
   };
