@@ -111,7 +111,7 @@ lib.mkMerge [
     home.shellAliases = {
       wallrg = "wallpapers-search -t 50";
       # edit the current wallpaper
-      wallpaper-edit = "${lib.getExe wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
+      wallpapers-edit = "${lib.getExe wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
     };
 
     custom.persist = {

@@ -1,6 +1,6 @@
-[hypridle]
-src.git = "https://github.com/hyprwm/hypridle"
-fetch.github = "hyprwm/hypridle"
+[hyprcursor]
+src.git = "https://github.com/hyprwm/hyprcursor"
+fetch.github = "hyprwm/hyprcursor"
 
 [hyprlock]
 src.git = "https://github.com/hyprwm/hyprlock"

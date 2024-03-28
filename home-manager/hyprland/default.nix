@@ -25,7 +25,6 @@ in
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home = {
       sessionVariables = {
-        XCURSOR_SIZE = "${toString config.home.pointerCursor.size}";
         HYPR_LOG = "/tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
       };
 
@@ -44,6 +43,11 @@ in
       monitor =
         (lib.forEach displays ({ name, hyprland, ... }: "${name}, ${hyprland}"))
         ++ (lib.optional (host != "desktop") ",preferred,auto,auto");
+
+      env = [
+        "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
+        "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.size}"
+      ];
 
       input = {
         kb_layout = "us";
@@ -131,6 +135,7 @@ in
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
         mouse_move_enables_dpms = true;
+        # enable_hyprcursor = false;
         # animate_manual_resizes = true;
         # animate_mouse_windowdragging = true;
         # key_press_enables_dpms = true;

@@ -68,6 +68,9 @@ in
       # fix Authorization required, but no authorization protocol specified error
       # "${lib.getExe pkgs.xorg.xhost} si:localuser:root"
 
+      # stop fucking with my cursors
+      "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
+
       # start the polkit agent
       "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"
     ];

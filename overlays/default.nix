@@ -37,9 +37,11 @@ in
       # easier access to ghostty
       ghostty = inputs.ghostty.packages.${pkgs.system}.default;
 
-      hypridle =
-        assert (lib.assertMsg (prev.hypridle.version == "0.1.1") "hypridle: source overlay still needed?");
-        prev.hypridle.overrideAttrs (_: sources.hypridle);
+      hyprcursor =
+        assert (
+          lib.assertMsg (prev.hyprcursor.version == "0.1.5") "hyprcursor: source overlay still needed?"
+        );
+        prev.hyprcursor.overrideAttrs (_: sources.hyprcursor);
 
       hyprlock =
         assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: cmake patch still needed?");
