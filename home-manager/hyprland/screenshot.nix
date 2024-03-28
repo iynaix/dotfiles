@@ -8,14 +8,14 @@
 let
   screenshotDir = "${config.xdg.userDirs.pictures}/Screenshots";
   iso8601 = "%Y-%m-%dT%H:%M:%S%z";
-  # screenshot with rofi options to preselect
+  # screenshot with  options to preselect
   hypr-screenshot = pkgs.writeShellApplication {
     name = "hypr-screenshot";
     runtimeInputs = with pkgs; [
       grimblast
       libnotify
       swappy
-      rofi
+      rofi-wayland
     ];
     text = lib.replaceStrings [ "@outputPath@" ] [ "${screenshotDir}/$(date +${iso8601}).png" ] (
       lib.readFile ./screenshot.sh

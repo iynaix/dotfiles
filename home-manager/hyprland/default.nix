@@ -106,6 +106,7 @@ in
           "windows, 1, 5, overshot, slide"
           "windowsOut, 1, 4, smoothOut, slide"
           "windowsMove, 1, 4, smoothIn, slide"
+          "layers, 1, 5, default, popin 80%"
           "border, 1, 5, default"
           # 1 loop every 5 minutes
           "borderangle, 1, ${toString (10 * 60 * 5)}, default, loop"

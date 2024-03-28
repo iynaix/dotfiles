@@ -1,18 +1,20 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
 }:
 let
   cfg = config.custom.ghostty;
+  ghostty = inputs.ghostty.packages.${pkgs.system}.default;
   inherit (config.custom) terminal;
 in
 lib.mkIf cfg.enable {
   home = {
-    packages = [ pkgs.ghostty ];
+    packages = [ ];
     sessionVariables = {
-      GHOSTTY_RESOURCES_DIR = "${pkgs.ghostty}/share";
+      GHOSTTY_RESOURCES_DIR = "${ghostty}/share";
     };
   };
 
@@ -40,5 +42,5 @@ lib.mkIf cfg.enable {
     window-padding-y = terminal.padding;
   };
 
-  wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${lib.getExe pkgs.ghostty}" ];
+  wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${lib.getExe ghostty}" ];
 }

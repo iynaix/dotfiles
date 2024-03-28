@@ -30,7 +30,17 @@ let
   # replace the imports with preset theme / wallust
   fixupRofiThemesRasi = rasiPath: additionalStyles: ''
     ${themeStyles}
-    ${lib.replaceStrings [ "@import" ] [ "// @import" ] (lib.readFile rasiPath)}
+    ${lib.replaceStrings
+      [
+        "@import"
+        ""
+      ]
+      [
+        "// @import"
+        ""
+      ]
+      (lib.readFile rasiPath)
+    }
     window {
       width: ${toString cfg.width}px;
     }
@@ -40,7 +50,7 @@ let
   rofi-power-menu = pkgs.writeShellApplication {
     name = "rofi-power-menu";
     runtimeInputs = with pkgs; [
-      rofi
+      rofi-wayland
       custom.rofi-themes
     ];
     text = lib.replaceStrings [ "@theme@" ] [

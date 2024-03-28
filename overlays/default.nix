@@ -34,9 +34,6 @@ in
         patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
       });
 
-      # easier access to ghostty
-      ghostty = inputs.ghostty.packages.${pkgs.system}.default;
-
       hyprcursor =
         assert (
           lib.assertMsg (prev.hyprcursor.version == "0.1.5") "hyprcursor: source overlay still needed?"

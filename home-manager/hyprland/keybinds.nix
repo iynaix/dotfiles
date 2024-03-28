@@ -6,7 +6,6 @@
 }:
 let
   inherit (config.custom) displays;
-  rofi = lib.getExe pkgs.rofi;
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in
@@ -38,7 +37,7 @@ in
       in
       [
         "$mod, Return, exec, $term"
-        "$mod_SHIFT, Return, exec, ${rofi} -show drun"
+        "$mod_SHIFT, Return, exec, rofi -show drun"
         "$mod, BackSpace, killactive,"
         "$mod, e, exec, nemo ${config.xdg.userDirs.download}"
         "$mod_SHIFT, e, exec, $term yazi ${config.xdg.userDirs.download}"
@@ -54,7 +53,7 @@ in
 
         # without the rounding, the blur shows up around the corners
         "CTRL_ALT, Delete, exec, rofi-power-menu"
-        "$mod_CTRL, v, exec, cliphist list | ${rofi} -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
+        "$mod_CTRL, v, exec, cliphist list | rofi -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
 
         # reset monitors
         "CTRL_SHIFT, Escape, exec, hypr-monitors"
