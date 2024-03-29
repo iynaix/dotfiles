@@ -48,6 +48,12 @@ in
     };
 
     shell = {
+      functions = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        description = "Shell functions created as bash scripts to be cross shell.";
+      };
+
       profileExtra = lib.mkOption {
         type = lib.types.lines;
         default = "";

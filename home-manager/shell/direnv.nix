@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   user,
   ...
 }:
@@ -23,10 +22,10 @@ lib.mkMerge [
     home = {
       # silence direnv
       sessionVariables.DIRENV_LOG_FORMAT = "";
+    };
 
-      packages = pkgs.custom.lib.createShellScriptBins {
-        mkdevenv = "nix flake init --template github:iynaix/dotfiles#$1";
-      };
+    custom.shell.functions = {
+      mkdevenv = "nix flake init --template github:iynaix/dotfiles#$1";
     };
 
     custom.persist = {

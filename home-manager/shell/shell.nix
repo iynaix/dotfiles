@@ -36,28 +36,31 @@ in
       # add shortcuts for quick cd in shell
       lib.mapAttrs (_: value: "cd ${value}") config.custom.shortcuts;
 
-    packages = pkgs.custom.lib.createShellScriptBins {
-      fdnix = ''${lib.getExe pkgs.fd} "$@" /nix/store'';
-      md = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
-      # improved which for nix
-      where = "readlink -f $(which $1)";
-      ywhere = "yazi $(dirname $(dirname $(readlink -f $(which $1))))";
-      # server command, runs a local server
-      server = "${lib.getExe pkgs.python3} -m http.server \${1:-8000}";
-      renamer = ''
-        cd ${proj_dir}/personal-graphql
-        # activate direnv
-        direnv allow && eval "$(direnv export bash)"
-        cargo run --release --bin renamer
-        cd - > /dev/null
-      '';
-      openproj = ''
-        cd ${proj_dir}
-        if [[ $# -eq 1 ]]; then
-          cd "$1";
-        fi
-      '';
-    };
+    packages = lib.mapAttrsToList (name: content: pkgs.writeShellScriptBin name content) (
+      {
+        fdnix = ''${lib.getExe pkgs.fd} "$@" /nix/store'';
+        md = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
+        # improved which for nix
+        where = "readlink -f $(which $1)";
+        ywhere = "yazi $(dirname $(dirname $(readlink -f $(which $1))))";
+        # server command, runs a local server
+        server = "${lib.getExe pkgs.python3} -m http.server \${1:-8000}";
+        renamer = ''
+          cd ${proj_dir}/personal-graphql
+          # activate direnv
+          direnv allow && eval "$(direnv export bash)"
+          cargo run --release --bin renamer
+          cd - > /dev/null
+        '';
+        openproj = ''
+          cd ${proj_dir}
+          if [[ $# -eq 1 ]]; then
+            cd "$1";
+          fi
+        '';
+      }
+      // config.custom.shell.functions
+    );
   };
 
   # openproj cannot be implemented as script as it needs to change the directory of the shell

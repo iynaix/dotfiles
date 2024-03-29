@@ -1,4 +1,4 @@
-{ lib, pkgs }:
+{ lib, ... }:
 {
   # saner api for iterating through workspaces in a flat list
   # takes a function that accepts the following attrset {workspace, key, monitor}
@@ -25,6 +25,4 @@
       mkValueString = v: if lib.isString v then "\"${v}\"" else lib.generators.mkValueStringDefault { } v;
     };
   };
-
-  createShellScriptBins = lib.mapAttrsToList (name: content: pkgs.writeShellScriptBin name content);
 }
