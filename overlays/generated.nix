@@ -3,50 +3,50 @@
 {
   hyprcursor = {
     pname = "hyprcursor";
-    version = "d3876f34779cc03ee51e4aafc0d00a4f187c7544";
+    version = "752cc4477918b3f0ad3987a63a78efad767cdb57";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprcursor";
-      rev = "d3876f34779cc03ee51e4aafc0d00a4f187c7544";
+      rev = "752cc4477918b3f0ad3987a63a78efad767cdb57";
       fetchSubmodules = false;
-      sha256 = "sha256-sArxGyUBiCA1in+q6t0QqT+ZJiZ1PyBp7cNPKLmREM0=";
+      sha256 = "sha256-xGwCpzMGjqABlJCBSOGxJaDq+M92mRRzBlEqN/8pvCY=";
     };
-    date = "2024-03-26";
+    date = "2024-04-02";
   };
   hyprlock = {
     pname = "hyprlock";
-    version = "7f8c9b6addce5174af78acaf1eb1d726fc4133b5";
+    version = "071ebcefb9070e4397d75103f5f535b58dacf250";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "7f8c9b6addce5174af78acaf1eb1d726fc4133b5";
+      rev = "071ebcefb9070e4397d75103f5f535b58dacf250";
       fetchSubmodules = false;
-      sha256 = "sha256-JwHbbmAzX1Kfq1XAs06lKbk2TZL7mH/yLczG4BaiuTs=";
+      sha256 = "sha256-y1Om75muuJcEoLd/FOYGIZ5/ja/Mc4iBX/9S7vWF0C8=";
     };
-    date = "2024-03-28";
+    date = "2024-03-31";
   };
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.41.1";
+    version = "v2.42.0";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.41.1";
+      rev = "v2.42.0";
       fetchSubmodules = false;
-      sha256 = "sha256-Mi0/yoslvH6MyL4r23DHYNQac3aChsFCMZOIZIM1+dg=";
+      sha256 = "sha256-OxAyB+tMszQktGvxlGL/kc+Wt0iInFYY0qHNjK6EnSg=";
     };
   };
   swww = {
     pname = "swww";
-    version = "cb8795de15cd55696f57bee514d7b6679c2b2a1a";
+    version = "7d02c39532af7a4c3efef88dc8f706acbe2a1687";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "cb8795de15cd55696f57bee514d7b6679c2b2a1a";
+      rev = "7d02c39532af7a4c3efef88dc8f706acbe2a1687";
       fetchSubmodules = false;
-      sha256 = "sha256-MtZH6kBcOa2YjdjKnKIjIryp+ex2FDyeTQE2HFCmKps=";
+      sha256 = "sha256-eKNEhTBm+lhOWTiT0fQauMPhi3To0bD6mzFNJdWVZ8E=";
     };
-    date = "2024-03-27";
+    date = "2024-04-02";
   };
   wallust = {
     pname = "wallust";
