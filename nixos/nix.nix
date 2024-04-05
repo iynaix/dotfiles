@@ -9,29 +9,6 @@
 }:
 let
   dots = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
-  # set the current configuration as default to boot
-  ndefault = pkgs.writeShellScriptBin "ndefault" ''
-    sudo /run/current-system/bin/switch-to-configuration boot
-  '';
-  # build and push config for laptop
-  nsw-remote = pkgs.writeShellApplication {
-    name = "nsw-remote";
-    text = ''
-      cd ${dots}
-      sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
-      cd - > /dev/null
-    '';
-  };
-  # build iso images
-  nbuild-iso = pkgs.writeShellApplication {
-    name = "nbuild-iso";
-    runtimeInputs = [ pkgs.nixos-generators ];
-    text = ''
-      cd ${dots}
-      nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-      cd - > /dev/null
-    '';
-  };
 in
 # create an fhs environment to run downloaded binaries
 # https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
@@ -68,21 +45,44 @@ in
   environment = {
     systemPackages =
       # for nixlang / nixpkgs
-      with pkgs;
-      [
+      with pkgs; [
         nil
         nix-init
         nix-update
         nixfmt-rfc-style
         nixpkgs-fmt
         nixpkgs-review
-      ]
-      ++ [
-        ndefault
-        nbuild-iso
-      ]
-      ++ lib.optionals (host == "desktop") [ nsw-remote ];
+      ];
   };
+
+  custom-nixos.shell.packages =
+    {
+      # set the current configuration as default to boot
+      ndefault = ''
+        sudo /run/current-system/bin/switch-to-configuration boot
+      '';
+      # build iso images
+      nbuild-iso = pkgs.writeShellApplication {
+        name = "nbuild-iso";
+        runtimeInputs = [ pkgs.nixos-generators ];
+        text = ''
+          cd ${dots}
+          nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
+          cd - > /dev/null
+        '';
+      };
+    }
+    // lib.optionalAttrs (host == "desktop") {
+      # build and push config for laptop
+      nsw-remote = pkgs.writeShellApplication {
+        name = "nsw-remote";
+        text = ''
+          cd ${dots}
+          sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
+          cd - > /dev/null
+        '';
+      };
+    };
 
   nix = {
     gc = {

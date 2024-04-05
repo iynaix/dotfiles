@@ -38,7 +38,9 @@ in
         assert (
           lib.assertMsg (prev.hyprcursor.version == "0.1.5") "hyprcursor: source overlay still needed?"
         );
-        prev.hyprcursor.overrideAttrs (_: sources.hyprcursor);
+        prev.hyprcursor.overrideAttrs (
+          o: sources.hyprcursor // { buildInputs = (o.buildInputs or [ ]) ++ [ prev.tomlplusplus ]; }
+        );
 
       hyprlock =
         assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: cmake patch still needed?");

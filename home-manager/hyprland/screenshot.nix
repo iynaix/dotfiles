@@ -8,46 +8,44 @@
 let
   screenshotDir = "${config.xdg.userDirs.pictures}/Screenshots";
   iso8601 = "%Y-%m-%dT%H:%M:%S%z";
-  # screenshot with  options to preselect
-  hypr-screenshot = pkgs.writeShellApplication {
-    name = "hypr-screenshot";
-    runtimeInputs = with pkgs; [
-      grimblast
-      libnotify
-      swappy
-      rofi-wayland
-    ];
-    text = lib.replaceStrings [ "@outputPath@" ] [ "${screenshotDir}/$(date +${iso8601}).png" ] (
-      lib.readFile ./screenshot.sh
-    );
-  };
-  # run ocr on selected area and copy to clipboard
-  hypr-ocr = pkgs.writeShellApplication {
-    name = "hypr-ocr";
-    runtimeInputs = [ pkgs.tesseract5 ];
-    text = ''
-      img="${screenshotDir}/ocr.png"
-
-      grimblast save area "$img"
-      teserract5 "$img" - | wl-copy
-      rm "$img"
-      notify-send "$(wl-paste)"
-    '';
-  };
 in
 lib.mkIf config.wayland.windowManager.hyprland.enable {
-  home.packages =
+  home.packages = lib.mkIf isNixOS (
+    with pkgs;
     [
-      hypr-ocr
-      hypr-screenshot
+      grimblast
+      swappy
     ]
-    ++ (lib.optionals isNixOS (
-      with pkgs;
-      [
+  );
+
+  custom.shell.packages = {
+    # screenshot with  options to preselect
+    hypr-screenshot = pkgs.writeShellApplication {
+      name = "hypr-screenshot";
+      runtimeInputs = with pkgs; [
         grimblast
+        libnotify
         swappy
-      ]
-    ));
+        rofi-wayland
+      ];
+      text = lib.replaceStrings [ "@outputPath@" ] [ "${screenshotDir}/$(date +${iso8601}).png" ] (
+        lib.readFile ./screenshot.sh
+      );
+    };
+    # run ocr on selected area and copy to clipboard
+    hypr-ocr = pkgs.writeShellApplication {
+      name = "hypr-ocr";
+      runtimeInputs = [ pkgs.tesseract5 ];
+      text = ''
+        img="${screenshotDir}/ocr.png"
+
+        grimblast save area "$img"
+        teserract5 "$img" - | wl-copy
+        rm "$img"
+        notify-send "$(wl-paste)"
+      '';
+    };
+  };
 
   # swappy conf
   xdg.configFile."swappy/config".text = lib.generators.toINI { } {

@@ -96,8 +96,19 @@
             theme.package
             iconTheme.package
           ])
+        # add custom user created shell packages
+        ++ (lib.attrValues config.custom-nixos.shell.finalPackages)
         ++ (lib.optional config.hm.custom.helix.enable helix);
     };
+
+    # add custom user created shell packages to pkgs.custom.shell
+    nixpkgs.overlays = [
+      (_: prev: {
+        custom = prev.custom // {
+          shell = config.custom-nixos.shell.finalPackages // config.hm.custom.shell.finalPackages;
+        };
+      })
+    ];
 
     # setup fonts
     fonts.packages = config.hm.custom.fonts.packages ++ [ pkgs.custom.rofi-themes ];

@@ -24,8 +24,8 @@ lib.mkMerge [
       sessionVariables.DIRENV_LOG_FORMAT = "";
     };
 
-    custom.shell.functions = {
-      mkdevenv = "nix flake init --template github:iynaix/dotfiles#$1";
+    custom.shell.packages = {
+      mkdevenv = ''nix flake init --template github:iynaix/dotfiles#"$1"'';
     };
 
     custom.persist = {

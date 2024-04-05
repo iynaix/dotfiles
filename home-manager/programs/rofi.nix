@@ -46,23 +46,6 @@ let
     }
     ${additionalStyles}
   '';
-  # NOTE: rofi-power-menu only works for powermenuType = 4!
-  rofi-power-menu = pkgs.writeShellApplication {
-    name = "rofi-power-menu";
-    runtimeInputs = with pkgs; [
-      rofi-wayland
-      custom.rofi-themes
-    ];
-    text = lib.replaceStrings [ "@theme@" ] [
-      (builtins.toFile "rofi-power-menu.rasi" (
-        (lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
-        + ''
-          * { background-window: black/60%; } // darken background
-          window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
-        ''
-      ))
-    ] (lib.readFile ./rofi-power-menu.sh);
-  };
 in
 {
   programs.rofi = {
@@ -70,7 +53,25 @@ in
     package = pkgs.rofi-wayland;
   };
 
-  home.packages = [ rofi-power-menu ];
+  custom.shell.packages = {
+    # NOTE: rofi-power-menu only works for powermenuType = 4!
+    rofi-power-menu = pkgs.writeShellApplication {
+      name = "rofi-power-menu";
+      runtimeInputs = with pkgs; [
+        rofi-wayland
+        custom.rofi-themes
+      ];
+      text = lib.replaceStrings [ "@theme@" ] [
+        (builtins.toFile "rofi-power-menu.rasi" (
+          (lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
+          + ''
+            * { background-window: black/60%; } // darken background
+            window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
+          ''
+        ))
+      ] (lib.readFile ./rofi-power-menu.sh);
+    };
+  };
 
   xdg.configFile = {
     "rofi/rofi-wifi-menu" = lib.mkIf config.custom.wifi.enable {

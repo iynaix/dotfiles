@@ -5,28 +5,6 @@
   user,
   ...
 }:
-let
-  sonarr-ical-sync = pkgs.writeShellApplication {
-    name = "sonarr-ical-sync";
-    runtimeInputs = with pkgs; [
-      curl
-      netlify-cli
-    ];
-    text =
-      let
-        inherit (config.sops) secrets;
-      in
-      ''
-        outDir=/tmp/sonarr-ical-sync
-        mkdir -p "$outDir"
-
-        SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
-        curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
-
-        NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
-      '';
-  };
-in
 lib.mkIf config.custom-nixos.bittorrent.enable (
   lib.mkMerge [
     {
@@ -64,7 +42,28 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
         services.sonarr-ical-sync = {
           serviceConfig.Type = "oneshot";
           serviceConfig.User = user;
-          script = lib.getExe sonarr-ical-sync;
+          script = lib.getExe (
+            pkgs.writeShellApplication {
+              name = "sonarr-ical-sync";
+              runtimeInputs = with pkgs; [
+                curl
+                netlify-cli
+              ];
+              text =
+                let
+                  inherit (config.sops) secrets;
+                in
+                ''
+                  outDir=/tmp/sonarr-ical-sync
+                  mkdir -p "$outDir"
+
+                  SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
+                  curl "http://localhost:8989/feed/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
+
+                  NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
+                '';
+            }
+          );
         };
         timers.sonarr-ical-sync = {
           wantedBy = [ "timers.target" ];
