@@ -13,10 +13,10 @@
             "name": null,
             "owner": "cyl0",
             "repo": "ModernX",
-            "rev": "0.6.0",
-            "sha256": "sha256-Gpofl529VbmdN7eOThDAsNfNXNkUDDF82Rd+csXGOQg=",
+            "rev": "0.6.1",
+            "sha256": "sha256-q7DwyfmOIM7K1L7vvCpq1EM0RVpt9E/drhAa9rLYb1k=",
             "type": "github"
         },
-        "version": "0.6.0"
+        "version": "0.6.1"
     }
 }

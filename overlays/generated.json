@@ -1,7 +1,7 @@
 {
     "hyprcursor": {
         "cargoLocks": null,
-        "date": "2024-04-05",
+        "date": "2024-04-08",
         "extract": null,
         "name": "hyprcursor",
         "passthru": null,
@@ -13,15 +13,15 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hyprcursor",
-            "rev": "981b6617822dadc40246a6c70194d02dfc12e4c6",
-            "sha256": "sha256-j8pv3tL2EFLGuvFoO64dHWD8YzNvD77hRb4EEx5ADgE=",
+            "rev": "17ebb7fff097790be80fcc86bb1a6057313d80b4",
+            "sha256": "sha256-2QvWtS0r0Yq2l47e/o6ravQrNI8V+6vnIqEdaoI24Hs=",
             "type": "github"
         },
-        "version": "981b6617822dadc40246a6c70194d02dfc12e4c6"
+        "version": "17ebb7fff097790be80fcc86bb1a6057313d80b4"
     },
     "hyprlock": {
         "cargoLocks": null,
-        "date": "2024-03-31",
+        "date": "2024-04-08",
         "extract": null,
         "name": "hyprlock",
         "passthru": null,
@@ -33,11 +33,11 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hyprlock",
-            "rev": "071ebcefb9070e4397d75103f5f535b58dacf250",
-            "sha256": "sha256-y1Om75muuJcEoLd/FOYGIZ5/ja/Mc4iBX/9S7vWF0C8=",
+            "rev": "bc87adf9ec997090f15d9b662d6ca2f86e25f264",
+            "sha256": "sha256-rbzVe2WNdHynJrnyJsKOOrV8yuuJ7QIuah3ZHWERSnA=",
             "type": "github"
         },
-        "version": "071ebcefb9070e4397d75103f5f535b58dacf250"
+        "version": "bc87adf9ec997090f15d9b662d6ca2f86e25f264"
     },
     "path-of-building": {
         "cargoLocks": null,
@@ -61,7 +61,7 @@
     },
     "swww": {
         "cargoLocks": null,
-        "date": "2024-04-05",
+        "date": "2024-04-08",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -73,11 +73,11 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "432b7135af0bb34e4b0e55edf76ff516937bc7b0",
-            "sha256": "sha256-pX6fJrlNXe1W5ZO9nC9ikN1zoAcHDqErLS7EnglD33o=",
+            "rev": "3a3596c3b22740086f18ffb6b02aa89ef26a04fe",
+            "sha256": "sha256-PFfXSRTSAffU/4dHVYrqUCAkbN7J6cqX6DJ2s4vT8Rc=",
             "type": "github"
         },
-        "version": "432b7135af0bb34e4b0e55edf76ff516937bc7b0"
+        "version": "3a3596c3b22740086f18ffb6b02aa89ef26a04fe"
     },
     "wallust": {
         "cargoLocks": null,

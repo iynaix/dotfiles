@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs = {
     git = {
       enable = true;
@@ -86,6 +87,9 @@ _: {
       # cleanup leftover files from merges
       mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
     };
+
+    # stacked diffs
+    packages = [ pkgs.git-town ];
   };
 
   # extra git functions

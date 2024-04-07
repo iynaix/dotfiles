@@ -3,13 +3,13 @@
 {
   mpv-modernx = {
     pname = "mpv-modernx";
-    version = "0.6.0";
+    version = "0.6.1";
     src = fetchFromGitHub {
       owner = "cyl0";
       repo = "ModernX";
-      rev = "0.6.0";
+      rev = "0.6.1";
       fetchSubmodules = false;
-      sha256 = "sha256-Gpofl529VbmdN7eOThDAsNfNXNkUDDF82Rd+csXGOQg=";
+      sha256 = "sha256-q7DwyfmOIM7K1L7vvCpq1EM0RVpt9E/drhAa9rLYb1k=";
     };
   };
 }

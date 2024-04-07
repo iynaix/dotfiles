@@ -75,31 +75,31 @@
         keymaps = {
           "<leader>pf" = {
             action = "git_files";
-            desc = "Telescope git files";
+            options.desc = "Telescope git files";
           };
           "<leader>fc" = {
             action = "git_status";
-            desc = "Telescope git status";
+            options.desc = "Telescope git status";
           };
           "<leader>fb" = {
             action = "buffers";
-            desc = "Telescope buffers";
+            options.desc = "Telescope buffers";
           };
           "<leader>fr" = {
             action = "oldfiles";
-            desc = "Telescope recent files";
+            options.desc = "Telescope recent files";
           };
           "<leader>fq" = {
             action = "quickfix";
-            desc = "Telescope quickfix";
+            options.desc = "Telescope quickfix";
           };
           "<leader>gb" = {
             action = "git_branches";
-            desc = "Telescope git branches";
+            options.desc = "Telescope git branches";
           };
           "<leader>/" = {
             action = "live_grep";
-            desc = "Telescope grep";
+            options.desc = "Telescope grep";
           };
           # TODO: harpoon marks?
           # TODO: tmux windows?
