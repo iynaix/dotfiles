@@ -15,8 +15,8 @@
       imagemagick
       nitch
       pipes-rs
+      scope-tui
       tenki
-      custom.scope-tui
       inputs.wfetch.packages.${pkgs.system}.wfetch
     ];
 
