@@ -103,9 +103,6 @@ in
         "CTRL_ALT_, Tab, exec, hypr-same-class next"
         "CTRL_ALT_SHIFT, Tab, exec, hypr-same-class prev"
 
-        # toggle waybar
-        "$mod, a, exec, killall -SIGUSR1 .waybar-wrapped"
-
         # picture in picture mode
         "$mod, p, exec, hypr-pip"
 

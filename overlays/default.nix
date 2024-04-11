@@ -42,11 +42,7 @@ in
           o: sources.hyprcursor // { buildInputs = (o.buildInputs or [ ]) ++ [ prev.tomlplusplus ]; }
         );
 
-      hyprlock =
-        assert (lib.assertMsg (prev.hyprlock.version == "0.2.0") "hyprlock: cmake patch still needed?");
-        prev.hyprlock.overrideAttrs (
-          o: sources.hyprlock // { patches = (o.patches or [ ]) ++ [ ./hyprlock-cmake.patch ]; }
-        );
+      hyprlock = prev.hyprlock.overrideAttrs (_: sources.hyprlock);
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (o: {

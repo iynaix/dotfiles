@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   # saner api for iterating through workspaces in a flat list
   # takes a function that accepts the following attrset {workspace, key, monitor}
@@ -25,4 +25,18 @@
       mkValueString = v: if lib.isString v then "\"${v}\"" else lib.generators.mkValueStringDefault { } v;
     };
   };
+
+  # uses the direnv of a directory
+  useDirenv =
+    dir: text:
+    let
+      direnv = lib.getExe pkgs.direnv;
+    in
+    ''
+      cd ${dir}
+      # activate direnv, it's always bash for a script
+      ${direnv} allow && eval "$(${direnv} export bash)"
+      ${text}
+      cd - > /dev/null
+    '';
 }

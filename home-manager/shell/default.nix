@@ -11,9 +11,11 @@
     ./neovim
     ./nix.nix
     ./rice.nix
+    ./rust.nix
     ./shell.nix
     ./starship.nix
     ./tmux.nix
+    ./typescript.nix
     ./yazi.nix
   ];
 

@@ -15,6 +15,30 @@ lib.mkIf cfg.enable {
     # https://github.com/nix-community/home-manager/issues/3599
   };
 
+  # toggle / launch waybar
+  wayland.windowManager.hyprland.settings.bind = [
+    "$mod, a, exec, ${
+      lib.getExe (
+        pkgs.writeShellApplication {
+          name = "toggle-waybar";
+          runtimeInputs = with pkgs; [
+            procps
+            custom.dotfiles-utils
+            killall
+          ];
+          text = ''
+            # toggle waybar visibility if it is running
+            if pgrep .waybar-wrapped > /dev/null; then
+              killall -SIGUSR1 .waybar-wrapped
+            else
+              launch-waybar
+            fi
+          '';
+        }
+      )
+    }"
+  ];
+
   custom.waybar.config =
     let
       alertSpan = s: ''<span color="{{color4}}">${s}</span>'';

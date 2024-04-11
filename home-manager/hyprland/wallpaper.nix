@@ -56,25 +56,16 @@ lib.mkMerge [
         name = "wallpapers-pipeline";
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
-          cd ${wallpapers_proj}
-          # activate direnv
-          direnv allow && eval "$(direnv export bash)"
-          cargo run --bin wallpaper-pipeline "$@"
-          cd - > /dev/null
+          ${pkgs.custom.lib.useDirenv wallpapers_proj ''
+            cargo run --release --bin wallpaper-pipeline "$@"
+          ''}
           wallpapers-backup
         '';
       };
       # choose custom crops for wallpapers
-      wallpapers-ui = pkgs.writeShellApplication {
-        name = "wallpapers-ui";
-        text = ''
-          cd ${wallpapers_proj}
-          # activate direnv
-          direnv allow && eval "$(direnv export bash)"
-          cargo run --bin wallpaper-ui "$@"
-          cd - > /dev/null
-        '';
-      };
+      wallpapers-ui = pkgs.custom.lib.useDirenv wallpapers_proj ''
+        cargo run --release --bin wallpaper-ui "$@"
+      '';
     };
 
     gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];

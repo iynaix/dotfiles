@@ -123,34 +123,28 @@ in
       '';
     };
     # nix garbage collection
-    ngc = pkgs.writeShellApplication {
-      name = "ngc";
-      text = ''
-        # sudo rm /nix/var/nix/gcroots/auto/*
-        if [ "$#" -eq 0 ]; then
-          sudo nix-collect-garbage -d
-        else
-          sudo nix-collect-garbage "$@"
-        fi
-      '';
-    };
+    ngc = ''
+      # sudo rm /nix/var/nix/gcroots/auto/*
+      if [ "$#" -eq 0 ]; then
+        sudo nix-collect-garbage -d
+      else
+        sudo nix-collect-garbage "$@"
+      fi
+    '';
     # utility for creating a nix repl, allows editing within the repl.nix
     # https://bmcgee.ie/posts/2023/01/nix-and-its-slow-feedback-loop/
-    nrepl = pkgs.writeShellApplication {
-      name = "nrepl";
-      text = ''
-        if [[ -f repl.nix ]]; then
-          nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-        # use flake repl if not in a nix project
-        elif [[ $(find . -maxdepth 1 -name "*.nix" | wc -l) -eq 0 ]]; then
-          cd ${dots}
-          nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-          cd - > /dev/null
-        else
-          nix repl "$@"
-        fi
-      '';
-    };
+    nrepl = ''
+      if [[ -f repl.nix ]]; then
+        nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+      # use flake repl if not in a nix project
+      elif [[ $(find . -maxdepth 1 -name "*.nix" | wc -l) -eq 0 ]]; then
+        cd ${dots}
+        nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+        cd - > /dev/null
+      else
+        nix repl "$@"
+      fi
+    '';
     # build local package if possible, otherwise build config
     nb = pkgs.writeShellApplication {
       name = "nb";
@@ -173,44 +167,38 @@ in
       '';
     };
     # build and run local package if possible, otherwise run from nixpkgs
-    nr = pkgs.writeShellApplication {
-      name = "nr";
-      text = ''
-        if [ "$#" -eq 0 ]; then
-            echo "no package specified."
-            exit 1
-        fi
+    nr = ''
+      if [ "$#" -eq 0 ]; then
+          echo "no package specified."
+          exit 1
+      fi
 
-        # assume building packages in local nixpkgs if possible
-        src="nixpkgs"
-        if [[ $(pwd) =~ /nixpkgs$ ]]; then
-            src="."
-        # dotfiles, custom package exists, build it
-        elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
-            src="."
-        # flake
-        elif [[ -f flake.nix ]]; then
-            src="."
-        fi
+      # assume building packages in local nixpkgs if possible
+      src="nixpkgs"
+      if [[ $(pwd) =~ /nixpkgs$ ]]; then
+          src="."
+      # dotfiles, custom package exists, build it
+      elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
+          src="."
+      # flake
+      elif [[ -f flake.nix ]]; then
+          src="."
+      fi
 
-        if [ "$#" -eq 1 ]; then
-            nix run "$src#$1"
-        else
-            nix run "$src#$1" -- "''${@:2}"
-        fi
-      '';
-    };
-    npath = pkgs.writeShellApplication {
-      name = "npath";
-      text = ''
-        if [ "$#" -eq 0 ]; then
-            echo "no package specified."
-            exit 1
-        fi
+      if [ "$#" -eq 1 ]; then
+          nix run "$src#$1"
+      else
+          nix run "$src#$1" -- "''${@:2}"
+      fi
+    '';
+    npath = ''
+      if [ "$#" -eq 0 ]; then
+          echo "no package specified."
+          exit 1
+      fi
 
-        nix eval --raw "nixpkgs#$1.outPath"
-      '';
-    };
+      nix eval --raw "nixpkgs#$1.outPath"
+    '';
     # what depends on the given package in the current nixos install?
     nix-depends = pkgs.writeShellApplication {
       name = "nix-depends";

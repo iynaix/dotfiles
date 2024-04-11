@@ -6,26 +6,11 @@ _: {
         servers = {
           bashls.enable = true;
           # ccls.enable = true; # c / c++
-          emmet_ls.enable = true;
           eslint.enable = true;
-          graphql.enable = true;
           jsonls.enable = true;
           # lua-ls.enable = true;
           nil_ls.enable = true;
-          prismals.enable = true;
           pyright.enable = true;
-          rust-analyzer = {
-            enable = true;
-            # do not install the language server
-            package = null;
-            # autostart = false;
-            cmd = null;
-            installCargo = false;
-            installRustc = false;
-            settings.check.command = "clippy";
-          };
-          tailwindcss.enable = true;
-          tsserver.enable = true;
         };
 
         keymaps = {
@@ -52,42 +37,6 @@ _: {
           timeoutMs = 500;
         };
         formattersByFt = {
-          html = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          css = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          javascript = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          javascriptreact = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          typescript = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          typescriptreact = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
           python = [ "black" ];
           # lua = [ "stylua" ];
           nix = [ "nixfmt" ];
@@ -97,7 +46,6 @@ _: {
               "prettier"
             ]
           ];
-          rust = [ "rustfmt" ];
         };
       };
     };
