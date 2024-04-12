@@ -22,7 +22,8 @@ in
       "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
         backend = "resized";
         color_space = "labmixed";
-        # threshold = 20;
+        check_contrast = true;
+        fallback_generator = "interpolate";
         palette = "dark16";
         templates = lib.mapAttrs (
           filename:
