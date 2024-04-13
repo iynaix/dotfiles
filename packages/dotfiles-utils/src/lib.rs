@@ -1,7 +1,10 @@
 use crate::monitor::Monitor;
 use execute::Execute;
 use serde::{de::DeserializeOwned, Deserialize};
-use std::{path::PathBuf, process::Stdio};
+use std::{
+    path::{Path, PathBuf},
+    process::Stdio,
+};
 
 pub mod cli;
 pub mod monitor;
@@ -19,9 +22,12 @@ pub struct WorkspaceId {
 
 pub fn full_path<P>(p: P) -> PathBuf
 where
-    P: AsRef<std::path::Path>,
+    P: AsRef<std::path::Path> + std::fmt::Debug,
 {
-    let p = p.as_ref().to_str().expect("invalid path");
+    let p = p
+        .as_ref()
+        .to_str()
+        .unwrap_or_else(|| panic!("invalid path: {p:?}"));
 
     match p.strip_prefix("~/") {
         Some(p) => dirs::home_dir().expect("invalid home directory").join(p),
@@ -37,14 +43,14 @@ where
     let output = execute::command_args!("hyprctl", "-j", cmd)
         .stdout(Stdio::piped())
         .execute_output()
-        .expect("failed to execute process");
+        .expect("failed to execute hyprctl");
 
-    serde_json::from_slice(&output.stdout).expect("failed to parse json")
+    serde_json::from_slice(&output.stdout).expect("failed to parse json from hyprctl")
 }
 
 fn command_output_to_lines(output: &[u8]) -> Vec<String> {
     String::from_utf8(output.to_vec())
-        .expect("invalid utf8 from command")
+        .unwrap_or_else(|_| panic!("invalid utf8 from command: {output:?}"))
         .lines()
         .map(String::from)
         .collect()
@@ -83,7 +89,7 @@ where
     for arg in hypr_args {
         cmd.arg(arg.as_ref());
     }
-    cmd.execute().expect("failed to execute hyprctl");
+    cmd.execute().expect("failed to execute hyprctl dispatch");
 }
 
 /// hyprctl activewindow
@@ -105,7 +111,7 @@ impl ActiveWindow {
         Monitor::monitors()
             .into_iter()
             .find(|m| m.id == self.monitor)
-            .expect("monitor not found")
+            .unwrap_or_else(|| panic!("monitor {} not found", self.monitor))
     }
 }
 
@@ -149,7 +155,7 @@ impl Workspace {
         Monitor::monitors()
             .into_iter()
             .find(|m| m.name == self.monitor)
-            .expect("monitor not found")
+            .unwrap_or_else(|| panic!("monitor {} not found", self.monitor))
     }
 
     pub fn by_name(name: &str) -> Option<Self> {
@@ -157,31 +163,36 @@ impl Workspace {
     }
 }
 
+pub fn filename(path: &Path) -> String {
+    path.file_name()
+        .unwrap_or_else(|| panic!("could not get filename: {path:?}"))
+        .to_str()
+        .unwrap_or_else(|| panic!("could not convert filename to str: {path:?}"))
+        .to_string()
+}
+
 pub mod json {
     use super::full_path;
 
-    pub fn load<T, P>(path: P) -> T
+    pub fn load<T, P>(path: P) -> std::io::Result<T>
     where
         T: serde::de::DeserializeOwned,
         P: AsRef<std::path::Path>,
     {
         let path = path.as_ref();
-        let contents = std::fs::read_to_string(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to load {path:?}"));
-        serde_json::from_str(&contents)
-            .unwrap_or_else(|_| panic!("failed to parse json for {path:?}"))
+        let contents = std::fs::read_to_string(full_path(path))?;
+        Ok(serde_json::from_str::<T>(&contents)?)
     }
 
-    pub fn write<T, P>(path: P, data: T)
+    pub fn write<T, P>(path: P, data: T) -> std::io::Result<()>
     where
         T: serde::Serialize,
         P: AsRef<std::path::Path>,
     {
         let path = path.as_ref();
-        let file = std::fs::File::create(full_path(path))
-            .unwrap_or_else(|_| panic!("failed to create {path:?}"));
-        serde_json::to_writer(file, &data)
-            .unwrap_or_else(|_| panic!("failed to write json to {path:?}"));
+        let file = std::fs::File::create(full_path(path))?;
+        serde_json::to_writer(file, &data)?;
+        Ok(())
     }
 }
 

@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    execute_wrapped_process, full_path,
+    execute_wrapped_process, filename, full_path,
     nixinfo::NixInfo,
     wallpaper::{self, WallInfo},
     wallust,
@@ -18,11 +18,7 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
 
     // convert image to path
     let image = Path::new(image);
-    let fname = image
-        .file_name()
-        .expect("invalid image path")
-        .to_str()
-        .expect("could not convert image path to str");
+    let fname = filename(image);
 
     let reader = std::io::BufReader::new(
         std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
@@ -42,10 +38,10 @@ fn main() {
             if image_or_dir.is_dir() {
                 wallpaper::random_from_dir(&image_or_dir)
             } else {
-                std::fs::canonicalize(image_or_dir)
-                    .expect("invalid path")
+                std::fs::canonicalize(&image_or_dir)
+                    .unwrap_or_else(|_| panic!("invalid wallpaper: {image_or_dir:?}"))
                     .to_str()
-                    .expect("could not convert path to str")
+                    .unwrap_or_else(|| panic!("could not conver {image_or_dir:?} to str"))
                     .to_string()
             }
         }
@@ -67,7 +63,7 @@ fn main() {
     // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
     std::fs::write(
         dirs::runtime_dir()
-            .expect("could not get XDG_RUNTIME_DIR")
+            .expect("could not get $XDG_RUNTIME_DIR")
             .join("current_wallpaper"),
         &wallpaper,
     )

@@ -16,28 +16,30 @@ fn main() {
     let config_path = full_path("~/.config/waybar/config.jsonc");
     let config_path = config_path
         .to_str()
-        .expect("could not convert config path to str");
+        .expect("could not convert waybar config path to str");
 
     if cfg!(feature = "hyprland") {
-        let mut cfg: serde_json::Value = json::load(config_path);
+        let mut cfg: serde_json::Value = json::load(config_path)
+            .unwrap_or_else(|_| panic!("unable to read waybar config at {config_path}"));
 
         if NixInfo::before().persistent_workspaces {
             let rearranged_workspaces = Monitor::rearranged_workspaces();
 
             cfg["hyprland/workspaces"]["persistent-workspaces"] =
-                serde_json::to_value(rearranged_workspaces).expect("failed to convert to json");
+                serde_json::to_value(rearranged_workspaces)
+                    .expect("failed to convert rearranged workspaces to json");
         } else {
             let hyprland_workspaces = cfg["hyprland/workspaces"]
                 .as_object_mut()
                 .expect("invalid hyprland workspaces");
             hyprland_workspaces.remove("persistent-workspaces");
 
-            cfg["hyprland/workspaces"] =
-                serde_json::to_value(hyprland_workspaces).expect("failed to convert to json");
+            cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
+                .expect("failed to convert hyprland workspaces to json");
         }
 
         // write waybar_config back to waybar_config_file as json
-        json::write(config_path, &cfg);
+        json::write(config_path, &cfg).expect("failed to write updated waybar config");
     }
 
     // open waybar in the background

@@ -38,6 +38,7 @@ in
 
   gtk =
     let
+      catppuccinDefault = "Blue";
       extraConfig = {
         gtk-application-prefer-dark-theme = 1;
         gtk-error-bell = 0;
@@ -57,16 +58,32 @@ in
           }
         else
           {
-            name = "Catppuccin-Mocha-Compact-Blue-Dark";
+            name = "Catppuccin-Mocha-Compact-${catppuccinDefault}-Dark";
             package = pkgs.catppuccin-gtk.override {
-              accents = [ "blue" ];
+              # allow all accents so the closest matching color can be selected by dotfiles-utils
+              accents = [
+                "blue"
+                "flamingo"
+                "green"
+                "lavender"
+                "maroon"
+                "mauve"
+                "peach"
+                "pink"
+                "red"
+                "rosewater"
+                "sapphire"
+                "sky"
+                "teal"
+                "yellow"
+              ];
               variant = "mocha";
               size = "compact";
             };
           };
       iconTheme = {
-        name = "Tela-blue-dark";
-        package = pkgs.tela-icon-theme;
+        name = "Tela-${catppuccinDefault}-dark";
+        package = pkgs.custom.tela-catppuccin-icon-theme;
       };
       font = {
         name = "${config.custom.fonts.regular} Regular";

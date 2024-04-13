@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::SwwwCropArgs,
-    full_path,
+    filename, full_path,
     monitor::Monitor,
     wallpaper::{self, WallInfo},
 };
@@ -65,11 +65,7 @@ fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
 
     // convert image to path
     let image = PathBuf::from(image);
-    let fname = image
-        .file_name()
-        .expect("invalid image path")
-        .to_str()
-        .expect("could not convert image path to str");
+    let fname = filename(&image);
 
     let reader = std::io::BufReader::new(
         std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),

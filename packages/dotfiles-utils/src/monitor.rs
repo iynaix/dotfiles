@@ -95,12 +95,17 @@ impl Monitor {
             let wksp_rule = workspace_rules
                 .into_iter()
                 .find(|rule| rule.workspace == wksp)
-                .expect("workspace not found within workspace rules");
+                .unwrap_or_else(|| panic!("workspace {wksp:?} not found within workspace rules"));
 
             let mon = Self::monitors()
                 .into_iter()
                 .find(|mon| mon.name == wksp_rule.monitor)
-                .expect("monitor not found from workspace rules");
+                .unwrap_or_else(|| {
+                    panic!(
+                        "monitor {} not found from workspace rules",
+                        &wksp_rule.monitor
+                    )
+                });
 
             (mon, false)
         }

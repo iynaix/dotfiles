@@ -1,6 +1,9 @@
 use crate::{
-    execute_wrapped_process, full_path, json, monitor::Monitor, nixinfo::NixInfo,
-    wallpaper::WallInfo, CommandUtf8,
+    execute_wrapped_process, filename, full_path, json,
+    monitor::Monitor,
+    nixinfo::{hyprland_colors, NixInfo},
+    wallpaper::WallInfo,
+    CommandUtf8,
 };
 use execute::Execute;
 use std::{collections::HashMap, path::PathBuf};
@@ -20,14 +23,16 @@ pub fn apply_theme(theme: &str) {
         execute::command_args!(
             "wallust",
             "cs",
-            colorscheme_file.to_str().expect("invalid colorscheme file"),
+            colorscheme_file
+                .to_str()
+                .unwrap_or_else(|| panic!("invalid colorscheme file: {colorscheme_file:?}")),
         )
         .execute()
-        .expect("failed to apply colorscheme");
+        .unwrap_or_else(|_| panic!("failed to apply colorscheme {theme}"));
     } else {
         execute::command_args!("wallust", "theme", &theme)
             .execute()
-            .expect("failed to apply theme");
+            .unwrap_or_else(|_| panic!("failed to apply wallust theme {theme}"));
     }
 }
 
@@ -64,8 +69,9 @@ fn refresh_zathura() {
 
 /// applies the wallust colors to various applications
 pub fn apply_colors() {
-    let c = if full_path("~/.cache/wallust/nix.json").exists() {
-        NixInfo::after().hyprland_colors()
+    let has_nix_json = full_path("~/.cache/wallust/nix.json").exists();
+    let hyprland_colors = if has_nix_json {
+        hyprland_colors(&NixInfo::after().colors)
     } else {
         #[derive(serde::Deserialize)]
         struct Colorscheme {
@@ -73,17 +79,11 @@ pub fn apply_colors() {
         }
 
         let cs_path = full_path("~/.config/wallust/themes/catppuccin-mocha.json");
-        let cs: Colorscheme = json::load(cs_path);
+        let cs: Colorscheme = json::load(&cs_path).unwrap_or_else(|_| {
+            panic!("unable to read colorscheme at {:?}", &cs_path);
+        });
 
-        (1..16)
-            .map(|n| {
-                let k = format!("color{n}");
-                format!(
-                    "rgb({})",
-                    cs.colors.get(&k).expect("color not found").replace('#', "")
-                )
-            })
-            .collect()
+        hyprland_colors(&cs.colors)
     };
 
     if cfg!(feature = "hyprland") {
@@ -92,14 +92,19 @@ pub fn apply_colors() {
             "hyprctl",
             "keyword",
             "general:col.active_border",
-            &format!("{} {} 45deg", c[4], c[0]),
+            &format!("{} {} 45deg", hyprland_colors[4], hyprland_colors[0]),
         )
         .execute()
-        .expect("failed to set active border color");
+        .expect("failed to set hyprland active border color");
 
-        execute::command_args!("hyprctl", "keyword", "general:col.inactive_border", &c[0])
-            .execute()
-            .expect("failed to set inactive border color");
+        execute::command_args!(
+            "hyprctl",
+            "keyword",
+            "general:col.inactive_border",
+            &hyprland_colors[0]
+        )
+        .execute()
+        .expect("failed to set hyprland inactive border color");
 
         // pink border for monocle windows
         execute::command_args!(
@@ -107,30 +112,30 @@ pub fn apply_colors() {
             "keyword",
             "windowrulev2",
             "bordercolor",
-            &format!("{},fullscreen:1", &c[5]),
+            &format!("{},fullscreen:1", &hyprland_colors[5]),
         )
         .execute()
-        .expect("failed to set border color");
+        .expect("failed to set hyprland border color");
         // teal border for floating windows
         execute::command_args!(
             "hyprctl",
             "keyword",
             "windowrulev2",
             "bordercolor",
-            &format!("{},floating:1", &c[6]),
+            &format!("{},floating:1", &hyprland_colors[6]),
         )
         .execute()
-        .expect("failed to set floating border color");
+        .expect("failed to set hyprland floating border color");
         // yellow border for sticky (must be floating) windows
         execute::command_args!(
             "hyprctl",
             "keyword",
             "windowrulev2",
             "bordercolor",
-            &format!("{},pinned:1", &c[3]),
+            &format!("{},pinned:1", &hyprland_colors[3]),
         )
         .execute()
-        .expect("failed to set sticky border color");
+        .expect("failed to set hyprland sticky border color");
     }
 
     // refresh zathura
@@ -162,8 +167,10 @@ pub fn apply_colors() {
         });
     }
 
-    // reload gtk theme
-    // reload_gtk()
+    // set gtk theme
+    if has_nix_json {
+        set_gtk_and_icon_theme();
+    }
 }
 
 /// runs wallust with options from wallpapers.csv
@@ -196,11 +203,11 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                 if let Some(geometry) = info.get_geometry(m.width, m.height) {
                     // output cropped and resized wallpaper to /tmp
                     let with_png = full_path(wallpaper).with_extension("png");
-                    let output_fname = with_png
-                        .file_name()
-                        .expect("could not get filename of wallpaper");
+                    let output_fname = filename(&with_png);
                     let output_path = PathBuf::from("/tmp").join(output_fname);
-                    let output_path = output_path.to_str().expect("invalid wallpaper path");
+                    let output_path = output_path
+                        .to_str()
+                        .unwrap_or_else(|| panic!("invalid wallpaper: {output_path:?}"));
 
                     execute::command("convert")
                         .arg(wallpaper)
@@ -218,7 +225,8 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                     if hyprlock_conf.exists() {
                         let contents = std::fs::read_to_string(&hyprlock_conf)
                             .expect("Could not read hyprlock.conf");
-                        let wall_re = regex::Regex::new(r"path = (.*)").expect("invalid regex");
+                        let wall_re =
+                            regex::Regex::new(r"path = (.*)").expect("invalid hyprlock path regex");
                         // only replaces the first occurrence
                         let new_contents =
                             wall_re.replace(&contents, &format!("path = {output_path}"));
@@ -230,4 +238,89 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
             }
         }
     };
+}
+
+type Rgb = (i32, i32, i32);
+
+/// hex string to f64 RGB tuple
+fn hex_to_rgb(hex: &str) -> Rgb {
+    let hex = hex.trim_start_matches('#');
+
+    let r = i32::from_str_radix(&hex[0..2], 16).unwrap_or_else(|_| {
+        panic!("invalid hex color: {hex}");
+    });
+    let g = i32::from_str_radix(&hex[2..4], 16).unwrap_or_else(|_| {
+        panic!("invalid hex color: {hex}");
+    });
+    let b = i32::from_str_radix(&hex[4..6], 16).unwrap_or_else(|_| {
+        panic!("invalid hex color: {hex}");
+    });
+
+    (r, g, b)
+}
+
+pub fn set_gtk_and_icon_theme() {
+    let catppuccin_variants = HashMap::from([
+        ("Blue", hex_to_rgb("#89b4fa")),
+        ("Flamingo", hex_to_rgb("#f2cdcd")),
+        ("Green", hex_to_rgb("#a6e3a1")),
+        ("Lavender", hex_to_rgb("#b4befe")),
+        ("Maroon", hex_to_rgb("#eba0ac")),
+        ("Mauve", hex_to_rgb("#cba6f7")),
+        ("Peach", hex_to_rgb("#fab387")),
+        ("Pink", hex_to_rgb("#f5c2e7")),
+        ("Red", hex_to_rgb("#f38ba8")),
+        ("Rosewater", hex_to_rgb("#f5e0dc")),
+        ("Sapphire", hex_to_rgb("#74c7ec")),
+        ("Sky", hex_to_rgb("#89dceb")),
+        ("Teal", hex_to_rgb("#94e2d5")),
+        ("Yellow", hex_to_rgb("#f9e2af")),
+    ]);
+
+    let wallust_colors: Vec<_> = NixInfo::after()
+        .colors
+        .iter()
+        .filter_map(|(name, color)| {
+            // ignore black
+            if name == "color0" {
+                return None;
+            }
+
+            Some(hex_to_rgb(color))
+        })
+        .collect();
+
+    let mut variant = String::new();
+    let mut min_distance = i32::MAX;
+
+    for (catppuccin_variant, catppuccin_color) in catppuccin_variants {
+        for wallust_color in &wallust_colors {
+            // calculate distance between colos, no sqrt necessary since we're only comparing
+            let (r1, g1, b1) = catppuccin_color;
+            let (r2, g2, b2) = wallust_color;
+
+            let dr = r1 - r2;
+            let dg = g1 - g2;
+            let db = b1 - b2;
+
+            let distance = db * db + dg * dg + dr * dr;
+
+            if distance < min_distance {
+                variant = catppuccin_variant.to_string();
+                min_distance = distance;
+            }
+        }
+    }
+
+    execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/gtk-theme")
+        // requires the quotes to be GVariant compatible for dconf
+        .arg(format!("'Catppuccin-Mocha-Compact-{variant}-Dark'"))
+        .execute()
+        .expect("failed to apply gtk theme");
+
+    execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/icon-theme")
+        // requires the quotes to be GVariant compatible for dconf
+        .arg(format!("'Tela-{variant}-dark'"))
+        .execute()
+        .expect("failed to apply icon theme");
 }

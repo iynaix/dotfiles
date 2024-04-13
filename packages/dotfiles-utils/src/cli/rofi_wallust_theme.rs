@@ -39,9 +39,8 @@ fn main() {
         .expect("failed to read rofi theme")
         .stdout;
 
-    // let output = rofi.wait_with_output().expect("failed to read rofi theme");
     let selected_theme = std::str::from_utf8(&selected_theme)
-        .expect("failed to parse utf8")
+        .expect("failed to parse utf8 from rofi theme")
         .strip_suffix('\n')
         .unwrap_or_default();
 

@@ -61,7 +61,7 @@ fn main() {
 
         let (ev, ev_args) = line
             .split_once(">>")
-            .expect("could not parse hyprland event");
+            .unwrap_or_else(|| panic!("could not parse hyprland event from {line}"));
         let ev_args: Vec<String> = ev_args
             .split(',')
             .map(std::string::ToString::to_string)

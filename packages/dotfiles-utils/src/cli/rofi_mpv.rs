@@ -25,7 +25,7 @@ fn latest_file(media_type: &RofiMpvMedia) -> Video {
             .next()
             .expect("watch_later file is empty")
             .strip_prefix("# ")
-            .expect("no prefix for filename")
+            .expect("watch_later: no prefix for filename")
             .to_string();
 
         let vid_path = PathBuf::from(&vid);
@@ -56,19 +56,25 @@ fn get_start_time(content: &str) -> f32 {
         .find(|line| line.starts_with("start="))
         .expect("no start time found");
 
-    let (_, time) = start_line.rsplit_once('=').expect("invalid start time");
-    time.parse().expect("invalid start time")
+    let (_, time) = start_line
+        .rsplit_once('=')
+        .unwrap_or_else(|| panic!("invalid start time: {start_line}"));
+    time.parse()
+        .unwrap_or_else(|_| panic!("invalid start time: {time}"))
 }
 
 /// gets the duration of a video in seconds
-fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
+fn get_duration<P>(vid_path: P) -> f32
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
     let ffmpeg = execute::command_args!(
         "ffmpeg",
         "-i",
         vid_path
             .as_ref()
             .to_str()
-            .expect("could not convert video path to str"),
+            .unwrap_or_else(|| panic!("could not convert video path {vid_path:?} to str")),
     )
     .execute_stderr_lines();
     let duration = ffmpeg
@@ -81,17 +87,20 @@ fn get_duration<P: AsRef<Path>>(vid_path: P) -> f32 {
 
     let duration: Vec<_> = duration
         .split_once(',')
-        .expect("invalid duration")
+        .unwrap_or_else(|| panic!("invalid duration: {duration}"))
         .0
         .split(':')
-        .map(|t| t.parse::<f32>().expect("invalid duration"))
+        .map(|t| {
+            t.parse::<f32>()
+                .unwrap_or_else(|_| panic!("invalid duration: {duration}"))
+        })
         .collect();
 
     match duration.len() {
         1 => duration[0],
         2 => duration[1].mul_add(60.0, duration[0]),
         3 => (duration[2] * 60.0).mul_add(60.0, duration[1].mul_add(60.0, duration[0])),
-        _ => panic!("invalid duration"),
+        _ => panic!("invalid duration: {duration:?}"),
     }
 }
 
@@ -111,7 +120,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     // get list of files in the current directory
     let mut current_files: Vec<_> = path
         .read_dir()
-        .expect("could not read current directory")
+        .unwrap_or_else(|_| panic!("could not read current directory: {path:?}"))
         .flatten()
         .map(|e| e.path())
         .collect();
@@ -122,7 +131,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     let current_index = current_files
         .iter()
         .position(|path| path == &path.clone())
-        .expect("could not get index of current file");
+        .unwrap_or_else(|| panic!("could not get index of {path:?}"));
 
     current_files
         .get(current_index + 1)

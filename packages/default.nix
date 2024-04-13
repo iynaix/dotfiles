@@ -19,6 +19,9 @@ in
   # boutique rust packages
   dotfiles-utils = callPackage ./dotfiles-utils { };
 
+  # custom tela built with catppucin variant colors
+  tela-catppuccin-icon-theme = callPackage ./tela-catppuccin-icon-theme { };
+
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
   hyprnstack = callPackage ./hyprnstack { };

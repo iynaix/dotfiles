@@ -162,10 +162,12 @@ impl<'de> Deserialize<'de> for WallInfo {
                         let parts: Vec<&str> = ratio.split('x').collect();
                         assert!(parts.len() == 2, "invalid aspect ratio: {ratio}");
 
-                        let target_w = parts[0].parse::<u32>().expect("invalid aspect ratio width");
-                        let target_h = parts[1]
+                        let target_w = parts[0]
                             .parse::<u32>()
-                            .expect("invalid aspect ratio height");
+                            .unwrap_or_else(|_| panic!("invalid aspect ratio width: {}", parts[0]));
+                        let target_h = parts[1].parse::<u32>().unwrap_or_else(|_| {
+                            panic!("invalid aspect ratio height: {}", parts[1])
+                        });
 
                         // Calculate width and height that can be cropped while maintaining aspect ratio
                         let crop_w = std::cmp::min(width, height * target_w / target_h);
