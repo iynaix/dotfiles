@@ -21,13 +21,15 @@ pub struct NixInfo {
     pub fallback: String,
     pub colorscheme: Option<String>,
     pub special: Special,
-    pub persistent_workspaces: bool,
-    // TODO: remove when hyprlock has support for jpegs?
+    pub persistent_workspaces: Option<bool>,
+    // FIXME: remove when hyprlock has support for jpegs?
     // output cropped wallpaper as jpg for hyprlock
-    pub hyprlock: bool,
+    pub hyprlock: Option<bool>,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,
+    /// for selecting best gtk theme and icon variants for wallpaper
+    pub theme_accents: HashMap<String, String>,
 }
 
 /// get a vec of colors without # prefix

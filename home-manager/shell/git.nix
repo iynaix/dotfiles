@@ -122,6 +122,33 @@
     # searches git history, can never remember this stupid thing
     # 2nd argument is target path and subsequent arguments are passed through
     gsearch = ''git log -S"$1" -- "\${"2:-."}" "$*"[2,-1]'';
+    # checkout main / master, whichever exists
+    gmain = ''
+      if git show-ref --verify --quiet refs/heads/master; then
+          BRANCH="master"
+      else
+          BRANCH="main"
+      fi
+
+      git checkout "$BRANCH"
+    '';
+    # syncs with upstream
+    gsync = pkgs.writeShellApplication {
+      name = "gsync";
+      runtimeInputs = with pkgs; [
+        gh
+        custom.shell.gmain
+      ];
+      text = ''
+        REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
+
+        gmain
+
+        CURRENT=$(git rev-parse --abbrev-ref HEAD)
+        gh repo sync "iynaix/$REPO_NAME" -b "CURRENT"
+        git pull origin "$CURRENT"
+      '';
+    };
   };
 
   custom.persist = {

@@ -193,7 +193,11 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
 
     // crop wallpaper for lockscreen
     let nix_info = NixInfo::before();
-    if nix_info.hyprlock {
+    if let NixInfo {
+        hyprlock: Some(true),
+        ..
+    } = nix_info
+    {
         if let Some(info) = wallpaper_info {
             let nix_monitors = nix_info.monitors;
             if let Some(m) = Monitor::monitors()
@@ -260,24 +264,15 @@ fn hex_to_rgb(hex: &str) -> Rgb {
 }
 
 pub fn set_gtk_and_icon_theme() {
-    let catppuccin_variants = HashMap::from([
-        ("Blue", hex_to_rgb("#89b4fa")),
-        ("Flamingo", hex_to_rgb("#f2cdcd")),
-        ("Green", hex_to_rgb("#a6e3a1")),
-        ("Lavender", hex_to_rgb("#b4befe")),
-        ("Maroon", hex_to_rgb("#eba0ac")),
-        ("Mauve", hex_to_rgb("#cba6f7")),
-        ("Peach", hex_to_rgb("#fab387")),
-        ("Pink", hex_to_rgb("#f5c2e7")),
-        ("Red", hex_to_rgb("#f38ba8")),
-        ("Rosewater", hex_to_rgb("#f5e0dc")),
-        ("Sapphire", hex_to_rgb("#74c7ec")),
-        ("Sky", hex_to_rgb("#89dceb")),
-        ("Teal", hex_to_rgb("#94e2d5")),
-        ("Yellow", hex_to_rgb("#f9e2af")),
-    ]);
+    let nixinfo = NixInfo::after();
 
-    let wallust_colors: Vec<_> = NixInfo::after()
+    let theme_accents: HashMap<_, _> = nixinfo
+        .theme_accents
+        .iter()
+        .map(|(k, v)| (k, hex_to_rgb(v)))
+        .collect();
+
+    let wallust_colors: Vec<_> = nixinfo
         .colors
         .iter()
         .filter_map(|(name, color)| {
@@ -293,10 +288,10 @@ pub fn set_gtk_and_icon_theme() {
     let mut variant = String::new();
     let mut min_distance = i32::MAX;
 
-    for (catppuccin_variant, catppuccin_color) in catppuccin_variants {
+    for (accent_name, accent_color) in theme_accents {
         for wallust_color in &wallust_colors {
             // calculate distance between colos, no sqrt necessary since we're only comparing
-            let (r1, g1, b1) = catppuccin_color;
+            let (r1, g1, b1) = accent_color;
             let (r2, g2, b2) = wallust_color;
 
             let dr = r1 - r2;
@@ -306,7 +301,7 @@ pub fn set_gtk_and_icon_theme() {
             let distance = db * db + dg * dg + dr * dr;
 
             if distance < min_distance {
-                variant = catppuccin_variant.to_string();
+                variant = accent_name.to_string();
                 min_distance = distance;
             }
         }

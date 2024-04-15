@@ -22,7 +22,11 @@ fn main() {
         let mut cfg: serde_json::Value = json::load(config_path)
             .unwrap_or_else(|_| panic!("unable to read waybar config at {config_path}"));
 
-        if NixInfo::before().persistent_workspaces {
+        if let NixInfo {
+            persistent_workspaces: Some(true),
+            ..
+        } = NixInfo::before()
+        {
             let rearranged_workspaces = Monitor::rearranged_workspaces();
 
             cfg["hyprland/workspaces"]["persistent-workspaces"] =

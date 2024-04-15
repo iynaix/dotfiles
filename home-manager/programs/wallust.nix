@@ -45,27 +45,27 @@ in
   custom.wallust.templates = {
     # misc information for nix
     "nix.json" = {
-      text = lib.strings.toJSON {
-        wallpaper = "{{wallpaper}}";
-        fallback = "${../gits-catppuccin.jpg}";
-        monitors = config.custom.displays;
-        inherit (config.custom.wallust) colorscheme;
-        # TODO: remove when hyprlock has support for jpegs?
-        hyprlock = config.custom.hyprland.lock;
-        persistent_workspaces = config.custom.waybar.persistent-workspaces;
+      text = lib.strings.toJSON (
         # use pywal template syntax here
-        special = {
-          background = "{{background}}";
-          foreground = "{{foreground}}";
-          cursor = "{{cursor}}";
-        };
-        colors = lib.listToAttrs (
-          map (i: {
-            name = "color${toString i}";
-            value = "{{color${toString i}}}";
-          }) (lib.range 0 15)
-        );
-      };
+        {
+          wallpaper = "{{wallpaper}}";
+          fallback = "${../gits-catppuccin.jpg}";
+          monitors = config.custom.displays;
+          inherit (config.custom.wallust) colorscheme;
+          special = {
+            background = "{{background}}";
+            foreground = "{{foreground}}";
+            cursor = "{{cursor}}";
+          };
+          colors = lib.listToAttrs (
+            map (i: {
+              name = "color${toString i}";
+              value = "{{color${toString i}}}";
+            }) (lib.range 0 15)
+          );
+        }
+        // cfg.nixJson
+      );
       target = "${config.xdg.cacheHome}/wallust/nix.json";
     };
   };

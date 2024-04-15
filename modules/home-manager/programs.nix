@@ -1,4 +1,9 @@
-{ isNixOS, lib, ... }:
+{
+  isNixOS,
+  lib,
+  pkgs,
+  ...
+}:
 {
   options.custom = {
     deadbeef.enable = lib.mkEnableOption "deadbeef";
@@ -32,7 +37,11 @@
         default = null;
         description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
       };
-
+      nixJson = lib.mkOption {
+        type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
+        default = { };
+        description = "Data to be written to nix.json for use in other programs at runtime.";
+      };
       templates = lib.mkOption {
         type = attrsOf (submodule {
           options = {

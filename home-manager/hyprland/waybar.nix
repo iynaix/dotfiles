@@ -184,94 +184,98 @@ lib.mkIf cfg.enable {
       start_hidden = cfg.hidden;
     };
 
-  custom.wallust.templates = lib.mkIf cfg.enable {
-    "waybar.jsonc" = {
-      text = lib.strings.toJSON cfg.config;
-      target = "${config.xdg.configHome}/waybar/config.jsonc";
-    };
-    "waybar.css" =
-      let
-        margin = "12px";
-        baseModuleCss = ''
-          font-family: ${config.custom.fonts.regular};
-          font-weight: bold;
-          color: {{foreground}};
-          transition: none;
-          text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-          border-bottom:  2px solid transparent;
-          padding-left: ${margin};
-          padding-right: ${margin};
-        '';
-        mkModuleClassName =
-          mod:
-          "#${
-            lib.replaceStrings
-              [
-                "hyprland/"
-                "/"
-              ]
-              [
-                ""
-                "-"
-              ]
-              mod
-          }";
-        mkModulesCss =
-          arr:
-          lib.concatMapStringsSep "\n" (mod: ''
-            ${mkModuleClassName mod} {
-              ${baseModuleCss}
-            }'') arr;
-      in
-      {
-        text =
-          ''
-            * {
-              border: none;
-              border-radius: 0;
-            }
+  custom.wallust = {
+    nixJson.persistent_workspaces = cfg.persistent-workspaces;
 
-            #waybar {
-              background: rgba(0,0,0,0.5)
-            }
-
-            ${mkModulesCss cfg.config.modules-left}
-            ${mkModulesCss cfg.config.modules-center}
-            ${mkModulesCss cfg.config.modules-right}
-
-            ${mkModuleClassName "custom/nix"} {
-              font-size: 20px;
-            }
-
-            #workspaces button {
-              ${baseModuleCss}
-              padding-left: 8px;
-              padding-right: 8px;
-            }
-
-            #workspaces button.active {
-              border-bottom:  2px solid {{foreground}};
-              background-color: rgba(255,255,255, 0.25);
-            }
-          ''
-          + lib.optionalString cfg.idle-inhibitor ''
-            ${mkModuleClassName "idle_inhibitor"} {
-              font-size: 16px;
-            }
-          ''
-          +
-            # remove padding for the outermost modules
-            ''
-              ${mkModuleClassName (lib.head cfg.config.modules-left)} {
-                padding-left: 0;
-                margin-left: ${margin};
-              }
-              ${mkModuleClassName (lib.last cfg.config.modules-right)} {
-                padding-right: 0;
-                margin-right: ${margin};
-              }
-            '';
-        target = "${config.xdg.configHome}/waybar/style.css";
+    templates = {
+      "waybar.jsonc" = {
+        text = lib.strings.toJSON cfg.config;
+        target = "${config.xdg.configHome}/waybar/config.jsonc";
       };
+      "waybar.css" =
+        let
+          margin = "12px";
+          baseModuleCss = ''
+            font-family: ${config.custom.fonts.regular};
+            font-weight: bold;
+            color: {{foreground}};
+            transition: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            border-bottom:  2px solid transparent;
+            padding-left: ${margin};
+            padding-right: ${margin};
+          '';
+          mkModuleClassName =
+            mod:
+            "#${
+              lib.replaceStrings
+                [
+                  "hyprland/"
+                  "/"
+                ]
+                [
+                  ""
+                  "-"
+                ]
+                mod
+            }";
+          mkModulesCss =
+            arr:
+            lib.concatMapStringsSep "\n" (mod: ''
+              ${mkModuleClassName mod} {
+                ${baseModuleCss}
+              }'') arr;
+        in
+        {
+          text =
+            ''
+              * {
+                border: none;
+                border-radius: 0;
+              }
+
+              #waybar {
+                background: rgba(0,0,0,0.5)
+              }
+
+              ${mkModulesCss cfg.config.modules-left}
+              ${mkModulesCss cfg.config.modules-center}
+              ${mkModulesCss cfg.config.modules-right}
+
+              ${mkModuleClassName "custom/nix"} {
+                font-size: 20px;
+              }
+
+              #workspaces button {
+                ${baseModuleCss}
+                padding-left: 8px;
+                padding-right: 8px;
+              }
+
+              #workspaces button.active {
+                border-bottom:  2px solid {{foreground}};
+                background-color: rgba(255,255,255, 0.25);
+              }
+            ''
+            + lib.optionalString cfg.idle-inhibitor ''
+              ${mkModuleClassName "idle_inhibitor"} {
+                font-size: 16px;
+              }
+            ''
+            +
+              # remove padding for the outermost modules
+              ''
+                ${mkModuleClassName (lib.head cfg.config.modules-left)} {
+                  padding-left: 0;
+                  margin-left: ${margin};
+                }
+                ${mkModuleClassName (lib.last cfg.config.modules-right)} {
+                  padding-right: 0;
+                  margin-right: ${margin};
+                }
+              '';
+          target = "${config.xdg.configHome}/waybar/style.css";
+        };
+    };
   };
 }
