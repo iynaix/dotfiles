@@ -34,6 +34,9 @@ inputs.devenv.lib.mkShell {
                 "generated.nix"
                 "templates/.*/flake.nix"
               ];
+              settings = {
+                edit = true;
+              };
             };
             nixfmt = {
               enable = true;
@@ -43,9 +46,6 @@ inputs.devenv.lib.mkShell {
               enable = true;
               excludes = [ "generated.nix" ];
             };
-          };
-          settings = {
-            deadnix.edit = true;
           };
         };
       }

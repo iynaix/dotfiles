@@ -6,13 +6,13 @@
 }:
 gcc13Stdenv.mkDerivation {
   pname = "hyprNStack";
-  version = "${hyprland.version}-unstable-2024-03-27";
+  version = "${hyprland.version}-unstable-2024-04-13";
 
   src = fetchFromGitHub {
     owner = "zakk4223";
     repo = "hyprNStack";
-    rev = "9a46b8adf2ecc67c47b1db75ffb832de3aed1291";
-    hash = "sha256-g8PG9Hg3qBBDlPA2rT/Luzes1+rEVGtfU/S8amXt3Hk=";
+    rev = "cdde5e302f66fba2be05195cd634f74ef464dd8f";
+    hash = "sha256-fOvhWrmkyYd2iCbThMclX0RpmRlJva2pzH8Ymtl11WA=";
   };
 
   preConfigure = ''

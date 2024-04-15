@@ -28,13 +28,6 @@ in
 
   # mpv plugins
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
-  mpv-dynamic-crop =
-    assert (
-      lib.assertMsg (
-        !lib.hasAttr "dynamic-crop" pkgs.mpvScripts
-      ) "dynamic-crop: dynamic-crop is in nixpkgs"
-    );
-    (w pkgs.mpvScripts.callPackage ./mpv-dynamic-crop { inherit buildLua; });
   mpv-modernx = w pkgs.mpvScripts.callPackage ./mpv-modernx { inherit buildLua; };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };

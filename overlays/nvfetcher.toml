@@ -1,10 +1,10 @@
-[hyprcursor]
-src.git = "https://github.com/hyprwm/hyprcursor"
-fetch.github = "hyprwm/hyprcursor"
-
 [hyprlock]
 src.git = "https://github.com/hyprwm/hyprlock"
 fetch.github = "hyprwm/hyprlock"
+
+[mpv-dynamic-crop]
+src.git = "https://github.com/Ashyni/mpv-scripts"
+fetch.github = "Ashyni/mpv-scripts"
 
 [path-of-building]
 src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"

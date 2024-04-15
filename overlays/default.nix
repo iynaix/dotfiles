@@ -34,14 +34,6 @@ in
         patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
       });
 
-      hyprcursor =
-        assert (
-          lib.assertMsg (prev.hyprcursor.version == "0.1.5") "hyprcursor: source overlay still needed?"
-        );
-        prev.hyprcursor.overrideAttrs (
-          o: sources.hyprcursor // { buildInputs = (o.buildInputs or [ ]) ++ [ prev.tomlplusplus ]; }
-        );
-
       hyprlock = prev.hyprlock.overrideAttrs (_: sources.hyprlock);
 
       # add default font to silence null font errors

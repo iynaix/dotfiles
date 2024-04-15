@@ -147,6 +147,7 @@ in
         with pkgs.mpvScripts;
         [
           chapterskip
+          dynamic-crop
           seekTo
           sponsorblock
           thumbfast
@@ -154,7 +155,6 @@ in
         # custom packaged scripts
         ++ (with pkgs.custom; [
           mpv-deletefile
-          mpv-dynamic-crop
           # mpv-modernx
           mpv-nextfile
           mpv-sub-select
