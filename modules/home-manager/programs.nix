@@ -10,7 +10,6 @@
         description = "Extra ghostty configuration.";
       };
     };
-    gradience.enable = lib.mkEnableOption "gradience";
     helix.enable = lib.mkEnableOption "helix";
     kitty.enable = lib.mkEnableOption "kitty" // {
       default = isNixOS;

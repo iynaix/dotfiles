@@ -13,7 +13,7 @@ fi
 
 readonly SRC_DIR=$(cd $(dirname $0) && pwd)
 
-readonly COLOR_VARIANTS=("Blue" "Flamingo" "Green" "Lavender" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow")
+readonly COLOR_VARIANTS=(@@THEME_COLORS@@)
 readonly BRIGHT_VARIANTS=("" "dark")
 
 usage() {
@@ -28,83 +28,13 @@ OPTIONS:
   -h                       Show this help
 
 COLOR VARIANTS:
-  Blue                     Blue color folder version
-  Flamingo                 Flamingo color folder version
-  Green                    Green color folder version
-  Lavender                 Lavender color folder version
-  Maroon                   Maroon color folder version
-  Mauve                    Mauve color folder version
-  Peach                    Peach color folder version
-  Pink                     Pink color folder version
-  Red                      Red color folder version
-  Rosewater                Rosewater color folder version
-  Sapphire                 Sapphire color folder version
-  Sky                      Sky color folder version
-  Teal                     Teal color folder version
-  Yellow                   Yellow color folder version
-
-  By default, only the Blue one is selected.
+  @@THEME_HELP@@
 EOF
 }
 
 install_theme() {
   case "$1" in
-    Blue)
-      local -r theme_color='#89b4fa'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Flamingo)
-      local -r theme_color='#f2cdcd'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Green)
-      local -r theme_color='#a6e3a1'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Lavender)
-      local -r theme_color='#b4befe'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Maroon)
-      local -r theme_color='#eba0ac'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Mauve)
-      local -r theme_color='#cba6f7'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Peach)
-      local -r theme_color='#fab387'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Pink)
-      local -r theme_color='#f5c2e7'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Red)
-      local -r theme_color='#f38ba8'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Rosewater)
-      local -r theme_color='#f5e0dc'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Sapphire)
-      local -r theme_color='#74c7ec'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Sky)
-      local -r theme_color='#89dceb'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Teal)
-      local -r theme_color='#94e2d5'
-      local -r theme_back_color='#ffffff'
-      ;;
-    Yellow)
-      local -r theme_color='#f9e2af'
-      local -r theme_back_color='#ffffff'
-      ;;
+    @@THEME_IF@@
   esac
 
   # Appends a dash if the variables are not empty
