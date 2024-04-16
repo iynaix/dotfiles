@@ -141,12 +141,14 @@
       ];
       text = ''
         REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
+        if git show-ref --verify --quiet refs/heads/master; then
+            BRANCH="master"
+        else
+            BRANCH="main"
+        fi
 
-        gmain
-
-        CURRENT=$(git rev-parse --abbrev-ref HEAD)
-        gh repo sync "iynaix/$REPO_NAME" -b "CURRENT"
-        git pull origin "$CURRENT"
+        gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
+        git pull origin "$BRANCH"
       '';
     };
   };

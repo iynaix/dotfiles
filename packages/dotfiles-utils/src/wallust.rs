@@ -175,7 +175,7 @@ pub fn apply_colors() {
 
 /// runs wallust with options from wallpapers.csv
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
-    let mut wallust = execute::command_args!("wallust", "run", "--check-contrast");
+    let mut wallust = execute::command_args!("wallust", "run", "--no-cache", "--check-contrast");
 
     // normalize the options for wallust
     if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {

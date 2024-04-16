@@ -17,7 +17,12 @@ pub fn current() -> Option<String> {
 
     let wallpaper = {
         if curr == "./foo/bar.text" {
-            fs::read_to_string(full_path("~/.cache/current_wallpaper")).ok()
+            fs::read_to_string(
+                dirs::runtime_dir()
+                    .expect("could not get $XDG_RUNTIME_DIR")
+                    .join("current_wallpaper"),
+            )
+            .ok()
         } else {
             Some(curr)
         }

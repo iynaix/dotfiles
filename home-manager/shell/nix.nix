@@ -78,7 +78,7 @@ in
           fi
 
           ${lib.optionalString isNixOS ''
-            # only relevant if --dry is passed
+            # only relevant if --dry is not passed
             if [[ "$*" != *"--dry"* ]]; then
               echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
             fi
@@ -89,7 +89,10 @@ in
     # update all nvfetcher overlays and packages
     nv-update = pkgs.writeShellApplication {
       name = "nv-update";
-      runtimeInputs = [ pkgs.nvfetcher ];
+      runtimeInputs = with pkgs; [
+        fd
+        nvfetcher
+      ];
       text = ''
         cd ${dots}
 
@@ -148,19 +151,22 @@ in
     # build local package if possible, otherwise build config
     nb = pkgs.writeShellApplication {
       name = "nb";
-      runtimeInputs = with pkgs; [ custom.shell.nbuild ];
+      runtimeInputs = with pkgs; [
+        nom
+        custom.shell.nbuild
+      ];
       text = ''
         if [[ $1 == ".#"* ]]; then
-            nix build "$@"
+            nom build "$@"
         # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
         elif [[ $(pwd) =~ /nixpkgs$ ]]; then
             nix-build -A "$1"
         # dotfiles, build local package
         elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
-            nix build ".#$1"
+            nom build ".#$1"
         # nix repo, build package within flake
         elif [[ -f flake.nix ]]; then
-            nix build ".#$1"
+            nom build ".#$1"
         else
             nbuild "$@"
         fi

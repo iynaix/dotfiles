@@ -1,7 +1,7 @@
 {
     "hyprlock": {
         "cargoLocks": null,
-        "date": "2024-04-13",
+        "date": "2024-04-19",
         "extract": null,
         "name": "hyprlock",
         "passthru": null,
@@ -13,11 +13,11 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hyprlock",
-            "rev": "04267a5f83a7cd94a2e219d22b139c72ed718182",
-            "sha256": "sha256-hbLGAdWXnDyrnUc2+ShoSbOiBgfl5ESx+4agrjjivsM=",
+            "rev": "307e473759d1268b50a087095cc005c941f3bb0d",
+            "sha256": "sha256-qsXB8swg2FkVRYx8FdD28iXQsz5Pyd0hxV8pnyI49aI=",
             "type": "github"
         },
-        "version": "04267a5f83a7cd94a2e219d22b139c72ed718182"
+        "version": "307e473759d1268b50a087095cc005c941f3bb0d"
     },
     "mpv-dynamic-crop": {
         "cargoLocks": null,
