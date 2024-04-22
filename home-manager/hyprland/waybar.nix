@@ -37,6 +37,7 @@ lib.mkIf cfg.enable {
         }
       )
     }"
+    "$mod_SHIFT, a, exec, launch-waybar"
   ];
 
   custom.waybar.config =

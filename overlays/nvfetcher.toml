@@ -17,5 +17,5 @@ fetch.github = "LGFae/swww"
 
 [wallust]
 src.git = "https://codeberg.org/explosion-mental/wallust.git"
-# src.branch = "dev"
+src.branch = "dev"
 fetch.git = "https://codeberg.org/explosion-mental/wallust.git"

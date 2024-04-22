@@ -7,6 +7,7 @@
 }:
 let
   homeDir = "/persist${config.hm.home.homeDirectory}";
+  proj_dir = "/persist${config.hm.home.homeDirectory}/projects";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in
@@ -131,7 +132,14 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
         };
       };
 
-      custom-nixos.persist.home.directories = [ ".config/transmission-daemon" ];
+      custom-nixos = {
+        persist.home.directories = [ ".config/transmission-daemon" ];
+
+        # process downloaded files
+        shell.packages = {
+          renamer = pkgs.custom.lib.useDirenv "${proj_dir}/renamer" ''cargo run --release --bin renamer'';
+        };
+      };
     }
 
     # only setup rpc password if sops is enabled

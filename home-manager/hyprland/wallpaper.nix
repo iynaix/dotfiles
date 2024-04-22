@@ -57,7 +57,7 @@ lib.mkMerge [
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
           ${pkgs.custom.lib.useDirenv wallpapers_proj ''
-            cargo run --release --bin wallpaper-pipeline "$@"
+            cargo run --release --bin pipeline "$@"
           ''}
           wallpapers-backup
         '';

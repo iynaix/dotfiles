@@ -85,6 +85,7 @@ in
     };
 
   nix = {
+    # channel.enable = false;
     gc = {
       # Automatic garbage collection
       automatic = true;

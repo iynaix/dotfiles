@@ -45,7 +45,6 @@ in
     ywhere = ''yazi "$(dirname "$(dirname "$(readlink -f "$(which "$1")")")")"'';
     # server command, runs a local server
     server = ''${lib.getExe pkgs.python3} -m http.server "\${"1:-8000"}"'';
-    renamer = pkgs.custom.lib.useDirenv "${proj_dir}/personal-graphql" ''cargo run --release --bin renamer'';
     openproj = ''
       cd ${proj_dir}
       if [[ $# -eq 1 ]]; then
