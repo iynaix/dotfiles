@@ -66,7 +66,6 @@ let
               experimental-features = [
                 "nix-command"
                 "flakes"
-                "repl-flake"
               ];
               substituters = [
                 "https://hyprland.cachix.org"

@@ -118,7 +118,6 @@ in
       experimental-features = [
         "nix-command"
         "flakes"
-        "repl-flake" # allows use of a flake via nix repl ".#desktop"
       ];
       substituters = [
         "https://hyprland.cachix.org"

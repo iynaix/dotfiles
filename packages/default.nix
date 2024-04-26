@@ -24,7 +24,7 @@ in
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
-  hyprnstack = callPackage ./hyprnstack { };
+  hyprnstack = w callPackage ./hyprnstack { };
 
   # mpv plugins
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };

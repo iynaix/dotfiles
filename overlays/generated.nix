@@ -38,14 +38,15 @@
   };
   swww = {
     pname = "swww";
-    version = "432b7135af0bb34e4b0e55edf76ff516937bc7b0";
+    version = "453fa1456a285c819693d5961116db1be79ecf7f";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "432b7135af0bb34e4b0e55edf76ff516937bc7b0";
+      rev = "453fa1456a285c819693d5961116db1be79ecf7f";
       fetchSubmodules = false;
-      sha256 = "sha256-pX6fJrlNXe1W5ZO9nC9ikN1zoAcHDqErLS7EnglD33o=";
+      sha256 = "sha256-9zy6zgH2jZkjylBvkDtrfYef8xFd0IpHmWHmj0anAUw=";
     };
+    date = "2024-04-25";
   };
   wallust = {
     pname = "wallust";

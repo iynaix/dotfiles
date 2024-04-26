@@ -1,0 +1,22 @@
+{
+    "hyprNStack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "hyprNStack",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "zakk4223",
+            "repo": "hyprNstack",
+            "rev": "cdde5e302f66fba2be05195cd634f74ef464dd8f",
+            "sha256": "sha256-fOvhWrmkyYd2iCbThMclX0RpmRlJva2pzH8Ymtl11WA=",
+            "type": "github"
+        },
+        "version": "cdde5e302f66fba2be05195cd634f74ef464dd8f"
+    }
+}
