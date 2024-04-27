@@ -20,7 +20,7 @@
   # by-id doesn't seem to work with b650e mobo
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
 
-  services.xserver.displayManager.autoLogin.user = user;
+  services.displayManager.autoLogin.user = user;
 
   # open ports for devices on the local network
   networking.firewall.extraCommands = ''

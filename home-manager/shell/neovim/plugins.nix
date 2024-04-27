@@ -3,7 +3,7 @@
   programs.nixvim = {
     plugins = {
       bufferline.enable = true;
-      comment-nvim.enable = true;
+      comment.enable = true;
       # perform initial setup with
       # :Copilot setup
       # TODO: switch to copilot lua?

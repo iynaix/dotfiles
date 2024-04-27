@@ -58,12 +58,10 @@ let
       ];
     };
 in
-rec {
+{
   desktop = mkNixosConfiguration "desktop";
   framework = mkNixosConfiguration "framework";
   xps = mkNixosConfiguration "xps";
   vm = mkNixosConfiguration "vm";
-  vm-amd = vm // {
-    config.custom-nixos.hyprland.enable = true;
-  };
+  vm-amd = mkNixosConfiguration "vm-amd";
 }

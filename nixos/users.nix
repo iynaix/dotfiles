@@ -4,9 +4,6 @@
   user,
   ...
 }:
-let
-  autoLoginUser = config.services.xserver.displayManager.autoLogin.user;
-in
 {
   # silence warning about setting multiple user password options
   # https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990
@@ -22,10 +19,10 @@ in
     {
       # autologin
       services = {
-        xserver.displayManager.autoLogin.user = lib.mkDefault (
+        displayManager.autoLogin.user = lib.mkDefault (
           if config.boot.zfs.requestEncryptionCredentials then user else null
         );
-        getty.autologinUser = autoLoginUser;
+        getty.autologinUser = config.services.displayManager.autoLogin.user;
       };
 
       users = {

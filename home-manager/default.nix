@@ -1,9 +1,9 @@
 {
-  user,
-  pkgs,
-  lib,
   config,
   isNixOS,
+  lib,
+  pkgs,
+  user,
   ...
 }:
 {

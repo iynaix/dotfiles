@@ -27,11 +27,11 @@
 
     colorschemes.catppuccin = {
       enable = true;
-      flavour = "mocha";
+      settings.flavour = "mocha";
       # transparentBackground = true;
     };
 
-    options = {
+    opts = {
       autoread = true;
       cursorline = true;
       fileformat = "unix";

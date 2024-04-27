@@ -5,9 +5,6 @@
   user,
   ...
 }:
-let
-  autoLoginUser = config.services.xserver.displayManager.autoLogin.user;
-in
 lib.mkMerge [
   # ssh settings
   {
@@ -33,7 +30,8 @@ lib.mkMerge [
   # keyring settings
   {
     services.gnome.gnome-keyring.enable = true;
-    security.pam.services.gdm.enableGnomeKeyring = autoLoginUser != null;
+    security.pam.services.gdm.enableGnomeKeyring =
+      config.services.displayManager.autoLogin.user != null;
   }
 
   # misc

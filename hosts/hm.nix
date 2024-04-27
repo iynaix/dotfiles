@@ -27,12 +27,9 @@ let
       ];
     };
 in
-rec {
+{
   desktop = mkHomeConfiguration "desktop";
   framework = mkHomeConfiguration "framework";
   xps = mkHomeConfiguration "xps";
-  vm = mkHomeConfiguration "vm";
-  vm-amd = vm // {
-    config.custom-nixos.hyprland.enable = true;
-  };
+  # NOTE: standalone home-manager doesn't make sense for VM config!
 }
