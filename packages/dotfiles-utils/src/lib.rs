@@ -1,10 +1,7 @@
 use crate::monitor::Monitor;
 use execute::Execute;
 use serde::{de::DeserializeOwned, Deserialize};
-use std::{
-    path::{Path, PathBuf},
-    process::Stdio,
-};
+use std::{path::PathBuf, process::Stdio};
 
 pub mod cli;
 pub mod monitor;
@@ -163,8 +160,12 @@ impl Workspace {
     }
 }
 
-pub fn filename(path: &Path) -> String {
-    path.file_name()
+pub fn filename<P>(path: P) -> String
+where
+    P: AsRef<std::path::Path> + std::fmt::Debug,
+{
+    path.as_ref()
+        .file_name()
         .unwrap_or_else(|| panic!("could not get filename: {path:?}"))
         .to_str()
         .unwrap_or_else(|| panic!("could not convert filename to str: {path:?}"))

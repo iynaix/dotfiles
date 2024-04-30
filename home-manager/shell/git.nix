@@ -147,8 +147,8 @@
             BRANCH="main"
         fi
 
-        gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
-        git pull origin "$BRANCH"
+        # if the repo sync fails, just update the branch anyway
+        gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH" || git pull origin "$BRANCH"
       '';
     };
   };

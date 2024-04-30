@@ -1,3 +1,4 @@
+use dotfiles_utils::nixinfo::NixInfo;
 use dotfiles_utils::{hypr, hypr_json, monitor::Monitor};
 use execute::Execute;
 use serde::Deserialize;
@@ -46,10 +47,7 @@ fn set_workspace_orientation(workspace: &str, is_desktop: bool, nstack: bool) {
 }
 
 fn main() {
-    let is_desktop = gethostname::gethostname()
-        .to_str()
-        .unwrap_or_default()
-        .ends_with("desktop");
+    let is_desktop = NixInfo::before().host == "desktop";
     let nstack = is_nstack();
 
     let socket_path = get_hyprland_socket();

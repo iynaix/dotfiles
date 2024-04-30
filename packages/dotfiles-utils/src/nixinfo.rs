@@ -3,7 +3,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Default, Deserialize)]
-pub struct Special {
+pub struct ColorsSpecial {
     pub background: String,
     pub foreground: String,
     pub cursor: String,
@@ -20,11 +20,10 @@ pub struct NixInfo {
     pub wallpaper: String,
     pub fallback: String,
     pub colorscheme: Option<String>,
-    pub special: Special,
+    pub special: ColorsSpecial,
+    pub host: String,
     pub persistent_workspaces: Option<bool>,
-    // FIXME: remove when hyprlock has support for jpegs?
     // output cropped wallpaper as jpg for hyprlock
-    pub hyprlock: Option<bool>,
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,

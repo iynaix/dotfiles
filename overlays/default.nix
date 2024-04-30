@@ -34,7 +34,19 @@ in
         patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
       });
 
-      hyprlock = prev.hyprlock.overrideAttrs (_: sources.hyprlock);
+      hyprlock = prev.hyprlock.overrideAttrs (
+        o:
+        sources.hyprlock
+        // {
+          buildInputs =
+            o.buildInputs
+            ++ (with prev; [
+              file
+              libjpeg
+              libwebp
+            ]);
+        }
+      );
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (o: {

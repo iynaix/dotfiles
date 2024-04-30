@@ -193,21 +193,17 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
 
     // crop wallpaper for lockscreen
     let nix_info = NixInfo::before();
-    if let NixInfo {
-        hyprlock: Some(true),
-        ..
-    } = nix_info
-    {
+    if matches!(nix_info.host.as_str(), "framework" | "xps") {
         if let Some(info) = wallpaper_info {
-            let nix_monitors = nix_info.monitors;
-            if let Some(m) = Monitor::monitors()
-                .iter()
-                .find(|m| nix_monitors.iter().any(|nix_mon| nix_mon.name == m.name))
-            {
+            if let Some(m) = Monitor::monitors().iter().find(|m| {
+                nix_info
+                    .monitors
+                    .iter()
+                    .any(|nix_mon| nix_mon.name == m.name)
+            }) {
                 if let Some(geometry) = info.get_geometry(m.width, m.height) {
                     // output cropped and resized wallpaper to /tmp
-                    let with_png = full_path(wallpaper).with_extension("png");
-                    let output_fname = filename(&with_png);
+                    let output_fname = filename(full_path(wallpaper));
                     let output_path = PathBuf::from("/tmp").join(output_fname);
                     let output_path = output_path
                         .to_str()

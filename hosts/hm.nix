@@ -30,6 +30,5 @@ in
 {
   desktop = mkHomeConfiguration "desktop";
   framework = mkHomeConfiguration "framework";
-  xps = mkHomeConfiguration "xps";
   # NOTE: standalone home-manager doesn't make sense for VM config!
 }

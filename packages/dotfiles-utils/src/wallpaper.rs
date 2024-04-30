@@ -2,11 +2,7 @@ use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
 use crate::{full_path, nixinfo::NixInfo};
-use std::{
-    collections::HashMap,
-    fs,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashMap, fs, path::PathBuf};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
@@ -35,8 +31,12 @@ pub fn current() -> Option<String> {
     )
 }
 
-fn filter_images(dir: &Path) -> impl Iterator<Item = String> {
-    dir.read_dir()
+fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
+where
+    P: AsRef<std::path::Path> + std::fmt::Debug,
+{
+    dir.as_ref()
+        .read_dir()
         .unwrap_or_else(|_| panic!("could not read {:?}", &dir))
         .flatten()
         .filter_map(|entry| {
@@ -76,7 +76,10 @@ pub fn random() -> String {
     }
 }
 
-pub fn random_from_dir(dir: &Path) -> String {
+pub fn random_from_dir<P>(dir: P) -> String
+where
+    P: AsRef<std::path::Path> + std::fmt::Debug,
+{
     filter_images(dir)
         .collect::<Vec<_>>()
         .choose(&mut rand::thread_rng())

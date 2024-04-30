@@ -84,8 +84,5 @@ lib.mkIf lockEnable {
         target = "${config.xdg.configHome}/hypr/hyprlock.conf";
       };
     };
-
-    # FIXME: remove when hyprlock has support for jpegs?
-    nixJson.hyprlock = lockEnable;
   };
 }
