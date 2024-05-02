@@ -1,4 +1,0 @@
-[mpv-thumbfast-osc]
-src.git = "https://github.com/po5/thumbfast"
-src.branch = "vanilla-osc"
-fetch.github = "po5/thumbfast"

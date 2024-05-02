@@ -57,11 +57,6 @@ in
         '';
       });
 
-      # nixos-small logo looks like ass
-      neofetch = prev.neofetch.overrideAttrs (o: {
-        patches = (o.patches or [ ]) ++ [ ./neofetch-nixos-small.patch ];
-      });
-
       # fix nix package count for nitch
       nitch = prev.nitch.overrideAttrs (o: {
         patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];

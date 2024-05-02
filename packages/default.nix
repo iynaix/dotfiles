@@ -28,11 +28,9 @@ in
 
   # mpv plugins
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
-  mpv-modernx = w pkgs.mpvScripts.callPackage ./mpv-modernx { inherit buildLua; };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };
   mpv-subsearch = w pkgs.mpvScripts.callPackage ./mpv-subsearch { inherit buildLua; };
-  mpv-thumbfast-osc = w pkgs.mpvScripts.callPackage ./mpv-thumbfast-osc { inherit buildLua; };
 
   rofi-themes = w callPackage ./rofi-themes { };
 
