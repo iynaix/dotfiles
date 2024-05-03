@@ -24,14 +24,6 @@ in
 
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     home = {
-      sessionVariables = {
-        HYPR_LOG = "/tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
-      };
-
-      shellAliases = {
-        hypr-log = "less /tmp/hypr/$(command ls -t /tmp/hypr/ | grep -v lock | head -n 1)/hyprland.log";
-      };
-
       packages = with pkgs; [
         # clipboard history
         cliphist

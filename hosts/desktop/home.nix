@@ -1,7 +1,7 @@
 {
-  pkgs,
-  lib,
   isNixOS,
+  lib,
+  pkgs,
   ...
 }:
 {
@@ -58,6 +58,7 @@
       with pkgs;
       [
         ffmpeg
+        hyprlock # build package for testing, but it isn't used
         # vial
       ]
     );

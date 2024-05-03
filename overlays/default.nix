@@ -38,6 +38,8 @@ in
         o:
         sources.hyprlock
         // {
+          patches = [ ];
+
           buildInputs =
             o.buildInputs
             ++ (with prev; [

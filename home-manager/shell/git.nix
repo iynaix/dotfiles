@@ -147,8 +147,11 @@
             BRANCH="main"
         fi
 
-        # if the repo sync fails, just update the branch anyway
-        gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH" || git pull origin "$BRANCH"
+        # check if repo is forked and sync with upstream if it is
+        if gh repo view "iynaix/$REPO_NAME" >/dev/null 2>&1; then
+            gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
+        fi
+        git pull origin "$BRANCH"
       '';
     };
   };
