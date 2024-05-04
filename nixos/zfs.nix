@@ -5,8 +5,8 @@
   ...
 }:
 let
-  cfg = config.custom-nixos.zfs;
-  persistCfg = config.custom-nixos.persist;
+  cfg = config.custom.zfs;
+  persistCfg = config.custom.persist;
 in
 # NOTE: zfs datasets are created via install.sh
 {

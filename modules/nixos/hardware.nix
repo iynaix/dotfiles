@@ -5,20 +5,20 @@
   ...
 }:
 {
-  options.custom-nixos = {
+  options.custom = {
     bluetooth.enable = lib.mkEnableOption "Bluetooth" // {
       default = isLaptop;
     };
     hdds = {
       enable = lib.mkEnableOption "Desktop HDDs";
       wdred6 = lib.mkEnableOption "WD Red 6TB" // {
-        default = config.custom-nixos.hdds.enable;
+        default = config.custom.hdds.enable;
       };
       ironwolf22 = lib.mkEnableOption "Ironwolf Pro 22TB" // {
-        default = config.custom-nixos.hdds.enable;
+        default = config.custom.hdds.enable;
       };
       windows = lib.mkEnableOption "Windows" // {
-        default = config.custom-nixos.hdds.enable;
+        default = config.custom.hdds.enable;
       };
     };
     nvidia.enable = lib.mkEnableOption "Nvidia GPU";

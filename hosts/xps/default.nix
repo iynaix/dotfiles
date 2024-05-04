@@ -1,5 +1,5 @@
 _: {
-  custom-nixos = {
+  custom = {
     # impermanence
     persist.tmpfs = false; # change to false to test zfs impermanence
   };

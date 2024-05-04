@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.custom-nixos.persist;
+  cfg = config.custom.persist;
   hmPersistCfg = config.hm.custom.persist;
 in
 {

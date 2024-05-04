@@ -18,7 +18,7 @@ lib.mkMerge [
   }
 
   # setup auth token for gh if sops is enabled
-  (lib.mkIf config.custom-nixos.sops.enable {
+  (lib.mkIf config.custom.sops.enable {
     sops.secrets.github_token.owner = user;
 
     hm.home.sessionVariables = {

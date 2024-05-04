@@ -1,6 +1,6 @@
 { user, ... }:
 {
-  custom-nixos = {
+  custom = {
     # hardware
     hdds.enable = true;
     nvidia.enable = true;

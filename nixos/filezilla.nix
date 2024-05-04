@@ -4,7 +4,7 @@
   config,
   ...
 }:
-lib.mkIf config.custom-nixos.bittorrent.enable {
+lib.mkIf config.custom.bittorrent.enable {
   hm = {
     home.packages = [ pkgs.filezilla ];
 

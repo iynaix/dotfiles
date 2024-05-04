@@ -4,7 +4,7 @@
   user,
   ...
 }:
-lib.mkIf config.custom-nixos.syncoid.enable {
+lib.mkIf config.custom.syncoid.enable {
   # allow syncoid to ssh into NAS
   users.users = {
     syncoid.openssh.authorizedKeys.keyFiles = [
@@ -34,7 +34,7 @@ lib.mkIf config.custom-nixos.syncoid.enable {
   };
 
   # persist syncoid .ssh
-  custom-nixos.persist = {
+  custom.persist = {
     root.directories = [ "/var/lib/syncoid" ];
   };
 }

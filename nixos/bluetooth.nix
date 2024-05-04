@@ -1,5 +1,5 @@
 { config, lib, ... }:
-lib.mkIf config.custom-nixos.bluetooth.enable {
+lib.mkIf config.custom.bluetooth.enable {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -17,7 +17,7 @@ lib.mkIf config.custom-nixos.bluetooth.enable {
     };
   };
 
-  custom-nixos.persist = {
+  custom.persist = {
     root.directories = [ "/var/lib/bluetooth" ];
   };
 }

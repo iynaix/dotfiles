@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  custom-nixos = {
+  custom = {
     hyprland.enable = false;
     zfs.encryption = false;
   };

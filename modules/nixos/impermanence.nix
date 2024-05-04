@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  options.custom-nixos.persist = {
+  options.custom.persist = {
     root = {
       directories = lib.mkOption {
         type = lib.types.listOf lib.types.str;

@@ -50,7 +50,7 @@
     }
 
     # use sops for user passwords if enabled
-    (lib.mkIf config.custom-nixos.sops.enable (
+    (lib.mkIf config.custom.sops.enable (
       let
         inherit (config.sops) secrets;
       in

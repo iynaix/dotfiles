@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.mkIf config.custom-nixos.nvidia.enable {
+lib.mkIf config.custom.nvidia.enable {
   # enable nvidia support
   services.xserver.videoDrivers = [ "nvidia" ];
 

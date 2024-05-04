@@ -1,5 +1,5 @@
 { config, lib, ... }:
-lib.mkIf config.custom-nixos.keyd.enable {
+lib.mkIf config.custom.keyd.enable {
   services.keyd = {
     enable = true;
     keyboards.true = {

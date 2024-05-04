@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.mkIf config.custom-nixos.hyprland.enable {
+lib.mkIf config.custom.hyprland.enable {
   services.xserver.desktopManager.gnome.enable = lib.mkForce false;
   services.xserver.displayManager.lightdm.enable = lib.mkForce false;
   # services.xserver.displayManager.sddm.enable = lib.mkForce true;

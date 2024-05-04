@@ -4,8 +4,8 @@
   pkgs,
   ...
 }:
-lib.mkIf (config.custom-nixos.docker.enable || config.custom-nixos.distrobox.enable) {
-  environment.systemPackages = lib.mkIf config.custom-nixos.distrobox.enable [ pkgs.distrobox ];
+lib.mkIf (config.custom.docker.enable || config.custom.distrobox.enable) {
+  environment.systemPackages = lib.mkIf config.custom.distrobox.enable [ pkgs.distrobox ];
 
   virtualisation = {
     podman = {
@@ -26,7 +26,7 @@ lib.mkIf (config.custom-nixos.docker.enable || config.custom-nixos.distrobox.ena
   };
 
   # store docker images on zroot/cache
-  custom-nixos.persist = {
+  custom.persist = {
     home = {
       directories = [ ".local/share/containers" ];
     };

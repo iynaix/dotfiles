@@ -97,7 +97,7 @@
             iconTheme.package
           ])
         # add custom user created shell packages
-        ++ (lib.attrValues config.custom-nixos.shell.finalPackages)
+        ++ (lib.attrValues config.custom.shell.finalPackages)
         ++ (lib.optional config.hm.custom.helix.enable helix);
     };
 
@@ -105,7 +105,7 @@
     nixpkgs.overlays = [
       (_: prev: {
         custom = prev.custom // {
-          shell = config.custom-nixos.shell.finalPackages // config.hm.custom.shell.finalPackages;
+          shell = config.custom.shell.finalPackages // config.hm.custom.shell.finalPackages;
         };
       })
     ];
@@ -136,7 +136,7 @@
     # faster boot times
     # systemd.services.NetworkManager-wait-online.enable = false;
 
-    custom-nixos.persist = {
+    custom.persist = {
       root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
 
       home.directories = [ ".local/state/wireplumber" ];

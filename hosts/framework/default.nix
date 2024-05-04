@@ -1,5 +1,5 @@
 _: {
-  custom-nixos = {
+  custom = {
     vm.enable = true;
   };
 

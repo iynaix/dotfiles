@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.mkIf config.custom-nixos.qmk.enable {
+lib.mkIf config.custom.qmk.enable {
   hardware.keyboard.qmk.enable = true;
 
   # required for vial to work

@@ -5,7 +5,7 @@
   user,
   ...
 }:
-lib.mkIf config.custom-nixos.bittorrent.enable (
+lib.mkIf config.custom.bittorrent.enable (
   lib.mkMerge [
     {
       services = {
@@ -18,7 +18,7 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
         prowlarr.enable = true;
       };
 
-      custom-nixos.persist = {
+      custom.persist = {
         root.directories = [
           "/var/lib/sonarr/.config/NzbDrone"
           "/var/lib/private/prowlarr"
@@ -28,14 +28,14 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
     }
 
     # only setup sonarr-ical-sync if sops is enabled
-    (lib.mkIf config.custom-nixos.sops.enable {
+    (lib.mkIf config.custom.sops.enable {
       # allow sonarr to read secret keys
       sops.secrets = {
         sonarr_api_key.owner = user;
         netlify_site_id.owner = user;
       };
 
-      custom-nixos.shell.packages = {
+      custom.shell.packages = {
         sonarr-ical-sync = pkgs.writeShellApplication {
           name = "sonarr-ical-sync";
           runtimeInputs = with pkgs; [

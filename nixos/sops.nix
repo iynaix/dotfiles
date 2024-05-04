@@ -7,7 +7,7 @@
 let
   homeDir = config.hm.home.homeDirectory;
 in
-lib.mkIf config.custom-nixos.sops.enable {
+lib.mkIf config.custom.sops.enable {
   sops = {
     # to edit secrets file, run "sops hosts/secrets.json"
     defaultSopsFile = ../hosts/secrets.json;
@@ -25,7 +25,7 @@ lib.mkIf config.custom-nixos.sops.enable {
 
   users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
-  custom-nixos.persist.home = {
+  custom.persist.home = {
     directories = [ ".config/sops" ];
   };
 }

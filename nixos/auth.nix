@@ -56,7 +56,7 @@ lib.mkMerge [
     };
 
     # persist keyring and misc other secrets
-    custom-nixos.persist.home = {
+    custom.persist.home = {
       directories = [
         ".pki"
         ".ssh"

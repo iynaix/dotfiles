@@ -6,10 +6,10 @@
   ...
 }:
 let
-  cfg = config.custom-nixos;
+  cfg = config.custom;
 in
 {
-  options.custom-nixos = {
+  options.custom = {
     ### NIXOS LEVEL OPTIONS ###
     distrobox.enable = lib.mkEnableOption "distrobox";
     docker.enable = lib.mkEnableOption "docker" // {
@@ -48,7 +48,7 @@ in
             }
           else
             pkg
-        ) config.custom-nixos.shell.packages;
+        ) config.custom.shell.packages;
         description = "Extra shell packages to install after all entries have been converted to packages.";
       };
     };

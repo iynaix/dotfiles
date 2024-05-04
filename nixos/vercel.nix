@@ -5,10 +5,10 @@
   user,
   ...
 }:
-lib.mkIf (config.custom-nixos.vercel.enable && config.custom-nixos.sops.enable) {
+lib.mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
   sops.secrets.vercel_postgres.owner = user;
 
-  custom-nixos.shell.packages = {
+  custom.shell.packages = {
     vercel-backup = pkgs.writeShellApplication {
       name = "vercel-backup";
       runtimeInputs = [ pkgs.postgresql_15 ];
@@ -38,5 +38,5 @@ lib.mkIf (config.custom-nixos.vercel.enable && config.custom-nixos.sops.enable) 
     };
   };
 
-  custom-nixos.persist.home.directories = [ ".local/share/com.vercel.cli" ];
+  custom.persist.home.directories = [ ".local/share/com.vercel.cli" ];
 }

@@ -55,7 +55,7 @@ in
       ];
   };
 
-  custom-nixos.shell.packages =
+  custom.shell.packages =
     {
       # set the current configuration as default to boot
       ndefault = ''

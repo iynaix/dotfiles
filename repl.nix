@@ -23,28 +23,28 @@ rec {
   # default host
   c = flake.nixosConfigurations.${host}.config;
   inherit (flake.nixosConfigurations.${host}) config;
-  o = c.custom-nixos;
+  o = c.custom;
   inherit (c) hm;
   hmo = hm.custom;
   inherit (flake.nixosConfigurations.${host}) pkgs;
 
   desktop = flake.nixosConfigurations.desktop.config;
-  desktopo = desktop.custom-nixos;
+  desktopo = desktop.custom;
   desktopHm = desktop.hm;
   desktopHmo = desktopHm.custom;
 
   framework = flake.nixosConfigurations.framework.config;
-  frameworko = framework.custom-nixos;
+  frameworko = framework.custom;
   frameworkHm = framework.hm;
   frameworkHmo = frameworkHm.custom;
 
   laptop = flake.nixosConfigurations.framework.config;
-  laptopo = framework.custom-nixos;
+  laptopo = framework.custom;
   laptopHm = framework.hm;
   laptopHmo = frameworkHm.custom;
 
   vm = flake.nixosConfigurations.vm.config;
-  vmo = vm.custom-nixos;
+  vmo = vm.custom;
   vmHm = vm.hm;
   vmHmo = vmHm.custom;
 

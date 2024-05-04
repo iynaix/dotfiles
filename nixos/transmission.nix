@@ -11,7 +11,7 @@ let
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in
-lib.mkIf config.custom-nixos.bittorrent.enable (
+lib.mkIf config.custom.bittorrent.enable (
   lib.mkMerge [
     {
       services.transmission = {
@@ -132,7 +132,7 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
         };
       };
 
-      custom-nixos = {
+      custom = {
         persist.home.directories = [ ".config/transmission-daemon" ];
 
         # process downloaded files
@@ -143,7 +143,7 @@ lib.mkIf config.custom-nixos.bittorrent.enable (
     }
 
     # only setup rpc password if sops is enabled
-    (lib.mkIf config.custom-nixos.sops.enable {
+    (lib.mkIf config.custom.sops.enable {
       sops.secrets.transmission_rpc.owner = user;
 
       services.transmission.credentialsFile = config.sops.secrets.transmission_rpc.path;
