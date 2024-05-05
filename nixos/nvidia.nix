@@ -8,6 +8,8 @@ lib.mkIf config.custom.nvidia.enable {
   # enable nvidia support
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  boot.kernelParams = [ "nvidia-drm.fbdev=1" ];
+
   hardware.nvidia = {
     # package = config.boot.kernelPackages.nvidiaPackages.beta;
     modesetting.enable = true;
