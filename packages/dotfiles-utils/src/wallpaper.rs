@@ -164,33 +164,6 @@ impl<'de> Deserialize<'de> for WallInfo {
                 let wallust = wallust.ok_or_else(|| de::Error::missing_field("wallust"))?;
 
                 // geometries have no width and height, calculate from wall info
-                let geometries = geometries
-                    .iter()
-                    .map(|(ratio, geom)| {
-                        let parts: Vec<&str> = ratio.split('x').collect();
-                        assert!(parts.len() == 2, "invalid aspect ratio: {ratio}");
-
-                        let target_w = parts[0]
-                            .parse::<u32>()
-                            .unwrap_or_else(|_| panic!("invalid aspect ratio width: {}", parts[0]));
-                        let target_h = parts[1].parse::<u32>().unwrap_or_else(|_| {
-                            panic!("invalid aspect ratio height: {}", parts[1])
-                        });
-
-                        // Calculate width and height that can be cropped while maintaining aspect ratio
-                        let crop_w = std::cmp::min(width, height * target_w / target_h);
-                        let crop_h = std::cmp::min(height, width * target_h / target_w);
-
-                        // Choose the larger dimension to get the largest possible cropped rectangle
-                        let (crop_w, crop_h) = if crop_w * target_h > crop_h * target_w {
-                            (crop_w, crop_h)
-                        } else {
-                            (crop_h * target_w / target_h, crop_h)
-                        };
-                        (ratio.clone(), format!("{crop_w}x{crop_h}+{geom}"))
-                    })
-                    .collect();
-
                 Ok(WallInfo {
                     filename,
                     width,

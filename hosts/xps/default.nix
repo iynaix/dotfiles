@@ -7,5 +7,5 @@ _: {
   networking.hostId = "abb4d116"; # required for zfs
 
   # touchpad support
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 }

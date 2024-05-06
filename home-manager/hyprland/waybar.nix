@@ -136,10 +136,7 @@ lib.mkIf cfg.enable {
 
         modules-center = [ "hyprland/workspaces" ];
 
-        modules-left = [
-          "custom/nix"
-          # "hyprland/window"
-        ] ++ (lib.optional cfg.idle-inhibitor "idle_inhibitor");
+        modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idle-inhibitor "idle_inhibitor");
 
         modules-right =
           [

@@ -1,6 +1,5 @@
 {
   config,
-  host,
   isNixOS,
   lib,
   pkgs,
@@ -13,7 +12,7 @@ let
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
 in
 lib.mkMerge [
-  (lib.mkIf (host == "desktop") {
+  (lib.mkIf config.custom.wallpaper-pipeline.enable {
     custom.shell.packages = {
       # backup wallpapers to secondary drive
       wallpapers-backup = {
@@ -54,7 +53,7 @@ lib.mkMerge [
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
           ${pkgs.custom.lib.useDirenv wallpapers_proj ''
-            cargo run --release --bin pipeline "$@"
+            cargo run --release --bin pipeline "$@" "${walls_in_dir}"
           ''}
           wallpapers-backup
         '';
@@ -72,12 +71,31 @@ lib.mkMerge [
       wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
     };
 
+    # config file for wallpapers-ui
+    xdg.configFile = {
+      "wallpaper-ui/config.ini".text = lib.generators.toINIWithGlobalSection { } {
+        globalSection = {
+          csv_path = "${wallpapers_dir}/wallpapers.csv";
+          wallpapers_path = wallpapers_dir;
+        };
+
+        sections = {
+          resolutions = {
+            Framework = "2256x1504";
+            HD = "1920x1080";
+            Thumbnail = "1x1";
+            Ultrawide = "3440x1440";
+            Vertical = "1440x2560";
+          };
+        };
+      };
+    };
+
     programs.pqiv.extraConfig = lib.mkAfter ''
       m { command(mv $1 ${walls_in_dir}) }
     '';
   })
 
-  # TODO: rofi rclip?
   (lib.mkIf config.custom.rclip.enable {
     home.packages = [ pkgs.rclip ];
 
@@ -107,6 +125,7 @@ lib.mkMerge [
       };
     };
   })
+
   (lib.mkIf isNixOS { home.packages = [ pkgs.swww ]; })
   {
     home.shellAliases = {
