@@ -23,8 +23,7 @@ lib.mkIf cfg.enable {
 
   custom = {
     shell.packages = {
-      toggle-waybar = pkgs.writeShellApplication {
-        name = "toggle-waybar";
+      toggle-waybar = {
         runtimeInputs = with pkgs; [
           procps
           custom.dotfiles-utils

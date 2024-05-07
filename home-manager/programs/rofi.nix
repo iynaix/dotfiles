@@ -55,8 +55,7 @@ in
 
   custom.shell.packages = {
     # NOTE: rofi-power-menu only works for powermenuType = 4!
-    rofi-power-menu = pkgs.writeShellApplication {
-      name = "rofi-power-menu";
+    rofi-power-menu = {
       runtimeInputs = with pkgs; [
         rofi-wayland
         custom.rofi-themes

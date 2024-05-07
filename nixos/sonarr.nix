@@ -36,8 +36,7 @@ lib.mkIf config.custom.bittorrent.enable (
       };
 
       custom.shell.packages = {
-        sonarr-ical-sync = pkgs.writeShellApplication {
-          name = "sonarr-ical-sync";
+        sonarr-ical-sync = {
           runtimeInputs = with pkgs; [
             curl
             netlify-cli

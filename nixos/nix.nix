@@ -62,8 +62,7 @@ in
         sudo /run/current-system/bin/switch-to-configuration boot
       '';
       # build iso images
-      nbuild-iso = pkgs.writeShellApplication {
-        name = "nbuild-iso";
+      nbuild-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
         text = ''
           cd ${dots}
@@ -74,14 +73,11 @@ in
     }
     // lib.optionalAttrs (host == "desktop") {
       # build and push config for laptop
-      nsw-remote = pkgs.writeShellApplication {
-        name = "nsw-remote";
-        text = ''
-          cd ${dots}
-          sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
-          cd - > /dev/null
-        '';
-      };
+      nsw-remote = ''
+        cd ${dots}
+        sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
+        cd - > /dev/null
+      '';
     };
 
   nix = {

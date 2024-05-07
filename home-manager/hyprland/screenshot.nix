@@ -20,8 +20,7 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
 
   custom.shell.packages = {
     # screenshot with  options to preselect
-    hypr-screenshot = pkgs.writeShellApplication {
-      name = "hypr-screenshot";
+    hypr-screenshot = {
       runtimeInputs = with pkgs; [
         grimblast
         libnotify
@@ -33,8 +32,7 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
       );
     };
     # run ocr on selected area and copy to clipboard
-    hypr-ocr = pkgs.writeShellApplication {
-      name = "hypr-ocr";
+    hypr-ocr = {
       runtimeInputs = [ pkgs.tesseract5 ];
       text = ''
         img="${screenshotDir}/ocr.png"

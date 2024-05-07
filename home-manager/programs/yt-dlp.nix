@@ -24,8 +24,7 @@
   };
 
   custom.shell.packages = {
-    ytdl = pkgs.writeShellApplication {
-      name = "ytdl";
+    ytdl = {
       runtimeInputs = with pkgs; [ yt-dlp ];
       text = ''
         cd "${config.xdg.userDirs.download}"

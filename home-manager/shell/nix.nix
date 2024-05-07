@@ -34,8 +34,7 @@ in
       echo $(( GENERATIONS + ${if host == "desktop" then "1196" else "0"}))
     '';
     # build flake but don't switch
-    nbuild = pkgs.writeShellApplication {
-      name = "nbuild";
+    nbuild = {
       runtimeInputs = with pkgs; [ custom.shell.nsw ];
       text = ''
         if [ "$#" -eq 0 ]; then
@@ -47,8 +46,7 @@ in
       '';
     };
     # switch via nix flake
-    nsw = pkgs.writeShellApplication {
-      name = "nsw";
+    nsw = {
       runtimeInputs = with pkgs; [
         git
         nh
@@ -88,8 +86,7 @@ in
         '';
     };
     # update all nvfetcher overlays and packages
-    nv-update = pkgs.writeShellApplication {
-      name = "nv-update";
+    nv-update = {
       runtimeInputs = with pkgs; [
         fd
         nvfetcher
@@ -111,8 +108,7 @@ in
       '';
     };
     # update via nix flake
-    upd8 = pkgs.writeShellApplication {
-      name = "upd8";
+    upd8 = {
       runtimeInputs = with pkgs; [
         nvfetcher
         custom.shell.nsw
@@ -150,8 +146,7 @@ in
       fi
     '';
     # build local package if possible, otherwise build config
-    nb = pkgs.writeShellApplication {
-      name = "nb";
+    nb = {
       runtimeInputs = with pkgs; [
         nom
         custom.shell.nbuild
@@ -212,8 +207,7 @@ in
           nix build "nixpkgs#hyprland" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
       fi
     '';
-    ynpath = pkgs.writeShellApplication {
-      name = "ynpath";
+    ynpath = {
       runtimeInputs = with pkgs; [
         yazi
         custom.shell.npath
@@ -221,8 +215,7 @@ in
       text = ''yazi "$(npath "$@")"'';
     };
     # what depends on the given package in the current nixos install?
-    nix-depends = pkgs.writeShellApplication {
-      name = "nix-depends";
+    nix-depends = {
       runtimeInputs = with pkgs; [ custom.shell.npath ];
       text = ''
         if [ "$#" -eq 0 ]; then
@@ -241,8 +234,7 @@ in
         nix why-depends "$parent" "$child"
       '';
     };
-    json2nix = pkgs.writeShellApplication {
-      name = "json2nix";
+    json2nix = {
       runtimeInputs = with pkgs; [
         hjson
         nixfmt-rfc-style
@@ -252,8 +244,7 @@ in
         nix eval --expr "lib.strings.fromJSON '''$json'''" | nixfmt -q
       '';
     };
-    yaml2nix = pkgs.writeShellApplication {
-      name = "yaml2nix";
+    yaml2nix = {
       runtimeInputs = with pkgs; [
         yq
         nixfmt-rfc-style

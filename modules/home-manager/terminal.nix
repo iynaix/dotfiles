@@ -55,23 +55,35 @@ in
       };
 
       packages = lib.mkOption {
-        type = with lib.types; attrsOf (either str package);
+        type = with lib.types; attrsOf (either str attrs);
         default = { };
-        description = "Attrset of extra shell packages to install and add to pkgs.custom overlay, strings will be converted to writeShellApplication.";
+        description = ''
+          Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
+          Both string and attr values will be passed as arguments to writeShellApplication
+        '';
+        example = ''
+          shell.packages = {
+            myPackage1 = "echo 'Hello, World!'";
+            myPackage2 = {
+              runtimeInputs = [ pkgs.hello ];
+              text = "hello --greeting 'Hi'";
+            };
+          }
+        '';
       };
 
       finalPackages = lib.mkOption {
         type = with lib.types; attrsOf package;
         readOnly = true;
         default = lib.mapAttrs (
-          name: pkg:
-          if lib.isString pkg then
+          name: attrs:
+          if lib.isString attrs then
             pkgs.writeShellApplication {
               inherit name;
-              text = pkg;
+              text = attrs;
             }
           else
-            pkg
+            pkgs.writeShellApplication (attrs // { inherit name; })
         ) config.custom.shell.packages;
         description = "Extra shell packages to install after all entries have been converted to packages.";
       };

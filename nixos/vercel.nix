@@ -9,8 +9,7 @@ lib.mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
   sops.secrets.vercel_postgres.owner = user;
 
   custom.shell.packages = {
-    vercel-backup = pkgs.writeShellApplication {
-      name = "vercel-backup";
+    vercel-backup = {
       runtimeInputs = [ pkgs.postgresql_15 ];
       text = ''
         mkdir -p "/media/6TBRED/Vercel"

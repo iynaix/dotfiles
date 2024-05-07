@@ -133,8 +133,7 @@
       git checkout "$BRANCH"
     '';
     # syncs with upstream
-    gsync = pkgs.writeShellApplication {
-      name = "gsync";
+    gsync = {
       runtimeInputs = with pkgs; [
         gh
         custom.shell.gmain

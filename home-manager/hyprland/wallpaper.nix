@@ -16,8 +16,7 @@ lib.mkMerge [
   (lib.mkIf (host == "desktop") {
     custom.shell.packages = {
       # backup wallpapers to secondary drive
-      wallpapers-backup = pkgs.writeShellApplication {
-        name = "wallpapers-backup";
+      wallpapers-backup = {
         runtimeInputs = with pkgs; [ rsync ];
         text = ''
           rsync -aP --delete --no-links "${wallpapers_dir}" "/media/6TBRED"
@@ -30,8 +29,7 @@ lib.mkMerge [
         '';
       };
       # sync wallpapers with laptop
-      wallpapers-remote = pkgs.writeShellApplication {
-        name = "wallpapers-remote";
+      wallpapers-remote = {
         runtimeInputs = with pkgs; [
           rsync
           custom.shell.wallpapers-backup
@@ -52,8 +50,7 @@ lib.mkMerge [
           '';
       };
       # process wallpapers with upscaling and vertical crop
-      wallpapers-pipeline = pkgs.writeShellApplication {
-        name = "wallpapers-pipeline";
+      wallpapers-pipeline = {
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
           ${pkgs.custom.lib.useDirenv wallpapers_proj ''
@@ -86,8 +83,7 @@ lib.mkMerge [
 
     custom.shell.packages = {
       # search wallpapers with rclip
-      wallpapers-search = pkgs.writeShellApplication {
-        name = "wallpapers-search";
+      wallpapers-search = {
         runtimeInputs = with pkgs; [
           rclip
           pqiv
