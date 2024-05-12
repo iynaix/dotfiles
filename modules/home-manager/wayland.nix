@@ -1,14 +1,11 @@
 {
-  config,
   host,
   lib,
   isLaptop,
+  isNixOS,
   pkgs,
   ...
 }:
-let
-  hyprlandCfg = config.wayland.windowManager.hyprland;
-in
 {
   options.custom = {
     displays = lib.mkOption {
@@ -40,11 +37,8 @@ in
     };
 
     hyprland = {
-      autostart = lib.mkEnableOption "Autostart hyprland from tty" // {
-        default = true;
-      };
       lock = lib.mkEnableOption "locking of host" // {
-        default = isLaptop;
+        default = isLaptop && isNixOS;
       };
       qtile = lib.mkEnableOption "qtile like behavior for workspaces";
       plugin = lib.mkOption {
@@ -55,9 +49,6 @@ in
     };
 
     waybar = {
-      enable = lib.mkEnableOption "waybar" // {
-        default = hyprlandCfg.enable;
-      };
       config = lib.mkOption {
         type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };

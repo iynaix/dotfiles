@@ -3,15 +3,15 @@
 {
   hyprlock = {
     pname = "hyprlock";
-    version = "c87af3aa1f6e6bd06cffaabcc400bd45e26d565a";
+    version = "316c37746df323df563dc1acd87c68801df833d8";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "c87af3aa1f6e6bd06cffaabcc400bd45e26d565a";
+      rev = "316c37746df323df563dc1acd87c68801df833d8";
       fetchSubmodules = false;
-      sha256 = "sha256-89WxndRGO3CGuWE5XCaHKnsV3IKBRdOWqScp6o8enT4=";
+      sha256 = "sha256-gYXU2yWFQ2p2beJnyeNduvwkI6tXXVe7h9xJoaAZWYQ=";
     };
-    date = "2024-05-04";
+    date = "2024-05-14";
   };
   mpv-dynamic-crop = {
     pname = "mpv-dynamic-crop";
@@ -38,27 +38,27 @@
   };
   swww = {
     pname = "swww";
-    version = "9733f3e3799ca1f8b989c677b12473dfe46f0f14";
+    version = "e32373915b1425f9d663cbb83f1e2093d26faff2";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "9733f3e3799ca1f8b989c677b12473dfe46f0f14";
+      rev = "e32373915b1425f9d663cbb83f1e2093d26faff2";
       fetchSubmodules = false;
-      sha256 = "sha256-F+dGjzWEJQzICTnNT0FVZDrOl3j4l3747flNcYKR9uM=";
+      sha256 = "sha256-B7YUGwPyKgbmOFLaxnrM+G/DvcrMgoPcWcWZyd6WE18=";
     };
-    date = "2024-05-05";
+    date = "2024-05-14";
   };
   wallust = {
     pname = "wallust";
-    version = "f13682c32652aef61faf7d103b6fc8122d969e49";
+    version = "6ab659f5fe74988d029a9733cf4f1aa1a3d79952";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust.git";
-      rev = "f13682c32652aef61faf7d103b6fc8122d969e49";
+      rev = "6ab659f5fe74988d029a9733cf4f1aa1a3d79952";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "sha256-BkDBE6uOzehz1IdOf58xHfTXRjmnxDBEruruAOvCYA4=";
+      sha256 = "sha256-waJpftMvIRKno0SSFLm4Ti1WtsNnDcvm80lyH/lLJVU=";
     };
-    date = "2024-05-05";
+    date = "2024-05-13";
   };
 }

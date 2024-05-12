@@ -88,7 +88,7 @@ in
       dates = "daily";
       options = "--delete-older-than 7d";
     };
-    package = pkgs.nixVersions.latest;
+    package = pkgs.nixVersions.nix_2_22;
     registry = {
       nixpkgs-master = {
         from = {

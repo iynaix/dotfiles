@@ -9,15 +9,13 @@
 let
   openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
 in
-{
+lib.mkIf config.wayland.windowManager.hyprland.enable {
   # start hyprland
-  custom.shell.profileExtra =
-    lib.mkIf (config.wayland.windowManager.hyprland.enable && config.custom.hyprland.autostart)
-      ''
-        if [ "$(tty)" = "/dev/tty1" ]; then
-          exec Hyprland &> /dev/null
-        fi
-      '';
+  custom.shell.profileExtra = ''
+    if [ "$(tty)" = "/dev/tty1" ]; then
+      exec Hyprland &> /dev/null
+    fi
+  '';
 
   wayland.windowManager.hyprland.settings = {
     exec-once = [

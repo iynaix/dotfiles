@@ -5,11 +5,11 @@
   pkgs,
   ...
 }:
-lib.mkIf config.custom.hyprland.lock {
+lib.mkIf (config.wayland.windowManager.hyprland.enable && config.custom.hyprland.lock) {
   home.packages = [ pkgs.hyprlock ];
 
   wayland.windowManager.hyprland.settings = {
-    bind = [ "$mod, x, exec, hyprlock" ];
+    bind = [ "$mod_SHIFT, x, exec, hyprlock" ];
 
     # handle laptop lid
     bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, hyprlock" ];

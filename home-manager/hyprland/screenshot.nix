@@ -33,7 +33,11 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
     };
     # run ocr on selected area and copy to clipboard
     hypr-ocr = {
-      runtimeInputs = [ pkgs.tesseract5 ];
+      runtimeInputs = with pkgs; [
+        grimblast
+        libnotify
+        tesseract5
+      ];
       text = ''
         img="${screenshotDir}/ocr.png"
 

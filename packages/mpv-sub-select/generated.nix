@@ -3,14 +3,14 @@
 {
   mpv-sub-select = {
     pname = "mpv-sub-select";
-    version = "31f5bf53e7f3b833862c4dfde0993d13253d95db";
+    version = "a5864aa2ee849c372964809842c2b1db3d0c20ea";
     src = fetchFromGitHub {
       owner = "CogentRedTester";
       repo = "mpv-sub-select";
-      rev = "31f5bf53e7f3b833862c4dfde0993d13253d95db";
+      rev = "a5864aa2ee849c372964809842c2b1db3d0c20ea";
       fetchSubmodules = false;
-      sha256 = "sha256-P5c5sDXWR2NJ6LSIn+0Rb57f17DC5nY5Hl7Nz0g1524=";
+      sha256 = "sha256-NKiQfx0WuDySXRR9I6FKcuzyIz3gVWXcaQgaEvyepT8=";
     };
-    date = "2024-04-19";
+    date = "2024-05-15";
   };
 }

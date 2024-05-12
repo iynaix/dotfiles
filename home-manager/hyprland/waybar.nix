@@ -8,7 +8,7 @@
 let
   cfg = config.custom.waybar;
 in
-lib.mkIf cfg.enable {
+lib.mkIf config.wayland.windowManager.hyprland.enable {
   programs.waybar = {
     enable = isNixOS;
     # do not use the systemd service as it is flaky and unreliable

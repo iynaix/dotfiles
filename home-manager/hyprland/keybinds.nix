@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   pkgs,
   ...
@@ -9,7 +10,7 @@ let
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in
-{
+lib.mkIf config.wayland.windowManager.hyprland.enable {
   wayland.windowManager.hyprland.settings = {
     bind =
       let
@@ -117,9 +118,6 @@ in
         "$mod, mouse_down, workspace, e+1"
         "$mod, mouse_up, workspace, e-1"
 
-        # turn monitors off
-        "$mod_SHIFT_CTRL, l, dpms, off"
-
         # dunst controls
         "$mod, grave, exec, dunstctl history-pop"
 
@@ -136,6 +134,8 @@ in
         ",XF86AudioMute, exec, ${pamixer} -t"
       ]
       ++ workspace_keybinds
+      # turn monitors off
+      ++ lib.optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
       ++ lib.optionals config.custom.backlight.enable [
         ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
         ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"

@@ -5,7 +5,7 @@
   pkgs,
   ...
 }:
-{
+lib.mkIf config.wayland.windowManager.hyprland.enable {
   wayland.windowManager.hyprland = lib.mkIf (config.custom.hyprland.plugin == "hyprnstack") {
     plugins = [ pkgs.custom.hyprnstack ];
 

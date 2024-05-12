@@ -126,10 +126,13 @@ lib.mkMerge [
     };
   })
 
-  (lib.mkIf isNixOS { home.packages = [ pkgs.swww ]; })
-  {
-    home.shellAliases = {
-      current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
+  (lib.mkIf (config.wayland.windowManager.hyprland.enable && isNixOS) {
+    home = {
+      packages = [ pkgs.swww ];
+
+      shellAliases = {
+        current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
+      };
     };
-  }
+  })
 ]

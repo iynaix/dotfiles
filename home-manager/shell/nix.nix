@@ -26,7 +26,7 @@ in
     };
   };
 
-  custom.shell.packages = {
+  custom.shell.packages = rec {
     # outputs the current nixos generation
     nix-current-generation = ''
       GENERATIONS=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
@@ -84,6 +84,10 @@ in
           ''}
           cd - > /dev/null
         '';
+    };
+    # same as nsw, but do test instead
+    nst = nsw // {
+      text = lib.replaceStrings [ " switch " ] [ " test " ] nsw.text;
     };
     # update all nvfetcher overlays and packages
     nv-update = {
