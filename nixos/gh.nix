@@ -14,6 +14,10 @@ lib.mkMerge [
           version = 1;
         };
       };
+
+      custom.persist = {
+        home.directories = [ ".config/gh" ];
+      };
     };
   }
 

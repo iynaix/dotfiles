@@ -3,13 +3,13 @@
 {
   vv = {
     pname = "vv";
-    version = "1.9.2.1";
+    version = "1.9.2.1.6";
     src = fetchFromGitHub {
       owner = "hackerb9";
       repo = "vv";
-      rev = "1.9.2.1";
+      rev = "1.9.2.1.6";
       fetchSubmodules = false;
-      sha256 = "sha256-uN7MVasU2oFqKa94GcdB3R3Xt+9aVOKX6LWFPwfW80Y=";
+      sha256 = "sha256-W44oE+s1R+NcVlYkegJbjaM3E5lpciTHscu5tJ4OrPQ=";
     };
   };
 }

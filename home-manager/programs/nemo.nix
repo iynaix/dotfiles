@@ -12,12 +12,12 @@ let
     name = "gnome-terminal";
     text = ''${config.custom.terminal.exec} "$@"'';
   };
-  nemo-patched = pkgs.cinnamon.nemo-with-extensions.overrideAttrs (_: {
+  nemo-patched = pkgs.cinnamon.nemo-with-extensions.overrideAttrs {
     postFixup = ''
       wrapProgram $out/bin/nemo \
         --prefix PATH : "${lib.makeBinPath [ fakeGnomeTerminal ]}"
     '';
-  });
+  };
 in
 {
   home = {

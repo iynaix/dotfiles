@@ -86,7 +86,7 @@ in
           };
           data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
         in
-        prev.path-of-building.overrideAttrs (_: {
+        prev.path-of-building.overrideAttrs {
           inherit (sources.path-of-building) version;
 
           postInstall = ''
@@ -101,11 +101,10 @@ in
               --chdir "${data}"
             )
           '';
-        });
+        };
 
       # use latest commmit from git
       swww = prev.swww.overrideAttrs (
-        _:
         sources.swww
         // {
           # creating an overlay for buildRustPackage overlay

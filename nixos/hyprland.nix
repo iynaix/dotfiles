@@ -28,7 +28,7 @@ lib.mkIf config.custom.hyprland.enable {
         assert (
           lib.assertMsg (prev.hyprland.version == "0.39.1") "hyprland: updated, sync with hyprnstack?"
         );
-        prev.hyprland.overrideAttrs (_: rec {
+        prev.hyprland.overrideAttrs rec {
           version = "0.38.1";
 
           src = prev.fetchFromGitHub {
@@ -37,7 +37,7 @@ lib.mkIf config.custom.hyprland.enable {
             rev = "v${version}";
             hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
           };
-        });
+        };
     })
   ];
 

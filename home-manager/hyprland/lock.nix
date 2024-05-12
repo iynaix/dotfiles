@@ -63,7 +63,7 @@ lib.mkIf config.custom.hyprland.lock {
                   font_size = 150;
                   font_family = "${config.custom.fonts.regular}";
 
-                  position = "0, 90";
+                  position = "0, 200";
                   halign = "center";
                   valign = "center";
                 }
@@ -74,7 +74,7 @@ lib.mkIf config.custom.hyprland.lock {
                   font_size = 40;
                   font_family = "${config.custom.fonts.regular}";
 
-                  position = "0, 40";
+                  position = "0, 60";
                   halign = "center";
                   valign = "center";
                 }

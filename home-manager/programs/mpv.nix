@@ -161,14 +161,14 @@ in
     # mpv-osc-modern with thumbfast support
     {
       scripts = [
-        (pkgs.mpvScripts.mpv-osc-modern.overrideAttrs (_: {
+        (pkgs.mpvScripts.mpv-osc-modern.overrideAttrs {
           src = pkgs.fetchFromGitHub {
             owner = "maoiscat";
             repo = "mpv-osc-modern";
             rev = "61a695767436593b911ca6b8a714712841622f96";
             hash = "sha256-MRaH76zn4KNALyshEpXYBdscLr5qbLuWdppn/vV3NVw=";
           };
-        }))
+        })
       ];
 
       config = lib.mkAfter { osc = "no"; };

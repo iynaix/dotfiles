@@ -157,7 +157,6 @@
 
   custom.persist = {
     home.directories = [
-      ".config/gh"
       ".config/systemd" # git maintenance systemd timers
     ];
   };
