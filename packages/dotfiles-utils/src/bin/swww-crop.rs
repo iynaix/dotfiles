@@ -91,7 +91,6 @@ fn swww_with_crop(
     wall_info: &WallInfo,
     transition_args: &Vec<String>,
 ) {
-    // convert "$1" -crop "$2" -resize "$3" -
     let Some(geometry) = wall_info.get_geometry(mon.width, mon.height) else {
         panic!(
             "unable to get geometry for {}: {}",

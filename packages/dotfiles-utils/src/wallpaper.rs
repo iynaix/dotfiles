@@ -88,6 +88,16 @@ where
         .to_string()
 }
 
+/// euclid's algorithm to find the greatest common divisor
+const fn gcd(mut a: i32, mut b: i32) -> i32 {
+    while b != 0 {
+        let tmp = b;
+        b = a % b;
+        a = tmp;
+    }
+    a
+}
+
 #[derive(Debug, Clone)]
 pub struct WallInfo {
     pub filename: String,
@@ -99,7 +109,9 @@ pub struct WallInfo {
 
 impl WallInfo {
     pub fn get_geometry(&self, width: i32, height: i32) -> Option<&String> {
-        self.geometries.get(&format!("{width}x{height}"))
+        let divisor = gcd(width, height);
+        self.geometries
+            .get(&format!("{}x{}", width / divisor, height / divisor))
     }
 }
 
