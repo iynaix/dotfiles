@@ -29,23 +29,13 @@ in
 
   xdg = {
     # fix mimetype associations
-    mimeApps.defaultApplications =
-      {
-        "inode/directory" = "nemo.desktop";
-        # wtf zathura registers itself to open archives
-        "application/zip" = "org.gnome.FileRoller.desktop";
-        "application/vnd.rar" = "org.gnome.FileRoller.desktop";
-        "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
-      }
-      // lib.optionalAttrs config.programs.zathura.enable {
-        "application/pdf" = "org.pwmt.zathura.desktop";
-      }
-      // (lib.optionalAttrs config.programs.pqiv.enable {
-        "image/jpeg" = "pqiv.desktop";
-        "image/gif" = "pqiv.desktop";
-        "image/webp" = "pqiv.desktop";
-        "image/png" = "pqiv.desktop";
-      });
+    mimeApps.defaultApplications = {
+      "inode/directory" = "nemo.desktop";
+      # wtf zathura registers itself to open archives
+      "application/zip" = "org.gnome.FileRoller.desktop";
+      "application/vnd.rar" = "org.gnome.FileRoller.desktop";
+      "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+    };
 
     # other OSes seem to override this file
     configFile = lib.mkIf (!isNixOS) {

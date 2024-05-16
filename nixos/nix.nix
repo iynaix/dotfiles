@@ -57,9 +57,13 @@ in
 
   custom.shell.packages =
     {
-      # set the current configuration as default to boot
+      # set the current generation or given generation number as default to boot
       ndefault = ''
-        sudo /run/current-system/bin/switch-to-configuration boot
+        if [ "$#" -eq 0 ]; then
+          sudo /run/current-system/bin/switch-to-configuration boot
+        else
+          sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" switch
+        fi
       '';
       # build iso images
       nbuild-iso = {

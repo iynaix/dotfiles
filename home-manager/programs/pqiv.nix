@@ -34,4 +34,11 @@ _: {
       }
     '';
   };
+
+  xdg.mimeApps.defaultApplications = {
+    "image/jpeg" = "pqiv.desktop";
+    "image/gif" = "pqiv.desktop";
+    "image/webp" = "pqiv.desktop";
+    "image/png" = "pqiv.desktop";
+  };
 }

@@ -20,6 +20,7 @@ in
     ];
 
     shellAliases = {
+      nfu = "nix flake update";
       nvfetcher-flat = "nvfetcher --build-dir .";
       nsh = "nix-shell --command fish -p";
       nix-update-input = "nix flake lock --update-input";
@@ -29,22 +30,9 @@ in
   custom.shell.packages = rec {
     # outputs the current nixos generation
     nix-current-generation = ''
-      GENERATIONS=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
-      # add generation number from before desktop format
-      echo $(( GENERATIONS + ${if host == "desktop" then "1196" else "0"}))
+      # previous desktop versions: 1196
+      sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
     '';
-    # build flake but don't switch
-    nbuild = {
-      runtimeInputs = with pkgs; [ custom.shell.nsw ];
-      text = ''
-        if [ "$#" -eq 0 ]; then
-            nsw --dry --hostname "${host}"
-        else
-            # provide hostname as the first argument
-            nsw --dry --hostname "$@"
-        fi
-      '';
-    };
     # switch via nix flake
     nsw = {
       runtimeInputs = with pkgs; [
@@ -85,7 +73,11 @@ in
           cd - > /dev/null
         '';
     };
-    # same as nsw, but do test instead
+    # same as nsw, but do nixos-rebuild boot instead
+    nsb = nsw // {
+      text = lib.replaceStrings [ " switch " ] [ " boot " ] nsw.text;
+    };
+    # same as nsw, but do nixos-rebuild test instead
     nst = nsw // {
       text = lib.replaceStrings [ " switch " ] [ " test " ] nsw.text;
     };
@@ -151,24 +143,26 @@ in
     '';
     # build local package if possible, otherwise build config
     nb = {
-      runtimeInputs = with pkgs; [
-        nom
-        custom.shell.nbuild
-      ];
+      runtimeInputs = with pkgs; [ nix-output-monitor ];
       text = ''
-        if [[ $1 == ".#"* ]]; then
-            nom build "$@"
+        if [ "$#" -eq 0 ]; then
+            nom build .
+            exit
+        fi
+
+        TARGET="''${1/.\#}"
+
+        if nix eval ".#nixosConfigurations.$TARGET.class" &>/dev/null; then
+            nsw --dry --hostname "$TARGET"
         # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
         elif [[ $(pwd) =~ /nixpkgs$ ]]; then
-            nix-build -A "$1"
+            nix-build -A "$TARGET"
         # dotfiles, build local package
-        elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
-            nom build ".#$1"
+        elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$TARGET" ]]; then
+            nom build ".#$TARGET"
         # nix repo, build package within flake
-        elif [[ -f flake.nix ]]; then
-            nom build ".#$1"
         else
-            nbuild "$@"
+            nom build ".#$TARGET"
         fi
       '';
     };

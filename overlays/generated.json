@@ -1,7 +1,7 @@
 {
     "hyprlock": {
         "cargoLocks": null,
-        "date": "2024-05-14",
+        "date": "2024-05-17",
         "extract": null,
         "name": "hyprlock",
         "passthru": null,
@@ -13,11 +13,11 @@
             "name": null,
             "owner": "hyprwm",
             "repo": "hyprlock",
-            "rev": "316c37746df323df563dc1acd87c68801df833d8",
-            "sha256": "sha256-gYXU2yWFQ2p2beJnyeNduvwkI6tXXVe7h9xJoaAZWYQ=",
+            "rev": "997f222b0fec6ac74ec718b53600e77c2b26860a",
+            "sha256": "sha256-WD6Iyb9DV1R5a2A0UIVT8GyzRhs9ntOPGKDubEUUVNs=",
             "type": "github"
         },
-        "version": "316c37746df323df563dc1acd87c68801df833d8"
+        "version": "997f222b0fec6ac74ec718b53600e77c2b26860a"
     },
     "mpv-dynamic-crop": {
         "cargoLocks": null,
@@ -61,7 +61,7 @@
     },
     "swww": {
         "cargoLocks": null,
-        "date": "2024-05-14",
+        "date": "2024-05-16",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -73,11 +73,11 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "e32373915b1425f9d663cbb83f1e2093d26faff2",
-            "sha256": "sha256-B7YUGwPyKgbmOFLaxnrM+G/DvcrMgoPcWcWZyd6WE18=",
+            "rev": "d458041bf0fbdc7b4df8009b5ad0b09353417ddd",
+            "sha256": "sha256-Z31EBFfpEbm3s/EG14i2jECyRYCfKCXBIvd+2C/o6MY=",
             "type": "github"
         },
-        "version": "e32373915b1425f9d663cbb83f1e2093d26faff2"
+        "version": "d458041bf0fbdc7b4df8009b5ad0b09353417ddd"
     },
     "wallust": {
         "cargoLocks": null,

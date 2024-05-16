@@ -52,19 +52,19 @@
           # cd
           {
             on = [ "g" ] ++ lib.stringToCharacters keys;
-            exec = "cd ${loc}";
+            run = "cd ${loc}";
             desc = "cd to ${loc}";
           }
           # new tab
           {
             on = [ "t" ] ++ lib.stringToCharacters keys;
-            exec = "tab_create ${loc}";
+            run = "tab_create ${loc}";
             desc = "open new tab to ${loc}";
           }
           # mv
           {
             on = [ "m" ] ++ lib.stringToCharacters keys;
-            exec = [
+            run = [
               "yank --cut"
               "escape --visual --select"
               loc
@@ -74,7 +74,7 @@
           # cp
           {
             on = [ "Y" ] ++ lib.stringToCharacters keys;
-            exec = [
+            run = [
               "yank"
               "escape --visual --select"
               loc

@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -22,24 +23,7 @@ lib.mkIf config.custom.hyprland.enable {
   hm.wayland.windowManager.hyprland.enable = true;
 
   # lock hyprland to 0.38.1 until workspace switching is resolved
-  nixpkgs.overlays = [
-    (_: prev: {
-      hyprland =
-        assert (
-          lib.assertMsg (prev.hyprland.version == "0.39.1") "hyprland: updated, sync with hyprnstack?"
-        );
-        prev.hyprland.overrideAttrs rec {
-          version = "0.38.1";
-
-          src = prev.fetchFromGitHub {
-            owner = "hyprwm";
-            repo = "hyprland";
-            rev = "v${version}";
-            hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
-          };
-        };
-    })
-  ];
+  nixpkgs.overlays = [ (_: _prev: { inherit (inputs.hyprland.packages.${pkgs.system}) hyprland; }) ];
 
   xdg.portal = {
     enable = true;

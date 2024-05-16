@@ -27,6 +27,10 @@
     };
   };
 
+  xdg.mimeApps.defaultApplications = {
+    "application/pdf" = "org.pwmt.zathura.desktop";
+  };
+
   custom.wallust.templates.zathurarc = lib.mkIf config.programs.zathura.enable {
     text = ''
       set default-bg                  "{{color0}}"
