@@ -4,7 +4,7 @@ let
 in
 {
   options.custom.shortcuts = lib.mkOption {
-    type = lib.types.attrsOf lib.types.str;
+    type = with lib.types; attrsOf str;
     default = {
       h = homeDir;
       dots = "${homeDir}/projects/dotfiles";

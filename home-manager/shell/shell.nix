@@ -24,9 +24,8 @@ in
         mkdir = "mkdir -p";
         mount = "mount --mkdir";
         open = "xdg-open";
-        pj = "openproj";
         py = "python";
-        coinfc = "openproj coinfc";
+        coinfc = "pj coinfc";
 
         # cd aliases
         ".." = "cd ..";
@@ -38,37 +37,39 @@ in
   };
 
   custom.shell.packages = {
-    fdnix = ''${lib.getExe pkgs.fd} "$@" /nix/store'';
+    fdnix = {
+      runtimeInputs = [ pkgs.fd ];
+      text = ''fd "$@" /nix/store'';
+    };
     md = ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
     # improved which for nix
     where = ''readlink -f "$(which "$1")"'';
-    ywhere = ''yazi "$(dirname "$(dirname "$(readlink -f "$(which "$1")")")")"'';
-    # server command, runs a local server
-    server = ''${lib.getExe pkgs.python3} -m http.server "\${"1:-8000"}"'';
-    openproj = ''
-      cd ${proj_dir}
-      if [[ $# -eq 1 ]]; then
-        cd "$1";
-      fi
-    '';
+    cwhere = ''cat "$(where "$1")"'';
+    ywhere = {
+      runtimeInputs = with pkgs; [
+        yazi
+        custom.shell.where
+      ];
+      text = ''yazi "$(dirname "$(dirname "$(where "$1")")")"'';
+    };
   };
 
-  # openproj cannot be implemented as script as it needs to change the directory of the shell
-  # bash function and completion for openproj
+  # pj cannot be implemented as script as it needs to change the directory of the shell
+  # bash function and completion for pj
   programs.bash.initExtra = ''
-    function openproj() {
+    function pj() {
         cd ${proj_dir}
         if [[ $# -eq 1 ]]; then
           cd "$1";
         fi
     }
-    _openproj() {
+    _pj() {
         ( cd ${proj_dir}; printf "%s\n" "$2"* )
     }
-    complete -o nospace -C _openproj openproj
+    complete -o nospace -C _pj pj
   '';
 
-  programs.fish.functions.openproj = ''
+  programs.fish.functions.pj = ''
     cd ${proj_dir}
     if test (count $argv) -eq 1
       cd $argv[1]
@@ -76,10 +77,10 @@ in
   '';
 
   # fish completion
-  xdg.configFile."fish/completions/openproj.fish".text = ''
-    function _openproj
+  xdg.configFile."fish/completions/pj.fish".text = ''
+    function _pj
         find ${proj_dir} -maxdepth 1 -type d -exec basename {} \;
     end
-    complete --no-files --command openproj --arguments "(_openproj)"
+    complete --no-files --command pj --arguments "(_pj)"
   '';
 }

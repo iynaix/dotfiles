@@ -35,6 +35,7 @@ in
     };
 
     sessionVariables = {
+      QT_QPA_PLATFORM = "wayland";
       XCURSOR_SIZE = config.home.pointerCursor.size;
     };
   };
@@ -47,6 +48,7 @@ in
     # set dark theme for gtk 4
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      cursor-theme = config.home.pointerCursor.name;
     };
   };
 

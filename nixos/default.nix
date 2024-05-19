@@ -111,7 +111,7 @@
     ];
 
     # setup fonts
-    fonts.packages = config.hm.custom.fonts.packages ++ [ pkgs.custom.rofi-themes ];
+    fonts.packages = config.hm.custom.fonts.packages;
 
     programs = {
       # use same config as home-manager

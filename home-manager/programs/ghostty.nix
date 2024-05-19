@@ -12,7 +12,7 @@ let
 in
 lib.mkIf cfg.enable {
   home = {
-    packages = [ ];
+    packages = [ ghostty ];
     sessionVariables = {
       GHOSTTY_RESOURCES_DIR = "${ghostty}/share";
     };

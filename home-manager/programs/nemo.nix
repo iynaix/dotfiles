@@ -20,12 +20,10 @@ let
   };
 in
 {
-  home = {
-    packages = [
-      pkgs.cinnamon.nemo-fileroller
-      nemo-patched
-    ];
-  };
+  home.packages = [
+    pkgs.cinnamon.nemo-fileroller
+    nemo-patched
+  ];
 
   xdg = {
     # fix mimetype associations

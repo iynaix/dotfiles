@@ -3,15 +3,15 @@
 {
   hyprlock = {
     pname = "hyprlock";
-    version = "997f222b0fec6ac74ec718b53600e77c2b26860a";
+    version = "18d2d2ba6af6ac76e4714fae2737a55d223716f8";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "997f222b0fec6ac74ec718b53600e77c2b26860a";
+      rev = "18d2d2ba6af6ac76e4714fae2737a55d223716f8";
       fetchSubmodules = false;
-      sha256 = "sha256-WD6Iyb9DV1R5a2A0UIVT8GyzRhs9ntOPGKDubEUUVNs=";
+      sha256 = "sha256-9itkgx3Sl8xPToweCHQoLfvyiTX/b5PZb7clYcKYyIs=";
     };
-    date = "2024-05-17";
+    date = "2024-05-20";
   };
   mpv-dynamic-crop = {
     pname = "mpv-dynamic-crop";
@@ -38,15 +38,15 @@
   };
   swww = {
     pname = "swww";
-    version = "d458041bf0fbdc7b4df8009b5ad0b09353417ddd";
+    version = "9a012646e66420ab8058b9f595cdfa0c14625755";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "d458041bf0fbdc7b4df8009b5ad0b09353417ddd";
+      rev = "9a012646e66420ab8058b9f595cdfa0c14625755";
       fetchSubmodules = false;
-      sha256 = "sha256-Z31EBFfpEbm3s/EG14i2jECyRYCfKCXBIvd+2C/o6MY=";
+      sha256 = "sha256-b7rgfW6GSNwC0bolnlDDw8SV8ZgiChlbMeQ3Q1YfA4E=";
     };
-    date = "2024-05-16";
+    date = "2024-05-19";
   };
   wallust = {
     pname = "wallust";

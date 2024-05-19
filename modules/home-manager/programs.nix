@@ -10,7 +10,7 @@
     ghostty = {
       enable = lib.mkEnableOption "ghostty";
       config = lib.mkOption {
-        type = lib.types.attrsOf lib.types.anything;
+        type = with lib.types; attrsOf anything;
         default = { };
         description = "Extra ghostty configuration.";
       };
@@ -34,7 +34,7 @@
         default = true;
       };
       colorscheme = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = with lib.types; nullOr str;
         default = null;
         description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
       };

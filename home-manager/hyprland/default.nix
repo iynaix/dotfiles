@@ -23,13 +23,11 @@ in
   ];
 
   config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-    home = {
-      packages = with pkgs; [
-        # clipboard history
-        cliphist
-        wl-clipboard
-      ];
-    };
+    home.packages = with pkgs; [
+      # clipboard history
+      cliphist
+      wl-clipboard
+    ];
 
     wayland.windowManager.hyprland.settings = {
       monitor =

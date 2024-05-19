@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   options.custom = {
     fonts = {
@@ -13,13 +13,7 @@
         description = "The font to use for monospace text";
       };
       packages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = with pkgs; [
-          noto-fonts
-          noto-fonts-cjk
-          noto-fonts-emoji
-          (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-        ];
+        type = with lib.types; listOf package;
         description = "The packages to install for the fonts";
       };
     };

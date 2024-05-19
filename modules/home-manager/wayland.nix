@@ -42,7 +42,7 @@
       };
       qtile = lib.mkEnableOption "qtile like behavior for workspaces";
       plugin = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum [ "hyprnstack" ]);
+        type = with lib.types; nullOr (enum [ "hyprnstack" ]);
         description = "Plugin to enable for hyprland";
         default = null;
       };

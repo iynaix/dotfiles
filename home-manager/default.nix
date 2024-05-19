@@ -68,11 +68,21 @@
     mimeApps.enable = true;
   };
 
-  custom.persist = {
-    home.directories = [
-      "Desktop"
-      "Documents"
-      "Pictures"
+  custom = {
+    fonts.packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+      custom.rofi-themes
     ];
+
+    persist = {
+      home.directories = [
+        "Desktop"
+        "Documents"
+        "Pictures"
+      ];
+    };
   };
 }
