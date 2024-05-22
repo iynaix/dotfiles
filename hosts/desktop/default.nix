@@ -4,7 +4,7 @@
     # hardware
     hdds.enable = true;
     nvidia.enable = true;
-    qmk.enable = true;
+    qmk.enable = false;
     zfs.encryption = false;
 
     # software

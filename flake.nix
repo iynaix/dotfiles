@@ -90,7 +90,7 @@
         };
       });
 
-      legacyPackages = forAllSystems (pkgs: pkgs);
+      # legacyPackages = forAllSystems (pkgs: pkgs);
 
       packages = forAllSystems (pkgs: (import ./packages { inherit pkgs inputs; }));
 

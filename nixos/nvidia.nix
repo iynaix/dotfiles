@@ -13,10 +13,10 @@ lib.mkIf config.custom.nvidia.enable {
 
   hardware = {
     nvidia = {
-      # package = config.boot.kernelPackages.nvidiaPackages.beta;
       modesetting.enable = true;
       powerManagement.enable = false;
       nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
     opengl.extraPackages = [ pkgs.vaapiVdpau ];
   };
