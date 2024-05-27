@@ -10,30 +10,27 @@ let
 in
 {
   home = {
-    shellAliases =
-      {
-        ":e" = "nvim";
-        ":q" = "exit";
-        c = "clear";
-        cat = "bat";
-        ccat = "command cat";
-        crate = "cargo";
-        isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
-        man = lib.getExe' pkgs.bat-extras.batman "batman";
-        mime = "xdg-mime query filetype";
-        mkdir = "mkdir -p";
-        mount = "mount --mkdir";
-        open = "xdg-open";
-        py = "python";
-        coinfc = "pj coinfc";
+    shellAliases = {
+      ":e" = "nvim";
+      ":q" = "exit";
+      c = "clear";
+      cat = "bat";
+      ccat = "command cat";
+      crate = "cargo";
+      dots = "cd ${proj_dir}/dotfiles";
+      isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
+      man = lib.getExe' pkgs.bat-extras.batman "batman";
+      mime = "xdg-mime query filetype";
+      mkdir = "mkdir -p";
+      mount = "mount --mkdir";
+      open = "xdg-open";
+      py = "python";
+      coinfc = "pj coinfc";
 
-        # cd aliases
-        ".." = "cd ..";
-        "..." = "cd ../..";
-      }
-      //
-      # add shortcuts for quick cd in shell
-      lib.mapAttrs (_: value: "cd ${value}") config.custom.shortcuts;
+      # cd aliases
+      ".." = "cd ..";
+      "..." = "cd ../..";
+    };
   };
 
   custom.shell.packages = {

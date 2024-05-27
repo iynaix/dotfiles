@@ -4,8 +4,9 @@ use execute::Execute;
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
+use std::path::PathBuf;
 
-fn get_hyprland_socket() -> String {
+fn get_hyprland_socket() -> PathBuf {
     #[derive(Deserialize, Debug)]
     struct HyprlandInstance {
         instance: String,
@@ -17,7 +18,10 @@ fn get_hyprland_socket() -> String {
         .iter()
         .min_by_key(|i| i.time)
         .expect("no hyprland instances running");
-    format!("/tmp/hypr/{}/.socket2.sock", youngest.instance)
+
+    PathBuf::from("/tmp/hypr/")
+        .join(&youngest.instance)
+        .join(".socket2.sock")
 }
 
 fn log(msg: &str) {

@@ -21,7 +21,7 @@ in
 
     shellAliases = {
       nfu = "nix flake update";
-      nvfetcher-flat = "nvfetcher --build-dir .";
+      nv-flat = "nvfetcher --build-dir .";
       nsh = "nix-shell --command fish -p";
       nix-update-input = "nix flake lock --update-input";
     };
@@ -29,7 +29,7 @@ in
 
   custom.shell.packages =
     let
-      createNsw = subcmd: {
+      createNixosRebuild = subcmd: {
         runtimeInputs = with pkgs; [
           git
           nh
@@ -76,9 +76,9 @@ in
         sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
       '';
       # nixos-rebuild switch / boot /test via flake
-      nsw = createNsw "switch";
-      nsb = createNsw "boot";
-      nst = createNsw "test";
+      nsw = createNixosRebuild "switch";
+      nsb = createNixosRebuild "boot";
+      nst = createNixosRebuild "test";
       # update all nvfetcher overlays and packages
       nv-update = {
         runtimeInputs = with pkgs; [

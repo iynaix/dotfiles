@@ -45,45 +45,66 @@
       };
     };
 
-    keymap = {
-      # add keymaps for shortcuts
-      input.prepend_keymap = lib.flatten (
-        lib.mapAttrsToList (keys: loc: [
-          # cd
-          {
-            on = [ "g" ] ++ lib.stringToCharacters keys;
-            run = "cd ${loc}";
-            desc = "cd to ${loc}";
-          }
-          # new tab
-          {
-            on = [ "t" ] ++ lib.stringToCharacters keys;
-            run = "tab_create ${loc}";
-            desc = "open new tab to ${loc}";
-          }
-          # mv
-          {
-            on = [ "m" ] ++ lib.stringToCharacters keys;
-            run = [
-              "yank --cut"
-              "escape --visual --select"
-              loc
-            ];
-            desc = "move selection to ${loc}";
-          }
-          # cp
-          {
-            on = [ "Y" ] ++ lib.stringToCharacters keys;
-            run = [
-              "yank"
-              "escape --visual --select"
-              loc
-            ];
-            desc = "copy selection to ${loc}";
-          }
-        ]) config.custom.shortcuts
-      );
-    };
+    keymap =
+      let
+        homeDir = "/persist/${config.home.homeDirectory}";
+        shortcuts = {
+          h = homeDir;
+          dots = "${homeDir}/projects/dotfiles";
+          cfg = "${homeDir}/.config";
+          vd = "${homeDir}/Videos";
+          vaa = "${homeDir}/Videos/Anime";
+          vm = "${homeDir}/Videos/Movies";
+          vt = "${homeDir}/Videos/TV";
+          vtn = "${homeDir}/Videos/TV/New";
+          pp = "${homeDir}/projects";
+          pc = "${homeDir}/Pictures";
+          ps = "${homeDir}/Pictures/Screenshots";
+          pw = "${homeDir}/Pictures/Wallpapers";
+          dd = "${homeDir}/Downloads";
+          dp = "${homeDir}/Downloads/pending";
+          dus = "${homeDir}/Downloads/pending/Unsorted";
+        };
+      in
+      {
+        # add keymaps for shortcuts
+        input.prepend_keymap = lib.flatten (
+          lib.mapAttrsToList (keys: loc: [
+            # cd
+            {
+              on = [ "g" ] ++ lib.stringToCharacters keys;
+              run = "cd ${loc}";
+              desc = "cd to ${loc}";
+            }
+            # new tab
+            {
+              on = [ "t" ] ++ lib.stringToCharacters keys;
+              run = "tab_create ${loc}";
+              desc = "open new tab to ${loc}";
+            }
+            # mv
+            {
+              on = [ "m" ] ++ lib.stringToCharacters keys;
+              run = [
+                "yank --cut"
+                "escape --visual --select"
+                loc
+              ];
+              desc = "move selection to ${loc}";
+            }
+            # cp
+            {
+              on = [ "Y" ] ++ lib.stringToCharacters keys;
+              run = [
+                "yank"
+                "escape --visual --select"
+                loc
+              ];
+              desc = "copy selection to ${loc}";
+            }
+          ]) shortcuts
+        );
+      };
   };
 
   home.shellAliases = {

@@ -15,28 +15,6 @@ function yesno() {
     done
 }
 
-function prompt_for_password() {
-    while true; do
-        # Prompt for password
-        read -rs -p "Enter root password: " password
-        printf "\n"
-
-        # Prompt for password confirmation
-        read -rs -p "Confirm root password: " confirm_password
-        printf "\n"
-
-        # Check if passwords match
-        if [ "$password" == "$confirm_password" ]; then
-            break
-        else
-            echo "Passwords do not match. Please try again."
-        fi
-    done
-
-    # Return the entered password
-    echo "$password"
-}
-
 cat << Introduction
 This script will format the *entire* disk with a 1GB boot partition
 (labelled NIXBOOT), 16GB of swap, then allocating the rest to ZFS.
