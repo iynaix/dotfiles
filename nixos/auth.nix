@@ -30,7 +30,7 @@ lib.mkMerge [
   # keyring settings
   {
     services.gnome.gnome-keyring.enable = true;
-    security.pam.services.gdm.enableGnomeKeyring =
+    security.pam.services.login.enableGnomeKeyring =
       config.services.displayManager.autoLogin.user != null;
   }
 

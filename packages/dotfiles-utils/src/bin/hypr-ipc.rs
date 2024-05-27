@@ -19,7 +19,9 @@ fn get_hyprland_socket() -> PathBuf {
         .min_by_key(|i| i.time)
         .expect("no hyprland instances running");
 
-    PathBuf::from("/tmp/hypr/")
+    dirs::runtime_dir()
+        .expect("could not get $XDG_RUNTIME_DIR")
+        .join("hypr")
         .join(&youngest.instance)
         .join(".socket2.sock")
 }

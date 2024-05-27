@@ -22,6 +22,17 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
       # init ipc listener
       "hypr-ipc &"
 
+      "swww-daemon &"
+      "sleep 1; hypr-wallpaper && launch-waybar"
+
+      # fix gparted "cannot open display: :0" error
+      "${lib.getExe pkgs.xorg.xhost} +local:${user}"
+      # fix Authorization required, but no authorization protocol specified error
+      # "${lib.getExe pkgs.xorg.xhost} si:localuser:root"
+
+      # stop fucking with my cursors
+      "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
+
       # browsers
       (openOnWorkspace 1 "brave --incognito")
       (openOnWorkspace 1 "brave --profile-directory=Default")
@@ -33,7 +44,6 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
       (openOnWorkspace 7 "$term")
 
       # firefox
-      # (if host == "desktop" then
       (openOnWorkspace 9 (
         toString (
           [
@@ -57,20 +67,6 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
       "hyprctl dispatch workspace 9"
       "hyprctl dispatch workspace 7"
       "hyprctl dispatch workspace 1"
-
-      "swww-daemon &"
-      "sleep 1; hypr-wallpaper && launch-waybar"
-
-      # fix gparted "cannot open display: :0" error
-      "${lib.getExe pkgs.xorg.xhost} +local:${user}"
-      # fix Authorization required, but no authorization protocol specified error
-      # "${lib.getExe pkgs.xorg.xhost} si:localuser:root"
-
-      # stop fucking with my cursors
-      "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
-
-      # start the polkit agent
-      "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"
     ];
   };
 }

@@ -14,8 +14,6 @@
 
     devenv.url = "github:cachix/devenv";
 
-    hyprland.url = "github:hyprwm/hyprland/v0.38.1";
-
     impermanence.url = "github:nix-community/impermanence";
 
     sops-nix = {

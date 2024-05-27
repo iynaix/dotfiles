@@ -9,7 +9,11 @@ lib.mkIf config.custom.nvidia.enable {
   # enable nvidia support
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  boot.kernelParams = [ "nvidia-drm.fbdev=1" ];
+  boot = {
+    # use nvidia framebuffer
+    # https://wiki.gentoo.org/wiki/NVIDIA/nvidia-drivers#Kernel_module_parameters for more info.
+    kernelParams = [ "nvidia-drm.fbdev=1" ];
+  };
 
   hardware = {
     nvidia = {
@@ -28,7 +32,6 @@ lib.mkIf config.custom.nvidia.enable {
       }
       // lib.optionalAttrs config.programs.hyprland.enable (
         {
-          WLR_NO_HARDWARE_CURSORS = "1";
           LIBVA_DRIVER_NAME = "nvidia";
           GBM_BACKEND = "nvidia-drm";
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";

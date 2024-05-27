@@ -23,7 +23,7 @@ gcc13Stdenv.mkDerivation (
 
     installPhase = ''
       mkdir -p $out/lib
-      cp nstackLayoutPlugin.so $out/lib/lib${source.pname}.so
+      cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
     '';
 
     meta = with lib; {
