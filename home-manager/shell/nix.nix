@@ -54,9 +54,9 @@ in
             if [[ "$*" == *"--${hostFlag}"* ]]; then
                 # Replace the word after "--${hostFlag}" with host using parameter expansion
                 cleaned_args=("''${@/--${hostFlag} [^[:space:]]*/--${hostFlag} ${host}}")
-                nh ${configType} ${subcmd} "''${cleaned_args[@]}" ${dots} -- --option eval-cache false
+                nh ${configType} ${subcmd} "''${cleaned_args[@]}" ${dots}
             else
-                nh ${configType} ${subcmd} "$@" --${hostFlag} ${host} ${dots} -- --option eval-cache false
+                nh ${configType} ${subcmd} "$@" --${hostFlag} ${host} ${dots}
             fi
 
             ${lib.optionalString (isNixOS && subcmd == "switch") ''

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -10,7 +11,6 @@ let
 in
 {
   # NOTE: see zfs.nix for filesystem declarations, filesystem creation is handled via install.sh
-
   boot = {
     # clear /tmp on boot
     tmp.cleanOnBoot = true;
@@ -42,6 +42,32 @@ in
 
   # shut sudo up
   security.sudo.extraConfig = "Defaults lecture=never";
+
+  custom.shell.packages = {
+    # show all files stored on tmpfs, useful for finding files to persist
+    show-tmpfs = {
+      runtimeInputs = [ pkgs.fd ];
+      text =
+        let
+          wallustExcludes = lib.pipe config.hm.custom.wallust.templates [
+            lib.attrValues
+            (map (a: a.target))
+            (lib.filter (t: !(lib.hasInfix "wallust" t)))
+            (map (t: ''--exclude "${t}" \''))
+            # (lib.concatStringsSep " ")
+            lib.concatLines
+          ];
+        in
+        ''
+          sudo fd --one-file-system --base-directory / --type f --hidden --list-details \
+            --exclude "/etc/{ssh,machine-id,passwd,shadow}" \
+            ${wallustExcludes} \
+            --exclude "*.timer" \
+            --exclude "/var/lib/NetworkManager" \
+            --exclude "/home/iynaix/.cache/{bat,fontconfig,nvidia,nvim/catppuccin,pre-commit,swww,wallust}"
+        '';
+    };
+  };
 
   # setup persistence
   environment.persistence = {
