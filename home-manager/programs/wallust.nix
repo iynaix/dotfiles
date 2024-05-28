@@ -51,7 +51,7 @@ in
         {
           wallpaper = "{{wallpaper}}";
           fallback = "${../gits-catppuccin.jpg}";
-          monitors = config.custom.displays;
+          inherit (config.custom) monitors;
           inherit (config.custom.wallust) colorscheme;
           inherit host;
           special = {

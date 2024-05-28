@@ -8,7 +8,7 @@
 }:
 {
   options.custom = {
-    displays = lib.mkOption {
+    monitors = lib.mkOption {
       type =
         with lib.types;
         listOf (submodule {
@@ -17,23 +17,37 @@
               type = str;
               description = "The name of the display, e.g. eDP-1";
             };
-            hyprland = lib.mkOption {
+            width = lib.mkOption {
+              type = int;
+              description = "Pixel width of the display";
+            };
+            framerate = lib.mkOption {
+              type = nullOr int;
+              default = null;
+              description = "Refresh rate of the display";
+            };
+            height = lib.mkOption {
+              type = int;
+              description = "Pixel width of the display";
+            };
+            position = lib.mkOption {
               type = str;
-              description = ''
-                Hyprland config for the monitor, see
-                https://wiki.hyprland.org/Configuring/Monitors/
-
-                e.g. 3440x1440@160,1440x1080,1
-              '';
+              default = "0x0";
+              description = "Position of the display, e.g. 0x0";
+            };
+            vertical = lib.mkOption {
+              type = bool;
+              description = "Is the display vertical?";
+              default = false;
             };
             workspaces = lib.mkOption {
               type = listOf int;
-              description = "List of workspace strings";
+              description = "List of workspace numbers";
             };
           };
         });
       default = [ ];
-      description = "Config for new displays";
+      description = "Config for monitors";
     };
 
     hyprland = {

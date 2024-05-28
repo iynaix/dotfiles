@@ -7,7 +7,7 @@
   ...
 }:
 let
-  inherit (config.custom) displays;
+  inherit (config.custom) monitors;
   isVm = host == "vm" || host == "vm-amd";
 in
 {
@@ -31,8 +31,23 @@ in
 
     wayland.windowManager.hyprland.settings = {
       monitor =
-        (lib.forEach displays ({ name, hyprland, ... }: "${name}, ${hyprland}"))
-        ++ (lib.optional (host != "desktop") ",preferred,auto,auto");
+        (lib.forEach monitors (
+          d:
+          lib.concatStringsSep "," (
+            [
+              d.name
+              # dimensions@framerate
+              (
+                "${toString d.width}x${toString d.height}"
+                + lib.optionalString (d.framerate != null) "@${toString d.framerate}"
+              )
+              d.position
+              "1" # scale
+            ]
+            ++ lib.optionals d.vertical [ "transform,1" ]
+          )
+        ))
+        ++ [ ",preferred,auto,auto" ];
 
       env = [
         "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
@@ -138,8 +153,8 @@ in
 
       # bind workspaces to monitors
       workspace = pkgs.custom.lib.mapWorkspaces (
-        { workspace, monitor, ... }: "${workspace}, monitor:${monitor}"
-      ) displays;
+        { workspace, monitor, ... }: "${workspace},monitor:${monitor.name}"
+      ) monitors;
 
       windowrulev2 = [
         # "dimaround,floating:1"
@@ -159,7 +174,6 @@ in
 
       # handle trackpad settings
       gestures = lib.mkIf isLaptop { workspace_swipe = true; };
-      # source = "${config.xdg.configHome}/hypr/hyprland-test.conf";
     };
 
     # hyprland crash reports

@@ -6,10 +6,13 @@
 }:
 {
   custom = {
-    displays = [
+    monitors = [
       {
         name = "DP-2";
-        hyprland = "3440x1440@144,1440x1080,1";
+        width = 3440;
+        height = 1440;
+        framerate = 144;
+        position = "1440x1080";
         workspaces = [
           1
           2
@@ -20,7 +23,10 @@
       }
       {
         name = "DP-4";
-        hyprland = "2560x1440,0x728,1,transform,1";
+        width = 2560;
+        height = 1440;
+        position = "0x728";
+        vertical = true;
         workspaces = [
           6
           7
@@ -28,7 +34,9 @@
       }
       {
         name = "HDMI-A-1";
-        hyprland = "1920x1080,1754x0,1";
+        width = 1920;
+        height = 1080;
+        position = "1754x0";
         workspaces = [
           8
           9

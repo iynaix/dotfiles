@@ -1,10 +1,11 @@
 { lib, pkgs, ... }:
 {
   custom = {
-    displays = [
+    monitors = [
       {
         name = "eDP-1";
-        hyprland = "2256x1504,0x0,1";
+        width = 2256;
+        height = 1504;
         workspaces = [
           1
           2

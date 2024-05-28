@@ -26,6 +26,7 @@ fn get_hyprland_socket() -> PathBuf {
         .join(".socket2.sock")
 }
 
+#[allow(dead_code)]
 fn log(msg: &str) {
     use std::io::Write;
 
@@ -51,30 +52,23 @@ fn is_nstack() -> bool {
 
 /// set random split ratio to prevent oled burn in
 fn set_split_ratio(mon: &Monitor, nstack: bool) {
-    if mon.is_ultrawide() {
-        let split_ratio = rand::random::<f32>().mul_add(0.1, 0.4);
-        let keyword_path = if nstack {
-            "plugin:nstack:layout:mfact"
-        } else {
-            "master:mfact"
-        };
+    let keyword_path = if nstack {
+        "plugin:nstack:layout:mfact"
+    } else {
+        "master:mfact"
+    };
 
-        log(&format!("setting split ratio: {split_ratio}"));
+    // TODO: is_oled? for future use?
+    let split_ratio = if mon.is_ultrawide() {
+        rand::random::<f32>().mul_add(0.1, 0.4)
+    } else {
+        0.5
+    };
 
-        execute::command_args!("hyprctl", "keyword", keyword_path, split_ratio.to_string())
-            .execute()
-            .expect("unable to set mfact");
-    }
-}
-
-/// set workspace orientation and nstack stacks for vertical / ultrawide
-fn set_workspace_orientation(mon: &Monitor, nstack: bool) {
-    hypr(["layoutmsg", mon.orientation()]);
-
-    // set nstack stacks
-    if nstack {
-        hypr(["layoutmsg", "setstackcount", &mon.stacks().to_string()]);
-    }
+    // log(&format!("setting split ratio: {split_ratio}"));
+    execute::command_args!("hyprctl", "keyword", keyword_path, split_ratio.to_string())
+        .execute()
+        .expect("unable to set mfact");
 }
 
 fn main() {
@@ -117,14 +111,13 @@ fn main() {
                 }
             }
             "openwindow" | "movewindow" => {
-                log(&format!("{ev} {ev_args:?}"));
+                // log(&format!("{ev} {ev_args:?}"));
 
                 if is_desktop {
                     let wksp = &ev_args[1].replace(" silent", "");
                     let (mon, _) = Monitor::by_workspace(wksp);
 
                     set_split_ratio(&mon, nstack);
-                    set_workspace_orientation(&mon, nstack);
                 }
             }
             _ => {

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (config.custom) displays;
+  inherit (config.custom) monitors;
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in
@@ -33,7 +33,7 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
                 "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
               ]
           ))
-            displays
+            monitors
         );
       in
       [
@@ -118,7 +118,7 @@ lib.mkIf config.wayland.windowManager.hyprland.enable {
         "$mod_SHIFT, m, layoutmsg, removemaster"
 
         # rotate via switching master orientation
-        "$mod, r, layoutmsg, orientationcycle left top"
+        # "$mod, r, layoutmsg, orientationcycle left top"
 
         # Scroll through existing workspaces with mainMod + scroll
         "$mod, mouse_down, workspace, e+1"

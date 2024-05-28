@@ -1,9 +1,10 @@
 _: {
   custom = {
-    displays = [
+    monitors = [
       {
         name = "Virtual-1";
-        hyprland = "1920x1080,0x0,1";
+        width = 1920;
+        height = 1080;
         workspaces = [
           1
           2

@@ -213,6 +213,7 @@ in
         if [ -L "$1" ]; then
             mv "$1" "$1.orig"
             cp -L "$1.orig" "$1"
+            chmod +w "$1"
         else
             echo "not a symlink."
             exit 1

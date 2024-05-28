@@ -3,21 +3,21 @@
   # saner api for iterating through workspaces in a flat list
   # takes a function that accepts the following attrset {workspace, key, monitor}
   mapWorkspaces =
-    workspaceFn: displays:
+    workspaceFn: monitors:
     lib.concatMap (
-      { name, workspaces, ... }:
-      lib.forEach workspaces (
+      monitor:
+      lib.forEach monitor.workspaces (
         ws:
         let
           workspaceArg = {
+            inherit monitor;
             workspace = toString ws;
             key = toString (lib.mod ws 10);
-            monitor = name;
           };
         in
         workspaceFn workspaceArg
       )
-    ) displays;
+    ) monitors;
 
   # produces ini format strings, takes a single argument of the object
   toQuotedINI = lib.generators.toINI {
