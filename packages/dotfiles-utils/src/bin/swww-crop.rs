@@ -91,12 +91,10 @@ fn swww_with_crop(
     wall_info: &WallInfo,
     transition_args: &Vec<String>,
 ) {
+    let dimensions = mon.dimension_str();
+
     let Some(geometry) = wall_info.get_geometry(mon.width, mon.height) else {
-        panic!(
-            "unable to get geometry for {}: {}",
-            mon.name,
-            mon.dimension_str()
-        );
+        panic!("unable to get geometry for {}: {}", mon.name, dimensions);
     };
 
     let mut imagemagick = execute::command("convert");
@@ -105,7 +103,7 @@ fn swww_with_crop(
         .arg("-crop")
         .arg(geometry)
         .arg("-resize")
-        .arg(&mon.dimension_str())
+        .arg(dimensions)
         // output to stdin for piping
         .arg("-");
 

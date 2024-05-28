@@ -15,6 +15,7 @@ pub struct WorkspaceRule {
 pub struct Monitor {
     pub id: i32,
     pub name: String,
+    pub model: String,
     pub x: i32,
     pub y: i32,
     pub width: i32,
@@ -31,6 +32,10 @@ impl Monitor {
 
     pub const fn is_ultrawide(&self) -> bool {
         self.width >= 3440
+    }
+
+    pub fn is_oled(&self) -> bool {
+        self.model.contains("AW3423DW")
     }
 
     pub const fn orientation(&self) -> &str {

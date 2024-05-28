@@ -21,14 +21,14 @@
               type = int;
               description = "Pixel width of the display";
             };
-            framerate = lib.mkOption {
-              type = nullOr int;
-              default = null;
-              description = "Refresh rate of the display";
-            };
             height = lib.mkOption {
               type = int;
               description = "Pixel width of the display";
+            };
+            refreshRate = lib.mkOption {
+              type = int;
+              default = 60;
+              description = "Refresh rate of the display";
             };
             position = lib.mkOption {
               type = str;

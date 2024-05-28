@@ -117,13 +117,28 @@ impl ActiveWindow {
 pub struct Client {
     pub class: String,
     pub address: String,
+    pub floating: bool,
     pub workspace: WorkspaceId,
     pub at: Coord,
+    pub size: Coord,
 }
 
 impl Client {
     pub fn clients() -> Vec<Self> {
         hypr_json("clients")
+    }
+
+    pub fn by_id(id: &str) -> Option<Self> {
+        Self::clients()
+            .into_iter()
+            .find(|client| client.address.ends_with(id))
+    }
+
+    pub fn filter_workspace(wksp_id: i32) -> Vec<Self> {
+        Self::clients()
+            .into_iter()
+            .filter(|client| client.workspace.id == wksp_id)
+            .collect()
     }
 
     pub fn filter_class(class: &str) -> Vec<Self> {

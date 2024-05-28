@@ -1,4 +1,5 @@
 use dotfiles_utils::nixinfo::NixInfo;
+use dotfiles_utils::Client;
 use dotfiles_utils::{hypr, hypr_json, monitor::Monitor};
 use execute::Execute;
 use serde::Deserialize;
@@ -51,24 +52,47 @@ fn is_nstack() -> bool {
 }
 
 /// set random split ratio to prevent oled burn in
-fn set_split_ratio(mon: &Monitor, nstack: bool) {
+fn set_split_ratio(nstack: bool, split_ratio: f32) {
     let keyword_path = if nstack {
         "plugin:nstack:layout:mfact"
     } else {
         "master:mfact"
     };
 
-    // TODO: is_oled? for future use?
-    let split_ratio = if mon.is_ultrawide() {
+    // log(&format!("setting split ratio: {split_ratio}"));
+
+    execute::command_args!("hyprctl", "keyword", keyword_path, split_ratio.to_string())
+        .execute()
+        .expect("unable to set mfact");
+}
+
+/// sets split ratio if there are 2 windows
+fn split_for_workspace(wksp: &str, nstack: bool) {
+    let wksp = &wksp.replace(" silent", "");
+    let (mon, _) = Monitor::by_workspace(wksp);
+
+    if !mon.is_oled() {
+        return;
+    }
+
+    let wksp_id = wksp.parse().unwrap_or_default();
+    let clients = Client::filter_workspace(wksp_id);
+
+    // floating window, don't do anything
+    if clients.iter().any(|c| c.floating) {
+        return;
+    }
+
+    let num_windows = clients.len();
+    let split_ratio = if num_windows == 2 {
         rand::random::<f32>().mul_add(0.1, 0.4)
+    } else if nstack {
+        0.0
     } else {
         0.5
     };
 
-    // log(&format!("setting split ratio: {split_ratio}"));
-    execute::command_args!("hyprctl", "keyword", keyword_path, split_ratio.to_string())
-        .execute()
-        .expect("unable to set mfact");
+    set_split_ratio(nstack, split_ratio);
 }
 
 fn main() {
@@ -90,8 +114,6 @@ fn main() {
             .map(std::string::ToString::to_string)
             .collect();
 
-        // println!("{ev} ---- {ev_args:?}");
-
         match ev {
             // different handling for desktop and laptops is done within hypr-monitors
             "monitoradded" => {
@@ -110,14 +132,51 @@ fn main() {
                     hypr(["focusmonitor", mon_to_focus]);
                 }
             }
-            "openwindow" | "movewindow" => {
-                // log(&format!("{ev} {ev_args:?}"));
+            "openwindow" => {
+                // TODO: cannot resize tiled windows?
+                /*
+                if ev_args[2] == "mpv" {
+                    if let Some(win) = Client::by_id(&ev_args[0]) {
+                        let (mon, _) = Monitor::by_workspace(&ev_args[1]);
 
+                        let (win_w, win_h) = win.size;
+                        let is_full_width = mon.width - win_w < 60;
+                        let is_full_height = mon.height - win_h < 60;
+
+                        // single window, ignore
+                        if is_full_width {
+                            continue;
+                        }
+
+                        if is_full_height {
+                            // resize width to fit 16:9 aspect ratio
+                            let new_width = win_h * 16 / 9 - win_w;
+                            let resize_params = format!("{new_width} {win_h}");
+
+                            hypr(["focuswindow", &win.address]);
+                            hypr(["resizeactive", &resize_params]);
+                        }
+                    }
+                }
+                */
+
+                // only care about dynamic split ratios for oled
                 if is_desktop {
-                    let wksp = &ev_args[1].replace(" silent", "");
-                    let (mon, _) = Monitor::by_workspace(wksp);
-
-                    set_split_ratio(&mon, nstack);
+                    split_for_workspace(&ev_args[1], nstack);
+                }
+            }
+            "movewindow" => {
+                // only care about dynamic split ratios for oled
+                if is_desktop {
+                    split_for_workspace(&ev_args[1], nstack);
+                }
+            }
+            "closewindow" => {
+                // only care about dynamic split ratios for oled
+                if is_desktop {
+                    if let Some(wksp_id) = Client::by_id(&ev_args[0]).map(|w| w.workspace.id) {
+                        split_for_workspace(&wksp_id.to_string(), nstack);
+                    }
                 }
             }
             _ => {

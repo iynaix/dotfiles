@@ -11,7 +11,7 @@
         name = "DP-2";
         width = 3440;
         height = 1440;
-        framerate = 144;
+        refreshRate = 144;
         position = "1440x1080";
         workspaces = [
           1
