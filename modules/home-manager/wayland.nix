@@ -51,6 +51,9 @@
     };
 
     hyprland = {
+      enable = lib.mkEnableOption "hyprland" // {
+        default = true;
+      };
       lock = lib.mkEnableOption "locking of host" // {
         default = isLaptop && isNixOS;
       };

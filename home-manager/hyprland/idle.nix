@@ -1,5 +1,5 @@
 { config, lib, ... }:
-lib.mkIf config.wayland.windowManager.hyprland.enable {
+lib.mkIf config.custom.hyprland.enable {
   services.hypridle = {
     enable = true;
 

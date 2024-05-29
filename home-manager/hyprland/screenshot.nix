@@ -9,7 +9,7 @@ let
   screenshotDir = "${config.xdg.userDirs.pictures}/Screenshots";
   iso8601 = "%Y-%m-%dT%H:%M:%S%z";
 in
-lib.mkIf config.wayland.windowManager.hyprland.enable {
+lib.mkIf config.custom.hyprland.enable {
   home.packages = lib.mkIf isNixOS (
     with pkgs;
     [

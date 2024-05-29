@@ -66,7 +66,7 @@ in
         fi
       '';
       # build iso images
-      nbuild-iso = {
+      nix-build-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
         text = ''
           cd ${dots}

@@ -1,5 +1,5 @@
 { config, lib, ... }:
-lib.mkIf (!config.hm.wayland.windowManager.hyprland.enable) {
+lib.mkIf (!config.hm.custom.hyprland.enable) {
   services = {
     # xserver.enable = true;
     # displayManager.sddm.enable = true;

@@ -89,6 +89,7 @@
           procps
           ripgrep
           yazi
+          zoxide
         ]
         ++
           # install gtk theme for root, some apps like gparted only run as root
@@ -111,7 +112,10 @@
     ];
 
     # setup fonts
-    fonts.packages = config.hm.custom.fonts.packages;
+    fonts = {
+      enableDefaultPackages = true;
+      inherit (config.hm.custom.fonts) packages;
+    };
 
     programs = {
       # use same config as home-manager
@@ -120,10 +124,10 @@
         loginShellInit = config.hm.programs.bash.profileExtra;
       };
 
+      file-roller.enable = true;
+
       # bye bye nano
       nano.enable = lib.mkForce false;
-
-      file-roller.enable = true;
     };
 
     # use gtk theme on qt apps

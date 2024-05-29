@@ -126,7 +126,7 @@ lib.mkMerge [
     };
   })
 
-  (lib.mkIf (config.wayland.windowManager.hyprland.enable && isNixOS) {
+  (lib.mkIf (config.custom.hyprland.enable && isNixOS) {
     home = {
       packages = [ pkgs.swww ];
 

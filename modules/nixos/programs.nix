@@ -15,9 +15,6 @@ in
     docker.enable = lib.mkEnableOption "docker" // {
       default = cfg.distrobox.enable;
     };
-    hyprland.enable = lib.mkEnableOption "hyprland (nixos)" // {
-      default = true;
-    };
     keyd.enable = lib.mkEnableOption "keyd" // {
       default = isLaptop;
     };

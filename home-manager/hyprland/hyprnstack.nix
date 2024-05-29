@@ -4,14 +4,15 @@
   pkgs,
   ...
 }:
-lib.mkIf config.wayland.windowManager.hyprland.enable {
+lib.mkIf config.custom.hyprland.enable {
   wayland.windowManager.hyprland = lib.mkIf (config.custom.hyprland.plugin == "hyprnstack") {
-    plugins = [ pkgs.custom.hyprnstack ];
+    plugins = [
+      # always build with actual hyprland to keep versions in sync
+      (pkgs.custom.hyprnstack.override { hyprland = config.wayland.windowManager.hyprland.package; })
+    ];
 
     settings = {
       general.layout = "nstack";
-
-      # use hyprnstack plugin, the home-manager options do not seem to emit the plugin section
       "plugin:nstack" = {
         layout = {
           new_is_master = 0;

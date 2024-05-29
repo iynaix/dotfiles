@@ -5,7 +5,7 @@
   pkgs,
   ...
 }:
-lib.mkIf (config.wayland.windowManager.hyprland.enable && config.custom.hyprland.lock) {
+lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
   home.packages = [ pkgs.hyprlock ];
 
   wayland.windowManager.hyprland.settings = {

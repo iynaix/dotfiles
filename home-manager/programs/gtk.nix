@@ -35,7 +35,6 @@ in
     };
 
     sessionVariables = {
-      QT_QPA_PLATFORM = "wayland";
       XCURSOR_SIZE = config.home.pointerCursor.size;
     };
   };

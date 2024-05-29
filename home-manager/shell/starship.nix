@@ -9,7 +9,8 @@
         let
           dir_bg = "blue";
           accent_style = "bg:${dir_bg} fg:black";
-          important_style = "bg:white fg:black";
+          # divine orb style :)
+          important_style = "bg:white fg:bold #ff0000";
         in
         {
           add_newline = false;

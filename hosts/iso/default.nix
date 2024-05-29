@@ -61,6 +61,13 @@ let
               };
             };
 
+            # enable SSH in the boot process.
+            systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
+            users.users.root.openssh.authorizedKeys.keyFiles = [
+              ../../home-manager/id_rsa.pub
+              ../../home-manager/id_ed25519.pub
+            ];
+
             # quality of life
             nix.settings = {
               experimental-features = [

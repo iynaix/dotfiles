@@ -10,7 +10,7 @@ let
   pamixer = lib.getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in
-lib.mkIf config.wayland.windowManager.hyprland.enable {
+lib.mkIf config.custom.hyprland.enable {
   wayland.windowManager.hyprland.settings = {
     bind =
       let
