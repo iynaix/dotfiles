@@ -25,20 +25,18 @@ lib.mkIf config.custom.nvidia.enable {
     opengl.extraPackages = [ pkgs.vaapiVdpau ];
   };
 
-  environment = {
-    sessionVariables =
+  environment.sessionVariables =
+    {
+      NIXOS_OZONE_WL = "1";
+    }
+    // lib.optionalAttrs config.programs.hyprland.enable (
       {
-        NIXOS_OZONE_WL = "1";
+        LIBVA_DRIVER_NAME = "nvidia";
+        GBM_BACKEND = "nvidia-drm";
+        __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       }
-      // lib.optionalAttrs config.programs.hyprland.enable (
-        {
-          LIBVA_DRIVER_NAME = "nvidia";
-          GBM_BACKEND = "nvidia-drm";
-          __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-        }
-        // lib.optionalAttrs (host == "vm" || host == "vm-amd") { WLR_RENDERER_ALLOW_SOFTWARE = "1"; }
-      );
-  };
+      // lib.optionalAttrs (host == "vm" || host == "vm-amd") { WLR_RENDERER_ALLOW_SOFTWARE = "1"; }
+    );
 
   nix.settings = {
     substituters = [ "https://cuda-maintainers.cachix.org" ];

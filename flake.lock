@@ -64,11 +64,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1717072927,
-        "narHash": "sha256-vJgwYu0mQIvTHsCKVj3ADTzMGCDnKfetutYYzw/+3tw=",
+        "lastModified": 1717182737,
+        "narHash": "sha256-lvaLEEm+KuxCXgSqwwTwTxNseS4r+B/hQCm9QHv+AXU=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "fe3b1de09bcf45040a8bbfe850feba403a8af73f",
+        "rev": "0dd14e6461627bba9734b34e14f4529529715bc0",
         "type": "github"
       },
       "original": {
@@ -597,11 +597,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1717107246,
-        "narHash": "sha256-a3VzaRBQA/0j7XT5WcqAvsMn70XKSwo+niqo4hraG9g=",
+        "lastModified": 1717189374,
+        "narHash": "sha256-DIA8Mb5G11wFxj4VXD6/JSNUFl55DOpwgtBMg+aVNlY=",
         "ref": "refs/heads/main",
-        "rev": "b50f34de3a0c9fcb36fc229eb5f274bc557ea8f8",
-        "revCount": 6225,
+        "rev": "c7d37dad4be82459960b13937a74b3a171c047b7",
+        "revCount": 6231,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -1121,16 +1121,16 @@
     },
     "nixpkgs-stable_3": {
       "locked": {
-        "lastModified": 1716991068,
-        "narHash": "sha256-Av0UWCCiIGJxsZ6TFc+OiKCJNqwoxMNVYDBChmhjNpo=",
+        "lastModified": 1717144377,
+        "narHash": "sha256-F/TKWETwB5RaR8owkPPi+SPJh83AQsm6KrQAlJ8v/uA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "25cf937a30bf0801447f6bf544fc7486c6309234",
+        "rev": "805a384895c696f802a9bf5bf4720f37385df547",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-23.11",
+        "ref": "nixos-24.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1280,11 +1280,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1717148599,
-        "narHash": "sha256-F5ooc75rvGOrofZ/Qy9gVdt0sPahc5HuVfc0Zxn9tOE=",
+        "lastModified": 1717191071,
+        "narHash": "sha256-wue0+NHKFhTiY7dTtP0jyNwVgUCMOBfcP7mSHVa6PMw=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "fa43854e022140cd19b50d265cd481c461d6dd82",
+        "rev": "d15fade62b743839a20d927d3506d503858f49f0",
         "type": "github"
       },
       "original": {

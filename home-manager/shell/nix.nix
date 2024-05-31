@@ -211,12 +211,18 @@ in
         fi
 
         for file in "$@"; do
+          if [[ "$file" == *.bak ]]; then
+              continue
+          fi
+
           if [ -L "$file" ]; then
-              mv "$file" "$file.orig"
-              cp -L "$file.orig" "$file"
+              mv "$file" "$file.bak"
+              cp -L "$file.bak" "$file"
               chmod +w "$file"
-          else
-              echo "$file is not a symlink."
+
+          # regular file, reverse the process
+          elif [ -f "$file" ] && [ -L "$file.bak" ]; then
+              mv "$file.bak" "$file"
           fi
         done
       '';
