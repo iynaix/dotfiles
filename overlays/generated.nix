@@ -3,15 +3,15 @@
 {
   hyprlock = {
     pname = "hyprlock";
-    version = "768cd3ea525bbd1ed2dde5928b0843129274b50d";
+    version = "e07d4110dc0b9d1786403aa760232564ad28b6fa";
     src = fetchFromGitHub {
       owner = "hyprwm";
       repo = "hyprlock";
-      rev = "768cd3ea525bbd1ed2dde5928b0843129274b50d";
+      rev = "e07d4110dc0b9d1786403aa760232564ad28b6fa";
       fetchSubmodules = false;
-      sha256 = "sha256-seOWIKi6jXE1BIQ6FLXUMe0h54cLwAxCCiL8bXFx60Q=";
+      sha256 = "sha256-l8aa+XPDbM3Mf3W4ukC/tBBHVZE8A3att4KLXrnyKSI=";
     };
-    date = "2024-05-26";
+    date = "2024-05-29";
   };
   mpv-dynamic-crop = {
     pname = "mpv-dynamic-crop";

@@ -206,18 +206,19 @@ in
       # creates a file with the symlink contents and renames the original symlink to .orig
       nsymlink = ''
         if [ "$#" -eq 0 ]; then
-            echo "no file specified."
+            echo "No file(s) specified."
             exit 1
         fi
 
-        if [ -L "$1" ]; then
-            mv "$1" "$1.orig"
-            cp -L "$1.orig" "$1"
-            chmod +w "$1"
-        else
-            echo "not a symlink."
-            exit 1
-        fi
+        for file in "$@"; do
+          if [ -L "$file" ]; then
+              mv "$file" "$file.orig"
+              cp -L "$file.orig" "$file"
+              chmod +w "$file"
+          else
+              echo "$file is not a symlink."
+          fi
+        done
       '';
       ynpath = {
         runtimeInputs = with pkgs; [

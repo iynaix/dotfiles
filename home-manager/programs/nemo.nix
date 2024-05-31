@@ -29,10 +29,11 @@ in
     # fix mimetype associations
     mimeApps.defaultApplications = {
       "inode/directory" = "nemo.desktop";
-      # wtf zathura registers itself to open archives
+      # wtf zathura / pqiv registers themselves to open archives
       "application/zip" = "org.gnome.FileRoller.desktop";
       "application/vnd.rar" = "org.gnome.FileRoller.desktop";
       "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+      "application/x-bzip2-compressed-tar" = "org.gnome.FileRoller.desktop";
     };
 
     # other OSes seem to override this file

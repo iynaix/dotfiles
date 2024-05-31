@@ -76,6 +76,7 @@
 
   home = {
     shellAliases = {
+      dt = "difftastic";
       lg = "lazygit";
       gaa = "git add --all";
       gb = "git branch";
