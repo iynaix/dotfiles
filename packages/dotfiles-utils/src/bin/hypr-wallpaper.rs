@@ -1,34 +1,12 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    execute_wrapped_process, filename, full_path,
+    execute_wrapped_process, full_path,
     nixinfo::NixInfo,
-    wallpaper::{self, WallInfo},
+    wallpaper::{self, get_wallpaper_info},
     wallust,
 };
 use execute::Execute;
-use std::path::Path;
-
-/// reads the wallpaper info from wallpapers.csv
-fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
-    let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
-    if !wallpapers_csv.exists() {
-        return None;
-    }
-
-    // convert image to path
-    let image = Path::new(image);
-    let fname = filename(image);
-
-    let reader = std::io::BufReader::new(
-        std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
-    );
-
-    let mut rdr = csv::Reader::from_reader(reader);
-    rdr.deserialize::<WallInfo>()
-        .flatten()
-        .find(|line| line.filename == fname)
-}
 
 fn main() {
     let args = HyprWallpaperArgs::parse();

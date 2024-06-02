@@ -65,7 +65,7 @@ in
         # https://wiki.hyprland.org/Configuring/Environment-variables/
         env = [
           "QT_QPA_PLATFORM,wayland;xcb"
-          "GDK_BACKEND,wayland,x11,*"
+          # "GDK_BACKEND,wayland,x11,*"
           "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
           "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.size}"
         ];

@@ -6,6 +6,7 @@ use crate::{
     CommandUtf8,
 };
 use execute::Execute;
+use rayon::prelude::*;
 use std::{collections::HashMap, path::PathBuf};
 
 pub const CUSTOM_THEMES: [&str; 6] = [
@@ -191,53 +192,75 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .execute()
         .expect("wallust: failed to set colors from wallpaper");
 
-    // crop wallpaper for lockscreen
+    crop_lockscreens(wallpaper_info, wallpaper);
+}
+
+/// crops the wallpapers for usage with the lockscreens
+fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
+    // replace image path in hyprlock config at ~/.config/hypr/hyprlock.conf
+    let hyprlock_conf = full_path("~/.config/hypr/hyprlock.conf");
+    if !hyprlock_conf.exists() {
+        std::process::exit(0);
+    }
+    let mut contents =
+        std::fs::read_to_string(&hyprlock_conf).expect("Could not read hyprlock.conf");
     let nix_info = NixInfo::before();
-    if matches!(nix_info.host.as_str(), "framework" | "xps") {
-        if let Some(info) = wallpaper_info {
-            if let Some(m) = Monitor::monitors().iter().find(|m| {
+
+    if let Some(info) = wallpaper_info {
+        // monitor should be present in nix.json
+        let monitors = Monitor::monitors();
+        let mon_info: Vec<_> = monitors
+            .iter()
+            .filter(|m| {
                 nix_info
                     .monitors
                     .iter()
                     .any(|nix_mon| nix_mon.name == m.name)
-            }) {
-                if let Some(geometry) = info.get_geometry(m.width, m.height) {
-                    // output cropped and resized wallpaper to /tmp
-                    let output_fname = filename(full_path(wallpaper));
+            })
+            .filter_map(|mon| {
+                info.get_geometry(mon.width, mon.height).map(|geometry| {
+                    // prefix output filename with monitor name
+                    let wall_path = full_path(wallpaper);
+                    let output_fname = format!("{}-{}", mon.name, filename(wall_path));
                     let output_path = PathBuf::from("/tmp").join(output_fname);
-                    let output_path = output_path
-                        .to_str()
-                        .unwrap_or_else(|| panic!("invalid wallpaper: {output_path:?}"));
 
+                    (mon, geometry, output_path)
+                })
+            })
+            .collect();
+
+        // replace background image paths in hyprlock config
+        for (mon, _, output_path) in &mon_info {
+            let wall_re = regex::Regex::new(&format!(r"{}\s+# {}", &wallpaper, mon.name))
+                .expect("invalid hyprlock path regex");
+            contents = wall_re
+                .replace(
+                    &contents,
+                    output_path
+                        .to_str()
+                        .unwrap_or_else(|| panic!("invalid wallpaper: {output_path:?}")),
+                )
+                .to_string();
+        }
+        std::fs::write(&hyprlock_conf, contents).expect("Could not write hyprlock.conf");
+
+        // create lockscreen images in the background (non-blocking)
+        mon_info
+            .par_iter()
+            .for_each(|(mon, geometry, output_path)| {
+                if !output_path.exists() {
                     execute::command("convert")
                         .arg(wallpaper)
                         .arg("-crop")
                         .arg(geometry)
                         .arg("-resize")
-                        .arg(&format!("{}x{}", m.width, m.height))
+                        .arg(&format!("{}x{}", mon.width, mon.height))
                         .arg(output_path)
-                        .execute()
+                        .spawn()
                         .expect("failed to crop wallpaper for lockscreen");
-
-                    // replace image path in hyprlock config at ~/.config/hypr/hyprlock.conf
-                    let hyprlock_conf = full_path("~/.config/hypr/hyprlock.conf");
-
-                    if hyprlock_conf.exists() {
-                        let contents = std::fs::read_to_string(&hyprlock_conf)
-                            .expect("Could not read hyprlock.conf");
-                        let wall_re =
-                            regex::Regex::new(r"path = (.*)").expect("invalid hyprlock path regex");
-                        // only replaces the first occurrence
-                        let new_contents =
-                            wall_re.replace(&contents, &format!("path = {output_path}"));
-
-                        std::fs::write(&hyprlock_conf, new_contents.as_ref())
-                            .expect("Could not write hyprlock.conf");
-                    }
                 }
-            }
-        }
-    };
+            });
+    }
 }
 
 type Rgb = (i32, i32, i32);

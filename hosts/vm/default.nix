@@ -1,7 +1,6 @@
 { lib, pkgs, ... }:
 {
   custom = {
-    hyprland.enable = false;
     zfs.encryption = false;
   };
 

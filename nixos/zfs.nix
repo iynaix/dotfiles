@@ -12,7 +12,7 @@ in
 {
   boot = {
     # booting with zfs
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems.zfs = true;
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     zfs = {
       devNodes = lib.mkDefault "/dev/disk/by-id";

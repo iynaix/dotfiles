@@ -94,8 +94,8 @@ let
     };
 in
 {
-  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
-  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
+  kde-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
+  minimal-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
   kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma5";
   minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
 }

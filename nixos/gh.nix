@@ -36,6 +36,7 @@ lib.mkMerge [
             wrapProgram $out/bin/gh \
               --run 'export GITHUB_TOKEN=$(cat ${config.sops.secrets.github_token.path})'
           '';
+          meta.mainProgram = "gh";
         };
       })
     ];

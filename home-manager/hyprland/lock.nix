@@ -2,11 +2,10 @@
   config,
   isLaptop,
   lib,
-  pkgs,
   ...
 }:
 lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
-  home.packages = [ pkgs.hyprlock ];
+  programs.hyprlock.enable = true;
 
   wayland.windowManager.hyprland.settings = {
     bind = [ "$mod_SHIFT, x, exec, hyprlock" ];
@@ -20,7 +19,7 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
       "hyprlock.conf" = {
         text =
           let
-            rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }}, ${toString alpha})";
+            rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }},${toString alpha})";
           in
           lib.hm.generators.toHyprconf {
             attrs = {
@@ -30,16 +29,17 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
                 hide_cursor = false;
               };
 
-              background = {
-                monitor = "";
-                path = "{{wallpaper}}";
+              background = map (mon: {
+                monitor = "${mon.name}";
+                # add trailing comment with monitor name for hypr-wallpaper to replace later
+                path = "{{wallpaper}} # ${mon.name}";
                 color = "${rgba "background" 1}";
-              };
+              }) config.custom.monitors;
 
               input-field = {
                 monitor = "";
                 size = "300, 50";
-                outline_thickness = 3;
+                outline_thickness = 2;
                 dots_size = 0.33;
                 dots_spacing = 0.15;
                 dots_center = true;
@@ -63,6 +63,10 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
                   font_size = 150;
                   font_family = "${config.custom.fonts.regular}";
 
+                  # shadow makes it more readable on light backgrounds
+                  shadow_passes = 1;
+                  shadow_size = 4;
+
                   position = "0, 200";
                   halign = "center";
                   valign = "center";
@@ -73,6 +77,10 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
                   color = "${rgba "foreground" 1}";
                   font_size = 40;
                   font_family = "${config.custom.fonts.regular}";
+
+                  # shadow makes it more readable on light backgrounds
+                  shadow_passes = 1;
+                  shadow_size = 2;
 
                   position = "0, 60";
                   halign = "center";

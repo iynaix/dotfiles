@@ -86,7 +86,7 @@ lib.mkIf cfg.enable {
       # ''));
     };
 
-    supportedFilesystems = lib.mkIf cfg.windows [ "ntfs" ];
+    supportedFilesystems.ntfs = cfg.windows;
   };
 
   # hide disks

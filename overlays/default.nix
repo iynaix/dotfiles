@@ -54,7 +54,7 @@ in
       lsix = prev.lsix.overrideAttrs (o: {
         postFixup = ''
           substituteInPlace $out/bin/lsix \
-            --replace '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
+            --replace-fail '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
           ${o.postFixup}
         '';
       });

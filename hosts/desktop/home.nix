@@ -66,7 +66,6 @@
     packages = lib.mkIf isNixOS (
       with pkgs;
       [
-        ffmpeg
         hyprlock # build package for testing, but it isn't used
         # vial
       ]

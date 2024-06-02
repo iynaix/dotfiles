@@ -1,7 +1,7 @@
 use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
-use crate::{full_path, nixinfo::NixInfo};
+use crate::{filename, full_path, nixinfo::NixInfo};
 use std::{collections::HashMap, fs, path::PathBuf};
 
 pub fn dir() -> PathBuf {
@@ -86,6 +86,24 @@ where
         // use fallback image if not available
         .unwrap_or(&NixInfo::before().fallback)
         .to_string()
+}
+
+/// reads the wallpaper info from wallpapers.csv
+pub fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
+    let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
+    if !wallpapers_csv.exists() {
+        return None;
+    }
+
+    let reader = std::io::BufReader::new(
+        std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
+    );
+
+    let fname = filename(image);
+    let mut rdr = csv::Reader::from_reader(reader);
+    rdr.deserialize::<WallInfo>()
+        .flatten()
+        .find(|line| line.filename == fname)
 }
 
 /// euclid's algorithm to find the greatest common divisor
