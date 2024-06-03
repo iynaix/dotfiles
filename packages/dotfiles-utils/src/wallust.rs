@@ -200,7 +200,7 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
     // replace image path in hyprlock config at ~/.config/hypr/hyprlock.conf
     let hyprlock_conf = full_path("~/.config/hypr/hyprlock.conf");
     if !hyprlock_conf.exists() {
-        std::process::exit(0);
+        return;
     }
     let mut contents =
         std::fs::read_to_string(&hyprlock_conf).expect("Could not read hyprlock.conf");

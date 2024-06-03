@@ -12,7 +12,7 @@ let
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
 in
 lib.mkMerge [
-  (lib.mkIf config.custom.wallpaper-pipeline.enable {
+  (lib.mkIf config.custom.wallpaper-utils.enable {
     custom.shell.packages = {
       # backup wallpapers to secondary drive
       wallpapers-backup = {
@@ -49,11 +49,11 @@ lib.mkMerge [
           '';
       };
       # process wallpapers with upscaling and vertical crop
-      wallpapers-pipeline = {
+      wallpapers-add = {
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
           ${pkgs.custom.lib.useDirenv wallpapers_proj ''
-            cargo run --release --bin pipeline "$@" "${walls_in_dir}"
+            cargo run --release --bin add-wallpapers "$@" "${walls_in_dir}"
           ''}
           wallpapers-backup
         '';
@@ -77,6 +77,8 @@ lib.mkMerge [
         globalSection = {
           csv_path = "${wallpapers_dir}/wallpapers.csv";
           wallpapers_path = wallpapers_dir;
+          min_width = 3440; # ultrawide width
+          min_height = 1504; # framework height
         };
 
         sections = {

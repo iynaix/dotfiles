@@ -154,9 +154,15 @@ in
               nsw --dry --hostname "$TARGET"
           # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
           elif [[ $(pwd) =~ /nixpkgs$ ]]; then
-              nix-build -A "$TARGET"
+              nom-build -A "$TARGET"
           # dotfiles, build local package
           elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$TARGET" ]]; then
+              # stop bothering me about untracked files
+              untracked_files=$(git ls-files --exclude-standard --others .)
+              if [ -n "$untracked_files" ]; then
+                  git add "$untracked_files"
+              fi
+
               nom build ".#$TARGET"
           # nix repo, build package within flake
           else
@@ -195,13 +201,7 @@ in
             exit 1
         fi
 
-        PKG_DIR=$(nix eval --raw "nixpkgs#$1.outPath")
-        if [ -e "$PKG_DIR" ]; then
-            echo "$PKG_DIR"
-        else
-            # path not found, build it
-            nix build "nixpkgs#hyprland" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
-        fi
+        nix eval --raw "nixpkgs#$1.outPath"
       '';
       # creates a file with the symlink contents and renames the original symlink to .orig
       nsymlink = ''
@@ -231,7 +231,20 @@ in
           yazi
           custom.shell.npath
         ];
-        text = ''yazi "$(npath "$@")"'';
+        text = ''
+          if [ "$#" -eq 0 ]; then
+              echo "no package specified."
+              exit 1
+          fi
+
+          PKG_DIR=$(npath)
+          if [ ! -e "$PKG_DIR" ]; then
+              # path not found, build it
+              nix build "nixpkgs#$1" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
+
+              yazi "$PKG_DIR"
+          fi
+        '';
       };
       # what depends on the given package in the current nixos install?
       nix-depends = {

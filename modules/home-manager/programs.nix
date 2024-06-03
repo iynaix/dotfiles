@@ -28,7 +28,7 @@
     };
     rclip.enable = lib.mkEnableOption "rclip";
     vlc.enable = lib.mkEnableOption "vlc";
-    wallpaper-pipeline.enable = lib.mkEnableOption "wallpaper-pipeline";
+    wallpaper-utils.enable = lib.mkEnableOption "wallpaper-utils";
     wallust = with lib.types; {
       enable = lib.mkEnableOption "wallust" // {
         default = true;

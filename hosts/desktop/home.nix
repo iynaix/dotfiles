@@ -56,7 +56,7 @@
     pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = true;
-    wallpaper-pipeline.enable = true;
+    wallpaper-utils.enable = true;
     # wallust.colorscheme = "tokyo-night";
     # waybar.persistent-workspaces = true;
     waybar.hidden = false;
