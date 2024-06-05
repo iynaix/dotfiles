@@ -1,14 +1,23 @@
 {
   inputs,
   lib,
-  pkgs,
+  system,
   specialArgs,
   user ? "iynaix",
   ...
 }:
 let
+  # provide an optional { pkgs } 2nd argument to override the pkgs
   mkNixosConfiguration =
     host:
+    {
+      pkgs ? (
+        import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+      ),
+    }:
     lib.nixosSystem {
       inherit pkgs;
 
@@ -59,9 +68,9 @@ let
     };
 in
 {
-  desktop = mkNixosConfiguration "desktop";
-  framework = mkNixosConfiguration "framework";
-  xps = mkNixosConfiguration "xps";
-  vm = mkNixosConfiguration "vm";
-  vm-amd = mkNixosConfiguration "vm-amd";
+  desktop = mkNixosConfiguration "desktop" { };
+  framework = mkNixosConfiguration "framework" { };
+  xps = mkNixosConfiguration "xps" { };
+  vm = mkNixosConfiguration "vm" { };
+  vm-amd = mkNixosConfiguration "vm-amd" { };
 }

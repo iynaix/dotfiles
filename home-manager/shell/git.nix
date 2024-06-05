@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs = {
     git = {
@@ -136,7 +136,7 @@
     # syncs with upstream
     gsync = {
       runtimeInputs = with pkgs; [
-        gh
+        config.programs.gh.package
         custom.shell.gmain
       ];
       text = ''

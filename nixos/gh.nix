@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -9,6 +10,7 @@ lib.mkMerge [
     hm = {
       programs.gh = {
         enable = true;
+
         # https://github.com/nix-community/home-manager/issues/4744#issuecomment-1849590426
         settings = {
           version = 1;
@@ -25,20 +27,16 @@ lib.mkMerge [
   (lib.mkIf config.custom.sops.enable {
     sops.secrets.github_token.owner = user;
 
-    # wrap gh to set GITHUB_TOKEN, an overlay is used so gh can be used within other scripts
-    nixpkgs.overlays = [
-      (_: prev: {
-        gh = prev.symlinkJoin {
-          name = "gh";
-          paths = [ prev.gh ];
-          buildInputs = [ prev.makeWrapper ];
-          postBuild = ''
-            wrapProgram $out/bin/gh \
-              --run 'export GITHUB_TOKEN=$(cat ${config.sops.secrets.github_token.path})'
-          '';
-          meta.mainProgram = "gh";
-        };
-      })
-    ];
+    # wrap gh to set GITHUB_TOKEN
+    hm.programs.gh.package = pkgs.symlinkJoin {
+      name = "gh";
+      paths = [ pkgs.gh ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/gh \
+          --run 'export GITHUB_TOKEN=$(cat ${config.sops.secrets.github_token.path})'
+      '';
+      meta.mainProgram = "gh";
+    };
   })
 ]

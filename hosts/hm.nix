@@ -1,13 +1,22 @@
 {
   inputs,
-  pkgs,
+  system,
   specialArgs,
   user ? "iynaix",
   ...
 }:
 let
+  # provide an optional { pkgs } 2nd argument to override the pkgs
   mkHomeConfiguration =
     host:
+    {
+      pkgs ? (
+        import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+      ),
+    }:
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
@@ -28,7 +37,7 @@ let
     };
 in
 {
-  desktop = mkHomeConfiguration "desktop";
-  framework = mkHomeConfiguration "framework";
+  desktop = mkHomeConfiguration "desktop" { };
+  framework = mkHomeConfiguration "framework" { };
   # NOTE: standalone home-manager doesn't make sense for VM config!
 }
