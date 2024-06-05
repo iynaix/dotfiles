@@ -2,7 +2,7 @@ _: {
   programs.nixvim = {
     plugins = {
       lsp.servers = {
-        emmet_ls.enable = true;
+        emmet-ls.enable = true;
         graphql.enable = true;
         prismals.enable = true;
         tailwindcss.enable = true;

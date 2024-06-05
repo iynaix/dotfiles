@@ -11,6 +11,7 @@ in
 {
   options.custom = {
     ### NIXOS LEVEL OPTIONS ###
+    bittorrent.enable = lib.mkEnableOption "Torrenting Applications";
     distrobox.enable = lib.mkEnableOption "distrobox";
     docker.enable = lib.mkEnableOption "docker" // {
       default = cfg.distrobox.enable;
@@ -18,11 +19,11 @@ in
     keyd.enable = lib.mkEnableOption "keyd" // {
       default = isLaptop;
     };
+    plasma.enable = lib.mkEnableOption "Plasma Desktop";
     sops.enable = lib.mkEnableOption "sops" // {
       default = true;
     };
     syncoid.enable = lib.mkEnableOption "syncoid";
-    bittorrent.enable = lib.mkEnableOption "Torrenting Applications";
     vercel.enable = lib.mkEnableOption "Vercel Backups";
     vm.enable = lib.mkEnableOption "VM support";
 

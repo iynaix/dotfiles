@@ -59,6 +59,26 @@
         },
         "version": "v2.42.0"
     },
+    "scope-tui": {
+        "cargoLocks": null,
+        "date": "2024-05-06",
+        "extract": null,
+        "name": "scope-tui",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "alemidev",
+            "repo": "scope-tui",
+            "rev": "c2fe70a69cfc15c4de6ea3f2a51580ec57a5c9e1",
+            "sha256": "sha256-6UPIZ2UB5wb0IkigaOXdQ/0ux9vHUGC4w5WnrjEd1bg=",
+            "type": "github"
+        },
+        "version": "c2fe70a69cfc15c4de6ea3f2a51580ec57a5c9e1"
+    },
     "swww": {
         "cargoLocks": null,
         "date": null,

@@ -8,9 +8,10 @@
     zfs.encryption = false;
 
     # software
-    distrobox.enable = true;
-    syncoid.enable = true;
     bittorrent.enable = true;
+    distrobox.enable = true;
+    plasma.enable = false;
+    syncoid.enable = true;
     vercel.enable = true;
     vm.enable = true;
   };

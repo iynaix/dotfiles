@@ -66,9 +66,12 @@ lib.mkMerge [
 
     gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
 
-    home.shellAliases = {
-      # edit the current wallpaper
-      wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
+    home = {
+      packages = [ pkgs.nomacs ];
+      shellAliases = {
+        # edit the current wallpaper
+        wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
+      };
     };
 
     # config file for wallpapers-ui
@@ -96,6 +99,12 @@ lib.mkMerge [
     programs.pqiv.extraConfig = lib.mkAfter ''
       m { command(mv $1 ${walls_in_dir}) }
     '';
+
+    custom.persist = {
+      home = {
+        directories = [ ".config/nomacs" ];
+      };
+    };
   })
 
   (lib.mkIf config.custom.rclip.enable {
