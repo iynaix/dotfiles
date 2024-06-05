@@ -3,37 +3,19 @@ lib.mkIf config.custom.hyprland.enable {
   services.hypridle = {
     enable = true;
 
-    settings =
-      let
-        timeout = 5 * 60;
-      in
-      lib.mkMerge [
+    # NOTE: screen lock on idle is handled in lock.nix
+    settings = {
+      general = {
+        ignore_dbus_inhibit = false;
+      };
+
+      listener = [
         {
-          general = {
-            ignore_dbus_inhibit = false;
-          };
-
-          listener = [
-            {
-              inherit timeout;
-              on-timeout = "hyprctl dispatch dpms off";
-              on-resume = "hyprctl dispatch dpms on";
-            }
-          ];
+          timeout = 5 * 60;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
         }
-        # lock screen on idle
-        (lib.mkIf config.custom.hyprland.lock {
-          general = {
-            lock_cmd = "hyprlock";
-          };
-
-          listener = [
-            {
-              inherit timeout;
-              on-timeout = "hyprlock";
-            }
-          ];
-        })
       ];
+    };
   };
 }

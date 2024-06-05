@@ -237,13 +237,13 @@ in
               exit 1
           fi
 
-          PKG_DIR=$(npath)
+          PKG_DIR=$(npath "$1")
+          # path not found, build it
           if [ ! -e "$PKG_DIR" ]; then
-              # path not found, build it
               nix build "nixpkgs#$1" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
-
-              yazi "$PKG_DIR"
           fi
+
+          yazi "$PKG_DIR"
         '';
       };
       # what depends on the given package in the current nixos install?
