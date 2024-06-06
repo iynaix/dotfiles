@@ -194,11 +194,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1717560231,
-        "narHash": "sha256-bYXXEG9+OCj0V36GoILmjRIX2hlJZEqmJMVJYuEeY80=",
+        "lastModified": 1717646600,
+        "narHash": "sha256-yHNeUEOU8/n+ULrsokW5aCLDWg/mEVbPCOyhTIorZns=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "33f54ff418fddefe7429ea7025389f09296b56a8",
+        "rev": "bdbbd8c2cb03b23b586fea14a8a680b218ab363c",
         "type": "gitlab"
       },
       "original": {
@@ -582,11 +582,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1717516756,
-        "narHash": "sha256-2sS+2e7Nsl+sZs5LL12EEBTK/7exRMdgJj9hlteaKms=",
+        "lastModified": 1717637010,
+        "narHash": "sha256-5ynKKFou5YrzvKZM/uHhmcCvxuGb+HWc+6Zy793Tevo=",
         "ref": "refs/heads/main",
-        "rev": "955246d6a0b4d3b7c79ac606aa1441a4794b5c40",
-        "revCount": 6258,
+        "rev": "096ed254dfe68a8ccd45eb79eaae658470aa315c",
+        "revCount": 6261,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -1106,11 +1106,11 @@
     },
     "nixpkgs-stable_3": {
       "locked": {
-        "lastModified": 1717281328,
-        "narHash": "sha256-evZPzpf59oNcDUXxh2GHcxHkTEG4fjae2ytWP85jXRo=",
+        "lastModified": 1717555607,
+        "narHash": "sha256-WZ1s48OODmRJ3DHC+I/DtM3tDRuRJlNqMvxvAPTD7ec=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b3b2b28c1daa04fe2ae47c21bb76fd226eac4ca1",
+        "rev": "0b8e7a1ae5a94da2e1ee3f3030a32020f6254105",
         "type": "github"
       },
       "original": {
@@ -1264,11 +1264,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1717574948,
-        "narHash": "sha256-8C2S1WWC4ty1LePzFWp+D6re/pggCJj9tWslddJ/wUw=",
+        "lastModified": 1717666795,
+        "narHash": "sha256-aJAcarOlEGStdtDm9wJCSmSH35l9SQZHtLZHu4qCm80=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "a54ee8ad64c91b587c3460126bad25a441c1118c",
+        "rev": "04671a049ac849e44396691d0c67092419fe9bc8",
         "type": "github"
       },
       "original": {

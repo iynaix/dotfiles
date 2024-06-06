@@ -6,12 +6,14 @@
 }:
 let
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
+  user = "nixos";
   mkIso =
     nixpkgs: isoPath:
     lib.nixosSystem {
       inherit system;
       modules = [
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
+        inputs.home-manager.nixosModules.home-manager
         (
           { pkgs, ... }:
           {
@@ -38,6 +40,7 @@ let
                   btop
                   git
                   eza
+                  home-manager
                   yazi
                 ]);
               shellAliases = {
@@ -86,6 +89,35 @@ let
                   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
                   "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
                 ];
+              };
+            };
+
+            # set dark theme for kde, adapted from plasma-manager
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+
+              users.${user} = {
+                home = {
+                  username = user;
+                  homeDirectory = "/home/${user}";
+                  stateVersion = "24.05";
+                };
+
+                xdg.configFile."autostart/plasma-dark-mode.desktop".text =
+                  let
+                    plasmaDarkMode = pkgs.writeShellScriptBin "plasma-dark-mode" ''
+                      plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+                      plasma-apply-desktoptheme breeze-dark
+                    '';
+                  in
+                  lib.mkIf (lib.hasInfix "kde" isoPath) ''
+                    [Desktop Entry]
+                    Type=Application
+                    Name=Plasma Dark Mode
+                    Exec=${lib.getExe plasmaDarkMode}
+                    X-KDE-autostart-condition=ksmserver
+                  '';
               };
             };
           }

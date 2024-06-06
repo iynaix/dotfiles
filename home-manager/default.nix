@@ -42,7 +42,7 @@
         custom.dotfiles-utils
       ]
       ++ (lib.optional config.custom.helix.enable helix)
-      # home-manager executable only on non-nixos
+      # home-manager executable only on nixos
       ++ (lib.optional isNixOS home-manager)
       # handle fonts
       ++ (lib.optionals (!isNixOS) config.custom.fonts.packages)

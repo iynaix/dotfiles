@@ -119,6 +119,9 @@ in
       # nix garbage collection
       ngc = ''
         # sudo rm /nix/var/nix/gcroots/auto/*
+
+        rm -f "${dots}/result"
+
         if [ "$#" -eq 0 ]; then
           sudo nix-collect-garbage -d
         else

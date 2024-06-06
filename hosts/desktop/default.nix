@@ -10,7 +10,7 @@
     # software
     bittorrent.enable = true;
     distrobox.enable = true;
-    plasma.enable = false;
+    # plasma.enable = true;
     syncoid.enable = true;
     vercel.enable = true;
     vm.enable = true;
