@@ -35,7 +35,7 @@ lib.mkMerge [
         ];
         text =
           let
-            rsync = ''rsync -aP --delete --no-links -e "ssh -o StrictHostKeyChecking=no"'';
+            rsync = "rsync -aP --delete --no-links";
             remote = "\${1:-${user}-framework}";
             rclip_dir = "${config.xdg.dataHome}/rclip";
           in

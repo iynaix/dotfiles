@@ -26,7 +26,6 @@ lib.mkIf config.custom.syncoid.enable {
       extraArgs = [
         "--no-sync-snap"
         "--delete-target-snapshots"
-        "--sshoption=StrictHostKeyChecking=no"
       ];
       localSourceAllow = config.services.syncoid.localSourceAllow ++ [ "mount" ];
       localTargetAllow = config.services.syncoid.localTargetAllow ++ [ "destroy" ];

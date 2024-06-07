@@ -2,43 +2,29 @@
   config,
   isLaptop,
   lib,
-  pkgs,
   ...
 }:
-let
-  lock_cmd = lib.getExe pkgs.custom.shell.lock;
-in
 lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
   programs.hyprlock.enable = true;
 
-  custom.shell.packages = {
-    lock = {
-      runtimeInputs = with pkgs; [
-        killall
-        hyprlock
-      ];
-      text = "killall hyprlock || hyprlock";
-    };
-  };
-
   wayland.windowManager.hyprland.settings = {
-    bind = [ "$mod_SHIFT, x, exec, ${lock_cmd}" ];
+    bind = [ "$mod_SHIFT, x, exec, hyprlock" ];
 
     # handle laptop lid
-    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lock_cmd}" ];
+    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, hyprlock" ];
   };
 
   # lock on idle
   services.hypridle = {
     settings = {
       general = {
-        inherit lock_cmd;
+        lock_cmd = "hyprlock";
       };
 
       listener = [
         {
           timeout = 5 * 60;
-          on-timeout = lock_cmd;
+          on-timeout = "hyprlock";
         }
       ];
     };

@@ -6,16 +6,20 @@
 }:
 {
   # Bootloader.
-  boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot";
-    };
-    grub = {
-      enable = true;
-      devices = [ "nodev" ];
-      efiSupport = true;
-      theme = pkgs.custom.distro-grub-themes-nixos;
+  boot = {
+    # enable stage-1 bootloader
+    initrd.systemd.enable = true;
+    loader = {
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        theme = pkgs.custom.distro-grub-themes-nixos;
+      };
     };
   };
 
