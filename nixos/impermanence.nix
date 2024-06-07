@@ -10,34 +10,21 @@ let
   hmPersistCfg = config.hm.custom.persist;
 in
 {
-  # NOTE: see zfs.nix for filesystem declarations, filesystem creation is handled via install.sh
-  boot = {
-    # clear /tmp on boot
-    tmp.cleanOnBoot = true;
+  # clear /tmp on boot, since it's a zfs dataset
+  boot.tmp.cleanOnBoot = true;
 
-    # root / home filesystem is destroyed and rebuilt on every boot:
-    # https://grahamc.com/blog/erase-your-darlings
-    initrd.postDeviceCommands = lib.mkAfter (
-      lib.optionalString (!cfg.tmpfs) "zfs rollback -r zroot/root@blank"
-    );
-  };
-
-  # replace root filesystem with tmpfs
+  # root and home on tmpfs
   # neededForBoot is required, so there won't be permission errors creating directories or symlinks
   # https://github.com/nix-community/impermanence/issues/149#issuecomment-1806604102
-  fileSystems = {
-    "/" = lib.mkIf cfg.tmpfs (
-      lib.mkForce {
-        device = "tmpfs";
-        fsType = "tmpfs";
-        neededForBoot = true;
-        options = [
-          "defaults"
-          "size=1G"
-          "mode=755"
-        ];
-      }
-    );
+  fileSystems."/" = {
+    device = "tmpfs";
+    fsType = "tmpfs";
+    neededForBoot = true;
+    options = [
+      "defaults"
+      "size=1G"
+      "mode=755"
+    ];
   };
 
   # shut sudo up
@@ -54,7 +41,6 @@ in
             (map (a: a.target))
             (lib.filter (t: !(lib.hasInfix "wallust" t)))
             (map (t: ''--exclude "${t}" \''))
-            # (lib.concatStringsSep " ")
             lib.concatLines
           ];
         in

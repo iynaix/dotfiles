@@ -156,6 +156,7 @@ lib.mkIf config.custom.hyprland.enable {
             if config.custom.wifi.enable then
               {
                 format = "    {essid}";
+                format-ethernet = " ";
                 on-click = "${config.xdg.configHome}/rofi/rofi-wifi-menu";
                 on-click-right = "${config.custom.terminal.exec} nmtui";
               }

@@ -91,6 +91,8 @@
         default = import ./devenv.nix commonArgs';
       });
 
+      # inherit self;
+
       # legacyPackages = forAllSystems (pkgs: pkgs);
 
       packages = forAllSystems (commonArgs': (import ./packages commonArgs'));

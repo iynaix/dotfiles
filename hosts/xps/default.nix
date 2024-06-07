@@ -1,8 +1,5 @@
 _: {
-  custom = {
-    # impermanence
-    persist.tmpfs = false; # change to false to test zfs impermanence
-  };
+  custom = { };
 
   networking.hostId = "abb4d116"; # required for zfs
 

@@ -18,6 +18,12 @@ in
 {
   nixpkgs.overlays = [
     (_: prev: {
+      # include nixpkgs stable
+      stable = import inputs.nixpkgs-stable {
+        inherit (prev.pkgs) system;
+        config.allowUnfree = true;
+      };
+
       # include custom packages
       custom =
         (prev.custom or { })

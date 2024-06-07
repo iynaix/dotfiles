@@ -30,8 +30,5 @@
         description = "Files to persist in home directory";
       };
     };
-    tmpfs = lib.mkEnableOption "tmpfs for for persist instead of snapshots" // {
-      default = true;
-    };
   };
 }

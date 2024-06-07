@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.custom.zfs;
-  persistCfg = config.custom.persist;
 in
 # NOTE: zfs datasets are created via install.sh
 {
@@ -37,13 +36,8 @@ in
       fsType = "vfat";
     };
 
+    # NOTE: root and home are on tmpfs
     # zfs datasets
-    "/" = {
-      device = "zroot/root";
-      fsType = "zfs";
-      neededForBoot = !persistCfg.tmpfs;
-    };
-
     "/nix" = {
       device = "zroot/nix";
       fsType = "zfs";
