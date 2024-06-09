@@ -45,19 +45,8 @@
       # home-manager executable only on nixos
       ++ (lib.optional isNixOS home-manager)
       # handle fonts
-      ++ (lib.optionals (!isNixOS) config.custom.fonts.packages)
-      # add custom user created shell packages
-      ++ (lib.attrValues config.custom.shell.finalPackages);
+      ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
   };
-
-  # add custom user created shell packages to pkgs.custom.shell
-  nixpkgs.overlays = lib.mkIf (!isNixOS) [
-    (_: prev: {
-      custom = prev.custom // {
-        shell = config.custom.shell.finalPackages;
-      };
-    })
-  ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

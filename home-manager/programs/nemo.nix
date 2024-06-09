@@ -20,8 +20,9 @@ let
   };
 in
 {
-  home.packages = [
-    pkgs.cinnamon.nemo-fileroller
+  home.packages = with pkgs; [
+    cinnamon.nemo-fileroller
+    webp-pixbuf-loader # for webp thumbnails
     nemo-patched
   ];
 

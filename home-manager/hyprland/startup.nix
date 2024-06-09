@@ -11,7 +11,7 @@ let
 in
 lib.mkIf config.custom.hyprland.enable {
   # start hyprland
-  custom.shell.profileExtra = ''
+  programs.bash.profileExtra = ''
     if [ "$(tty)" = "/dev/tty1" ]; then
       exec Hyprland &> /dev/null
     fi

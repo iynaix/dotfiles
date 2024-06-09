@@ -29,7 +29,7 @@ in
 
   custom.shell.packages =
     let
-      createNixosRebuild = subcmd: {
+      createNhCommand = subcmd: {
         runtimeInputs = with pkgs; [
           git
           nh
@@ -76,9 +76,9 @@ in
         sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
       '';
       # nixos-rebuild switch / boot /test via flake
-      nsw = createNixosRebuild "switch";
-      nsb = createNixosRebuild "boot";
-      nst = createNixosRebuild "test";
+      nsw = createNhCommand "switch";
+      nsb = createNhCommand "boot";
+      nst = createNhCommand "test";
       # update all nvfetcher overlays and packages
       nv-update = {
         runtimeInputs = with pkgs; [

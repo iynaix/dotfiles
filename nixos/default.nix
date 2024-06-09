@@ -119,10 +119,7 @@
 
     programs = {
       # use same config as home-manager
-      bash = {
-        interactiveShellInit = config.hm.programs.bash.initExtra;
-        loginShellInit = config.hm.programs.bash.profileExtra;
-      };
+      bash.interactiveShellInit = config.hm.programs.bash.initExtra;
 
       file-roller.enable = true;
 

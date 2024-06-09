@@ -50,7 +50,7 @@ in
             ${wallustExcludes} \
             --exclude "*.timer" \
             --exclude "/var/lib/NetworkManager" \
-            --exclude "/home/iynaix/.cache/{bat,fontconfig,nvidia,nvim/catppuccin,pre-commit,swww,wallust}"
+            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,nvidia,nvim/catppuccin,pre-commit,swww,wallust}"
         '';
     };
   };

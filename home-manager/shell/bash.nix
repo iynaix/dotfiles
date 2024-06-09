@@ -1,7 +1,6 @@
 { config, ... }:
 let
-  cfg = config.custom.shell;
-  histFile = "/persist/.config/bash/.bash_history";
+  histFile = "/persist/${config.xdg.configHome}/bash/.bash_history";
 in
 {
   # NOTE: see shell.nix for shared aliases and initExtra
@@ -13,7 +12,6 @@ in
       ehistory = "nvim ${histFile}";
     };
 
-    inherit (cfg) profileExtra;
     initExtra = ''
       # Change cursor with support for inside/outside tmux
       function _set_cursor() {
@@ -35,5 +33,9 @@ in
       # echo -e -n "\x1b[\x35 q"
       _set_beam_cursor
     '';
+  };
+
+  custom.persist = {
+    home.directories = [ ".config/bash" ];
   };
 }

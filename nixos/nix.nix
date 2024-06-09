@@ -84,55 +84,65 @@ in
       '';
     };
 
-  nix = {
-    channel.enable = false;
-    gc = {
-      # Automatic garbage collection
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 7d";
-    };
-    package = pkgs.nixVersions.latest;
-    registry = {
-      nixpkgs-master = {
-        from = {
-          type = "indirect";
-          id = "nixpkgs-master";
-        };
-        to = {
-          type = "github";
-          owner = "NixOS";
-          repo = "nixpkgs";
+  nix =
+    let
+      nixPath = [
+        "nixpkgs=flake:nixpkgs"
+        "/nix/var/nix/profiles/per-user/root/channels"
+      ];
+    in
+    {
+      channel.enable = false;
+      # required for nix-shell -p to work
+      inherit nixPath;
+      gc = {
+        # Automatic garbage collection
+        automatic = true;
+        dates = "daily";
+        options = "--delete-older-than 7d";
+      };
+      package = pkgs.nixVersions.latest;
+      registry = {
+        nixpkgs-master = {
+          from = {
+            type = "indirect";
+            id = "nixpkgs-master";
+          };
+          to = {
+            type = "github";
+            owner = "NixOS";
+            repo = "nixpkgs";
+          };
         };
       };
-    };
-    settings = {
-      auto-optimise-store = true; # Optimise symlinks
-      # re-evaluate on every rebuild instead of "cached failure of attribute" error
-      # eval-cache = false;
-      warn-dirty = false;
-      # removes ~/.nix-profile and ~/.nix-defexpr
-      use-xdg-base-directories = true;
+      settings = {
+        auto-optimise-store = true; # Optimise symlinks
+        # re-evaluate on every rebuild instead of "cached failure of attribute" error
+        # eval-cache = false;
+        nix-path = nixPath;
+        warn-dirty = false;
+        # removes ~/.nix-profile and ~/.nix-defexpr
+        use-xdg-base-directories = true;
 
-      # use flakes
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      substituters = [
-        "https://hyprland.cachix.org"
-        "https://nix-community.cachix.org"
-        "https://ghostty.cachix.org"
-      ];
-      # allow building and pushing of laptop config from desktop
-      trusted-users = [ user ];
-      trusted-public-keys = [
-        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-      ];
+        # use flakes
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        substituters = [
+          "https://hyprland.cachix.org"
+          "https://nix-community.cachix.org"
+          "https://ghostty.cachix.org"
+        ];
+        # allow building and pushing of laptop config from desktop
+        trusted-users = [ user ];
+        trusted-public-keys = [
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
+        ];
+      };
     };
-  };
 
   # better nixos generation label
   # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
