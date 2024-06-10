@@ -32,6 +32,10 @@ in
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };
   mpv-subsearch = w pkgs.mpvScripts.callPackage ./mpv-subsearch { inherit buildLua; };
 
+  # for nixos-rebuild
+  hsw = callPackage ./hsw { };
+  nsw = callPackage ./nsw { };
+
   rofi-themes = w callPackage ./rofi-themes { };
 
   vv =

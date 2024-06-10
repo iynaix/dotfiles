@@ -6,14 +6,14 @@
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
-### Install Home Manger
+### Install Home Manager
 
 ```sh
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 ```
 
-### Run Home Manger
+### Run Home Manager
 
 Substitute `desktop` with desired host
 

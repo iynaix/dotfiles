@@ -28,57 +28,24 @@ in
   };
 
   custom.shell.packages =
-    let
-      createNhCommand = subcmd: {
-        runtimeInputs = with pkgs; [
-          git
-          nh
-          ripgrep
-          custom.shell.nix-current-generation
-        ];
-        text =
-          let
-            configType = if isNixOS then "os" else "home";
-            hostFlag = if isNixOS then "hostname" else "configuration";
-          in
-          ''
-            cd ${dots}
-
-            # stop bothering me about untracked files
-            untracked_files=$(git ls-files --exclude-standard --others .)
-            if [ -n "$untracked_files" ]; then
-                git add "$untracked_files"
-            fi
-
-            # do not allow specifying host
-            if [[ "$*" == *"--${hostFlag}"* ]]; then
-                # Replace the word after "--${hostFlag}" with host using parameter expansion
-                cleaned_args=("''${@/--${hostFlag} [^[:space:]]*/--${hostFlag} ${host}}")
-                nh ${configType} ${subcmd} "''${cleaned_args[@]}" ${dots}
-            else
-                nh ${configType} ${subcmd} "$@" --${hostFlag} ${host} ${dots}
-            fi
-
-            ${lib.optionalString (isNixOS && subcmd == "switch") ''
-              # only relevant if --dry is not passed
-              if [[ "$*" != *"--dry"* ]]; then
-                echo -e "Switched to Generation \033[1m$(nix-current-generation)\033[0m"
-              fi
-            ''}
-            cd - > /dev/null
-          '';
-      };
-    in
     {
       # outputs the current nixos generation
       nix-current-generation = ''
         # previous desktop versions: 1196
         sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
       '';
-      # nixos-rebuild switch / boot /test via flake
-      nsw = createNhCommand "switch";
-      nsb = createNhCommand "boot";
-      nst = createNhCommand "test";
+      # nixos-rebuild switch, use different package for home-manager standalone
+      nsw =
+        if isNixOS then
+          pkgs.custom.nsw.override {
+            inherit dots host;
+            name = "nsw";
+          }
+        else
+          pkgs.custom.hsw.override {
+            inherit dots host;
+            name = "nsw";
+          };
       # update all nvfetcher overlays and packages
       nv-update = {
         runtimeInputs = with pkgs; [
@@ -288,6 +255,21 @@ in
           yaml=$(cat - | yq)
           nix eval --expr "lib.strings.fromJSON '''$yaml'''" | nixfmt -q
         '';
+      };
+    }
+    # nh home doesnt have boot or test
+    // lib.optionalAttrs isNixOS {
+      # nixos-rebuild boot
+      nsb = pkgs.custom.nsw.override {
+        inherit dots host;
+        name = "nsb";
+        nhCommand = "boot";
+      };
+      # nixos-rebuild test
+      nst = pkgs.custom.nsw.override {
+        inherit dots host;
+        name = "nst";
+        nhCommand = "test";
       };
     };
 

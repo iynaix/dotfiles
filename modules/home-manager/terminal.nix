@@ -49,7 +49,13 @@ in
 
     shell = {
       packages = lib.mkOption {
-        type = with lib.types; attrsOf (either str attrs);
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            attrs
+            package
+          ]);
         default = { };
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
@@ -70,14 +76,18 @@ in
         type = with lib.types; attrsOf package;
         readOnly = true;
         default = lib.mapAttrs (
-          name: attrs:
-          if lib.isString attrs then
+          name: value:
+          if lib.isString value then
             pkgs.writeShellApplication {
               inherit name;
-              text = attrs;
+              text = value;
             }
+          # packages
+          else if lib.hasAttr "overrideAttrs" value then
+            value
+          # attrs to pass to writeShellApplication
           else
-            pkgs.writeShellApplication (attrs // { inherit name; })
+            pkgs.writeShellApplication (value // { inherit name; })
         ) config.custom.shell.packages;
         description = "Extra shell packages to install after all entries have been converted to packages.";
       };
