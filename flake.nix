@@ -79,7 +79,14 @@
       };
       commonArgs = createCommonArgs system;
       # call with forAllSystems (commonArgs: function body)
-      forAllSystems = fn: nixpkgs.lib.genAttrs [ system ] (system: fn (createCommonArgs system));
+      forAllSystems =
+        fn:
+        nixpkgs.lib.genAttrs [
+          "x86_64-linux"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "aarch64-darwin"
+        ] (system: fn (createCommonArgs system));
     in
     {
       nixosConfigurations = (import ./hosts/nixos.nix commonArgs) // (import ./hosts/iso commonArgs);
@@ -91,9 +98,7 @@
         default = import ./devenv.nix commonArgs';
       });
 
-      # inherit self;
-
-      # legacyPackages = forAllSystems (pkgs: pkgs);
+      inherit self;
 
       packages = forAllSystems (commonArgs': (import ./packages commonArgs'));
 

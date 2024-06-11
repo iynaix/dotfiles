@@ -5,9 +5,9 @@
   ...
 }:
 {
-  home.packages = [ pkgs.cava ];
+  programs.cava.enable = true;
 
-  custom.wallust.templates.cava = lib.mkIf (lib.elem pkgs.cava config.home.packages) {
+  custom.wallust.templates.cava = lib.mkIf config.programs.cava.enable {
     text = pkgs.custom.lib.toQuotedINI {
       general = {
         # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.

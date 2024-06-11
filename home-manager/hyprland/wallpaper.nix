@@ -82,6 +82,7 @@ lib.mkMerge [
           wallpapers_path = wallpapers_dir;
           min_width = 3440; # ultrawide width
           min_height = 1504; # framework height
+          show_faces = true;
         };
 
         sections = {

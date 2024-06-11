@@ -55,6 +55,9 @@ in
       ];
   };
 
+  # cleanup nixpkgs-review cache on boot
+  systemd.tmpfiles.rules = [ "D! ${config.hm.xdg.cacheHome}/nixpkgs-review 1755 ${user} users 1d" ];
+
   custom.shell.packages =
     {
       # set the current generation or given generation number as default to boot

@@ -126,14 +126,18 @@ in
           elif [[ $(pwd) =~ /nixpkgs$ ]]; then
               nom-build -A "$TARGET"
           # dotfiles, build local package
-          elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$TARGET" ]]; then
+          elif [[ $(pwd) =~ /dotfiles$ ]]; then
               # stop bothering me about untracked files
               untracked_files=$(git ls-files --exclude-standard --others .)
               if [ -n "$untracked_files" ]; then
                   git add "$untracked_files"
               fi
 
-              nom build ".#$TARGET"
+              if  [[ -d "./packages/$TARGET" ]]; then
+                nom build ".#$TARGET"
+              else
+                nom build ".#nixoConfigurations.${host}.pkgs.$TARGET"
+              fi
           # nix repo, build package within flake
           else
               nom build ".#$TARGET"
@@ -152,8 +156,12 @@ in
         if [[ $(pwd) =~ /nixpkgs$ ]]; then
             src="."
         # dotfiles, custom package exists, build it
-        elif [[ $(pwd) =~ /dotfiles$ ]] && [[ -d "./packages/$1" ]]; then
-            src="."
+        elif [[ $(pwd) =~ /dotfiles$ ]]; then
+            if [[ -d "./packages/$1" ]]; then
+              src="."
+            else
+              src="nixpkgs"
+            fi
         # flake
         elif [[ -f flake.nix ]]; then
             src="."
