@@ -124,6 +124,12 @@ in
               nsw --dry --hostname "$TARGET"
           # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
           elif [[ $(pwd) =~ /nixpkgs$ ]]; then
+              # stop bothering me about untracked files
+              untracked_files=$(git ls-files --exclude-standard --others .)
+              if [ -n "$untracked_files" ]; then
+                  git add "$untracked_files"
+              fi
+
               nom-build -A "$TARGET"
           # dotfiles, build local package
           elif [[ $(pwd) =~ /dotfiles$ ]]; then

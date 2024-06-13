@@ -21,10 +21,6 @@ sysinfo = "0.30.5"
 clap = { version = "4.4.4", features = ["derive", "string"] }
 clap_complete = "4.4.3"
 
-[features]
-default = ["hyprland"]
-hyprland = []
-
 [lints.rust]
 unsafe_code = "forbid"
 

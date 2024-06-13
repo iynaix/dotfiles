@@ -14,15 +14,13 @@ fn main() {
         std::mem::swap(&mut width, &mut height);
     }
 
-    if cfg!(feature = "hyprland") {
-        let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
+    let float_rule = format!("[float;size {} {};center]", width as i32, height as i32);
 
-        hypr([
-            "exec",
-            &format!(
-                "{float_rule} pqiv --shuffle '{}'",
-                &wallpaper::dir().to_str().expect("invalid wallpaper dir")
-            ),
-        ]);
-    }
+    hypr([
+        "exec",
+        &format!(
+            "{float_rule} pqiv --shuffle '{}'",
+            &wallpaper::dir().to_str().expect("invalid wallpaper dir")
+        ),
+    ]);
 }

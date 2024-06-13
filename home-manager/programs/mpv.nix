@@ -147,6 +147,7 @@ in
           seekTo
           sponsorblock
           thumbfast
+          cutter
         ]
         # custom packaged scripts
         ++ (with pkgs.custom; [
@@ -254,10 +255,7 @@ in
     windowrulev2 = [ "suppressevent maximize, class:(mpv)" ];
   };
 
-  home.shellAliases = {
-    # subliminal is broken
-    # subs = "subliminal download -l 'en' -l 'eng' -s";
-  };
+  home.packages = with pkgs; [ ffmpeg ];
 
   custom.persist = {
     home.directories = [

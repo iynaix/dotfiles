@@ -160,13 +160,13 @@ in
     (_: prev: {
       nixos-option =
         let
-          flake-compact = prev.fetchFromGitHub {
+          flake-compat = prev.fetchFromGitHub {
             owner = "edolstra";
             repo = "flake-compat";
             rev = "12c64ca55c1014cdc1b16ed5a804aa8576601ff2";
             sha256 = "sha256-hY8g6H2KFL8ownSiFeMOjwPC8P0ueXpCVEbxgda3pko=";
           };
-          prefix = ''(import ${flake-compact} { src = ${dots}; }).defaultNix.nixosConfigurations.${host}'';
+          prefix = ''(import ${flake-compat} { src = ${dots}; }).defaultNix.nixosConfigurations.${host}'';
         in
         prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
           makeWrapper ${lib.getExe prev.nixos-option} $out/bin/nixos-option \

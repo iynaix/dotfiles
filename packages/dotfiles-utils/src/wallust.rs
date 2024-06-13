@@ -68,6 +68,60 @@ fn refresh_zathura() {
     }
 }
 
+/// returns the area of a triangle formed by the given RGB tuples
+fn color_triangle_area(a: &Rgb, b: &Rgb, c: &Rgb) -> i64 {
+    let (x1, y1, z1) = a;
+    let (x2, y2, z2) = b;
+    let (x3, y3, z3) = c;
+
+    let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
+    let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
+    let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+
+    let t1: i64 = i64::from(t1) * i64::from(t1);
+    let t2: i64 = i64::from(t2) * i64::from(t2);
+    let t3: i64 = i64::from(t3) * i64::from(t3);
+
+    // should be square root then halved, but makes no difference if just comparing
+    t1 + t2 + t3
+}
+
+/// sort wallust colors by how contrasting they are to the background and foreground,
+/// using the area of a triangle formed by the colors
+fn accents_by_contrast() -> Vec<String> {
+    let nixinfo = NixInfo::after();
+    let mut colors: Vec<_> = nixinfo
+        .colors
+        .into_iter()
+        .filter_map(|(name, color)| {
+            // ignore black and white
+            if matches!(name.as_str(), "color0" | "color7" | "color8" | "color15") {
+                return None;
+            }
+            Some(color)
+        })
+        .collect();
+
+    colors.sort_by_key(|color| {
+        // get the area of the triangle formed by the colors
+        color_triangle_area(
+            &hex_to_rgb(&nixinfo.special.background),
+            &hex_to_rgb(&nixinfo.special.foreground),
+            &hex_to_rgb(color),
+        )
+    });
+    colors.reverse();
+
+    colors
+}
+
+fn accent_or_default(accents: &[String], accent_idx: usize, default: &str) -> String {
+    accents.get(accent_idx).map_or_else(
+        || default.to_string(),
+        |accent| format!("{})", accent.replace('#', "rgb(")),
+    )
+}
+
 /// applies the wallust colors to various applications
 pub fn apply_colors() {
     let has_nix_json = full_path("~/.cache/wallust/nix.json").exists();
@@ -87,57 +141,74 @@ pub fn apply_colors() {
         hyprland_colors(&cs.colors)
     };
 
-    if cfg!(feature = "hyprland") {
-        // update borders
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
-            "general:col.active_border",
-            &format!("{} {} 45deg", hyprland_colors[4], hyprland_colors[0]),
-        )
-        .execute()
-        .expect("failed to set hyprland active border color");
+    let accents = if has_nix_json {
+        accents_by_contrast()
+    } else {
+        Vec::new()
+    };
 
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
-            "general:col.inactive_border",
-            &hyprland_colors[0]
-        )
-        .execute()
-        .expect("failed to set hyprland inactive border color");
+    // update borders
+    execute::command_args!(
+        "hyprctl",
+        "keyword",
+        "general:col.active_border",
+        &format!(
+            "{} {} 45deg",
+            accent_or_default(&accents, 0, &hyprland_colors[4]),
+            accent_or_default(&accents, 1, &hyprland_colors[0]),
+        ),
+    )
+    .execute()
+    .expect("failed to set hyprland active border color");
 
-        // pink border for monocle windows
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},fullscreen:1", &hyprland_colors[5]),
+    execute::command_args!(
+        "hyprctl",
+        "keyword",
+        "general:col.inactive_border",
+        &hyprland_colors[0]
+    )
+    .execute()
+    .expect("failed to set hyprland inactive border color");
+
+    // pink border for monocle windows
+    execute::command_args!(
+        "hyprctl",
+        "keyword",
+        "windowrulev2",
+        "bordercolor",
+        &format!(
+            "{},fullscreen:1",
+            accent_or_default(&accents, 2, &hyprland_colors[5]),
         )
-        .execute()
-        .expect("failed to set hyprland border color");
-        // teal border for floating windows
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},floating:1", &hyprland_colors[6]),
-        )
-        .execute()
-        .expect("failed to set hyprland floating border color");
-        // yellow border for sticky (must be floating) windows
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
-            "windowrulev2",
-            "bordercolor",
-            &format!("{},pinned:1", &hyprland_colors[3]),
-        )
-        .execute()
-        .expect("failed to set hyprland sticky border color");
-    }
+    )
+    .execute()
+    .expect("failed to set hyprland border color");
+    // teal border for floating windows
+    execute::command_args!(
+        "hyprctl",
+        "keyword",
+        "windowrulev2",
+        "bordercolor",
+        &format!(
+            "{},floating:1",
+            accent_or_default(&accents, 3, &hyprland_colors[6]),
+        ),
+    )
+    .execute()
+    .expect("failed to set hyprland floating border color");
+    // yellow border for sticky (must be floating) windows
+    execute::command_args!(
+        "hyprctl",
+        "keyword",
+        "windowrulev2",
+        "bordercolor",
+        &format!(
+            "{},pinned:1",
+            accent_or_default(&accents, 4, &hyprland_colors[3])
+        ),
+    )
+    .execute()
+    .expect("failed to set hyprland sticky border color");
 
     // refresh zathura
     refresh_zathura();
@@ -156,17 +227,20 @@ pub fn apply_colors() {
             .ok();
     });
 
-    if cfg!(feature = "hyprland") {
-        // sleep to prevent waybar race condition
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
-        // refresh waybar
-        execute_wrapped_process("waybar", |process| {
-            execute::command_args!("killall", "-SIGUSR2", process)
-                .execute()
-                .ok();
-        });
+    // set the waybar accent color to have more contrast
+    if let Some(accent) = accents.first() {
+        set_waybar_accent(accent);
     }
+
+    // sleep to prevent waybar race condition
+    std::thread::sleep(std::time::Duration::from_secs(1));
+
+    // refresh waybar
+    execute_wrapped_process("waybar", |process| {
+        execute::command_args!("killall", "-SIGUSR2", process)
+            .execute()
+            .ok();
+    });
 
     // set gtk theme
     if has_nix_json {
@@ -282,6 +356,18 @@ fn hex_to_rgb(hex: &str) -> Rgb {
     (r, g, b)
 }
 
+// euclidean distance squared between colos, no sqrt necessary since we're only comparing
+pub fn distance_sq(a: &Rgb, b: &Rgb) -> i32 {
+    let (r1, g1, b1) = a;
+    let (r2, g2, b2) = b;
+
+    let dr = r1 - r2;
+    let dg = g1 - g2;
+    let db = b1 - b2;
+
+    db * db + dg * dg + dr * dr
+}
+
 pub fn set_gtk_and_icon_theme() {
     let nixinfo = NixInfo::after();
 
@@ -296,7 +382,7 @@ pub fn set_gtk_and_icon_theme() {
         .iter()
         .filter_map(|(name, color)| {
             // ignore black
-            if name == "color0" {
+            if name == "color0" || name == "color7" {
                 return None;
             }
 
@@ -309,16 +395,7 @@ pub fn set_gtk_and_icon_theme() {
 
     for (accent_name, accent_color) in theme_accents {
         for wallust_color in &wallust_colors {
-            // calculate distance between colos, no sqrt necessary since we're only comparing
-            let (r1, g1, b1) = accent_color;
-            let (r2, g2, b2) = wallust_color;
-
-            let dr = r1 - r2;
-            let dg = g1 - g2;
-            let db = b1 - b2;
-
-            let distance = db * db + dg * dg + dr * dr;
-
+            let distance = distance_sq(&accent_color, wallust_color);
             if distance < min_distance {
                 variant = accent_name.to_string();
                 min_distance = distance;
@@ -337,4 +414,14 @@ pub fn set_gtk_and_icon_theme() {
         .arg(format!("'Tela-{variant}-dark'"))
         .execute()
         .expect("failed to apply icon theme");
+}
+
+pub fn set_waybar_accent(accent: &str) {
+    let nixinfo = NixInfo::after();
+
+    // replace old foreground color with new color
+    let css_path = full_path("~/.config/waybar/style.css");
+    let css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
+    std::fs::write(css_path, css.replace(&nixinfo.special.foreground, accent))
+        .expect("could not write waybar css");
 }

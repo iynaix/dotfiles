@@ -59,17 +59,15 @@ fn main() {
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
 
-    if cfg!(feature = "hyprland") {
-        if args.reload {
-            execute_wrapped_process("waybar", |process| {
-                execute::command_args!("killall", "-SIGUSR2", process)
-                    .execute()
-                    .ok();
-            });
-        }
-        execute::command!("swww-crop")
-            .arg(&wallpaper)
-            .execute()
-            .ok();
+    if args.reload {
+        execute_wrapped_process("waybar", |process| {
+            execute::command_args!("killall", "-SIGUSR2", process)
+                .execute()
+                .ok();
+        });
     }
+    execute::command!("swww-crop")
+        .arg(&wallpaper)
+        .execute()
+        .ok();
 }
