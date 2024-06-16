@@ -21,8 +21,16 @@ writeShellApplication {
         "@@host@@"
       ]
       [
-        dots
-        host
+        # not using toString trips up nix flake check
+        (toString dots)
+        (toString host)
       ]
-      (builtins.readFile ./nsw.sh);
+      (lib.readFile ./hsw.sh);
+
+  meta = {
+    description = "Switch to a different home-manager configuration";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iynaix ];
+    platforms = lib.platforms.linux;
+  };
 }

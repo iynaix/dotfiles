@@ -74,16 +74,12 @@ fn color_triangle_area(a: &Rgb, b: &Rgb, c: &Rgb) -> i64 {
     let (x2, y2, z2) = b;
     let (x3, y3, z3) = c;
 
-    let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
-    let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
-    let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
-
-    let t1: i64 = i64::from(t1) * i64::from(t1);
-    let t2: i64 = i64::from(t2) * i64::from(t2);
-    let t3: i64 = i64::from(t3) * i64::from(t3);
+    let t1 = i64::from((y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1));
+    let t2 = i64::from((z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1));
+    let t3 = i64::from((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1));
 
     // should be square root then halved, but makes no difference if just comparing
-    t1 + t2 + t3
+    t1 * t1 + t2 * t2 + t3 * t3
 }
 
 /// sort wallust colors by how contrasting they are to the background and foreground,

@@ -35,7 +35,7 @@ lib.mkMerge [
         ];
         text =
           let
-            rsync = "rsync -aP --delete --no-links";
+            rsync = "rsync -aP --delete --no-links --mkpath";
             remote = "\${1:-${user}-framework}";
             rclip_dir = "${config.xdg.dataHome}/rclip";
           in

@@ -154,3 +154,5 @@ done
 read -rp "Enter git rev for flake (default: main): " git_rev
 echo "Installing NixOS"
 sudo nixos-install --no-root-password --flake "github:iynaix/dotfiles/${git_rev:-main}#$host"
+
+echo "To setup secrets, run \"install-remote-secrets\" on another host. Otherwise, it is now safe to reboot."

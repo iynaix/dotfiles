@@ -65,6 +65,14 @@ let
             };
 
             # enable SSH in the boot process.
+            services.openssh = {
+              enable = true;
+              # disable password auth
+              settings = {
+                PasswordAuthentication = false;
+                KbdInteractiveAuthentication = false;
+              };
+            };
             systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
             users.users.root.openssh.authorizedKeys.keyFiles = [
               ../../home-manager/id_rsa.pub
@@ -91,37 +99,22 @@ let
                 ];
               };
             };
-
-            # set dark theme for kde, adapted from plasma-manager
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-
-              users.${user} = {
-                home = {
-                  username = user;
-                  homeDirectory = "/home/${user}";
-                  stateVersion = "24.05";
-                };
-
-                xdg.configFile."autostart/plasma-dark-mode.desktop".text =
-                  let
-                    plasmaDarkMode = pkgs.writeShellScriptBin "plasma-dark-mode" ''
-                      plasma-apply-lookandfeel -a org.kde.breezedark.desktop
-                      plasma-apply-desktoptheme breeze-dark
-                    '';
-                  in
-                  lib.mkIf (lib.hasInfix "kde" isoPath) ''
-                    [Desktop Entry]
-                    Type=Application
-                    Name=Plasma Dark Mode
-                    Exec=${lib.getExe plasmaDarkMode}
-                    X-KDE-autostart-condition=ksmserver
-                  '';
-              };
-            };
           }
         )
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+
+            extraSpecialArgs = {
+              inherit user isoPath;
+            };
+
+            users.${user} = {
+              imports = [ ./home.nix ];
+            };
+          };
+        }
       ];
     };
 in

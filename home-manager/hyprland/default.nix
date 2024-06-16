@@ -156,13 +156,14 @@ in
         misc = {
           disable_hyprland_logo = true;
           disable_splash_rendering = true;
+          initial_workspace_tracking = 0;
           mouse_move_enables_dpms = true;
           # enable_hyprcursor = false;
           # animate_manual_resizes = true;
           # animate_mouse_windowdragging = true;
           # key_press_enables_dpms = true;
           enable_swallow = false;
-          swallow_regex = "^([Kk]itty|[Ww]ezterm)$";
+          swallow_regex = "^([Kk]itty|[Ww]ezterm|[Gg]hostty)$";
         };
 
         debug.disable_logs = false;

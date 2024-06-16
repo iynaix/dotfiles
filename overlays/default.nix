@@ -54,6 +54,9 @@ in
         patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];
       });
 
+      # use nixfmt-rfc-style as the default
+      nixfmt = prev.nixfmt-rfc-style;
+
       path-of-building =
         let
           desktopItem = pkgs.makeDesktopItem {

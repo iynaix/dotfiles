@@ -10,9 +10,12 @@ inputs.devenv.lib.mkShell {
         packages = with pkgs; [
           age
           sops
+          cachix
+          deadnix
+          statix
+          nil
         ];
 
-        languages.nix.enable = true;
         languages.rust.enable = true;
 
         pre-commit = {

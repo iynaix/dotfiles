@@ -21,6 +21,7 @@
         theme = pkgs.custom.distro-grub-themes-nixos;
       };
     };
+    supportedFilesystems.ntfs = true;
   };
 
   networking.hostName = "${user}-${host}"; # Define your hostname.

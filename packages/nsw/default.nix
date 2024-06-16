@@ -23,9 +23,17 @@ writeShellApplication {
         "@@nhCommand@@"
       ]
       [
-        dots
-        host
-        nhCommand
+        # not using toString trips up nix flake check
+        (toString dots)
+        (toString host)
+        (toString nhCommand)
       ]
-      (builtins.readFile ./nsw.sh);
+      (lib.readFile ./nsw.sh);
+
+  meta = {
+    description = "Switch to a different nixos configuration";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iynaix ];
+    platforms = lib.platforms.linux;
+  };
 }

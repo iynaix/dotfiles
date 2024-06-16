@@ -85,7 +85,6 @@
           eza
           killall
           neovim
-          ntfs3g
           procps
           ripgrep
           yazi

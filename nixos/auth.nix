@@ -10,8 +10,11 @@ lib.mkMerge [
   {
     services.openssh = {
       enable = true;
-      settings.PasswordAuthentication = false;
-      settings.KbdInteractiveAuthentication = false;
+      # disable password auth
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
     };
 
     users.users =

@@ -1,7 +1,7 @@
 {
+  config,
   lib,
   pkgs,
-  config,
   ...
 }:
 let
@@ -83,7 +83,7 @@ in
               text = value;
             }
           # packages
-          else if lib.hasAttr "overrideAttrs" value then
+          else if lib.isDerivation value then
             value
           # attrs to pass to writeShellApplication
           else

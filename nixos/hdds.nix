@@ -5,6 +5,7 @@ let
   wdred-dataset = "zfs-wdred6-1/media";
   ironwolf = "/media/IRONWOLF22";
   ironwolf-dataset = "zfs-ironwolf22-1/media";
+  inherit (config.hm.home) homeDirectory;
 in
 lib.mkIf cfg.enable {
   # non os zfs disks
@@ -32,32 +33,26 @@ lib.mkIf cfg.enable {
 
   # symlinks from hdds
   # dest src
-  systemd.tmpfiles.rules = lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
-    "L+ ${wdred}/Anime            - - - - ${ironwolf}/Anime"
-    "L+ ${wdred}/Movies           - - - - ${ironwolf}/Movies"
-    "L+ ${wdred}/TV               - - - - ${ironwolf}/TV"
-  ];
-
-  # add bookmarks for gtk
-  hm = hmCfg: {
-    gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
-      "file://${ironwolf}/Anime Anime"
-      "file://${ironwolf}/Anime/Current Anime Current"
-      "file://${ironwolf}/TV TV"
-      "file://${ironwolf}/TV/Current TV Current"
-      "file://${ironwolf}/Movies"
+  systemd.tmpfiles.rules =
+    let
+      createLink = src: dest: "L+ ${dest} - - - - ${src}";
+    in
+    lib.optionals cfg.ironwolf22 [ (createLink "${ironwolf}/Downloads" "${homeDirectory}/Downloads") ]
+    ++ lib.optionals cfg.wdred6 [ (createLink wdred "${homeDirectory}/Videos") ]
+    ++ lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
+      (createLink "${ironwolf}/Anime" "${wdred}/Anime")
+      (createLink "${ironwolf}/Movies" "${wdred}/Movies")
+      (createLink "${ironwolf}/TV" "${wdred}/TV")
     ];
 
-    # create symlinks for locations with ~
-    home.file =
-      let
-        inherit (hmCfg.config.lib.file) mkOutOfStoreSymlink;
-      in
-      {
-        Downloads.source = lib.mkIf cfg.ironwolf22 (mkOutOfStoreSymlink "${ironwolf}/Downloads");
-        Videos.source = lib.mkIf cfg.wdred6 (mkOutOfStoreSymlink "${wdred}");
-      };
-  };
+  # add bookmarks for gtk
+  hm.gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
+    "file://${ironwolf}/Anime Anime"
+    "file://${ironwolf}/Anime/Current Anime Current"
+    "file://${ironwolf}/TV TV"
+    "file://${ironwolf}/TV/Current TV Current"
+    "file://${ironwolf}/Movies"
+  ];
 
   # dual boot windows
   boot = {
@@ -85,8 +80,6 @@ lib.mkIf cfg.enable {
       #   }
       # ''));
     };
-
-    supportedFilesystems.ntfs = cfg.windows;
   };
 
   # hide disks

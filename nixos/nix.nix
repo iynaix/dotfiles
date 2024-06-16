@@ -164,7 +164,7 @@ in
             owner = "edolstra";
             repo = "flake-compat";
             rev = "12c64ca55c1014cdc1b16ed5a804aa8576601ff2";
-            sha256 = "sha256-hY8g6H2KFL8ownSiFeMOjwPC8P0ueXpCVEbxgda3pko=";
+            hash = "sha256-hY8g6H2KFL8ownSiFeMOjwPC8P0ueXpCVEbxgda3pko=";
           };
           prefix = ''(import ${flake-compat} { src = ${dots}; }).defaultNix.nixosConfigurations.${host}'';
         in

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -24,6 +25,42 @@ lib.mkIf config.custom.sops.enable {
   };
 
   users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
+
+  # script to bootstrap a new install
+  environment.systemPackages = with pkgs; [
+    (writeShellApplication {
+      name = "install-remote-secrets";
+      runtimeInputs = [ rsync ];
+      text =
+        let
+          persistHome = "/persist${homeDir}";
+          copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "nixos@$remote:$target/${src}"'';
+        in
+        ''
+          read -rp "Enter ip of remote host: " remote
+          target="/mnt${persistHome}"
+
+          while true; do
+              read -rp "Use /mnt? [y/n] " yn
+              case $yn in
+                [Yy]*)
+                  echo "y";
+                  target="/mnt${persistHome}"
+                  return;;
+                [Nn]*)
+                  echo "n";
+                  target="${persistHome}"
+                  return;;
+                *)
+                  echo "Please answer yes or no.";;
+              esac
+          done
+
+          ${copy ".ssh/"}
+          ${copy ".config/sops/age/"}
+        '';
+    })
+  ];
 
   custom.persist.home = {
     directories = [ ".config/sops" ];
