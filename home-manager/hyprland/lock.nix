@@ -2,29 +2,43 @@
   config,
   isLaptop,
   lib,
+  pkgs,
   ...
 }:
+let
+  lockCmd = lib.getExe pkgs.custom.shell.lock;
+in
 lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
   programs.hyprlock.enable = true;
 
+  custom.shell.packages = {
+    lock = {
+      runtimeInputs = with pkgs; [
+        hyprlock
+        procps
+      ];
+      text = "pidof hyprlock || hyprlock";
+    };
+  };
+
   wayland.windowManager.hyprland.settings = {
-    bind = [ "$mod_SHIFT, x, exec, hyprlock" ];
+    bind = [ "$mod_SHIFT, x, exec, ${lockCmd}" ];
 
     # handle laptop lid
-    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, hyprlock" ];
+    bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
   };
 
   # lock on idle
   services.hypridle = {
     settings = {
       general = {
-        lock_cmd = "hyprlock";
+        lock_cmd = lockCmd;
       };
 
       listener = [
         {
           timeout = 5 * 60;
-          on-timeout = "hyprlock";
+          on-timeout = lockCmd;
         }
       ];
     };
@@ -81,7 +95,7 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
               shadow_passes = 1;
               shadow_size = 4;
 
-              position = "0, 200";
+              position = "0, 80";
               halign = "center";
               valign = "center";
             }
@@ -96,7 +110,7 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
               shadow_passes = 1;
               shadow_size = 2;
 
-              position = "0, 60";
+              position = "0, 30";
               halign = "center";
               valign = "center";
             }

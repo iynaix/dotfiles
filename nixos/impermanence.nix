@@ -45,12 +45,12 @@ in
           ];
         in
         ''
-          sudo fd --one-file-system --base-directory / --type f --hidden --list-details \
+          sudo fd --one-file-system --base-directory / --type f --hidden \
             --exclude "/etc/{ssh,machine-id,passwd,shadow}" \
-            ${wallustExcludes} \
             --exclude "*.timer" \
             --exclude "/var/lib/NetworkManager" \
-            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,nvidia,nvim/catppuccin,pre-commit,swww,wallust}"
+            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
+            ${wallustExcludes}  --exec ls -lS | sort -k5,5nr
         '';
     };
   };

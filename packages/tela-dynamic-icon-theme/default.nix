@@ -31,8 +31,8 @@ tela-icon-theme.overrideAttrs (oldAttrs: {
     (oldAttrs.postPatch or "")
     + ''
       substitute ${./install.sh} install.sh \
-        --replace-fail @@THEME_COLORS@@ "${themeColors}" \
-        --replace-fail @@THEME_HELP@@ "${themeHelp}" \
-        --replace-fail @@THEME_IF@@ "${themeIf}"
+        --replace-fail @THEME_COLORS@ "${themeColors}" \
+        --replace-fail @THEME_HELP@ "${themeHelp}" \
+        --replace-fail @THEME_IF@ "${themeIf}"
     '';
 })

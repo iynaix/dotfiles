@@ -1,8 +1,8 @@
 {
   host,
-  lib,
   isLaptop,
   isNixOS,
+  lib,
   pkgs,
   ...
 }:
@@ -66,15 +66,18 @@
     };
 
     waybar = {
+      accentColor = lib.mkEnableOption "Accent color" // {
+        default = true;
+      };
       config = lib.mkOption {
         type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
-      idle-inhibitor = lib.mkEnableOption "Idle inhibitor" // {
+      idleInhibitor = lib.mkEnableOption "Idle inhibitor" // {
         default = host == "desktop";
       };
-      persistent-workspaces = lib.mkEnableOption "Persistent workspaces";
+      persistentWorkspaces = lib.mkEnableOption "Persistent workspaces";
       hidden = lib.mkEnableOption "Hidden waybar by default";
     };
   };

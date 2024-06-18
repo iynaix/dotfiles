@@ -22,20 +22,20 @@ fn main() {
         .unwrap_or_else(|_| panic!("unable to read waybar config at {config_path}"));
 
     if let NixInfo {
-        persistent_workspaces: Some(true),
+        waybar_persistent_workspaces: Some(true),
         ..
     } = NixInfo::before()
     {
         let rearranged_workspaces = Monitor::rearranged_workspaces();
 
-        cfg["hyprland/workspaces"]["persistent-workspaces"] =
+        cfg["hyprland/workspaces"]["persistentWorkspaces"] =
             serde_json::to_value(rearranged_workspaces)
                 .expect("failed to convert rearranged workspaces to json");
     } else {
         let hyprland_workspaces = cfg["hyprland/workspaces"]
             .as_object_mut()
             .expect("invalid hyprland workspaces");
-        hyprland_workspaces.remove("persistent-workspaces");
+        hyprland_workspaces.remove("persistentWorkspaces");
 
         cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
             .expect("failed to convert hyprland workspaces to json");

@@ -1,10 +1,4 @@
-{
-  isNixOS,
-  lib,
-  pkgs,
-  ...
-}:
-{
+_: {
   custom = {
     monitors = [
       {
@@ -58,17 +52,13 @@
     vlc.enable = true;
     wallpaper-utils.enable = true;
     # wallust.colorscheme = "tokyo-night";
-    # waybar.persistent-workspaces = true;
+    # waybar.persistentWorkspaces = true;
     waybar.hidden = false;
   };
 
-  home = {
-    packages = lib.mkIf isNixOS (
-      with pkgs;
-      [
-        hyprlock # build package for testing, but it isn't used
-        # vial
-      ]
-    );
-  };
+  # home = {
+  #   packages = with pkgs; [
+  #     # hyprlock # build package for testing, but it isn't used
+  #   ];
+  # };
 }

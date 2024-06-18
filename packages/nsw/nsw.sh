@@ -1,8 +1,8 @@
 nhArgs=()
 restArgs=()
-dots="@@dots@@"
-hostname="@@host@@"
-nhCommand="@@nhCommand@@"
+dots="@dots@"
+hostname="@host@"
+nhCommand="@nhCommand@"
 isDry=$([ "$nhCommand" = "switch" ] && echo true || echo false)
 
 while (( "$#" )); do

@@ -105,7 +105,7 @@ lib.mkIf config.custom.hyprland.enable {
           tooltip = false;
         };
 
-        idle_inhibitor = lib.mkIf cfg.idle-inhibitor {
+        idle_inhibitor = lib.mkIf cfg.idleInhibitor {
           format = "{icon}";
           format-icons = {
             activated = alertSpan "";
@@ -136,7 +136,7 @@ lib.mkIf config.custom.hyprland.enable {
 
         modules-center = [ "hyprland/workspaces" ];
 
-        modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idle-inhibitor "idle_inhibitor");
+        modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idleInhibitor "idle_inhibitor");
 
         modules-right =
           [
@@ -184,7 +184,10 @@ lib.mkIf config.custom.hyprland.enable {
       };
 
     wallust = {
-      nixJson.persistent_workspaces = cfg.persistent-workspaces;
+      nixJson = {
+        waybar_accent_color = cfg.accentColor;
+        waybar_persistent_workspaces = cfg.persistentWorkspaces;
+      };
 
       templates = {
         "waybar.jsonc" = {
@@ -256,7 +259,7 @@ lib.mkIf config.custom.hyprland.enable {
                   background-color: rgba(255,255,255, 0.25);
                 }
               ''
-              + lib.optionalString cfg.idle-inhibitor ''
+              + lib.optionalString cfg.idleInhibitor ''
                 ${mkModuleClassName "idle_inhibitor"} {
                   font-size: 16px;
                 }

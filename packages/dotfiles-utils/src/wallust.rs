@@ -415,6 +415,11 @@ pub fn set_gtk_and_icon_theme() {
 pub fn set_waybar_accent(accent: &str) {
     let nixinfo = NixInfo::after();
 
+    // respect nix setting
+    if !nixinfo.waybar_accent_color {
+        return;
+    }
+
     // replace old foreground color with new color
     let css_path = full_path("~/.config/waybar/style.css");
     let css = std::fs::read_to_string(&css_path).expect("could not read waybar css");

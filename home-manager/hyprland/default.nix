@@ -29,9 +29,15 @@ in
         cliphist
         wl-clipboard
       ];
+    };
 
-      shellAliases = {
-        hypr-log = "${lib.getExe pkgs.bat} $XDG_RUNTIME_DIR/hyrp/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log";
+    custom.shell.packages = {
+      hypr-log = {
+        runtimeInputs = [ pkgs.bat ];
+        text = ''
+          instanceDir=$(find "$XDG_RUNTIME_DIR/hypr" -maxdepth 1 -mindepth 1 -type d | sort | head -n 1)
+          bat "$instanceDir/hyprland.log"
+        '';
       };
     };
 

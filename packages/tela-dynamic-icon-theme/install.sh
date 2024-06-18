@@ -13,7 +13,7 @@ fi
 
 readonly SRC_DIR=$(cd $(dirname $0) && pwd)
 
-readonly COLOR_VARIANTS=(@@THEME_COLORS@@)
+readonly COLOR_VARIANTS=(@THEME_COLORS@)
 readonly BRIGHT_VARIANTS=("" "dark")
 
 usage() {
@@ -28,13 +28,13 @@ OPTIONS:
   -h                       Show this help
 
 COLOR VARIANTS:
-  @@THEME_HELP@@
+  @THEME_HELP@
 EOF
 }
 
 install_theme() {
   case "$1" in
-    @@THEME_IF@@
+    @THEME_IF@
   esac
 
   # Appends a dash if the variables are not empty

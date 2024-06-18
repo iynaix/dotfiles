@@ -17,8 +17,8 @@ lib.mkIf config.custom.syncoid.enable {
   services.syncoid = {
     enable = true;
 
-    # 3:14am daily
-    interval = "*-*-* 03:14:00";
+    # 23:14 daily
+    interval = "*-*-* 23:14:00";
 
     commands."truenas" = {
       source = "zroot/persist";

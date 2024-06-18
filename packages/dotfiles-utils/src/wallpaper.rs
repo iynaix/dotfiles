@@ -44,7 +44,9 @@ where
             if path.is_file() {
                 if let Some(ext) = path.extension() {
                     match ext.to_str() {
-                        Some("jpg" | "jpeg" | "png") => return Some(path.to_str()?.to_string()),
+                        Some("jpg" | "jpeg" | "png" | "webp") => {
+                            return Some(path.to_str()?.to_string())
+                        }
                         _ => return None,
                     }
                 }

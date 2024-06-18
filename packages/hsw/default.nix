@@ -17,8 +17,8 @@ writeShellApplication {
   text =
     lib.replaceStrings
       [
-        "@@dots@@"
-        "@@host@@"
+        "@dots@"
+        "@host@"
       ]
       [
         # not using toString trips up nix flake check

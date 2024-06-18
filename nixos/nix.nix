@@ -82,7 +82,7 @@ in
       # build and push config for laptop
       nsw-remote = ''
         cd ${dots}
-        sudo nixos-rebuild --target-host "root@''${1:-${user}-laptop}" --flake ".#''${2:-framework}" switch
+        nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
         cd - > /dev/null
       '';
     };

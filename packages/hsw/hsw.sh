@@ -1,5 +1,5 @@
-dots="@@dots@@"
-hostname="@@host@@"
+dots="@dots@"
+hostname="@host@"
 nhArgs=()
 restArgs=()
 

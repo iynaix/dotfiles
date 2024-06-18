@@ -35,16 +35,17 @@ lib.mkMerge [
         ];
         text =
           let
-            rsync = "rsync -aP --delete --no-links --mkpath";
             remote = "\${1:-${user}-framework}";
             rclip_dir = "${config.xdg.dataHome}/rclip";
+            rsync = dir: ''rsync -aP --delete --no-links --mkpath "${dir}" "${user}@${remote}:${dir}/"'';
           in
           ''
             wallpapers-backup
-            ${rsync} "${wallpapers_dir}/" "${user}@${remote}:${wallpapers_dir}/"
+            ${rsync wallpapers_dir}
+            ${rsync "${config.xdg.cacheHome}/thumbnails"}
 
             if [ "${remote}" == "iynaix-framework" ]; then
-                ${rsync} "${rclip_dir}/" "${user}@${remote}:${rclip_dir}/"
+                ${rsync rclip_dir}
             fi
           '';
       };
@@ -53,7 +54,7 @@ lib.mkMerge [
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
           ${pkgs.custom.lib.useDirenv wallpapers_proj ''
-            cargo run --release --bin add-wallpapers "$@" "${walls_in_dir}"
+            cargo run --release --bin add-wallpapers --format webp "$@" "${walls_in_dir}"
           ''}
           wallpapers-backup
         '';
@@ -62,6 +63,13 @@ lib.mkMerge [
       wallpapers-ui = pkgs.custom.lib.useDirenv wallpapers_proj ''
         cargo run --release --bin wallpaper-ui "$@"
       '';
+      # finds duplicate wallpapers
+      wallpapers-dupe = {
+        runtimeInputs = [ pkgs.czkawka ];
+        text = ''
+          czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
+        '';
+      };
     };
 
     gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
