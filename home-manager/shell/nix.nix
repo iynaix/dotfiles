@@ -20,6 +20,7 @@ in
     ];
 
     shellAliases = {
+      nfl = "nix flake lock";
       nfu = "nix flake update";
       nv-flat = "nvfetcher --build-dir .";
       nsh = "nix-shell --command fish -p";

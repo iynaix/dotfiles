@@ -6,22 +6,22 @@
   ...
 }:
 let
-  catppuccinDefault = "Blue";
+  catppuccinDefault = "blue";
   catppuccinAccents = {
-    Blue = "#89b4fa";
-    Flamingo = "#f2cdcd";
-    Green = "#a6e3a1";
-    Lavender = "#b4befe";
-    Maroon = "#eba0ac";
-    Mauve = "#cba6f7";
-    Peach = "#fab387";
-    Pink = "#f5c2e7";
-    Red = "#f38ba8";
-    # Rosewater = "#f5e0dc";
-    Sapphire = "#74c7ec";
-    Sky = "#89dceb";
-    Teal = "#94e2d5";
-    Yellow = "#f9e2af";
+    blue = "#89b4fa";
+    flamingo = "#f2cdcd";
+    green = "#a6e3a1";
+    lavender = "#b4befe";
+    maroon = "#eba0ac";
+    mauve = "#cba6f7";
+    peach = "#fab387";
+    pink = "#f5c2e7";
+    red = "#f38ba8";
+    # rosewater = "#f5e0dc";
+    sapphire = "#74c7ec";
+    sky = "#89dceb";
+    teal = "#94e2d5";
+    yellow = "#f9e2af";
   };
 in
 {
@@ -54,13 +54,25 @@ in
   gtk = {
     enable = true;
     theme = {
-      name = "Catppuccin-Mocha-Compact-${catppuccinDefault}-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        # allow all accents so the closest matching color can be selected by dotfiles-utils
-        accents = map lib.toLower (lib.attrNames catppuccinAccents);
-        variant = "mocha";
-        size = "compact";
-      };
+      name = "catppuccin-mocha-${catppuccinDefault}-compact+default";
+      package =
+        (pkgs.catppuccin-gtk.overrideAttrs {
+          src = pkgs.fetchFromGitHub {
+            owner = "catppuccin";
+            repo = "gtk";
+            rev = "v1.0.3";
+            fetchSubmodules = true;
+            hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
+          };
+
+          postUnpack = "";
+        }).override
+          {
+            # allow all accents so the closest matching color can be selected by dotfiles-utils
+            accents = lib.attrNames catppuccinAccents;
+            variant = "mocha";
+            size = "compact";
+          };
     };
     iconTheme = {
       name = "Tela-${catppuccinDefault}-dark";

@@ -401,7 +401,7 @@ pub fn set_gtk_and_icon_theme() {
 
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/gtk-theme")
         // requires the quotes to be GVariant compatible for dconf
-        .arg(format!("'Catppuccin-Mocha-Compact-{variant}-Dark'"))
+        .arg(format!("'catppuccin-mocha-{variant}-compact+default'"))
         .execute()
         .expect("failed to apply gtk theme");
 

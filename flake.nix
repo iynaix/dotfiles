@@ -50,9 +50,9 @@
     # declare the cache useless. If you do, you will have
     # to compile LLVM, Zig and Ghostty itself on your machine,
     # which will take a very very long time.
-    ghostty = {
-      url = "git+ssh://git@github.com/mitchellh/ghostty";
-    };
+    # ghostty = {
+    #   url = "git+ssh://git@github.com/mitchellh/ghostty";
+    # };
   };
 
   # flake-utils is unnecessary
