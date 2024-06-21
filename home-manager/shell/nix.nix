@@ -56,16 +56,27 @@ in
         text = ''
           cd ${dots}
 
-          # run nvfetcher for overlays
-          nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+          if [ -n "$1" ]; then
+            if  [[ -d "./packages/$1" ]]; then
+              # run nvfetcher for just the package
+              nvfetcher --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
+            else
+              # run nvfetcher for overlays
+              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+            fi
+            exit
+          else
+            # run nvfetcher for overlays
+            nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
 
-          # run nvfetcher for packages
-          mapfile -t pkg_tomls < <(fd nvfetcher.toml packages)
+            # run nvfetcher for packages
+            mapfile -t pkg_tomls < <(fd nvfetcher.toml packages)
 
-          for pkg_toml in "''${pkg_tomls[@]}"; do
-              pkg_dir=$(dirname "$pkg_toml")
-              nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
-          done
+            for pkg_toml in "''${pkg_tomls[@]}"; do
+                pkg_dir=$(dirname "$pkg_toml")
+                nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
+            done
+           fi
           cd - > /dev/null
         '';
       };
