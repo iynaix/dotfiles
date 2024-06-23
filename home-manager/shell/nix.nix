@@ -13,7 +13,7 @@ in
   home = {
     packages = with pkgs; [
       nh
-      nil
+      nixd
       nix-output-monitor
       nixfmt-rfc-style
       nvfetcher
@@ -22,9 +22,8 @@ in
     shellAliases = {
       nfl = "nix flake lock";
       nfu = "nix flake update";
-      nv-flat = "nvfetcher --build-dir .";
+      nfui = "nix flake lock --update-input";
       nsh = "nix-shell --command fish -p";
-      nix-update-input = "nix flake lock --update-input";
     };
   };
 
@@ -182,7 +181,9 @@ in
             fi
         # flake
         elif [[ -f flake.nix ]]; then
-            src="."
+            if nix eval ".#$1" &>/dev/null; then
+              src="."
+            fi
         fi
 
         if [ "$#" -eq 1 ]; then
@@ -303,7 +304,6 @@ in
     nix-index.enable = true;
     nixvim.plugins = {
       nix.enable = true;
-      lsp.servers.nil-ls.enable = true;
     };
   };
 

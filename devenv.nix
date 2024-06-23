@@ -13,7 +13,7 @@ inputs.devenv.lib.mkShell {
           cachix
           deadnix
           statix
-          nil
+          nixd
         ];
 
         languages.rust.enable = true;

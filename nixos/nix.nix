@@ -46,7 +46,6 @@ in
     systemPackages =
       # for nixlang / nixpkgs
       with pkgs; [
-        nil
         nix-init
         nix-update
         nixfmt-rfc-style

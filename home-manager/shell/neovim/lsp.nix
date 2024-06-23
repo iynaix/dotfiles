@@ -9,7 +9,12 @@ _: {
           eslint.enable = true;
           jsonls.enable = true;
           # lua-ls.enable = true;
-          nil-ls.enable = true;
+          nixd = {
+            enable = true;
+            settings = {
+              diagnostic.suppress = [ "sema-escaping-with" ];
+            };
+          };
           pyright.enable = true;
         };
 
