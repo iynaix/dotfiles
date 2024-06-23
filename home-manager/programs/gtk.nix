@@ -55,24 +55,16 @@ in
     enable = true;
     theme = {
       name = "catppuccin-mocha-${catppuccinDefault}-compact+default";
-      package =
-        (pkgs.catppuccin-gtk.overrideAttrs {
-          src = pkgs.fetchFromGitHub {
-            owner = "catppuccin";
-            repo = "gtk";
-            rev = "v1.0.3";
-            fetchSubmodules = true;
-            hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
-          };
-
-          postUnpack = "";
-        }).override
-          {
-            # allow all accents so the closest matching color can be selected by dotfiles-utils
-            accents = lib.attrNames catppuccinAccents;
-            variant = "mocha";
-            size = "compact";
-          };
+      package = pkgs.catppuccin-gtk.override {
+        # allow all accents so the closest matching color can be selected by dotfiles-utils
+        accents = lib.attrNames catppuccinAccents;
+        variant = "mocha";
+        tweaks = [
+          # "black" # black tweak for oled
+          # "rimless"
+        ];
+        size = "compact";
+      };
     };
     iconTheme = {
       name = "Tela-${catppuccinDefault}-dark";

@@ -30,8 +30,8 @@ lib.mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
       wantedBy = [ "timers.target" ];
       partOf = [ "vercel-backup.service" ];
       timerConfig = {
-        # every day at 5:03am
-        OnCalendar = "*-*-* 05:03:00";
+        # every day at 13:52
+        OnCalendar = "*-*-* 13:52:00";
         Unit = "vercel-backup.service";
       };
     };

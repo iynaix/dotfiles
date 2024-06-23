@@ -66,7 +66,7 @@ lib.mkMerge [
         cargo run --release --bin wallpaper-ui "$@"
       '';
       # finds duplicate wallpapers
-      wallpapers-dupe = {
+      wallpapers-dedupe = {
         runtimeInputs = [ pkgs.czkawka ];
         text = ''
           czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
@@ -108,12 +108,16 @@ lib.mkMerge [
     };
 
     programs.pqiv.extraConfig = lib.mkAfter ''
+      c { command(nomacs $1) }
       m { command(mv $1 ${walls_in_dir}) }
     '';
 
     custom.persist = {
       home = {
-        directories = [ ".config/nomacs" ];
+        directories = [
+          ".cache/czkawka"
+          ".config/nomacs"
+        ];
       };
     };
   })
