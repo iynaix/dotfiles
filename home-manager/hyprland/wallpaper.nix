@@ -37,17 +37,14 @@ lib.mkMerge [
           let
             remote = "\${1:-${user}-framework}";
             rclip_dir = "${config.xdg.dataHome}/rclip";
-            rsync =
-              dir: rsyncFlags:
-              ''rsync -aP --no-links --mkpath ${rsyncFlags} "${dir}/" "${user}@${remote}:${dir}/"'';
+            rsync = dir: ''rsync -aP --no-links --mkpath --delete "${dir}/" "${user}@${remote}:${dir}/"'';
           in
           ''
             wallpapers-backup
-            ${rsync wallpapers_dir "--delete"}
-            ${rsync "${config.xdg.cacheHome}/thumbnails" ""}
+            ${rsync wallpapers_dir}
 
             if [ "${remote}" == "iynaix-framework" ]; then
-                ${rsync rclip_dir "--delete"}
+                ${rsync rclip_dir}
             fi
           '';
       };
@@ -63,7 +60,7 @@ lib.mkMerge [
       };
       # choose custom crops for wallpapers
       wallpapers-ui = pkgs.custom.lib.useDirenv wallpapers_proj ''
-        cargo run --release --bin wallpaper-ui "$@"
+        cargo run --release --bin wallpaper-ui -- "$@"
       '';
       # finds duplicate wallpapers
       wallpapers-dedupe = {

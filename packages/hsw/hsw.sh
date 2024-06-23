@@ -2,6 +2,7 @@ dots="@dots@"
 hostname="@host@"
 nhArgs=()
 restArgs=()
+showProgress=false
 
 while (( "$#" )); do
     case "$1" in
@@ -18,6 +19,10 @@ while (( "$#" )); do
             exit 1
         fi
         ;;
+    --progress)
+        showProgress=true
+        shift
+        ;;
     *) # everything else
         restArgs+=("$1")
         shift
@@ -33,6 +38,10 @@ if [ -n "$untrackedFiles" ]; then
     git add "$untrackedFiles"
 fi
 
-nh home switch --configuration "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+if [ "$showProgress" = true ]; then
+    home-manager switch --flake ".#$hostname" "${restArgs[@]}"
+else
+    nh home switch --configuration "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+fi
 
 cd - > /dev/null

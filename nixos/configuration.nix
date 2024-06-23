@@ -71,7 +71,7 @@
   services.dbus.implementation = "broker";
 
   # enable opengl
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   # zram
   zramSwap.enable = true;

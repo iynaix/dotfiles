@@ -57,48 +57,23 @@ in
       # use nixfmt-rfc-style as the default
       nixfmt = prev.nixfmt-rfc-style;
 
-      path-of-building = prev.path-of-building.overrideAttrs (o: {
-        inherit (sources.path-of-building) version;
+      /*
+        path-of-building = prev.path-of-building.overrideAttrs (o: {
+          inherit (sources.path-of-building) version;
 
-        nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.copyDesktopItems ];
-
-        desktopItems = [
-          (prev.makeDesktopItem {
-            name = "Path of Building";
-            desktopName = "Path of Building";
-            comment = "Offline build planner for Path of Exile";
-            exec = "pobfrontend %U";
-            terminal = false;
-            type = "Application";
-            icon = prev.fetchurl {
-              name = "PathOfBuilding-logo.png";
-              url = "https://avatars.githubusercontent.com/u/60926656?s=200&v=4";
-              hash = "sha256-ztiM/JxIC305az0AHSdhzlGVdCKbS0KF7tIYRHH4CgM=";
-            };
-            categories = [ "Game" ];
-            keywords = [
-              "poe"
-              "pob"
-              "pobc"
-              "path"
-              "exile"
-            ];
-            mimeTypes = [ "x-scheme-handler/pob" ];
-          })
-        ];
-
-        preFixup =
-          let
-            data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
-          in
-          ''
-            qtWrapperArgs+=(
-              --set LUA_PATH "$LUA_PATH"
-              --set LUA_CPATH "$LUA_CPATH"
-              --chdir "${data}"
-            )
-          '';
-      });
+          preFixup =
+            let
+              data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
+            in
+            ''
+              qtWrapperArgs+=(
+                --set LUA_PATH "$LUA_PATH"
+                --set LUA_CPATH "$LUA_CPATH"
+                --chdir "${data}"
+              )
+            '';
+        });
+      */
 
       scope-tui = prev.scope-tui.overrideAttrs (
         o:

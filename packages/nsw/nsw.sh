@@ -1,9 +1,11 @@
-nhArgs=()
-restArgs=()
 dots="@dots@"
 hostname="@host@"
-nhCommand="@nhCommand@"
-isDry=$([ "$nhCommand" = "switch" ] && echo true || echo false)
+nhArgs=()
+restArgs=()
+hostnameOverride="$hostname"
+nhCommand="switch"
+isDry=false
+showProgress=false
 
 while (( "$#" )); do
     case "$1" in
@@ -14,10 +16,7 @@ while (( "$#" )); do
         ;;
     -H|--hostname)
         if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
-            # don't allow specifying hostname for switch / boot / test
-            if [ "$nhCommand" = "build" ]; then
-                hostname="$2"
-            fi
+            hostnameOverride="$2"
             shift 2
         else
             echo "Error: Argument for hostname is missing" >&2
@@ -37,12 +36,25 @@ while (( "$#" )); do
         nhArgs+=("$1")
         shift
         ;;
+    --progress)
+        showProgress=true
+        shift
+        ;;
+    switch|boot|test|build)
+        nhCommand="$1"
+        shift
+        ;;
     *) # everything else
         restArgs+=("$1")
         shift
         ;;
     esac
 done
+
+# only allow hostname override for build
+if [ "$nhCommand" = "build" ]; then
+    hostname="$hostnameOverride"
+fi
 
 cd "$dots"
 
@@ -52,10 +64,14 @@ if [ -n "$untrackedFiles" ]; then
     git add "$untrackedFiles"
 fi
 
-nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+if [ "$showProgress" = true ]; then
+    sudo nixos-rebuild "$nhCommand" --flake ".#$hostname" "${restArgs[@]}"
+else
+    nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+fi
 
-# only relevant if --dry is not passed
-if [ "$isDry" = true ]; then
+# isDry is false or nhCommand is switch or boot
+if [ "$isDry" = false ] || [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
     currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
     echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
 fi

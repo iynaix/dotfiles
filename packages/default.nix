@@ -27,6 +27,7 @@ in
   hyprnstack = w callPackage ./hyprnstack { };
 
   # mpv plugins
+  mpv-cut = w pkgs.mpvScripts.callPackage ./mpv-cut { inherit buildLua; };
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };

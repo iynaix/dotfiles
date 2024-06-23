@@ -1,24 +1,4 @@
 {
-    "mpv-dynamic-crop": {
-        "cargoLocks": null,
-        "date": "2023-12-22",
-        "extract": null,
-        "name": "mpv-dynamic-crop",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "Ashyni",
-            "repo": "mpv-scripts",
-            "rev": "c79a46ba03631eb2a9b4f598aab0b723f03fc531",
-            "sha256": "sha256-W4Dj2tyJHeHLqAndrzllKs4iwMe3Tu8rfzEGBHuke6s=",
-            "type": "github"
-        },
-        "version": "c79a46ba03631eb2a9b4f598aab0b723f03fc531"
-    },
     "path-of-building": {
         "cargoLocks": null,
         "date": null,
@@ -81,7 +61,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2024-06-15",
+        "date": "2024-06-23",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -91,11 +71,11 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "905ea665685c59c35f915351016fb06961370bfd",
-            "sha256": "sha256-doAtbAqUA5GCldRqz1JGee61660ZTn2rj60hOixSKtE=",
+            "rev": "a60ebe16d97aa0632801e6bc10a2e0d63c5ed5fe",
+            "sha256": "sha256-KTtOPwxXDGQQA41PgCv02OYBb+wUj07RsUbLuNbJyu0=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
-        "version": "905ea665685c59c35f915351016fb06961370bfd"
+        "version": "a60ebe16d97aa0632801e6bc10a2e0d63c5ed5fe"
     }
 }

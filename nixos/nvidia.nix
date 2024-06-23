@@ -22,7 +22,7 @@ lib.mkIf config.custom.nvidia.enable {
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
-    opengl.extraPackages = [ pkgs.vaapiVdpau ];
+    graphics.extraPackages = [ pkgs.vaapiVdpau ];
   };
 
   environment.sessionVariables =

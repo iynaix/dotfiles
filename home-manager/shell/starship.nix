@@ -102,7 +102,6 @@
       '';
       # add transient prompt for fish via transient.fish plugin in fish.nix
       # the starship transience module doesn't handle empty commands properly
-      # https://github.com/starship/starship/issues/4929
       interactiveShellInit = lib.mkAfter ''
         function transient_prompt_func
           starship module character

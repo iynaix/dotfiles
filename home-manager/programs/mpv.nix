@@ -5,61 +5,9 @@
   pkgs,
   ...
 }:
-let
-  shaders_dir = "${pkgs.mpv-shim-default-shaders}/share/mpv-shim-default-shaders/shaders";
-  shaderList =
-    shaders:
-    lib.concatMapStringsSep ":"
-      (s: if (lib.hasSuffix ".hook" s) then "${shaders_dir}/${s}" else "${shaders_dir}/${s}.glsl")
-      (
-        # Adds a very small amount of static noise to help with debanding.
-        [
-          "noise_static_luma.hook"
-          "noise_static_chroma.hook"
-        ]
-        ++ shaders
-      );
-in
-{
-  xdg.configFile = {
-    "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
-    "mpv/script-opts/sub-select.json".text = lib.strings.toJSON [
-      {
-        alang = "jpn";
-        slang = [
-          "en"
-          "eng"
-        ];
-        blacklist = [
-          "signs"
-          "songs"
-          "translation only"
-          "forced"
-        ];
-      }
-      {
-        alang = [
-          "eng"
-          "en"
-          "unk"
-          "unknown"
-        ];
-        slang = [
-          "eng"
-          "en"
-          "unk"
-          "unknown"
-        ];
-      }
-      {
-        alang = "*";
-        slang = "eng";
-      }
-    ];
-  };
-
-  programs.mpv = lib.mkMerge [
-    {
+lib.mkMerge [
+  {
+    programs.mpv = {
       enable = isNixOS;
       bindings = {
         MBTN_LEFT = "cycle pause";
@@ -137,68 +85,146 @@ in
         alang = "jp,jpn,japanese,en,eng,english";
 
         write-filename-in-watch-later-config = true;
-        script-opts = "chapterskip-skip=opening;ending;sponsorblock";
       };
       scripts =
-        with pkgs.mpvScripts;
-        [
-          chapterskip
+        (with pkgs.mpvScripts; [
           dynamic-crop
           seekTo
-          sponsorblock
           thumbfast
-          cutter
-        ]
+        ])
         # custom packaged scripts
         ++ (with pkgs.custom; [
+          mpv-cut
           mpv-deletefile
-          # mpv-modernx
           mpv-nextfile
-          mpv-sub-select
           mpv-subsearch
         ]);
-    }
+    };
 
-    # mpv-osc-modern with thumbfast support
-    {
-      scripts = [
-        (pkgs.mpvScripts.mpv-osc-modern.overrideAttrs {
-          src = pkgs.fetchFromGitHub {
-            owner = "maoiscat";
-            repo = "mpv-osc-modern";
-            rev = "61a695767436593b911ca6b8a714712841622f96";
-            hash = "sha256-MRaH76zn4KNALyshEpXYBdscLr5qbLuWdppn/vV3NVw=";
-          };
-        })
+    wayland.windowManager.hyprland.settings = {
+      # do not idle while watching videos
+      windowrule = [ "idleinhibit focus,mpv" ];
+      # fix mpv-dynamic-crop unmaximizing the window
+      windowrulev2 = [ "suppressevent maximize, class:(mpv)" ];
+    };
+
+    home.packages = with pkgs; [ ffmpeg ];
+
+    custom.persist = {
+      home.directories = [
+        ".local/state/mpv" # watch later
       ];
+    };
+  }
 
-      config = lib.mkAfter { osc = "no"; };
-
-      profiles.Idle = {
-        profile-cond = ''p["idle-active"]'';
-        profile-restore = "copy-equal";
-        title = " ";
-        keepaspect = "no";
-        background = 1;
+  # modernx-zydezu settings
+  {
+    programs.mpv = {
+      config = lib.mkAfter {
+        osc = "no";
+        border = "no";
       };
-    }
+      scripts = [ pkgs.mpvScripts.modernx-zydezu ];
+    };
 
-    # anime profile settings
-    (
-      let
-        anime4k_shaders = map (s: "Anime4K_" + s) [
-          "Clamp_Highlights"
-          "Restore_CNN_VL"
-          "Upscale_CNN_x2_VL"
-          "AutoDownscalePre_x2"
-          "AutoDownscalePre_x4"
-          "Upscale_CNN_x2_M"
+    xdg.configFile."mpv/script-opts/modernx.conf".text = ''
+      compactmode=yes
+      keybindings=no
+      noxmas=yes
+      showinfo=yes
+      showloop=no
+      showontop=no
+    '';
+  }
+
+  # sub-select settings
+  {
+    programs.mpv = {
+      config = {
+        script-opts = "chapterskip-skip=opening;ending;sponsorblock";
+      };
+      scripts = [ pkgs.custom.mpv-sub-select ];
+    };
+
+    xdg.configFile."mpv/script-opts/sub-select.json".text = lib.strings.toJSON [
+      {
+        alang = "jpn";
+        slang = [
+          "en"
+          "eng"
         ];
-        createShaderKeybind =
-          shaders: description:
-          ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
-      in
-      lib.optionalAttrs config.custom.mpv-anime.enable {
+        blacklist = [
+          "signs"
+          "songs"
+          "translation only"
+          "forced"
+        ];
+      }
+      {
+        alang = [
+          "eng"
+          "en"
+          "unk"
+          "unknown"
+        ];
+        slang = [
+          "eng"
+          "en"
+          "unk"
+          "unknown"
+        ];
+      }
+      {
+        alang = "*";
+        slang = "eng";
+      }
+    ];
+  }
+
+  # sponsorblock + chapterskip settings
+  {
+    programs.mpv = {
+      scripts = with pkgs.mpvScripts; [
+        chapterskip
+        sponsorblock
+      ];
+    };
+
+    xdg.configFile = {
+      "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
+    };
+  }
+
+  # anime profile settings
+  (
+    let
+      shaders_dir = "${pkgs.mpv-shim-default-shaders}/share/mpv-shim-default-shaders/shaders";
+      shaderList =
+        shaders:
+        lib.concatMapStringsSep ":"
+          (s: if (lib.hasSuffix ".hook" s) then "${shaders_dir}/${s}" else "${shaders_dir}/${s}.glsl")
+          (
+            # Adds a very small amount of static noise to help with debanding.
+            [
+              "noise_static_luma.hook"
+              "noise_static_chroma.hook"
+            ]
+            ++ shaders
+          );
+      anime4k_shaders = map (s: "Anime4K_" + s) [
+        "Clamp_Highlights"
+        "Restore_CNN_VL"
+        "Upscale_CNN_x2_VL"
+        "AutoDownscalePre_x2"
+        "AutoDownscalePre_x4"
+        "Upscale_CNN_x2_M"
+      ];
+      createShaderKeybind =
+        shaders: description:
+        ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
+    in
+    lib.mkIf config.custom.mpv-anime.enable {
+      programs.mpv = {
         # auto apply anime shaders for anime videos
         profiles.anime = {
           profile-desc = "Anime";
@@ -244,22 +270,7 @@ in
                 (createShaderKeybind [ "nnedi3-nns256-win8x6.hook" ] "NNEDI3")
               ]
           );
-      }
-    )
-  ];
-
-  wayland.windowManager.hyprland.settings = {
-    # do not idle while watching videos
-    windowrule = [ "idleinhibit focus,mpv" ];
-    # fix mpv-dynamic-crop unmaximizing the window
-    windowrulev2 = [ "suppressevent maximize, class:(mpv)" ];
-  };
-
-  home.packages = with pkgs; [ ffmpeg ];
-
-  custom.persist = {
-    home.directories = [
-      ".local/state/mpv" # watch later
-    ];
-  };
-}
+      };
+    }
+  )
+]

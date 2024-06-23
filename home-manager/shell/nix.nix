@@ -55,16 +55,7 @@ in
         text = ''
           cd ${dots}
 
-          if [ -n "$1" ]; then
-            if  [[ -d "./packages/$1" ]]; then
-              # run nvfetcher for just the package
-              nvfetcher --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
-            else
-              # run nvfetcher for overlays
-              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
-            fi
-            exit
-          else
+          if [ "$#" -eq 0 ]; then
             # run nvfetcher for overlays
             nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
 
@@ -75,7 +66,16 @@ in
                 pkg_dir=$(dirname "$pkg_toml")
                 nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
             done
-           fi
+          else
+            if  [[ -d "./packages/$1" ]]; then
+              # run nvfetcher for just the package
+              nvfetcher --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
+            else
+              # run nvfetcher for overlays
+              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+            fi
+            exit
+          fi
           cd - > /dev/null
         '';
       };
@@ -287,16 +287,14 @@ in
     # nh home doesnt have boot or test
     // lib.optionalAttrs isNixOS {
       # nixos-rebuild boot
-      nsb = pkgs.custom.nsw.override {
-        inherit dots host;
-        name = "nsb";
-        nhCommand = "boot";
+      nsb = {
+        runtimeInputs = [ pkgs.custom.shell.nsw ];
+        text = ''nsw boot "$@"'';
       };
       # nixos-rebuild test
-      nst = pkgs.custom.nsw.override {
-        inherit dots host;
-        name = "nst";
-        nhCommand = "test";
+      nst = {
+        runtimeInputs = [ pkgs.custom.shell.nsw ];
+        text = ''nsw test "$@"'';
       };
     };
 

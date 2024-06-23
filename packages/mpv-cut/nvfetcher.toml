@@ -1,0 +1,3 @@
+[mpv-cut]
+src.git = "https://github.com/familyfriendlymikey/mpv-cut"
+fetch.github = "familyfriendlymikey/mpv-cut"

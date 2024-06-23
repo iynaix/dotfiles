@@ -121,6 +121,7 @@ in
         auto-optimise-store = true; # Optimise symlinks
         # re-evaluate on every rebuild instead of "cached failure of attribute" error
         # eval-cache = false;
+        # required to be set, for some reason nix.nixPath does not write to nix.conf
         nix-path = nixPath;
         warn-dirty = false;
         # removes ~/.nix-profile and ~/.nix-defexpr
