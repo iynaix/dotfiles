@@ -1,4 +1,10 @@
-{ user, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  user,
+  ...
+}:
 {
   custom = {
     # hardware
@@ -27,6 +33,10 @@
   networking.firewall.extraCommands = ''
     iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
   '';
+
+  # enable flirc usb ir receiver
+  hardware.flirc.enable = false;
+  environment.systemPackages = lib.mkIf config.hardware.flirc.enable [ pkgs.flirc ];
 
   # fix intel i225-v ethernet dying due to power management
   # https://reddit.com/r/buildapc/comments/xypn1m/network_card_intel_ethernet_controller_i225v_igc/

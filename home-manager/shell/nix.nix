@@ -186,11 +186,7 @@ in
             fi
         fi
 
-        if [ "$#" -eq 1 ]; then
-            nix run "$src#$1"
-        else
-            nix run "$src#$1" -- "''${@:2}"
-        fi
+        nix run "$src#$1" -- "''${@:2}"
       '';
       npath = ''
         if [ "$#" -eq 0 ]; then

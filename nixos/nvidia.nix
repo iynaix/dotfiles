@@ -1,6 +1,5 @@
 {
   config,
-  host,
   lib,
   pkgs,
   ...
@@ -29,14 +28,11 @@ lib.mkIf config.custom.nvidia.enable {
     {
       NIXOS_OZONE_WL = "1";
     }
-    // lib.optionalAttrs config.programs.hyprland.enable (
-      {
-        LIBVA_DRIVER_NAME = "nvidia";
-        GBM_BACKEND = "nvidia-drm";
-        __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      }
-      // lib.optionalAttrs (host == "vm" || host == "vm-amd") { WLR_RENDERER_ALLOW_SOFTWARE = "1"; }
-    );
+    // lib.optionalAttrs config.programs.hyprland.enable {
+      LIBVA_DRIVER_NAME = "nvidia";
+      GBM_BACKEND = "nvidia-drm";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    };
 
   nix.settings = {
     substituters = [ "https://cuda-maintainers.cachix.org" ];

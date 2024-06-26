@@ -30,6 +30,7 @@ in
   mpv-cut = w pkgs.mpvScripts.callPackage ./mpv-cut { inherit buildLua; };
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { inherit buildLua; };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { inherit buildLua; };
+  mpv-smartskip = w pkgs.mpvScripts.callPackage ./mpv-smartskip { inherit buildLua; };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { inherit buildLua; };
   mpv-subsearch = w pkgs.mpvScripts.callPackage ./mpv-subsearch { inherit buildLua; };
 

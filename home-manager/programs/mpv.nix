@@ -20,8 +20,6 @@ lib.mkMerge [
         j = "seek  -60";
         k = "seek 60";
         S = "cycle sub";
-        PGUP = "add chapter 1"; # skip to next chapter
-        PGDWN = "add chapter -1"; # skip to previous chapter
         "[" = "add speed -0.1";
         "]" = "add speed 0.1";
 
@@ -52,7 +50,7 @@ lib.mkMerge [
         input-ipc-server = "/tmp/mpvsocket";
         # no-border = true;
         save-position-on-quit = true;
-        force-seekable = "yes";
+        force-seekable = true;
         cursor-autohide = 100;
 
         vo = "gpu-next";
@@ -60,7 +58,7 @@ lib.mkMerge [
         hwdec-codecs = "all";
 
         # forces showing subtitles while seeking through the video
-        demuxer-mkv-subtitle-preroll = "yes";
+        demuxer-mkv-subtitle-preroll = true;
 
         deband = true;
         deband-grain = 0;
@@ -73,11 +71,11 @@ lib.mkMerge [
         sub-auto = "fuzzy";
         # some settings fixing VOB/PGS subtitles (creating blur & changing yellow subs to gray)
         sub-gauss = "1.0";
-        sub-gray = "yes";
-        sub-use-margins = "no";
+        sub-gray = true;
+        sub-use-margins = false;
         sub-font-size = 45;
-        sub-scale-by-window = "yes";
-        sub-scale-with-window = "no";
+        sub-scale-by-window = true;
+        sub-scale-with-window = false;
 
         screenshot-directory = "${config.xdg.userDirs.pictures}/Screenshots";
 
@@ -90,11 +88,9 @@ lib.mkMerge [
         (with pkgs.mpvScripts; [
           dynamic-crop
           seekTo
-          thumbfast
         ])
         # custom packaged scripts
         ++ (with pkgs.custom; [
-          mpv-cut
           mpv-deletefile
           mpv-nextfile
           mpv-subsearch
@@ -121,28 +117,41 @@ lib.mkMerge [
   {
     programs.mpv = {
       config = lib.mkAfter {
-        osc = "no";
-        border = "no";
+        osc = false;
+        border = false;
       };
-      scripts = [ pkgs.mpvScripts.modernx-zydezu ];
+      scripts = with pkgs.mpvScripts; [
+        modernx-zydezu
+        thumbfast
+      ];
+      scriptOpts = {
+        modernx = {
+          compactmode = true;
+          keybindings = false;
+          noxmas = true;
+          showinfo = true;
+          showloop = false;
+          showontop = false;
+        };
+      };
+    };
+  }
+
+  # mpv-cut settings
+  {
+    programs.mpv = {
+      scripts = [ pkgs.custom.mpv-cut ];
     };
 
-    xdg.configFile."mpv/script-opts/modernx.conf".text = ''
-      compactmode=yes
-      keybindings=no
-      noxmas=yes
-      showinfo=yes
-      showloop=no
-      showontop=no
+    # disable bookmarks functionality
+    xdg.configFile."mpv-cut/config.lua".text = ''
+      KEY_BOOKMARK_ADD = ""
     '';
   }
 
   # sub-select settings
   {
     programs.mpv = {
-      config = {
-        script-opts = "chapterskip-skip=opening;ending;sponsorblock";
-      };
       scripts = [ pkgs.custom.mpv-sub-select ];
     };
 
@@ -184,14 +193,21 @@ lib.mkMerge [
   # sponsorblock + chapterskip settings
   {
     programs.mpv = {
-      scripts = with pkgs.mpvScripts; [
-        chapterskip
-        sponsorblock
-      ];
-    };
-
-    xdg.configFile = {
-      "mpv/script-opts/chapterskip.conf".text = "categories=sponsorblock>SponsorBlock";
+      scripts = (with pkgs.mpvScripts; [ sponsorblock ]) ++ [ pkgs.custom.mpv-smartskip ];
+      scriptOpts = {
+        "SmartSkip" = {
+          add_chapter_on_skip = false;
+          smart_next_keybind = ''[ "PGUP" ]'';
+          smart_prev_keybind = ''[ "PGDWN" ]'';
+          autoload_playlist = false;
+          max_skip_duration = 60 * 5;
+          # sponsorblock overrides
+          categories = ''[ ["internal-chapters", "prologue>Prologue/^Intro; opening>^OP/ OP$/^Opening; ending>^ED/ ED$/^Ending; preview>Preview$; sponsorblock>Sponsor/SponsorBlock"] ]'';
+          skip = ''[ ["internal-chapters", "toggle;toggle_idx;opening;ending;preview;sponsorblock"], ["external-chapters", "toggle;toggle_idx"] ]'';
+          autoskip_countdown = 0;
+          last_chapter_skip_behavior = ''[ ["no-chapters", "silence-skip"], ["internal-chapters", "silence-skip"], ["external-chapters", "silence-skip"] ]'';
+        };
+      };
     };
   }
 

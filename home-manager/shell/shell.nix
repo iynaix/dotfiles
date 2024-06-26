@@ -13,6 +13,7 @@ in
     shellAliases = {
       ":e" = "nvim";
       ":q" = "exit";
+      ":wq" = "exit";
       c = "clear";
       cat = "bat";
       ccat = "command cat";

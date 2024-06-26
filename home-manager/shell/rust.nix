@@ -4,6 +4,7 @@
   home.sessionVariables = {
     CARGO_HOME = "/persist/cache/${config.xdg.dataHome}/.cargo";
     CARGO_TARGET_DIR = "/persist/cache/home/${user}/cargo/target";
+    RUSTUP_HOME = "/persist/cache/${config.xdg.dataHome}/.rustup";
   };
 
   # setup nvim for rust
@@ -51,8 +52,8 @@
   custom.persist = {
     home = {
       cache = [
-        ".cargo"
         ".local/share/.cargo"
+        ".local/share/.rustup"
       ];
     };
   };

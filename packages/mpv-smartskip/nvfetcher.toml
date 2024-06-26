@@ -1,0 +1,3 @@
+[mpv-smartskip]
+src.git = "https://github.com/Eisa01/mpv-scripts"
+fetch.github = "Eisa01/mpv-scripts"

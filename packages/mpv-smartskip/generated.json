@@ -1,0 +1,22 @@
+{
+    "mpv-smartskip": {
+        "cargoLocks": null,
+        "date": "2023-11-25",
+        "extract": null,
+        "name": "mpv-smartskip",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "Eisa01",
+            "repo": "mpv-scripts",
+            "rev": "48d68283cea47ff8e904decc9003b3abc3e2123e",
+            "sha256": "sha256-95CAKjBRELX2f7oWSHFWJnI0mikAoxhfUphe9k51Qf4=",
+            "type": "github"
+        },
+        "version": "48d68283cea47ff8e904decc9003b3abc3e2123e"
+    }
+}
