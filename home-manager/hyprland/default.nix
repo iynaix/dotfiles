@@ -43,14 +43,8 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package =
-        assert (
-          lib.assertMsg (
-            !(lib.hasPrefix pkgs.hyprland.version "0.40.0")
-          ) "hyprland: updated, sync with hyprnstack?"
-        );
-        # inputs.hyprland.packages.${pkgs.system}.hyprland;
-        pkgs.hyprland;
+      # package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      package = pkgs.hyprland;
 
       settings = {
         monitor =
@@ -149,7 +143,7 @@ in
         };
 
         master = {
-          new_is_master = false;
+          new_on_active = "after";
           mfact = "0.5";
           orientation = "left";
           smart_resizing = true;
