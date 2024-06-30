@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   custom = {
+    plasma.enable = true;
     zfs.encryption = false;
   };
 
