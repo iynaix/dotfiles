@@ -133,6 +133,14 @@
       style = "adwaita-dark";
     };
 
+    # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
+    xdg.terminal-exec = {
+      enable = true;
+      settings = {
+        default = [ "${config.hm.custom.terminal.package.pname}.desktop" ];
+      };
+    };
+
     # faster boot times
     # systemd.services.NetworkManager-wait-online.enable = false;
 

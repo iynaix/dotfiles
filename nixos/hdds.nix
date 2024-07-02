@@ -12,7 +12,7 @@ lib.mkIf cfg.enable {
   boot.zfs.extraPools =
     lib.optional cfg.ironwolf22 "zfs-ironwolf22-1" ++ (lib.optional cfg.wdred6 "zfs-wdred6-1");
 
-  services.sanoid = lib.mkIf config.custom.zfs.snapshots {
+  services.sanoid = {
     enable = true;
 
     datasets = {

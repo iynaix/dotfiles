@@ -150,7 +150,7 @@ in
                   git add "$untracked_files"
               fi
 
-              if  [[ -d "./packages/$TARGET" ]]; then
+              if nix eval ".#$TARGET.pname" &>/dev/null; then
                 nom build ".#$TARGET"
               else
                 nom build ".#nixoConfigurations.${host}.pkgs.$TARGET"

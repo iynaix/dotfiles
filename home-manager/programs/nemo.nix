@@ -5,25 +5,11 @@
   pkgs,
   ...
 }:
-let
-  # create a fake gnome-terminal shell script so xdg terminal applications open in the correct terminal
-  # https://unix.stackexchange.com/a/642886
-  fakeGnomeTerminal = pkgs.writeShellApplication {
-    name = "gnome-terminal";
-    text = ''${config.custom.terminal.exec} "$@"'';
-  };
-  nemo-patched = pkgs.cinnamon.nemo-with-extensions.overrideAttrs {
-    postFixup = ''
-      wrapProgram $out/bin/nemo \
-        --prefix PATH : "${lib.makeBinPath [ fakeGnomeTerminal ]}"
-    '';
-  };
-in
 {
   home.packages = with pkgs; [
     cinnamon.nemo-fileroller
     webp-pixbuf-loader # for webp thumbnails
-    nemo-patched
+    cinnamon.nemo-with-extensions
   ];
 
   xdg = {
@@ -37,11 +23,12 @@ in
       "application/x-bzip2-compressed-tar" = "org.gnome.FileRoller.desktop";
     };
 
-    # other OSes seem to override this file
-    configFile = lib.mkIf (!isNixOS) {
-      "mimeapps.list".force = true;
-      "gtk-3.0/bookmarks".force = true;
-    };
+    configFile =
+      {
+        "mimeapps.list".force = true;
+      }
+      # other OSes seem to override this file
+      // lib.mkIf (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
   };
 
   gtk.gtk3.bookmarks =

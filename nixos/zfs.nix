@@ -64,7 +64,7 @@ in
   # https://github.com/openzfs/zfs/issues/10891
   systemd.services.systemd-udev-settle.enable = false;
 
-  services.sanoid = lib.mkIf cfg.snapshots {
+  services.sanoid = {
     enable = true;
 
     datasets = {
