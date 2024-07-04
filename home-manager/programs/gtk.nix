@@ -54,7 +54,7 @@ in
   gtk = {
     enable = true;
     theme = {
-      name = "catppuccin-mocha-${catppuccinDefault}-compact+default";
+      name = "catppuccin-mocha-${catppuccinDefault}-compact";
       package = pkgs.catppuccin-gtk.override {
         # allow all accents so the closest matching color can be selected by dotfiles-utils
         accents = lib.attrNames catppuccinAccents;

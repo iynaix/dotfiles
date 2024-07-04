@@ -69,6 +69,10 @@ lib.mkMerge [
           czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
         '';
       };
+      # download wallpapers from pixiv
+      wallpapers-pixiv = pkgs.custom.lib.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
+        cargo run --release --bin wall-dl -- "$@"
+      '';
     };
 
     gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];

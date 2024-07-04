@@ -141,7 +141,7 @@ in
                   git add "$untracked_files"
               fi
 
-              nom-build -A "$TARGET"
+              nix-build -A "$TARGET"
           # dotfiles, build local package
           elif [[ $(pwd) =~ /dotfiles$ ]]; then
               # stop bothering me about untracked files

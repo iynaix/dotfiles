@@ -25,17 +25,16 @@
           # system.
           devenv.shells.default = {
             # https://devenv.sh/reference/options/
-            packages = with pkgs; [ ];
+            packages =
+              (with pkgs.python3Packages; [
+                flake8
+                black
+              ])
+              ++ (with pkgs; [ ]);
 
             dotenv.disableHint = true;
             languages.python = {
               enable = true;
-              package = pkgs.python3.withPackages (
-                ps: with ps; [
-                  flake8
-                  black
-                ]
-              );
               venv.enable = true;
             };
           };
