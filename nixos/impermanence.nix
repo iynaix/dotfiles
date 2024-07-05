@@ -83,4 +83,19 @@ in
       };
     };
   };
+
+  hm.home.file.".cache/impermanence.txt".text =
+    let
+      getDirPath = d: prefix: "${prefix}${d.dirPath}";
+      getFilePath = f: prefix: "${prefix}${f.filePath}";
+      persistCfg = config.environment.persistence."/persist";
+      persistCacheCfg = config.environment.persistence."/persist/cache";
+      allDirectories =
+        map (d: getDirPath d "/persist") (persistCfg.directories ++ persistCfg.users.${user}.directories)
+        ++ map (d: getDirPath d "/persist/cache") (
+          persistCacheCfg.directories ++ persistCacheCfg.users.${user}.directories
+        );
+      allFiles = map (f: getFilePath f "/persist") (persistCfg.files ++ persistCfg.users.${user}.files);
+    in
+    lib.concatLines (allDirectories ++ allFiles);
 }

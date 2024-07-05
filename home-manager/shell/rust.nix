@@ -1,10 +1,10 @@
-{ config, user, ... }:
+{ config, ... }:
 {
   # use centralized cargo cache
-  home.sessionVariables = {
-    CARGO_HOME = "/persist/cache/${config.xdg.dataHome}/.cargo";
-    CARGO_TARGET_DIR = "/persist/cache/home/${user}/cargo/target";
-    RUSTUP_HOME = "/persist/cache/${config.xdg.dataHome}/.rustup";
+  home.sessionVariables = rec {
+    CARGO_HOME = "/persist/cache${config.xdg.dataHome}/.cargo";
+    CARGO_TARGET_DIR = "${CARGO_HOME}/target";
+    RUSTUP_HOME = "/persist/cache${config.xdg.dataHome}/.rustup";
   };
 
   # setup nvim for rust
