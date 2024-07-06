@@ -322,7 +322,7 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
             .par_iter()
             .for_each(|(mon, geometry, output_path)| {
                 if !output_path.exists() {
-                    execute::command("convert")
+                    execute::command("magick")
                         .arg(wallpaper)
                         .arg("-crop")
                         .arg(geometry)

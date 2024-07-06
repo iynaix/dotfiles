@@ -85,29 +85,6 @@ lib.mkMerge [
       };
     };
 
-    # config file for wallpapers-ui
-    xdg.configFile = {
-      "wallpaper-ui/config.ini".text = lib.generators.toINIWithGlobalSection { } {
-        globalSection = {
-          csv_path = "${wallpapers_dir}/wallpapers.csv";
-          wallpapers_path = wallpapers_dir;
-          min_width = 3440; # ultrawide width
-          min_height = 1504; # framework height
-          show_faces = true;
-        };
-
-        sections = {
-          resolutions = {
-            Framework = "2256x1504";
-            HD = "1920x1080";
-            Thumbnail = "1x1";
-            Ultrawide = "3440x1440";
-            Vertical = "1440x2560";
-          };
-        };
-      };
-    };
-
     programs.pqiv.extraConfig = lib.mkAfter ''
       c { command(nomacs $1) }
       m { command(mv $1 ${walls_in_dir}) }
@@ -161,5 +138,29 @@ lib.mkMerge [
         current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
       };
     };
+
+    # config file for wallpapers-ui
+    xdg.configFile = {
+      "wallpaper-ui/config.ini".text = lib.generators.toINIWithGlobalSection { } {
+        globalSection = {
+          csv_path = "${wallpapers_dir}/wallpapers.csv";
+          wallpapers_path = wallpapers_dir;
+          min_width = 3440; # ultrawide width
+          min_height = 1504; # framework height
+          show_faces = true;
+        };
+
+        sections = {
+          resolutions = {
+            Framework = "2256x1504";
+            HD = "1920x1080";
+            Thumbnail = "1x1";
+            Ultrawide = "3440x1440";
+            Vertical = "1440x2560";
+          };
+        };
+      };
+    };
+
   })
 ]

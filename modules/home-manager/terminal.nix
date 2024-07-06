@@ -30,7 +30,7 @@ in
 
       size = lib.mkOption {
         type = lib.types.int;
-        default = 11;
+        default = 10;
         description = "Font size for the terminal.";
       };
 

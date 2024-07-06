@@ -97,7 +97,7 @@ fn swww_with_crop(
         panic!("unable to get geometry for {}: {}", mon.name, dimensions);
     };
 
-    let mut imagemagick = execute::command("convert");
+    let mut imagemagick = execute::command("magick");
     imagemagick
         .arg(image)
         .arg("-crop")

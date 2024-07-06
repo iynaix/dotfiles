@@ -190,7 +190,7 @@ lib.mkMerge [
     ];
   }
 
-  # sponsorblock + chapterskip settings
+  # sponsorblock + smartskip settings
   {
     programs.mpv = {
       scripts = (with pkgs.mpvScripts; [ sponsorblock ]) ++ [ pkgs.custom.mpv-smartskip ];

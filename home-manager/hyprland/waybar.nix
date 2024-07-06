@@ -175,7 +175,7 @@ lib.mkIf config.custom.hyprland.enable {
           ];
           format-muted = alertSpan "󰖁  Muted";
           on-click = "${lib.getExe pkgs.pamixer} -t";
-          on-click-right = "pavucontrol";
+          on-click-right = "pwvucontrol";
           scroll-step = 1;
           tooltip = false;
         };
