@@ -56,7 +56,7 @@ if [ "$nhCommand" = "build" ]; then
     hostname="$hostnameOverride"
 fi
 
-cd "$dots"
+pushd "$dots" > /dev/null
 
 # stop bothering me about untracked files
 untrackedFiles=$(git ls-files --exclude-standard --others .)
@@ -75,4 +75,4 @@ if [ "$isDry" = false ] || [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot
     currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
     echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
 fi
-cd - > /dev/null
+popd > /dev/null

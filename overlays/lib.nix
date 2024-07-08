@@ -33,10 +33,12 @@
       direnv = lib.getExe pkgs.direnv;
     in
     ''
-      cd ${dir}
+      pushd ${dir} > /dev/null
       # activate direnv, it's always bash for a script
       ${direnv} allow && eval "$(${direnv} export bash)"
       ${text}
-      cd - > /dev/null
+      popd > /dev/null
+      # deactivate direnv by evaluating in the context of the original directory
+      eval "$(${direnv} export bash)"
     '';
 }

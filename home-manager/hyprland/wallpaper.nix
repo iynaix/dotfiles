@@ -16,14 +16,14 @@ lib.mkMerge [
     custom.shell.packages = {
       # backup wallpapers to secondary drive
       wallpapers-backup = {
-        runtimeInputs = with pkgs; [ rsync ];
+        runtimeInputs = [ pkgs.rsync ] ++ lib.optionals config.custom.rclip.enable [ pkgs.rclip ];
         text = ''
           rsync -aP --delete --no-links "${wallpapers_dir}" "/media/6TBRED"
           # update rclip database
           ${lib.optionalString config.custom.rclip.enable ''
-            cd "${wallpapers_dir}"
+            pushd "${wallpapers_dir}" > /dev/null
             rclip -f "cat" >  /dev/null
-            cd - > /dev/null
+            popd > /dev/null
           ''}
         '';
       };
@@ -111,9 +111,9 @@ lib.mkMerge [
           pqiv
         ];
         text = ''
-          cd "${wallpapers_dir}"
+          pushd "${wallpapers_dir}" > /dev/null
           rclip --filepath-only "$@" | pqiv --additional-from-stdin
-          cd - > /dev/null
+          popd > /dev/null
         '';
       };
     };

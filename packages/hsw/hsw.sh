@@ -30,7 +30,7 @@ while (( "$#" )); do
     esac
 done
 
-cd "$dots"
+pushd "$dots" > /dev/null
 
 # stop bothering me about untracked files
 untrackedFiles=$(git ls-files --exclude-standard --others .)
@@ -44,4 +44,4 @@ else
     nh home switch --configuration "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
-cd - > /dev/null
+popd > /dev/null

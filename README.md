@@ -22,7 +22,7 @@ From a standard ISO,
 sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/install.sh)
 ```
 
-From the custom iso built via `nbuild ISO_HOST`,
+From the custom iso built via `nix-build-iso ISO_HOST`,
 ```sh
 iynaixos-install
 ```
@@ -58,7 +58,7 @@ From a standard ISO,
 sh <(curl -L https://raw.githubusercontent.com/iynaix/dotfiles/main/recover.sh)
 ```
 
-From the custom iso built via `nbuild ISO_HOST`,
+From the custom iso built via `nix-build-iso ISO_HOST`,
 ```sh
 iynaixos-recover
 ```

@@ -53,7 +53,7 @@ in
           nvfetcher
         ];
         text = ''
-          cd ${dots}
+          pushd ${dots} > /dev/null
 
           if [ "$#" -eq 0 ]; then
             # run nvfetcher for overlays
@@ -76,7 +76,7 @@ in
             fi
             exit
           fi
-          cd - > /dev/null
+          popd > /dev/null
         '';
       };
       # update via nix flake
@@ -87,11 +87,11 @@ in
           custom.shell.nv-update
         ];
         text = ''
-          cd ${dots}
+          pushd ${dots} > /dev/null
           nix flake update
           nv-update
           nsw "$@"
-          cd - > /dev/null
+          popd > /dev/null
         '';
       };
       # nix garbage collection
@@ -113,9 +113,9 @@ in
           nix repl --arg host '"${host}"' --file ./repl.nix "$@"
         # use flake repl if not in a nix project
         elif [[ $(find . -maxdepth 1 -name "*.nix" | wc -l) -eq 0 ]]; then
-          cd ${dots}
+          pushd ${dots} > /dev/null
           nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-          cd - > /dev/null
+          popd > /dev/null
         else
           nix repl "$@"
         fi

@@ -64,6 +64,11 @@ in
   # https://github.com/openzfs/zfs/issues/10891
   systemd.services.systemd-udev-settle.enable = false;
 
+  # https://github.com/NixOS/nixpkgs/issues/257505
+  custom.shell.packages.remount-persist = ''
+    sudo mount -t zfs zroot/persist -o remount
+  '';
+
   services.sanoid = {
     enable = true;
 

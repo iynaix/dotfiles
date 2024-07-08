@@ -35,6 +35,11 @@ in
           inherit inputs;
         });
 
+      # TODO: remove when xlib is updated upstream
+      python312 = prev.python312.override {
+        packageOverrides = _: pysuper: { xlib = pysuper.xlib.overridePythonAttrs { doCheck = false; }; };
+      };
+
       # nixos-small logo looks like ass
       fastfetch = prev.fastfetch.overrideAttrs (o: {
         patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
@@ -106,21 +111,11 @@ in
       );
 
       wallust =
-        assert (lib.assertMsg (prev.wallust.version == "2.10.0") "wallust: use wallust from nixpkgs?");
+        assert (lib.assertMsg (prev.wallust.version == "3.0.0-beta") "wallust: use wallust 3.0?");
         prev.wallust.overrideAttrs (
-          o:
+          _:
           sources.wallust
           // {
-            nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.installShellFiles ];
-
-            postInstall = ''
-              installManPage man/wallust*
-              installShellCompletion --cmd wallust \
-                --bash completions/wallust.bash \
-                --zsh completions/_wallust \
-                --fish completions/wallust.fish
-            '';
-
             # creating an overlay for buildRustPackage overlay
             # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
             cargoDeps = prev.rustPlatform.importCargoLock {

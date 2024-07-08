@@ -71,18 +71,18 @@ in
       nix-build-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
         text = ''
-          cd ${dots}
+          pushd ${dots} > /dev/null
           nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-          cd - > /dev/null
+          popd > /dev/null
         '';
       };
     }
     // lib.optionalAttrs (host == "desktop") {
       # build and push config for laptop
       nsw-remote = ''
-        cd ${dots}
+        pushd ${dots} > /dev/null
         nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
-        cd - > /dev/null
+        popd > /dev/null
       '';
     };
 

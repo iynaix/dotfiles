@@ -27,9 +27,9 @@
     ytdl = {
       runtimeInputs = with pkgs; [ yt-dlp ];
       text = ''
-        cd "${config.xdg.userDirs.download}"
+        pushd "${config.xdg.userDirs.download}" > /dev/null
         yt-dlp -a "${config.xdg.userDirs.desktop}/yt.txt"
-        cd - > /dev/null
+        popd > /dev/null
       '';
     };
   };
