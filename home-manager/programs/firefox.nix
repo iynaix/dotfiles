@@ -1,19 +1,31 @@
 {
   inputs,
-  lib,
   pkgs,
   user,
   ...
 }:
-let
-  firefoxPkg = pkgs.firefox-devedition-bin;
-in
 {
   programs = {
-    # firefox dev edition
+    # use firefox dev edition
     firefox = {
       enable = true;
-      package = firefoxPkg;
+      package = pkgs.firefox-devedition-bin.overrideAttrs (o: {
+        # unable to move .mozilla directory to XDG_CONFIG_HOME
+        # as the mozilla path is hardcoded within home-manager
+
+        # resolvable by configPath option in PR:
+        # https://github.com/nix-community/home-manager/pull/5128
+
+        # --set 'HOME' '${config.xdg.configHome}' \
+
+        # launch firefox with user profile
+        buildCommand =
+          o.buildCommand
+          + ''
+            wrapProgram "$executablePath" \
+              --append-flags "--name firefox -P ${user}"
+          '';
+      });
 
       profiles.${user} = {
         # TODO: define keyword searches here?
@@ -33,18 +45,6 @@ in
   wayland.windowManager.hyprland.settings = {
     # do not idle while watching videos
     windowrule = [ "idleinhibit fullscreen,firefox-aurora" ];
-  };
-
-  # overwrite desktop entry with user profile
-  xdg.desktopEntries.firefox-developer-edition = {
-    name = "Firefox Developer Edition";
-    genericName = "Web Browser";
-    exec = "${lib.getExe firefoxPkg} --name firefox -P ${user} %U";
-    icon = "${firefoxPkg}/share/icons/hicolor/128x128/apps/firefox.png";
-    categories = [
-      "Network"
-      "WebBrowser"
-    ];
   };
 
   custom.persist = {

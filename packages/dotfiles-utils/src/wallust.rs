@@ -324,6 +324,7 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                 if !output_path.exists() {
                     execute::command("magick")
                         .arg(wallpaper)
+                        .arg("-strip")
                         .arg("-crop")
                         .arg(geometry)
                         .arg("-resize")

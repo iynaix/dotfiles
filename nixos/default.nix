@@ -25,6 +25,7 @@
     ./sops.nix
     ./syncoid.nix
     ./transmission.nix
+    ./tty.nix
     ./users.nix
     ./vercel.nix
     ./virt-manager.nix

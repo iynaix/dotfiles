@@ -30,6 +30,13 @@ in
 
   # standardized filesystem layout
   fileSystems = {
+    # root partition, exists only as a fallback, actual root is a tmpfs
+    "/" = {
+      device = "zroot/root";
+      fsType = "zfs";
+      neededForBoot = true;
+    };
+
     # boot partition
     "/boot" = {
       device = "/dev/disk/by-label/NIXBOOT";

@@ -4,14 +4,12 @@ nhArgs=()
 restArgs=()
 hostnameOverride="$hostname"
 nhCommand="switch"
-isDry=false
 showProgress=false
 
 while (( "$#" )); do
     case "$1" in
     -n|--dry)
         nhArgs+=("$1")
-        isDry=true
         shift
         ;;
     -H|--hostname)
@@ -70,8 +68,7 @@ else
     nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
-# isDry is false or nhCommand is switch or boot
-if [ "$isDry" = false ] || [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
+if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
     currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
     echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
 fi

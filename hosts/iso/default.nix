@@ -81,7 +81,7 @@ let
 
             # quality of life
             nix = {
-              package = pkgs.nixVersions.latest;
+              package = pkgs.lix;
               settings = {
                 experimental-features = [
                   "nix-command"

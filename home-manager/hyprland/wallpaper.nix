@@ -16,12 +16,17 @@ lib.mkMerge [
     custom.shell.packages = {
       # backup wallpapers to secondary drive
       wallpapers-backup = {
-        runtimeInputs = [ pkgs.rsync ] ++ lib.optionals config.custom.rclip.enable [ pkgs.rclip ];
+        runtimeInputs = [
+          pkgs.direnv
+          pkgs.rsync
+        ] ++ lib.optionals config.custom.rclip.enable [ pkgs.rclip ];
         text = ''
           rsync -aP --delete --no-links "${wallpapers_dir}" "/media/6TBRED"
           # update rclip database
           ${lib.optionalString config.custom.rclip.enable ''
             pushd "${wallpapers_dir}" > /dev/null
+            # do not use previous python
+            eval "$(direnv export bash)"
             rclip -f "cat" >  /dev/null
             popd > /dev/null
           ''}
@@ -148,7 +153,7 @@ lib.mkMerge [
           min_width = 3440; # ultrawide width
           min_height = 1504; # framework height
           show_faces = true;
-        };
+        } // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "hypr-wallpaper $1"; };
 
         sections = {
           resolutions = {

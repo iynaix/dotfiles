@@ -68,7 +68,7 @@ in
         fi
       '';
       # build iso images
-      nix-build-iso = {
+      nbuild-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
         text = ''
           pushd ${dots} > /dev/null
@@ -103,7 +103,7 @@ in
         dates = "daily";
         options = "--delete-older-than 7d";
       };
-      package = pkgs.nixVersions.latest;
+      package = pkgs.lix;
       registry = {
         nixpkgs-master = {
           from = {

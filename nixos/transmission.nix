@@ -120,10 +120,17 @@ lib.mkIf config.custom.bittorrent.enable (
       hm = {
         xdg = {
           desktopEntries.transmission = {
-            name = "Transmission";
+            name = "Transmission Remote";
             genericName = "BitTorrent Client";
             icon = "transmission";
             exec = "transmission-remote -a %U";
+          };
+
+          desktopEntries.transmission-web = {
+            name = "Transmission Web";
+            genericName = "BitTorrent Client";
+            icon = "transmission";
+            exec = "xdg-open http://localhost:9091/transmission/web/";
           };
 
           mimeApps.defaultApplications = {

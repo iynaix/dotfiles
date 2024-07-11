@@ -100,6 +100,7 @@ fn swww_with_crop(
     let mut imagemagick = execute::command("magick");
     imagemagick
         .arg(image)
+        .arg("-strip")
         .arg("-crop")
         .arg(geometry)
         .arg("-resize")

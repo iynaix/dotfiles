@@ -35,11 +35,6 @@ in
           inherit inputs;
         });
 
-      # TODO: remove when xlib is updated upstream
-      python312 = prev.python312.override {
-        packageOverrides = _: pysuper: { xlib = pysuper.xlib.overridePythonAttrs { doCheck = false; }; };
-      };
-
       # nixos-small logo looks like ass
       fastfetch = prev.fastfetch.overrideAttrs (o: {
         patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];

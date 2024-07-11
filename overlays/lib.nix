@@ -28,15 +28,15 @@
 
   # uses the direnv of a directory
   useDirenv =
-    dir: text:
+    dir: content:
     let
       direnv = lib.getExe pkgs.direnv;
     in
     ''
       pushd ${dir} > /dev/null
       # activate direnv, it's always bash for a script
-      ${direnv} allow && eval "$(${direnv} export bash)"
-      ${text}
+      eval "$(${direnv} export bash)"
+      ${content}
       popd > /dev/null
       # deactivate direnv by evaluating in the context of the original directory
       eval "$(${direnv} export bash)"

@@ -37,6 +37,9 @@ in
     sessionVariables = {
       XCURSOR_SIZE = config.home.pointerCursor.size;
     };
+
+    # plasma seems to override this file?
+    file.${config.gtk.gtk2.configLocation}.force = true;
   };
 
   dconf.settings = {
