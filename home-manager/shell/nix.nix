@@ -15,6 +15,7 @@ in
       nh
       nixd
       nix-output-monitor
+      nix-tree
       nixfmt-rfc-style
       nvfetcher
     ];
@@ -68,7 +69,10 @@ in
                 nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
             done
           else
-            if  [[ -d "./packages/$1" ]]; then
+            # special case
+            if [ "$1" = "root" ]; then
+              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+            elif  [[ -d "./packages/$1" ]]; then
               # run nvfetcher for just the package
               nvfetcher --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
             else
@@ -78,6 +82,37 @@ in
             exit
           fi
           popd > /dev/null
+        '';
+        bashCompletion = ''
+          _nv_update() {
+              local cur="''${COMP_WORDS[COMP_CWORD]}"
+              local options=("root")
+
+              while IFS= read -r -d ''' dir; do
+                  if [[ -f "$dir/generated.nix" ]]; then
+                      options+=("$(basename "$dir")")
+                  fi
+              done < <(find "${dots}/packages" -mindepth 1 -maxdepth 1 -type d -print0)
+
+              COMPREPLY=($(compgen -W "''${options[*]}" -- "$cur"))
+          }
+
+          complete -F _nv_update nv-update
+        '';
+        fishCompletion = ''
+          function _nv_update
+              # "root" special case
+              echo "root"
+
+              for dir in "${dots}/packages/*/"
+                  set -l dir (string trim -r -c / $dir)
+                  if test -f "$dir/generated.nix"
+                      echo (basename $dir)
+                  end
+              end
+          end
+
+          complete -c nv-update -f -a '(_nv_update)'
         '';
       };
       # update via nix flake
@@ -151,7 +186,7 @@ in
                   git add "$untracked_files"
               fi
 
-              if nix eval ".#$TARGET.pname" &>/dev/null; then
+              if nix eval ".#$TARGET.name" &>/dev/null; then
                 nom build ".#$TARGET"
               else
                 nom build ".#nixoConfigurations.${host}.pkgs.$TARGET"

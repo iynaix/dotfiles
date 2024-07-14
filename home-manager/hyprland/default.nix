@@ -32,13 +32,14 @@ in
     };
 
     custom.shell.packages = {
-      hypr-log = {
-        runtimeInputs = [ pkgs.bat ];
-        text = ''
-          instanceDir=$(find "$XDG_RUNTIME_DIR/hypr" -maxdepth 1 -mindepth 1 -type d | sort | head -n 1)
-          bat "$instanceDir/hyprland.log"
-        '';
-      };
+      # hypr-log = {
+      #   runtimeInputs = [ pkgs.bat ];
+      #   text = ''
+      #     instanceDir=$(find "$XDG_RUNTIME_DIR/hypr" -maxdepth 1 -mindepth 1 -type d | sort | head -n 1)
+      #     bat "$instanceDir/hyprland.log"
+      #   '';
+      # };
+      hypr-log = "hyprctl rollinglog --follow";
     };
 
     wayland.windowManager.hyprland = {

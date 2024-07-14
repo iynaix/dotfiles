@@ -39,7 +39,7 @@ in
         default = { };
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
-          Both string and attr values will be passed as arguments to writeShellApplication
+          Both string and attr values will be passed as arguments to writeShellApplicationCompletions
         '';
         example = ''
           shell.packages = {
@@ -67,7 +67,7 @@ in
             value
           # attrs to pass to writeShellApplication
           else
-            pkgs.writeShellApplication (value // { inherit name; })
+            pkgs.custom.writeShellApplicationCompletions (value // { inherit name; })
         ) config.custom.shell.packages;
         description = "Extra shell packages to install after all entries have been converted to packages.";
       };

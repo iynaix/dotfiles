@@ -60,13 +60,38 @@ in
   custom.shell.packages =
     {
       # set the current generation or given generation number as default to boot
-      ndefault = ''
-        if [ "$#" -eq 0 ]; then
-          sudo /run/current-system/bin/switch-to-configuration boot
-        else
-          sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
-        fi
-      '';
+      ndefault = {
+        text = ''
+          if [ "$#" -eq 0 ]; then
+            sudo /run/current-system/bin/switch-to-configuration boot
+          else
+            sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
+          fi
+        '';
+        bashCompletion = ''
+          _ndefault() {
+              local profile_dir="/nix/var/nix/profiles"
+              local profiles=$(command ls -1 "$profile_dir" | \
+                  grep -E '^system-[0-9]+-link$' | \
+                  sed -E 's/^system-([0-9]+)-link$/\1/' | \
+                  sort -rnu)
+              COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
+          }
+
+          complete -F _ndefault ndefault
+        '';
+        fishCompletion = ''
+          function _ndefault
+              set -l profile_dir "/nix/var/nix/profiles"
+              command ls -1 "$profile_dir" | \
+                string match -r '^system-([0-9]+)-link$' | \
+                string replace -r '^system-([0-9]+)-link$' '$1' | \
+                sort -ru
+          end
+
+          complete --keep-order -c ndefault -f -a "(_ndefault)"
+        '';
+      };
       # build iso images
       nbuild-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
@@ -74,6 +99,14 @@ in
           pushd ${dots} > /dev/null
           nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
           popd > /dev/null
+        '';
+        fishCompletion = ''
+          function _nbuild_iso
+            nix eval --impure --json --expr \
+              'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
+              ${lib.getExe pkgs.jq} -r '.[]' | grep iso
+            end
+            complete -c nbuild-iso -f -a '(_nbuild_iso)'
         '';
       };
     }

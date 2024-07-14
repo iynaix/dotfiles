@@ -64,9 +64,18 @@ lib.mkMerge [
         '';
       };
       # choose custom crops for wallpapers
-      wallpapers-ui = pkgs.custom.lib.useDirenv wallpapers_proj ''
-        cargo run --release --bin wallpaper-ui -- "$@"
-      '';
+      wallpapers-ui = {
+        text = pkgs.custom.lib.useDirenv wallpapers_proj ''
+          cargo run --release --bin wallpaper-ui -- "$@"
+        '';
+        # bash completion isn't helpful as there are 1000s of images
+        fishCompletion = ''
+          function _wallpapers_ui
+            find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
+          end
+          complete -c wallpapers-ui -f -a '(_wallpapers_ui)'
+        '';
+      };
       # finds duplicate wallpapers
       wallpapers-dedupe = {
         runtimeInputs = [ pkgs.czkawka ];

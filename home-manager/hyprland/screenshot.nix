@@ -27,9 +27,7 @@ lib.mkIf config.custom.hyprland.enable {
         swappy
         rofi-wayland
       ];
-      text = lib.replaceStrings [ "@outputPath@" ] [ "${screenshotDir}/$(date +${iso8601}).png" ] (
-        lib.readFile ./screenshot.sh
-      );
+      text = lib.readFile ./screenshot.sh;
     };
     # run ocr on selected area and copy to clipboard
     hypr-ocr = {
@@ -42,7 +40,7 @@ lib.mkIf config.custom.hyprland.enable {
         img="${screenshotDir}/ocr.png"
 
         grimblast save area "$img"
-        teserract5 "$img" - | wl-copy
+        tesseract "$img" - | wl-copy
         rm "$img"
         notify-send "$(wl-paste)"
       '';
@@ -67,7 +65,7 @@ lib.mkIf config.custom.hyprland.enable {
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$mod, backslash, exec, grimblast --notify copy area"
-      "$mod_SHIFT, backslash, exec, hypr-screenshot"
+      ''$mod_SHIFT, backslash, exec, hypr-screenshot "${screenshotDir}/$(date +${iso8601}).png"''
       "$mod_CTRL, backslash, exec, hypr-ocr"
     ];
   };
