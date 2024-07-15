@@ -18,7 +18,7 @@ let
     else
       ''
         * {
-            background:     {{background}};
+            background:     {{background}}{{ 60 | alpha_hexa }};
             background-alt: {{color0}};
             foreground:     {{foreground}};
             selected:       {{color4}};
@@ -28,7 +28,7 @@ let
       '';
 
   # replace the imports with preset theme / wallust
-  fixupRofiThemesRasi = rasiPath: additionalStyles: ''
+  fixupRofiThemesRasi = rasiPath: overrideStyles: ''
     ${themeStyles}
     ${lib.replaceStrings
       [
@@ -44,7 +44,13 @@ let
     window {
       width: ${toString cfg.width}px;
     }
-    ${additionalStyles}
+
+    element normal.normal { background-color: transparent; }
+    inputbar { background-color: transparent; }
+    message { background-color: transparent; }
+    textbox { background-color: transparent; }
+
+    ${overrideStyles}
   '';
 in
 {
@@ -101,7 +107,10 @@ in
   custom.wallust.templates = lib.mkIf config.programs.rofi.enable {
     # default launcher
     "rofi.rasi" = {
-      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" "";
+      text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        inputbar { background-color: transparent; }
+        element normal.normal { background-color: transparent; }
+      '';
       target = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
@@ -134,7 +143,7 @@ in
           border:                      0px solid;
           border-radius:               0px;
           border-color:                @selected;
-          background-color:            @background;
+          /* background-color is set in style overrides */
           text-color:                  @foreground;
         }
       '';

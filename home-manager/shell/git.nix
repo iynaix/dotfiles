@@ -117,8 +117,7 @@
     '';
     # delete a remote branch
     grd = ''
-      git branch -D "$1"
-      git push origin --delete "$1"
+      git branch -D "$1" || git push origin --delete "$1"
     '';
     # searches git history, can never remember this stupid thing
     # 2nd argument is target path and subsequent arguments are passed through

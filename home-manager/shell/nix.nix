@@ -167,10 +167,8 @@ in
 
           TARGET="''${1/.\#}"
 
-          if nix eval ".#nixosConfigurations.$TARGET.class" &>/dev/null; then
-              nsw --dry --hostname "$TARGET"
           # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
-          elif [[ $(pwd) =~ /nixpkgs$ ]]; then
+          if [[ $(pwd) =~ /nixpkgs$ ]]; then
               # stop bothering me about untracked files
               untracked_files=$(git ls-files --exclude-standard --others .)
               if [ -n "$untracked_files" ]; then
@@ -178,6 +176,8 @@ in
               fi
 
               nix-build -A "$TARGET"
+          elif nix eval ".#nixosConfigurations.$TARGET.class" &>/dev/null; then
+              nsw --dry --hostname "$TARGET"
           # dotfiles, build local package
           elif [[ $(pwd) =~ /dotfiles$ ]]; then
               # stop bothering me about untracked files
