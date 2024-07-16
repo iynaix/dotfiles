@@ -66,15 +66,7 @@ in
         rofi-wayland
         custom.rofi-themes
       ];
-      text = lib.replaceStrings [ "@theme@" ] [
-        (builtins.toFile "rofi-power-menu.rasi" (
-          (lib.readFile "${powermenuDir}/style-${toString powermenuStyle}.rasi")
-          + ''
-            * { background-window: black/60%; } // darken background
-            window { border-radius: 12px; } // no rounded corners as it doesn't interact well with blur on hyprland
-          ''
-        ))
-      ] (lib.readFile ./rofi-power-menu.sh);
+      text = lib.readFile ./rofi-power-menu.sh;
     };
   };
 
@@ -150,8 +142,23 @@ in
       target = "${config.xdg.cacheHome}/wallust/rofi-screenshot.rasi";
     };
 
+    "rofi-power-menu.rasi" = {
+      text = fixupRofiThemesRasi "${powermenuDir}/style-${toString powermenuStyle}.rasi" ''
+        * { background-window: @background; } // darken background
+        window {
+          width: 1000px;
+          border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+        }
+        element normal.normal { background-color: var(background-normal); }
+        element selected.normal { background-color: @selected; }
+      '';
+      target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
+    };
+
     "rofi-power-menu-confirm.rasi" = {
-      text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" "";
+      text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" ''
+        element normal.normal { background-color: transparent; }
+      '';
       target = "${config.xdg.cacheHome}/wallust/rofi-power-menu-confirm.rasi";
     };
   };

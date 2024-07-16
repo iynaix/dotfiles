@@ -41,5 +41,6 @@ if lib.length completions == 0 then
 else
   symlinkJoin {
     inherit name;
+    inherit (app) meta;
     paths = [ app ] ++ completions;
   }

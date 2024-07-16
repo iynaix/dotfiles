@@ -147,13 +147,13 @@ in
       nrepl = ''
         if [[ -f repl.nix ]]; then
           nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-        # use flake repl if not in a nix project
-        elif [[ $(find . -maxdepth 1 -name "*.nix" | wc -l) -eq 0 ]]; then
+        elif [[ -f ./flake.nix ]]; then
+          nix repl .
+        else
+          # use flake repl if not in a nix project
           pushd ${dots} > /dev/null
           nix repl --arg host '"${host}"' --file ./repl.nix "$@"
           popd > /dev/null
-        else
-          nix repl "$@"
         fi
       '';
       # build local package if possible, otherwise build config

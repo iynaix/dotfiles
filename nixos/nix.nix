@@ -109,6 +109,16 @@ in
             complete -c nbuild-iso -f -a '(_nbuild_iso)'
         '';
       };
+      # list all installed packages
+      nix-list-packages = {
+        text =
+          let
+            allPkgs = map (p: p.name) (
+              config.environment.systemPackages ++ config.users.users.${user}.packages ++ config.hm.home.packages
+            );
+          in
+          ''sort -ui <<< "${lib.concatLines allPkgs}"'';
+      };
     }
     // lib.optionalAttrs (host == "desktop") {
       # build and push config for laptop
@@ -164,6 +174,7 @@ in
         experimental-features = [
           "nix-command"
           "flakes"
+          "repl-flake"
         ];
         substituters = [
           "https://hyprland.cachix.org"
@@ -178,6 +189,9 @@ in
           "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
         ];
       };
+      # // lib.optionalAttrs (config.nix.package.pname == "lix") {
+      #   repl-overlays = [ ./repl-overlays.nix ];
+      # };
     };
 
   # better nixos generation label

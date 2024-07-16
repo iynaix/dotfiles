@@ -24,7 +24,7 @@ rofi_cmd() {
 	rofi -dmenu \
 		-p "Goodbye ${USER}" \
 		-mesg "Uptime: $uptime" \
-		-theme @theme@
+		-theme "$HOME/.cache/wallust/rofi-power-menu.rasi"
 }
 
 # Confirmation CMD

@@ -15,11 +15,12 @@
       luasnip.enable = true;
       nvim-autopairs.enable = true;
       nvim-tree.enable = true;
+      project-nvim.enable = true;
       surround.enable = true;
       tmux-navigator.enable = true;
       treesitter = {
         enable = true;
-        indent = true;
+        settings.indent.enable = true;
 
         grammarPackages = with config.programs.nixvim.plugins.treesitter.package.builtGrammars; [
           bash

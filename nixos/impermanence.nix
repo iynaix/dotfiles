@@ -96,6 +96,12 @@ in
           persistCacheCfg.directories ++ persistCacheCfg.users.${user}.directories
         );
       allFiles = map (f: getFilePath f "/persist") (persistCfg.files ++ persistCfg.users.${user}.files);
+      sort-u = arr: lib.concatLines (lib.sort lib.lessThan (lib.unique arr));
     in
-    lib.concatLines (allDirectories ++ allFiles);
+    ''
+      # Directories
+      ${sort-u allDirectories}
+      # Files
+      ${sort-u allFiles}
+    '';
 }

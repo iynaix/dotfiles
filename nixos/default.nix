@@ -71,11 +71,8 @@
         }
         // {
           inherit (config.hm.home.shellAliases)
-            # eza related
-            t
-            tree
-            # yazi
-            y
+            t # eza related
+            y # yazi
             ;
         };
 

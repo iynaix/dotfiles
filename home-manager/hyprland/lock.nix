@@ -95,7 +95,7 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
               shadow_passes = 1;
               shadow_size = 4;
 
-              position = "0, 80";
+              position = "0, 190";
               halign = "center";
               valign = "center";
             }
@@ -110,7 +110,7 @@ lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
               shadow_passes = 1;
               shadow_size = 2;
 
-              position = "0, 30";
+              position = "0, 60";
               halign = "center";
               valign = "center";
             }

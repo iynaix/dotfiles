@@ -12,7 +12,9 @@ in
   boot = {
     # booting with zfs
     supportedFilesystems.zfs = true;
-    kernelPackages = pkgs.linuxPackages_latest;
+    # TODO: update when 6.10 is supported
+    # https://github.com/NixOS/nixpkgs/pull/327474
+    kernelPackages = pkgs.linuxPackages_6_9;
     zfs = {
       devNodes = lib.mkDefault "/dev/disk/by-id";
       package = pkgs.zfs_unstable;

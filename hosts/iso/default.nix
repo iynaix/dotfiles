@@ -38,9 +38,10 @@ let
                 ]
                 ++ (with pkgs; [
                   btop
-                  git
                   eza
+                  git
                   home-manager
+                  tree
                   yazi
                 ]);
               shellAliases = {
@@ -49,8 +50,6 @@ let
                 ll = "eza -l";
                 la = "eza -a";
                 lla = "eza -la";
-                t = "eza -la --git-ignore --icons --tree --hyperlink --level 3";
-                tree = "eza -la --git-ignore --icons --tree --hyperlink --level 3";
                 y = "yazi";
               };
             };
@@ -86,6 +85,7 @@ let
                 experimental-features = [
                   "nix-command"
                   "flakes"
+                  "repl-flake"
                 ];
                 substituters = [
                   "https://hyprland.cachix.org"

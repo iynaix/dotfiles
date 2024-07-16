@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./completion.nix
@@ -104,31 +99,8 @@
       name = "Neovim";
       genericName = "Text Editor";
       icon = "nvim";
-
-      exec =
-        let
-          nvim-direnv = pkgs.writeShellApplication {
-            name = "nvim-direnv";
-            runtimeInputs = with pkgs; [
-              bash
-              direnv
-              jq
-              config.custom.terminal.package
-            ];
-            text = ''
-              filename="$(readlink -f "$1")"
-              dirname="$(dirname "$filename")"
-              has_direnv="$(direnv status --json | jq '.state.foundRC.allowed == 0 and .state.loadedRC.allowed == 0')"
-
-              if [ "$has_direnv" = "true" ]; then
-                ${config.custom.terminal.exec} -d "$dirname" bash -c "direnv exec . nvim '$filename'"
-              else
-                ${config.custom.terminal.exec} -d "$dirname" bash -c "nvim '$filename'"
-              fi
-            '';
-          };
-        in
-        "${lib.getExe nvim-direnv} %f";
+      terminal = true;
+      exec = "nvim %f";
     };
 
     mimeApps = {
