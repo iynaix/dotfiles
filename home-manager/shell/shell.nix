@@ -19,7 +19,7 @@ in
       ccat = "command cat";
       crate = "cargo";
       dots = "cd ${proj_dir}/dotfiles";
-      isodate = ''date - u + "%Y-%m-%dT%H:%M:%SZ"'';
+      isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
       man = lib.getExe' pkgs.bat-extras.batman "batman";
       mime = "xdg-mime query filetype";
       mkdir = "mkdir -p";

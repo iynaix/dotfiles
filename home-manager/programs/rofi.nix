@@ -157,6 +157,7 @@ in
 
     "rofi-power-menu-confirm.rasi" = {
       text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" ''
+        element { background-color: transparent; }
         element normal.normal { background-color: transparent; }
       '';
       target = "${config.xdg.cacheHome}/wallust/rofi-power-menu-confirm.rasi";

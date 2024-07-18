@@ -24,9 +24,6 @@
 
   networking.hostId = "89eaa833"; # required for zfs
 
-  # by-id doesn't seem to work with b650e mobo
-  boot.zfs.devNodes = "/dev/disk/by-partuuid";
-
   services.displayManager.autoLogin.user = user;
 
   # open ports for devices on the local network

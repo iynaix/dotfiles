@@ -25,7 +25,6 @@ in
       nfu = "nix flake update";
       nfui = "nix flake lock --update-input";
       nsh = "nix-shell --command fish -p";
-      npsh = "nix-shell --pure --command fish -p";
     };
   };
 
@@ -70,7 +69,7 @@ in
             done
           else
             # special case
-            if [ "$1" = "root" ]; then
+            if [ "$1" = "main" ]; then
               nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
             elif  [[ -d "./packages/$1" ]]; then
               # run nvfetcher for just the package
@@ -86,7 +85,7 @@ in
         bashCompletion = ''
           _nv_update() {
               local cur="''${COMP_WORDS[COMP_CWORD]}"
-              local options=("root")
+              local options=("main")
 
               while IFS= read -r -d ''' dir; do
                   if [[ -f "$dir/generated.nix" ]]; then
@@ -102,7 +101,7 @@ in
         fishCompletion = ''
           function _nv_update
               # "root" special case
-              echo "root"
+              echo "main"
 
               for dir in "${dots}/packages/*/"
                   set -l dir (string trim -r -c / $dir)

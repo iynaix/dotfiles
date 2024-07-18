@@ -57,23 +57,21 @@ in
       # use nixfmt-rfc-style as the default
       nixfmt = prev.nixfmt-rfc-style;
 
-      /*
-        path-of-building = prev.path-of-building.overrideAttrs (o: {
-          inherit (sources.path-of-building) version;
+      path-of-building = prev.path-of-building.overrideAttrs {
+        inherit (sources.path-of-building) version;
 
-          preFixup =
-            let
-              data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
-            in
-            ''
-              qtWrapperArgs+=(
-                --set LUA_PATH "$LUA_PATH"
-                --set LUA_CPATH "$LUA_CPATH"
-                --chdir "${data}"
-              )
-            '';
-        });
-      */
+        preFixup =
+          let
+            data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
+          in
+          ''
+            qtWrapperArgs+=(
+              --set LUA_PATH "$LUA_PATH"
+              --set LUA_CPATH "$LUA_CPATH"
+              --chdir "${data}"
+            )
+          '';
+      };
 
       swww = prev.swww.overrideAttrs (
         sources.swww

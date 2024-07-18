@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.custom.zfs;
+  isVm = lib.elem "virtio_blk" config.boot.initrd.availableKernelModules;
 in
 # NOTE: zfs datasets are created via install.sh
 {
@@ -16,7 +17,12 @@ in
     # https://github.com/NixOS/nixpkgs/pull/327474
     kernelPackages = pkgs.linuxPackages_6_9;
     zfs = {
-      devNodes = lib.mkDefault "/dev/disk/by-id";
+      # use by-id for intel mobo when not in a vm
+      devNodes =
+        if !isVm && config.hardware.cpu.intel.updateMicrocode then
+          "/dev/disk/by-id"
+        else
+          "/dev/disk/by-partuuid";
       package = pkgs.zfs_unstable;
       requestEncryptionCredentials = cfg.encryption;
     };
@@ -32,6 +38,7 @@ in
 
   # standardized filesystem layout
   fileSystems = {
+    # NOTE: root and home are on tmpfs
     # root partition, exists only as a fallback, actual root is a tmpfs
     "/" = {
       device = "zroot/root";
@@ -45,8 +52,6 @@ in
       fsType = "vfat";
     };
 
-    # NOTE: root and home are on tmpfs
-    # zfs datasets
     "/nix" = {
       device = "zroot/nix";
       fsType = "zfs";

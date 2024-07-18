@@ -3,26 +3,14 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.42.0";
+    version = "v2.44.0";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.42.0";
+      rev = "v2.44.0";
       fetchSubmodules = false;
-      sha256 = "sha256-OxAyB+tMszQktGvxlGL/kc+Wt0iInFYY0qHNjK6EnSg=";
+      sha256 = "sha256-EdIllX3upiyk35R/p63kx1SDYlrmChfnymj1oN088rM=";
     };
-  };
-  scope-tui = {
-    pname = "scope-tui";
-    version = "c2fe70a69cfc15c4de6ea3f2a51580ec57a5c9e1";
-    src = fetchFromGitHub {
-      owner = "alemidev";
-      repo = "scope-tui";
-      rev = "c2fe70a69cfc15c4de6ea3f2a51580ec57a5c9e1";
-      fetchSubmodules = false;
-      sha256 = "sha256-6UPIZ2UB5wb0IkigaOXdQ/0ux9vHUGC4w5WnrjEd1bg=";
-    };
-    date = "2024-05-06";
   };
   swww = {
     pname = "swww";

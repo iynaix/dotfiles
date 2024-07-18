@@ -15,7 +15,9 @@
           fish_vi_key_bindings --no-erase insert
         '';
       };
-      shellAliases = {
+      # use abbreviations instead of aliases
+      shellAliases = lib.mkForce { };
+      shellAbbrs = config.home.shellAliases // {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
       shellInit = ''
