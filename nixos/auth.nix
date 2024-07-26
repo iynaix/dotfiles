@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   user,
   ...
 }:
@@ -38,13 +37,11 @@ lib.mkMerge [
 
   # misc
   {
-    environment.systemPackages = [ pkgs.gcr ]; # stops errors with copilot login?
-
     security = {
       polkit.enable = true;
       # i can't type
       sudo.extraConfig = "Defaults passwd_tries=10";
-    };
+    } // lib.optionalAttrs config.hm.programs.hyprlock.enable { pam.services.hyprlock = { }; };
 
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.

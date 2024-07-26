@@ -1,6 +1,7 @@
 {
   config,
   host,
+  inputs,
   lib,
   pkgs,
   self,
@@ -159,6 +160,7 @@ in
             repo = "nixpkgs";
           };
         };
+        nixpkgs-stable.flake = inputs.nixpkgs-stable;
       };
       settings = {
         auto-optimise-store = true; # Optimise symlinks

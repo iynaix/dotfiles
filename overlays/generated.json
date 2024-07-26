@@ -13,11 +13,11 @@
             "name": null,
             "owner": "PathOfBuildingCommunity",
             "repo": "PathOfBuilding",
-            "rev": "v2.44.0",
-            "sha256": "sha256-EdIllX3upiyk35R/p63kx1SDYlrmChfnymj1oN088rM=",
+            "rev": "v2.46.0",
+            "sha256": "sha256-L63pFaIjSDEzEud+v4IbNjFVdwTBU08/xICBIHzPutE=",
             "type": "github"
         },
-        "version": "v2.44.0"
+        "version": "v2.46.0"
     },
     "swww": {
         "cargoLocks": null,
@@ -41,7 +41,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2024-07-18",
+        "date": null,
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -51,11 +51,11 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "432c491131a1569cad79277811660c7e25ce0908",
-            "sha256": "sha256-1x1REdL/pgzBWj/BnIbiRPJBiHxvwvhChRjjCWYEfHk=",
+            "rev": "549b30dae0ae9db0bdda780a17d474562378399f",
+            "sha256": "sha256-ytLBuFx7WQksYufdYQ8PapYWkIez7yCpfF4TAHAUiX4=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
-        "version": "432c491131a1569cad79277811660c7e25ce0908"
+        "version": "549b30dae0ae9db0bdda780a17d474562378399f"
     }
 }

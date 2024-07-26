@@ -16,10 +16,17 @@ lib.mkIf config.custom.hyprland.enable {
   };
 
   # toggle / launch waybar
-  wayland.windowManager.hyprland.settings.bind = [
-    "$mod, a, exec, ${lib.getExe pkgs.custom.shell.toggle-waybar}"
-    "$mod_SHIFT, a, exec, launch-waybar"
-  ];
+  wayland.windowManager.hyprland.settings = {
+    layerrule = [
+      "blur,waybar"
+      "ignorealpha 0,waybar"
+    ];
+
+    bind = [
+      "$mod, a, exec, ${lib.getExe pkgs.custom.shell.toggle-waybar}"
+      "$mod_SHIFT, a, exec, launch-waybar"
+    ];
+  };
 
   custom = {
     shell.packages = {

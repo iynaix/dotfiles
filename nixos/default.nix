@@ -108,6 +108,11 @@
       })
     ];
 
+    # create symlink to dotfiles from default location
+    systemd.tmpfiles.rules = [
+      "L+ /etc/nixos - - - - /persist${config.hm.home.homeDirectory}/projects/dotfiles"
+    ];
+
     # setup fonts
     fonts = {
       enableDefaultPackages = true;

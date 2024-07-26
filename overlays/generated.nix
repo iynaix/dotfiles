@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.44.0";
+    version = "v2.46.0";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.44.0";
+      rev = "v2.46.0";
       fetchSubmodules = false;
-      sha256 = "sha256-EdIllX3upiyk35R/p63kx1SDYlrmChfnymj1oN088rM=";
+      sha256 = "sha256-L63pFaIjSDEzEud+v4IbNjFVdwTBU08/xICBIHzPutE=";
     };
   };
   swww = {
@@ -25,15 +25,14 @@
   };
   wallust = {
     pname = "wallust";
-    version = "432c491131a1569cad79277811660c7e25ce0908";
+    version = "549b30dae0ae9db0bdda780a17d474562378399f";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust.git";
-      rev = "432c491131a1569cad79277811660c7e25ce0908";
+      rev = "549b30dae0ae9db0bdda780a17d474562378399f";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "sha256-1x1REdL/pgzBWj/BnIbiRPJBiHxvwvhChRjjCWYEfHk=";
+      sha256 = "sha256-ytLBuFx7WQksYufdYQ8PapYWkIez7yCpfF4TAHAUiX4=";
     };
-    date = "2024-07-18";
   };
 }

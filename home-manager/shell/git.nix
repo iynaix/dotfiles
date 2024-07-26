@@ -1,4 +1,13 @@
-{ config, pkgs, ... }:
+{
+  config,
+  host,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  hasNixpkgsRepo = host == "desktop" || host == "framework";
+in
 {
   programs = {
     git = {
@@ -9,66 +18,70 @@
         enable = true;
         background = "dark";
       };
-      extraConfig = {
-        init = {
-          defaultBranch = "main";
-        };
-        alias = {
-          # blame with ignore whitespace and track movement across all commits
-          blame = "blame -w -C -C -C";
-          diff = "diff --word-diff";
-          # git town
-          append = "town append";
-          contribute = "town contribute";
-          diff-parent = "town diff-parent";
-          hack = "town hack";
-          kill = "town kill";
-          observe = "town observe";
-          park = "town park";
-          prepend = "town prepend";
-          propose = "town propose";
-          rename-branch = "town rename-branch";
-          repo = "town repo";
-          set-parent = "town set-parent";
-          ship = "town ship";
-          sync = "town sync";
-        };
-        branch = {
-          master = {
-            merge = "refs/heads/master";
+      extraConfig =
+        {
+          init = {
+            defaultBranch = "main";
           };
-          main = {
-            merge = "refs/heads/main";
+          alias = {
+            # blame with ignore whitespace and track movement across all commits
+            blame = "blame -w -C -C -C";
+            diff = "diff --word-diff";
+            # git town
+            append = "town append";
+            contribute = "town contribute";
+            diff-parent = "town diff-parent";
+            hack = "town hack";
+            kill = "town kill";
+            observe = "town observe";
+            park = "town park";
+            prepend = "town prepend";
+            propose = "town propose";
+            rename-branch = "town rename-branch";
+            repo = "town repo";
+            set-parent = "town set-parent";
+            ship = "town ship";
+            sync = "town sync";
           };
-          sort = "-committerdate";
+          branch = {
+            master = {
+              merge = "refs/heads/master";
+            };
+            main = {
+              merge = "refs/heads/main";
+            };
+            sort = "-committerdate";
+          };
+          diff = {
+            tool = "nvim -d";
+            guitool = "code";
+            colorMoved = "default";
+          };
+          format = {
+            pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+          };
+          merge = {
+            conflictstyle = "diff3";
+          };
+          pull = {
+            rebase = true;
+          };
+          push = {
+            default = "simple";
+          };
+          # reuse record resolution: git automatically resolves conflicts using the recorded resolution
+          rerere = {
+            enabled = true;
+            autoUpdate = true;
+          };
+        }
+        // lib.optionalAttrs hasNixpkgsRepo {
+          # background maintenance for large git repos:
+          # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
+          maintenance = lib.mkIf (host == "desktop" || host == "framework") {
+            repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
+          };
         };
-        core = {
-          # use fileystem monitor daemon to speed up git status for large repos like nixpkgs
-          fsmonitor = true;
-        };
-        diff = {
-          tool = "nvim -d";
-          guitool = "code";
-          colorMoved = "default";
-        };
-        format = {
-          pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
-        };
-        merge = {
-          conflictstyle = "diff3";
-        };
-        pull = {
-          rebase = true;
-        };
-        push = {
-          default = "simple";
-        };
-        # reuse record resolution: git automatically resolves conflicts using the recorded resolution
-        rerere = {
-          enabled = true;
-          autoUpdate = true;
-        };
-      };
     };
 
     lazygit.enable = true;
