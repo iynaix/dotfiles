@@ -13,9 +13,7 @@ in
   boot = {
     # booting with zfs
     supportedFilesystems.zfs = true;
-    # TODO: update when 6.10 is supported
-    # https://github.com/NixOS/nixpkgs/pull/327474
-    kernelPackages = pkgs.linuxPackages_6_9;
+    kernelPackages = pkgs.linuxPackages_latest;
     zfs = {
       # use by-id for intel mobo when not in a vm
       devNodes =

@@ -1,15 +1,16 @@
 { config, pkgs, ... }:
 let
-  yt-dlp' = pkgs.yt-dlp.overrideAttrs rec {
-    version = "2024.7.16";
-    src = pkgs.fetchFromGitHub {
-      owner = "yt-dlp";
-      repo = "yt-dlp";
-      rev = "f0993391e6052ec8f7aacc286609564f226943b9";
-      hash = "sha256-2/pCHRzCi5m/7gDd1HxFEZUNGZOV0EICPGA4mtAadgg=";
-    };
-  };
+  yt-dlp' = pkgs.yt-dlp;
 in
+# .overrideAttrs rec {
+#   version = "2024.7.16";
+#   src = pkgs.fetchFromGitHub {
+#     owner = "yt-dlp";
+#     repo = "yt-dlp";
+#     rev = "f0993391e6052ec8f7aacc286609564f226943b9";
+#     hash = "sha256-2/pCHRzCi5m/7gDd1HxFEZUNGZOV0EICPGA4mtAadgg=";
+#   };
+# };
 {
   programs = {
     yt-dlp = {
