@@ -26,6 +26,8 @@
       # transparentBackground = true;
     };
 
+    performance.combinePlugins.enable = true;
+
     opts = {
       autoread = true;
       cursorline = true;

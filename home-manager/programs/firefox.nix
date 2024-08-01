@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   user,
@@ -7,25 +8,21 @@
 {
   programs = {
     # use firefox dev edition
-    firefox = {
+    firefox = rec {
       enable = true;
       package = pkgs.firefox-devedition-bin.overrideAttrs (o: {
-        # unable to move .mozilla directory to XDG_CONFIG_HOME
-        # as the mozilla path is hardcoded within home-manager
-
-        # resolvable by configPath option in PR:
-        # https://github.com/nix-community/home-manager/pull/5128
-
-        # --set 'HOME' '${config.xdg.configHome}' \
-
         # launch firefox with user profile
         buildCommand =
           o.buildCommand
           + ''
             wrapProgram "$executablePath" \
+              --set 'HOME' '${config.xdg.configHome}' \
               --append-flags "--name firefox -P ${user}"
           '';
       });
+
+      vendorPath = ".config/.mozilla";
+      configPath = "${vendorPath}/firefox";
 
       profiles.${user} = {
         # TODO: define keyword searches here?
@@ -50,7 +47,7 @@
   custom.persist = {
     home.directories = [
       ".cache/mozilla"
-      ".mozilla"
+      ".config/.mozilla"
     ];
   };
 }
