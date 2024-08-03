@@ -170,7 +170,7 @@ in
         debug.disable_logs = false;
 
         # bind workspaces to monitors
-        workspace = pkgs.custom.lib.mapWorkspaces (
+        workspace = lib.custom.mapWorkspaces (
           { workspace, monitor, ... }: "${workspace},monitor:${monitor.name}"
         ) monitors;
 

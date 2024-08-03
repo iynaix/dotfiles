@@ -27,7 +27,7 @@ lib.mkIf config.custom.hyprland.enable (
 
           # add rules for vertical displays and number of stacks
           workspace = lib.mkAfter (
-            pkgs.custom.lib.mapWorkspaces (
+            lib.custom.mapWorkspaces (
               { monitor, workspace, ... }:
               let
                 isUltrawide = builtins.div (monitor.width * 1.0) monitor.height > builtins.div 16.0 9;
@@ -50,7 +50,7 @@ lib.mkIf config.custom.hyprland.enable (
     # handle workspace orientation without hyprnstack
     (lib.mkIf (config.custom.hyprland.plugin != "hyprnstack") {
       wayland.windowManager.hyprland.settings.workspace = lib.mkAfter (
-        pkgs.custom.lib.mapWorkspaces (
+        lib.custom.mapWorkspaces (
           { monitor, workspace, ... }:
           "${workspace},layoutopt:orientation:${if monitor.vertical then "top" else "left"}"
         ) config.custom.monitors

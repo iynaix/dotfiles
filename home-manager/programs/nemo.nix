@@ -7,9 +7,9 @@
 }:
 {
   home.packages = with pkgs; [
-    cinnamon.nemo-fileroller
+    nemo-fileroller
+    nemo-with-extensions
     webp-pixbuf-loader # for webp thumbnails
-    cinnamon.nemo-with-extensions
   ];
 
   xdg = {

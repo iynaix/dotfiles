@@ -15,7 +15,7 @@ lib.mkIf config.custom.hyprland.enable {
     bind =
       let
         workspace_keybinds = lib.flatten (
-          (pkgs.custom.lib.mapWorkspaces (
+          (lib.custom.mapWorkspaces (
             { workspace, key, ... }:
             if qtile_like then
               [

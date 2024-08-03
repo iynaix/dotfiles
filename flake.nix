@@ -61,18 +61,24 @@
     inputs@{ nixpkgs, self, ... }:
     let
       system = "x86_64-linux";
-      createCommonArgs = system: {
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      lib = import ./lib.nix {
         inherit (nixpkgs) lib;
+        inherit pkgs;
+        inherit (inputs) home-manager;
+      };
+      createCommonArgs = system: {
         inherit
           self
           inputs
           nixpkgs
+          lib
+          pkgs
           system
           ;
-        pkgs = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
         specialArgs = {
           inherit self inputs;
         };
@@ -81,7 +87,7 @@
       # call with forAllSystems (commonArgs: function body)
       forAllSystems =
         fn:
-        nixpkgs.lib.genAttrs [
+        lib.genAttrs [
           "x86_64-linux"
           "aarch64-linux"
           "x86_64-darwin"
@@ -98,7 +104,7 @@
         default = import ./devenv.nix commonArgs';
       });
 
-      inherit self;
+      inherit lib self;
 
       packages = forAllSystems (commonArgs': (import ./packages commonArgs'));
 

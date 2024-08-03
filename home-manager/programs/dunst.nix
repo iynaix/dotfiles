@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 let
   opacity = "E5";
 in
@@ -14,7 +9,7 @@ in
   };
 
   custom.wallust.templates.dunstrc = lib.mkIf config.services.dunst.enable {
-    text = pkgs.custom.lib.toQuotedINI {
+    text = lib.custom.toQuotedINI {
       global = {
         browser = "brave -new-tab";
         corner_radius = 8;

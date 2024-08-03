@@ -1,14 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 {
   programs.cava.enable = true;
 
   custom.wallust.templates.cava = lib.mkIf config.programs.cava.enable {
-    text = pkgs.custom.lib.toQuotedINI {
+    text = lib.custom.toQuotedINI {
       general = {
         # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.
         mode = "normal";

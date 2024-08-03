@@ -57,7 +57,7 @@ lib.mkMerge [
       wallpapers-add = {
         runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
         text = ''
-          ${pkgs.custom.lib.useDirenv wallpapers_proj ''
+          ${lib.custom.useDirenv wallpapers_proj ''
             cargo run --release --bin add-wallpapers -- --format webp "$@" "${walls_in_dir}"
           ''}
           wallpapers-backup
@@ -65,7 +65,7 @@ lib.mkMerge [
       };
       # choose custom crops for wallpapers
       wallpapers-ui = {
-        text = pkgs.custom.lib.useDirenv wallpapers_proj ''
+        text = lib.custom.useDirenv wallpapers_proj ''
           cargo run --release --bin wallpaper-ui -- "$@"
         '';
         # bash completion isn't helpful as there are 1000s of images
@@ -84,7 +84,7 @@ lib.mkMerge [
         '';
       };
       # download wallpapers from pixiv
-      wallpapers-pixiv = pkgs.custom.lib.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
+      wallpapers-pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
         cargo run --release --bin wall-dl -- "$@"
       '';
     };

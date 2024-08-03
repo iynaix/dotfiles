@@ -8,17 +8,11 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  inherit (flake.inputs.nixpkgs) lib;
 in
 rec {
-  inherit (flake) inputs self;
+  inherit (flake) inputs lib self;
   inherit (flake.inputs) nixpkgs;
-  inherit
-    flake
-    lib
-    host
-    user
-    ;
+  inherit flake host user;
 
   # default host
   c = flake.nixosConfigurations.${host}.config;

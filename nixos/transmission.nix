@@ -144,7 +144,7 @@ lib.mkIf config.custom.bittorrent.enable (
 
         # process downloaded files
         shell.packages = {
-          renamer = pkgs.custom.lib.useDirenv "${proj_dir}/renamer" ''cargo run --release --bin renamer'';
+          renamer = lib.custom.useDirenv "${proj_dir}/renamer" ''cargo run --release --bin renamer'';
         };
       };
     }
