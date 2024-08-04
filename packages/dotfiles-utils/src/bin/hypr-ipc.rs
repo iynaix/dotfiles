@@ -1,7 +1,8 @@
 use dotfiles_utils::nixinfo::NixInfo;
 use dotfiles_utils::Client;
-use dotfiles_utils::{hypr, hypr_json, monitor::Monitor};
+use dotfiles_utils::{hypr_json, monitor::Monitor};
 use execute::Execute;
+use rand::Rng;
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::UnixStream;
@@ -99,6 +100,19 @@ fn main() {
     let is_desktop = NixInfo::before().host == "desktop";
     let nstack = is_nstack();
 
+    // set a random gap for desktop
+    if is_desktop {
+        // random gap between 4 and 8
+        let gap = rand::thread_rng().gen_range(4..=8).to_string();
+
+        execute::command_args!("hyprctl", "keyword", "general:gaps_in", &gap)
+            .execute()
+            .expect("failed to set gaps");
+        execute::command_args!("hyprctl", "keyword", "general:gaps_out", &gap)
+            .execute()
+            .expect("failed to set gaps");
+    };
+
     let socket_path = get_hyprland_socket();
     let socket = UnixStream::connect(socket_path).expect("hyprland ipc socket not found");
 
@@ -117,20 +131,27 @@ fn main() {
         match ev {
             // different handling for desktop and laptops is done within hypr-monitors
             "monitoradded" => {
+                // single monitor in config; is laptop
+                if NixInfo::before().monitors.len() == 1 {
+                    // pass new monitor to rofi monitors for mirroring
+                    let new_mon = ev_args.first().expect("no monitor name found");
+                    execute::command!("hypr-monitors")
+                        .arg("--rofi")
+                        .arg(new_mon)
+                        .execute()
+                        .expect("failed to run rofi-monitors");
+                } else {
+                    // desktop, redistribute workspaces
+                    execute::command!("hypr-monitors")
+                        .execute()
+                        .expect("failed to run hypr-monitors");
+                }
+            }
+            "monitorremoved" => {
+                // redistribute workspaces
                 execute::command!("hypr-monitors")
                     .execute()
                     .expect("failed to run hypr-monitors");
-            }
-            "monitorremoved" => {
-                if is_desktop {
-                    let rearranged_workspaces = Monitor::rearranged_workspaces();
-                    // focus desktop with the most workspaces
-                    let (mon_to_focus, _) = rearranged_workspaces
-                        .iter()
-                        .max_by_key(|(_, wksps)| wksps.len())
-                        .expect("no workspaces found");
-                    hypr(["focusmonitor", mon_to_focus]);
-                }
             }
             "openwindow" => {
                 // TODO: cannot resize tiled windows?

@@ -27,9 +27,6 @@ in
       # include custom packages
       custom =
         (prev.custom or { })
-        # // {
-        #   lib = pkgs.callPackage ./lib.nix { inherit (prev) pkgs; };
-        # }
         // (import ../packages {
           inherit (prev) pkgs;
           inherit inputs;

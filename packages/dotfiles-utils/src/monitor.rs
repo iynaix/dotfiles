@@ -1,6 +1,9 @@
-use crate::{hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
+use crate::{cli::MonitorExtend, hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
 use serde::Deserialize;
 use std::collections::HashMap;
+
+#[allow(clippy::module_name_repetitions)]
+pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 
 #[derive(Clone, Default, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -116,7 +119,7 @@ impl Monitor {
         }
     }
 
-    pub fn rearranged_workspaces() -> HashMap<String, Vec<i32>> {
+    pub fn rearranged_workspaces() -> WorkspacesByMonitor {
         let nix_monitors = NixInfo::before().monitors;
         let active_workspaces = Self::active_workspaces();
 
@@ -152,8 +155,8 @@ impl Monitor {
     }
 
     /// distribute the workspaces evenly across all monitors
-    pub fn distribute_workspaces(extend_as_primary: bool) -> HashMap<String, Vec<i32>> {
-        let workspaces: Vec<i32> = (1..10).collect();
+    pub fn distribute_workspaces(extend_type: &MonitorExtend) -> WorkspacesByMonitor {
+        let workspaces: Vec<i32> = (1..=10).collect();
 
         let mut all_monitors = Self::monitors();
         let nix_monitors = NixInfo::before().monitors;
@@ -162,10 +165,9 @@ impl Monitor {
         all_monitors.sort_by_key(|a| {
             let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
             (
-                if extend_as_primary {
-                    is_base_monitor
-                } else {
-                    !is_base_monitor
+                match extend_type {
+                    MonitorExtend::Primary => is_base_monitor,
+                    MonitorExtend::Secondary => !is_base_monitor,
                 },
                 a.id,
             )
@@ -185,5 +187,22 @@ impl Monitor {
                 (mon.name.clone(), wksps.to_vec())
             })
             .collect()
+    }
+
+    /// mirrors the current display onto the new display
+    pub fn mirror_to(new_mon: &str) {
+        let nix_monitors = NixInfo::before().monitors;
+
+        let primary = nix_monitors.first().expect("no primary monitor found");
+
+        // mirror the primary to the new one
+        execute::command_args!(
+            "hyprctl",
+            "keyword",
+            "monitor",
+            &format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon)
+        );
+
+        // hyprctl keyword monitor HDMI-A-1,mirror,eDP-1
     }
 }

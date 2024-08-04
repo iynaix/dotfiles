@@ -6,6 +6,7 @@ use std::{path::PathBuf, process::Stdio};
 pub mod cli;
 pub mod monitor;
 pub mod nixinfo;
+pub mod rofi;
 pub mod wallpaper;
 pub mod wallust;
 

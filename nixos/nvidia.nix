@@ -9,6 +9,8 @@ lib.mkIf config.custom.nvidia.enable {
   services.xserver.videoDrivers = [ "nvidia" ];
 
   boot = {
+    # nvidia-uvm is required for CUDA applications
+    kernelModules = [ "nvidia-uvm" ];
     # use nvidia framebuffer
     # https://wiki.gentoo.org/wiki/NVIDIA/nvidia-drivers#Kernel_module_parameters for more info.
     kernelParams = [ "nvidia-drm.fbdev=1" ];

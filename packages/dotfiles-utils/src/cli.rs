@@ -1,21 +1,31 @@
-use clap::{builder::PossibleValuesParser, Parser, Subcommand};
+use clap::{value_parser, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
 
 // ------------------ HYPR MONITOR ------------------
+#[derive(ValueEnum, Debug, Clone)]
+pub enum MonitorExtend {
+    Primary,
+    Secondary,
+}
+
 #[derive(Parser, Debug)]
 #[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
+/// Utilities for working with adding or removing monitors in hyprland
+/// Without arguments, it redistributes the workspaces across all monitors
 pub struct HyprMonitorArgs {
     #[arg(
         long,
-        default_value = "primary",
-        value_name = "EXTEND",
-        value_parser = PossibleValuesParser::new([
-            "primary",
-            "secondary",
-        ]),
-        help = "set new display(s) to be primary or secondary"
+        value_parser = value_parser!(MonitorExtend),
+        help = "set new monitor(s) to be primary or secondary"
     )]
-    pub extend: Option<String>,
+    pub extend: Option<MonitorExtend>,
+
+    #[arg(long, name = "MONITOR", action, help = "mirrors the primary monitor")]
+    pub mirror: Option<String>,
+
+    // show rofi menu for selecting monitor
+    #[arg(long, action, help = "show rofi menu for monitor options")]
+    pub rofi: Option<String>,
 }
 
 // ------------------ HYPR SAME CLASS ------------------

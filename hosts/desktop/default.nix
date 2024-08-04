@@ -26,10 +26,13 @@
 
   services.displayManager.autoLogin.user = user;
 
-  # open ports for devices on the local network
-  networking.firewall.extraCommands = ''
-    iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
-  '';
+  networking = {
+    interfaces.enp5s0.wakeOnLan.enable = true;
+    # open ports for devices on the local network
+    firewall.extraCommands = ''
+      iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
+    '';
+  };
 
   # enable flirc usb ir receiver
   hardware.flirc.enable = false;

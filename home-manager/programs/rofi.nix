@@ -119,7 +119,7 @@ in
       target = "${config.xdg.cacheHome}/wallust/rofi-menu.rasi";
     };
 
-    "rofi-screenshot.rasi" = {
+    "rofi-menu-noinput.rasi" = {
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
         listview {
           columns: 1;
@@ -139,7 +139,7 @@ in
           text-color:                  @foreground;
         }
       '';
-      target = "${config.xdg.cacheHome}/wallust/rofi-screenshot.rasi";
+      target = "${config.xdg.cacheHome}/wallust/rofi-menu-noinput.rasi";
     };
 
     "rofi-power-menu.rasi" = {

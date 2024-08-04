@@ -25,6 +25,7 @@ in
       nfu = "nix flake update";
       nfui = "nix flake lock --update-input";
       nsh = "nix-shell --command fish -p";
+      nshp = "nix-shell --pure --command fish -p";
     };
   };
 

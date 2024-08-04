@@ -1,6 +1,4 @@
-use dotfiles_utils::{wallust, CommandUtf8};
-use execute::Execute;
-use std::process::Stdio;
+use dotfiles_utils::{rofi::Rofi, wallust, CommandUtf8};
 
 fn wallust_preset_themes() -> Vec<String> {
     execute::command!("wallust theme --help")
@@ -31,19 +29,12 @@ fn all_themes() -> Vec<String> {
 }
 
 fn main() {
-    let themes = all_themes().join("\n");
+    let themes = all_themes();
 
-    let selected_theme = execute::command!("rofi -dmenu -theme ~/.cache/wallust/rofi-menu.rasi")
-        .stdout(Stdio::piped())
-        .execute_input_output(themes.as_bytes())
-        .expect("failed to read rofi theme")
-        .stdout;
+    let rofi = Rofi::new("rofi-menu-noinput.rasi", &themes);
+    let mut cmd = rofi.prompt();
+    let selected = rofi.run(&mut cmd);
 
-    let selected_theme = std::str::from_utf8(&selected_theme)
-        .expect("failed to parse utf8 from rofi theme")
-        .strip_suffix('\n')
-        .unwrap_or_default();
-
-    wallust::apply_theme(selected_theme);
+    wallust::apply_theme(&selected);
     wallust::apply_colors();
 }

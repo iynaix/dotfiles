@@ -13,7 +13,7 @@ in
   boot = {
     # booting with zfs
     supportedFilesystems.zfs = true;
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     zfs = {
       # use by-id for intel mobo when not in a vm
       devNodes =

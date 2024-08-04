@@ -1,19 +1,28 @@
 use clap::Parser;
-use dotfiles_utils::{cli::HyprMonitorArgs, hypr, monitor::Monitor, nixinfo::NixInfo};
+use dotfiles_utils::{
+    cli::HyprMonitorArgs,
+    hypr,
+    monitor::{Monitor, WorkspacesByMonitor},
+    rofi::Rofi,
+};
 use execute::Execute;
 
-fn main() {
-    let args = HyprMonitorArgs::parse();
+// reload wallpaper
+fn reload_wallpaper() {
+    execute::command!("hypr-wallpaper --reload")
+        .execute()
+        .expect("failed to reload wallpaper");
+}
 
-    // single monitor in config probably means laptop, so distribute them
-    let workspaces = if NixInfo::before().monitors.len() == 1 {
-        Monitor::distribute_workspaces(matches!(args.extend.as_deref(), Some("primary")))
-    } else {
-        Monitor::rearranged_workspaces()
-    };
+fn mirror_monitors(new_mon: &str) {
+    Monitor::mirror_to(new_mon);
+    reload_wallpaper();
+    std::process::exit(0);
+}
 
+fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
     // move workspaces to monitors
-    for (mon, wksps) in &workspaces {
+    for (mon, wksps) in workspaces {
         wksps
             .iter()
             .for_each(|wksp| hypr(["moveworkspacetomonitor", &wksp.to_string(), mon]));
@@ -42,8 +51,46 @@ fn main() {
         (workspaces.keys().next().expect("primary monitor not found")),
     ]);
 
-    // reload wallpaper
-    execute::command!("hypr-wallpaper --reload")
-        .execute()
-        .expect("failed to reload wallpaper");
+    reload_wallpaper();
+}
+
+fn main() {
+    let args = HyprMonitorArgs::parse();
+
+    // --rofi
+    if let Some(new_mon) = args.rofi {
+        let choices = ["Extend as Primary", "Extend as Secondary", "Mirror"];
+
+        let rofi = Rofi::new("rofi-menu-noinput.rasi", &choices);
+        let mut cmd = rofi.prompt();
+        cmd.arg("-lines").arg(choices.len().to_string());
+
+        let selected = rofi.run(&mut cmd);
+        match selected.as_str() {
+            "Extend as Primary" => println!("extending as primary"),
+            "Extend as Secondary" => println!("extending as secondary"),
+            "Mirror" => mirror_monitors(&new_mon),
+            _ => {
+                eprintln!("No selection made, exiting...");
+                std::process::exit(1);
+            }
+        };
+
+        std::process::exit(0);
+    }
+
+    // --mirror
+    if let Some(new_mon) = args.mirror {
+        mirror_monitors(&new_mon);
+    }
+
+    // distribute workspaces per monitor
+    let workspaces = match args.extend {
+        // --extend
+        Some(extend_type) => Monitor::distribute_workspaces(&extend_type),
+        // no args, fall through
+        _ => Monitor::rearranged_workspaces(),
+    };
+
+    move_workspaces_to_monitors(&workspaces);
 }
