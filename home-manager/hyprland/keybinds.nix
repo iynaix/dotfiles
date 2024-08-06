@@ -11,6 +11,26 @@ let
   qtile_like = config.custom.hyprland.qtile;
 in
 lib.mkIf config.custom.hyprland.enable {
+  custom.shell.packages = {
+    focusorrun = {
+      runtimeInputs = with pkgs; [
+        hyprland
+        jq
+      ];
+      # $1 is string to search for in window title
+      # $2 is the command to run if the window isn't found
+      text = ''
+        address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | \"address:\(.address)\"")
+
+        if [ -z "$address" ]; then
+          eval "$2"
+        else
+          hyprctl dispatch focuswindow "$address"
+        fi
+      '';
+    };
+  };
+
   wayland.windowManager.hyprland.settings = {
     bind =
       let
@@ -46,8 +66,8 @@ lib.mkIf config.custom.hyprland.enable {
         "$mod_SHIFT, w, exec, brave --incognito"
         "$mod, v, exec, $term nvim"
         "$mod_SHIFT, v, exec, code"
-        "$mod, period, exec, code ${config.home.homeDirectory}/projects/dotfiles"
-        "$mod_SHIFT, period, exec, code ${config.home.homeDirectory}/projects/nixpkgs"
+        ''$mod, period, exec, focusorrun "dotfiles - Visual Studio Code" "code ${config.home.homeDirectory}/projects/dotfiles"''
+        ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - Visual Studio Code" "code ${config.home.homeDirectory}/projects/nixpkgs"''
 
         # exit hyprland
         "$mod_ALT, F4, exit,"

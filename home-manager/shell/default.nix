@@ -23,6 +23,7 @@
     ./tmux.nix
     ./typescript.nix
     ./yazi.nix
+    ./zoxide.nix
   ];
 
   home.packages =
@@ -55,13 +56,6 @@
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
-    };
-
-    zoxide = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      options = [ "--cmd cd" ];
     };
   };
 
