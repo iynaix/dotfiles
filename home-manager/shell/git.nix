@@ -170,6 +170,7 @@ in
 
   custom.persist = {
     home.directories = [
+      ".config/lazygit"
       ".config/systemd" # git maintenance systemd timers
     ];
   };

@@ -36,4 +36,15 @@
     };
     date = "2024-08-05";
   };
+  yt-dlp = {
+    pname = "yt-dlp";
+    version = "2024.08.06";
+    src = fetchFromGitHub {
+      owner = "yt-dlp";
+      repo = "yt-dlp";
+      rev = "2024.08.06";
+      fetchSubmodules = false;
+      sha256 = "sha256-NjsP8XbaLs4RTXDuviN1MEYQ2Xv//P5MPXIym1S4hEw=";
+    };
+  };
 }

@@ -12,3 +12,7 @@ src.git = "https://codeberg.org/explosion-mental/wallust.git"
 # src.manual = "549b30dae0ae9db0bdda780a17d474562378399f"
 src.branch = "dev"
 fetch.git = "https://codeberg.org/explosion-mental/wallust.git"
+
+[yt-dlp]
+src.github_tag = "yt-dlp/yt-dlp"
+fetch.github = "yt-dlp/yt-dlp"

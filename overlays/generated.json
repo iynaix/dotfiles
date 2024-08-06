@@ -57,5 +57,25 @@
             "url": "https://codeberg.org/explosion-mental/wallust.git"
         },
         "version": "2fe6f577cbd16847f32969c7d18c59556fdc9c2b"
+    },
+    "yt-dlp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "yt-dlp",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "yt-dlp",
+            "repo": "yt-dlp",
+            "rev": "2024.08.06",
+            "sha256": "sha256-NjsP8XbaLs4RTXDuviN1MEYQ2Xv//P5MPXIym1S4hEw=",
+            "type": "github"
+        },
+        "version": "2024.08.06"
     }
 }

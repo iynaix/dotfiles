@@ -85,7 +85,6 @@ in
       wallust =
         assert (lib.assertMsg (prev.wallust.version == "3.0.0-beta") "wallust: use wallust 3.0?");
         prev.wallust.overrideAttrs (
-          _:
           sources.wallust
           // {
             # creating an overlay for buildRustPackage overlay
@@ -96,6 +95,22 @@ in
             };
           }
         );
+
+      # hiding waybar is currently broken
+      # https://github.com/Alexays/Waybar/issues/3477
+      waybar =
+        assert (lib.assertMsg (prev.waybar.version == "0.10.4") "waybar: use version from nixpkgs?");
+        prev.waybar.overrideAttrs {
+          src = prev.fetchFromGitHub {
+            owner = "Alexays";
+            repo = "Waybar";
+            rev = "79d3a1a2962cdad1ad02195916790ae1e63122c6";
+            hash = "sha256-SaokQfNpyo+fgpEtIVTesZsmy5B5zzMZ0yygejqt3ug=";
+          };
+        };
+
+      # nsig keeps breaking, so use updated version from github
+      yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
     })
   ];
 }

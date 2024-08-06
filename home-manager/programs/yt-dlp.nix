@@ -1,27 +1,11 @@
 { config, pkgs, ... }:
 let
-  yt-dlp' = pkgs.yt-dlp;
-  # yt-dlp' = pkgs.yt-dlp.overrideAttrs rec {
-  #   version = "2024.8.1";
-  #   # src = pkgs.fetchFromGitHub {
-  #   #   owner = "yt-dlp";
-  #   #   repo = "yt-dlp";
-  #   #   rev = "f0993391e6052ec8f7aacc286609564f226943b9";
-  #   #   hash = "sha256-2/pCHRzCi5m/7gDd1HxFEZUNGZOV0EICPGA4mtAadgg=";
-  #   # };
-  #   src = pkgs.fetchPypi {
-  #     inherit version;
-  #     pname = "yt_dlp";
-  #     hash = "sha256-QxiqUjaUYRVi8BQZyNUmtmKnLfNO+LpFQBazTINmwVg=";
-  #   };
-  # };
-
   mkFormat =
     height: "bestvideo[height<=${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best";
 
   # use positional arguments if provided, otherwise use yt.txt
   mkYtDlpWrapper = args: {
-    runtimeInputs = [ yt-dlp' ];
+    runtimeInputs = [ pkgs.yt-dlp ];
     text = ''
       is_flag() {
           [[ "$1" == -* ]]
@@ -51,7 +35,7 @@ in
   programs = {
     yt-dlp = {
       enable = true;
-      package = yt-dlp';
+      package = pkgs.yt-dlp;
       settings = {
         add-metadata = true;
         format = mkFormat 720;
