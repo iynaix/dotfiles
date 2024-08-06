@@ -1,10 +1,5 @@
 # create a cross shell config
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 let
   proj_dir = "/persist${config.home.homeDirectory}/projects";
 in
@@ -20,7 +15,7 @@ in
       crate = "cargo";
       dots = "cd ${proj_dir}/dotfiles";
       isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
-      man = lib.getExe' pkgs.bat-extras.batman "batman";
+      man = "batman";
       mime = "xdg-mime query filetype";
       mkdir = "mkdir -p";
       mount = "mount --mkdir";

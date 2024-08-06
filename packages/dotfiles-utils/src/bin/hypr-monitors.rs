@@ -62,7 +62,7 @@ fn main() {
         let choices = ["Extend as Primary", "Extend as Secondary", "Mirror"];
 
         let rofi = Rofi::new("rofi-menu-noinput.rasi", &choices);
-        let mut cmd = rofi.prompt();
+        let mut cmd = rofi.command();
         cmd.arg("-lines").arg(choices.len().to_string());
 
         let selected = rofi.run(&mut cmd);

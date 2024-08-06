@@ -20,7 +20,7 @@ impl Rofi {
         }
     }
 
-    pub fn prompt(&self) -> Command {
+    pub fn command(&self) -> Command {
         let mut cmd = Command::new("rofi");
 
         cmd.arg("-dmenu")

@@ -32,7 +32,6 @@ in
           {
             inherit target;
             template = filename;
-            new_engine = true;
           }
         ) cfg.templates;
       };
@@ -40,7 +39,7 @@ in
     //
     # set xdg configFile text and on change for wallust templates
     (lib.mapAttrs' (
-      template: { text, ... }: lib.nameValuePair "wallust/${template}" { inherit text; }
+      template: { text, ... }: lib.nameValuePair "wallust/templates/${template}" { inherit text; }
     ) cfg.templates);
 
   custom.wallust.templates = {

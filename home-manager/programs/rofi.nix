@@ -109,10 +109,7 @@ in
     # generic single column rofi menu
     "rofi-menu.rasi" = {
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
-        listview {
-          columns: 1;
-          lines: 6;
-        }
+        listview { columns: 1; }
         prompt { enabled: false; }
         textbox-prompt-colon { enabled: false; }
       '';
@@ -121,10 +118,7 @@ in
 
     "rofi-menu-noinput.rasi" = {
       text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
-        listview {
-          columns: 1;
-          lines: 6;
-        }
+        listview { columns: 1; }
         * { width: 1000; }
         window { height: 625; }
         mainbox {

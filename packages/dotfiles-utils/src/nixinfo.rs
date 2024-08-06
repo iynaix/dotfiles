@@ -54,8 +54,8 @@ pub fn hyprland_colors<S: ::std::hash::BuildHasher>(
 impl NixInfo {
     /// get nix info from ~/.config before wallust has processed it
     pub fn before() -> Self {
-        json::load("~/.config/wallust/nix.json")
-            .unwrap_or_else(|_| panic!("unable to read ~/.config/wallust/nix.json"))
+        json::load("~/.config/wallust/templates/nix.json")
+            .unwrap_or_else(|_| panic!("unable to read ~/.config/wallust/templates/nix.json"))
     }
 
     /// get nix info from ~/.cache after wallust has processed it
