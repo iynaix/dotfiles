@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
@@ -70,4 +72,19 @@ fn main() {
         .arg(&wallpaper)
         .execute()
         .ok();
+
+    // write wallpaper log
+    if !args.reload {
+        // append
+        let mut wallpaper_log = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(full_path("~/.local/share/wallpapers.log"))
+            .expect("unable to open wallpaper log");
+
+        wallpaper_log
+            // write timestamp followed by wallpaper
+            .write_all(format!("{}|{wallpaper}\n", chrono::Local::now().to_rfc3339()).as_bytes())
+            .expect("failed to write wallpaper log");
+    }
 }

@@ -140,6 +140,7 @@ lib.mkMerge [
       home = {
         directories = [ ".cache/clip" ];
         cache = [ ".local/share/rclip" ];
+        files = [ ".local/share/wallpapers.log" ];
       };
     };
   })
@@ -150,6 +151,17 @@ lib.mkMerge [
 
       shellAliases = {
         current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
+      };
+    };
+
+    custom.shell.packages = {
+      wallpapers-history = {
+        runtimeInputs = with pkgs; [ pqiv ];
+        text = ''
+          tac ${config.xdg.dataHome}/wallpapers.log | \
+          cut -d '|' -f 2 | \
+          xargs pqiv
+        '';
       };
     };
 
@@ -175,6 +187,5 @@ lib.mkMerge [
         };
       };
     };
-
   })
 ]
