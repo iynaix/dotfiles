@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
+set -o nounset
+set -o pipefail
 
 function yesno() {
     local prompt="$1"
@@ -43,16 +45,45 @@ sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 
-while true; do
-    read -rp "Which host to install? (desktop / framework / xps / vm / vm-hyprland) " host
-    case $host in
-        desktop|framework|xps|vm|vm-hyprland ) break;;
-        * ) echo "Invalid host. Please select a valid host.";;
-    esac
-done
+# Get repo to install from
+read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
+repo="${repo:-github:iynaix/dotfiles}"
 
+# qol for iynaix os
+if [[ $repo == "github:iynaix/dotfiles" ]]; then
+    hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
+
+    echo "Available hosts:"
+    for i in "${!hosts[@]}"; do
+        printf "%d) %s\n" $((i+1)) "${hosts[i]}"
+    done
+
+    while true; do
+        echo ""
+        read -rp "Enter the number of the host to install: " selection
+        if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le ${#hosts[@]} ]; then
+            host="${hosts[$selection-1]}"
+            break
+        else
+            echo "Invalid selection. Please enter a number between 1 and ${#hosts[@]}."
+        fi
+    done
+else
+    read -rp "Which host to install?" host
+fi
+
+# Get git rev
 read -rp "Enter git rev for flake (default: main): " git_rev
-echo "Reinstalling NixOS"
-# nixos minimal iso does not have git
-nix-shell -p git nixFlakes --command \
-    "sudo nixos-install --no-root-password --flake \"github:iynaix/dotfiles/${git_rev:-main}#$host\""
+
+echo "Re-installing NixOS"
+# nixos minimal iso does not have git for whatever fucking stupid reason???
+if [[ $repo == "github:iynaix/dotfiles" ]]; then
+    # root password is irrelevant if initialPassword is set in the config
+    nix-shell -p git nixFlakes --command \
+        "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\""
+else
+    nix-shell -p git nixFlakes --command \
+        "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\""
+fi
+
+echo "Intallation complete. It is now safe to reboot."

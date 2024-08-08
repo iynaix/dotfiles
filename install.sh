@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
+set -o nounset
+set -o pipefail
 
 function yesno() {
     local prompt="$1"
@@ -16,8 +18,8 @@ function yesno() {
 }
 
 cat << Introduction
-This script will format the *entire* disk with a 1GB boot partition
-(labelled NIXBOOT), 16GB of swap, then allocating the rest to ZFS.
+The *entire* disk with be formatted with a 1GB boot partition
+(labelled NIXBOOT), 16GB of swap, and the rest allocated to ZFS.
 
 The following ZFS datasets will be created:
     - zroot/root (mounted at / with blank snapshot)
@@ -26,40 +28,61 @@ The following ZFS datasets will be created:
     - zroot/persist (mounted at /persist)
     - zroot/persist/cache (mounted at /persist/cache)
 
+** IMPORTANT **
+This script assumes that the relevant "fileSystems" are declared within the
+NixOS config to be installed. It does not create any hardware configuration
+or modify the NixOS config to be installed in any way. If you have not done
+so, you will need to add the necessary zfs options and filesystems before
+proceeding or your install WILL NOT BOOT.
+
 Introduction
 
 # in a vm, special case
 if [[ -b "/dev/vda" ]]; then
-DISK="/dev/vda"
-
-BOOTDISK="${DISK}3"
-SWAPDISK="${DISK}2"
-ZFSDISK="${DISK}1"
-# normal disk
+    DISK="/dev/vda"
 else
-cat << FormatWarning
-Please enter the disk by id to be formatted *without* the part number.
-(e.g. nvme-eui.0123456789). Your devices are shown below:
+    # listing with the standard lsblk to help with viewing partitions
+    lsblk
 
-FormatWarning
+    # Get the list of disks
+    mapfile -t disks < <(lsblk -ndo NAME,SIZE,MODEL)
 
-ls -al /dev/disk/by-id
+    echo -e "\nAvailable disks:\n"
+    for i in "${!disks[@]}"; do
+        printf "%d) %s\n" $((i+1)) "${disks[i]}"
+    done
 
-echo ""
+    # Get user selection
+    while true; do
+        echo ""
+        read -rp "Enter the number of the disk to install to: " selection
+        if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le ${#disks[@]} ]; then
+            break
+        else
+            echo "Invalid selection. Please try again."
+        fi
+    done
 
-read -r DISKINPUT
+    # Get the selected disk
+    DISK="/dev/$(echo "${disks[$selection-1]}" | awk '{print $1}')"
+fi
 
-DISK="/dev/disk/by-id/${DISKINPUT}"
-
-BOOTDISK="${DISK}-part3"
-SWAPDISK="${DISK}-part2"
-ZFSDISK="${DISK}-part1"
+# if disk contains "nvme", append "p" to partitions
+if [[ "$DISK" =~ "nvme" ]]; then
+    BOOTDISK="${DISK}p3"
+    SWAPDISK="${DISK}p2"
+    ZFSDISK="${DISK}p1"
+else
+    BOOTDISK="${DISK}3"
+    SWAPDISK="${DISK}2"
+    ZFSDISK="${DISK}1"
 fi
 
 echo "Boot Partiton: $BOOTDISK"
 echo "SWAP Partiton: $SWAPDISK"
 echo "ZFS Partiton: $ZFSDISK"
 
+echo ""
 do_format=$(yesno "This irreversibly formats the entire disk. Are you sure?")
 if [[ $do_format == "n" ]]; then
     exit
@@ -67,6 +90,7 @@ fi
 
 echo "Creating partitions"
 sudo blkdiscard -f "$DISK"
+sudo sgdisk --clear"$DISK"
 
 sudo sgdisk -n3:1M:+1G -t3:EF00 "$DISK"
 sudo sgdisk -n2:0:+16G -t2:8200 "$DISK"
@@ -143,18 +167,49 @@ else
 fi
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
-while true; do
-    read -rp "Which host to install? (desktop / framework / xps / vm / vm-hyprland) " host
-    case $host in
-        desktop|framework|xps|vm|vm-hyprland ) break;;
-        * ) echo "Invalid host. Please select a valid host.";;
-    esac
-done
+# Get repo to install from
+read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
+repo="${repo:-github:iynaix/dotfiles}"
+
+# qol for iynaix os
+if [[ $repo == "github:iynaix/dotfiles" ]]; then
+    hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
+
+    echo "Available hosts:"
+    for i in "${!hosts[@]}"; do
+        printf "%d) %s\n" $((i+1)) "${hosts[i]}"
+    done
+
+    while true; do
+        echo ""
+        read -rp "Enter the number of the host to install: " selection
+        if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le ${#hosts[@]} ]; then
+            host="${hosts[$selection-1]}"
+            break
+        else
+            echo "Invalid selection. Please enter a number between 1 and ${#hosts[@]}."
+        fi
+    done
+else
+    read -rp "Which host to install?" host
+fi
 
 read -rp "Enter git rev for flake (default: main): " git_rev
-echo "Installing NixOS"
-# nixos minimal iso does not have git
-nix-shell -p git nixFlakes --command \
-    "sudo nixos-install --no-root-password --flake \"github:iynaix/dotfiles/${git_rev:-main}#$host\""
 
-echo "To setup secrets, run \"install-remote-secrets\" on another host. Otherwise, it is now safe to reboot."
+echo "Installing NixOS"
+# nixos minimal iso does not have git for whatever fucking stupid reason???
+if [[ $repo == "github:iynaix/dotfiles" ]]; then
+    # root password is irrelevant if initialPassword is set in the config
+    nix-shell -p git nixFlakes --command \
+        "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\""
+else
+    nix-shell -p git nixFlakes --command \
+        "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\""
+fi
+
+# only relevant for iynaix os
+if [[ $repo == "github:iynaix/dotfiles" ]]; then
+    echo "To setup secrets, run \"install-remote-secrets\" on the other host."
+fi
+
+echo "Intallation complete. It is now safe to reboot."
