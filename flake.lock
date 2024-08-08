@@ -72,11 +72,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1722937792,
-        "narHash": "sha256-gyudaKQ8oBk13wIRGNWEkoiw6F+RMsZxHXxCsyHtIic=",
+        "lastModified": 1723059106,
+        "narHash": "sha256-Z7XKArxAsguAkYs+Q1fsEQUySBrL+pTLYsSZa1YcUzo=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "bc9926e2cbef29c927b0a959bed5eeba2b55d648",
+        "rev": "d796321cf460cff012768b341af45a1fbad1f8ce",
         "type": "github"
       },
       "original": {
@@ -201,11 +201,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1723003402,
-        "narHash": "sha256-Qn6XeYwKVaaER67saIcqwBs8/XTL9TNJyqeUq8fcWds=",
+        "lastModified": 1723016048,
+        "narHash": "sha256-boo9SgJkWwqC1hfDn1fLiZLBR4wB2uFcJURbj/KGKtE=",
         "ref": "refs/heads/master",
-        "rev": "dd4ae151a71517e3fea8e10801a755c5e024239d",
-        "revCount": 3719,
+        "rev": "6af4b8e298a5c6a32468b433ff9931b83a999ce3",
+        "revCount": 3720,
         "type": "git",
         "url": "https://gitlab.com/rycee/nur-expressions.git?dir=pkgs/firefox-addons"
       },
@@ -523,11 +523,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722936497,
-        "narHash": "sha256-UBst8PkhY0kqTgdKiR8MtTBt4c1XmjJoOV11efjsC/o=",
+        "lastModified": 1723015306,
+        "narHash": "sha256-jQnFEtH20/OsDPpx71ntZzGdRlpXhUENSQCGTjn//NA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a6c743980e23f4cef6c2a377f9ffab506568413a",
+        "rev": "b3d5ea65d88d67d4ec578ed11d4d2d51e3de525e",
         "type": "github"
       },
       "original": {
@@ -990,11 +990,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1722925425,
-        "narHash": "sha256-BXUYNBaG5KF+h8aU7p/4HUxGK1G42Ji/GK+KkC3bntU=",
+        "lastModified": 1722996297,
+        "narHash": "sha256-DgRM/DK9XScK0ArrEwHvWt9i5m92hPm3QuO19UZY/tM=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "e48ce785d9e72c0106319d93e23c5579336ffe33",
+        "rev": "c9a855fe680a62ed25d848d5a8f80cb5479cd0ae",
         "type": "github"
       },
       "original": {

@@ -54,7 +54,23 @@
   programs = {
     bat = {
       enable = true;
-      extraPackages = with pkgs; [ bat-extras.batman ];
+      extraPackages = [
+        (pkgs.bat-extras.batman.overrideAttrs (o: {
+          postInstall =
+            (o.postInstall or "")
+            + ''
+              # bash completion
+              mkdir -p $out/share/bash-completion/completions
+              substitute ${pkgs.bash-completion}/share/bash-completion/completions/man \
+                $out/share/bash-completion/completions/batman \
+                --replace-fail "_comp_cmd_man man" "_comp_cmd_man batman"
+
+              # fish completion
+              mkdir -p $out/share/fish/vendor_completions.d
+              echo "complete batman --wraps man" > $out/share/fish/vendor_completions.d/batman.fish
+            '';
+        }))
+      ];
     };
 
     fzf = {

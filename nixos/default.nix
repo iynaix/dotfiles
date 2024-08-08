@@ -136,11 +136,25 @@
       style = "adwaita-dark";
     };
 
-    # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
-    xdg.terminal-exec = {
-      enable = true;
-      settings = {
-        default = [ "${config.hm.custom.terminal.package.pname}.desktop" ];
+    xdg = {
+      # use mimetypes defined from home-manager
+      mime =
+        let
+          hmMime = config.hm.xdg.mimeApps;
+        in
+        {
+          enable = true;
+          inherit (hmMime) defaultApplications;
+          addedAssociations = hmMime.associations.added;
+          removedAssociations = hmMime.associations.removed;
+        };
+
+      # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
+      terminal-exec = {
+        enable = true;
+        settings = {
+          default = [ "${config.hm.custom.terminal.package.pname}.desktop" ];
+        };
       };
     };
 

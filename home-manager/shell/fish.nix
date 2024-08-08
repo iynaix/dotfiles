@@ -42,9 +42,6 @@
     sponge
   ];
 
-  # do not generate man caches as it slows down build, removes ~/.manpath
-  programs.man.generateCaches = false;
-
   # set as default interactive shell
   programs.kitty.settings.shell = lib.mkForce (lib.getExe pkgs.fish);
   custom.ghostty.config.command = lib.mkForce (lib.getExe pkgs.fish);

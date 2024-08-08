@@ -158,7 +158,9 @@ lib.mkMerge [
       wallpapers-history = {
         runtimeInputs = with pkgs; [ pqiv ];
         text = ''
+          # skip the current wallpaper
           tac ${config.xdg.dataHome}/wallpapers.log | \
+          tail -n +2 | \
           cut -d '|' -f 2 | \
           xargs pqiv
         '';
