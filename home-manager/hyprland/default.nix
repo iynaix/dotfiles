@@ -8,7 +8,7 @@
 }:
 let
   inherit (config.custom) monitors;
-  isVm = host == "vm" || host == "vm-amd";
+  isVm = host == "vm" || host == "vm-hyprland";
 in
 {
   imports = [

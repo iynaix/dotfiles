@@ -82,19 +82,17 @@ in
         }
       );
 
-      wallust =
-        assert (lib.assertMsg (prev.wallust.version == "3.0.0-beta") "wallust: use wallust 3.0?");
-        prev.wallust.overrideAttrs (
-          sources.wallust
-          // {
-            # creating an overlay for buildRustPackage overlay
-            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-            cargoDeps = prev.rustPlatform.importCargoLock {
-              lockFile = sources.wallust.src + "/Cargo.lock";
-              allowBuiltinFetchGit = true;
-            };
-          }
-        );
+      # wallust = prev.wallust.overrideAttrs (
+      #   sources.wallust
+      #   // {
+      #     # creating an overlay for buildRustPackage overlay
+      #     # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+      #     cargoDeps = prev.rustPlatform.importCargoLock {
+      #       lockFile = sources.wallust.src + "/Cargo.lock";
+      #       allowBuiltinFetchGit = true;
+      #     };
+      #   }
+      # );
 
       # hiding waybar is currently broken
       # https://github.com/Alexays/Waybar/issues/3477

@@ -44,9 +44,9 @@ sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 
 while true; do
-    read -rp "Which host to install? (desktop / framework / xps / vm / vm-amd) " host
+    read -rp "Which host to install? (desktop / framework / xps / vm / vm-hyprland) " host
     case $host in
-        desktop|framework|xps|vm|vm-amd ) break;;
+        desktop|framework|xps|vm|vm-hyprland ) break;;
         * ) echo "Invalid host. Please select a valid host.";;
     esac
 done

@@ -25,6 +25,7 @@ let
         inherit host user;
         isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
+        isVm = host == "vm" || host == "vm-hyprland";
       };
 
       modules = [
@@ -72,5 +73,5 @@ in
   framework = mkNixosConfiguration "framework" { };
   xps = mkNixosConfiguration "xps" { };
   vm = mkNixosConfiguration "vm" { };
-  vm-amd = mkNixosConfiguration "vm-amd" { };
+  vm-hyprland = mkNixosConfiguration "vm-hyprland" { };
 }

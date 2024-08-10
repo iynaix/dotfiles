@@ -1,13 +1,9 @@
 {
   config,
-  lib,
+  isVm,
   pkgs,
   ...
 }:
-let
-  cfg = config.custom.zfs;
-  isVm = lib.elem "virtio_blk" config.boot.initrd.availableKernelModules;
-in
 # NOTE: zfs datasets are created via install.sh
 {
   boot = {
@@ -15,14 +11,17 @@ in
     supportedFilesystems.zfs = true;
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
     zfs = {
-      # use by-id for intel mobo when not in a vm
       devNodes =
-        if !isVm && config.hardware.cpu.intel.updateMicrocode then
+        if isVm then
+          "/dev/disk/by-partuuid"
+        # use by-id for intel mobo when not in a vm
+        else if config.hardware.cpu.intel.updateMicrocode then
           "/dev/disk/by-id"
         else
           "/dev/disk/by-partuuid";
+
       package = pkgs.zfs_unstable;
-      requestEncryptionCredentials = cfg.encryption;
+      requestEncryptionCredentials = config.custom.zfs.encryption;
     };
   };
 

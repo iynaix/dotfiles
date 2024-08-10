@@ -12,7 +12,7 @@ lib.mkIf config.hm.custom.hyprland.enable {
     );
     true;
 
-  environment.sessionVariables = lib.mkIf (host == "vm" || host == "vm-amd") {
+  environment.sessionVariables = lib.mkIf (host == "vm" || host == "vm-hyprland") {
     WLR_RENDERER_ALLOW_SOFTWARE = "1";
   };
 
