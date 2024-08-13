@@ -5,20 +5,26 @@
   lib,
   ...
 }:
-lib.mkIf config.custom.vm.enable {
-  virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true;
-  # https://discourse.nixos.org/t/virt-manager-cannot-find-virtiofsd/26752/2
-  # add virtiofsd to filesystem xml
-  # <binary path="/run/current-system/sw/bin/virtiofsd"/>
-  environment.systemPackages = with pkgs; [ virtiofsd ];
+{
+  options.custom = with lib; {
+    virtualization.enable = mkEnableOption "VM support";
+  };
 
-  users.users.${user}.extraGroups = [ "libvirtd" ];
+  config = lib.mkIf config.custom.virtualization.enable {
+    virtualisation.libvirtd.enable = true;
+    programs.virt-manager.enable = true;
+    # https://discourse.nixos.org/t/virt-manager-cannot-find-virtiofsd/26752/2
+    # add virtiofsd to filesystem xml
+    # <binary path="/run/current-system/sw/bin/virtiofsd"/>
+    environment.systemPackages = with pkgs; [ virtiofsd ];
 
-  # store VMs on zroot/cache
-  custom.persist = {
-    root = {
-      cache = [ "/var/lib/libvirt" ];
+    users.users.${user}.extraGroups = [ "libvirtd" ];
+
+    # store VMs on zroot/cache
+    custom.persist = {
+      root = {
+        cache = [ "/var/lib/libvirt" ];
+      };
     };
   };
 }

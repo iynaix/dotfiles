@@ -4,17 +4,23 @@
   pkgs,
   ...
 }:
-lib.mkIf config.custom.qmk.enable {
-  hardware.keyboard.qmk.enable = true;
+{
+  options.custom = with lib; {
+    qmk.enable = mkEnableOption "QMK";
+  };
 
-  # required for vial to work
-  environment.systemPackages = with pkgs; [
-    vial
-    via
-  ];
+  config = lib.mkIf config.custom.qmk.enable {
+    hardware.keyboard.qmk.enable = true;
 
-  services.udev.extraRules = ''
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl
-  '';
+    # required for vial to work
+    environment.systemPackages = with pkgs; [
+      vial
+      via
+    ];
+
+    services.udev.extraRules = ''
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl
+    '';
+  };
 }

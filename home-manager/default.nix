@@ -9,69 +9,91 @@
 {
   imports = [
     ./hyprland
+    ./impermanence.nix
     ./programs
     ./shell
   ];
 
-  # setup fonts for other distros, run "fc-cache -f" to refresh fonts
-  fonts.fontconfig.enable = true;
+  options.custom = with lib; {
+    fonts = {
+      regular = mkOption {
+        type = types.str;
+        default = "Geist Regular";
+        description = "The font to use for regular text";
+      };
+      monospace = mkOption {
+        type = types.str;
+        default = "JetBrainsMono Nerd Font";
+        description = "The font to use for monospace text";
+      };
+      packages = mkOption {
+        type = types.listOf types.package;
+        description = "The packages to install for the fonts";
+      };
+    };
+  };
 
-  home = {
-    username = user;
-    homeDirectory = "/home/${user}";
-    # do not change this value
-    stateVersion = "23.05";
+  config = {
+    # setup fonts for other distros, run "fc-cache -f" to refresh fonts
+    fonts.fontconfig.enable = true;
 
-    sessionVariables = {
-      __IS_NIXOS = if isNixOS then "1" else "0";
-      NIXPKGS_ALLOW_UNFREE = "1";
+    home = {
+      username = user;
+      homeDirectory = "/home/${user}";
+      # do not change this value
+      stateVersion = "23.05";
+
+      sessionVariables = {
+        __IS_NIXOS = if isNixOS then "1" else "0";
+        NIXPKGS_ALLOW_UNFREE = "1";
+      };
+
+      packages =
+        with pkgs;
+        [
+          curl
+          gzip
+          killall
+          rar # includes unrar
+          ripgrep
+          libreoffice
+          trash-cli
+          xdg-utils
+          # misc utilities for dotfiles written in rust
+          custom.dotfiles-utils
+        ]
+        ++ (lib.optional config.custom.helix.enable helix)
+        # home-manager executable only on nixos
+        ++ (lib.optional isNixOS home-manager)
+        # handle fonts
+        ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
     };
 
-    packages =
-      with pkgs;
-      [
-        curl
-        gzip
-        killall
-        rar # includes unrar
-        ripgrep
-        libreoffice
-        trash-cli
-        xdg-utils
-        # misc utilities for dotfiles written in rust
-        custom.dotfiles-utils
-      ]
-      ++ (lib.optional config.custom.helix.enable helix)
-      # home-manager executable only on nixos
-      ++ (lib.optional isNixOS home-manager)
-      # handle fonts
-      ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
-  };
+    # Let Home Manager install and manage itself.
+    programs.home-manager.enable = true;
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+    xdg = {
+      enable = true;
+      userDirs.enable = true;
+      mimeApps.enable = true;
+    };
 
-  xdg = {
-    enable = true;
-    userDirs.enable = true;
-    mimeApps.enable = true;
-  };
-
-  custom = {
-    fonts.packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      custom.rofi-themes
-    ];
-
-    persist = {
-      home.directories = [
-        "Desktop"
-        "Documents"
-        "Pictures"
+    custom = {
+      fonts.packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
+        (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+        custom.rofi-themes
       ];
+
+      persist = {
+        home.directories = [
+          "Desktop"
+          "Documents"
+          "Pictures"
+        ];
+      };
     };
   };
 }

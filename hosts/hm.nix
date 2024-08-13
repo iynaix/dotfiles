@@ -31,7 +31,6 @@ let
         inputs.nixvim.homeManagerModules.nixvim
         ./${host}/home.nix # host specific home-manager configuration
         ../home-manager
-        ../modules/home-manager
         ../overlays
       ];
     };

@@ -22,6 +22,61 @@ in
     ./waybar.nix
   ];
 
+  options.custom = with lib; {
+    hyprland = {
+      enable = mkEnableOption "hyprland" // {
+        default = true;
+      };
+      plugin = mkOption {
+        type = types.nullOr (types.enum [ "hyprnstack" ]);
+        description = "Plugin to enable for hyprland";
+        default = null;
+      };
+    };
+
+    monitors = mkOption {
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            name = mkOption {
+              type = str;
+              description = "The name of the display, e.g. eDP-1";
+            };
+            width = mkOption {
+              type = int;
+              description = "Pixel width of the display";
+            };
+            height = mkOption {
+              type = int;
+              description = "Pixel width of the display";
+            };
+            refreshRate = mkOption {
+              type = int;
+              default = 60;
+              description = "Refresh rate of the display";
+            };
+            position = mkOption {
+              type = str;
+              default = "0x0";
+              description = "Position of the display, e.g. 0x0";
+            };
+            vertical = mkOption {
+              type = bool;
+              description = "Is the display vertical?";
+              default = false;
+            };
+            workspaces = mkOption {
+              type = listOf int;
+              description = "List of workspace numbers";
+            };
+          };
+        });
+      default = [ ];
+      description = "Config for monitors";
+    };
+  };
+
   config = lib.mkIf config.custom.hyprland.enable {
     home = {
       packages = with pkgs; [

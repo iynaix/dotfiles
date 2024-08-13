@@ -22,6 +22,24 @@ lib.extend (
           )
         ) monitors;
 
+      # produces an attrset shell package with completions from either a string / writeShellApplication attrset / package
+      mkShellPackages =
+        shellPkgs:
+        lib.mapAttrs (
+          name: value:
+          if lib.isString value then
+            pkgs.writeShellApplication {
+              inherit name;
+              text = value;
+            }
+          # packages
+          else if lib.isDerivation value then
+            value
+          # attrs to pass to writeShellApplication
+          else
+            (pkgs.callPackage ./packages/write-shell-application-completions { }) (value // { inherit name; })
+        ) shellPkgs;
+
       # produces ini format strings, takes a single argument of the object
       toQuotedINI = libprev.generators.toINI {
         mkKeyValue = libprev.flip libprev.generators.mkKeyValueDefault "=" {

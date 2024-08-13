@@ -1,8 +1,14 @@
 { config, lib, ... }:
-lib.mkIf config.custom.obs-studio.enable {
-  programs.obs-studio.enable = true;
+{
+  options.custom = with lib; {
+    obs-studio.enable = mkEnableOption "obs-studio";
+  };
 
-  custom.persist = {
-    home.directories = [ ".config/obs-studio" ];
+  config = lib.mkIf config.custom.obs-studio.enable {
+    programs.obs-studio.enable = true;
+
+    custom.persist = {
+      home.directories = [ ".config/obs-studio" ];
+    };
   };
 }

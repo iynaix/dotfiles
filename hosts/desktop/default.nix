@@ -19,7 +19,7 @@
     # plasma.enable = true;
     syncoid.enable = true;
     vercel.enable = true;
-    vm.enable = true;
+    virtualization.enable = true;
   };
 
   networking.hostId = "89eaa833"; # required for zfs

@@ -32,7 +32,6 @@ let
         ./${host} # host specific configuration
         ./${host}/hardware.nix # host specific hardware configuration
         ../nixos
-        ../modules/nixos
         ../overlays
         inputs.home-manager.nixosModules.home-manager
         {
@@ -52,7 +51,6 @@ let
                 inputs.nixvim.homeManagerModules.nixvim
                 ./${host}/home.nix # host specific home-manager configuration
                 ../home-manager
-                ../modules/home-manager
               ];
             };
           };

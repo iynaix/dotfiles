@@ -1,6 +1,6 @@
 _: {
   custom = {
-    vm.enable = true;
+    virtualization.enable = true;
   };
 
   networking.hostId = "abb4d116"; # required for zfs
