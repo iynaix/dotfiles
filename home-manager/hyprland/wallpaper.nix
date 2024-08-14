@@ -146,7 +146,6 @@ in
         home = {
           directories = [ ".cache/clip" ];
           cache = [ ".local/share/rclip" ];
-          files = [ ".local/share/wallpapers.log" ];
         };
       };
     })
@@ -165,9 +164,8 @@ in
           runtimeInputs = with pkgs; [ pqiv ];
           text = ''
             # skip the current wallpaper
-            tac ${config.xdg.dataHome}/wallpapers.log | \
+            find /persist${config.home.homeDirectory}/Pictures/wallpaper_history -type l | \
             tail -n +2 | \
-            cut -d '|' -f 2 | \
             xargs pqiv
           '';
         };

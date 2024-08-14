@@ -197,6 +197,11 @@ in
           fi
         '';
       };
+      # test all packages that depend on this change, used for nixpkgs and copied from the PR template
+      nb-dependents = {
+        runtimeInputs = with pkgs; [ nixpkgs-review ];
+        text = "nixpkgs-review rev HEAD";
+      };
       # build and run local package if possible, otherwise run from nixpkgs
       nr = ''
         if [ "$#" -eq 0 ]; then

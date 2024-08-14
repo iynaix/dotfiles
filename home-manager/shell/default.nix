@@ -105,15 +105,17 @@
               postInstall =
                 (o.postInstall or "")
                 + ''
-                  # bash completion
                   mkdir -p $out/share/bash-completion/completions
-                  substitute ${pkgs.bash-completion}/share/bash-completion/completions/man \
-                    $out/share/bash-completion/completions/batman \
-                    --replace-fail "_comp_cmd_man man" "_comp_cmd_man batman"
+                  echo 'complete -F _comp_cmd_man batman' > $out/share/bash-completion/completions/batman
 
-                  # fish completion
                   mkdir -p $out/share/fish/vendor_completions.d
-                  echo "complete batman --wraps man" > $out/share/fish/vendor_completions.d/batman.fish
+                  echo 'complete batman --wraps man' > $out/share/fish/vendor_completions.d/batman.fish
+
+                  mkdir -p $out/share/zsh/site-functions
+                  cat << EOF > $out/share/zsh/site-functions/_batman
+                  #compdef batman
+                  _man "$@"
+                  EOF
                 '';
             }))
           ];

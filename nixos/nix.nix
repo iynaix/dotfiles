@@ -134,7 +134,7 @@ in
     let
       nixPath = [
         "nixpkgs=flake:nixpkgs"
-        "/nix/var/nix/profiles/per-user/root/channels"
+        # "/nix/var/nix/profiles/per-user/root/channels"
       ];
     in
     {
