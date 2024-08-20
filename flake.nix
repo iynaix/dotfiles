@@ -12,6 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+
     devenv.url = "github:cachix/devenv";
 
     impermanence.url = "github:nix-community/impermanence";

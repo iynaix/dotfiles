@@ -4,8 +4,6 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use dotfiles_utils::full_path;
-
 fn walk_persist(dir: &Path, persist_paths: &Vec<String>) -> std::io::Result<()> {
     for entry in fs::read_dir(dir)? {
         let path = entry?.path();
@@ -36,8 +34,12 @@ fn walk_persist(dir: &Path, persist_paths: &Vec<String>) -> std::io::Result<()> 
 }
 
 fn main() {
-    let fp = fs::File::open(full_path("~/.cache/impermanence.txt"))
-        .expect("could not read impermanence.txt, generate it with nix?");
+    let fp = fs::File::open(
+        dirs::data_local_dir()
+            .expect("unable to get XDG_DATA_HOME")
+            .join("impermanence.txt"),
+    )
+    .expect("could not read impermanence.txt, generate it with nix?");
     let persist_paths: Vec<String> = BufReader::new(fp).lines().map_while(Result::ok).collect();
 
     walk_persist(&PathBuf::from("/persist"), &persist_paths).unwrap_or_else(|e| {

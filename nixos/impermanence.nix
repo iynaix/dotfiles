@@ -97,6 +97,7 @@ in
         files = [ "/etc/machine-id" ] ++ cfg.root.files;
         directories = [
           "/var/log" # systemd journal is stored in /var/log/journal
+          "/var/lib/nixos" # for persisting user uids and gids
         ] ++ cfg.root.directories;
 
         users.${user} = {

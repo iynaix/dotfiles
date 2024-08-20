@@ -82,5 +82,18 @@ fn main() {
 
         std::os::unix::fs::symlink(wallpaper, target)
             .expect("unable to create wallpaper history symlink");
+
+        // remove broken symlinks for deleted wallpapers
+        for entry in std::fs::read_dir(wallpaper_history)
+            .expect("failed to read wallpaper_history directory")
+        {
+            let path = entry
+                .expect("failed to read wallpaper_history directory entry")
+                .path();
+
+            if path.is_symlink() && !path.exists() {
+                std::fs::remove_file(path).expect("failed to remove broken symlink");
+            }
+        }
     }
 }

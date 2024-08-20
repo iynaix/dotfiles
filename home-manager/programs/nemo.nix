@@ -21,6 +21,7 @@
       "application/vnd.rar" = "org.gnome.FileRoller.desktop";
       "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
       "application/x-bzip2-compressed-tar" = "org.gnome.FileRoller.desktop";
+      "application/x-tar" = "org.gnome.FileRoller.desktop";
     };
 
     configFile =

@@ -29,25 +29,50 @@
     };
   };
 
-  custom.shell.packages = {
-    # cargo will be provided via the nix-shell
-    crb = ''
-      # if no arguments
-      if [ $# -eq 0 ]; then
-        cargo run --bin "$(basename "$(pwd)")";
-      else
-        cargo run --bin "$1" -- "''${@:2}";
-      fi;
-    '';
-    crrb = ''
-      # if no arguments
-      if [ $# -eq 0 ]; then
-        cargo run --release --bin "$(basename "$(pwd)")";
-      else
-        cargo run --release --bin "$1" -- "''${@:2}";
-      fi;
-    '';
-  };
+  custom.shell.packages =
+    let
+      cargoBinCompletions = binaryName: {
+        fishCompletion = ''
+          function _cargo_bins
+            cargo run --bin 2>&1 | string replace -rf '^\s+' ""
+          end
+
+          complete -c ${binaryName} -f -a '(_cargo_bins)'
+        '';
+        bashCompletion = ''
+          _cargo_bins() {
+            local bins
+            bins=$(cargo run --bin 2>&1 | sed 's/^\s\+//')
+            COMPREPLY=("''${bins}")
+          }
+
+          complete -F _cargo_bins ${binaryName}
+        '';
+      };
+    in
+    {
+      # cargo will be provided via the nix-shell
+      crb = {
+        text = ''
+          # if no arguments
+          if [ $# -eq 0 ]; then
+            cargo run --bin "$(basename "$(pwd)")";
+          else
+            cargo run --bin "$1" -- "''${@:2}";
+          fi;
+        '';
+      } // cargoBinCompletions "crb";
+      crrb = {
+        text = ''
+          # if no arguments
+          if [ $# -eq 0 ]; then
+            cargo run --release --bin "$(basename "$(pwd)")";
+          else
+            cargo run --release --bin "$1" -- "''${@:2}";
+          fi;
+        '';
+      } // cargoBinCompletions "crrb";
+    };
 
   custom.persist = {
     home = {

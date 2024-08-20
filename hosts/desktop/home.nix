@@ -42,7 +42,7 @@ _: {
     deadbeef.enable = true;
     ghostty.enable = false;
     hyprland = {
-      plugin = "hyprnstack";
+      # plugin = "hyprnstack";
       lock = false;
       qtile = false;
     };
