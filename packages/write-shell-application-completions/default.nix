@@ -3,8 +3,7 @@
   symlinkJoin,
   writeShellApplication,
   writeTextFile,
-}:
-{
+  # custom args
   name,
   bashCompletion ? null,
   zshCompletion ? null,
@@ -12,13 +11,8 @@
   ...
 }@shellArgs:
 let
-  app = writeShellApplication (
-    lib.removeAttrs shellArgs [
-      "bashCompletion"
-      "zshCompletion"
-      "fishCompletion"
-    ]
-  );
+  # get the needed arguments for writeShellApplication
+  app = writeShellApplication (lib.intersectAttrs (lib.functionArgs writeShellApplication) shellArgs);
   completions =
     lib.optional (bashCompletion != null) (writeTextFile {
       name = "${name}.bash";
