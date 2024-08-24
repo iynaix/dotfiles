@@ -37,20 +37,22 @@ _: {
       };
       conform-nvim = {
         enable = true;
-        formatOnSave = {
-          lspFallback = true;
-          timeoutMs = 500;
-        };
-        formattersByFt = {
-          python = [ "black" ];
-          # lua = [ "stylua" ];
-          nix = [ "nixfmt" ];
-          markdown = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
+        settings = {
+          format_on_save = {
+            lspFallback = true;
+            timeoutMs = 500;
+          };
+          formatters_by_ft = {
+            python = [ "black" ];
+            # lua = [ "stylua" ];
+            nix = [ "nixfmt" ];
+            markdown = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+          };
         };
       };
     };

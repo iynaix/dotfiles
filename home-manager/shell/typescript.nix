@@ -10,43 +10,45 @@ _: {
       };
 
       conform-nvim = {
-        formattersByFt = {
-          html = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          css = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          javascript = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          javascriptreact = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          typescript = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
-          typescriptreact = [
-            [
-              "prettierd"
-              "prettier"
-            ]
-          ];
+        settings = {
+          formatters_by_ft = {
+            html = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+            css = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+            javascript = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+            javascriptreact = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+            typescript = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+            typescriptreact = [
+              [
+                "prettierd"
+                "prettier"
+              ]
+            ];
+          };
         };
       };
     };

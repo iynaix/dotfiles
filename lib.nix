@@ -6,7 +6,7 @@ lib.extend (
       # saner api for iterating through workspaces in a flat list
       # takes a function that accepts the following attrset {workspace, key, monitor}
       mapWorkspaces =
-        workspaceFn: monitors:
+        workspaceFn:
         libprev.concatMap (
           monitor:
           libprev.forEach monitor.workspaces (
@@ -20,25 +20,23 @@ lib.extend (
             in
             workspaceFn workspaceArg
           )
-        ) monitors;
+        );
 
       # produces an attrset shell package with completions from either a string / writeShellApplication attrset / package
-      mkShellPackages =
-        shellPkgs:
-        lib.mapAttrs (
-          name: value:
-          if lib.isString value then
-            pkgs.writeShellApplication {
-              inherit name;
-              text = value;
-            }
-          # packages
-          else if lib.isDerivation value then
-            value
-          # attrs to pass to writeShellApplication
-          else
-            pkgs.callPackage ./packages/write-shell-application-completions (value // { inherit name; })
-        ) shellPkgs;
+      mkShellPackages = lib.mapAttrs (
+        name: value:
+        if lib.isString value then
+          pkgs.writeShellApplication {
+            inherit name;
+            text = value;
+          }
+        # packages
+        else if lib.isDerivation value then
+          value
+        # attrs to pass to writeShellApplication
+        else
+          pkgs.callPackage ./packages/write-shell-application-completions (value // { inherit name; })
+      );
 
       # produces ini format strings, takes a single argument of the object
       toQuotedINI = libprev.generators.toINI {

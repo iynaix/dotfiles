@@ -50,9 +50,6 @@ in
   home = {
     shellAliases = {
       yt = "yt-dlp";
-      # ytaudio = "yt-dlp --audio-format mp3 --extract-audio";
-      # ytsub = "yt-dlp --write-auto-sub --sub-lang='en,eng' --convert-subs srt";
-      # ytplaylist = "yt-dlp --output '%(playlist_index)d - %(title)s.%(ext)s'";
     };
   };
 
@@ -61,6 +58,7 @@ in
     ytdl = mkYtDlpWrapper "--no-cache";
     ytaudio = mkYtDlpWrapper "--audio-format mp3 --extract-audio";
     ytsub = mkYtDlpWrapper "--write-auto-sub --sub-lang='en,eng' --convert-subs srt";
+    ytsubonly = mkYtDlpWrapper "--skip-download --write-subs --write-auto-sub --sub-lang='en,eng' --convert-subs srt ";
     ytplaylist = mkYtDlpWrapper "--output '%(playlist_index)d - %(title)s.%(ext)s'";
   };
 }

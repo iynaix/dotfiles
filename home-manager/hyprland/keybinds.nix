@@ -116,7 +116,8 @@ in
 
           # fullscreen
           "$mod, f, fullscreen, 0"
-          "$mod_SHIFT, f, fullscreenstate, -1 2"
+          "$mod_SHIFT, f, fakefullscreen"
+          # "$mod_SHIFT, f, fullscreenstate, -1 2" # hyprland 0.42.0
 
           # floating
           "$mod, g, togglefloating"
