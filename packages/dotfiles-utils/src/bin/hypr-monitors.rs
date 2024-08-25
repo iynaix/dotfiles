@@ -17,7 +17,6 @@ fn reload_wallpaper() {
 fn mirror_monitors(new_mon: &str) {
     Monitor::mirror_to(new_mon);
     reload_wallpaper();
-    std::process::exit(0);
 }
 
 fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
@@ -82,6 +81,7 @@ fn main() {
     // --mirror
     if let Some(new_mon) = args.mirror {
         mirror_monitors(&new_mon);
+        std::process::exit(0);
     }
 
     // distribute workspaces per monitor

@@ -126,6 +126,12 @@ lib.mkMerge [
 
         # vimux
       };
+
+      extraConfigVim = ''
+        let g:lightline = {
+            \ 'enable': {'tabline': 0 }
+            \ }
+      '';
     };
   }
 

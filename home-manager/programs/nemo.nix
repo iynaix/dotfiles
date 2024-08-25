@@ -40,6 +40,7 @@
       "file://${homeDir}/Downloads"
       "file://${homeDir}/projects"
       "file://${homeDir}/projects/dotfiles"
+      "file://${homeDir}/projects/nixpkgs"
       "file://${homeDir}/projects/coinfc Work"
       "file://${homeDir}/Pictures/Wallpapers"
       "file:///persist Persist"

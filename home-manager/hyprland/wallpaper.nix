@@ -89,9 +89,13 @@ in
             czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
           '';
         };
-        # download wallpapers from pixiv
-        wallpapers-pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
+        # fetch wallpapers from pixiv for user
+        pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
           cargo run --release --bin wall-dl -- "$@"
+        '';
+        # fetch latest followed wallpapers from pixiv
+        pixiv-latest = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
+          cargo run --release --bin latest -- "$@"
         '';
       };
 

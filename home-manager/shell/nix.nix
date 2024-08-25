@@ -281,25 +281,25 @@ in
         '';
       };
       # what depends on the given package in the current nixos install?
-      nix-depends = {
-        runtimeInputs = with pkgs; [ custom.shell.npath ];
-        text = ''
-          if [ "$#" -eq 0 ]; then
-              echo "package not found."
-              exit 1
-          fi
+      ndepends = ''
+        if [ "$#" -eq 0 ]; then
+            echo "No package(s) provided."
+            exit 1
+        fi
 
-          parent="/run/current-system"
-          child="$(npath "$1")"
+        parent="/run/current-system"
+        child="\$(nix eval --raw \"nixpkgs#$1.outPath\")"
 
-          if [ "$#" -eq 2 ]; then
-            parent="$(npath "$1")"
-            child="$(npath "$2")"
-          fi
+        if [ "$#" -eq 2 ]; then
+          parent="\$(nix eval --raw \"nixpkgs#$1.outPath\")"
+          child="\$(nix eval --raw \"nixpkgs#$2.outPath\")"
+        fi
 
-          nix why-depends "$parent" "$child"
-        '';
-      };
+        # echo then run the command
+        cmd="nix why-depends \"$parent\" \"$child\""
+        echo "$cmd" >&2
+        eval "$cmd"
+      '';
       json2nix = {
         runtimeInputs = with pkgs; [
           hjson

@@ -129,9 +129,30 @@ in
       git checkout "$1"
     '';
     # delete a remote branch
-    grd = ''
-      git branch -D "$1" || git push origin --delete "$1"
-    '';
+    grd = {
+      text = ''
+        git branch -D "$1" || true
+        git push origin --delete "$1"
+      '';
+      fishCompletion = ''
+        function __git_remote_branches
+          command git branch --no-color -r 2>/dev/null | \
+            sed -e 's/^..//' -e 's/^origin\///' | \
+            grep -vE 'HEAD|^main$|^master$'
+        end
+
+        complete -c grd -f -a '(__git_remote_branches)'
+      '';
+      bashCompletion = ''
+        __git_remote_branches() {
+            git branch --no-color -r 2>/dev/null | \
+            sed -e 's/^..//' -e 's/^origin\///' | \
+            grep -vE 'HEAD|^main$|^master$'
+        }
+
+        complete -F __git_remote_branches grd
+      '';
+    };
     # searches git history, can never remember this stupid thing
     # 2nd argument is target path and subsequent arguments are passed through
     gsearch = ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
