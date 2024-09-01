@@ -26,7 +26,7 @@ _: {
   custom.persist = {
     home = {
       directories = [ ".local/share/direnv" ];
-      cache = [ ".cache/pip" ];
+      cache.directories = [ ".cache/pip" ];
     };
   };
 }

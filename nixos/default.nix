@@ -58,6 +58,11 @@
         '';
       };
     };
+    symlinks = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Symlinks to create in the format { dest = src;}";
+    };
   };
 
   config =
@@ -141,10 +146,15 @@
         })
       ];
 
-      # create symlink to dotfiles from default location
-      systemd.tmpfiles.rules = [
-        "L+ /etc/nixos - - - - /persist${config.hm.home.homeDirectory}/projects/dotfiles"
-      ];
+      # create symlink to dotfiles from default /etc/nixos
+      custom.symlinks = {
+        "/etc/nixos" = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
+      };
+
+      # create symlinks
+      systemd.tmpfiles.rules = lib.mapAttrsToList (
+        dest: src: "L+ ${dest} - - - - ${src}"
+      ) config.custom.symlinks;
 
       # setup fonts
       fonts = {

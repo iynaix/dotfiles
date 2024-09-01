@@ -23,10 +23,17 @@ in
           default = [ ];
           description = "Files to persist in root filesystem";
         };
-        cache = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "Directories to persist, but not to snapshot";
+        cache = {
+          directories = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = "Directories to persist, but not to snapshot";
+          };
+          files = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = "Files to persist, but not to snapshot";
+          };
         };
       };
       home = {
@@ -112,10 +119,10 @@ in
 
       "/persist/cache" = {
         hideMounts = true;
-        directories = cfg.root.cache;
+        inherit (cfg.root.cache) directories files;
 
         users.${user} = {
-          directories = hmPersistCfg.home.cache;
+          inherit (hmPersistCfg.home.cache) directories files;
         };
       };
     };

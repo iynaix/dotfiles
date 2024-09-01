@@ -52,6 +52,7 @@ in
         mime = "xdg-mime query filetype";
         mkdir = "mkdir -p";
         mount = "mount --mkdir";
+        np = "cd ${proj_dir}/nixpkgs";
         open = "xdg-open";
         py = "python";
         coinfc = "pj coinfc";

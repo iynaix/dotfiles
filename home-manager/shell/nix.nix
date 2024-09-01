@@ -189,7 +189,7 @@ in
               if nix eval ".#$TARGET.name" &>/dev/null; then
                 nom build ".#$TARGET"
               else
-                nom build ".#nixoConfigurations.${host}.pkgs.$TARGET"
+                nom build ".#nixosConfigurations.${host}.pkgs.$TARGET"
               fi
           # nix repo, build package within flake
           else
@@ -344,7 +344,7 @@ in
 
   custom.persist = {
     home = {
-      cache = [ ".cache/nix-index" ];
+      cache.directories = [ ".cache/nix-index" ];
     };
   };
 }

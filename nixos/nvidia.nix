@@ -24,11 +24,16 @@
     hardware = {
       nvidia = {
         modesetting.enable = true;
-        powerManagement.enable = false;
+        powerManagement.enable = true;
+        open = false;
         nvidiaSettings = false;
         package = config.boot.kernelPackages.nvidiaPackages.beta;
       };
-      graphics.extraPackages = [ pkgs.vaapiVdpau ];
+      graphics.extraPackages = with pkgs; [
+        vaapiVdpau
+        # nvidia-vaapi-driver
+        # libvdpau-va-gl
+      ];
     };
 
     environment.sessionVariables =

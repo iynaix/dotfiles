@@ -72,11 +72,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1724763216,
-        "narHash": "sha256-oW2bwCrJpIzibCNK6zfIDaIQw765yMAuMSG2gyZfGv0=",
+        "lastModified": 1725121898,
+        "narHash": "sha256-UZVuDnDCS5EgFNLtO9u0Q8+ZRql7t5fMbxd54VMtLdY=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "1e4ef61205b9aa20fe04bf1c468b6a316281c4f1",
+        "rev": "3ec083c9d58c9007d2be2a6145b578c67322d575",
         "type": "github"
       },
       "original": {
@@ -201,11 +201,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1724817789,
-        "narHash": "sha256-520wi6QMLdssqqdsTdSfVZRgjoBS4tZI0wi8Jll9juE=",
+        "lastModified": 1725077025,
+        "narHash": "sha256-KlOUcs9b/wbQP/jGAdIpqb3p51ubzdAqzAxPIGYDNHQ=",
         "ref": "refs/heads/master",
-        "rev": "4617ae75fdf11f6738ea2504db130f3add9c24cd",
-        "revCount": 3744,
+        "rev": "519c16e0646b0e5082c53f60363b381b1b018f29",
+        "revCount": 3750,
         "type": "git",
         "url": "https://gitlab.com/rycee/nur-expressions.git?dir=pkgs/firefox-addons"
       },
@@ -436,11 +436,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1724440431,
-        "narHash": "sha256-9etXEOUtzeMgqg1u0wp+EdwG7RpmrAZ2yX516bMj2aE=",
+        "lastModified": 1724857454,
+        "narHash": "sha256-Qyl9Q4QMTLZnnBb/8OuQ9LSkzWjBU1T5l5zIzTxkkhk=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "c8a54057aae480c56e28ef3e14e4960628ac495b",
+        "rev": "4509ca64f1084e73bc7a721b20c669a8d4c5ebe6",
         "type": "github"
       },
       "original": {
@@ -913,11 +913,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1724575805,
-        "narHash": "sha256-OB/kEL3GAhUZmUfkbPfsPhKs0pRqJKs0EEBiLfyKZw8=",
+        "lastModified": 1724878143,
+        "narHash": "sha256-UjpKo92iZ25M05kgSOw/Ti6VZwpgdlOa73zHj8OcaDk=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "9fc19be21f0807d6be092d70bf0b1de0c00ac895",
+        "rev": "95c3dfe6ef2e96ddc1ccdd7194e3cda02ca9a8ef",
         "type": "github"
       },
       "original": {
@@ -1024,11 +1024,11 @@
     },
     "nixpkgs-stable_2": {
       "locked": {
-        "lastModified": 1724531977,
-        "narHash": "sha256-XROVLf9ti4rrNCFLr+DmXRZtPjCQTW4cYy59owTEmxk=",
+        "lastModified": 1725001927,
+        "narHash": "sha256-eV+63gK0Mp7ygCR0Oy4yIYSNcum2VQwnZamHxYTNi+M=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2527da1ef492c495d5391f3bcf9c1dd9f4514e32",
+        "rev": "6e99f2a27d600612004fbd2c3282d614bfee6421",
         "type": "github"
       },
       "original": {
@@ -1104,11 +1104,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1724479785,
-        "narHash": "sha256-pP3Azj5d6M5nmG68Fu4JqZmdGt4S4vqI5f8te+E/FTw=",
+        "lastModified": 1724819573,
+        "narHash": "sha256-GnR7/ibgIH1vhoy8cYdmXE6iyZqKqFxQSVkFgosBh6w=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d0e1602ddde669d5beb01aec49d71a51937ed7be",
+        "rev": "71e91c409d1e654808b2621f28a327acfdad8dc2",
         "type": "github"
       },
       "original": {
@@ -1167,11 +1167,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1724800090,
-        "narHash": "sha256-7KxGFZ40pidca5gcdI2weGanfB74yDxrErFNElOZWqA=",
+        "lastModified": 1725139609,
+        "narHash": "sha256-tjMrSaxGXC7JQkENchdPPxWv4gPbelPwSoPs5A5e0vU=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "4814147442cd3f12f8160ecad9e36751f68cdc22",
+        "rev": "caefb266bee301922a4cf4d4564b1b000a0a21c3",
         "type": "github"
       },
       "original": {
@@ -1461,11 +1461,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1724338379,
-        "narHash": "sha256-kKJtaiU5Ou+e/0Qs7SICXF22DLx4V/WhG1P6+k4yeOE=",
+        "lastModified": 1724833132,
+        "narHash": "sha256-F4djBvyNRAXGusJiNYInqR6zIMI3rvlp6WiKwsRISos=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "070f834771efa715f3e74cd8ab93ecc96fabc951",
+        "rev": "3ffd842a5f50f435d3e603312eefa4790db46af5",
         "type": "github"
       },
       "original": {

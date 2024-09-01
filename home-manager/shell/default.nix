@@ -130,7 +130,7 @@
 
       custom.persist = {
         home = {
-          cache = [ ".local/share/zoxide" ];
+          cache.directories = [ ".local/share/zoxide" ];
         };
       };
     };

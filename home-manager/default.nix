@@ -31,6 +31,11 @@
         description = "The packages to install for the fonts";
       };
     };
+    symlinks = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Symlinks to create in the format { dest = src;}";
+    };
   };
 
   config = {
@@ -71,6 +76,15 @@
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
+
+    # create symlinks
+    systemd.user.tmpfiles.rules =
+      let
+        normalizeHome = p: if (lib.hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
+      in
+      lib.mapAttrsToList (
+        dest: src: "L+ ${normalizeHome dest} - - - - ${normalizeHome src}"
+      ) config.custom.symlinks;
 
     xdg = {
       enable = true;

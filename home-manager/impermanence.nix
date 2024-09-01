@@ -16,10 +16,17 @@
           default = [ ];
           description = "Files to persist in home directory";
         };
-        cache = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "Directories to persist, but not to snapshot";
+        cache = {
+          directories = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = "Directories to persist, but not to snapshot";
+          };
+          files = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = "Files to persist, but not to snapshot";
+          };
         };
       };
     };

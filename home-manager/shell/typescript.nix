@@ -56,7 +56,7 @@ _: {
 
   custom.persist = {
     home = {
-      cache = [ ".cache/yarn" ];
+      cache.directories = [ ".cache/yarn" ];
     };
   };
 }

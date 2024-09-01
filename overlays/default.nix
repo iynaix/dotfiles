@@ -109,22 +109,6 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
-
-      # newer version of webdataset breaks open-clip-torch tests
-      python312 = prev.python312.override {
-        packageOverrides = _: pysuper: {
-          webdataset = pysuper.webdataset.overridePythonAttrs rec {
-            version = "0.2.90";
-
-            src = prev.fetchFromGitHub {
-              owner = "webdataset";
-              repo = "webdataset";
-              rev = "refs/tags/${version}";
-              hash = "sha256-selj7XD7NS831lbPnx/4o46bNpsxuFdSEIIb4S2b7S0=";
-            };
-          };
-        };
-      };
     })
   ];
 }

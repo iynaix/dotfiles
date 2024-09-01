@@ -251,7 +251,7 @@ in
 
     # hyprland crash reports
     custom.persist = {
-      home.cache = [ ".cache/hyprland" ];
+      home.cache.directories = [ ".cache/hyprland" ];
     };
   };
 }

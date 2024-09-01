@@ -75,7 +75,7 @@
 
   custom.persist = {
     home = {
-      cache = [
+      cache.directories = [
         ".local/share/.cargo"
         ".local/share/.rustup"
       ];

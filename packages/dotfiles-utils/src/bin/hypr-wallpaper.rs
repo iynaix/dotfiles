@@ -1,7 +1,7 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    execute_wrapped_process, full_path,
+    execute_wrapped_process, full_path, iso8601_filename,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust,
@@ -77,8 +77,7 @@ fn main() {
         std::fs::create_dir_all(&wallpaper_history)
             .expect("failed to create wallpaper_history directory");
 
-        let target = wallpaper_history
-            .join(chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true));
+        let target = wallpaper_history.join(iso8601_filename());
 
         std::os::unix::fs::symlink(wallpaper, target)
             .expect("unable to create wallpaper history symlink");

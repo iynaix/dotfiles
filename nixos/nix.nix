@@ -237,7 +237,7 @@ in
 
   hm.custom.persist = {
     home = {
-      cache = [
+      cache.directories = [
         ".cache/nix"
         ".cache/nixpkgs-review"
       ];

@@ -130,7 +130,7 @@ in
 
     custom.persist = {
       home = {
-        cache = [ ".cache/wallust" ];
+        cache.directories = [ ".cache/wallust" ];
       };
     };
   };

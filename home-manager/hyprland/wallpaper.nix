@@ -149,7 +149,7 @@ in
       custom.persist = {
         home = {
           directories = [ ".cache/clip" ];
-          cache = [ ".local/share/rclip" ];
+          cache.directories = [ ".local/share/rclip" ];
         };
       };
     })

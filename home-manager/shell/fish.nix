@@ -48,7 +48,7 @@
 
   custom.persist = {
     home = {
-      cache = [ ".local/share/fish" ];
+      cache.directories = [ ".local/share/fish" ];
     };
   };
 }

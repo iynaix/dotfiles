@@ -48,18 +48,14 @@ in
     };
 
     # symlinks from hdds
-    # dest src
-    systemd.tmpfiles.rules =
-      let
-        createLink = src: dest: "L+ ${dest} - - - - ${src}";
-      in
-      lib.optionals cfg.ironwolf22 [ (createLink "${ironwolf}/Downloads" "${homeDirectory}/Downloads") ]
-      ++ lib.optionals cfg.wdred6 [ (createLink wdred "${homeDirectory}/Videos") ]
-      ++ lib.optionals (cfg.ironwolf22 && cfg.wdred6) [
-        (createLink "${ironwolf}/Anime" "${wdred}/Anime")
-        (createLink "${ironwolf}/Movies" "${wdred}/Movies")
-        (createLink "${ironwolf}/TV" "${wdred}/TV")
-      ];
+    custom.symlinks =
+      lib.optionalAttrs cfg.ironwolf22 { "${homeDirectory}/Downloads" = "${ironwolf}/Downloads"; }
+      // lib.optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
+      // lib.optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
+        "${wdred}/Anime" = "${ironwolf}/Anime";
+        "${wdred}/Movies" = "${ironwolf}/Movies";
+        "${wdred}/TV" = "${ironwolf}/TV";
+      };
 
     # add bookmarks for gtk
     hm.gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [

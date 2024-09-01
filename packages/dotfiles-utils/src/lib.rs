@@ -226,3 +226,7 @@ where
         process_fn(unwrapped_name);
     }
 }
+
+pub fn iso8601_filename() -> String {
+    chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
+}
