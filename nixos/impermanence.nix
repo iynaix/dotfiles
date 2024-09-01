@@ -129,16 +129,20 @@ in
 
     hm.xdg.dataFile."impermanence.txt".text =
       let
-        getDirPath = d: prefix: "${prefix}${d.dirPath}";
-        getFilePath = f: prefix: "${prefix}${f.filePath}";
+        getDirPath = prefix: d: "${prefix}${d.dirPath}";
+        getFilePath = prefix: f: "${prefix}${f.filePath}";
         persistCfg = config.environment.persistence."/persist";
         persistCacheCfg = config.environment.persistence."/persist/cache";
         allDirectories =
-          map (d: getDirPath d "/persist") (persistCfg.directories ++ persistCfg.users.${user}.directories)
-          ++ map (d: getDirPath d "/persist/cache") (
+          map (getDirPath "/persist") (persistCfg.directories ++ persistCfg.users.${user}.directories)
+          ++ map (getDirPath "/persist/cache") (
             persistCacheCfg.directories ++ persistCacheCfg.users.${user}.directories
           );
-        allFiles = map (f: getFilePath f "/persist") (persistCfg.files ++ persistCfg.users.${user}.files);
+        allFiles =
+          map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
+          ++ map (getFilePath "/persist/cache") (
+            persistCacheCfg.files ++ persistCacheCfg.users.${user}.files
+          );
         sort-u = arr: lib.concatLines (lib.sort lib.lessThan (lib.unique arr));
       in
       ''

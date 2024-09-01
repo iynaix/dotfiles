@@ -1,12 +1,13 @@
 use clap::Parser;
 use dotfiles_utils::{
     cli::HyprWallpaperArgs,
-    execute_wrapped_process, full_path, iso8601_filename,
+    full_path, iso8601_filename, kill_wrapped_process,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust,
 };
 use execute::Execute;
+use sysinfo::Signal;
 
 fn main() {
     let args = HyprWallpaperArgs::parse();
@@ -60,11 +61,7 @@ fn main() {
     wallust::apply_colors();
 
     if args.reload {
-        execute_wrapped_process("waybar", |process| {
-            execute::command_args!("killall", "-SIGUSR2", process)
-                .execute()
-                .ok();
-        });
+        kill_wrapped_process("waybar", Signal::User2);
     }
     execute::command!("swww-crop")
         .arg(&wallpaper)

@@ -213,17 +213,17 @@ pub mod json {
     }
 }
 
-pub fn execute_wrapped_process<F>(unwrapped_name: &str, process_fn: F)
-where
-    F: Fn(&str),
-{
-    let wrapped_name = &format!(".{unwrapped_name}-wrapped");
-    let sys = sysinfo::System::new_all();
+pub fn kill_wrapped_process(unwrapped_name: &str, signal: sysinfo::Signal) {
+    let mut sys = sysinfo::System::new();
+    sys.refresh_processes();
 
-    if sys.processes_by_exact_name(wrapped_name).next().is_some() {
-        process_fn(wrapped_name);
-    } else {
-        process_fn(unwrapped_name);
+    let wrapped_name = format!(".{unwrapped_name}-wrapped");
+    let mut wrapped_process = sys.processes_by_exact_name(&wrapped_name);
+
+    if let Some(process) = wrapped_process.next() {
+        process.kill_with(signal);
+    } else if let Some(process) = sys.processes_by_exact_name(unwrapped_name).next() {
+        process.kill_with(signal);
     }
 }
 

@@ -55,6 +55,9 @@ in
       ];
   };
 
+  # make a symlink of flake within the generation (e.g. /run/current-system/src)
+  system.extraSystemBuilderCmds = "ln -s ${self.sourceInfo.outPath} $out/src";
+
   systemd.tmpfiles.rules = [
     # cleanup nixpkgs-review cache on boot
     "D! ${config.hm.xdg.cacheHome}/nixpkgs-review 1755 ${user} users 1d"

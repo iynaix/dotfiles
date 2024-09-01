@@ -3,7 +3,9 @@
   symlinkJoin,
   writeShellApplication,
   writeTextFile,
-  # custom args
+}:
+# NOTE: returns a function to be called!
+{
   name,
   bashCompletion ? null,
   zshCompletion ? null,

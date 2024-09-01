@@ -1,5 +1,5 @@
 use crate::{
-    execute_wrapped_process, filename, full_path, json,
+    filename, full_path, json, kill_wrapped_process,
     monitor::Monitor,
     nixinfo::{hyprland_colors, NixInfo},
     wallpaper::WallInfo,
@@ -8,6 +8,7 @@ use crate::{
 use execute::Execute;
 use rayon::prelude::*;
 use std::{collections::HashMap, path::PathBuf};
+use sysinfo::Signal;
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -213,18 +214,10 @@ pub fn apply_colors() {
     refresh_zathura();
 
     // refresh cava
-    execute_wrapped_process("cava", |process| {
-        execute::command_args!("killall", "-SIGUSR2", process)
-            .execute()
-            .ok();
-    });
+    kill_wrapped_process("cava", Signal::User2);
 
     // refresh wfetch
-    execute_wrapped_process("wfetch", |process| {
-        execute::command_args!("killall", "-SIGUSR2", process)
-            .execute()
-            .ok();
-    });
+    kill_wrapped_process("wfetch", Signal::User2);
 
     // set the waybar accent color to have more contrast
     if let Some(accent) = accents.first() {
@@ -235,11 +228,7 @@ pub fn apply_colors() {
     std::thread::sleep(std::time::Duration::from_secs(1));
 
     // refresh waybar
-    execute_wrapped_process("waybar", |process| {
-        execute::command_args!("killall", "-SIGUSR2", process)
-            .execute()
-            .ok();
-    });
+    kill_wrapped_process("waybar", Signal::User2);
 
     // set gtk theme
     if has_nix_json {

@@ -35,7 +35,7 @@ lib.extend (
           value
         # attrs to pass to writeShellApplication
         else
-          pkgs.callPackage ./packages/write-shell-application-completions (value // { inherit name; })
+          (pkgs.callPackage ./packages/write-shell-application-completions { }) (value // { inherit name; })
       );
 
       # produces ini format strings, takes a single argument of the object
