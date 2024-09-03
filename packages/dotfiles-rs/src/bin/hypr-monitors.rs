@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{
+use dotfiles::{
     cli::HyprMonitorArgs,
     hypr,
     monitor::{Monitor, WorkspacesByMonitor},
@@ -60,12 +60,12 @@ fn main() {
     if let Some(new_mon) = args.rofi {
         let choices = ["Extend as Primary", "Extend as Secondary", "Mirror"];
 
-        let rofi = Rofi::new("rofi-menu-noinput.rasi", &choices);
-        let mut cmd = rofi.command();
-        cmd.arg("-lines").arg(choices.len().to_string());
+        let sel = Rofi::new("rofi-menu-noinput.rasi", &choices)
+            .arg("-lines")
+            .arg(choices.len().to_string())
+            .run();
 
-        let selected = rofi.run(&mut cmd);
-        match selected.as_str() {
+        match sel.as_str() {
             "Extend as Primary" => println!("extending as primary"),
             "Extend as Secondary" => println!("extending as secondary"),
             "Mirror" => mirror_monitors(&new_mon),

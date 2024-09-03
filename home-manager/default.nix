@@ -65,7 +65,7 @@
           trash-cli
           xdg-utils
           # misc utilities for dotfiles written in rust
-          custom.dotfiles-utils
+          custom.dotfiles-rs
         ]
         ++ (lib.optional config.custom.helix.enable helix)
         # home-manager executable only on nixos

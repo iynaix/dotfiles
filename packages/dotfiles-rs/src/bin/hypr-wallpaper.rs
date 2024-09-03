@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{
+use dotfiles::{
     cli::HyprWallpaperArgs,
     full_path, iso8601_filename, kill_wrapped_process,
     nixinfo::NixInfo,

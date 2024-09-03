@@ -215,14 +215,14 @@ pub mod json {
 
 pub fn kill_wrapped_process(unwrapped_name: &str, signal: sysinfo::Signal) {
     let mut sys = sysinfo::System::new();
-    sys.refresh_processes();
+    sys.refresh_processes(sysinfo::ProcessesToUpdate::All);
 
     let wrapped_name = format!(".{unwrapped_name}-wrapped");
-    let mut wrapped_process = sys.processes_by_exact_name(&wrapped_name);
+    let mut wrapped_process = sys.processes_by_exact_name(wrapped_name.as_ref());
 
     if let Some(process) = wrapped_process.next() {
         process.kill_with(signal);
-    } else if let Some(process) = sys.processes_by_exact_name(unwrapped_name).next() {
+    } else if let Some(process) = sys.processes_by_exact_name(unwrapped_name.as_ref()).next() {
         process.kill_with(signal);
     }
 }

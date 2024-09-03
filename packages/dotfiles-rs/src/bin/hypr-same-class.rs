@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{
+use dotfiles::{
     cli::{HyprSameClassArgs, HyprSameClassDirection},
     hypr, ActiveWindow, Client,
 };

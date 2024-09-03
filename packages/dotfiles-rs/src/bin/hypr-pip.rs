@@ -1,4 +1,4 @@
-use dotfiles_utils::{hypr, ActiveWindow};
+use dotfiles::{hypr, ActiveWindow};
 
 #[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
 fn main() {

@@ -1,5 +1,5 @@
 [package]
-name = "dotfiles_utils"
+name = "dotfiles"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
@@ -16,7 +16,7 @@ rayon = "1.10.0"
 regex = "1.10.6"
 serde = { version = "1.0.209", features = ["derive"] }
 serde_json = "1.0.127"
-sysinfo = "0.30.13"
+sysinfo = "0.31.4"
 wallust_themes = "1.0.0"
 
 [build-dependencies]

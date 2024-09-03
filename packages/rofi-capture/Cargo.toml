@@ -1,0 +1,13 @@
+[package]
+name = "rofi-capture"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "4.5.17"
+dirs = "5.0.1"
+execute = "0.2.13"
+regex = "1.10.6"
+sysinfo = "0.31.4"
+dotfiles = { path = "../dotfiles-rs" }
+clap_complete = "4.5.25"

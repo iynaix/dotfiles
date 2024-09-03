@@ -1,4 +1,4 @@
-use dotfiles_utils::{hypr, monitor::Monitor, wallpaper};
+use dotfiles::{hypr, monitor::Monitor, wallpaper};
 
 #[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
 fn main() {

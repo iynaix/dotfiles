@@ -1,5 +1,5 @@
 use clap::Parser;
-use dotfiles_utils::{
+use dotfiles::{
     cli::SwwwCropArgs,
     filename, full_path,
     monitor::Monitor,

@@ -64,7 +64,7 @@ in
         toggle-waybar = {
           runtimeInputs = with pkgs; [
             procps
-            custom.dotfiles-utils
+            custom.dotfiles-rs
             killall
           ];
           text = ''

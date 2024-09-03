@@ -13,10 +13,22 @@ let
     _callPackage (path + "/default.nix") (
       extraOverrides // { source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource; }
     );
+  # cargo workspaces needed to build rust packages
+  rustSrcs = lib.fileset.toSource {
+    root = ../.;
+    fileset = lib.fileset.unions [
+      ../Cargo.lock
+      ../Cargo.toml
+
+      ./dotfiles-rs
+      ./rofi-capture
+    ];
+  };
 in
 {
   # boutique rust packages
-  dotfiles-utils = callPackage ./dotfiles-utils { };
+  dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
+  rofi-capture = callPackage ./rofi-capture { src = rustSrcs; };
 
   # writeShellApplication with support for completions
   writeShellApplicationCompletions = callPackage ./write-shell-application-completions { };

@@ -16,6 +16,7 @@ lib.mkIf config.custom.hyprland.enable {
       grimblast
       swappy
       wf-recorder
+      slurp
     ]
   );
 

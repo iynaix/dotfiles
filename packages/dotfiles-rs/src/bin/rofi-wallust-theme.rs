@@ -1,4 +1,4 @@
-use dotfiles_utils::{full_path, rofi::Rofi, wallust};
+use dotfiles::{full_path, rofi::Rofi, wallust};
 
 struct ThemeEntry {
     name: String,
@@ -99,20 +99,20 @@ fn main() {
             .map(|theme| theme.rofi.to_string())
             .collect::<Vec<_>>(),
     );
-    let mut cmd = rofi.command();
-    cmd.arg("-i") // case insensitive
-        .arg("-markup-rows"); // needed for pango markup
 
-    let selected = rofi.run(&mut cmd);
+    let sel = rofi
+        .arg("-i") // case insensitive
+        .arg("-markup-rows") // needed for pango markup
+        .run();
 
-    let selected = &all_themes
+    let sel = &all_themes
         .iter()
-        .find(|theme| theme.rofi == selected)
+        .find(|theme| theme.rofi == sel)
         .expect("failed to find selected theme")
         .name;
 
-    if !selected.is_empty() {
-        wallust::apply_theme(selected);
+    if !sel.is_empty() {
+        wallust::apply_theme(sel);
         wallust::apply_colors();
     }
 }

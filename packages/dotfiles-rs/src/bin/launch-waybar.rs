@@ -1,6 +1,6 @@
 use std::process::Stdio;
 
-use dotfiles_utils::{full_path, json, kill_wrapped_process, monitor::Monitor, nixinfo::NixInfo};
+use dotfiles::{full_path, json, kill_wrapped_process, monitor::Monitor, nixinfo::NixInfo};
 use sysinfo::Signal;
 
 fn main() {

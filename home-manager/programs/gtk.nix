@@ -59,7 +59,7 @@ in
     theme = {
       name = "catppuccin-mocha-${catppuccinDefault}-compact";
       package = pkgs.catppuccin-gtk.override {
-        # allow all accents so the closest matching color can be selected by dotfiles-utils
+        # allow all accents so the closest matching color can be selected by dotfiles-rs
         accents = lib.attrNames catppuccinAccents;
         variant = "mocha";
         tweaks = [

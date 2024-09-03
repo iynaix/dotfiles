@@ -1,6 +1,6 @@
-use dotfiles_utils::nixinfo::NixInfo;
-use dotfiles_utils::Client;
-use dotfiles_utils::{hypr_json, monitor::Monitor};
+use dotfiles::nixinfo::NixInfo;
+use dotfiles::Client;
+use dotfiles::{hypr_json, monitor::Monitor};
 use execute::Execute;
 use rand::Rng;
 use serde::Deserialize;

@@ -1,4 +1,4 @@
 [workspace]
 
-members = ["packages/dotfiles-utils"]
+members = ["packages/dotfiles-rs", "packages/rofi-capture"]
 resolver = "2"

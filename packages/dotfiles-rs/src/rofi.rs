@@ -5,8 +5,8 @@ use execute::Execute;
 use crate::full_path;
 
 pub struct Rofi {
-    theme: String,
     choices: Vec<String>,
+    command: Command,
 }
 
 impl Rofi {
@@ -14,18 +14,11 @@ impl Rofi {
     where
         S: AsRef<str>,
     {
-        Self {
-            theme: theme.to_string(),
-            choices: choices.iter().map(|s| s.as_ref().to_string()).collect(),
-        }
-    }
-
-    pub fn command(&self) -> Command {
         let mut cmd = Command::new("rofi");
 
         cmd.arg("-dmenu")
             .arg("-theme")
-            .arg(full_path(format!("~/.cache/wallust/{}", self.theme)))
+            .arg(full_path(format!("~/.cache/wallust/{theme}")))
             // use | as separator
             .arg("-sep")
             .arg("|")
@@ -34,11 +27,21 @@ impl Rofi {
             .arg("-cycle")
             .arg("true");
 
-        cmd
+        Self {
+            choices: choices.iter().map(|s| s.as_ref().to_string()).collect(),
+            command: cmd,
+        }
     }
 
-    pub fn run(&self, rofi_cmd: &mut Command) -> String {
-        let selected = rofi_cmd
+    #[must_use]
+    pub fn arg<S: AsRef<std::ffi::OsStr>>(mut self, arg: S) -> Self {
+        self.command.arg(arg);
+        self
+    }
+
+    pub fn run(mut self) -> String {
+        let selected = self
+            .command
             .stdout(Stdio::piped())
             // use | as separator
             .execute_input_output(self.choices.join("|").as_bytes())
