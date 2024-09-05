@@ -11,3 +11,5 @@ regex = "1.10.6"
 sysinfo = "0.31.4"
 dotfiles = { path = "../dotfiles-rs" }
 clap_complete = "4.5.25"
+serde_json = "1.0.128"
+serde = "1.0.209"

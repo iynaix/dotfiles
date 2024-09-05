@@ -5,8 +5,12 @@ use clap_complete::{generate, Shell};
 use rofi_capture::{Screencast, Screenshot};
 
 /*
-    TODO:
-    notify for video: save video path to lock file and read from there
+    TODO
+    - rofi for choosing delay
+    - edit for images: open in swappy?
+    - tesseract
+    - --delay
+    - --edit for images?
 */
 
 #[derive(Subcommand, ValueEnum, Debug, Clone)]

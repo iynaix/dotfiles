@@ -17,6 +17,10 @@ lib.mkIf config.custom.hyprland.enable {
       swappy
       wf-recorder
       slurp
+      (custom.rofi-capture.override {
+        hyprland = config.wayland.windowManager.hyprland.package;
+        rofi = config.programs.rofi.package;
+      })
     ]
   );
 

@@ -44,18 +44,13 @@ impl Grim {
             .execute()
             .expect("unable to execute grim");
 
-        println!("Screenshot copied and saved to {}", self.output.display());
-
         // show a notifcation
         command_args!("notify-send", "-t", "3000", "-a", "rofi-capture")
-            .arg(format!(
-                "Screenshot copied and saved to {}",
-                self.output.display()
-            ))
+            .arg(format!("Screenshot captured to {}", self.output.display()))
             .arg("-i")
             .arg(&self.output)
             .execute()
-            .expect("Failed to send notification");
+            .expect("Failed to send screenshot notification");
     }
 }
 

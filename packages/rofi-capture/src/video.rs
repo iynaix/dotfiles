@@ -1,24 +1,53 @@
-use std::{io::Write, path::PathBuf};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 
 use crate::{create_parent_dirs, SlurpGeom};
 use dotfiles::{iso8601_filename, monitor::Monitor, rofi::Rofi};
-use execute::{command, Execute};
+use execute::{command, command_args, Execute};
 
-pub struct Screencast;
+#[derive(Serialize, Deserialize)]
+struct LockFile {
+    pid: u32,
+    child: u32,
+    video: PathBuf,
+}
+
+impl LockFile {
+    fn path() -> PathBuf {
+        dirs::runtime_dir()
+            .expect("could not get $XDG_RUNTIME_DIR")
+            .join("rofi-capture.lock")
+    }
+
+    fn write(&self) -> std::io::Result<()> {
+        let content = serde_json::to_string(&self).expect("failed to serialize rofi-capture.lock");
+        std::fs::write(Self::path(), content)
+    }
+
+    fn read() -> std::io::Result<Self> {
+        let content = std::fs::read_to_string(Self::path())?;
+        serde_json::from_str(&content)
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))
+    }
+
+    fn remove() {
+        std::fs::remove_file(Self::path()).expect("failed to delete rofi-capture.lock");
+    }
+}
 
 #[derive(Default)]
 struct WfRecorder {
     monitor: String,
-    output: PathBuf,
+    video: PathBuf,
     filter: String,
     duration: Option<u64>,
 }
 
 impl WfRecorder {
-    pub fn new(monitor: &str, output: PathBuf) -> Self {
+    pub fn new(monitor: &str, video: PathBuf) -> Self {
         Self {
             monitor: monitor.to_string(),
-            output,
+            video,
             ..Default::default()
         }
     }
@@ -34,12 +63,6 @@ impl WfRecorder {
         self
     }
 
-    fn lock_path() -> PathBuf {
-        dirs::runtime_dir()
-            .expect("could not get $XDG_RUNTIME_DIR")
-            .join("rofi-capture.lock")
-    }
-
     pub fn stop() -> bool {
         // kill all wf-recorder processes
         let mut sys = sysinfo::System::new();
@@ -52,22 +75,25 @@ impl WfRecorder {
         }
 
         // check lock file and close the process within if it exists
-        let lock_file = Self::lock_path();
-        if let Ok(pid) = std::fs::read_to_string(&lock_file) {
-            if let Ok(pid) = pid.trim().parse::<u32>() {
-                if let Some(process) = sys.process(sysinfo::Pid::from_u32(pid)) {
-                    // stop the recording by wf-recorder
-                    for process in sys.processes_by_exact_name("wf-recorder".as_ref()) {
-                        process.kill_with(sysinfo::Signal::Interrupt);
-                    }
-
-                    // kill the previous instance of rofi-capture
-                    process.kill_with(sysinfo::Signal::Interrupt);
-
-                    // delete the lock file
-                    std::fs::remove_file(&lock_file).expect("Failed to delete lock file");
-                    return true;
+        if let Ok(LockFile { pid, child, video }) = LockFile::read() {
+            if let Some(child_process) = sys.process(sysinfo::Pid::from_u32(child)) {
+                // stop any wf-recorder processes
+                child_process.kill_with(sysinfo::Signal::Interrupt);
+                for wf_process in sys.processes_by_exact_name("wf-recorder".as_ref()) {
+                    wf_process.kill_with(sysinfo::Signal::Interrupt);
                 }
+
+                // kill previous instance of rofi-capture
+                if let Some(prev_process) = sys.process(sysinfo::Pid::from_u32(pid)) {
+                    prev_process.kill_with(sysinfo::Signal::Interrupt);
+                }
+
+                LockFile::remove();
+
+                // show notification with the video thumbnail
+                Self::notify(&video);
+
+                return true;
             }
         }
 
@@ -86,7 +112,7 @@ impl WfRecorder {
             .arg(&self.monitor)
             .arg("--overwrite")
             .arg("-f")
-            .arg(&self.output)
+            .arg(&self.video)
             .spawn()
         {
             // duration provied, recording will stop by itself so no lock file is needed
@@ -95,20 +121,50 @@ impl WfRecorder {
 
                 Self::stop();
             } else {
-                let mut lock = std::fs::OpenOptions::new()
-                    .write(true)
-                    .create(true)
-                    .truncate(true)
-                    .open(Self::lock_path())
-                    .expect("failed to create rofi-capture.lock");
-
-                writeln!(lock, "{}", child.id()).expect("failed to write to rofi-capture.lock");
+                let lock = LockFile {
+                    pid: std::process::id(),
+                    child: child.id(),
+                    video: self.video.clone(),
+                };
+                lock.write().expect("failed to write to rofi-capture.lock");
             }
         } else {
             panic!("failed to execute wf-recorder");
         }
     }
+
+    fn notify(video: &PathBuf) {
+        let thumb_path = PathBuf::from("/tmp/rofi-capture-thumbnail.jpg");
+
+        if thumb_path.exists() {
+            std::fs::remove_file(&thumb_path).expect("failed to remove notification thumbnail");
+        }
+
+        command!("ffmpeg")
+            .arg("-i")
+            .arg(video)
+            // from 3s in the video
+            .arg("-ss")
+            .arg("00:00:03.000")
+            .arg("-vframes")
+            .arg("1")
+            .arg("-s")
+            .arg("128x72")
+            .arg(&thumb_path)
+            .execute()
+            .expect("failed to create notification thumbnail");
+
+        // show notifcation with the video thumbnail
+        command_args!("notify-send", "-t", "3000", "-a", "rofi-capture")
+            .arg(format!("Video captured to {}", video.display()))
+            .arg("-i")
+            .arg(&thumb_path)
+            .execute()
+            .expect("Failed to send screencast notification");
+    }
 }
+
+pub struct Screencast;
 
 impl Screencast {
     pub fn output_path(filename: Option<PathBuf>) -> PathBuf {
@@ -119,27 +175,27 @@ impl Screencast {
         }))
     }
 
-    fn capture(mon: &str, filter: &str, output_path: PathBuf) {
+    fn capture(mon: &str, filter: &str, video: PathBuf) {
         // copy the video file to clipboard
         command!("wl-copy")
             .arg("--type")
             .arg("text/uri-list")
-            .execute_input(&format!("file://{}", output_path.display()))
+            .execute_input(&format!("file://{}", video.display()))
             .expect("failed to copy video to clipboard");
 
         // small delay before recording
         std::thread::sleep(std::time::Duration::from_millis(500));
 
-        WfRecorder::new(mon, output_path).filter(filter).record();
+        WfRecorder::new(mon, video).filter(filter).record();
     }
 
-    pub fn selection(output_path: PathBuf) {
+    pub fn selection(video: PathBuf) {
         let (mon, filter) = SlurpGeom::prompt().to_ffmpeg_geom();
-        Self::capture(&mon, &filter, output_path);
+        Self::capture(&mon, &filter, video);
     }
 
-    pub fn monitor(output_path: PathBuf) {
-        Self::capture(&Monitor::focused().name, "", output_path);
+    pub fn monitor(video: PathBuf) {
+        Self::capture(&Monitor::focused().name, "", video);
     }
 
     pub fn stop() -> bool {
@@ -147,14 +203,14 @@ impl Screencast {
     }
 
     pub fn rofi(filename: &Option<PathBuf>) {
-        let output_path = Self::output_path(filename.clone());
+        let video = Self::output_path(filename.clone());
 
         let rofi = Rofi::new("rofi-menu-noinput.rasi", &["Selection", "Monitor"]);
 
         let sel = rofi.run();
         match sel.as_str() {
-            "Monitor" => Self::monitor(output_path),
-            "Selection" => Self::selection(output_path),
+            "Monitor" => Self::monitor(video),
+            "Selection" => Self::selection(video),
             "All" => unimplemented!("Capturing of all outputs has not been implemented for video"),
             "" => {
                 eprintln!("No rofi selection was made.");

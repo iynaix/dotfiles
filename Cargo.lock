@@ -573,6 +573,8 @@ dependencies = [
  "dotfiles",
  "execute",
  "regex",
+ "serde",
+ "serde_json",
  "sysinfo",
 ]
 
