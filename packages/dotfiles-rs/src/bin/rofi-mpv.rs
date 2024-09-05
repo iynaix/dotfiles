@@ -1,12 +1,28 @@
-use clap::Parser;
-use dotfiles::{
-    cli::{RofiMpvArgs, RofiMpvMedia},
-    full_path, CommandUtf8,
-};
+use clap::{CommandFactory, Parser, ValueEnum};
+use dotfiles::{full_path, generate_completions, CommandUtf8, ShellCompletion};
 use std::{
     fs::read_to_string,
     path::{Path, PathBuf},
 };
+
+#[derive(ValueEnum, Clone, Debug)]
+pub enum RofiMpvMedia {
+    Anime,
+    TV,
+}
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "rofi-media",
+    about = "Plays the next episode of anime or tv shows"
+)]
+pub struct RofiMpvArgs {
+    #[arg(value_enum)]
+    pub media: Option<RofiMpvMedia>,
+
+    #[arg(long, value_enum, help = "type of shell completion to generate")]
+    pub generate_completions: Option<ShellCompletion>,
+}
 
 type Video = (PathBuf, String);
 
@@ -141,7 +157,18 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
 fn main() {
     let args = RofiMpvArgs::parse();
 
-    let video = latest_file(&args.media);
+    // print shell completions
+    if let Some(shell) = args.generate_completions {
+        return generate_completions("hypr-monitors", &mut RofiMpvArgs::command(), &shell);
+    }
+
+    let no_media = "No media type specified. Use 'anime' or 'tv'.";
+    if args.media.is_none() {
+        eprintln!("{no_media}");
+        std::process::exit(1);
+    }
+
+    let video = latest_file(&args.media.unwrap_or_else(|| panic!("{no_media}")));
 
     if let Some(to_play) = get_episode(video) {
         println!("Playing {to_play:?}");

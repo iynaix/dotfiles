@@ -1,14 +1,31 @@
 use crate::monitor::Monitor;
+use clap::{Command, Subcommand, ValueEnum};
+use clap_complete::{generate, Shell};
 use execute::Execute;
 use serde::{de::DeserializeOwned, Deserialize};
 use std::{path::PathBuf, process::Stdio};
 
-pub mod cli;
 pub mod monitor;
 pub mod nixinfo;
 pub mod rofi;
 pub mod wallpaper;
 pub mod wallust;
+
+// utilities for generating shell completions
+#[derive(Subcommand, ValueEnum, Debug, Clone)]
+pub enum ShellCompletion {
+    Bash,
+    Zsh,
+    Fish,
+}
+
+pub fn generate_completions(progname: &str, cmd: &mut Command, shell_completion: &ShellCompletion) {
+    match shell_completion {
+        ShellCompletion::Bash => generate(Shell::Bash, cmd, progname, &mut std::io::stdout()),
+        ShellCompletion::Zsh => generate(Shell::Zsh, cmd, progname, &mut std::io::stdout()),
+        ShellCompletion::Fish => generate(Shell::Fish, cmd, progname, &mut std::io::stdout()),
+    }
+}
 
 // shared structs / types
 type Coord = (i32, i32);

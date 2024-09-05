@@ -1,14 +1,27 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use dotfiles::{
-    cli::SwwwCropArgs,
-    filename, full_path,
+    filename, full_path, generate_completions,
     monitor::Monitor,
     wallpaper::{self, WallInfo},
+    ShellCompletion,
 };
 use execute::Execute;
 use rand::seq::SliceRandom;
 use rayon::prelude::*;
 use std::{path::PathBuf, process::Stdio};
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "swww-crop",
+    about = "Applies image crops for wallpapers on each monitor"
+)]
+pub struct SwwwCropArgs {
+    // optional image to use, uses a random one otherwise
+    pub image: Option<PathBuf>,
+
+    #[arg(long, value_enum, help = "type of shell completion to generate")]
+    pub generate_completions: Option<ShellCompletion>,
+}
 
 // choose a random transition, taken from ZaneyOS
 // https://gitlab.com/Zaney/zaneyos/-/blob/main/config/scripts/wallsetter.nix
@@ -123,6 +136,11 @@ fn swww_with_crop(
 
 fn main() {
     let args = SwwwCropArgs::parse();
+
+    // print shell completions
+    if let Some(shell) = args.generate_completions {
+        return generate_completions("hypr-monitors", &mut SwwwCropArgs::command(), &shell);
+    }
 
     let wall = match args.image {
         Some(image) => std::fs::canonicalize(image)

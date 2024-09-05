@@ -1,11 +1,38 @@
-use clap::Parser;
-use dotfiles::{
-    cli::{HyprSameClassArgs, HyprSameClassDirection},
-    hypr, ActiveWindow, Client,
-};
+use clap::{CommandFactory, Parser, ValueEnum};
+use dotfiles::{generate_completions, hypr, ActiveWindow, Client, ShellCompletion};
+
+#[derive(ValueEnum, Clone, Debug)]
+pub enum Direction {
+    Next,
+    Prev,
+}
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "hypr-same-class",
+    about = "Focus next / prev window of same class"
+)]
+pub struct HyprSameClassArgs {
+    #[arg(value_enum)]
+    pub direction: Option<Direction>,
+
+    #[arg(long, value_enum, help = "type of shell completion to generate")]
+    pub generate_completions: Option<ShellCompletion>,
+}
 
 fn main() {
     let args = HyprSameClassArgs::parse();
+
+    // print shell completions
+    if let Some(shell) = args.generate_completions {
+        return generate_completions("hypr-monitors", &mut HyprSameClassArgs::command(), &shell);
+    }
+
+    if args.direction.is_none() {
+        eprintln!("No direction specified. Use 'next' or 'prev'.");
+        std::process::exit(1);
+    }
+
     let active = ActiveWindow::new();
     let mut same_class = Client::filter_class(&active.class);
 
@@ -18,9 +45,12 @@ fn main() {
         .position(|&addr| addr == &active.address)
         .expect("active window not found");
 
-    let new_idx: usize = match args.direction {
-        HyprSameClassDirection::Next => (active_idx + 1) % addresses.len(),
-        HyprSameClassDirection::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
+    let new_idx: usize = match args
+        .direction
+        .unwrap_or_else(|| panic!("no direction specified"))
+    {
+        Direction::Next => (active_idx + 1) % addresses.len(),
+        Direction::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
     hypr(["focuswindow", &format!("address:{}", addresses[new_idx])]);

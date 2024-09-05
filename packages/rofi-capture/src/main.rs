@@ -46,31 +46,34 @@ pub struct RofiCaptureArgs {
     pub generate_completions: Option<ShellCompletion>,
 }
 
+fn generate_completions(shell_completion: ShellCompletion) {
+    let mut cmd = RofiCaptureArgs::command();
+
+    match shell_completion {
+        ShellCompletion::Bash => generate(
+            Shell::Bash,
+            &mut cmd,
+            "rofi-capture",
+            &mut std::io::stdout(),
+        ),
+        ShellCompletion::Zsh => {
+            generate(Shell::Zsh, &mut cmd, "rofi-capture", &mut std::io::stdout())
+        }
+        ShellCompletion::Fish => generate(
+            Shell::Fish,
+            &mut cmd,
+            "rofi-capture",
+            &mut std::io::stdout(),
+        ),
+    }
+}
+
 fn main() {
     let args = RofiCaptureArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate_completions {
-        let mut cmd = RofiCaptureArgs::command();
-
-        match shell {
-            ShellCompletion::Bash => generate(
-                Shell::Bash,
-                &mut cmd,
-                "rofi-capture",
-                &mut std::io::stdout(),
-            ),
-            ShellCompletion::Zsh => {
-                generate(Shell::Zsh, &mut cmd, "rofi-capture", &mut std::io::stdout())
-            }
-            ShellCompletion::Fish => generate(
-                Shell::Fish,
-                &mut cmd,
-                "rofi-capture",
-                &mut std::io::stdout(),
-            ),
-        }
-        return;
+        return generate_completions(shell);
     }
 
     // stop any currently recording videos

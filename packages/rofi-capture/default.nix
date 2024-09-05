@@ -1,7 +1,7 @@
 {
   src,
   lib,
-  # installShellFiles,
+  installShellFiles,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage {
@@ -14,17 +14,14 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "-p rofi-capture" ];
 
-  # create files for shell autocomplete
-  # nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # installShellCompletion $releaseDir/build/dotfiles-*/out/*.{bash,fish}
-  # preFixup = ''
-  #   OUT_DIR=$releaseDir/build/dotfiles-*/out
-
-  #   installShellCompletion --bash $OUT_DIR/*.bash
-  #   installShellCompletion --fish $OUT_DIR/*.fish
-  #   installShellCompletion --zsh $OUT_DIR/_*
-  # '';
+  postInstall = ''
+    installShellCompletion --cmd rofi-capture \
+      --bash <($out/bin/rofi-capture --generate-completions bash) \
+      --fish <($out/bin/rofi-capture --generate-completions fish) \
+      --zsh <($out/bin/rofi-capture --generate-completions zsh)
+  '';
 
   meta = with lib; {
     description = "Rofi menu for screenshots / screencasts";

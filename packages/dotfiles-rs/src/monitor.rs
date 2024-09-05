@@ -1,6 +1,14 @@
-use crate::{cli::MonitorExtend, hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
+use crate::{hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
+use clap::ValueEnum;
 use serde::Deserialize;
 use std::collections::HashMap;
+
+#[allow(clippy::module_name_repetitions)]
+#[derive(ValueEnum, Debug, Clone)]
+pub enum MonitorExtend {
+    Primary,
+    Secondary,
+}
 
 #[allow(clippy::module_name_repetitions)]
 pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;

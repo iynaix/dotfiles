@@ -1,11 +1,34 @@
-use clap::Parser;
+use clap::{value_parser, CommandFactory, Parser};
 use dotfiles::{
-    cli::HyprMonitorArgs,
-    hypr,
-    monitor::{Monitor, WorkspacesByMonitor},
+    generate_completions, hypr,
+    monitor::{Monitor, MonitorExtend, WorkspacesByMonitor},
     rofi::Rofi,
+    ShellCompletion,
 };
 use execute::Execute;
+
+#[derive(Parser, Debug)]
+#[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
+/// Utilities for working with adding or removing monitors in hyprland
+/// Without arguments, it redistributes the workspaces across all monitors
+pub struct HyprMonitorArgs {
+    #[arg(
+        long,
+        value_parser = value_parser!(MonitorExtend),
+        help = "set new monitor(s) to be primary or secondary"
+    )]
+    pub extend: Option<MonitorExtend>,
+
+    #[arg(long, name = "MONITOR", action, help = "mirrors the primary monitor")]
+    pub mirror: Option<String>,
+
+    // show rofi menu for selecting monitor
+    #[arg(long, action, help = "show rofi menu for monitor options")]
+    pub rofi: Option<String>,
+
+    #[arg(long, value_enum, help = "type of shell completion to generate")]
+    pub generate_completions: Option<ShellCompletion>,
+}
 
 // reload wallpaper
 fn reload_wallpaper() {
@@ -55,6 +78,11 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
 
 fn main() {
     let args = HyprMonitorArgs::parse();
+
+    // print shell completions
+    if let Some(shell) = args.generate_completions {
+        return generate_completions("hypr-monitors", &mut HyprMonitorArgs::command(), &shell);
+    }
 
     // --rofi
     if let Some(new_mon) = args.rofi {

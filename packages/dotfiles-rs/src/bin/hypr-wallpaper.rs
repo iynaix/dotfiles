@@ -1,16 +1,37 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use dotfiles::{
-    cli::HyprWallpaperArgs,
-    full_path, iso8601_filename, kill_wrapped_process,
+    full_path, generate_completions, iso8601_filename, kill_wrapped_process,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
-    wallust,
+    wallust, ShellCompletion,
 };
 use execute::Execute;
+use std::path::PathBuf;
 use sysinfo::Signal;
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "hypr-wallpaper",
+    about = "Changes the wallpaper and updates the colorcheme"
+)]
+pub struct HyprWallpaperArgs {
+    #[arg(long, action, help = "reload current wallpaper")]
+    pub reload: bool,
+
+    // optional image to use, uses a random one otherwise
+    pub image_or_dir: Option<PathBuf>,
+
+    #[arg(long, value_enum, help = "type of shell completion to generate")]
+    pub generate_completions: Option<ShellCompletion>,
+}
 
 fn main() {
     let args = HyprWallpaperArgs::parse();
+
+    // print shell completions
+    if let Some(shell) = args.generate_completions {
+        return generate_completions("hypr-monitors", &mut HyprWallpaperArgs::command(), &shell);
+    }
 
     let random_wallpaper = match args.image_or_dir {
         Some(image_or_dir) => {

@@ -17,12 +17,13 @@ rustPlatform.buildRustPackage {
   # create files for shell autocomplete
   nativeBuildInputs = [ installShellFiles ];
 
-  preFixup = ''
-    OUT_DIR=$releaseDir/build/dotfiles-*/out
-
-    installShellCompletion --bash $OUT_DIR/*.bash
-    installShellCompletion --fish $OUT_DIR/*.fish
-    installShellCompletion --zsh $OUT_DIR/_*
+  postInstall = ''
+    for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv swww-crop; do
+      installShellCompletion --cmd $prog \
+        --bash <($out/bin/$prog --generate-completions bash) \
+        --fish <($out/bin/$prog --generate-completions fish) \
+        --zsh <($out/bin/$prog --generate-completions zsh)
+    done
   '';
 
   meta = with lib; {
