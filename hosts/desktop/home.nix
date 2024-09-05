@@ -42,11 +42,11 @@ _: {
     deadbeef.enable = true;
     ghostty.enable = false;
     hyprland = {
-      plugin = "hyprnstack";
+      # plugin = "hyprnstack";
       lock = false;
       qtile = false;
     };
-    obs-studio.enable = true;
+    obs-studio.enable = false;
     pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = true;

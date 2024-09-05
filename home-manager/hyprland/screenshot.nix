@@ -38,7 +38,7 @@ lib.mkIf config.custom.hyprland.enable {
 
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, backslash, exec, ${lib.getExe focal} --area selection --no-notify"
+      "$mod, backslash, exec, ${lib.getExe focal} --area selection --no-notify --no-save"
       ''$mod_SHIFT, backslash, exec, ${lib.getExe focal} --rofi''
       "$mod_CTRL, backslash, exec, ${lib.getExe focal} --area selection --ocr"
       ''ALT, backslash, exec, ${lib.getExe focal} --rofi --video''

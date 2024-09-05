@@ -1,7 +1,6 @@
 {
   config,
   host,
-  inputs,
   isLaptop,
   lib,
   pkgs,
@@ -94,9 +93,9 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       # package = pkgs.hyprland;
-      package =
-        assert (lib.assertMsg (pkgs.hyprland.version == "0.42.0") "hyprland: use version from nixpkgs?");
-        inputs.hyprland.packages.${pkgs.system}.hyprland;
+      # package =
+      #   assert (lib.assertMsg (pkgs.hyprland.version == "0.42.0") "hyprland: use version from nixpkgs?");
+      #   inputs.hyprland.packages.${pkgs.system}.hyprland;
 
       settings =
         {
