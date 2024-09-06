@@ -38,6 +38,7 @@ impl LockFile {
 #[derive(Default)]
 struct WfRecorder {
     monitor: String,
+    audio: bool,
     video: PathBuf,
     filter: String,
     duration: Option<u64>,
@@ -50,6 +51,11 @@ impl WfRecorder {
             video,
             ..Default::default()
         }
+    }
+
+    pub fn audio(mut self, audio: bool) -> Self {
+        self.audio = audio;
+        self
     }
 
     pub fn filter(mut self, filter: &str) -> Self {
@@ -105,6 +111,10 @@ impl WfRecorder {
 
         if !self.filter.is_empty() {
             wfrecorder.arg("--filter").arg(&self.filter);
+        }
+
+        if self.audio {
+            wfrecorder.arg("--audio");
         }
 
         if let Ok(child) = wfrecorder
@@ -164,53 +174,86 @@ impl WfRecorder {
     }
 }
 
-pub struct Screencast;
+pub struct Screencast {
+    pub delay: Option<u64>,
+    pub audio: bool,
+    pub output: PathBuf,
+}
 
 impl Screencast {
-    pub fn output_path(filename: Option<PathBuf>) -> PathBuf {
-        create_parent_dirs(filename.unwrap_or_else(|| {
+    pub fn new(filename: Option<PathBuf>, delay: Option<u64>, audio: Option<bool>) -> Self {
+        let output = create_parent_dirs(filename.unwrap_or_else(|| {
             dirs::video_dir()
                 .expect("could not get $XDG_VIDEOS_DIR")
                 .join(format!("Screencasts/{}.mp4", iso8601_filename()))
-        }))
+        }));
+
+        Self {
+            delay,
+            audio: audio.is_some(),
+            output,
+        }
     }
 
-    fn capture(mon: &str, filter: &str, video: PathBuf) {
+    fn capture(&self, mon: &str, filter: &str) {
         // copy the video file to clipboard
         command!("wl-copy")
             .arg("--type")
             .arg("text/uri-list")
-            .execute_input(&format!("file://{}", video.display()))
+            .execute_input(&format!("file://{}", self.output.display()))
             .expect("failed to copy video to clipboard");
 
         // small delay before recording
         std::thread::sleep(std::time::Duration::from_millis(500));
 
-        WfRecorder::new(mon, video).filter(filter).record();
+        WfRecorder::new(mon, self.output.clone())
+            .audio(self.audio)
+            .filter(filter)
+            .record();
     }
 
-    pub fn selection(video: PathBuf) {
+    pub fn selection(&self) {
         let (mon, filter) = SlurpGeom::prompt().to_ffmpeg_geom();
-        Self::capture(&mon, &filter, video);
+        self.capture(&mon, &filter);
     }
 
-    pub fn monitor(video: PathBuf) {
-        Self::capture(&Monitor::focused().name, "", video);
+    pub fn monitor(&self) {
+        self.capture(&Monitor::focused().name, "");
     }
 
     pub fn stop() -> bool {
         WfRecorder::stop()
     }
 
-    pub fn rofi(filename: &Option<PathBuf>) {
-        let video = Self::output_path(filename.clone());
+    pub fn rofi(&mut self, theme: &Option<PathBuf>) {
+        let mut rofi = Rofi::new(&["Selection", "Monitor"]);
 
-        let rofi = Rofi::new("rofi-menu-noinput.rasi", &["Selection", "Monitor"]);
+        if let Some(theme) = &theme {
+            rofi = rofi.theme(theme.clone());
+        }
 
-        let sel = rofi.run();
+        let (sel, exit_code) = rofi
+            // for editing with swappy
+            .arg("-kb-custom-1")
+            .arg("Alt-a")
+            .arg("-mesg")
+            .arg("Audio can be recorded using Alt+a")
+            .run();
+
+        // custom keyboard code selected
+        if !self.audio {
+            self.audio = exit_code == 10;
+        }
+
         match sel.as_str() {
-            "Monitor" => Self::monitor(video),
-            "Selection" => Self::selection(video),
+            "Monitor" => {
+                std::thread::sleep(std::time::Duration::from_secs(self.rofi_delay(theme)));
+                self.monitor();
+            }
+            "Selection" => {
+                std::thread::sleep(std::time::Duration::from_secs(self.rofi_delay(theme)));
+                self.selection();
+            }
             "All" => unimplemented!("Capturing of all outputs has not been implemented for video"),
             "" => {
                 eprintln!("No rofi selection was made.");
@@ -218,5 +261,24 @@ impl Screencast {
             }
             _ => unimplemented!("Invalid rofi selection"),
         };
+    }
+
+    /// prompts the user for delay using rofi if not provided as a cli flag
+    pub fn rofi_delay(&self, theme: &Option<PathBuf>) -> u64 {
+        let delay_options = ["0", "3", "5"];
+
+        let mut rofi = Rofi::new(&delay_options);
+        if let Some(theme) = theme {
+            rofi = rofi.theme(theme.clone());
+        }
+
+        let (sel, _) = rofi.run();
+
+        if sel.is_empty() {
+            eprintln!("No delay selection was made.");
+            std::process::exit(1);
+        }
+
+        sel.parse::<u64>().expect("Invalid delay specified")
     }
 }

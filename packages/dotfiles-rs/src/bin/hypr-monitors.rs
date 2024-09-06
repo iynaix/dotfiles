@@ -88,7 +88,7 @@ fn main() {
     if let Some(new_mon) = args.rofi {
         let choices = ["Extend as Primary", "Extend as Secondary", "Mirror"];
 
-        let sel = Rofi::new("rofi-menu-noinput.rasi", &choices)
+        let (sel, _) = Rofi::new(&choices)
             .arg("-lines")
             .arg(choices.len().to_string())
             .run();

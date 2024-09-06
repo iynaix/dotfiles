@@ -93,14 +93,14 @@ fn main() {
 
     // display with rofi
     let rofi = Rofi::new(
-        "rofi-menu.rasi",
         &all_themes
             .iter()
             .map(|theme| theme.rofi.to_string())
             .collect::<Vec<_>>(),
-    );
+    )
+    .theme(full_path("~/.cache/wallust/rofi-menu.rasi"));
 
-    let sel = rofi
+    let (sel, _) = rofi
         .arg("-i") // case insensitive
         .arg("-markup-rows") // needed for pango markup
         .run();

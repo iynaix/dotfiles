@@ -8,6 +8,7 @@
   grim,
   libnotify,
   slurp,
+  swappy,
   wl-clipboard,
   hyprland,
 }:
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage {
           wl-clipboard
           hyprland
           rofi
+          swappy
         ]
       }
   '';

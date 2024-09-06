@@ -5,12 +5,10 @@ use clap_complete::{generate, Shell};
 use rofi_capture::{Screencast, Screenshot};
 
 /*
-    TODO
-    - rofi for choosing delay
-    - edit for images: open in swappy?
-    - tesseract
-    - --delay
-    - --edit for images?
+    TODO:
+    tesseract?
+    --notify option?
+    arg groups for formatting?
 */
 
 #[derive(Subcommand, ValueEnum, Debug, Clone)]
@@ -33,15 +31,26 @@ pub enum ShellCompletion {
     about = "Rofi menu for screenshots / screencasts"
 )]
 pub struct RofiCaptureArgs {
-    #[arg(long, action, help = "do video recording instead of screenshots")]
-    pub video: bool,
-
-    /// display rofi menu
     #[arg(long, action, help = "display rofi menu")]
     pub rofi: bool,
 
     #[arg(name = "capture", long, value_enum, help = "type of area to capture")]
     pub capture: Option<CaptureArea>,
+
+    #[arg(long, help = "delay in seconds before capturing")]
+    pub delay: Option<u64>, // sleep uses u64
+
+    #[arg(long, action, help = "use rofi theme")]
+    pub theme: Option<PathBuf>,
+
+    #[arg(long, action, help = "do video recording instead of screenshots")]
+    pub video: bool,
+
+    #[arg(long, action, help = "capture video with audio")]
+    pub audio: Option<bool>,
+
+    #[arg(long, action, help = "edit screenshot with swappy")]
+    pub edit: Option<bool>,
 
     /// write to specific filename, otherwise creates one based on current time
     pub filename: Option<PathBuf>,
@@ -86,35 +95,30 @@ fn main() {
         return;
     }
 
-    if args.rofi {
-        if args.video {
-            Screencast::rofi(&args.filename);
-        } else {
-            Screenshot::rofi(&args.filename);
-        }
-
-        return;
-    }
-
     if args.video {
-        if let Some(area) = args.capture {
-            let output_path = Screencast::output_path(args.filename);
-
+        let mut screencast = Screencast::new(args.filename.clone(), args.delay, args.audio);
+        if args.rofi {
+            screencast.rofi(&args.theme);
+        } else if let Some(area) = args.capture {
             match area {
-                CaptureArea::Monitor => Screencast::monitor(output_path),
-                CaptureArea::Selection => Screencast::selection(output_path),
+                CaptureArea::Monitor => screencast.monitor(),
+                CaptureArea::Selection => screencast.selection(),
                 CaptureArea::All => {
                     unimplemented!("Capturing of all outputs has not been implemented for video")
                 }
             }
         }
-    } else if let Some(area) = args.capture {
-        let output_path = Screenshot::output_path(args.filename);
+    } else {
+        let screenshot = Screenshot::new(args.filename.clone(), args.delay, args.edit);
 
-        match area {
-            CaptureArea::Monitor => Screenshot::monitor(output_path),
-            CaptureArea::Selection => Screenshot::selection(output_path),
-            CaptureArea::All => Screenshot::all(output_path),
+        if args.rofi {
+            screenshot.rofi(&args.theme);
+        } else if let Some(area) = args.capture {
+            match area {
+                CaptureArea::Monitor => screenshot.monitor(),
+                CaptureArea::Selection => screenshot.selection(),
+                CaptureArea::All => screenshot.all(),
+            }
         }
     }
 }
