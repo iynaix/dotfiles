@@ -6,58 +6,26 @@
   ...
 }:
 let
-  screenshotDir = "${config.xdg.userDirs.pictures}/Screenshots";
-  iso8601 = "%Y-%m-%dT%H:%M:%S%z";
+  focal = pkgs.custom.focal.override {
+    hyprland = config.wayland.windowManager.hyprland.package;
+    rofi = config.programs.rofi.package;
+    ocr = true;
+  };
 in
 lib.mkIf config.custom.hyprland.enable {
   home.packages = lib.mkIf isNixOS (
-    with pkgs;
-    [
-      grimblast
+    [ focal ]
+    ++ (with pkgs; [
       swappy
       wf-recorder
-      slurp
-      (custom.rofi-capture.override {
-        hyprland = config.wayland.windowManager.hyprland.package;
-        rofi = config.programs.rofi.package;
-      })
-    ]
+    ])
   );
-
-  custom.shell.packages = {
-    # screenshot with  options to preselect
-    hypr-screenshot = {
-      runtimeInputs = with pkgs; [
-        grimblast
-        libnotify
-        swappy
-        rofi-wayland
-      ];
-      text = lib.readFile ./screenshot.sh;
-    };
-    # run ocr on selected area and copy to clipboard
-    hypr-ocr = {
-      runtimeInputs = with pkgs; [
-        grimblast
-        libnotify
-        tesseract5
-      ];
-      text = ''
-        img="${screenshotDir}/ocr.png"
-
-        grimblast save area "$img"
-        tesseract "$img" - | wl-copy
-        rm "$img"
-        notify-send "$(wl-paste)"
-      '';
-    };
-  };
 
   # swappy conf
   xdg.configFile."swappy/config".text = lib.generators.toINI { } {
     default = {
-      save_dir = screenshotDir;
-      save_filename_format = "${iso8601}.png";
+      save_dir = "${config.xdg.userDirs.pictures}/Screenshots";
+      save_filename_format = "%Y-%m-%dT%H:%M:%S%z.png";
       show_panel = false;
       line_size = 5;
       text_size = 20;
@@ -70,9 +38,10 @@ lib.mkIf config.custom.hyprland.enable {
 
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, backslash, exec, grimblast --notify copy area"
-      ''$mod_SHIFT, backslash, exec, hypr-screenshot "${screenshotDir}/$(date +${iso8601}).png"''
-      "$mod_CTRL, backslash, exec, hypr-ocr"
+      "$mod, backslash, exec, ${lib.getExe focal} --area selection --no-notify"
+      ''$mod_SHIFT, backslash, exec, ${lib.getExe focal} --rofi''
+      "$mod_CTRL, backslash, exec, ${lib.getExe focal} --area selection --ocr"
+      ''ALT, backslash, exec, ${lib.getExe focal} --rofi --video''
     ];
   };
 }

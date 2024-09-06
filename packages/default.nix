@@ -21,14 +21,14 @@ let
       ../Cargo.toml
 
       ./dotfiles-rs
-      ./rofi-capture
+      ./focal
     ];
   };
 in
 {
   # boutique rust packages
   dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
-  rofi-capture = callPackage ./rofi-capture { src = rustSrcs; };
+  focal = callPackage ./focal { src = rustSrcs; };
 
   # writeShellApplication with support for completions
   writeShellApplicationCompletions = callPackage ./write-shell-application-completions { };

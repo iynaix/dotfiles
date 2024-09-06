@@ -319,6 +319,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69dc321eb6be977f44674620ca3aa21703cb20ffbe560e1ae97da08401ffbcad"
 
 [[package]]
+name = "focal"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "clap_complete",
+ "dirs",
+ "dotfiles",
+ "execute",
+ "regex",
+ "serde",
+ "serde_json",
+ "sysinfo",
+]
+
+[[package]]
 name = "generic-array"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -562,21 +577,6 @@ name = "regex-syntax"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a66a03ae7c801facd77a29370b4faec201768915ac14a721ba36f20bc9c209b"
-
-[[package]]
-name = "rofi-capture"
-version = "0.1.0"
-dependencies = [
- "clap",
- "clap_complete",
- "dirs",
- "dotfiles",
- "execute",
- "regex",
- "serde",
- "serde_json",
- "sysinfo",
-]
 
 [[package]]
 name = "ryu"

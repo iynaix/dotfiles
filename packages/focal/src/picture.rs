@@ -1,7 +1,7 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, process::Stdio};
 
-use crate::{create_parent_dirs, SlurpGeom};
-use dotfiles::{iso8601_filename, monitor::Monitor, rofi::Rofi};
+use crate::SlurpGeom;
+use dotfiles::{monitor::Monitor, rofi::Rofi};
 use execute::{command, command_args, Execute};
 
 #[derive(Default)]
@@ -29,7 +29,7 @@ impl Grim {
         self
     }
 
-    pub fn capture(self) {
+    pub fn capture(self, notify: bool) {
         let mut grim = command!("grim");
 
         if !self.monitor.is_empty() {
@@ -44,45 +44,50 @@ impl Grim {
             .execute()
             .expect("unable to execute grim");
 
-        // show a notifcation
-        command_args!("notify-send", "-t", "3000", "-a", "rofi-capture")
-            .arg(format!("Screenshot captured to {}", self.output.display()))
-            .arg("-i")
-            .arg(&self.output)
-            .execute()
-            .expect("Failed to send screenshot notification");
+        // show a notification
+        if notify {
+            command_args!("notify-send", "-t", "3000", "-a", "focal")
+                .arg(format!("Screenshot captured to {}", self.output.display()))
+                .arg("-i")
+                .arg(&self.output)
+                .execute()
+                .expect("Failed to send screenshot notification");
+        }
     }
 }
 
 pub struct Screenshot {
     pub delay: Option<u64>,
-    pub edit: Option<bool>,
+    pub edit: bool,
+    pub notify: bool,
+    pub ocr: bool,
     pub output: PathBuf,
 }
 
 impl Screenshot {
-    pub fn new(filename: Option<PathBuf>, delay: Option<u64>, edit: Option<bool>) -> Self {
-        let output = create_parent_dirs(filename.unwrap_or_else(|| {
-            dirs::picture_dir()
-                .expect("could not get $XDG_PICTURES_DIR")
-                .join(format!("Screenshots/{}.png", iso8601_filename()))
-        }));
-
-        Self {
-            delay,
-            edit,
-            output,
-        }
-    }
-
     fn capture(&self, monitor: &str, geometry: &str) {
+        if !self.ocr {
+            // copy the image file to clipboard
+            command!("wl-copy")
+                .arg("--type")
+                .arg("text/uri-list")
+                .execute_input(&format!("file://{}", self.output.display()))
+                .expect("failed to copy image to clipboard");
+        }
+
         // small delay before capture
         std::thread::sleep(std::time::Duration::from_millis(500));
 
         Grim::new(self.output.clone())
             .geometry(geometry)
             .monitor(monitor)
-            .capture();
+            .capture(self.notify);
+
+        if self.ocr {
+            self.ocr();
+        } else if self.edit {
+            self.edit();
+        }
     }
 
     pub fn monitor(&self) {
@@ -104,7 +109,7 @@ impl Screenshot {
         self.capture("", &format!("0,0 {w}x{h}"));
     }
 
-    pub fn edit(&self) {
+    fn edit(&self) {
         command!("swappy")
             .arg("--file")
             .arg(self.output.clone())
@@ -114,7 +119,21 @@ impl Screenshot {
             .expect("Failed to edit screenshot with swappy");
     }
 
-    pub fn rofi(&self, theme: &Option<PathBuf>) {
+    fn ocr(&self) {
+        let output = command!("tesseract")
+            .arg(&self.output)
+            .arg("-")
+            .stdout(Stdio::piped())
+            .execute_output()
+            .expect("Failed to run tesseract");
+
+        command!("wl-copy")
+            .stdout(Stdio::piped())
+            .execute_input(&output.stdout)
+            .expect("unable to copy ocr text");
+    }
+
+    pub fn rofi(&mut self, theme: &Option<PathBuf>) {
         let mut rofi = Rofi::new(&["Selection", "Monitor", "All"]);
 
         if let Some(theme) = theme {
@@ -129,8 +148,8 @@ impl Screenshot {
             .arg("Screenshots can be edited with swappy by using Alt+e")
             .run();
 
-        // Alt-e is exit code 10
-        let do_edit = self.edit.unwrap_or(exit_code == 10);
+        // custom keyboard code selected
+        self.edit = exit_code == 10;
 
         match sel.as_str() {
             "Selection" => {
@@ -151,13 +170,9 @@ impl Screenshot {
             }
             _ => unimplemented!("Invalid rofi selection"),
         };
-
-        if do_edit {
-            self.edit();
-        }
     }
 
-    pub fn rofi_delay(&self, theme: &Option<PathBuf>) -> u64 {
+    fn rofi_delay(&self, theme: &Option<PathBuf>) -> u64 {
         let delay_options = ["0", "3", "5"];
 
         let mut rofi = Rofi::new(&delay_options);
