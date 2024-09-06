@@ -80,7 +80,8 @@ in
 
       waybar.config =
         let
-          alertSpan = s: ''<span color="{{color4}}">${s}</span>'';
+          # lang is hack to be compatible with pango markup as class is not a supported attribute
+          inversed = s: ''<span lang="inverse" color="{{color4}}">${s}</span>'';
         in
         {
           backlight = lib.mkIf config.custom.backlight.enable {
@@ -130,7 +131,6 @@ in
             };
             format = "󰥔   {:%H:%M}";
             format-alt = "󰸗   {:%a, %d %b %Y}";
-            # format = "󰥔   {:%H:%M}";
             # format-alt = "  {:%a, %d %b %Y}";
             interval = 10;
             tooltip-format = "<tt><small>{calendar}</small></tt>";
@@ -146,7 +146,7 @@ in
           idle_inhibitor = lib.mkIf cfg.idleInhibitor {
             format = "{icon}";
             format-icons = {
-              activated = alertSpan "";
+              activated = inversed "";
               deactivated = "";
             };
           };
@@ -187,7 +187,7 @@ in
 
           network =
             {
-              format-disconnected = alertSpan "󰖪    Offline";
+              format-disconnected = inversed "󰖪    Offline";
               tooltip = false;
             }
             // (
@@ -211,7 +211,7 @@ in
               "󰖀"
               "󰕾"
             ];
-            format-muted = alertSpan "󰖁  Muted";
+            format-muted = inversed "󰖁  Muted";
             on-click = "${lib.getExe pkgs.pamixer} -t";
             on-click-right = "pwvucontrol";
             scroll-step = 1;

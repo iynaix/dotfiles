@@ -34,7 +34,7 @@ pub enum ShellCompletion {
         .conflicts_with("video")
         .args(["edit", "ocr"]),
 ))]
-pub struct RofiCaptureArgs {
+pub struct FocalArgs {
     #[arg(long, action, help = "display rofi menu")]
     pub rofi: bool,
 
@@ -76,7 +76,7 @@ pub struct RofiCaptureArgs {
 }
 
 fn generate_completions(shell_completion: ShellCompletion) {
-    let mut cmd = RofiCaptureArgs::command();
+    let mut cmd = FocalArgs::command();
 
     match shell_completion {
         ShellCompletion::Bash => generate(Shell::Bash, &mut cmd, "focal", &mut std::io::stdout()),
@@ -86,7 +86,7 @@ fn generate_completions(shell_completion: ShellCompletion) {
 }
 
 fn main() {
-    let args = RofiCaptureArgs::parse();
+    let args = FocalArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate_completions {
