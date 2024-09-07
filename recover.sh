@@ -80,10 +80,10 @@ echo "Re-installing NixOS"
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
     nix-shell -p git nixFlakes --command \
-        "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\""
+        "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"
 else
     nix-shell -p git nixFlakes --command \
-        "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\""
+        "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"
 fi
 
 echo "Intallation complete. It is now safe to reboot."

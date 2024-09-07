@@ -27,7 +27,7 @@
             # https://devenv.sh/reference/options/
             dotenv.disableHint = true;
 
-            packages = with pkgs; [ ];
+            packages = with pkgs; [ cargo-edit ];
 
             languages.rust.enable = true;
           };

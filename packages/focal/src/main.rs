@@ -194,9 +194,9 @@ fn main() {
             PathBuf::from(format!("/tmp/{fname}"))
         } else {
             create_parent_dirs(args.filename.unwrap_or_else(|| {
-                dirs::video_dir()
-                    .expect("could not get $XDG_VIDEOS_DIR")
-                    .join(format!("Screencasts/{}", fname))
+                dirs::picture_dir()
+                    .expect("could not get $XDG_PICTURES_DIR")
+                    .join(format!("Screenshots/{}", fname))
             }))
         };
 

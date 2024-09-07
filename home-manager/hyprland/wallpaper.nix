@@ -9,7 +9,7 @@
 let
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   walls_in_dir = "${config.xdg.userDirs.pictures}/wallpapers_in";
-  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallpaper-ui";
+  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallfacer";
 in
 {
   options.custom = with lib; {
@@ -60,26 +60,26 @@ in
             '';
         };
         # process wallpapers with upscaling and vertical crop
-        wallpapers-add = {
+        wallfacer-add = {
           runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
           text = ''
             ${lib.custom.useDirenv wallpapers_proj ''
-              cargo run --release --bin add-wallpapers -- --format webp "$@" "${walls_in_dir}"
+              cargo run --release --bin wallfacer -- add --format webp "$@" "${walls_in_dir}"
             ''}
             wallpapers-backup
           '';
         };
         # choose custom crops for wallpapers
-        wallpapers-ui = {
+        wallfacer = {
           text = lib.custom.useDirenv wallpapers_proj ''
-            cargo run --release --bin wallpaper-ui -- "$@"
+            cargo run --release --bin wallfacer -- "$@"
           '';
           # bash completion isn't helpful as there are 1000s of images
           fishCompletion = ''
-            function _wallpapers_ui
+            function _wallfacer
               find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
             end
-            complete -c wallpapers-ui -f -a '(_wallpapers_ui)'
+            complete -c wallfacer -f -a '(_wallfacer)'
           '';
         };
         # finds duplicate wallpapers
@@ -105,7 +105,7 @@ in
         packages = [ pkgs.nomacs ];
         shellAliases = {
           # edit the current wallpaper
-          wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallpapers-ui} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
+          wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallfacer} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
         };
       };
 
@@ -175,9 +175,9 @@ in
         };
       };
 
-      # config file for wallpapers-ui
+      # config file for wallfacer
       xdg.configFile = {
-        "wallpaper-ui/config.ini".text = lib.generators.toINIWithGlobalSection { } {
+        "wallfacer/config.ini".text = lib.generators.toINIWithGlobalSection { } {
           globalSection = {
             csv_path = "${wallpapers_dir}/wallpapers.csv";
             wallpapers_path = wallpapers_dir;
