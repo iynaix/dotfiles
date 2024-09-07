@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     installShellCompletion --cmd focal \
-      --bash <($out/bin/focal --generate-completions bash) \
-      --fish <($out/bin/focal --generate-completions fish) \
-      --zsh <($out/bin/focal --generate-completions zsh)
+      --bash <($out/bin/focal --generate bash) \
+      --fish <($out/bin/focal --generate fish) \
+      --zsh <($out/bin/focal --generate zsh)
   '';
 
   postFixup =
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage {
     "wrapProgram $out/bin/focal --prefix PATH : ${lib.makeBinPath binaries}";
 
   meta = with lib; {
-    description = "Rofi menu for screenshots / screencasts";
+    description = "Focal captures screenshots / videos using rofi, with clipboard support on hyprland";
     mainProgram = "focal";
     homepage = "https://github.com/iynaix/dotfiles";
     license = licenses.mit;

@@ -21,15 +21,21 @@ pub struct HyprWallpaperArgs {
     // optional image to use, uses a random one otherwise
     pub image_or_dir: Option<PathBuf>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 fn main() {
     let args = HyprWallpaperArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut HyprWallpaperArgs::command(), &shell);
     }
 

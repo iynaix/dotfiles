@@ -26,8 +26,14 @@ pub struct HyprMonitorArgs {
     #[arg(long, action, help = "show rofi menu for monitor options")]
     pub rofi: Option<String>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 // reload wallpaper
@@ -80,7 +86,7 @@ fn main() {
     let args = HyprMonitorArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut HyprMonitorArgs::command(), &shell);
     }
 

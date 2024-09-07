@@ -1,8 +1,11 @@
 use std::{path::PathBuf, process::Stdio};
 
-use crate::SlurpGeom;
-use dotfiles::{monitor::Monitor, rofi::Rofi};
+use crate::{Rofi, SlurpGeom};
 use execute::{command, command_args, Execute};
+use hyprland::{
+    data::{Monitor, Monitors},
+    shared::{HyprData, HyprDataActive},
+};
 
 #[derive(Default)]
 struct Grim {
@@ -91,7 +94,8 @@ impl Screenshot {
     }
 
     pub fn monitor(&self) {
-        self.capture(&Monitor::focused().name, "");
+        let focused = Monitor::get_active().expect("unable to get active monitor");
+        self.capture(&focused.name, "");
     }
 
     pub fn selection(&self) {
@@ -101,9 +105,9 @@ impl Screenshot {
     pub fn all(&self) {
         let mut w = 0;
         let mut h = 0;
-        for mon in Monitor::monitors() {
-            w = w.max(mon.x + mon.width);
-            h = h.max(mon.y + mon.height);
+        for mon in Monitors::get().expect("unable to get monitors").iter() {
+            w = w.max(mon.x + mon.width as i32);
+            h = h.max(mon.y + mon.height as i32);
         }
 
         self.capture("", &format!("0,0 {w}x{h}"));
@@ -165,7 +169,7 @@ impl Screenshot {
                 self.all()
             }
             "" => {
-                eprintln!("No capture area selection was made.");
+                eprintln!("No capture selection was made.");
                 std::process::exit(1);
             }
             _ => unimplemented!("Invalid rofi selection"),

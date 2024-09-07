@@ -1,5 +1,8 @@
-use dotfiles::{monitor::Monitor, Client};
 use execute::{command_args, Execute};
+use hyprland::{
+    data::{Clients, Monitors, Transforms},
+    shared::HyprData,
+};
 use std::{fmt, process::Stdio};
 
 #[derive(Debug)]
@@ -62,11 +65,13 @@ impl std::str::FromStr for SlurpGeom {
 impl SlurpGeom {
     pub fn to_ffmpeg_geom(self) -> (String, String) {
         let Self { x, y, w, h } = self;
-        let monitors = Monitor::monitors();
 
+        let monitors = Monitors::get().expect("unable to get monitors");
         let mon = monitors
-            .into_iter()
-            .find(|m| x >= m.x && x <= m.x + m.width && y >= m.y && y <= m.y + m.height)
+            .iter()
+            .find(|m| {
+                x >= m.x && x <= m.x + m.width as i32 && y >= m.y && y <= m.y + m.height as i32
+            })
             .unwrap_or_else(|| {
                 panic!("No monitor found for slurp region");
             });
@@ -86,41 +91,44 @@ impl SlurpGeom {
         let final_h = round2(w);
 
         let filter = match mon.transform {
-            0 => format!("crop=w={w}:h={h}:x={x}:y={y}"),
+            Transforms::Normal => format!("crop=w={w}:h={h}:x={x}:y={y}"),
             // clockwise
-            1 => {
-                let final_y = mon.width - x - w;
+            Transforms::Normal90 => {
+                let final_y = mon.width as i32 - x - w;
                 let final_x = y;
                 format!("crop=w={final_w}:h={final_h}:x={final_x}:y={final_y}, transpose=1")
             }
             // anti-clockwise
-            3 => {
-                let final_x = mon.width - y - h;
+            Transforms::Normal270 => {
+                let final_x = mon.width as i32 - y - h;
                 let final_y = x;
                 format!("crop=w={final_w}:h={final_h}:x={final_x}:y={final_y}, transpose=2")
             }
             _ => {
-                panic!("Unknown monitor transform: {}", mon.transform);
+                unimplemented!("Unknown monitor transform");
             }
         };
 
-        (mon.name, filter)
+        (mon.name.clone(), filter)
     }
 
     pub fn prompt() -> Self {
-        let active_wksps = Monitor::active_workspaces();
-        let active_wksps: Vec<_> = active_wksps.values().collect();
+        let active_wksps: Vec<_> = Monitors::get()
+            .expect("unable to get monitors")
+            .iter()
+            .map(|mon| mon.active_workspace.id)
+            .collect();
 
-        let windows = Client::clients();
+        let windows = Clients::get().expect("unable to get clients");
         let window_geoms: Vec<_> = windows
             .iter()
             .filter_map(|win| {
-                if active_wksps.contains(&&win.workspace.id) {
+                if active_wksps.contains(&win.workspace.id) {
                     Some(Self {
-                        x: win.at.0,
-                        y: win.at.1,
-                        w: win.size.0,
-                        h: win.size.1,
+                        x: win.at.0.into(),
+                        y: win.at.1.into(),
+                        w: win.size.0.into(),
+                        h: win.size.1.into(),
                     })
                 } else {
                     None

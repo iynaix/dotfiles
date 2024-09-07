@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv swww-crop; do
       installShellCompletion --cmd $prog \
-        --bash <($out/bin/$prog --generate-completions bash) \
-        --fish <($out/bin/$prog --generate-completions fish) \
-        --zsh <($out/bin/$prog --generate-completions zsh)
+        --bash <($out/bin/$prog --generate bash) \
+        --fish <($out/bin/$prog --generate fish) \
+        --zsh <($out/bin/$prog --generate zsh)
     done
   '';
 

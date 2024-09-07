@@ -10,6 +10,9 @@ execute = "0.2.13"
 regex = "1.10.6"
 sysinfo = "0.31.4"
 dotfiles = { path = "../dotfiles-rs" }
-clap_complete = "4.5.25"
+clap_complete = "4.5.26"
 serde_json = "1.0.128"
-serde = "1.0.209"
+serde = "1.0.210"
+which = "6.0.3"
+chrono = "0.4.38"
+hyprland = { version = "0.4.0-alpha.3" }

@@ -16,15 +16,21 @@ pub struct HyprSameClassArgs {
     #[arg(value_enum)]
     pub direction: Option<Direction>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 fn main() {
     let args = HyprSameClassArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut HyprSameClassArgs::command(), &shell);
     }
 

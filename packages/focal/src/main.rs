@@ -2,8 +2,7 @@ use std::path::PathBuf;
 
 use clap::{ArgGroup, CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
-use dotfiles::iso8601_filename;
-use focal::{create_parent_dirs, Screencast, Screenshot};
+use focal::{create_parent_dirs, iso8601_filename, Screencast, Screenshot};
 
 #[derive(Subcommand, ValueEnum, Debug, Clone)]
 pub enum CaptureArea {
@@ -22,7 +21,7 @@ pub enum ShellCompletion {
 #[derive(Parser, Debug)]
 #[command(
     name = "focal",
-    about = "Focal captures screenshots / videos using rofi, with clipboard support"
+    about = "Focal captures screenshots / videos using rofi, with clipboard support on hyprland"
 )]
 #[command(group(
     ArgGroup::new("video_options")
@@ -30,7 +29,7 @@ pub enum ShellCompletion {
         .args(["audio"]),
 ))]
 #[command(group(
-    ArgGroup::new("non_video_options")
+    ArgGroup::new("image_options")
         .conflicts_with("video")
         .args(["edit", "ocr"]),
 ))]
@@ -71,8 +70,14 @@ pub struct FocalArgs {
     )]
     pub filename: Option<PathBuf>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 fn generate_completions(shell_completion: ShellCompletion) {
@@ -85,13 +90,66 @@ fn generate_completions(shell_completion: ShellCompletion) {
     }
 }
 
+/// check if all required programs are installed
+fn check_programs(args: &FocalArgs) {
+    let mut progs = std::collections::HashSet::from(["notify-send", "wl-copy"]);
+
+    if args.video {
+        progs.insert("wf-recorder");
+    } else {
+        progs.insert("grim");
+    }
+
+    if args.rofi {
+        progs.insert("rofi");
+        progs.insert("slurp");
+    }
+
+    if let Some(CaptureArea::Selection) = args.area {
+        progs.insert("slurp");
+    }
+
+    if args.edit {
+        progs.insert("swappy");
+    }
+
+    if args.ocr {
+        progs.insert("tesseract");
+    }
+
+    let not_found: Vec<_> = progs
+        .into_iter()
+        .filter(|prog| which::which(prog).is_err())
+        .collect();
+
+    if !not_found.is_empty() {
+        eprintln!(
+            "The following programs are required but not installed: {}",
+            not_found.join(", ")
+        );
+        std::process::exit(1);
+    }
+}
+
 fn main() {
     let args = FocalArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions(shell);
     }
+
+    if !args.rofi && args.area.is_none() {
+        FocalArgs::command()
+            .error(
+                clap::error::ErrorKind::MissingRequiredArgument,
+                "Either --rofi or --area is required.",
+            )
+            .exit()
+    }
+
+    // check if all required programs are installed
+    check_programs(&args);
 
     // stop any currently recording videos
     if args.video && Screencast::stop(!args.no_notify) {

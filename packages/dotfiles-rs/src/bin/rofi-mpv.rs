@@ -20,8 +20,14 @@ pub struct RofiMpvArgs {
     #[arg(value_enum)]
     pub media: Option<RofiMpvMedia>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 type Video = (PathBuf, String);
@@ -158,7 +164,7 @@ fn main() {
     let args = RofiMpvArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut RofiMpvArgs::command(), &shell);
     }
 

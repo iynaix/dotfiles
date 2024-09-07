@@ -19,8 +19,14 @@ pub struct SwwwCropArgs {
     // optional image to use, uses a random one otherwise
     pub image: Option<PathBuf>,
 
-    #[arg(long, value_enum, help = "type of shell completion to generate")]
-    pub generate_completions: Option<ShellCompletion>,
+    #[arg(
+        long,
+        value_enum,
+        help = "type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
 }
 
 // choose a random transition, taken from ZaneyOS
@@ -138,7 +144,7 @@ fn main() {
     let args = SwwwCropArgs::parse();
 
     // print shell completions
-    if let Some(shell) = args.generate_completions {
+    if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut SwwwCropArgs::command(), &shell);
     }
 
