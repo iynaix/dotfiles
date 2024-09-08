@@ -1,14 +1,15 @@
 {
   config,
+  inputs,
   isNixOS,
   lib,
   pkgs,
   ...
 }:
 let
-  focal = pkgs.custom.focal.override {
+  focal = inputs.focal.packages.${pkgs.system}.default.override {
     hyprland = config.wayland.windowManager.hyprland.package;
-    rofi = config.programs.rofi.package;
+    rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };
 in
@@ -39,9 +40,9 @@ lib.mkIf config.custom.hyprland.enable {
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$mod, backslash, exec, ${lib.getExe focal} --area selection --no-notify --no-save"
-      ''$mod_SHIFT, backslash, exec, ${lib.getExe focal} --rofi''
+      "$mod_SHIFT, backslash, exec, ${lib.getExe focal} --edit ${lib.getExe pkgs.swappy} --rofi"
       "$mod_CTRL, backslash, exec, ${lib.getExe focal} --area selection --ocr"
-      ''ALT, backslash, exec, ${lib.getExe focal} --rofi --video''
+      "ALT, backslash, exec, ${lib.getExe focal} --rofi --video"
     ];
   };
 }

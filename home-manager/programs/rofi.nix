@@ -92,6 +92,7 @@ in
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
+      theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
     custom.shell.packages = {
@@ -103,17 +104,6 @@ in
         ];
         text = lib.readFile ./rofi-power-menu.sh;
       };
-    };
-
-    xdg.configFile = {
-      "rofi/rofi-wifi-menu" = lib.mkIf config.custom.wifi.enable {
-        # https://github.com/ericmurphyxyz/rofi-wifi-menu/blob/master/rofi-wifi-menu.sh
-        source = ./rofi-wifi-menu.sh;
-      };
-
-      "rofi/config.rasi".text = ''
-        @theme "${config.xdg.cacheHome}/wallust/rofi.rasi"
-      '';
     };
 
     # add blur for rofi shutdown

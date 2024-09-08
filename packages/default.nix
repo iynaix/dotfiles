@@ -21,14 +21,12 @@ let
       ../Cargo.toml
 
       ./dotfiles-rs
-      ./focal
     ];
   };
 in
 {
   # boutique rust packages
   dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
-  focal = callPackage ./focal { src = rustSrcs; };
 
   # writeShellApplication with support for completions
   writeShellApplicationCompletions = callPackage ./write-shell-application-completions { };

@@ -1,4 +1,4 @@
 [workspace]
 
-members = ["packages/dotfiles-rs", "packages/focal"]
+members = ["packages/dotfiles-rs"]
 resolver = "2"

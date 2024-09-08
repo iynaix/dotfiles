@@ -195,7 +195,11 @@ in
                 {
                   format = "    {essid}";
                   format-ethernet = " ";
-                  on-click = "${config.xdg.configHome}/rofi/rofi-wifi-menu";
+                  # rofi wifi script
+                  on-click = pkgs.fetchurl {
+                    url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
+                    hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
+                  };
                   on-click-right = "${config.custom.terminal.exec} nmtui";
                 }
               else

@@ -7,24 +7,15 @@ inputs.devenv.lib.mkShell {
       { pkgs, ... }:
       {
         # devenv configuration
-        packages =
-          with pkgs;
-          [
-            age
-            sops
-            cachix
-            deadnix
-            statix
-            nixd
-            cargo-edit
-          ]
-          ++
-            # for focal
-            [
-              grim
-              libnotify
-              slurp
-            ];
+        packages = with pkgs; [
+          age
+          sops
+          cachix
+          deadnix
+          statix
+          nixd
+          cargo-edit
+        ];
 
         languages.rust.enable = true;
 
