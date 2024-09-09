@@ -1,12 +1,13 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
-    full_path, generate_completions, iso8601_filename, kill_wrapped_process,
+    full_path, generate_completions, hypr, iso8601_filename, kill_wrapped_process,
+    monitor::Monitor,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
 };
 use execute::Execute;
-use std::path::PathBuf;
+use std::{collections::HashSet, path::PathBuf};
 use sysinfo::Signal;
 
 #[derive(Parser, Debug)]
@@ -23,6 +24,15 @@ pub struct HyprWallpaperArgs {
 
     #[arg(
         long,
+        action,
+        aliases = ["rofi"],
+        help = "show wallpaper selector with pqiv",
+        exclusive = true
+    )]
+    pub pqiv: bool,
+
+    #[arg(
+        long,
         value_enum,
         help = "type of shell completion to generate",
         hide = true,
@@ -31,12 +41,42 @@ pub struct HyprWallpaperArgs {
     pub generate: Option<ShellCompletion>,
 }
 
+fn show_pqiv() {
+    const TARGET_PERCENT: f64 = 0.3;
+
+    let mon = Monitor::focused();
+
+    let mut width = f64::from(mon.width) * TARGET_PERCENT;
+    let mut height = f64::from(mon.height) * TARGET_PERCENT;
+
+    // handle vertical monitor
+    if height > width {
+        std::mem::swap(&mut width, &mut height);
+    }
+
+    let float_rule = format!("[float;size {} {};center]", width.floor(), height.floor());
+
+    hypr([
+        "exec",
+        &format!(
+            "{float_rule} pqiv --shuffle '{}'",
+            &wallpaper::dir().to_str().expect("invalid wallpaper dir")
+        ),
+    ]);
+}
+
 fn main() {
     let args = HyprWallpaperArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate {
         return generate_completions("hypr-monitors", &mut HyprWallpaperArgs::command(), &shell);
+    }
+
+    // show pqiv for selecting wallpaper, via the "w" keybind
+    if args.pqiv {
+        show_pqiv();
+        return;
     }
 
     let random_wallpaper = match args.image_or_dir {
@@ -106,16 +146,26 @@ fn main() {
         std::os::unix::fs::symlink(wallpaper, target)
             .expect("unable to create wallpaper history symlink");
 
-        // remove broken symlinks for deleted wallpapers
-        for entry in std::fs::read_dir(wallpaper_history)
+        // remove broken and duplicate symlinks
+        let mut uniq_history = HashSet::new();
+        let mut history: Vec<_> = std::fs::read_dir(&wallpaper_history)
             .expect("failed to read wallpaper_history directory")
-        {
-            let path = entry
-                .expect("failed to read wallpaper_history directory entry")
-                .path();
+            .filter_map(|entry| entry.ok().map(|e| e.path()))
+            .collect();
+        history.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
 
-            if path.is_symlink() && !path.exists() {
-                std::fs::remove_file(path).expect("failed to remove broken symlink");
+        for path in history {
+            match std::fs::read_link(&path) {
+                Ok(resolved) => {
+                    if uniq_history.contains(&resolved) {
+                        std::fs::remove_file(path).expect("failed to remove duplicate symlink");
+                    } else {
+                        uniq_history.insert(resolved.clone());
+                    }
+                }
+                Err(_) => {
+                    std::fs::remove_file(path).expect("failed to remove broken symlink");
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 use crate::{hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
 use clap::ValueEnum;
+use hyprland::keyword::Keyword;
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -204,12 +205,11 @@ impl Monitor {
         let primary = nix_monitors.first().expect("no primary monitor found");
 
         // mirror the primary to the new one
-        execute::command_args!(
-            "hyprctl",
-            "keyword",
+        Keyword::set(
             "monitor",
-            &format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon)
-        );
+            format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
+        )
+        .expect("unable to mirror displays");
 
         // hyprctl keyword monitor HDMI-A-1,mirror,eDP-1
     }

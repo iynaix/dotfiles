@@ -127,7 +127,7 @@ in
       };
     };
 
-    hm.xdg.dataFile."impermanence.txt".text =
+    hm.xdg.stateFile."impermanence.txt".text =
       let
         getDirPath = prefix: d: "${prefix}${d.dirPath}";
         getFilePath = prefix: f: "${prefix}${f.filePath}";

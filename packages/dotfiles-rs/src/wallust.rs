@@ -6,6 +6,7 @@ use crate::{
     CommandUtf8,
 };
 use execute::Execute;
+use hyprland::keyword::Keyword;
 use rayon::prelude::*;
 use std::{collections::HashMap, path::PathBuf};
 use sysinfo::Signal;
@@ -121,66 +122,47 @@ fn accent_or_default(accents: &[String], accent_idx: usize, default: &str) -> St
 
 fn apply_hyprland_colors(accents: &[String], hyprland_colors: &[String]) {
     // update borders
-    execute::command_args!(
-        "hyprctl",
-        "keyword",
+    Keyword::set(
         "general:col.active_border",
-        &format!(
+        format!(
             "{} {} 45deg",
             accent_or_default(accents, 0, &hyprland_colors[4]),
             &hyprland_colors[0],
         ),
     )
-    .execute()
     .expect("failed to set hyprland active border color");
 
-    execute::command_args!(
-        "hyprctl",
-        "keyword",
-        "general:col.inactive_border",
-        &hyprland_colors[0]
-    )
-    .execute()
-    .expect("failed to set hyprland inactive border color");
+    Keyword::set("general:col.inactive_border", hyprland_colors[0].clone())
+        .expect("failed to set hyprland inactive border color");
 
     // pink border for monocle windows
-    execute::command_args!(
-        "hyprctl",
-        "keyword",
+    Keyword::set(
         "windowrulev2",
-        "bordercolor",
-        &format!(
-            "{},fullscreen:1",
+        format!(
+            "bordercolor {},fullscreen:1",
             accent_or_default(accents, 1, &hyprland_colors[5]),
-        )
+        ),
     )
-    .execute()
-    .expect("failed to set hyprland border color");
+    .expect("failed to set hyprland fakefullscreen border color");
+
     // teal border for floating windows
-    execute::command_args!(
-        "hyprctl",
-        "keyword",
+    Keyword::set(
         "windowrulev2",
-        "bordercolor",
-        &format!(
-            "{},floating:1",
+        format!(
+            "bordercolor {},floating:1",
             accent_or_default(accents, 2, &hyprland_colors[6]),
         ),
     )
-    .execute()
     .expect("failed to set hyprland floating border color");
+
     // yellow border for sticky (must be floating) windows
-    execute::command_args!(
-        "hyprctl",
-        "keyword",
+    Keyword::set(
         "windowrulev2",
-        "bordercolor",
-        &format!(
-            "{},pinned:1",
+        format!(
+            "bordercolor {},pinned:1",
             accent_or_default(accents, 3, &hyprland_colors[3])
         ),
     )
-    .execute()
     .expect("failed to set hyprland sticky border color");
 }
 

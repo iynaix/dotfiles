@@ -2,6 +2,7 @@ use dotfiles::nixinfo::NixInfo;
 use dotfiles::Client;
 use dotfiles::{hypr_json, monitor::Monitor};
 use execute::Execute;
+use hyprland::keyword::Keyword;
 use rand::Rng;
 use serde::Deserialize;
 use std::io::{BufRead, BufReader};
@@ -61,10 +62,7 @@ fn set_split_ratio(nstack: bool, split_ratio: f32) {
     };
 
     // log(&format!("setting split ratio: {split_ratio}"));
-
-    execute::command_args!("hyprctl", "keyword", keyword_path, split_ratio.to_string())
-        .execute()
-        .expect("unable to set mfact");
+    Keyword::set(keyword_path, split_ratio.to_string()).expect("unable to set mfact");
 }
 
 /// sets split ratio if there are 2 windows
@@ -105,12 +103,8 @@ fn main() {
         // random gap between 4 and 8
         let gap = rand::thread_rng().gen_range(4..=8).to_string();
 
-        execute::command_args!("hyprctl", "keyword", "general:gaps_in", &gap)
-            .execute()
-            .expect("failed to set gaps");
-        execute::command_args!("hyprctl", "keyword", "general:gaps_out", &gap)
-            .execute()
-            .expect("failed to set gaps");
+        Keyword::set("general:gaps_in", gap.clone()).expect("failed to set gaps");
+        Keyword::set("general:gaps_out", gap).expect("failed to set gaps");
     };
 
     let socket_path = get_hyprland_socket();

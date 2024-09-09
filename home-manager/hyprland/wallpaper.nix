@@ -169,6 +169,7 @@ in
           text = ''
             # skip the current wallpaper
             find /persist${config.home.homeDirectory}/Pictures/wallpaper_history -type l | \
+            sort -r | \
             tail -n +2 | \
             xargs pqiv
           '';

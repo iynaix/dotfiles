@@ -138,8 +138,8 @@ in
 
           "custom/nix" = {
             format = "󱄅";
-            on-click = "hypr-wallpaper";
-            on-click-right = "wallpapers-select";
+            on-click = "rofi -show drun";
+            on-click-right = "hypr-wallpaper --rofi";
             tooltip = false;
           };
 
