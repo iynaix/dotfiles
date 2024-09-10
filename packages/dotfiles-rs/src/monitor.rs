@@ -1,6 +1,6 @@
-use crate::{hypr_json, nixinfo::NixInfo, Workspace, WorkspaceId};
+use crate::{hypr_json, nixinfo::NixInfo, WorkspaceId};
 use clap::ValueEnum;
-use hyprland::keyword::Keyword;
+use hyprland::{data::Workspaces, keyword::Keyword, shared::HyprData};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -102,17 +102,29 @@ impl Monitor {
     }
 
     /// returns the monitor and if the workspace currently exists
-    pub fn by_workspace(wksp: &str) -> (Self, bool) {
-        if let Some(wksp) = Workspace::by_name(wksp) {
-            (wksp.monitor(), true)
+    pub fn by_workspace(wksp_name: &str) -> (Self, bool) {
+        if let Some(wksp) = Workspaces::get()
+            .expect("could not get workspaces")
+            .iter()
+            .find(|w| w.name == wksp_name)
+        {
+            (
+                Self::monitors()
+                    .into_iter()
+                    .find(|m| m.name == wksp.monitor)
+                    .unwrap_or_else(|| panic!("monitor {} not found", wksp.monitor)),
+                true,
+            )
         } else {
             // workspace is empty and doesn't exist yet, search workspace rules for the monitor
             let workspace_rules: Vec<WorkspaceRule> = hypr_json("workspacerules");
 
             let wksp_rule = workspace_rules
                 .into_iter()
-                .find(|rule| rule.workspace == wksp)
-                .unwrap_or_else(|| panic!("workspace {wksp:?} not found within workspace rules"));
+                .find(|rule| rule.workspace == wksp_name)
+                .unwrap_or_else(|| {
+                    panic!("workspace {wksp_name:?} not found within workspace rules")
+                });
 
             let mon = Self::monitors()
                 .into_iter()

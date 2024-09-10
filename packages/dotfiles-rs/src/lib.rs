@@ -1,4 +1,3 @@
-use crate::monitor::Monitor;
 use clap::{Command, Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
 use execute::Execute;
@@ -93,20 +92,6 @@ impl CommandUtf8 for std::process::Command {
     }
 }
 
-/// hyprctl dispatch
-pub fn hypr<I, S>(hypr_args: I)
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<str>,
-{
-    let mut cmd = execute::command_args!("hyprctl", "dispatch");
-
-    for arg in hypr_args {
-        cmd.arg(arg.as_ref());
-    }
-    cmd.execute().expect("failed to execute hyprctl dispatch");
-}
-
 /// hyprctl clients
 #[derive(Clone, Default, Deserialize, Debug)]
 pub struct Client {
@@ -141,32 +126,6 @@ impl Client {
             .into_iter()
             .filter(|client| client.class == class)
             .collect()
-    }
-}
-
-/// hyprctl workspaces
-#[derive(Clone, Default, Deserialize, Debug)]
-pub struct Workspace {
-    pub id: i32,
-    pub name: String,
-    pub windows: i32,
-    pub monitor: String,
-}
-
-impl Workspace {
-    pub fn workspaces() -> Vec<Self> {
-        hypr_json("workspaces")
-    }
-
-    pub fn monitor(&self) -> Monitor {
-        Monitor::monitors()
-            .into_iter()
-            .find(|m| m.name == self.monitor)
-            .unwrap_or_else(|| panic!("monitor {} not found", self.monitor))
-    }
-
-    pub fn by_name(name: &str) -> Option<Self> {
-        Self::workspaces().into_iter().find(|w| w.name == name)
     }
 }
 

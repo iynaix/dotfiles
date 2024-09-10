@@ -1,11 +1,16 @@
 use clap::{value_parser, CommandFactory, Parser};
 use dotfiles::{
-    generate_completions, hypr,
+    generate_completions,
     monitor::{Monitor, MonitorExtend, WorkspacesByMonitor},
     rofi::Rofi,
     ShellCompletion,
 };
 use execute::Execute;
+use hyprland::dispatch::{
+    Dispatch,
+    DispatchType::{self, FocusMonitor, MoveWorkspaceToMonitor},
+    MonitorIdentifier, WorkspaceIdentifier, WorkspaceIdentifierWithSpecial,
+};
 
 #[derive(Parser, Debug)]
 #[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
@@ -48,12 +53,17 @@ fn mirror_monitors(new_mon: &str) {
     reload_wallpaper();
 }
 
-fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
+fn move_workspaces_to_monitors(
+    workspaces: &WorkspacesByMonitor,
+) -> Result<(), hyprland::shared::HyprError> {
     // move workspaces to monitors
     for (mon, wksps) in workspaces {
-        wksps
-            .iter()
-            .for_each(|wksp| hypr(["moveworkspacetomonitor", &wksp.to_string(), mon]));
+        for wksp in wksps {
+            Dispatch::call(MoveWorkspaceToMonitor(
+                WorkspaceIdentifier::Id(*wksp),
+                MonitorIdentifier::Name(mon),
+            ))?;
+        }
     }
 
     // focus workspace on monitors
@@ -67,19 +77,22 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
 
         for wksp in wksps {
             if primary_workspaces.contains(wksp) {
-                hypr(["workspace", &wksp.to_string()]);
+                Dispatch::call(DispatchType::Workspace(WorkspaceIdentifierWithSpecial::Id(
+                    *wksp,
+                )))?;
                 break;
             }
         }
     }
 
     // focus first / primary monitor
-    hypr([
-        "focusmonitor",
-        (workspaces.keys().next().expect("primary monitor not found")),
-    ]);
+    Dispatch::call(FocusMonitor(MonitorIdentifier::Name(
+        workspaces.keys().next().expect("primary monitor not found"),
+    )))?;
 
     reload_wallpaper();
+
+    Ok(())
 }
 
 fn main() {
@@ -126,5 +139,5 @@ fn main() {
         _ => Monitor::rearranged_workspaces(),
     };
 
-    move_workspaces_to_monitors(&workspaces);
+    move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
 }
