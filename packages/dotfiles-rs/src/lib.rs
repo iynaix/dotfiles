@@ -1,6 +1,7 @@
 use clap::{Command, Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
 use execute::Execute;
+use hyprland::shared::HyprData;
 use serde::{de::DeserializeOwned, Deserialize};
 use std::{path::PathBuf, process::Stdio};
 
@@ -184,6 +185,19 @@ pub fn iso8601_filename() -> String {
     chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
 }
 
-pub const fn is_vertical(mon: &hyprland::data::Monitor) -> bool {
-    mon.transform as u8 % 2 == 1
+/// swaps the dimenions if the monitor is vertical
+pub fn vertical_dimensions(mon: &hyprland::data::Monitor) -> (i32, i32) {
+    if mon.transform as u8 % 2 == 1 {
+        (mon.height.into(), mon.width.into())
+    } else {
+        (mon.width.into(), mon.height.into())
+    }
+}
+
+pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
+    hyprland::data::Monitors::get()
+        .expect("could not get monitors")
+        .iter()
+        .find(|mon| mon.name == name)
+        .cloned()
 }

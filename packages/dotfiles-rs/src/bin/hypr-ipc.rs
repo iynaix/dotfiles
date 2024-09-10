@@ -1,9 +1,39 @@
-use dotfiles::monitor::Monitor;
+use dotfiles::find_monitor_by_name;
 use dotfiles::nixinfo::NixInfo;
 use execute::Execute;
 use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprData;
-use hyprland::{data::Clients, keyword::Keyword};
+use hyprland::{
+    data::{Clients, Monitor, WorkspaceRules, Workspaces},
+    keyword::Keyword,
+};
+
+/// returns the monitor and if the workspace currently exists
+fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
+    if let Some(wksp) = Workspaces::get()
+        .expect("could not get workspaces")
+        .iter()
+        .find(|w| w.name == wksp_name)
+    {
+        find_monitor_by_name(&wksp.monitor)
+    } else {
+        // workspace is empty and doesn't exist yet, search workspace rules for the monitor
+        let wksp_rules = WorkspaceRules::get().expect("could not get workspace rules");
+
+        let rule_monitor = wksp_rules
+            .iter()
+            .find_map(|rule| {
+                (rule.workspace_string == wksp_name).then(|| {
+                    rule.monitor
+                        .as_ref()
+                        .expect("no monitor found for workspace rule")
+                })
+            })
+            .expect("no rule found for monitor");
+
+        find_monitor_by_name(rule_monitor)
+    }
+}
 
 /// set random split ratio to prevent oled burn in
 fn set_split_ratio(nstack: bool, split_ratio: f32) {
@@ -18,11 +48,14 @@ fn set_split_ratio(nstack: bool, split_ratio: f32) {
 }
 
 /// sets split ratio if there are 2 windows
-fn split_for_workspace(wksp: &str, nstack: bool) {
-    let wksp = &wksp.replace(" silent", "");
-    let (mon, _) = Monitor::by_workspace(wksp);
+fn split_for_workspace(wksp_name: &str, nstack: bool) {
+    let wksp = &wksp_name.replace(" silent", "");
+    let Some(mon) = monitor_for_workspace(wksp) else {
+        return;
+    };
 
-    if !mon.is_oled() {
+    // check if oled
+    if !mon.description.contains("AW3423DW") {
         return;
     }
 

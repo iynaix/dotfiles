@@ -2,14 +2,18 @@ use clap::{value_parser, CommandFactory, Parser};
 use dotfiles::{
     generate_completions,
     monitor::{Monitor, MonitorExtend, WorkspacesByMonitor},
+    nixinfo::NixInfo,
     rofi::Rofi,
     ShellCompletion,
 };
 use execute::Execute;
-use hyprland::dispatch::{
-    Dispatch,
-    DispatchType::{self, FocusMonitor, MoveWorkspaceToMonitor},
-    MonitorIdentifier, WorkspaceIdentifier, WorkspaceIdentifierWithSpecial,
+use hyprland::{
+    dispatch::{
+        Dispatch,
+        DispatchType::{self, FocusMonitor, MoveWorkspaceToMonitor},
+        MonitorIdentifier, WorkspaceIdentifier, WorkspaceIdentifierWithSpecial,
+    },
+    keyword::Keyword,
 };
 
 #[derive(Parser, Debug)]
@@ -48,8 +52,19 @@ fn reload_wallpaper() {
         .expect("failed to reload wallpaper");
 }
 
+/// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {
-    Monitor::mirror_to(new_mon);
+    let nix_monitors = NixInfo::before().monitors;
+
+    let primary = nix_monitors.first().expect("no primary monitor found");
+
+    // mirror the primary to the new one
+    Keyword::set(
+        "monitor",
+        format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
+    )
+    .expect("unable to mirror displays");
+
     reload_wallpaper();
 }
 

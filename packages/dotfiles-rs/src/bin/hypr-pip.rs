@@ -1,4 +1,4 @@
-use dotfiles::is_vertical;
+use dotfiles::vertical_dimensions;
 use hyprland::{
     data::{Client, Monitor},
     dispatch::{
@@ -41,13 +41,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let activewindow = Client::get_active()?.expect("no active window");
 
-        let (curr_width, curr_height) = if is_vertical(&curr_mon) {
-            (curr_mon.height, curr_mon.width)
-        } else {
-            (curr_mon.width, curr_mon.height)
-        };
-        let mon_bottom = curr_mon.y + i32::from(curr_height);
-        let mon_right = curr_mon.x + i32::from(curr_width);
+        let (curr_width, curr_height) = vertical_dimensions(&curr_mon);
+        let mon_bottom = curr_mon.y + curr_height;
+        let mon_right = curr_mon.x + curr_width;
 
         #[allow(clippy::cast_possible_truncation)]
         let delta_x = mon_right - PADDING - target_w as i32 - i32::from(activewindow.at.0);

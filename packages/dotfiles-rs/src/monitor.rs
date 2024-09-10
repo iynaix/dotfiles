@@ -1,6 +1,5 @@
 use crate::{hypr_json, nixinfo::NixInfo, WorkspaceId};
 use clap::ValueEnum;
-use hyprland::{data::Workspaces, keyword::Keyword, shared::HyprData};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -42,34 +41,6 @@ impl Monitor {
         matches!(self.transform, 1 | 3 | 5 | 7)
     }
 
-    pub const fn is_ultrawide(&self) -> bool {
-        self.width >= 3440
-    }
-
-    pub fn is_oled(&self) -> bool {
-        self.model.contains("AW3423DW")
-    }
-
-    pub const fn orientation(&self) -> &str {
-        if self.is_vertical() {
-            "orientationtop"
-        } else {
-            "orientationleft"
-        }
-    }
-
-    pub const fn stacks(&self) -> i32 {
-        if self.is_ultrawide() || self.is_vertical() {
-            3
-        } else {
-            2
-        }
-    }
-
-    pub fn dimension_str(&self) -> String {
-        format!("{}x{}", self.width, self.height)
-    }
-
     pub fn monitors() -> Vec<Self> {
         hypr_json::<Vec<Self>>("monitors")
             .iter()
@@ -99,45 +70,6 @@ impl Monitor {
             .into_iter()
             .map(|mon| (mon.name, mon.active_workspace.id))
             .collect()
-    }
-
-    /// returns the monitor and if the workspace currently exists
-    pub fn by_workspace(wksp_name: &str) -> (Self, bool) {
-        if let Some(wksp) = Workspaces::get()
-            .expect("could not get workspaces")
-            .iter()
-            .find(|w| w.name == wksp_name)
-        {
-            (
-                Self::monitors()
-                    .into_iter()
-                    .find(|m| m.name == wksp.monitor)
-                    .unwrap_or_else(|| panic!("monitor {} not found", wksp.monitor)),
-                true,
-            )
-        } else {
-            // workspace is empty and doesn't exist yet, search workspace rules for the monitor
-            let workspace_rules: Vec<WorkspaceRule> = hypr_json("workspacerules");
-
-            let wksp_rule = workspace_rules
-                .into_iter()
-                .find(|rule| rule.workspace == wksp_name)
-                .unwrap_or_else(|| {
-                    panic!("workspace {wksp_name:?} not found within workspace rules")
-                });
-
-            let mon = Self::monitors()
-                .into_iter()
-                .find(|mon| mon.name == wksp_rule.monitor)
-                .unwrap_or_else(|| {
-                    panic!(
-                        "monitor {} not found from workspace rules",
-                        &wksp_rule.monitor
-                    )
-                });
-
-            (mon, false)
-        }
     }
 
     pub fn rearranged_workspaces() -> WorkspacesByMonitor {
@@ -208,21 +140,5 @@ impl Monitor {
                 (mon.name.clone(), wksps.to_vec())
             })
             .collect()
-    }
-
-    /// mirrors the current display onto the new display
-    pub fn mirror_to(new_mon: &str) {
-        let nix_monitors = NixInfo::before().monitors;
-
-        let primary = nix_monitors.first().expect("no primary monitor found");
-
-        // mirror the primary to the new one
-        Keyword::set(
-            "monitor",
-            format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
-        )
-        .expect("unable to mirror displays");
-
-        // hyprctl keyword monitor HDMI-A-1,mirror,eDP-1
     }
 }

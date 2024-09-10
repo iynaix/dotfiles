@@ -1,11 +1,14 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
-    filename, full_path, generate_completions,
-    monitor::Monitor,
+    filename, full_path, generate_completions, vertical_dimensions,
     wallpaper::{self, WallInfo},
     ShellCompletion,
 };
 use execute::Execute;
+use hyprland::{
+    data::{Monitor, Monitors},
+    shared::HyprData,
+};
 use rand::seq::SliceRandom;
 use rayon::prelude::*;
 use std::{path::PathBuf, process::Stdio};
@@ -110,9 +113,11 @@ fn swww_with_crop(
     wall_info: &WallInfo,
     transition_args: &Vec<String>,
 ) {
-    let dimensions = mon.dimension_str();
+    let (mon_width, mon_height) = vertical_dimensions(mon);
 
-    let Some(geometry) = wall_info.get_geometry(mon.width, mon.height) else {
+    let dimensions = format!("{mon_width}x{mon_height}");
+
+    let Some(geometry) = wall_info.get_geometry(mon_width, mon_height) else {
         panic!("unable to get geometry for {}: {}", mon.name, dimensions);
     };
 
@@ -140,17 +145,17 @@ fn swww_with_crop(
         .expect("failed to execute swww");
 }
 
-fn main() {
+fn main() -> hyprland::Result<()> {
     let args = SwwwCropArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-monitors", &mut SwwwCropArgs::command(), &shell);
+        generate_completions("hypr-monitors", &mut SwwwCropArgs::command(), &shell);
+        return Ok(());
     }
 
     let wall = match args.image {
-        Some(image) => std::fs::canonicalize(image)
-            .expect("invalid image path")
+        Some(image) => std::fs::canonicalize(image)?
             .to_str()
             .expect("could not convert image path to str")
             .to_string(),
@@ -162,22 +167,25 @@ fn main() {
     // get the WallInfo for the image if it exists
     let Some(wall_info) = get_wallpaper_info(&wall) else {
         swww_default(&wall, &transition_args);
-        return;
+        return Ok(());
     };
 
     // set the wallpaper per monitor
-    let monitors = Monitor::monitors();
+    let monitors = Monitors::get()?;
+    let monitors: Vec<_> = monitors.iter().collect();
 
     // bail if any monitor doesn't have geometry info
-    if monitors
-        .iter()
-        .any(|m| wall_info.get_geometry(m.width, m.height).is_none())
-    {
+    if monitors.iter().any(|m| {
+        let (mw, mh) = vertical_dimensions(m);
+        wall_info.get_geometry(mw, mh).is_none()
+    }) {
         swww_default(&wall, &transition_args);
-        return;
+        return Ok(());
     }
 
-    Monitor::monitors()
+    monitors
         .par_iter()
         .for_each(|mon| swww_with_crop(&wall, mon, &wall_info, &transition_args));
+
+    Ok(())
 }
