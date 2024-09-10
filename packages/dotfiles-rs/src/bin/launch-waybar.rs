@@ -1,6 +1,6 @@
 use std::process::Stdio;
 
-use dotfiles::{full_path, json, kill_wrapped_process, monitor::Monitor, nixinfo::NixInfo};
+use dotfiles::{full_path, json, kill_wrapped_process, nixinfo::NixInfo, rearranged_workspaces};
 use sysinfo::Signal;
 
 fn main() {
@@ -20,10 +20,8 @@ fn main() {
         ..
     } = NixInfo::before()
     {
-        let rearranged_workspaces = Monitor::rearranged_workspaces();
-
         cfg["hyprland/workspaces"]["persistentWorkspaces"] =
-            serde_json::to_value(rearranged_workspaces)
+            serde_json::to_value(rearranged_workspaces())
                 .expect("failed to convert rearranged workspaces to json");
     } else {
         let hyprland_workspaces = cfg["hyprland/workspaces"]

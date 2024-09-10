@@ -1,13 +1,16 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
     full_path, generate_completions, iso8601_filename, kill_wrapped_process,
-    monitor::Monitor,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
 };
 use execute::Execute;
-use hyprland::dispatch::{Dispatch, DispatchType};
+use hyprland::{
+    data::Monitor,
+    dispatch::{Dispatch, DispatchType},
+    shared::HyprDataActive,
+};
 use std::{collections::HashSet, path::PathBuf};
 use sysinfo::Signal;
 
@@ -45,7 +48,7 @@ pub struct HyprWallpaperArgs {
 fn show_pqiv() {
     const TARGET_PERCENT: f64 = 0.3;
 
-    let mon = Monitor::focused();
+    let mon = Monitor::get_active().expect("could not get active monitor");
 
     let mut width = f64::from(mon.width) * TARGET_PERCENT;
     let mut height = f64::from(mon.height) * TARGET_PERCENT;

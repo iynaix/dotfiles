@@ -1,12 +1,12 @@
 use crate::{
     filename, full_path, json, kill_wrapped_process,
-    monitor::Monitor,
     nixinfo::{hyprland_colors, NixInfo},
+    vertical_dimensions,
     wallpaper::WallInfo,
     CommandUtf8,
 };
 use execute::Execute;
-use hyprland::keyword::Keyword;
+use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
 use rayon::prelude::*;
 use std::{collections::HashMap, path::PathBuf};
 use sysinfo::Signal;
@@ -252,7 +252,7 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
 
     if let Some(info) = wallpaper_info {
         // monitor should be present in nix.json
-        let monitors = Monitor::monitors();
+        let monitors = Monitors::get().expect("could not get monitors");
         let mon_info: Vec<_> = monitors
             .iter()
             .filter(|m| {
@@ -262,7 +262,9 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
                     .any(|nix_mon| nix_mon.name == m.name)
             })
             .filter_map(|mon| {
-                info.get_geometry(mon.width, mon.height).map(|geometry| {
+                let (mon_width, mon_height) = vertical_dimensions(mon);
+
+                info.get_geometry(mon_width, mon_height).map(|geometry| {
                     // prefix output filename with monitor name
                     let wall_path = full_path(wallpaper);
                     let output_fname = format!("{}-{}", mon.name, filename(wall_path));

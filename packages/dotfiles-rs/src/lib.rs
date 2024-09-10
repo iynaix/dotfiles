@@ -1,11 +1,10 @@
 use clap::{Command, Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
 use execute::Execute;
-use hyprland::shared::HyprData;
-use serde::{de::DeserializeOwned, Deserialize};
-use std::{path::PathBuf, process::Stdio};
+use hyprland::{data::Monitors, shared::HyprData};
+use nixinfo::NixInfo;
+use std::{collections::HashMap, path::PathBuf, process::Stdio};
 
-pub mod monitor;
 pub mod nixinfo;
 pub mod rofi;
 pub mod wallpaper;
@@ -27,14 +26,6 @@ pub fn generate_completions(progname: &str, cmd: &mut Command, shell_completion:
     }
 }
 
-// shared structs / types
-type Coord = (i32, i32);
-
-#[derive(Clone, Default, Deserialize, Debug)]
-pub struct WorkspaceId {
-    pub id: i32,
-}
-
 pub fn full_path<P>(p: P) -> PathBuf
 where
     P: AsRef<std::path::Path> + std::fmt::Debug,
@@ -48,19 +39,6 @@ where
         Some(p) => dirs::home_dir().expect("invalid home directory").join(p),
         None => PathBuf::from(p),
     }
-}
-
-/// reads json from a hyprctl -j command
-pub fn hypr_json<T>(cmd: &str) -> T
-where
-    T: DeserializeOwned,
-{
-    let output = execute::command_args!("hyprctl", "-j", cmd)
-        .stdout(Stdio::piped())
-        .execute_output()
-        .expect("failed to execute hyprctl");
-
-    serde_json::from_slice(&output.stdout).expect("failed to parse json from hyprctl")
 }
 
 fn command_output_to_lines(output: &[u8]) -> Vec<String> {
@@ -90,43 +68,6 @@ impl CommandUtf8 for std::process::Command {
             |_| Vec::new(),
             |output| command_output_to_lines(&output.stderr),
         )
-    }
-}
-
-/// hyprctl clients
-#[derive(Clone, Default, Deserialize, Debug)]
-pub struct Client {
-    pub class: String,
-    pub address: String,
-    pub floating: bool,
-    pub workspace: WorkspaceId,
-    pub at: Coord,
-    pub size: Coord,
-}
-
-impl Client {
-    pub fn clients() -> Vec<Self> {
-        hypr_json("clients")
-    }
-
-    pub fn by_id(id: &str) -> Option<Self> {
-        Self::clients()
-            .into_iter()
-            .find(|client| client.address.ends_with(id))
-    }
-
-    pub fn filter_workspace(wksp_id: i32) -> Vec<Self> {
-        Self::clients()
-            .into_iter()
-            .filter(|client| client.workspace.id == wksp_id)
-            .collect()
-    }
-
-    pub fn filter_class(class: &str) -> Vec<Self> {
-        Self::clients()
-            .into_iter()
-            .filter(|client| client.class == class)
-            .collect()
     }
 }
 
@@ -200,4 +141,44 @@ pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
         .iter()
         .find(|mon| mon.name == name)
         .cloned()
+}
+
+pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
+
+/// assign workspaces to their rules if possible, otherwise add them to the other monitors
+pub fn rearranged_workspaces() -> WorkspacesByMonitor {
+    let nix_monitors = NixInfo::before().monitors;
+    let active_workspaces: HashMap<String, i32> = Monitors::get()
+        .expect("could not get monitors")
+        .iter()
+        .map(|mon| (mon.name.clone(), mon.active_workspace.id))
+        .collect();
+
+    nix_monitors
+        .iter()
+        .enumerate()
+        .fold(HashMap::new(), |mut acc, (mon_idx, mon)| {
+            let name = &mon.name;
+            match active_workspaces.get(name) {
+                // active, use current workspaces
+                Some(_) => {
+                    acc.entry(name.to_string())
+                        .or_default()
+                        .extend(&mon.workspaces);
+                }
+                // not active, add to the other monitors
+                None => {
+                    for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
+                        let other_name = &other_mon.name;
+
+                        if mon_idx != other_mon_idx && active_workspaces.contains_key(other_name) {
+                            acc.entry(other_name.to_string())
+                                .or_default()
+                                .extend(&mon.workspaces);
+                        }
+                    }
+                }
+            }
+            acc
+        })
 }

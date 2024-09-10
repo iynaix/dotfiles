@@ -1,7 +1,6 @@
 {
   config,
   inputs,
-  lib,
   pkgs,
   ...
 }:
@@ -21,8 +20,8 @@
     ];
 
     shellAliases = {
-      neofetch = "${lib.getExe pkgs.fastfetch} --config neofetch";
-      wwfetch = "${lib.getExe inputs.wfetch.packages.${pkgs.system}.wfetch} --wallpaper";
+      neofetch = "fastfetch --config neofetch";
+      wwfetch = "wfetch --wallpaper";
     };
   };
 

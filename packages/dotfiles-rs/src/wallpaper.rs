@@ -43,12 +43,13 @@ where
             let path = entry.path();
             if path.is_file() {
                 if let Some(ext) = path.extension() {
-                    match ext.to_str() {
-                        Some("jpg" | "jpeg" | "png" | "webp") => {
-                            return Some(path.to_str()?.to_string())
-                        }
-                        _ => return None,
-                    }
+                    return matches!(ext.to_str(), Some("jpg" | "jpeg" | "png" | "webp")).then(
+                        || {
+                            path.to_str()
+                                .expect("could not convert path to str")
+                                .to_string()
+                        },
+                    );
                 }
             }
 

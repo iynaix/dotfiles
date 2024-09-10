@@ -1,20 +1,25 @@
-use clap::{value_parser, CommandFactory, Parser};
+use clap::{value_parser, CommandFactory, Parser, ValueEnum};
 use dotfiles::{
-    generate_completions,
-    monitor::{Monitor, MonitorExtend, WorkspacesByMonitor},
-    nixinfo::NixInfo,
-    rofi::Rofi,
-    ShellCompletion,
+    generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
+    WorkspacesByMonitor,
 };
 use execute::Execute;
 use hyprland::{
+    data::Monitors,
     dispatch::{
         Dispatch,
         DispatchType::{self, FocusMonitor, MoveWorkspaceToMonitor},
         MonitorIdentifier, WorkspaceIdentifier, WorkspaceIdentifierWithSpecial,
     },
     keyword::Keyword,
+    shared::{HyprData, HyprDataVec},
 };
+
+#[derive(ValueEnum, Debug, Clone)]
+pub enum MonitorExtend {
+    Primary,
+    Secondary,
+}
 
 #[derive(Parser, Debug)]
 #[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
@@ -110,6 +115,41 @@ fn move_workspaces_to_monitors(
     Ok(())
 }
 
+/// distribute the workspaces evenly across all monitors
+fn distribute_workspaces(extend_type: &MonitorExtend) -> WorkspacesByMonitor {
+    let workspaces: Vec<i32> = (1..=10).collect();
+
+    let mut all_monitors = Monitors::get().expect("could not get monitors").to_vec();
+    let nix_monitors = NixInfo::before().monitors;
+
+    // sort all_monitors, putting the nix_monitors first
+    all_monitors.sort_by_key(|a| {
+        let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
+        (
+            match extend_type {
+                MonitorExtend::Primary => is_base_monitor,
+                MonitorExtend::Secondary => !is_base_monitor,
+            },
+            a.id,
+        )
+    });
+
+    let mut start = 0;
+    all_monitors
+        .iter()
+        .enumerate()
+        .map(|(i, mon)| {
+            let len = workspaces.len() / all_monitors.len()
+                + usize::from(i < workspaces.len() % all_monitors.len());
+            let end = start + len;
+            let wksps = &workspaces[start..end];
+            start += len;
+
+            (mon.name.clone(), wksps.to_vec())
+        })
+        .collect()
+}
+
 fn main() {
     let args = HyprMonitorArgs::parse();
 
@@ -149,9 +189,9 @@ fn main() {
     // distribute workspaces per monitor
     let workspaces = match args.extend {
         // --extend
-        Some(extend_type) => Monitor::distribute_workspaces(&extend_type),
+        Some(extend_type) => distribute_workspaces(&extend_type),
         // no args, fall through
-        _ => Monitor::rearranged_workspaces(),
+        _ => rearranged_workspaces(),
     };
 
     move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");

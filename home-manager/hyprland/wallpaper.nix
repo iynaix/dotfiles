@@ -104,8 +104,8 @@ in
       home = {
         packages = [ pkgs.nomacs ];
         shellAliases = {
-          # edit the current wallpaper
-          wallpapers-edit = "${lib.getExe pkgs.custom.shell.wallfacer} $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
+          # edit the current wallpaper, wallfacer is defined above
+          wallpapers-edit = "wallfacer $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
         };
       };
 

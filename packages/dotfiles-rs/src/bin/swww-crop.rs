@@ -7,7 +7,7 @@ use dotfiles::{
 use execute::Execute;
 use hyprland::{
     data::{Monitor, Monitors},
-    shared::HyprData,
+    shared::{HyprData, HyprDataVec},
 };
 use rand::seq::SliceRandom;
 use rayon::prelude::*;
@@ -171,8 +171,7 @@ fn main() -> hyprland::Result<()> {
     };
 
     // set the wallpaper per monitor
-    let monitors = Monitors::get()?;
-    let monitors: Vec<_> = monitors.iter().collect();
+    let monitors = Monitors::get()?.to_vec();
 
     // bail if any monitor doesn't have geometry info
     if monitors.iter().any(|m| {
