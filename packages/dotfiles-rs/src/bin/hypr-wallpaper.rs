@@ -1,12 +1,13 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
-    full_path, generate_completions, hypr, iso8601_filename, kill_wrapped_process,
+    full_path, generate_completions, iso8601_filename, kill_wrapped_process,
     monitor::Monitor,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
 };
 use execute::Execute;
+use hyprland::dispatch::{Dispatch, DispatchType};
 use std::{collections::HashSet, path::PathBuf};
 use sysinfo::Signal;
 
@@ -56,13 +57,11 @@ fn show_pqiv() {
 
     let float_rule = format!("[float;size {} {};center]", width.floor(), height.floor());
 
-    hypr([
-        "exec",
-        &format!(
-            "{float_rule} pqiv --shuffle '{}'",
-            &wallpaper::dir().to_str().expect("invalid wallpaper dir")
-        ),
-    ]);
+    Dispatch::call(DispatchType::Exec(&format!(
+        "{float_rule} pqiv --shuffle '{}'",
+        &wallpaper::dir().to_str().expect("invalid wallpaper dir")
+    )))
+    .expect("failed to execute kitty");
 }
 
 fn main() {
@@ -151,21 +150,19 @@ fn main() {
         let mut history: Vec<_> = std::fs::read_dir(&wallpaper_history)
             .expect("failed to read wallpaper_history directory")
             .filter_map(|entry| entry.ok().map(|e| e.path()))
+            .skip(1) // ignore current wallpaper being set
             .collect();
         history.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
 
         for path in history {
-            match std::fs::read_link(&path) {
-                Ok(resolved) => {
-                    if uniq_history.contains(&resolved) {
-                        std::fs::remove_file(path).expect("failed to remove duplicate symlink");
-                    } else {
-                        uniq_history.insert(resolved.clone());
-                    }
+            if let Ok(resolved) = std::fs::read_link(&path) {
+                if uniq_history.contains(&resolved) {
+                    std::fs::remove_file(path).expect("failed to remove duplicate symlink");
+                } else {
+                    uniq_history.insert(resolved.clone());
                 }
-                Err(_) => {
-                    std::fs::remove_file(path).expect("failed to remove broken symlink");
-                }
+            } else {
+                std::fs::remove_file(path).expect("failed to remove broken symlink");
             }
         }
     }

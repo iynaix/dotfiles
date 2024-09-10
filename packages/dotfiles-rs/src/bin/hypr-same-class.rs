@@ -1,5 +1,10 @@
 use clap::{CommandFactory, Parser, ValueEnum};
-use dotfiles::{generate_completions, hypr, ActiveWindow, Client, ShellCompletion};
+use dotfiles::{generate_completions, ShellCompletion};
+use hyprland::{
+    data::{Client, Clients},
+    dispatch::{Dispatch, DispatchType::FocusWindow, WindowIdentifier::Address},
+    shared::{HyprData, HyprDataActiveOptional},
+};
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum Direction {
@@ -26,12 +31,13 @@ pub struct HyprSameClassArgs {
     pub generate: Option<ShellCompletion>,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = HyprSameClassArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-monitors", &mut HyprSameClassArgs::command(), &shell);
+        generate_completions("hypr-monitors", &mut HyprSameClassArgs::command(), &shell);
+        std::process::exit(0);
     }
 
     if args.direction.is_none() {
@@ -39,12 +45,19 @@ fn main() {
         std::process::exit(1);
     }
 
-    let active = ActiveWindow::new();
-    let mut same_class = Client::filter_class(&active.class);
+    let active = Client::get_active()?.expect("no active window");
+    let clients = Clients::get()?;
+    let mut same_class: Vec<_> = clients
+        .iter()
+        .filter(|client| client.class == active.class)
+        .collect();
 
     // sort by workspace then coordinates
     same_class.sort_by_key(|client| (client.workspace.id, client.at));
-    let addresses: Vec<&String> = same_class.iter().map(|client| &client.address).collect();
+    let addresses: Vec<_> = same_class
+        .into_iter()
+        .map(|client| &client.address)
+        .collect();
 
     let active_idx = addresses
         .iter()
@@ -59,5 +72,7 @@ fn main() {
         Direction::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
-    hypr(["focuswindow", &format!("address:{}", addresses[new_idx])]);
+    Dispatch::call(FocusWindow(Address(addresses[new_idx].clone())))?;
+
+    Ok(())
 }

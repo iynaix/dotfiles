@@ -107,29 +107,6 @@ where
     cmd.execute().expect("failed to execute hyprctl dispatch");
 }
 
-/// hyprctl activewindow
-#[derive(Clone, Default, Deserialize, Debug)]
-pub struct ActiveWindow {
-    pub monitor: i32,
-    pub floating: bool,
-    pub at: Coord,
-    pub class: String,
-    pub address: String,
-}
-
-impl ActiveWindow {
-    pub fn new() -> Self {
-        hypr_json("activewindow")
-    }
-
-    pub fn get_monitor(&self) -> Monitor {
-        Monitor::monitors()
-            .into_iter()
-            .find(|m| m.id == self.monitor)
-            .unwrap_or_else(|| panic!("monitor {} not found", self.monitor))
-    }
-}
-
 /// hyprctl clients
 #[derive(Clone, Default, Deserialize, Debug)]
 pub struct Client {
@@ -246,4 +223,8 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: sysinfo::Signal) {
 
 pub fn iso8601_filename() -> String {
     chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
+}
+
+pub const fn is_vertical(mon: &hyprland::data::Monitor) -> bool {
+    mon.transform as u8 % 2 == 1
 }
