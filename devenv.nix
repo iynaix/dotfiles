@@ -31,9 +31,8 @@ inputs.devenv.lib.mkShell {
                 edit = true;
               };
             };
-            nixfmt = {
+            nixfmt-rfc-style = {
               enable = true;
-              package = pkgs.nixfmt-rfc-style;
               excludes = [ "generated.nix" ];
             };
             statix = {

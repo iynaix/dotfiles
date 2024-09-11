@@ -158,6 +158,7 @@ in
           # switching wallpapers or themes
           "$mod, apostrophe, exec, hypr-wallpaper --rofi"
           "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
+          "ALT, apostrophe, exec, hypr-wallpaper --history"
 
           # special keys
           # "XF86AudioPlay, mpvctl playpause"

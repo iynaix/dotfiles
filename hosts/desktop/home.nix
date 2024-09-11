@@ -39,10 +39,10 @@ _: {
       }
     ];
 
-    deadbeef.enable = true;
+    deadbeef.enable = false;
     ghostty.enable = false;
     hyprland = {
-      # plugin = "hyprnstack";
+      plugin = "hyprnstack";
       lock = false;
       qtile = false;
     };
