@@ -160,19 +160,7 @@ in
 
         shellAliases = {
           current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
-        };
-      };
-
-      custom.shell.packages = {
-        wallpapers-history = {
-          runtimeInputs = with pkgs; [ pqiv ];
-          text = ''
-            # skip the current wallpaper
-            find /persist${config.home.homeDirectory}/Pictures/wallpaper_history -type l | \
-            sort -r | \
-            tail -n +2 | \
-            xargs pqiv
-          '';
+          wallpapers-history = "hypr-wallpaper --history";
         };
       };
 

@@ -6,6 +6,7 @@ use dotfiles::{
     wallust, ShellCompletion,
 };
 use execute::Execute;
+use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
     dispatch::{Dispatch, DispatchType},
@@ -35,6 +36,9 @@ pub struct HyprWallpaperArgs {
     )]
     pub pqiv: bool,
 
+    #[arg(long, action, help = "show wallpaper history selector with rofi")]
+    pub history: bool,
+
     #[arg(
         long,
         value_enum,
@@ -45,7 +49,7 @@ pub struct HyprWallpaperArgs {
     pub generate: Option<ShellCompletion>,
 }
 
-fn show_pqiv() {
+fn pqiv_float_rule() -> String {
     const TARGET_PERCENT: f64 = 0.3;
 
     let mon = Monitor::get_active().expect("could not get active monitor");
@@ -58,13 +62,56 @@ fn show_pqiv() {
         std::mem::swap(&mut width, &mut height);
     }
 
-    let float_rule = format!("[float;size {} {};center]", width.floor(), height.floor());
+    format!("[float;size {} {};center]", width.floor(), height.floor())
+}
 
-    Dispatch::call(DispatchType::Exec(&format!(
-        "{float_rule} pqiv --shuffle '{}'",
+fn show_pqiv() {
+    let pqiv = format!(
+        "{} pqiv --shuffle '{}'",
+        pqiv_float_rule(),
         &wallpaper::dir().to_str().expect("invalid wallpaper dir")
-    )))
-    .expect("failed to execute kitty");
+    );
+
+    dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
+}
+
+fn show_history() {
+    let wallpaper_history = full_path("~/Pictures/wallpaper_history");
+
+    // remove broken and duplicate symlinks
+    let mut uniq_history = HashSet::new();
+    let mut final_history = Vec::new();
+    let mut history: Vec<_> = std::fs::read_dir(&wallpaper_history)
+        .expect("failed to read wallpaper_history directory")
+        .filter_map(|entry| entry.ok().map(|e| e.path()))
+        .collect();
+    history.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
+
+    // ignore the current wallpaper
+    for path in history.iter().skip(1) {
+        if let Ok(resolved) = std::fs::read_link(path) {
+            if uniq_history.contains(&resolved) {
+                std::fs::remove_file(path).expect("failed to remove duplicate symlink");
+            } else {
+                uniq_history.insert(resolved.clone());
+                final_history.push(path);
+            }
+        } else {
+            std::fs::remove_file(path).expect("failed to remove broken symlink");
+        }
+    }
+
+    let pqiv = format!(
+        "{} pqiv {}",
+        pqiv_float_rule(),
+        final_history
+            .iter()
+            .map(|p| format!("'{}'", p.display()))
+            .collect::<Vec<_>>()
+            .join(" ")
+    );
+
+    dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
 }
 
 fn main() {
@@ -78,6 +125,12 @@ fn main() {
     // show pqiv for selecting wallpaper, via the "w" keybind
     if args.pqiv {
         show_pqiv();
+        return;
+    }
+
+    // show rofi for selecting wallpaper history
+    if args.history {
+        show_history();
         return;
     }
 
@@ -147,26 +200,5 @@ fn main() {
 
         std::os::unix::fs::symlink(wallpaper, target)
             .expect("unable to create wallpaper history symlink");
-
-        // remove broken and duplicate symlinks
-        let mut uniq_history = HashSet::new();
-        let mut history: Vec<_> = std::fs::read_dir(&wallpaper_history)
-            .expect("failed to read wallpaper_history directory")
-            .filter_map(|entry| entry.ok().map(|e| e.path()))
-            .skip(1) // ignore current wallpaper being set
-            .collect();
-        history.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
-
-        for path in history {
-            if let Ok(resolved) = std::fs::read_link(&path) {
-                if uniq_history.contains(&resolved) {
-                    std::fs::remove_file(path).expect("failed to remove duplicate symlink");
-                } else {
-                    uniq_history.insert(resolved.clone());
-                }
-            } else {
-                std::fs::remove_file(path).expect("failed to remove broken symlink");
-            }
-        }
     }
 }

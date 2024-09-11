@@ -1,11 +1,8 @@
 use dotfiles::vertical_dimensions;
+use hyprland::dispatch;
 use hyprland::{
     data::{Client, Monitor},
-    dispatch::{
-        Dispatch,
-        DispatchType::{MoveActive, ResizeActive, ToggleFloating, TogglePin},
-        Position,
-    },
+    dispatch::{Dispatch, DispatchType, Position},
     shared::{HyprDataActive, HyprDataActiveOptional},
 };
 
@@ -20,24 +17,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // toggle fake fullscreen?
     // Dispatch::call(if activewindow.fullscreen == FullscreenMode::None {
-    //     ToggleFullscreen(FullscreenType::Maximize)
+    //     DispatchType::ToggleFullscreen(FullscreenType::Maximize)
     // } else {
-    //     ToggleFullscreen(FullscreenType::NoParam)
+    //     DispatchType::ToggleFullscreen(FullscreenType::NoParam)
     // })?;
-    Dispatch::call(ToggleFloating(None))?;
-    Dispatch::call(TogglePin)?;
+    dispatch!(ToggleFloating, None)?;
+    Dispatch::call(DispatchType::TogglePin)?;
 
     // if activewindow.floating {
-    //     Dispatch::call(ToggleFullscreen(FullscreenType::Real))?;
+    //     dispatch!(ToggleFullscreen(FullscreenType::Real))?;
     // } else {
     if !activewindow.floating {
         const PADDING: i32 = 30; // target distance from corner of screen
 
         #[allow(clippy::cast_possible_truncation)]
-        Dispatch::call(ResizeActive(Position::Exact(
-            target_w as i16,
-            target_h as i16,
-        )))?;
+        dispatch!(
+            ResizeActive,
+            Position::Exact(target_w as i16, target_h as i16,)
+        )?;
 
         let activewindow = Client::get_active()?.expect("no active window");
 
@@ -51,7 +48,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let delta_y = mon_bottom - PADDING - target_h as i32 - i32::from(activewindow.at.1);
 
         #[allow(clippy::cast_possible_truncation)]
-        Dispatch::call(MoveActive(Position::Delta(delta_x as i16, delta_y as i16)))
+        dispatch!(MoveActive, Position::Delta(delta_x as i16, delta_y as i16))
             .expect("failed to move active window");
     }
 

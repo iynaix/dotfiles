@@ -4,12 +4,12 @@ use dotfiles::{
     WorkspacesByMonitor,
 };
 use execute::Execute;
+use hyprland::dispatch;
 use hyprland::{
     data::Monitors,
     dispatch::{
-        Dispatch,
-        DispatchType::{self, FocusMonitor, MoveWorkspaceToMonitor},
-        MonitorIdentifier, WorkspaceIdentifier, WorkspaceIdentifierWithSpecial,
+        Dispatch, DispatchType, MonitorIdentifier, WorkspaceIdentifier,
+        WorkspaceIdentifierWithSpecial,
     },
     keyword::Keyword,
     shared::{HyprData, HyprDataVec},
@@ -79,10 +79,11 @@ fn move_workspaces_to_monitors(
     // move workspaces to monitors
     for (mon, wksps) in workspaces {
         for wksp in wksps {
-            Dispatch::call(MoveWorkspaceToMonitor(
+            dispatch!(
+                MoveWorkspaceToMonitor,
                 WorkspaceIdentifier::Id(*wksp),
-                MonitorIdentifier::Name(mon),
-            ))?;
+                MonitorIdentifier::Name(mon)
+            )?;
         }
     }
 
@@ -97,18 +98,17 @@ fn move_workspaces_to_monitors(
 
         for wksp in wksps {
             if primary_workspaces.contains(wksp) {
-                Dispatch::call(DispatchType::Workspace(WorkspaceIdentifierWithSpecial::Id(
-                    *wksp,
-                )))?;
+                dispatch!(Workspace, WorkspaceIdentifierWithSpecial::Id(*wksp,))?;
                 break;
             }
         }
     }
 
     // focus first / primary monitor
-    Dispatch::call(FocusMonitor(MonitorIdentifier::Name(
-        workspaces.keys().next().expect("primary monitor not found"),
-    )))?;
+    dispatch!(
+        FocusMonitor,
+        MonitorIdentifier::Name(workspaces.keys().next().expect("primary monitor not found"),)
+    )?;
 
     reload_wallpaper();
 

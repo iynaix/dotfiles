@@ -1,8 +1,9 @@
 use clap::{CommandFactory, Parser, ValueEnum};
 use dotfiles::{generate_completions, ShellCompletion};
+use hyprland::dispatch;
 use hyprland::{
     data::{Client, Clients},
-    dispatch::{Dispatch, DispatchType::FocusWindow, WindowIdentifier::Address},
+    dispatch::{Dispatch, DispatchType, WindowIdentifier::Address},
     shared::{HyprData, HyprDataActiveOptional},
 };
 
@@ -72,7 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Direction::Prev => (active_idx - 1 + addresses.len()) % addresses.len(),
     };
 
-    Dispatch::call(FocusWindow(Address(addresses[new_idx].clone())))?;
+    dispatch!(FocusWindow, Address(addresses[new_idx].clone()))?;
 
     Ok(())
 }
