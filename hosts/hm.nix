@@ -3,6 +3,7 @@
   system,
   specialArgs,
   user ? "iynaix",
+  lib,
   ...
 }:
 let
@@ -18,7 +19,7 @@ let
       ),
     }:
     inputs.home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
+      inherit pkgs lib;
 
       extraSpecialArgs = specialArgs // {
         inherit host user;

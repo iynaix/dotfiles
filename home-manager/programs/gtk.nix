@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  isNixOS,
   ...
 }:
 let
@@ -26,7 +25,7 @@ let
 in
 {
   home = {
-    pointerCursor = lib.mkIf isNixOS {
+    pointerCursor = {
       package = pkgs.simp1e-cursors;
       name = "Simp1e-Catppuccin-Frappe";
       size = 28;

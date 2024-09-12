@@ -91,7 +91,7 @@
       # add custom user created shell packages to pkgs.custom.shell
       nixpkgs.overlays = lib.mkIf (!isNixOS) [
         (_: prev: {
-          custom = prev.custom // {
+          custom = (prev.custom or { }) // {
             shell = hmShellPkgs;
           };
         })
