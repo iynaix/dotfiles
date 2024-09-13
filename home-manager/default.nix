@@ -58,7 +58,6 @@
         [
           curl
           gzip
-          killall
           rar # includes unrar
           ripgrep
           libreoffice

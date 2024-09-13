@@ -17,9 +17,6 @@
     ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
-    # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
-    # https://unix.stackexchange.com/a/253401
-    blacklistedKernelModules = [ "amdgpu" ];
     extraModulePackages = [ ];
   };
 

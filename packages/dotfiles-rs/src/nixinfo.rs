@@ -23,7 +23,6 @@ pub struct NixInfo {
     pub special: ColorsSpecial,
     pub host: String,
     // waybar options
-    pub waybar_accent_color: bool,
     pub waybar_persistent_workspaces: Option<bool>,
     // output cropped wallpaper as jpg for hyprlock
     pub monitors: Vec<NixMonitorInfo>,

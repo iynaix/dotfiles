@@ -34,6 +34,10 @@
     '';
   };
 
+  # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
+  # https://unix.stackexchange.com/a/253401
+  boot.blacklistedKernelModules = [ "amdgpu" ];
+
   # enable flirc usb ir receiver
   hardware.flirc.enable = false;
   environment.systemPackages = lib.mkIf config.hardware.flirc.enable [ pkgs.flirc ];

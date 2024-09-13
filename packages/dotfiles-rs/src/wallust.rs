@@ -389,44 +389,10 @@ pub fn set_gtk_and_icon_theme() {
         .expect("failed to apply icon theme");
 }
 
-fn replace_inverse_color(value: &mut serde_json::Value, re: &regex::Regex, inverse_color: &str) {
-    match value {
-        serde_json::Value::Object(map) => {
-            for (_, v) in map.iter_mut() {
-                replace_inverse_color(v, re, inverse_color);
-            }
-        }
-        serde_json::Value::Array(arr) => {
-            for v in arr.iter_mut() {
-                replace_inverse_color(v, re, inverse_color);
-            }
-        }
-        serde_json::Value::String(s) => {
-            if s.contains(r#"lang="inverse""#) {
-                *s = re
-                    .replace_all(s, format!(r#"color="{inverse_color}""#))
-                    .to_string();
-            }
-        }
-        _ => {}
-    }
-}
-
 pub fn set_waybar_accent(accent: &str) {
     let nixinfo = NixInfo::after();
 
-    // respect nix setting
-    if !nixinfo.waybar_accent_color {
-        return;
-    }
-
-    // replace old foreground color with new color
-    let css_path = full_path("~/.config/waybar/style.css");
-    let css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
-    std::fs::write(css_path, css.replace(&nixinfo.special.foreground, accent))
-        .expect("could not write waybar css");
-
-    // replace old alert color with inverse color
+    // get inverse color for inversed module classes
     let inverse = hex_to_rgb(accent);
     let inverse = format!(
         "#{:02X}{:02X}{:02X}",
@@ -435,24 +401,24 @@ pub fn set_waybar_accent(accent: &str) {
         255 - inverse.2
     );
 
-    let jsonc_path = full_path("~/.config/waybar/config.jsonc");
+    let css_path = full_path("~/.config/waybar/style.css");
+    let mut css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
 
-    // Parse the JSON
-    let mut jsonc: serde_json::Value = serde_json::from_str(
-        &std::fs::read_to_string(&jsonc_path).expect("could not read waybar jsonc"),
-    )
-    .expect("could not parse waybar jsonc");
+    // replace old foreground color with new color
+    css = css.replace(&nixinfo.special.foreground, accent);
 
-    let color_re = regex::Regex::new(r#"color="\#[0-9A-Fa-f]{6}""#)
-        .expect("could not create inverse color regex");
+    // replace inverse classes
+    css = css
+        .lines()
+        .map(|line| {
+            if line.ends_with("/* inverse */") {
+                format!("color: {inverse}; /* inverse */")
+            } else {
+                line.to_string()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
 
-    // Recursively traverse and modify the JSON
-    replace_inverse_color(&mut jsonc, &color_re, &inverse);
-
-    // Write the modified JSON back to a file
-    std::fs::write(
-        jsonc_path,
-        serde_json::to_string(&jsonc).expect("failed to serialize waybar jsonc"),
-    )
-    .expect("failed to write waybar jsonc");
+    std::fs::write(css_path, css).expect("could not write waybar css");
 }

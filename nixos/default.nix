@@ -82,6 +82,7 @@
           "gitconfig".text = config.hm.xdg.configFile."git/config".text;
           # get gparted to use system theme
           "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
+          "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
         };
 
         # install fish completions for fish
@@ -119,7 +120,6 @@
           [
             curl
             eza
-            killall
             neovim
             procps
             ripgrep

@@ -37,6 +37,30 @@ lib.mkIf config.custom.hyprland.enable {
     };
   };
 
+  # add focal module to waybar
+  custom.waybar = {
+    config = {
+      "custom/focal" = {
+        # exec = "focal-waybar start";
+        # format = "{}";
+        # hide-empty-text = true;
+        # return-type = "json";
+        # signal = 1;
+        # # TODO: on-click
+        # interval = "once";
+        format = "󰑋";
+      };
+
+      modules-left = lib.mkAfter [ "custom/focal" ];
+    };
+
+    extraCss = ''
+      #custom-focal {
+        font-size: 20px;
+      }
+    '';
+  };
+
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$mod, backslash, exec, ${lib.getExe focal} --area selection --no-notify --no-save"

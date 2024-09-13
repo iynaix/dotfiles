@@ -23,16 +23,23 @@ in
     };
 
     waybar = {
-      accentColor = mkEnableOption "Accent color" // {
-        default = true;
-      };
       config = mkOption {
         type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
+      inversed_classes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "List of waybar classes to inverse";
+      };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
         default = host == "desktop";
+      };
+      extraCss = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional css to add to the waybar style.css";
       };
       persistentWorkspaces = mkEnableOption "Persistent workspaces";
       hidden = mkEnableOption "Hidden waybar by default";
@@ -65,12 +72,11 @@ in
           runtimeInputs = with pkgs; [
             procps
             custom.dotfiles-rs
-            killall
           ];
           text = ''
             # toggle waybar visibility if it is running
             if pgrep .waybar-wrapped > /dev/null; then
-              killall -SIGUSR1 .waybar-wrapped
+              pkill -SIGUSR1 .waybar-wrapped
             else
               launch-waybar
             fi
@@ -78,156 +84,157 @@ in
         };
       };
 
-      waybar.config =
-        let
-          # lang is hack to be compatible with pango markup as class is not a supported attribute
-          inversed = s: ''<span lang="inverse" color="{{color4}}">${s}</span>'';
-        in
-        {
-          backlight = lib.mkIf config.custom.backlight.enable {
-            format = "{icon}   {percent}%";
-            format-icons = [
-              "󰃞"
-              "󰃟"
-              "󰃝"
-              "󰃠"
-            ];
-            on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
-            on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
-          };
-
-          battery = lib.mkIf config.custom.battery.enable {
-            format = "{icon}    {capacity}%";
-            format-charging = "     {capacity}%";
-            format-icons = [
-              ""
-              ""
-              ""
-              ""
-              ""
-            ];
-            states = {
-              critical = 20;
-            };
-            tooltip = false;
-          };
-
-          clock = {
-            calendar = {
-              actions = {
-                on-click-right = "mode";
-                on-scroll-down = "shift_down";
-                on-scroll-up = "shift_up";
-              };
-              format = {
-                days = "<span color='{{color4}}'><b>{}</b></span>";
-                months = "<span color='{{foreground}}'><b>{}</b></span>";
-                today = "<span color='{{color3}}'><b><u>{}</u></b></span>";
-                weekdays = "<span color='{{color5}}'><b>{}</b></span>";
-              };
-              mode = "year";
-              mode-mon-col = 3;
-              on-scroll = 1;
-            };
-            format = "󰥔   {:%H:%M}";
-            format-alt = "󰸗   {:%a, %d %b %Y}";
-            # format-alt = "  {:%a, %d %b %Y}";
-            interval = 10;
-            tooltip-format = "<tt><small>{calendar}</small></tt>";
-          };
-
-          "custom/nix" = {
-            format = "󱄅";
-            on-click = "rofi -show drun";
-            on-click-right = "hypr-wallpaper --rofi";
-            tooltip = false;
-          };
-
-          idle_inhibitor = lib.mkIf cfg.idleInhibitor {
-            format = "{icon}";
-            format-icons = {
-              activated = inversed "";
-              deactivated = "";
-            };
-          };
-
-          "hyprland/workspaces" = {
-            # TODO: pacman, remove active inverse circle
-            # format = "{icon}";
-            # format-icons = {
-            #   active = "󰮯";
-            #   default = "·";
-            #   urgent = "󰊠";
-            # };
-          };
-
-          "hyprland/window" = {
-            rewrite = {
-              # strip the application name
-              "(.*) - (.*)" = "$1";
-            };
-            separate-outputs = true;
-          };
-
-          layer = "top";
-          margin = "0";
-
-          modules-center = [ "hyprland/workspaces" ];
-
-          modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idleInhibitor "idle_inhibitor");
-
-          modules-right =
-            [
-              "network"
-              "pulseaudio"
-            ]
-            ++ (lib.optional config.custom.backlight.enable "backlight")
-            ++ (lib.optional config.custom.battery.enable "battery")
-            ++ [ "clock" ];
-
-          network =
-            {
-              format-disconnected = inversed "󰖪    Offline";
-              tooltip = false;
-            }
-            // (
-              if config.custom.wifi.enable then
-                {
-                  format = "    {essid}";
-                  format-ethernet = " ";
-                  # rofi wifi script
-                  on-click = pkgs.fetchurl {
-                    url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
-                    hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
-                  };
-                  on-click-right = "${config.custom.terminal.exec} nmtui";
-                }
-              else
-                { format-ethernet = ""; }
-            );
-
-          position = "top";
-
-          pulseaudio = {
-            format = "{icon}  {volume}%";
-            format-icons = [
-              "󰕿"
-              "󰖀"
-              "󰕾"
-            ];
-            format-muted = inversed "󰖁  Muted";
-            on-click = "${lib.getExe pkgs.pamixer} -t";
-            on-click-right = "pwvucontrol";
-            scroll-step = 1;
-            tooltip = false;
-          };
-
-          start_hidden = cfg.hidden;
+      waybar.config = {
+        backlight = lib.mkIf config.custom.backlight.enable {
+          format = "{icon}   {percent}%";
+          format-icons = [
+            "󰃞"
+            "󰃟"
+            "󰃝"
+            "󰃠"
+          ];
+          on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
+          on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
         };
+
+        battery = lib.mkIf config.custom.battery.enable {
+          format = "{icon}    {capacity}%";
+          format-charging = "     {capacity}%";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+          states = {
+            critical = 20;
+          };
+          tooltip = false;
+        };
+
+        clock = {
+          calendar = {
+            actions = {
+              on-click-right = "mode";
+              on-scroll-down = "shift_down";
+              on-scroll-up = "shift_up";
+            };
+            format = {
+              days = "<span color='{{color4}}'><b>{}</b></span>";
+              months = "<span color='{{foreground}}'><b>{}</b></span>";
+              today = "<span color='{{color3}}'><b><u>{}</u></b></span>";
+              weekdays = "<span color='{{color5}}'><b>{}</b></span>";
+            };
+            mode = "year";
+            mode-mon-col = 3;
+            on-scroll = 1;
+          };
+          format = "󰥔   {:%H:%M}";
+          format-alt = "󰸗   {:%a, %d %b %Y}";
+          # format-alt = "  {:%a, %d %b %Y}";
+          interval = 10;
+          tooltip-format = "<tt><small>{calendar}</small></tt>";
+        };
+
+        "custom/nix" = {
+          format = "󱄅";
+          on-click = "rofi -show drun";
+          on-click-right = "hypr-wallpaper --rofi";
+          tooltip = false;
+        };
+
+        idle_inhibitor = lib.mkIf cfg.idleInhibitor {
+          format = "{icon}";
+          format-icons = {
+            activated = "";
+            deactivated = "";
+          };
+        };
+
+        "hyprland/workspaces" = {
+          # TODO: pacman, remove active inverse circle
+          # format = "{icon}";
+          # format-icons = {
+          #   active = "󰮯";
+          #   default = "·";
+          #   urgent = "󰊠";
+          # };
+        };
+
+        # "hyprland/window" = {
+        #   rewrite = {
+        #     # strip the application name
+        #     "(.*) - (.*)" = "$1";
+        #   };
+        #   separate-outputs = true;
+        # };
+
+        layer = "top";
+        margin = "0";
+
+        modules-center = [ "hyprland/workspaces" ];
+
+        modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idleInhibitor "idle_inhibitor");
+
+        modules-right =
+          [
+            "network"
+            "pulseaudio"
+          ]
+          ++ (lib.optional config.custom.backlight.enable "backlight")
+          ++ (lib.optional config.custom.battery.enable "battery")
+          ++ [ "clock" ];
+
+        network =
+          {
+            format-disconnected = "󰖪    Offline";
+            tooltip = false;
+          }
+          // (
+            if config.custom.wifi.enable then
+              {
+                format = "    {essid}";
+                format-ethernet = " ";
+                # rofi wifi script
+                on-click = pkgs.fetchurl {
+                  url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
+                  hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
+                };
+                on-click-right = "${config.custom.terminal.exec} nmtui";
+              }
+            else
+              { format-ethernet = ""; }
+          );
+
+        position = "top";
+
+        pulseaudio = {
+          format = "{icon}  {volume}%";
+          format-icons = [
+            "󰕿"
+            "󰖀"
+            "󰕾"
+          ];
+          format-muted = "󰖁  Muted";
+          on-click = "${lib.getExe pkgs.pamixer} -t";
+          on-click-right = "pwvucontrol";
+          scroll-step = 1;
+          tooltip = false;
+        };
+
+        start_hidden = cfg.hidden;
+      };
+
+      waybar.inversed_classes = [
+        "idle_inhibitor.activated"
+        "network.disconnected"
+        "pulseaudio.muted"
+        "custom/focal"
+      ];
 
       wallust = {
         nixJson = {
-          waybar_accent_color = cfg.accentColor;
           waybar_persistent_workspaces = cfg.persistentWorkspaces;
         };
 
@@ -302,8 +309,7 @@ in
                   }
                 ''
                 + lib.optionalString cfg.idleInhibitor ''
-                  ${mkModuleClassName "idle_inhibitor"} {
-                    font-size: 16px;
+                  ${mkModuleClassName "idle_inhibitor"} {                  ;
                   }
                 ''
                 +
@@ -317,7 +323,22 @@ in
                       padding-right: 0;
                       margin-right: ${margin};
                     }
-                  '';
+                  ''
+                # idle inhibitor icon is wonky, add extra padding
+                + lib.optionalString cfg.idleInhibitor ''
+                  ${mkModuleClassName "idle_inhibitor"} {
+                    padding-right: 16px;
+                  }
+                ''
+                # add inversed classes to be modified by hypr-wallpaper later
+                + lib.concatMapStringsSep "\n" (class: ''
+                  ${mkModuleClassName class} {
+                    color: {{color4}}; /* inverse */
+                  }
+                '') cfg.inversed_classes
+                # additional css at the end for highest priority
+                + cfg.extraCss;
+
               target = "${config.xdg.configHome}/waybar/style.css";
             };
         };
