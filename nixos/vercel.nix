@@ -35,8 +35,8 @@
         wantedBy = [ "timers.target" ];
         partOf = [ "vercel-backup.service" ];
         timerConfig = {
-          # every day at 13:52
-          OnCalendar = "*-*-* 13:52:00";
+          # every 3 days at 13:52
+          OnCalendar = "*-*-*/3 13:52:00";
           Unit = "vercel-backup.service";
         };
       };

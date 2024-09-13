@@ -113,13 +113,25 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: sysinfo::Signal) {
     sys.refresh_processes(sysinfo::ProcessesToUpdate::All);
 
     let wrapped_name = format!(".{unwrapped_name}-wrapped");
-    let mut wrapped_process = sys.processes_by_exact_name(wrapped_name.as_ref());
 
-    if let Some(process) = wrapped_process.next() {
-        process.kill_with(signal);
-    } else if let Some(process) = sys.processes_by_exact_name(unwrapped_name.as_ref()).next() {
-        process.kill_with(signal);
+    let wrapped: Vec<_> = sys
+        .processes_by_exact_name(wrapped_name.as_ref())
+        .filter(|p| p.parent().map_or(false, |parent| parent.as_u32() == 1))
+        .collect();
+
+    if !wrapped.is_empty() {
+        for p in wrapped {
+            p.kill_with(signal);
+        }
+        return;
     }
+
+    // kill unwrapped
+    sys.processes_by_exact_name(wrapped_name.as_ref())
+        .filter(|p| p.parent().map_or(false, |parent| parent.as_u32() == 1))
+        .for_each(|p| {
+            p.kill_with(signal);
+        });
 }
 
 pub fn iso8601_filename() -> String {
