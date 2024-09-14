@@ -102,8 +102,8 @@ in
           src = prev.fetchFromGitHub {
             owner = "Alexays";
             repo = "Waybar";
-            rev = "79d3a1a2962cdad1ad02195916790ae1e63122c6";
-            hash = "sha256-SaokQfNpyo+fgpEtIVTesZsmy5B5zzMZ0yygejqt3ug=";
+            rev = "d56dd6ee7fdf8c5ba4e90790af62b7f7829d3a47";
+            hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
           };
         };
 

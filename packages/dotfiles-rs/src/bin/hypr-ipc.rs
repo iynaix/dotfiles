@@ -8,6 +8,20 @@ use hyprland::{
     keyword::Keyword,
 };
 
+#[allow(dead_code)]
+fn log(msg: &str) {
+    use std::io::Write;
+
+    // open /tmp/hypr/hypr-ipc.log for writing
+    let mut log = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("/tmp/hypr-ipc.log")
+        .expect("could not open log file");
+
+    writeln!(log, "{msg}").expect("could not write to log file");
+}
+
 /// returns the monitor and if the workspace currently exists
 fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
     if let Some(wksp) = Workspaces::get()

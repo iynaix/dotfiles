@@ -35,12 +35,16 @@ fn walk_persist(dir: &Path, persist_paths: &Vec<String>) -> std::io::Result<()> 
 
 fn main() {
     let fp = fs::File::open(
-        dirs::data_local_dir()
-            .expect("unable to get XDG_DATA_HOME")
+        dirs::state_dir()
+            .expect("unable to get XDG_STATE_HOME")
             .join("impermanence.txt"),
     )
     .expect("could not read impermanence.txt, generate it with nix?");
-    let persist_paths: Vec<String> = BufReader::new(fp).lines().map_while(Result::ok).collect();
+    let persist_paths: Vec<String> = BufReader::new(fp)
+        .lines()
+        .map_while(Result::ok)
+        .filter(|l| !l.is_empty() && !l.starts_with('#'))
+        .collect();
 
     walk_persist(&PathBuf::from("/persist"), &persist_paths).unwrap_or_else(|e| {
         eprintln!("An error has occured: {e}");

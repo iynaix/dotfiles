@@ -79,11 +79,13 @@ fn move_workspaces_to_monitors(
     // move workspaces to monitors
     for (mon, wksps) in workspaces {
         for wksp in wksps {
+            // note it can error if the workspace is empty has not been created yet
             dispatch!(
                 MoveWorkspaceToMonitor,
                 WorkspaceIdentifier::Id(*wksp),
                 MonitorIdentifier::Name(mon)
-            )?;
+            )
+            .ok();
         }
     }
 

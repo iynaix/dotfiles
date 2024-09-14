@@ -82,8 +82,17 @@
       };
     };
 
-    # https://github.com/openzfs/zfs/issues/10891
-    systemd.services.systemd-udev-settle.enable = false;
+    systemd.services = {
+      # https://github.com/openzfs/zfs/issues/10891
+      systemd-udev-settle.enable = false;
+      # snapshot dirs sometimes not accessible
+      # https://github.com/NixOS/nixpkgs/issues/257505#issuecomment-2348313665
+      zfs-mount = {
+        serviceConfig = {
+          ExecStart = [ "${lib.getExe' pkgs.util-linux "mount"} -t zfs zroot/persist -o remount" ];
+        };
+      };
+    };
 
     # https://github.com/NixOS/nixpkgs/issues/257505
     custom.shell.packages.remount-persist = ''
