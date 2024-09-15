@@ -1,4 +1,5 @@
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
+use dotfiles::log;
 use dotfiles::{
     generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
     WorkspacesByMonitor,
@@ -50,13 +51,6 @@ pub struct HyprMonitorArgs {
     pub generate: Option<ShellCompletion>,
 }
 
-// reload wallpaper
-fn reload_wallpaper() {
-    execute::command!("hypr-wallpaper --reload")
-        .execute()
-        .expect("failed to reload wallpaper");
-}
-
 /// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {
     let nix_monitors = NixInfo::before().monitors;
@@ -69,8 +63,6 @@ fn mirror_monitors(new_mon: &str) {
         format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
     )
     .expect("unable to mirror displays");
-
-    reload_wallpaper();
 }
 
 fn move_workspaces_to_monitors(
@@ -111,8 +103,6 @@ fn move_workspaces_to_monitors(
         FocusMonitor,
         MonitorIdentifier::Name(workspaces.keys().next().expect("primary monitor not found"),)
     )?;
-
-    reload_wallpaper();
 
     Ok(())
 }
@@ -185,7 +175,6 @@ fn main() {
     // --mirror
     if let Some(new_mon) = args.mirror {
         mirror_monitors(&new_mon);
-        std::process::exit(0);
     }
 
     // distribute workspaces per monitor
@@ -196,5 +185,12 @@ fn main() {
         _ => rearranged_workspaces(),
     };
 
+    log(format!("redistribute workspaces: {workspaces:?}"));
+
     move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
+
+    // reload wallpaper
+    execute::command!("hypr-wallpaper --reload")
+        .execute()
+        .expect("failed to reload wallpaper");
 }

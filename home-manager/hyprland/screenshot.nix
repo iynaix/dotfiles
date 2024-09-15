@@ -13,42 +13,6 @@ let
     ocr = true;
   };
   signum = 1;
-  focal-waybar = pkgs.writeShellApplication {
-    name = "focal-waybar";
-    runtimeInputs = with pkgs; [
-      procps
-      focal
-    ];
-    text = ''
-      lock="$XDG_RUNTIME_DIR/focal.lock"
-
-      update_waybar() {
-          echo "$1"
-          pkill -SIGRTMIN+${toString signum} .waybar-wrapped
-      }
-
-      if [[ "$*" == *"--toggle"* ]]; then
-          if [ -f "$lock" ]; then
-              # stop the video
-              focal --video --rofi
-
-              update_waybar ""
-          else
-              # start recording
-              update_waybar "󰑋"
-
-              focal --video --rofi
-          fi
-      else
-          if [ -f "$lock" ]; then
-              update_waybar "󰑋"
-          else
-              update_waybar ""
-          fi
-      fi
-    '';
-  };
-
 in
 lib.mkIf config.custom.hyprland.enable {
   home.packages = lib.mkIf isNixOS (
@@ -74,10 +38,6 @@ lib.mkIf config.custom.hyprland.enable {
     };
   };
 
-  custom.shell.packages = {
-    inherit focal-waybar;
-  };
-
   # add focal module to waybar
   custom.waybar = {
     config = {
@@ -87,7 +47,7 @@ lib.mkIf config.custom.hyprland.enable {
         # hide-empty-text = true;
         # return-type = "json";
         signal = signum;
-        on-click = "focal --rofi --video";
+        on-click = "focal video --rofi";
         interval = "once";
       };
 
@@ -103,10 +63,10 @@ lib.mkIf config.custom.hyprland.enable {
 
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, backslash, exec, focal --area selection --no-notify --no-save"
-      "$mod_SHIFT, backslash, exec, focal --edit swappy --rofi"
-      "$mod_CTRL, backslash, exec, focal --area selection --ocr"
-      "ALT, backslash, exec, ${lib.getExe pkgs.custom.shell.focal-waybar} --toggle"
+      "$mod, backslash, exec, focal image --area selection --no-notify --no-save"
+      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi"
+      "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
+      ''ALT, backslash, exec, focal-waybar --toggle --rofi --signal ${toString signum} --recording "󰑋"''
     ];
   };
 }

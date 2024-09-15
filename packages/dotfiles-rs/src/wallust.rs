@@ -9,7 +9,6 @@ use execute::Execute;
 use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
 use rayon::prelude::*;
 use std::{collections::HashMap, path::PathBuf};
-use sysinfo::Signal;
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -196,10 +195,10 @@ pub fn apply_colors() {
     refresh_zathura();
 
     // refresh cava
-    kill_wrapped_process("cava", Signal::User2);
+    kill_wrapped_process("cava", "SIGUSR2");
 
     // refresh wfetch
-    kill_wrapped_process("wfetch", Signal::User2);
+    kill_wrapped_process("wfetch", "SIGUSR2");
 
     // set the waybar accent color to have more contrast
     if let Some(accent) = accents.first() {
@@ -210,7 +209,7 @@ pub fn apply_colors() {
     std::thread::sleep(std::time::Duration::from_secs(1));
 
     // refresh waybar
-    kill_wrapped_process("waybar", Signal::User2);
+    kill_wrapped_process("waybar", "SIGUSR2");
 
     // set gtk theme
     if has_nix_json {

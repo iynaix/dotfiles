@@ -1,5 +1,5 @@
-use dotfiles::find_monitor_by_name;
 use dotfiles::nixinfo::NixInfo;
+use dotfiles::{find_monitor_by_name, log};
 use execute::Execute;
 use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprData;
@@ -7,20 +7,6 @@ use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
     keyword::Keyword,
 };
-
-#[allow(dead_code)]
-fn log(msg: &str) {
-    use std::io::Write;
-
-    // open /tmp/hypr/hypr-ipc.log for writing
-    let mut log = std::fs::OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open("/tmp/hypr-ipc.log")
-        .expect("could not open log file");
-
-    writeln!(log, "{msg}").expect("could not write to log file");
-}
 
 /// returns the monitor and if the workspace currently exists
 fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
@@ -57,7 +43,7 @@ fn set_split_ratio(nstack: bool, split_ratio: f32) {
         "master:mfact"
     };
 
-    // log(&format!("setting split ratio: {split_ratio}"));
+    log(&format!("setting split ratio: {split_ratio}"));
     Keyword::set(keyword_path, split_ratio.to_string()).expect("unable to set mfact");
 }
 
@@ -151,12 +137,12 @@ fn main() -> hyprland::Result<()> {
         });
     }
 
-    event_listener.add_monitor_added_handler(|new_mon| {
+    event_listener.add_monitor_added_handler(|mon| {
         // single monitor in config; is laptop
         if NixInfo::before().monitors.len() == 1 {
             execute::command!("hypr-monitors")
                 .arg("--rofi")
-                .arg(new_mon)
+                .arg(mon)
                 .execute()
                 .expect("failed to run rofi-monitors");
         } else {
@@ -167,7 +153,7 @@ fn main() -> hyprland::Result<()> {
         }
     });
 
-    event_listener.add_monitor_removed_handler(|_| {
+    event_listener.add_monitor_removed_handler(|mon| {
         // redistribute workspaces
         execute::command!("hypr-monitors")
             .execute()

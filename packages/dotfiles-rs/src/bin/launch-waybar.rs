@@ -1,10 +1,9 @@
 use std::process::Stdio;
 
 use dotfiles::{full_path, json, kill_wrapped_process, nixinfo::NixInfo, rearranged_workspaces};
-use sysinfo::Signal;
 
 fn main() {
-    kill_wrapped_process("waybar", Signal::Interrupt);
+    kill_wrapped_process("waybar", "SIGINT");
 
     // add / remove persistent workspaces config to waybar config before launching
     let config_path = full_path("~/.config/waybar/config.jsonc");
