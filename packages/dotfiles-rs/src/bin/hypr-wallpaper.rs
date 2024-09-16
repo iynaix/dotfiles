@@ -1,6 +1,6 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
-    full_path, generate_completions, iso8601_filename, kill_wrapped_process,
+    full_path, generate_completions, iso8601_filename,
     nixinfo::NixInfo,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
@@ -13,7 +13,6 @@ use hyprland::{
     shared::HyprDataActive,
 };
 use std::{collections::HashSet, path::PathBuf};
-use sysinfo::Signal;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -182,9 +181,6 @@ fn main() {
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
 
-    if args.reload {
-        kill_wrapped_process("waybar", Signal::User2);
-    }
     execute::command!("swww-crop")
         .arg(&wallpaper)
         .execute()

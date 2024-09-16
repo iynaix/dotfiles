@@ -1,9 +1,13 @@
-use clap::{Command, Subcommand, ValueEnum};
+use clap::{Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
 use execute::Execute;
 use hyprland::{data::Monitors, shared::HyprData};
 use nixinfo::NixInfo;
-use std::{collections::HashMap, path::PathBuf, process::Stdio};
+use std::{
+    collections::HashMap,
+    path::PathBuf,
+    process::{Command, Stdio},
+};
 
 pub mod nixinfo;
 pub mod rofi;
@@ -18,7 +22,11 @@ pub enum ShellCompletion {
     Fish,
 }
 
-pub fn generate_completions(progname: &str, cmd: &mut Command, shell_completion: &ShellCompletion) {
+pub fn generate_completions(
+    progname: &str,
+    cmd: &mut clap::Command,
+    shell_completion: &ShellCompletion,
+) {
     match shell_completion {
         ShellCompletion::Bash => generate(Shell::Bash, cmd, progname, &mut std::io::stdout()),
         ShellCompletion::Zsh => generate(Shell::Zsh, cmd, progname, &mut std::io::stdout()),
@@ -55,7 +63,7 @@ pub trait CommandUtf8 {
     fn execute_stderr_lines(&mut self) -> Vec<String>;
 }
 
-impl CommandUtf8 for std::process::Command {
+impl CommandUtf8 for Command {
     fn execute_stdout_lines(&mut self) -> Vec<String> {
         self.stdout(Stdio::piped()).execute_output().map_or_else(
             |_| Vec::new(),
@@ -108,30 +116,40 @@ pub mod json {
     }
 }
 
-pub fn kill_wrapped_process(unwrapped_name: &str, signal: sysinfo::Signal) {
-    let mut sys = sysinfo::System::new();
-    sys.refresh_processes(sysinfo::ProcessesToUpdate::All);
+pub fn log<S>(msg: S)
+where
+    S: std::fmt::Display,
+{
+    use std::io::Write;
 
+    // open /tmp/hypr/hypr-ipc.log for writing
+    let mut log = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("/tmp/hypr-ipc.log")
+        .expect("could not open log file");
+
+    writeln!(log, "{msg}").expect("could not write to log file");
+}
+
+pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
     let wrapped_name = format!(".{unwrapped_name}-wrapped");
 
-    let wrapped: Vec<_> = sys
-        .processes_by_exact_name(wrapped_name.as_ref())
-        .filter(|p| p.parent().map_or(false, |parent| parent.as_u32() == 1))
-        .collect();
+    // kill the wrapped process
+    let wrapped_processes = Command::new("pkill")
+        .arg("--echo")
+        .arg(format!("-{signal}"))
+        .arg(wrapped_name)
+        .execute_stdout_lines();
 
-    if !wrapped.is_empty() {
-        for p in wrapped {
-            p.kill_with(signal);
-        }
-        return;
+    if !wrapped_processes.is_empty() {
+        Command::new("pkill")
+            .arg("--signal")
+            .arg(signal)
+            .arg(unwrapped_name)
+            .output()
+            .unwrap_or_else(|_| panic!("failed to kill {unwrapped_name}"));
     }
-
-    // kill unwrapped
-    sys.processes_by_exact_name(wrapped_name.as_ref())
-        .filter(|p| p.parent().map_or(false, |parent| parent.as_u32() == 1))
-        .for_each(|p| {
-            p.kill_with(signal);
-        });
 }
 
 pub fn iso8601_filename() -> String {
