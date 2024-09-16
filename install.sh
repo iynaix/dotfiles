@@ -168,11 +168,11 @@ fi
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
 # Get repo to install from
-read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
-repo="${repo:-github:iynaix/dotfiles}"
+read -rp "Enter flake URL (default: github:elias-ainsworth/dotfiles): " repo
+repo="${repo:-github:elias-ainsworth/dotfiles}"
 
 # qol for iynaix os
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
 
     echo "Available hosts:"
@@ -198,7 +198,7 @@ read -rp "Enter git rev for flake (default: main): " git_rev
 
 echo "Installing NixOS"
 # nixos minimal iso does not have git for whatever fucking stupid reason???
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
     nix-shell -p git nixFlakes --command \
         "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"
@@ -208,7 +208,7 @@ else
 fi
 
 # only relevant for iynaix os
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     echo "To setup secrets, run \"install-remote-secrets\" on the other host."
 fi
 

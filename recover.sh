@@ -46,11 +46,11 @@ sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 
 # Get repo to install from
-read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
-repo="${repo:-github:iynaix/dotfiles}"
+read -rp "Enter flake URL (default: github:elias-ainsworth/dotfiles): " repo
+repo="${repo:-github:elias-ainsworth/dotfiles}"
 
 # qol for iynaix os
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
 
     echo "Available hosts:"
@@ -77,7 +77,7 @@ read -rp "Enter git rev for flake (default: main): " git_rev
 
 echo "Re-installing NixOS"
 # nixos minimal iso does not have git for whatever fucking stupid reason???
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
     nix-shell -p git nixFlakes --command \
         "sudo nixos-install --no-root-password --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"

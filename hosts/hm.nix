@@ -2,7 +2,7 @@
   inputs,
   system,
   specialArgs,
-  user ? "iynaix",
+  user ? "elias-ainsworth",
   lib,
   ...
 }:

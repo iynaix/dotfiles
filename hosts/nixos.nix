@@ -3,7 +3,7 @@
   lib,
   system,
   specialArgs,
-  user ? "iynaix",
+  user ? "elias-ainsworth",
   ...
 }:
 let
