@@ -21,17 +21,17 @@ let
               systemPackages =
                 [
                   (pkgs.writeShellApplication {
-                    name = "thorne-install";
+                    name = "thorneos-install";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/install.sh)";
                   })
                   (pkgs.writeShellApplication {
-                    name = "thorne-recover";
+                    name = "thorneos-recover";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                   (pkgs.writeShellApplication {
-                    name = "thorne-reinstall";
+                    name = "thorneos-reinstall";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })

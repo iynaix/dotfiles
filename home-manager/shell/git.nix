@@ -12,8 +12,8 @@ in
   programs = {
     git = {
       enable = true;
-      userName = "Lin Xianyi";
-      userEmail = "iynaix@gmail.com";
+      userName = "Elias Ainsworth";
+      userEmail = "pilum-murialis@proton.me";
       difftastic = {
         enable = true;
         background = "dark";

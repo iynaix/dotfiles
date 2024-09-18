@@ -21,11 +21,11 @@ in
       defaultSopsFile = ../hosts/secrets.json;
 
       # define owner of secrets
-      secrets = {
-        "rp".owner = config.users.users.${user}.name;
-        "up".owner = config.users.users.${user}.name;
-        "github_token".owner = config.users.users.${user}.name;
-      };
+      # secrets = {
+      #   "rp".owner = config.users.users.${user}.name;
+      #   "up".owner = config.users.users.${user}.name;
+      #   "github_token".owner = config.users.users.${user}.name;
+      # };
 
       # use full path to persist as the secrets activation script runs at the start
       # of stage 2 boot before impermanence

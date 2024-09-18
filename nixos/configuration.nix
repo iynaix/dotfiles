@@ -30,10 +30,10 @@
   networking.networkmanager.enable = true;
 
   # Set your time zone.
-  time.timeZone = "Asia/Singapore";
+  time.timeZone = "Asia/Phoenix";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_SG.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     # seems to break virtual-console service because it can't find the font
     # https://github.com/NixOS/nixpkgs/issues/257904
@@ -42,16 +42,18 @@
   };
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_SG.UTF-8";
-    LC_IDENTIFICATION = "en_SG.UTF-8";
-    LC_MEASUREMENT = "en_SG.UTF-8";
-    LC_MONETARY = "en_SG.UTF-8";
-    LC_NAME = "en_SG.UTF-8";
-    LC_NUMERIC = "en_SG.UTF-8";
-    LC_PAPER = "en_SG.UTF-8";
-    LC_TELEPHONE = "en_SG.UTF-8";
-    # week starts on a Monday, for fuck's sake
-    LC_TIME = "en_GB.UTF-8";
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    # # week starts on a Monday, for fuck's sake
+    # LC_TIME = "en_GB.UTF-8";
+    # Sorry Grandmaster, but the week starts on a Sunday.
+    LC_TIME = "en_US.UTF-8";
   };
 
   # Configure keymap in X11
