@@ -1,6 +1,5 @@
 {
   inputs,
-  lib,
   pkgs,
   ...
 }:
@@ -93,19 +92,6 @@ in
       #     };
       #   }
       # );
-
-      # hiding waybar is currently broken
-      # https://github.com/Alexays/Waybar/issues/3477
-      waybar =
-        assert (lib.assertMsg (prev.waybar.version == "0.10.4") "waybar: use version from nixpkgs?");
-        prev.waybar.overrideAttrs {
-          src = prev.fetchFromGitHub {
-            owner = "Alexays";
-            repo = "Waybar";
-            rev = "d56dd6ee7fdf8c5ba4e90790af62b7f7829d3a47";
-            hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
-          };
-        };
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;

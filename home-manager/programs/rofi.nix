@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.custom.rofi;
-  rofiThemes = "${pkgs.custom.rofi-themes}/files";
+  rofiThemes = pkgs.custom.rofi-themes;
   launcherType = 2;
   launcherStyle = 2;
   powermenuType = 4;
@@ -91,7 +91,9 @@ in
   config = {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi-wayland.override {
+        plugins = [ rofiThemes ];
+      };
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
@@ -162,15 +164,17 @@ in
       };
 
       "rofi-power-menu.rasi" = {
-        text = fixupRofiThemesRasi "${powermenuDir}/style-${toString powermenuStyle}.rasi" ''
-          * { background-window: @background; } // darken background
-          window {
-            width: 1000px;
-            border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-          }
-          element normal.normal { background-color: var(background-normal); }
-          element selected.normal { background-color: @selected; }
-        '';
+        text = lib.replaceStrings [ "Iosevka Nerd Font" ] [ "DejaVu Sans" ] (
+          fixupRofiThemesRasi "${powermenuDir}/style-${toString powermenuStyle}.rasi" ''
+            * { background-window: @background; } // darken background
+            window {
+              width: 1000px;
+              border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+            }
+            element normal.normal { background-color: var(background-normal); }
+            element selected.normal { background-color: @selected; }
+          ''
+        );
         target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
       };
 

@@ -97,7 +97,6 @@
         noto-fonts-cjk
         noto-fonts-emoji
         (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-        custom.rofi-themes
       ];
 
       persist = {

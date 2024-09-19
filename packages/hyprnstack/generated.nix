@@ -3,11 +3,11 @@
 {
   hyprNStack = {
     pname = "hyprNStack";
-    version = "30313f41b72096e65feec3381e217205163929ef";
+    version = "4a3c707ab81c50170de6bbdf6809b470c987cabf";
     src = fetchFromGitHub {
       owner = "zakk4223";
       repo = "hyprNstack";
-      rev = "30313f41b72096e65feec3381e217205163929ef";
+      rev = "4a3c707ab81c50170de6bbdf6809b470c987cabf";
       fetchSubmodules = false;
       sha256 = "sha256-OIT+Z4ixQ9jrjLkJXrQGI5jTKTddqvZp6d2BQ3ubqbg=";
     };

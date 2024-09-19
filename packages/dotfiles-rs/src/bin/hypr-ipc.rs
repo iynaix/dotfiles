@@ -153,7 +153,7 @@ fn main() -> hyprland::Result<()> {
         }
     });
 
-    event_listener.add_monitor_removed_handler(|mon| {
+    event_listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
         execute::command!("hypr-monitors")
             .execute()

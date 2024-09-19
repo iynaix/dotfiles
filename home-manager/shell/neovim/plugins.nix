@@ -18,7 +18,6 @@ lib.mkMerge [
         nvim-autopairs.enable = true;
         nvim-tree.enable = true;
         project-nvim.enable = true;
-        surround.enable = true;
         tmux-navigator.enable = true;
         treesitter = {
           enable = true;
@@ -69,7 +68,6 @@ lib.mkMerge [
             yaml
           ];
         };
-
         telescope = {
           enable = true;
           extensions = {
@@ -108,6 +106,7 @@ lib.mkMerge [
             # TODO: tmux windows?
           };
         };
+        vim-surround.enable = true;
 
         # trouble.enable = true;
         # incsearch-vim
