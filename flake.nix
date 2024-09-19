@@ -50,6 +50,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-gaming = {
+      url = "github:fufexan/nix-gaming";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # NOTE: This will require your git SSH access to the repo.
     # disable ghostty by commenting out the following input and setting
     # the hm option config.custom.ghostty.enable = false

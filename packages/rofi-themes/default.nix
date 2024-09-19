@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (
     buildInputs = [
       (nerdfonts.override {
         fonts = [
-          "JetBrainsMono"
+          # "JetBrainsMono"
           "Iosevka"
         ];
       })

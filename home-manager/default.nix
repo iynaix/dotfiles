@@ -18,12 +18,12 @@
     fonts = {
       regular = mkOption {
         type = types.str;
-        default = "Geist Regular";
+        default = "Iosevka Etoile";
         description = "The font to use for regular text";
       };
       monospace = mkOption {
         type = types.str;
-        default = "JetBrainsMono Nerd Font";
+        default = "Maple Mono Nerd Font";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
@@ -63,6 +63,11 @@
           libreoffice
           trash-cli
           xdg-utils
+          # for gaming
+          heroic
+          steam-run
+          protonup-qt
+          wineWowPackages.waylandFull
           # misc utilities for dotfiles written in rust
           custom.dotfiles-rs
         ]
@@ -96,7 +101,9 @@
         noto-fonts
         noto-fonts-cjk
         noto-fonts-emoji
-        (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+        iosevka
+        maple-mono-NF
+        (nerdfonts.override { fonts = [ "Iosevka" ]; })
         custom.rofi-themes
       ];
 
@@ -105,6 +112,9 @@
           "Desktop"
           "Documents"
           "Pictures"
+          "Books"
+          "Games"
+          ".config/heroic"
         ];
       };
     };

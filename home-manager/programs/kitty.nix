@@ -34,11 +34,11 @@ in
         background_opacity = terminal.opacity;
         confirm_os_window_close = 0;
       };
-      extraConfig = lib.mkIf (lib.hasPrefix "JetBrains" terminal.font) ''
-        font_features JetBrainsMonoNF-Regular +zero
-        font_features JetBrainsMonoNF-Bold +zero
-        font_features JetBrainsMonoNF-Italic +zero
-        font_features JetBrainsMonoNF-BoldItalic +zero
+      extraConfig = lib.mkIf (lib.hasPrefix "Maple Mono" terminal.font) ''
+        font_features MapleMonoNF-Regular +zero
+        font_features MapleMonoNF-Bold +zero
+        font_features MapleMonoNF-Italic +zero
+        font_features MapleMonoNF-BoldItalic +zero
       '';
     };
 

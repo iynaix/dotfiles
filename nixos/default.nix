@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -30,6 +31,7 @@
     ./vercel.nix
     ./virt-manager.nix
     ./zfs.nix
+    inputs.nix-gaming.nixosModules.platformOptimizations
   ];
 
   options.custom = with lib; {

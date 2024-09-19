@@ -3,7 +3,7 @@
 # Also see https://github.com/Mic92/dotfiles/blob/master/nixos/.sops.yaml
 # for a more complex example.
 keys:
-  - &elias-ainsworth age1ndhv9whtxt47rycy58mly40vxs4k9w6h7xuccv9fhqhfuqhhrqcsl590l4
+  - &elias-ainsworth age1d343d47etrvwvcu5mpvue6u8clunj2k0jjfygn06rvv9elxhtfmqjkysxa
 creation_rules:
   - path_regex: hosts/secrets.json$
     key_groups:
