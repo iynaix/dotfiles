@@ -37,8 +37,8 @@
       "Xft.hintstyle" = "hintslight";
       "Xft.lcdfilter" = "lcddefault";
 
-      "*.font" = "Iosevka Term Nerd Font Mono:Medium:size=12";
-      "*.bold_font" = "Iosevka Term Nerd Font Mono:Bold:size=12";
+      "*.font" = "Maple Mono NF:Medium:size=12";
+      "*.bold_font" = "Maple Mono NF:Bold:size=12";
     };
   };
 }

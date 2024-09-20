@@ -35,10 +35,10 @@ in
         confirm_os_window_close = 0;
       };
       extraConfig = lib.mkIf (lib.hasPrefix "Maple Mono" terminal.font) ''
-        font_features MapleMonoNF-Regular +zero
-        font_features MapleMonoNF-Bold +zero
-        font_features MapleMonoNF-Italic +zero
-        font_features MapleMonoNF-BoldItalic +zero
+        font_features MapleMono-NF-Regular +zero
+        font_features MapleMono-NF-Bold +zero
+        font_features MapleMono-NF-Italic +zero
+        font_features MapleMono-NF-BoldItalic +zero
       '';
     };
 

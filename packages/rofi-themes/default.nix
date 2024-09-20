@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   stdenvNoCC,
   nerdfonts,
   source,
@@ -10,6 +11,7 @@ stdenvNoCC.mkDerivation (
     version = "unstable-${source.date}";
 
     buildInputs = [
+      pkgs.maple-mono-NF
       (nerdfonts.override {
         fonts = [
           # "JetBrainsMono"

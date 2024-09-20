@@ -18,12 +18,12 @@
     fonts = {
       regular = mkOption {
         type = types.str;
-        default = "Iosevka Etoile";
+        default = "Iosevka Nerd Font Propo";
         description = "The font to use for regular text";
       };
       monospace = mkOption {
         type = types.str;
-        default = "Maple Mono Nerd Font";
+        default = "Maple Mono NF";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
