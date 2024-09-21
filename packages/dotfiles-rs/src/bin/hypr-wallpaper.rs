@@ -2,10 +2,10 @@ use clap::{CommandFactory, Parser};
 use dotfiles::{
     full_path, generate_completions, iso8601_filename,
     nixinfo::NixInfo,
+    swww::Swww,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
 };
-use execute::Execute;
 use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
@@ -14,6 +14,7 @@ use hyprland::{
 };
 use std::{collections::HashSet, path::PathBuf};
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 #[command(
     name = "hypr-wallpaper",
@@ -37,6 +38,9 @@ pub struct HyprWallpaperArgs {
 
     #[arg(long, action, help = "show wallpaper history selector with rofi")]
     pub history: bool,
+
+    #[arg(long, action, help = "do not save history")]
+    pub no_history: bool,
 
     #[arg(
         long,
@@ -181,12 +185,10 @@ fn main() {
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
 
-    execute::command!("swww-crop")
-        .arg(&wallpaper)
-        .execute()
-        .ok();
+    // set the wallpaper with cropping
+    Swww::new(&wallpaper).run(wallpaper_info);
 
-    if !args.reload {
+    if !args.reload && !args.no_history {
         // write the image as a timestamp to a wallpaper_history directory
         let wallpaper_history = full_path("~/Pictures/wallpaper_history");
         std::fs::create_dir_all(&wallpaper_history)

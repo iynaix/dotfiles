@@ -11,6 +11,7 @@ use std::{
 
 pub mod nixinfo;
 pub mod rofi;
+pub mod swww;
 pub mod wallpaper;
 pub mod wallust;
 
@@ -116,20 +117,22 @@ pub mod json {
     }
 }
 
-pub fn log<S>(msg: S)
-where
-    S: std::fmt::Display,
-{
-    use std::io::Write;
+#[macro_export]
+macro_rules! log {
+    ($($arg:tt)*) => {
+        {
+            use std::io::Write;
+            let mut log_file = std::fs::OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open("/tmp/hypr-ipc.log")
+                .expect("could not open log file");
 
-    // open /tmp/hypr/hypr-ipc.log for writing
-    let mut log = std::fs::OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open("/tmp/hypr-ipc.log")
-        .expect("could not open log file");
-
-    writeln!(log, "{msg}").expect("could not write to log file");
+            println!($($arg)*);
+            writeln!(log_file, $($arg)*).expect("could not write to hypr-ipc.log");
+            log_file.flush().expect("could not flush hypr-ipc.log");
+        }
+    };
 }
 
 pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
@@ -138,7 +141,8 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
     // kill the wrapped process
     let wrapped_processes = Command::new("pkill")
         .arg("--echo")
-        .arg(format!("-{signal}"))
+        .arg("--signal")
+        .arg(signal)
         .arg(wrapped_name)
         .execute_stdout_lines();
 

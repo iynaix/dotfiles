@@ -1,5 +1,4 @@
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
-use dotfiles::log;
 use dotfiles::{
     generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
     WorkspacesByMonitor,
@@ -184,8 +183,6 @@ fn main() {
         // no args, fall through
         _ => rearranged_workspaces(),
     };
-
-    log(format!("redistribute workspaces: {workspaces:?}"));
 
     move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
 
