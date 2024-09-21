@@ -1,7 +1,6 @@
 use crate::{vertical_dimensions, wallpaper::WallInfo};
 use execute::Execute;
-use fast_image_resize::images::Image;
-use fast_image_resize::{IntoImageView, ResizeOptions, Resizer};
+use fast_image_resize::{images::Image, IntoImageView, ResizeOptions, Resizer};
 use hyprland::{
     data::{Monitor, Monitors},
     shared::{HyprData, HyprDataVec},
