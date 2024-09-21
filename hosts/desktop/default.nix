@@ -17,7 +17,7 @@
     bittorrent.enable = true;
     distrobox.enable = true;
     # plasma.enable = true;
-    syncoid.enable = false;
+    syncoid.enable = true;
     vercel.enable = true;
     virtualization.enable = true;
   };

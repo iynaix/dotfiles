@@ -131,13 +131,15 @@ pub struct WallInfo {
 impl WallInfo {
     pub fn get_geometry(&self, width: i32, height: i32) -> Option<(f64, f64, f64, f64)> {
         self.get_geometry_str(width, height).and_then(|geom| {
-            let geometry: Vec<_> = geom.split(|c| c == '+' || c == 'x').collect();
-            let w: f64 = geometry[0].parse().ok()?;
-            let h: f64 = geometry[1].parse().ok()?;
-            let x: f64 = geometry[2].parse().ok()?;
-            let y: f64 = geometry[3].parse().ok()?;
+            let geometry: Vec<_> = geom
+                .split(|c| c == '+' || c == 'x')
+                .filter_map(|s| s.parse::<f64>().ok())
+                .collect();
 
-            Some((w, h, x, y))
+            match geometry.as_slice() {
+                &[w, h, x, y] => Some((w, h, x, y)),
+                _ => None,
+            }
         })
     }
 

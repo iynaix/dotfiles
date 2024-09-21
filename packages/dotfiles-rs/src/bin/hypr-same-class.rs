@@ -25,7 +25,7 @@ pub struct HyprSameClassArgs {
     #[arg(
         long,
         value_enum,
-        help = "type of shell completion to generate",
+        help = "Type of shell completion to generate",
         hide = true,
         exclusive = true
     )]

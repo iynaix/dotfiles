@@ -21,7 +21,7 @@ use std::{collections::HashSet, path::PathBuf};
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 pub struct HyprWallpaperArgs {
-    #[arg(long, action, help = "reload current wallpaper")]
+    #[arg(long, action, help = "Reload current wallpaper")]
     pub reload: bool,
 
     // optional image to use, uses a random one otherwise
@@ -31,21 +31,24 @@ pub struct HyprWallpaperArgs {
         long,
         action,
         aliases = ["rofi"],
-        help = "show wallpaper selector with pqiv",
+        help = "Show wallpaper selector with pqiv",
         exclusive = true
     )]
     pub pqiv: bool,
 
-    #[arg(long, action, help = "show wallpaper history selector with rofi")]
+    #[arg(long, action, help = "Show wallpaper history selector with rofi")]
     pub history: bool,
 
-    #[arg(long, action, help = "do not save history")]
+    #[arg(long, action, help = "Do not save history")]
     pub no_history: bool,
+
+    #[arg(long, action, help = "Transition type for swww")]
+    pub transition: Option<String>,
 
     #[arg(
         long,
         value_enum,
-        help = "type of shell completion to generate",
+        help = "Type of shell completion to generate",
         hide = true,
         exclusive = true
     )]
@@ -186,7 +189,7 @@ fn main() {
     wallust::apply_colors();
 
     // set the wallpaper with cropping
-    Swww::new(&wallpaper).run(wallpaper_info);
+    Swww::new(&wallpaper).run(wallpaper_info, &args.transition);
 
     if !args.reload && !args.no_history {
         // write the image as a timestamp to a wallpaper_history directory

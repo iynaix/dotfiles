@@ -1,7 +1,6 @@
 use crate::{vertical_dimensions, wallpaper::WallInfo};
 use execute::Execute;
-use fast_image_resize::images::Image;
-use fast_image_resize::{IntoImageView, ResizeOptions, Resizer};
+use fast_image_resize::{images::Image, PixelType, ResizeOptions, Resizer};
 use hyprland::{
     data::{Monitor, Monitors},
     shared::{HyprData, HyprDataVec},
@@ -69,15 +68,15 @@ impl Swww {
         }
     }
 
-    fn no_crop(&self) {
+    fn no_crop(&self, transition_args: &[String]) {
         execute::command_args!("swww", "img")
-            .args(get_random_transition())
+            .args(transition_args)
             .arg(&self.wall)
             .execute()
             .expect("failed to set wallpaper");
     }
 
-    fn with_crop(&self, mon: &Monitor, wall_info: &WallInfo) {
+    fn with_crop(&self, mon: &Monitor, wall_info: &WallInfo, transition_args: &[String]) {
         let img = ImageReader::open(&self.wall)
             .expect("could not open image")
             .decode()
@@ -91,13 +90,8 @@ impl Swww {
             panic!("unable to get geometry for {}: {}", mon.name, dimensions);
         };
 
-        // Create container for data of destination image
         #[allow(clippy::cast_sign_loss)]
-        let mut dest = Image::new(
-            mon_width as u32,
-            mon_height as u32,
-            img.pixel_type().expect("could not get pixel type"),
-        );
+        let mut dest = Image::new(mon_width as u32, mon_height as u32, PixelType::U8x3);
 
         Resizer::new()
             .resize(
@@ -117,23 +111,27 @@ impl Swww {
                 dest.buffer(),
                 mon_width as u32,
                 mon_height as u32,
-                img.color().into(),
+                image::ColorType::Rgb8.into(),
             )
             .expect("failed to write webp for swww");
 
         execute::command_args!("swww", "img", "--no-resize")
             .arg("--outputs")
             .arg(&mon.name)
-            .args(get_random_transition())
+            .args(transition_args)
             .arg(&fname)
             .spawn()
             .expect("failed to execute swww");
     }
 
-    pub fn run(&self, wall_info: Option<WallInfo>) {
+    pub fn run(&self, wall_info: Option<WallInfo>, transition: &Option<String>) {
+        let transition_args = transition.as_ref().map_or_else(get_random_transition, |t| {
+            vec!["--transition-type".to_string(), t.to_string()]
+        });
+
         // get the WallInfo for the image if it exists
         let Some(wall_info) = wall_info else {
-            self.no_crop();
+            self.no_crop(&transition_args);
             return;
         };
 
@@ -145,12 +143,12 @@ impl Swww {
             let (mw, mh) = vertical_dimensions(m);
             wall_info.get_geometry_str(mw, mh).is_none()
         }) {
-            self.no_crop();
+            self.no_crop(&transition_args);
             return;
         }
 
         monitors
             .par_iter()
-            .for_each(|mon| self.with_crop(mon, &wall_info));
+            .for_each(|mon| self.with_crop(mon, &wall_info, &transition_args));
     }
 }
