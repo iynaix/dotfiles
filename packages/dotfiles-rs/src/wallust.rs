@@ -1,5 +1,5 @@
 use crate::{
-    filename, full_path, json, kill_wrapped_process,
+    full_path, json, kill_wrapped_process,
     nixinfo::{hyprland_colors, NixInfo},
     vertical_dimensions,
     wallpaper::WallInfo,
@@ -7,8 +7,7 @@ use crate::{
 };
 use execute::Execute;
 use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
-use rayon::prelude::*;
-use std::{collections::HashMap, path::PathBuf};
+use std::collections::HashMap;
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -165,6 +164,26 @@ fn apply_hyprland_colors(accents: &[String], hyprland_colors: &[String]) {
     .expect("failed to set hyprland sticky border color");
 }
 
+/// refreshes waybar, has additional checks to restart if the process is killed
+fn refresh_waybar() {
+    use std::{process::Command, thread, time::Duration};
+
+    kill_wrapped_process("waybar", "SIGUSR2");
+
+    // not sure why the waybar process is sometimes killed, so restart it after a second
+    thread::spawn(move || {
+        thread::sleep(Duration::from_secs(1));
+
+        let waybar_processes = Command::new("pgrep").arg("waybar").execute_stdout_lines();
+
+        if waybar_processes.is_empty() {
+            Command::new("launch-waybar")
+                .output()
+                .expect("unable to launch waybar");
+        }
+    });
+}
+
 /// applies the wallust colors to various applications
 pub fn apply_colors() {
     let has_nix_json = full_path("~/.cache/wallust/nix.json").exists();
@@ -205,11 +224,7 @@ pub fn apply_colors() {
         set_waybar_accent(accent);
     }
 
-    // sleep to prevent waybar race condition
-    std::thread::sleep(std::time::Duration::from_secs(1));
-
-    // refresh waybar
-    kill_wrapped_process("waybar", "SIGUSR2");
+    refresh_waybar();
 
     // set gtk theme
     if has_nix_json {
@@ -250,62 +265,32 @@ fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
     let nix_info = NixInfo::before();
 
     if let Some(info) = wallpaper_info {
-        // monitor should be present in nix.json
         let monitors = Monitors::get().expect("could not get monitors");
-        let mon_info: Vec<_> = monitors
+        let monitors = monitors
             .iter()
-            .filter(|m| {
+            // monitor should be present in nix.json
+            .filter(|mon| {
                 nix_info
                     .monitors
                     .iter()
-                    .any(|nix_mon| nix_mon.name == m.name)
+                    .any(|nix_mon| nix_mon.name == mon.name)
             })
+            // filter monitors with geometry info
             .filter_map(|mon| {
                 let (mon_width, mon_height) = vertical_dimensions(mon);
+                info.get_geometry_str(mon_width, mon_height).map(|_| mon)
+            });
 
-                info.get_geometry(mon_width, mon_height).map(|geometry| {
-                    // prefix output filename with monitor name
-                    let wall_path = full_path(wallpaper);
-                    let output_fname = format!("{}-{}", mon.name, filename(wall_path));
-                    let output_path = PathBuf::from("/tmp").join(output_fname);
-
-                    (mon, geometry, output_path)
-                })
-            })
-            .collect();
-
-        // replace background image paths in hyprlock config
-        for (mon, _, output_path) in &mon_info {
+        for mon in monitors {
             let wall_re = regex::Regex::new(&format!(r"{}\s+# {}", &wallpaper, mon.name))
                 .expect("invalid hyprlock path regex");
             contents = wall_re
-                .replace(
-                    &contents,
-                    output_path
-                        .to_str()
-                        .unwrap_or_else(|| panic!("invalid wallpaper: {output_path:?}")),
-                )
+                // use the file created by swww for cropping
+                .replace(&contents, format!("/tmp/swww__{}.webp", mon.name))
                 .to_string();
         }
-        std::fs::write(&hyprlock_conf, contents).expect("Could not write hyprlock.conf");
 
-        // create lockscreen images in the background (non-blocking)
-        mon_info
-            .par_iter()
-            .for_each(|(mon, geometry, output_path)| {
-                if !output_path.exists() {
-                    execute::command("magick")
-                        .arg(wallpaper)
-                        .arg("-strip")
-                        .arg("-crop")
-                        .arg(geometry)
-                        .arg("-resize")
-                        .arg(&format!("{}x{}", mon.width, mon.height))
-                        .arg(output_path)
-                        .spawn()
-                        .expect("failed to crop wallpaper for lockscreen");
-                }
-            });
+        std::fs::write(&hyprlock_conf, contents).expect("Could not write hyprlock.conf");
     }
 }
 

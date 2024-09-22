@@ -15,6 +15,7 @@
     ./fish.nix
     ./git.nix
     ./neovim
+    ./helix
     ./nix.nix
     ./rice.nix
     ./rust.nix

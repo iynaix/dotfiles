@@ -39,7 +39,7 @@ _: {
       }
     ];
 
-    deadbeef.enable = false;
+    deadbeef.enable = true;
     ghostty.enable = false;
     hyprland = {
       plugin = "hyprnstack";

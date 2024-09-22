@@ -1,11 +1,10 @@
-use dotfiles::nixinfo::NixInfo;
-use dotfiles::{find_monitor_by_name, log};
+use dotfiles::{find_monitor_by_name, nixinfo::NixInfo};
 use execute::Execute;
-use hyprland::event_listener::EventListener;
-use hyprland::shared::HyprData;
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
+    event_listener::EventListener,
     keyword::Keyword,
+    shared::HyprData,
 };
 
 /// returns the monitor and if the workspace currently exists
@@ -43,7 +42,6 @@ fn set_split_ratio(nstack: bool, split_ratio: f32) {
         "master:mfact"
     };
 
-    log(&format!("setting split ratio: {split_ratio}"));
     Keyword::set(keyword_path, split_ratio.to_string()).expect("unable to set mfact");
 }
 
@@ -153,7 +151,7 @@ fn main() -> hyprland::Result<()> {
         }
     });
 
-    event_listener.add_monitor_removed_handler(|mon| {
+    event_listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
         execute::command!("hypr-monitors")
             .execute()

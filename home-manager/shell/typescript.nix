@@ -6,7 +6,7 @@ _: {
         graphql.enable = true;
         prismals.enable = true;
         tailwindcss.enable = true;
-        tsserver.enable = true;
+        ts-ls.enable = true;
       };
 
       conform-nvim = {

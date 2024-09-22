@@ -1,5 +1,4 @@
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
-use dotfiles::log;
 use dotfiles::{
     generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
     WorkspacesByMonitor,
@@ -30,21 +29,21 @@ pub struct HyprMonitorArgs {
     #[arg(
         long,
         value_parser = value_parser!(MonitorExtend),
-        help = "set new monitor(s) to be primary or secondary"
+        help = "Set new monitor(s) to be primary or secondary"
     )]
     pub extend: Option<MonitorExtend>,
 
-    #[arg(long, name = "MONITOR", action, help = "mirrors the primary monitor")]
+    #[arg(long, name = "MONITOR", action, help = "Mirrors the primary monitor")]
     pub mirror: Option<String>,
 
     // show rofi menu for selecting monitor
-    #[arg(long, action, help = "show rofi menu for monitor options")]
+    #[arg(long, action, help = "Show rofi menu for monitor options")]
     pub rofi: Option<String>,
 
     #[arg(
         long,
         value_enum,
-        help = "type of shell completion to generate",
+        help = "Type of shell completion to generate",
         hide = true,
         exclusive = true
     )]
@@ -184,8 +183,6 @@ fn main() {
         // no args, fall through
         _ => rearranged_workspaces(),
     };
-
-    log(format!("redistribute workspaces: {workspaces:?}"));
 
     move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
 

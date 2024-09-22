@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv swww-crop; do
+    for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv; do
       installShellCompletion --cmd $prog \
         --bash <($out/bin/$prog --generate bash) \
         --fish <($out/bin/$prog --generate fish) \

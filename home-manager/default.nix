@@ -104,7 +104,6 @@
         iosevka
         maple-mono-NF
         (nerdfonts.override { fonts = [ "Iosevka" ]; })
-        custom.rofi-themes
       ];
 
       persist = {

@@ -2,10 +2,10 @@ use clap::{CommandFactory, Parser};
 use dotfiles::{
     full_path, generate_completions, iso8601_filename,
     nixinfo::NixInfo,
+    swww::Swww,
     wallpaper::{self, get_wallpaper_info},
     wallust, ShellCompletion,
 };
-use execute::Execute;
 use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
@@ -14,13 +14,14 @@ use hyprland::{
 };
 use std::{collections::HashSet, path::PathBuf};
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 #[command(
     name = "hypr-wallpaper",
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 pub struct HyprWallpaperArgs {
-    #[arg(long, action, help = "reload current wallpaper")]
+    #[arg(long, action, help = "Reload current wallpaper")]
     pub reload: bool,
 
     // optional image to use, uses a random one otherwise
@@ -30,18 +31,24 @@ pub struct HyprWallpaperArgs {
         long,
         action,
         aliases = ["rofi"],
-        help = "show wallpaper selector with pqiv",
+        help = "Show wallpaper selector with pqiv",
         exclusive = true
     )]
     pub pqiv: bool,
 
-    #[arg(long, action, help = "show wallpaper history selector with rofi")]
+    #[arg(long, action, help = "Show wallpaper history selector with rofi")]
     pub history: bool,
+
+    #[arg(long, action, help = "Do not save history")]
+    pub no_history: bool,
+
+    #[arg(long, action, help = "Transition type for swww")]
+    pub transition: Option<String>,
 
     #[arg(
         long,
         value_enum,
-        help = "type of shell completion to generate",
+        help = "Type of shell completion to generate",
         hide = true,
         exclusive = true
     )]
@@ -181,12 +188,10 @@ fn main() {
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
 
-    execute::command!("swww-crop")
-        .arg(&wallpaper)
-        .execute()
-        .ok();
+    // set the wallpaper with cropping
+    Swww::new(&wallpaper).run(wallpaper_info, &args.transition);
 
-    if !args.reload {
+    if !args.reload && !args.no_history {
         // write the image as a timestamp to a wallpaper_history directory
         let wallpaper_history = full_path("~/Pictures/wallpaper_history");
         std::fs::create_dir_all(&wallpaper_history)

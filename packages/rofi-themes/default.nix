@@ -1,8 +1,6 @@
 {
   lib,
-  pkgs,
   stdenvNoCC,
-  nerdfonts,
   source,
 }:
 stdenvNoCC.mkDerivation (
@@ -10,23 +8,13 @@ stdenvNoCC.mkDerivation (
   // {
     version = "unstable-${source.date}";
 
-    buildInputs = [
-      pkgs.maple-mono-NF
-      (nerdfonts.override {
-        fonts = [
-          # "JetBrainsMono"
-          "Iosevka"
-        ];
-      })
-    ];
-
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/files
-      cp -r $src/files $out
+      # the fonts will be picked up by rofi in an override plugins = [ rofi-themes ];
       mkdir -p $out/share/fonts/truetype
-      cp $src/fonts/Icomoon-Feather.ttf $out/share/fonts/truetype/feather.ttf
+      cp -r $src/files/* $out
+      cp $src/fonts/Icomoon-Feather.ttf $out/share/fonts/truetype
 
       runHook postInstall
     '';

@@ -42,11 +42,12 @@ lib.mkIf config.custom.hyprland.enable {
   custom.waybar = {
     config = {
       "custom/focal" = {
-        exec = "focal-waybar";
+        exec = ''focal-waybar --signal ${toString signum} --recording "󰑋"'';
         format = "{}";
         # hide-empty-text = true;
         # return-type = "json";
         signal = signum;
+        on-click = "focal video --stop";
         interval = "once";
       };
 
@@ -62,10 +63,10 @@ lib.mkIf config.custom.hyprland.enable {
 
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, backslash, exec, focal image --area selection --no-notify --no-save"
-      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi"
+      "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
+      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
       "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-      ''ALT, backslash, exec, focal-waybar --toggle --rofi --signal ${toString signum} --recording "󰑋"''
+      ''ALT, backslash, exec, focal-waybar --toggle --signal ${toString signum} --recording "󰑋" --rofi --no-rounded-windows''
     ];
   };
 }
