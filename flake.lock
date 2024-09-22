@@ -464,11 +464,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1726891391,
-        "narHash": "sha256-o01/njm1G+5H5dJoHncIaO8Fu/jfSgu/0radj4LaHcE=",
+        "lastModified": 1726990332,
+        "narHash": "sha256-bsIe+QuHm3kCJYzL1FV4AIvM66uXaBZQ7lL80hT/+Pw=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "cecf006ed59b5e41a7ee3378f57ee3729e8a67bc",
+        "rev": "3c6057320ecebb3544779938f3c5dba42407ec6b",
         "type": "gitlab"
       },
       "original": {
@@ -885,11 +885,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1726757621,
-        "narHash": "sha256-u6CGnSLplSBaRZq5mRe6TDg/9bQkanVado8FqAZrBz8=",
+        "lastModified": 1727004198,
+        "narHash": "sha256-tG0+/WnGP17FeXIWdRWZXI26+iPwOk09/BMalfz3b8w=",
         "owner": "iynaix",
         "repo": "focal",
-        "rev": "2881f3358ce1d31abb2a6d5cc0fab9d97f1a8cb5",
+        "rev": "1a1cac3206def18b8e6d2d58a0c905fb9158bed3",
         "type": "github"
       },
       "original": {
@@ -1026,11 +1026,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1726939561,
-        "narHash": "sha256-C422Sr2hjzHDRBAtDZNte1mJ6723KTQUOVfvtDsKMp0=",
+        "lastModified": 1727025422,
+        "narHash": "sha256-qgCGwS2tcYy2EAPlI69VWP1jxQAMDIYlmkQw4m8gU6E=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "d6eb10d9f907139597ededa38a2cab44b26f5da6",
+        "rev": "73deabaa408c505905271e11065846ac87e1afd0",
         "type": "github"
       },
       "original": {
@@ -1046,11 +1046,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726902823,
-        "narHash": "sha256-Gkc7pwTVLKj4HSvRt8tXNvosl8RS9hrBAEhOjAE0Tt4=",
+        "lastModified": 1726985855,
+        "narHash": "sha256-NJPGK030Y3qETpWBhj9oobDQRbXdXOPxtu+YgGvZ84o=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "14929f7089268481d86b83ed31ffd88713dcd415",
+        "rev": "04213d1ce4221f5d9b40bcee30706ce9a91d148d",
         "type": "github"
       },
       "original": {
@@ -1186,11 +1186,11 @@
         "umu": "umu"
       },
       "locked": {
-        "lastModified": 1726853411,
-        "narHash": "sha256-+R8HmKGNV2PKUTmCyLKQeDCCpUqur23ucKR63M2SWAQ=",
+        "lastModified": 1726969451,
+        "narHash": "sha256-PuRj1ZoHkvUBak10HD55n7v3SDx5zCwn3av0JEoJteI=",
         "owner": "fufexan",
         "repo": "nix-gaming",
-        "rev": "7ea77f2f1cd535c4d952128b349eca0b8a16d196",
+        "rev": "43a085bb0d25ec065838b3c5434627b87c686295",
         "type": "github"
       },
       "original": {
@@ -1284,11 +1284,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726449931,
-        "narHash": "sha256-1AX7MyYzP7sNgZiGF8jwehCCI75y2kBGwACeryJs+yE=",
+        "lastModified": 1726975622,
+        "narHash": "sha256-bPDZosnom0+02ywmMZAvmj7zvsQ6mVv/5kmvSgbTkaY=",
         "owner": "nix-community",
         "repo": "nix-index-database",
-        "rev": "c1b0fa0bec5478185eae2fd3f39b9e906fc83995",
+        "rev": "c7515c2fdaf2e1f3f49856cef6cec95bb2138417",
         "type": "github"
       },
       "original": {
@@ -1988,11 +1988,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1726950811,
-        "narHash": "sha256-3ixqPAhMafMP70M4VjOKoLeCCNIvzv2WPzGuphxajcM=",
+        "lastModified": 1727031271,
+        "narHash": "sha256-OvekOLCj7kEq6X8Ncgyda1ud4BMD+OxHu7bdIsCtl/g=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "2bc6a949924319f61619d32695115a61394741f8",
+        "rev": "b473bdc5ae1260296d0f43f8f1fba6248b1ee078",
         "type": "github"
       },
       "original": {
@@ -2564,11 +2564,11 @@
         "systems": "systems_9"
       },
       "locked": {
-        "lastModified": 1725774519,
-        "narHash": "sha256-UhBSvEMWXluihW55zslYpdzXMywEmCkGZdkjI2zMNss=",
+        "lastModified": 1726976247,
+        "narHash": "sha256-AdmIsvDuu2CxsBd3bv+bWVmeBQPl5fWJRdoLy7SEskY=",
         "owner": "iynaix",
         "repo": "wfetch",
-        "rev": "47d073f0dbaeb59797ccc0a63511ee4ac0f95948",
+        "rev": "5d8344926b13f632321004eab2decfe041b24ddd",
         "type": "github"
       },
       "original": {
