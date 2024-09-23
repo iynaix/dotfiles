@@ -41,7 +41,7 @@ in
         text =
           let
             persistHome = "/persist${homeDir}";
-            copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "nixos@$remote:$target/${src}"'';
+            copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
           in
           ''
             read -rp "Enter ip of remote host: " remote
@@ -53,15 +53,18 @@ in
                   [Yy]*)
                     echo "y";
                     target="/mnt${persistHome}"
-                    return;;
+                    break;;
                   [Nn]*)
                     echo "n";
                     target="${persistHome}"
-                    return;;
+                    break;;
                   *)
                     echo "Please answer yes or no.";;
                 esac
             done
+
+            read -rp "Enter user on remote host: [nixos] " user
+            user=''${user:-nixos}
 
             ${copy ".ssh/"}
             ${copy ".config/sops/age/"}

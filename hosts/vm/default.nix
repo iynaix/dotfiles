@@ -2,7 +2,10 @@
 {
   custom = {
     plasma.enable = true;
-    zfs.encryption = false;
+    zfs = {
+      encryption = false;
+      zed = true;
+    };
   };
 
   networking.hostId = "5f43c101"; # required for zfs

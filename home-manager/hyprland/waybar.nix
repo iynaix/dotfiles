@@ -327,6 +327,7 @@ in
                 # idle inhibitor icon is wonky, add extra padding
                 + lib.optionalString cfg.idleInhibitor ''
                   ${mkModuleClassName "idle_inhibitor"} {
+                    font-size: 17px;
                     padding-right: 16px;
                   }
                 ''

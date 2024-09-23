@@ -43,6 +43,7 @@ let
               inherit host user;
               isNixOS = true;
               isLaptop = host == "xps" || host == "framework";
+              isVm = host == "vm" || host == "vm-hyprland";
             };
 
             users.${user} = {
