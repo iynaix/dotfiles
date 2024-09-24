@@ -2,13 +2,13 @@
   config,
   host,
   isLaptop,
+  isVm,
   lib,
   pkgs,
   ...
 }:
 let
   inherit (config.custom) monitors;
-  isVm = host == "vm" || host == "vm-hyprland";
 in
 {
   imports = [

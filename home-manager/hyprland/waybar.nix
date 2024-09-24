@@ -197,11 +197,10 @@ in
                 format = "    {essid}";
                 format-ethernet = " ";
                 # rofi wifi script
-                # on-click = pkgs.fetchurl {
-                #   url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
-                #   hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
-                # };
-                on-click = "sh ${lib.getExe pkgs.custom.shell.rofi-wifi-menu}";
+                on-click = pkgs.fetchurl {
+                  url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
+                  hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
+                };
                 on-click-right = "${config.custom.terminal.exec} nmtui";
               }
             else
@@ -328,6 +327,7 @@ in
                 # idle inhibitor icon is wonky, add extra padding
                 + lib.optionalString cfg.idleInhibitor ''
                   ${mkModuleClassName "idle_inhibitor"} {
+                    font-size: 17px;
                     padding-right: 16px;
                   }
                 ''

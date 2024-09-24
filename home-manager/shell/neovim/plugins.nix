@@ -1,5 +1,6 @@
 {
   config,
+  isVm,
   lib,
   pkgs,
   ...
@@ -107,6 +108,8 @@ lib.mkMerge [
           };
         };
         vim-surround.enable = true;
+        web-devicons.enable = true;
+
         # trouble.enable = true;
         # incsearch-vim
         # matchit-zip
@@ -134,12 +137,16 @@ lib.mkMerge [
   }
 
   # supermaven
-  {
+  (lib.mkIf (!isVm) {
     programs.nixvim = {
       extraPlugins = with pkgs.vimPlugins; [ supermaven-nvim ];
       extraConfigLua = ''
         require("supermaven-nvim").setup({})
       '';
     };
-  }
+
+    custom.persist = {
+      home.directories = [ ".supermaven" ];
+    };
+  })
 ]

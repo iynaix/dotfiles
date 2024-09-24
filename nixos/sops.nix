@@ -20,13 +20,6 @@ in
       # to edit secrets file, run "sops hosts/secrets.json"
       defaultSopsFile = ../hosts/secrets.json;
 
-      # define owner of secrets
-      # secrets = {
-      #   "rp".owner = config.users.users.${user}.name;
-      #   "up".owner = config.users.users.${user}.name;
-      #   "github_token".owner = config.users.users.${user}.name;
-      # };
-
       # use full path to persist as the secrets activation script runs at the start
       # of stage 2 boot before impermanence
       gnupg.sshKeyPaths = [ ];
@@ -48,7 +41,7 @@ in
         text =
           let
             persistHome = "/persist${homeDir}";
-            copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "nixos@$remote:$target/${src}"'';
+            copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
           in
           ''
             read -rp "Enter ip of remote host: " remote
@@ -60,15 +53,18 @@ in
                   [Yy]*)
                     echo "y";
                     target="/mnt${persistHome}"
-                    return;;
+                    break;;
                   [Nn]*)
                     echo "n";
                     target="${persistHome}"
-                    return;;
+                    break;;
                   *)
                     echo "Please answer yes or no.";;
                 esac
             done
+
+            read -rp "Enter user on remote host: [nixos] " user
+            user=''${user:-nixos}
 
             ${copy ".ssh/"}
             ${copy ".config/sops/age/"}

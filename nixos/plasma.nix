@@ -18,6 +18,11 @@
     hm = {
       custom.hyprland.enable = lib.mkForce false;
 
+      home.packages = with pkgs; [
+        # plasma5 currently still uses x11
+        xclip
+      ];
+
       # set dark theme, adapted from plasma-manager
       xdg.configFile."autostart/plasma-dark-mode.desktop".text =
         let

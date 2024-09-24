@@ -124,7 +124,6 @@
 
   custom.persist = {
     home.directories = [
-      ".supermaven"
       ".local/share/nvim" # data directory
       ".local/state/nvim" # persistent session info
     ];
