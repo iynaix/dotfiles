@@ -210,6 +210,9 @@ fi
 # only relevant for iynaix os
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
     echo "To setup secrets, run \"install-remote-secrets\" on the other host."
+
+    IP_ADDR=$(ifconfig | awk '/inet / && !/127.0.0.1/ {print $2; exit}')
+    echo "The IP address of this host is $IP_ADDR"
 fi
 
 echo "Intallation complete. It is now safe to reboot."

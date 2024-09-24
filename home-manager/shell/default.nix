@@ -17,6 +17,7 @@
     ./neovim
     ./nix.nix
     ./rice.nix
+    ./ripgrep.nix
     ./rust.nix
     ./shell.nix
     ./starship.nix

@@ -59,7 +59,6 @@
           curl
           gzip
           rar # includes unrar
-          ripgrep
           libreoffice
           trash-cli
           xdg-utils

@@ -70,7 +70,7 @@ in
             background = map (mon: {
               monitor = "${mon.name}";
               # add trailing comment with monitor name for hypr-wallpaper to replace later
-              path = "{{wallpaper}} # ${mon.name}";
+              path = "/tmp/swww__${mon.name}.webp";
               color = "${rgba "background" 1}";
             }) config.custom.monitors;
 
