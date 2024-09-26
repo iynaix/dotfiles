@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -13,6 +12,7 @@
     ./configuration.nix
     ./docker.nix
     ./filezilla.nix
+    ./gaming.nix
     ./gh.nix
     ./hdds.nix
     ./hyprland.nix
@@ -30,8 +30,8 @@
     ./users.nix
     ./vercel.nix
     ./virt-manager.nix
+    ./weeb.nix
     ./zfs.nix
-    inputs.nix-gaming.nixosModules.platformOptimizations
   ];
 
   options.custom = with lib; {

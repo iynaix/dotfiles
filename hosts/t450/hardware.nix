@@ -10,7 +10,6 @@
 {
   imports = [
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t450s
-    inputs.nix-gaming.nixosModules.pipewireLowLatency
   ];
 
   boot = {

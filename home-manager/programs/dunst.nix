@@ -1,14 +1,13 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
   opacity = "E5";
 in
 {
-  home.packages = [ pkgs.libnotify ];
+  # home.packages = [ pkgs.libnotify ];
   services.dunst = {
     enable = true;
     configFile = "${config.xdg.cacheHome}/wallust/dunstrc";

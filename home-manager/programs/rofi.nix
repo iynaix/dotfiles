@@ -94,9 +94,56 @@ in
       package = pkgs.rofi-wayland.override {
         plugins = [ rofiThemes ];
       };
+      extraConfig = {
+        show-icons = true;
+        kb-remove-char-back = "BackSpace";
+        kb-accept-entry = "Control+m,Return,KP_Enter";
+        kb-mode-next = "Control+l";
+        kb-mode-previous = "Control+h";
+        kb-row-up = "Control+k,Up";
+        kb-row-down = "Control+j,Down";
+        kb-row-left = "Control+u";
+        kb-row-right = "Control+d";
+        kb-delete-entry = "Control+semicolon";
+        kb-remove-char-forward = "";
+        kb-remove-to-sol = "";
+        kb-remove-to-eol = "";
+        kb-mode-complete = "";
+      };
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
+    xdg.dataFile."rofi/themes/preview.rasi".text = ''
+      @theme "custom"
+      icon-current-entry {
+        enabled: true;
+        size: 50%;
+        dynamic: true;
+        padding: 10px;
+        background-color: inherit;
+      }
+      listview-split {
+        background-color: transparent;
+        border-radius: 0px;
+        cycle: true;
+        dynamic : true;
+        orientation: horizontal;
+        border: 0px solid;
+        children: [listview,icon-current-entry];
+      }
+      listview {
+        lines: 10;
+      }
+      mainbox {
+        children: [inputbar,listview-split];
+      }
+      @media (enabled: env(EPUB, false)) {
+        icon-current-entry {
+          size: 35%;
+        }
+      }
+
+    '';
     custom.shell.packages = {
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       rofi-power-menu = {
@@ -108,12 +155,19 @@ in
       };
       rofi-wifi-menu = {
         runtimeInputs = with pkgs; [
+          libnotify
           rofi-wayland
           custom.rofi-themes
         ];
         text = lib.readFile ./rofi-wifi-menu.sh;
       };
-
+      rofi-epub-menu = {
+        runtimeInputs = with pkgs; [
+          rofi-wayland
+          custom.rofi-themes
+        ];
+        text = lib.readFile ./rofi-epub-menu.sh;
+      };
     };
 
     # add blur for rofi shutdown

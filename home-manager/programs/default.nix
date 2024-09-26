@@ -5,6 +5,7 @@
     ./deadbeef.nix
     ./dunst.nix
     ./firefox.nix
+    ./gaming.nix
     ./ghostty.nix
     ./gtk.nix
     ./helix.nix
@@ -18,6 +19,7 @@
     ./vlc.nix
     ./vscode.nix
     ./wallust.nix
+    ./weeb.nix
     ./yt-dlp.nix
     ./zathura.nix
   ];

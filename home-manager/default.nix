@@ -63,11 +63,6 @@
           libreoffice
           trash-cli
           xdg-utils
-          # for gaming
-          heroic
-          steam-run
-          protonup-qt
-          wineWowPackages.waylandFull
           # misc utilities for dotfiles written in rust
           custom.dotfiles-rs
         ]
@@ -112,8 +107,6 @@
           "Documents"
           "Pictures"
           "Books"
-          "Games"
-          ".config/heroic"
         ];
       };
     };
