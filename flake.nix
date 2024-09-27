@@ -74,6 +74,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mamelon = {
+      url = "github:elias-ainsworth/mamelon-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    kollektif = {
+      url = "github:elias-ainsworth/kollektif-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # music-player = {
     #   url = "github:tsirysndr/music-player";
     # };

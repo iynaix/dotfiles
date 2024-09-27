@@ -76,12 +76,14 @@
       home.packages =
         with pkgs;
         [
-          # dysk # better disk info
+          dysk # better disk info
           ets # add timestamp to beginning of each line
           fd # better find
           fx # terminal json viewer and processor
           htop
           jq
+          mdcat # terminal markdown viewer and processer
+          ouch # better decompress utility
           sd # better sed
           # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
           ugrep

@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  config,
   lib,
   ...
 }:
@@ -54,6 +55,7 @@
           ".local/share/jerry"
         ];
       };
+
     }
   ];
 }

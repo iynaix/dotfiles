@@ -3,6 +3,7 @@
   isNixOS,
   lib,
   pkgs,
+  inputs,
   user,
   ...
 }:
@@ -18,8 +19,13 @@
     fonts = {
       regular = mkOption {
         type = types.str;
-        default = "Iosevka Nerd Font Propo";
+        default = "Kollektif";
         description = "The font to use for regular text";
+      };
+      weeb = mkOption {
+        type = types.str;
+        default = "Mamelon";
+        description = "The font to use for weeb text";
       };
       monospace = mkOption {
         type = types.str;
@@ -40,7 +46,22 @@
 
   config = {
     # setup fonts for other distros, run "fc-cache -f" to refresh fonts
-    fonts.fontconfig.enable = true;
+    fonts = {
+      fontconfig = {
+        enable = true;
+        defaultFonts = rec {
+          serif = [
+            "Kollektif"
+            "Mamelon"
+          ];
+          sansSerif = serif;
+          monospace = [
+            "Maple Mono NF"
+            "Mamelon"
+          ];
+        };
+      };
+    };
 
     home = {
       username = user;
@@ -98,6 +119,8 @@
         noto-fonts-emoji
         iosevka
         maple-mono-NF
+        inputs.mamelon.packages.${system}.mamelon
+        inputs.kollektif.packages.${system}.kollektif
         (nerdfonts.override { fonts = [ "Iosevka" ]; })
       ];
 

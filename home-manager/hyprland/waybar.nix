@@ -160,6 +160,20 @@ in
           #   default = "·";
           #   urgent = "󰊠";
           # };
+          format = "{icon}";
+          show-special = true;
+          format-icons = {
+            "1" = "一";
+            "2" = "二";
+            "3" = "三";
+            "4" = "四";
+            "5" = "五";
+            "6" = "六";
+            "7" = "七";
+            "8" = "八";
+            "9" = "九";
+            "10" = "十";
+          };
         };
 
         # "hyprland/window" = {
@@ -197,10 +211,7 @@ in
                 format = "    {essid}";
                 format-ethernet = " ";
                 # rofi wifi script
-                on-click = pkgs.fetchurl {
-                  url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
-                  hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
-                };
+                on-click = "rofi-wifi-menu";
                 on-click-right = "${config.custom.terminal.exec} nmtui";
               }
             else
@@ -247,7 +258,7 @@ in
             let
               margin = "12px";
               baseModuleCss = ''
-                font-family: ${config.custom.fonts.regular};
+                font-family: "${config.custom.fonts.regular}", "${config.custom.fonts.weeb}";
                 font-weight: bold;
                 color: {{foreground}};
                 transition: none;
