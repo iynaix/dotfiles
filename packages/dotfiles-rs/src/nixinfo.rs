@@ -24,7 +24,6 @@ pub struct NixInfo {
     pub host: String,
     // waybar options
     pub waybar_persistent_workspaces: Option<bool>,
-    // output cropped wallpaper as jpg for hyprlock
     pub monitors: Vec<NixMonitorInfo>,
     /// color0 - color15
     pub colors: HashMap<String, String>,

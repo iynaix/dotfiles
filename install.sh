@@ -171,7 +171,7 @@ sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 read -rp "Enter flake URL (default: github:elias-ainsworth/dotfiles): " repo
 repo="${repo:-github:elias-ainsworth/dotfiles}"
 
-# qol for iynaix os
+# qol for thorneos
 if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
 
@@ -207,9 +207,12 @@ else
         "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"
 fi
 
-# only relevant for iynaix os
+# only relevant for thorneos
 if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     echo "To setup secrets, run \"install-remote-secrets\" on the other host."
+
+    IP_ADDR=$(ifconfig | awk '/inet / && !/127.0.0.1/ {print $2; exit}')
+    echo "The IP address of this host is $IP_ADDR"
 fi
 
 echo "Intallation complete. It is now safe to reboot."

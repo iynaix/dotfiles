@@ -1,12 +1,11 @@
 use crate::{
     full_path, json, kill_wrapped_process,
     nixinfo::{hyprland_colors, NixInfo},
-    vertical_dimensions,
     wallpaper::WallInfo,
     CommandUtf8,
 };
 use execute::Execute;
-use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
+use hyprland::keyword::Keyword;
 use std::collections::HashMap;
 
 pub const CUSTOM_THEMES: [&str; 6] = [
@@ -249,49 +248,6 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .arg(wallpaper)
         .execute()
         .expect("wallust: failed to set colors from wallpaper");
-
-    crop_lockscreens(wallpaper_info, wallpaper);
-}
-
-/// crops the wallpapers for usage with the lockscreens
-fn crop_lockscreens(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
-    // replace image path in hyprlock config at ~/.config/hypr/hyprlock.conf
-    let hyprlock_conf = full_path("~/.config/hypr/hyprlock.conf");
-    if !hyprlock_conf.exists() {
-        return;
-    }
-    let mut contents =
-        std::fs::read_to_string(&hyprlock_conf).expect("Could not read hyprlock.conf");
-    let nix_info = NixInfo::before();
-
-    if let Some(info) = wallpaper_info {
-        let monitors = Monitors::get().expect("could not get monitors");
-        let monitors = monitors
-            .iter()
-            // monitor should be present in nix.json
-            .filter(|mon| {
-                nix_info
-                    .monitors
-                    .iter()
-                    .any(|nix_mon| nix_mon.name == mon.name)
-            })
-            // filter monitors with geometry info
-            .filter_map(|mon| {
-                let (mon_width, mon_height) = vertical_dimensions(mon);
-                info.get_geometry_str(mon_width, mon_height).map(|_| mon)
-            });
-
-        for mon in monitors {
-            let wall_re = regex::Regex::new(&format!(r"{}\s+# {}", &wallpaper, mon.name))
-                .expect("invalid hyprlock path regex");
-            contents = wall_re
-                // use the file created by swww for cropping
-                .replace(&contents, format!("/tmp/swww__{}.webp", mon.name))
-                .to_string();
-        }
-
-        std::fs::write(&hyprlock_conf, contents).expect("Could not write hyprlock.conf");
-    }
 }
 
 type Rgb = (i32, i32, i32);

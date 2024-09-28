@@ -28,6 +28,14 @@
         # TODO: define keyword searches here?
         # search.engines = [ ];
 
+        isDefault = true;
+        settings = {
+          "browser.display.use_document_fonts" = 0;
+          "browser.ctrlTab.sortByRecentlyUsed" = false;
+          "browser.theme.toolbar-theme" = 0;
+          "general.autoScroll" = true;
+        };
+
         extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
           bitwarden
           darkreader

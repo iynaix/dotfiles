@@ -29,7 +29,7 @@
       };
       monospace = mkOption {
         type = types.str;
-        default = "Maple Mono NF";
+        default = "JetBrainsMono Nerd Font Mono";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
@@ -51,13 +51,13 @@
         enable = true;
         defaultFonts = rec {
           serif = [
-            "Kollektif"
-            "Mamelon"
+            "${config.custom.fonts.regular}"
+            "${config.custom.fonts.weeb}"
           ];
           sansSerif = serif;
           monospace = [
-            "Maple Mono NF"
-            "Mamelon"
+            "${config.custom.fonts.monospace}"
+            "${config.custom.fonts.weeb}"
           ];
         };
       };
@@ -80,7 +80,6 @@
           curl
           gzip
           rar # includes unrar
-          ripgrep
           libreoffice
           trash-cli
           xdg-utils
@@ -121,7 +120,13 @@
         maple-mono-NF
         inputs.mamelon.packages.${system}.mamelon
         inputs.kollektif.packages.${system}.kollektif
-        (nerdfonts.override { fonts = [ "Iosevka" ]; })
+        (nerdfonts.override {
+          fonts = [
+            "Iosevka"
+            "JetBrainsMono"
+            "MPlus"
+          ];
+        })
       ];
 
       persist = {

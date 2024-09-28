@@ -39,7 +39,7 @@ in
   config = {
     home = {
       shellAliases = {
-        ":e" = "nvim";
+        ":e" = "$EDITOR";
         ":q" = "exit";
         ":wq" = "exit";
         c = "clear";
