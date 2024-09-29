@@ -72,10 +72,10 @@ in
             "$mod_SHIFT, e, exec, $term yazi ${config.xdg.userDirs.download}"
             "$mod, w, exec, brave"
             "$mod_SHIFT, w, exec, rofi-epub-menu"
-            "$mod, v, exec, $term nvim"
-            "$mod_SHIFT, v, exec, code"
-            ''$mod, period, exec, focusorrun "dotfiles - Visual Studio Code" "code ${config.home.homeDirectory}/projects/dotfiles"''
-            ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - Visual Studio Code" "code ${config.home.homeDirectory}/projects/nixpkgs"''
+            "$mod, v, exec, $term hx"
+            "$mod_SHIFT, v, exec, zeditor"
+            ''$mod, period, exec, focusorrun "dotfiles - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/dotfiles"''
+            ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/nixpkgs"''
 
             # exit hyprland
             "$mod_ALT, F4, exit,"

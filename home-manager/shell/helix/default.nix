@@ -1,13 +1,16 @@
 { pkgs, inputs, ... }:
 {
-  imports = [ ./languages.nix ];
+  imports = [
+    ./languages.nix
+    ./themes
+  ];
   home.packages = [ pkgs.lldb_18 ];
   programs.helix = {
     enable = true;
     # defaultEditor = true;
     package = inputs.helix.packages.${pkgs.system}.helix;
     settings = {
-      theme = "rose_pine";
+      theme = "catppuccin-mocha";
       editor = {
         line-number = "relative";
         idle-timeout = 0;
@@ -32,7 +35,7 @@
             "position"
             "file-encoding"
           ];
-          separator = "▏";
+          separator = "|";
         };
         inline-diagnostics = {
           cursor-line = "warning";

@@ -19,7 +19,7 @@
     fonts = {
       regular = mkOption {
         type = types.str;
-        default = "Kollektif";
+        default = "Geist";
         description = "The font to use for regular text";
       };
       weeb = mkOption {
@@ -29,7 +29,7 @@
       };
       monospace = mkOption {
         type = types.str;
-        default = "JetBrainsMono Nerd Font Mono";
+        default = "JetBrainsMono Nerd Font";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
@@ -117,6 +117,7 @@
         noto-fonts-cjk
         noto-fonts-emoji
         iosevka
+        # geist-font
         maple-mono-NF
         inputs.mamelon.packages.${system}.mamelon
         inputs.kollektif.packages.${system}.kollektif

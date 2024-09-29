@@ -60,7 +60,7 @@ lib.mkIf config.custom.hyprland.enable {
       ))
 
       # download desktop
-      (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")
+      (openOnWorkspace 10 "$term hx ${config.xdg.userDirs.desktop}/yt.txt")
       (openOnWorkspace 10 "$term")
 
       # focus the initial workspaces on startup
