@@ -80,7 +80,8 @@ impl Swww {
         let img = ImageReader::open(&self.wall)
             .expect("could not open image")
             .decode()
-            .expect("could not decode image");
+            .expect("could not decode image")
+            .to_rgb8();
 
         let (mon_width, mon_height) = vertical_dimensions(mon);
 
@@ -90,12 +91,16 @@ impl Swww {
             panic!("unable to get geometry for {}: {}", mon.name, dimensions);
         };
 
+        // convert to rgb8 pixel type
+        let src = Image::from_vec_u8(img.width(), img.height(), img.into_raw(), PixelType::U8x3)
+            .expect("Failed to create source image view");
+
         #[allow(clippy::cast_sign_loss)]
         let mut dest = Image::new(mon_width as u32, mon_height as u32, PixelType::U8x3);
 
         Resizer::new()
             .resize(
-                &img,
+                &src,
                 &mut dest,
                 &ResizeOptions::new().use_alpha(false).crop(x, y, w, h),
             )

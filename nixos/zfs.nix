@@ -85,14 +85,6 @@
         };
       };
 
-      # fix for zfs timing out mounting on boot
-      # https://github.com/nix-community/impermanence/issues/216
-      boot.initrd.systemd.services.create-needed-for-boot-dirs = {
-        after = lib.mkForce [ ];
-        wants = lib.mkForce [ ];
-        unitConfig.DefaultDependencies = "no";
-      };
-
       systemd.services = {
         # https://github.com/openzfs/zfs/issues/10891
         systemd-udev-settle.enable = false;
