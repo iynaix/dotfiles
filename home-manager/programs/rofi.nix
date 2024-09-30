@@ -168,6 +168,13 @@ in
         ];
         text = lib.readFile ./rofi-epub-menu.sh;
       };
+      rofi-pdf-menu = {
+        runtimeInputs = with pkgs; [
+          rofi-wayland
+          custom.rofi-themes
+        ];
+        text = lib.readFile ./rofi-pdf-menu.sh;
+      };
     };
 
     # add blur for rofi shutdown

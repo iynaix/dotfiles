@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   home.packages = [ pkgs.zed-editor ];
   # add password-store: gnome for keyring to work
@@ -10,8 +10,8 @@
         "vim_mode": true,
         "ui_font_size": 16,
         "buffer_font_size": 14,
-        "ui_font_family": "JetBrainsMono Nerd Font",
-        "buffer_font_family": "JetBrainsMono Nerd Font",
+        "ui_font_family": "${config.custom.fonts.monospace}",
+        "buffer_font_family": "${config.custom.fonts.monospace}",
         "theme": {
           "mode": "system",
           "light": "Catppuccin Mocha (Blur)", // I will kill anyone that tries to use a light scheme

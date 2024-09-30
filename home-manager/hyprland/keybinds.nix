@@ -72,6 +72,7 @@ in
             "$mod_SHIFT, e, exec, $term yazi ${config.xdg.userDirs.download}"
             "$mod, w, exec, brave"
             "$mod_SHIFT, w, exec, rofi-epub-menu"
+            "$mod_CTRL, w, exec, rofi-pdf-menu"
             "$mod, v, exec, $term hx"
             "$mod_SHIFT, v, exec, zeditor"
             ''$mod, period, exec, focusorrun "dotfiles - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/dotfiles"''

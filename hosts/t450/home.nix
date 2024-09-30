@@ -20,10 +20,14 @@ _: {
       }
     ];
 
+    deadbeef.enable = true;
     terminal.size = 10;
 
     persist = {
-      home.directories = [ "Downloads" ];
+      home.directories = [
+        "Downloads"
+        "Music"
+      ];
     };
   };
 }
