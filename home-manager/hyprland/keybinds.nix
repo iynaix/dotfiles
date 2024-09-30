@@ -73,6 +73,7 @@ in
             "$mod, w, exec, brave"
             "$mod_SHIFT, w, exec, rofi-epub-menu"
             "$mod_CTRL, w, exec, rofi-pdf-menu"
+            "$mod, t, exec, jerry"
             "$mod, v, exec, $term hx"
             "$mod_SHIFT, v, exec, zeditor"
             ''$mod, period, exec, focusorrun "dotfiles - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/dotfiles"''

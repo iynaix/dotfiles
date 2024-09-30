@@ -163,26 +163,6 @@ fn apply_hyprland_colors(accents: &[String], hyprland_colors: &[String]) {
     .expect("failed to set hyprland sticky border color");
 }
 
-/// refreshes waybar, has additional checks to restart if the process is killed
-fn refresh_waybar() {
-    use std::{process::Command, thread, time::Duration};
-
-    kill_wrapped_process("waybar", "SIGUSR2");
-
-    // not sure why the waybar process is sometimes killed, so restart it after a second
-    thread::spawn(move || {
-        thread::sleep(Duration::from_secs(1));
-
-        let waybar_processes = Command::new("pgrep").arg("waybar").execute_stdout_lines();
-
-        if waybar_processes.is_empty() {
-            Command::new("launch-waybar")
-                .output()
-                .expect("unable to launch waybar");
-        }
-    });
-}
-
 /// applies the wallust colors to various applications
 pub fn apply_colors() {
     let has_nix_json = full_path("~/.cache/wallust/nix.json").exists();
@@ -223,7 +203,8 @@ pub fn apply_colors() {
         set_waybar_accent(accent);
     }
 
-    refresh_waybar();
+    // refresh waybar
+    kill_wrapped_process("waybar", "SIGUSR2");
 
     // set gtk theme
     if has_nix_json {

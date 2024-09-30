@@ -19,6 +19,7 @@
     ./vlc.nix
     ./vscode.nix
     ./wallust.nix
+    ./waybar.nix
     ./weeb.nix
     ./yt-dlp.nix
     ./zathura.nix

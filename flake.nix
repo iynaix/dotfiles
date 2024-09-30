@@ -18,8 +18,8 @@
     devenv.url = "github:cachix/devenv";
 
     # waiting for fix for https://github.com/nix-community/impermanence/issues/216
-    # impermanence.url = "github:nix-community/impermanence";
-    impermanence.url = "github:nix-community/impermanence/63f4d0443e32b0dd7189001ee1894066765d18a5";
+    impermanence.url = "github:nix-community/impermanence";
+    # impermanence.url = "github:nix-community/impermanence/63f4d0443e32b0dd7189001ee1894066765d18a5";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";

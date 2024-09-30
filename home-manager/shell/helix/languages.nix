@@ -12,18 +12,6 @@
         config.nil.formatting.command = [ "${lib.getExe pkgs.nixfmt-rfc-style}" ];
       };
 
-      # scls = {
-      #   command = lib.getExe self'.packages.simple-completion-language-server;
-      # };
-
-      # mdpls = {
-      #   command = lib.getExe self'.packages.mdpls;
-      #   config = {
-      #     markdown.preview.auto = true;
-      #     markdown.preview.browser = "firefox-devedition";
-      #   };
-      # };
-
       marksman = {
         command = lib.getExe pkgs.marksman;
         args = [ "server" ];
@@ -82,11 +70,6 @@
         args = [ "--stdio" ];
       };
 
-      # phpactor = {
-      #   command = lib.getExe' pkgs.phpactor "phpactor";
-      #   args = [ "language-server" ];
-      # };
-
       tailwindcss-ls = {
         command = lib.getExe pkgs.tailwindcss-language-server;
         args = [ "--stdio" ];
@@ -134,37 +117,6 @@
         auto-format = true;
         language-servers = [ "tsserver" ];
       }
-      # {
-      # name = "php";
-      # auto-format = true;
-      # language-servers = phplsp;
-      # }
-      # {
-      #   name = "blade";
-      #   auto-format = true;
-      #   formatter = {
-      #     command = lib.getExe pkgs.blade-formatter;
-      #     args = [ "--stdin" ];
-      #   };
-      #   scope = "source.blade.php";
-      #   file-types = [
-      #     { glob = "*.blade.php"; }
-      #     "blade"
-      #   ];
-      #   injection-regex = "blade";
-      #   language-servers = [
-      #     "vscode-html-language-server"
-      #     "tailwindcss-ls"
-      #   ];
-      #   block-comment-tokens = {
-      #     start = "{{--";
-      #     end = "--}}";
-      #   };
-      #   roots = [
-      #     "composer.json"
-      #     "index.php"
-      #   ];
-      # }
       {
         name = "gohtml";
         scope = "source.gohtml";

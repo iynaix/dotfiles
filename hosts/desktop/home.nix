@@ -52,8 +52,11 @@ _: {
     vlc.enable = true;
     wallpaper-utils.enable = true;
     # wallust.colorscheme = "tokyo-night";
-    # waybar.persistentWorkspaces = true;
-    waybar.hidden = false;
+    waybar = {
+      enable = true;
+      hidden = false;
+      # waybar.persistentWorkspaces = true;
+    };
   };
 
   # home = {
