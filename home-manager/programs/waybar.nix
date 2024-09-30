@@ -23,6 +23,9 @@ in
     };
 
     waybar = {
+      enable = mkEnableOption "waybar" // {
+        default = config.custom.hyprland.enable;
+      };
       config = mkOption {
         type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
@@ -46,7 +49,7 @@ in
     };
   };
 
-  config = lib.mkIf config.custom.hyprland.enable {
+  config = lib.mkIf config.custom.waybar.enable {
     programs.waybar = {
       enable = isNixOS;
       # do not use the systemd service as it is flaky and unreliable
@@ -75,8 +78,8 @@ in
           ];
           text = ''
             # toggle waybar visibility if it is running
-            if pgrep .waybar-wrapped > /dev/null; then
-              pkill -SIGUSR1 .waybar-wrapped
+            if pgrep waybar > /dev/null; then
+              pkill -SIGUSR1 waybar
             else
               launch-waybar
             fi

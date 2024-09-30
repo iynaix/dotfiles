@@ -19,7 +19,6 @@ in
     ./screenshot.nix
     ./startup.nix
     ./wallpaper.nix
-    ./waybar.nix
   ];
 
   options.custom = with lib; {
