@@ -52,7 +52,7 @@ pub struct HyprMonitorArgs {
 
 /// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {
-    let nix_monitors = NixInfo::before().monitors;
+    let nix_monitors = NixInfo::new().monitors;
 
     let primary = nix_monitors.first().expect("no primary monitor found");
 
@@ -111,7 +111,7 @@ fn distribute_workspaces(extend_type: &MonitorExtend) -> WorkspacesByMonitor {
     let workspaces: Vec<i32> = (1..=10).collect();
 
     let mut all_monitors = Monitors::get().expect("could not get monitors").to_vec();
-    let nix_monitors = NixInfo::before().monitors;
+    let nix_monitors = NixInfo::new().monitors;
 
     // sort all_monitors, putting the nix_monitors first
     all_monitors.sort_by_key(|a| {

@@ -82,7 +82,7 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 }
 
 fn main() -> hyprland::Result<()> {
-    let is_desktop = NixInfo::before().host == "desktop";
+    let is_desktop = NixInfo::new().host == "desktop";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
     let mut event_listener = EventListener::new();
@@ -137,7 +137,7 @@ fn main() -> hyprland::Result<()> {
 
     event_listener.add_monitor_added_handler(|mon| {
         // single monitor in config; is laptop
-        if NixInfo::before().monitors.len() == 1 {
+        if NixInfo::new().monitors.len() == 1 {
             execute::command!("hypr-monitors")
                 .arg("--rofi")
                 .arg(mon)

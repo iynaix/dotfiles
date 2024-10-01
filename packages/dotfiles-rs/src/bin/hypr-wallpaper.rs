@@ -156,7 +156,7 @@ fn main() {
             if full_path("~/.cache/wallust/nix.json").exists() {
                 wallpaper::random()
             } else {
-                NixInfo::before().fallback
+                NixInfo::new().fallback
             }
         }
     };
@@ -179,7 +179,7 @@ fn main() {
     let wallpaper_info = get_wallpaper_info(&wallpaper);
 
     // use colorscheme set from nix if available
-    if let Some(cs) = NixInfo::before().colorscheme {
+    if let Some(cs) = NixInfo::new().colorscheme {
         wallust::apply_theme(&cs);
     } else {
         wallust::from_wallpaper(&wallpaper_info, &wallpaper);
