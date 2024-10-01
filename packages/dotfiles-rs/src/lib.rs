@@ -9,6 +9,7 @@ use std::{
     process::{Command, Stdio},
 };
 
+pub mod colors;
 pub mod nixinfo;
 pub mod rofi;
 pub mod swww;
@@ -143,6 +144,7 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
         .arg("--echo")
         .arg("--signal")
         .arg(signal)
+        .arg("--exact")
         .arg(wrapped_name)
         .execute_stdout_lines();
 
@@ -150,6 +152,7 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
         Command::new("pkill")
             .arg("--signal")
             .arg(signal)
+            .arg("--exact")
             .arg(unwrapped_name)
             .output()
             .unwrap_or_else(|_| panic!("failed to kill {unwrapped_name}"));
@@ -181,7 +184,7 @@ pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 
 /// assign workspaces to their rules if possible, otherwise add them to the other monitors
 pub fn rearranged_workspaces() -> WorkspacesByMonitor {
-    let nix_monitors = NixInfo::before().monitors;
+    let nix_monitors = NixInfo::new().monitors;
     let active_workspaces: HashMap<String, i32> = Monitors::get()
         .expect("could not get monitors")
         .iter()

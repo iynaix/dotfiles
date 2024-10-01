@@ -17,7 +17,7 @@ fn main() {
     if let NixInfo {
         waybar_persistent_workspaces: Some(true),
         ..
-    } = NixInfo::before()
+    } = NixInfo::new()
     {
         cfg["hyprland/workspaces"]["persistentWorkspaces"] =
             serde_json::to_value(rearranged_workspaces())

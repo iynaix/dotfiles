@@ -1,7 +1,7 @@
 use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
-use crate::{filename, full_path, nixinfo::NixInfo};
+use crate::{colors::NixColors, filename, full_path, nixinfo::NixInfo};
 use std::{collections::HashMap, fs, path::PathBuf};
 
 pub fn dir() -> PathBuf {
@@ -9,7 +9,7 @@ pub fn dir() -> PathBuf {
 }
 
 pub fn current() -> Option<String> {
-    let curr = NixInfo::after().wallpaper;
+    let curr = NixColors::new().wallpaper;
 
     let wallpaper = {
         if curr == "./foo/bar.text" {
@@ -72,10 +72,10 @@ pub fn random() -> String {
         self::all()
             .choose(&mut rand::thread_rng())
             // use fallback image if not available
-            .unwrap_or(&NixInfo::before().fallback)
+            .unwrap_or(&NixInfo::new().fallback)
             .to_string()
     } else {
-        NixInfo::before().fallback
+        NixInfo::new().fallback
     }
 }
 
@@ -87,7 +87,7 @@ where
         .collect::<Vec<_>>()
         .choose(&mut rand::thread_rng())
         // use fallback image if not available
-        .unwrap_or(&NixInfo::before().fallback)
+        .unwrap_or(&NixInfo::new().fallback)
         .to_string()
 }
 
