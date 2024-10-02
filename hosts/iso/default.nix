@@ -57,9 +57,13 @@ let
             programs = {
               # bye bye nano
               nano.enable = false;
-              neovim = {
+              helix = {
                 enable = true;
                 defaultEditor = true;
+              };
+              neovim = {
+                enable = true;
+                # defaultEditor = true;
               };
             };
 

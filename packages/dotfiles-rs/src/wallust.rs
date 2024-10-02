@@ -77,15 +77,16 @@ fn accents_by_contrast() -> Vec<Rgb> {
         .into_values()
         .collect();
 
-    // returns the area of a triangle formed by the given RGB tuples
-    let bg = nixinfo.special.background;
-    let fg = nixinfo.special.foreground;
+    let (x1, y1, z1) = nixinfo.special.background.to_i64();
+    let (x2, y2, z2) = nixinfo.special.foreground.to_i64();
 
     colors.sort_by_key(|c| {
+        let (x3, y3, z3) = c.to_i64();
+
         // compute area of the triangle formed by the colors
-        let t1 = i64::from((bg.g - bg.r) * (fg.b - fg.r) - (fg.g - fg.r) * (bg.b - bg.r));
-        let t2 = i64::from((fg.g - fg.r) * (c.b - c.r) - (c.g - c.r) * (fg.b - fg.r));
-        let t3 = i64::from((c.g - c.r) * (bg.b - bg.r) - (bg.g - bg.r) * (c.b - c.r));
+        let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
+        let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
+        let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
 
         // should be square root then halved, but makes no difference if just comparing
         // negative for sorting in descending order
@@ -218,7 +219,7 @@ pub fn set_gtk_and_icon_theme() {
         .collect();
 
     let mut variant = String::new();
-    let mut min_distance = i32::MAX;
+    let mut min_distance = i64::MAX;
 
     for (accent_name, accent_color) in nixinfo.theme_accents {
         for wallust_color in &wallust_colors {
@@ -255,7 +256,7 @@ pub fn set_waybar_accent(accent: &Rgb) {
     // replace old foreground color with new inverse color
     css = css.replace(
         &nixinfo.special.foreground.to_hex_str(),
-        &inverse.to_hex_str(),
+        &accent.to_hex_str(),
     );
 
     // replace inverse classes

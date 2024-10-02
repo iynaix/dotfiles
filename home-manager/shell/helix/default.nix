@@ -7,7 +7,7 @@
   home.packages = [ pkgs.lldb_18 ];
   programs.helix = {
     enable = true;
-    # defaultEditor = true;
+    defaultEditor = true;
     package = inputs.helix.packages.${pkgs.system}.helix;
     settings = {
       theme = "catppuccin-mocha";

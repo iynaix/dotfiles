@@ -11,7 +11,7 @@
     enable = true;
     enableMan = false; # do not generate manpages
 
-    defaultEditor = true;
+    defaultEditor = false;
     viAlias = true;
     vimAlias = true;
 

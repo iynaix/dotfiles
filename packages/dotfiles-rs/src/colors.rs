@@ -11,23 +11,27 @@ pub struct Rgb {
 }
 
 impl Rgb {
+    /// to i32 RGB tuple
+    pub fn to_i64(&self) -> (i64, i64, i64) {
+        (i64::from(self.r), i64::from(self.g), i64::from(self.b))
+    }
+
     /// to hex string
     pub fn to_hex_str(&self) -> String {
-        format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.g)
+        format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
     }
 
     /// to `rgb()` string
     pub fn to_rgb_str(&self) -> String {
-        format!("rgb({:02X}{:02X}{:02X})", self.r, self.g, self.g)
+        format!("rgb({:02X}{:02X}{:02X})", self.r, self.g, self.b)
     }
 
     // euclidean distance squared between colos, no sqrt necessary since we're only comparing
-    pub fn distance_sq(&self, other: &Self) -> i32 {
-        let dr = i32::from(self.r) - i32::from(other.r);
-        let dg = i32::from(self.g) - i32::from(other.g);
-        let db = i32::from(self.g) - i32::from(other.g);
+    pub fn distance_sq(&self, other: &Self) -> i64 {
+        let (r1, g1, b1) = self.to_i64();
+        let (r2, g2, b2) = other.to_i64();
 
-        dr * dr + dg * dg + db * db
+        (r1 - r2) * (r1 - r2) + (g1 - g2) * (g1 - g2) + (b1 - b2) * (b1 - b2)
     }
 
     #[must_use]
@@ -35,8 +39,15 @@ impl Rgb {
         Self {
             r: 255 - self.r,
             g: 255 - self.g,
-            b: 255 - self.g,
+            b: 255 - self.b,
         }
+    }
+}
+
+// print as hex string by default
+impl std::fmt::Display for Rgb {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
     }
 }
 
@@ -100,7 +111,7 @@ impl NixColors {
     pub fn filter_colors(&self, names: &[&str]) -> HashMap<String, Rgb> {
         self.colors
             .iter()
-            .filter(|&(name, _)| names.contains(&name.as_str()))
+            .filter(|&(name, _)| !names.contains(&name.as_str()))
             .map(|(name, color)| (name.to_string(), color.clone()))
             .collect()
     }

@@ -37,7 +37,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // print shell completions
     if let Some(shell) = args.generate {
-        generate_completions("hypr-monitors", &mut HyprSameClassArgs::command(), &shell);
+        generate_completions("hypr-same-class", &mut HyprSameClassArgs::command(), &shell);
         std::process::exit(0);
     }
 

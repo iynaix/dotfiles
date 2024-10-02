@@ -25,6 +25,9 @@ lib.mkIf config.custom.hyprland.enable {
       "swww-daemon &"
       "sleep 1; hypr-wallpaper && launch-waybar"
 
+      # lock screen to protect privacy
+      "hyprlock"
+
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"
       # fix Authorization required, but no authorization protocol specified error
@@ -33,18 +36,11 @@ lib.mkIf config.custom.hyprland.enable {
       # stop fucking with my cursors
       "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
 
-      # browsers
-      (openOnWorkspace 1 "brave --incognito")
-      (openOnWorkspace 1 "brave --profile-directory=Default")
-
-      # file manager
-      (openOnWorkspace 4 "nemo")
-
       # terminal
-      (openOnWorkspace 7 "$term")
+      (openOnWorkspace 1 "$term")
 
       # firefox
-      (openOnWorkspace 9 (
+      (openOnWorkspace 5 (
         toString (
           [
             (lib.getExe config.programs.firefox.package)
@@ -64,8 +60,8 @@ lib.mkIf config.custom.hyprland.enable {
       (openOnWorkspace 10 "$term")
 
       # focus the initial workspaces on startup
-      "hyprctl dispatch workspace 9"
-      "hyprctl dispatch workspace 7"
+      "hyprctl dispatch workspace 10"
+      "hyprctl dispatch workspace 5"
       "hyprctl dispatch workspace 1"
     ];
   };
