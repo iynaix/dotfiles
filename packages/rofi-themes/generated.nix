@@ -3,14 +3,14 @@
 {
   rofi-themes = {
     pname = "rofi-themes";
-    version = "3f2275ab8f9dbb697c7387a20a78a3da196c302a";
+    version = "dce10e92b6fde7248a52b33b9051b425f8a5f204";
     src = fetchFromGitHub {
       owner = "adi1090x";
       repo = "rofi";
-      rev = "3f2275ab8f9dbb697c7387a20a78a3da196c302a";
+      rev = "dce10e92b6fde7248a52b33b9051b425f8a5f204";
       fetchSubmodules = false;
-      sha256 = "sha256-slq48vZlVLmFn4K+ET0uZeFQJYr7+lGxAzvvPHXj/NU=";
+      sha256 = "sha256-ZSosFsi/M5Gqb9gsUqS7hu89uOu9078Dus4Y+WCphZc=";
     };
-    date = "2024-09-09";
+    date = "2024-09-27";
   };
 }
