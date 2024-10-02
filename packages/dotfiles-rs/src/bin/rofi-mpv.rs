@@ -165,7 +165,7 @@ fn main() {
 
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-monitors", &mut RofiMpvArgs::command(), &shell);
+        return generate_completions("rofi-mpv", &mut RofiMpvArgs::command(), &shell);
     }
 
     let no_media = "No media type specified. Use 'anime' or 'tv'.";

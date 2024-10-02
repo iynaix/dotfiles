@@ -174,14 +174,13 @@ in
       ];
       text = ''
         REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
-        if [ -z "$1" ]; then
+        BRANCH="''${1:-}"
+        if [ -z "$BRANCH" ]; then
           if git show-ref --verify --quiet refs/heads/master; then
               BRANCH="master"
           else
               BRANCH="main"
           fi
-        else
-          BRANCH="$1"
         fi
 
         # check if repo is forked and sync with upstream if it is

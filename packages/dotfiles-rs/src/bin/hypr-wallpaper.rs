@@ -1,4 +1,4 @@
-use clap::{CommandFactory, Parser};
+use clap::{ArgGroup, CommandFactory, Parser};
 use dotfiles::{
     full_path, generate_completions, iso8601_filename,
     nixinfo::NixInfo,
@@ -20,17 +20,28 @@ use std::{collections::HashSet, path::PathBuf};
     name = "hypr-wallpaper",
     about = "Changes the wallpaper and updates the colorcheme"
 )]
+#[command(group(
+    ArgGroup::new("exclusive_group")
+        .args(&["reload", "pqiv", "history", "image_or_dir"])
+        .multiple(false)
+))]
 pub struct HyprWallpaperArgs {
+    #[arg(
+        long,
+        value_enum,
+        help = "Type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
+
     #[arg(long, action, help = "Reload current wallpaper")]
     pub reload: bool,
-
-    // optional image to use, uses a random one otherwise
-    pub image_or_dir: Option<PathBuf>,
 
     #[arg(
         long,
         action,
-        aliases = ["rofi"],
+        visible_alias = "rofi",
         help = "Show wallpaper selector with pqiv",
         exclusive = true
     )]
@@ -45,14 +56,15 @@ pub struct HyprWallpaperArgs {
     #[arg(long, action, help = "Transition type for swww")]
     pub transition: Option<String>,
 
+    // optional image to use, uses a random one otherwise
     #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
+        action,
+        value_hint = clap::ValueHint::AnyPath,
+        value_name = "PATH",
+        help = "An image or directory path",
+        // add = ArgValueCandidates::new(get_wallpaper_files)
     )]
-    pub generate: Option<ShellCompletion>,
+    pub image_or_dir: Option<PathBuf>,
 }
 
 fn pqiv_float_rule() -> String {
@@ -125,7 +137,7 @@ fn main() {
 
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-monitors", &mut HyprWallpaperArgs::command(), &shell);
+        return generate_completions("hypr-wallpaper", &mut HyprWallpaperArgs::command(), &shell);
     }
 
     // show pqiv for selecting wallpaper, via the "w" keybind
