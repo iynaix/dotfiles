@@ -24,7 +24,7 @@ let
       specialArgs = specialArgs // {
         inherit host user;
         isNixOS = true;
-        isLaptop = host == "xps" || host == "framework" || host == "t450";
+        isLaptop = host == "framework" || host == "t450";
         isVm = host == "vm" || host == "vm-hyprland";
       };
 
@@ -42,7 +42,7 @@ let
             extraSpecialArgs = specialArgs // {
               inherit host user;
               isNixOS = true;
-              isLaptop = host == "xps" || host == "framework" || host == "t450";
+              isLaptop = host == "framework" || host == "t450";
               isVm = host == "vm" || host == "vm-hyprland";
             };
 
@@ -70,7 +70,6 @@ in
 {
   desktop = mkNixosConfiguration "desktop" { };
   framework = mkNixosConfiguration "framework" { };
-  xps = mkNixosConfiguration "xps" { };
   t450 = mkNixosConfiguration "t450" { };
   vm = mkNixosConfiguration "vm" { };
   vm-hyprland = mkNixosConfiguration "vm-hyprland" { };

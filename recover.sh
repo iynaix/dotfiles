@@ -49,9 +49,9 @@ sudo mount --mkdir -t zfs zroot/cache /mnt/cache
 read -rp "Enter flake URL (default: github:elias-ainsworth/dotfiles): " repo
 repo="${repo:-github:elias-ainsworth/dotfiles}"
 
-# qol for iynaix os
+# qol for thorne os
 if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
-    hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
+    hosts=("desktop" "framework" "t450" "vm" "vm-hyprland")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do

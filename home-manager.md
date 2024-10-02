@@ -20,7 +20,7 @@ Substitute `desktop` with desired host
 ```sh
 mkdir -p ~/projects
 cd ~/projects
-git clone https://github.com/iynaix/dotfiles
+git clone https://github.com/elias-ainsworth/dotfiles
 cd dotfiles
 nix-shell -p home-manager
 NIXPKGS_ALLOW_UNFREE=1 home-manager --extra-experimental-features "nix-command flakes" switch --flake ".#desktop"

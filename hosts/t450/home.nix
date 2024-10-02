@@ -21,7 +21,8 @@ _: {
     ];
 
     deadbeef.enable = true;
-    terminal.size = 10;
+    rclip.enable = true;
+    terminal.size = 12;
 
     persist = {
       home.directories = [

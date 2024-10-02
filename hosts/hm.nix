@@ -24,7 +24,7 @@ let
       extraSpecialArgs = specialArgs // {
         inherit host user;
         isNixOS = false;
-        isLaptop = host == "xps" || host == "framework" || host == "t450";
+        isLaptop = host == "framework" || host == "t450";
       };
 
       modules = [
