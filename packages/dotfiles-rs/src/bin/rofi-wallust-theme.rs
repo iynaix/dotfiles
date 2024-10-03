@@ -1,4 +1,5 @@
 use dotfiles::{full_path, rofi::Rofi, wallust};
+use itertools::Itertools;
 
 struct ThemeEntry {
     name: String,
@@ -22,13 +23,13 @@ impl ThemeEntry {
                     None => String::new(),
                 }
             })
-            .collect::<Vec<_>>()
+            .collect_vec()
             .join(" ");
 
         let swatches = swatches
             .iter()
             .map(|swatch| format!("<span foreground=\"{swatch}\">\u{25A0}</span>"))
-            .collect::<Vec<_>>()
+            .collect_vec()
             .join(" ");
 
         Self {
@@ -88,7 +89,6 @@ fn main() {
     let mut all_themes = preset_themes();
     all_themes.extend(custom_themes());
 
-    let mut all_themes: Vec<_> = all_themes.into_iter().collect();
     all_themes.sort_by_key(|theme| theme.display_name.to_string());
 
     // display with rofi
@@ -96,7 +96,7 @@ fn main() {
         &all_themes
             .iter()
             .map(|theme| theme.rofi.to_string())
-            .collect::<Vec<_>>(),
+            .collect_vec(),
     )
     .theme(full_path("~/.cache/wallust/rofi-menu.rasi"));
 

@@ -1,10 +1,6 @@
 use clap::{ArgGroup, CommandFactory, Parser};
 use dotfiles::{
-    full_path, generate_completions, iso8601_filename,
-    nixinfo::NixInfo,
-    swww::Swww,
-    wallpaper::{self, get_wallpaper_info},
-    wallust, ShellCompletion,
+    full_path, generate_completions, iso8601_filename, nixinfo::NixInfo, wallpaper, ShellCompletion,
 };
 use hyprland::dispatch;
 use hyprland::{
@@ -12,6 +8,7 @@ use hyprland::{
     dispatch::{Dispatch, DispatchType},
     shared::HyprDataActive,
 };
+use itertools::Itertools;
 use std::{collections::HashSet, path::PathBuf};
 
 #[allow(clippy::struct_excessive_bools)]
@@ -99,15 +96,15 @@ fn show_history() {
     // remove broken and duplicate symlinks
     let mut uniq_history = HashSet::new();
     let mut final_history = Vec::new();
-    let mut history: Vec<_> = std::fs::read_dir(&wallpaper_history)
+
+    for path in std::fs::read_dir(&wallpaper_history)
         .expect("failed to read wallpaper_history directory")
         .filter_map(|entry| entry.ok().map(|e| e.path()))
-        .collect();
-    history.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
-
-    // ignore the current wallpaper
-    for path in history.iter().skip(1) {
-        if let Ok(resolved) = std::fs::read_link(path) {
+        .sorted_by(|a, b| b.file_name().cmp(&a.file_name()))
+        // ignore the current wallpaper
+        .skip(1)
+    {
+        if let Ok(resolved) = std::fs::read_link(&path) {
             if uniq_history.contains(&resolved) {
                 std::fs::remove_file(path).expect("failed to remove duplicate symlink");
             } else {
@@ -125,11 +122,22 @@ fn show_history() {
         final_history
             .iter()
             .map(|p| format!("'{}'", p.display()))
-            .collect::<Vec<_>>()
+            .collect_vec()
             .join(" ")
     );
 
     dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
+}
+
+fn write_wallpaper_history(wallpaper: &str) {
+    // write the image as a timestamp to a wallpaper_history directory
+    let wallpaper_history = full_path("~/Pictures/wallpaper_history");
+    std::fs::create_dir_all(&wallpaper_history)
+        .expect("failed to create wallpaper_history directory");
+
+    let target = wallpaper_history.join(iso8601_filename());
+    std::os::unix::fs::symlink(wallpaper, target)
+        .expect("unable to create wallpaper history symlink");
 }
 
 fn main() {
@@ -152,66 +160,44 @@ fn main() {
         return;
     }
 
-    let random_wallpaper = match args.image_or_dir {
-        Some(image_or_dir) => {
-            if image_or_dir.is_dir() {
-                wallpaper::random_from_dir(&image_or_dir)
-            } else {
-                std::fs::canonicalize(&image_or_dir)
-                    .unwrap_or_else(|_| panic!("invalid wallpaper: {image_or_dir:?}"))
-                    .to_str()
-                    .unwrap_or_else(|| panic!("could not conver {image_or_dir:?} to str"))
-                    .to_string()
-            }
-        }
-        None => {
-            if full_path("~/.cache/wallust/nix.json").exists() {
-                wallpaper::random()
-            } else {
-                NixInfo::new().fallback
-            }
-        }
-    };
-
     let wallpaper = if args.reload {
-        wallpaper::current().unwrap_or(random_wallpaper)
+        wallpaper::current()
     } else {
+        let random_wallpaper = match args.image_or_dir {
+            Some(image_or_dir) => {
+                if image_or_dir.is_dir() {
+                    wallpaper::random_from_dir(&image_or_dir)
+                } else {
+                    std::fs::canonicalize(&image_or_dir)
+                        .unwrap_or_else(|_| panic!("invalid wallpaper: {image_or_dir:?}"))
+                        .to_str()
+                        .unwrap_or_else(|| panic!("could not conver {image_or_dir:?} to str"))
+                        .to_string()
+                }
+            }
+            None => {
+                if full_path("~/.cache/wallust/nix.json").exists() {
+                    wallpaper::random()
+                } else {
+                    NixInfo::new().fallback
+                }
+            }
+        };
+
+        // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
+        let _ = std::fs::write(
+            dirs::runtime_dir()
+                .expect("could not get $XDG_RUNTIME_DIR")
+                .join("current_wallpaper"),
+            &random_wallpaper,
+        );
+
         random_wallpaper
     };
 
-    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
-    std::fs::write(
-        dirs::runtime_dir()
-            .expect("could not get $XDG_RUNTIME_DIR")
-            .join("current_wallpaper"),
-        &wallpaper,
-    )
-    .expect("failed to write $XDG_RUNTIME_DIR/current_wallpaper");
-
-    let wallpaper_info = get_wallpaper_info(&wallpaper);
-
-    // use colorscheme set from nix if available
-    if let Some(cs) = NixInfo::new().colorscheme {
-        wallust::apply_theme(&cs);
-    } else {
-        wallust::from_wallpaper(&wallpaper_info, &wallpaper);
-    }
-
-    // do wallust earlier to create the necessary templates
-    wallust::apply_colors();
-
-    // set the wallpaper with cropping
-    Swww::new(&wallpaper).run(wallpaper_info, &args.transition);
+    wallpaper::set(&wallpaper, &args.transition);
 
     if !args.reload && !args.no_history {
-        // write the image as a timestamp to a wallpaper_history directory
-        let wallpaper_history = full_path("~/Pictures/wallpaper_history");
-        std::fs::create_dir_all(&wallpaper_history)
-            .expect("failed to create wallpaper_history directory");
-
-        let target = wallpaper_history.join(iso8601_filename());
-
-        std::os::unix::fs::symlink(wallpaper, target)
-            .expect("unable to create wallpaper history symlink");
+        write_wallpaper_history(&wallpaper);
     }
 }

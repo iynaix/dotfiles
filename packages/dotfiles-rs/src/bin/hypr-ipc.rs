@@ -6,6 +6,7 @@ use hyprland::{
     keyword::Keyword,
     shared::HyprData,
 };
+use itertools::Itertools;
 
 /// returns the monitor and if the workspace currently exists
 fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
@@ -59,10 +60,10 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 
     let wksp_id: i32 = wksp.parse().unwrap_or_default();
     let clients = Clients::get().expect("could not get clients");
-    let clients: Vec<_> = clients
+    let clients = clients
         .iter()
         .filter(|c| c.workspace.id == wksp_id)
-        .collect();
+        .collect_vec();
 
     // floating window, don't do anything
     if clients.iter().any(|c| c.floating) {

@@ -1,5 +1,6 @@
 use clap::{CommandFactory, Parser, ValueEnum};
 use dotfiles::{full_path, generate_completions, CommandUtf8, ShellCompletion};
+use itertools::Itertools;
 use std::{
     fs::read_to_string,
     path::{Path, PathBuf},
@@ -107,7 +108,7 @@ where
         .expect("could not extract duration")
         .1;
 
-    let duration: Vec<_> = duration
+    let duration = duration
         .split_once(',')
         .unwrap_or_else(|| panic!("invalid duration: {duration}"))
         .0
@@ -116,7 +117,7 @@ where
             t.parse::<f32>()
                 .unwrap_or_else(|_| panic!("invalid duration: {duration}"))
         })
-        .collect();
+        .collect_vec();
 
     match duration.len() {
         1 => duration[0],
@@ -140,14 +141,13 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     // episode finished, look for next episode
 
     // get list of files in the current directory
-    let mut current_files: Vec<_> = path
+    let current_files = path
         .read_dir()
         .unwrap_or_else(|_| panic!("could not read current directory: {path:?}"))
         .flatten()
         .map(|e| e.path())
-        .collect();
-
-    current_files.sort();
+        .sorted()
+        .collect_vec();
 
     // get index of current file
     let current_index = current_files

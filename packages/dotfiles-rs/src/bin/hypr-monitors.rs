@@ -1,9 +1,9 @@
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
+use dotfiles::wallpaper;
 use dotfiles::{
     generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
     WorkspacesByMonitor,
 };
-use execute::Execute;
 use hyprland::dispatch;
 use hyprland::{
     data::Monitors,
@@ -12,8 +12,9 @@ use hyprland::{
         WorkspaceIdentifierWithSpecial,
     },
     keyword::Keyword,
-    shared::{HyprData, HyprDataVec},
+    shared::HyprData,
 };
+use itertools::Itertools;
 
 #[derive(ValueEnum, Debug, Clone)]
 pub enum MonitorExtend {
@@ -110,20 +111,23 @@ fn move_workspaces_to_monitors(
 fn distribute_workspaces(extend_type: &MonitorExtend) -> WorkspacesByMonitor {
     let workspaces: Vec<i32> = (1..=10).collect();
 
-    let mut all_monitors = Monitors::get().expect("could not get monitors").to_vec();
     let nix_monitors = NixInfo::new().monitors;
 
-    // sort all_monitors, putting the nix_monitors first
-    all_monitors.sort_by_key(|a| {
-        let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
-        (
-            match extend_type {
-                MonitorExtend::Primary => is_base_monitor,
-                MonitorExtend::Secondary => !is_base_monitor,
-            },
-            a.id,
-        )
-    });
+    let all_monitors = Monitors::get().expect("could not get monitors");
+    let all_monitors = all_monitors
+        .iter()
+        // putt the nix_monitors first
+        .sorted_by_key(|a| {
+            let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
+            (
+                match extend_type {
+                    MonitorExtend::Primary => is_base_monitor,
+                    MonitorExtend::Secondary => !is_base_monitor,
+                },
+                a.id,
+            )
+        })
+        .collect_vec();
 
     let mut start = 0;
     all_monitors
@@ -187,7 +191,5 @@ fn main() {
     move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
 
     // reload wallpaper
-    execute::command!("hypr-wallpaper --reload")
-        .execute()
-        .expect("failed to reload wallpaper");
+    wallpaper::reload(&None);
 }

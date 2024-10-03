@@ -6,6 +6,7 @@ use hyprland::{
     dispatch::{Dispatch, DispatchType, WindowIdentifier::Address},
     shared::{HyprData, HyprDataActiveOptional},
 };
+use itertools::Itertools;
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum Direction {
@@ -48,17 +49,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let active = Client::get_active()?.expect("no active window");
     let clients = Clients::get()?;
-    let mut same_class: Vec<_> = clients
+    let addresses = clients
         .iter()
         .filter(|client| client.class == active.class)
-        .collect();
-
-    // sort by workspace then coordinates
-    same_class.sort_by_key(|client| (client.workspace.id, client.at));
-    let addresses: Vec<_> = same_class
-        .into_iter()
+        // sort by workspace then coordinates
+        .sorted_by_key(|client| (client.workspace.id, client.at))
         .map(|client| &client.address)
-        .collect();
+        .collect_vec();
 
     let active_idx = addresses
         .iter()
