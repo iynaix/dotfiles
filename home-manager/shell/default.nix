@@ -68,71 +68,67 @@
 
   };
 
-  config =
-    let
-      hmShellPkgs = lib.custom.mkShellPackages config.custom.shell.packages;
-    in
-    {
-      home.packages =
-        with pkgs;
-        [
-          # dysk # better disk info
-          ets # add timestamp to beginning of each line
-          fd # better find
-          fx # terminal json viewer and processor
-          htop
-          jq
-          sd # better sed
-          # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
-          ugrep
-        ]
-        # add custom user created shell packages
-        ++ (lib.attrValues hmShellPkgs);
+  config = {
+    home.packages =
+      with pkgs;
+      [
+        # dysk # better disk info
+        ets # add timestamp to beginning of each line
+        fd # better find
+        fx # terminal json viewer and processor
+        htop
+        jq
+        sd # better sed
+        # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
+        ugrep
+      ]
+      # add custom user created shell packages
+      ++ (lib.attrValues config.custom.shell.packages);
 
-      # add custom user created shell packages to pkgs.custom.shell
-      nixpkgs.overlays = lib.mkIf (!isNixOS) [
-        (_: prev: {
-          custom = (prev.custom or { }) // {
-            shell = hmShellPkgs;
-          };
-        })
-      ];
-
-      programs = {
-        bat = {
-          enable = true;
-          extraPackages = [
-            (pkgs.bat-extras.batman.overrideAttrs (o: {
-              postInstall =
-                (o.postInstall or "")
-                + ''
-                  mkdir -p $out/share/bash-completion/completions
-                  echo 'complete -F _comp_cmd_man batman' > $out/share/bash-completion/completions/batman
-
-                  mkdir -p $out/share/fish/vendor_completions.d
-                  echo 'complete batman --wraps man' > $out/share/fish/vendor_completions.d/batman.fish
-
-                  mkdir -p $out/share/zsh/site-functions
-                  cat << EOF > $out/share/zsh/site-functions/_batman
-                  #compdef batman
-                  _man "$@"
-                  EOF
-                '';
-            }))
-          ];
+    # add custom user created shell packages to pkgs.custom.shell
+    nixpkgs.overlays = lib.mkIf (!isNixOS) [
+      (_: prev: {
+        custom = (prev.custom or { }) // {
+          shell = config.custom.shell.packages;
         };
+      })
+    ];
 
-        fzf = {
-          enable = true;
-          enableBashIntegration = true;
-          enableFishIntegration = true;
-        };
+    programs = {
+      bat = {
+        enable = true;
+        extraPackages = [
+          (pkgs.bat-extras.batman.overrideAttrs (o: {
+            postInstall =
+              (o.postInstall or "")
+              + ''
+                mkdir -p $out/share/bash-completion/completions
+                echo 'complete -F _comp_cmd_man batman' > $out/share/bash-completion/completions/batman
+
+                mkdir -p $out/share/fish/vendor_completions.d
+                echo 'complete batman --wraps man' > $out/share/fish/vendor_completions.d/batman.fish
+
+                mkdir -p $out/share/zsh/site-functions
+                cat << EOF > $out/share/zsh/site-functions/_batman
+                #compdef batman
+                _man "$@"
+                EOF
+              '';
+          }))
+        ];
       };
 
-      custom.persist = {
-        home = {
-          cache.directories = [ ".local/share/zoxide" ];
-        };
+      fzf = {
+        enable = true;
+        enableBashIntegration = true;
+        enableFishIntegration = true;
       };
     };
+
+    custom.persist = {
+      home = {
+        cache.directories = [ ".local/share/zoxide" ];
+      };
+    };
+  };
 }

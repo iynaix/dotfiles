@@ -136,6 +136,7 @@
             compactmode = true;
             keybindings = false;
             noxmas = true;
+            showfilesize = false;
             showinfo = true;
             showloop = false;
             showontop = false;

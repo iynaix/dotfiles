@@ -42,6 +42,7 @@
             attrs
             package
           ]);
+        apply = custom.mkShellPackages;
         default = { };
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
@@ -65,149 +66,144 @@
     };
   };
 
-  config =
-    let
-      nixosShellPkgs = lib.custom.mkShellPackages config.custom.shell.packages;
-      hmShellPkgs = lib.custom.mkShellPackages config.hm.custom.shell.packages;
-    in
-    {
-      # automount disks
-      services.gvfs.enable = true;
-      # services.devmon.enable = true;
-      programs.dconf.enable = true;
+  config = {
+    # automount disks
+    services.gvfs.enable = true;
+    # services.devmon.enable = true;
+    programs.dconf.enable = true;
 
-      environment = {
-        etc = {
-          # universal git settings
-          "gitconfig".text = config.hm.xdg.configFile."git/config".text;
-          # get gparted to use system theme
-          "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
-          "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
-        };
+    environment = {
+      etc = {
+        # universal git settings
+        "gitconfig".text = config.hm.xdg.configFile."git/config".text;
+        # get gparted to use system theme
+        "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
+        "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
+      };
 
-        # install fish completions for fish
-        # https://github.com/nix-community/home-manager/pull/2408
-        pathsToLink = [ "/share/fish" ];
+      # install fish completions for fish
+      # https://github.com/nix-community/home-manager/pull/2408
+      pathsToLink = [ "/share/fish" ];
 
-        variables = {
-          TERMINAL = lib.getExe config.hm.custom.terminal.package;
-          EDITOR = "nvim";
-          VISUAL = "nvim";
-          NIXPKGS_ALLOW_UNFREE = "1";
-          STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
-        };
+      variables = {
+        TERMINAL = lib.getExe config.hm.custom.terminal.package;
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+        NIXPKGS_ALLOW_UNFREE = "1";
+        STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
+      };
 
-        # use some shell aliases from home manager
-        shellAliases =
-          {
-            inherit (config.hm.programs.bash.shellAliases)
-              eza
-              ls
-              ll
-              la
-              lla
-              ;
-          }
-          // {
-            inherit (config.hm.home.shellAliases)
-              t # eza related
-              y # yazi
-              ;
-          };
-
-        systemPackages =
-          with pkgs;
-          [
-            curl
+      # use some shell aliases from home manager
+      shellAliases =
+        {
+          inherit (config.hm.programs.bash.shellAliases)
             eza
-            neovim
-            procps
-            ripgrep
-            yazi
-            zoxide
-          ]
-          ++
-            # install gtk theme for root, some apps like gparted only run as root
-            (with config.hm.gtk; [
-              theme.package
-              iconTheme.package
-            ])
-          # add custom user created shell packages
-          ++ (lib.attrValues nixosShellPkgs)
-          ++ (lib.optional config.hm.custom.helix.enable helix);
-      };
-
-      # add custom user created shell packages to pkgs.custom.shell
-      nixpkgs.overlays = [
-        (_: prev: {
-          custom = prev.custom // {
-            shell = nixosShellPkgs // hmShellPkgs;
-          };
-        })
-      ];
-
-      # create symlink to dotfiles from default /etc/nixos
-      custom.symlinks = {
-        "/etc/nixos" = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
-      };
-
-      # create symlinks
-      systemd.tmpfiles.rules = lib.mapAttrsToList (
-        dest: src: "L+ ${dest} - - - - ${src}"
-      ) config.custom.symlinks;
-
-      # setup fonts
-      fonts = {
-        enableDefaultPackages = true;
-        inherit (config.hm.custom.fonts) packages;
-      };
-
-      programs = {
-        # use same config as home-manager
-        bash.interactiveShellInit = config.hm.programs.bash.initExtra;
-
-        file-roller.enable = true;
-
-        # bye bye nano
-        nano.enable = lib.mkForce false;
-      };
-
-      # use gtk theme on qt apps
-      qt = {
-        enable = true;
-        platformTheme = "gnome";
-        style = "adwaita-dark";
-      };
-
-      xdg = {
-        # use mimetypes defined from home-manager
-        mime =
-          let
-            hmMime = config.hm.xdg.mimeApps;
-          in
-          {
-            enable = true;
-            inherit (hmMime) defaultApplications;
-            addedAssociations = hmMime.associations.added;
-            removedAssociations = hmMime.associations.removed;
-          };
-
-        # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
-        terminal-exec = {
-          enable = true;
-          settings = {
-            default = [ "${config.hm.custom.terminal.package.pname}.desktop" ];
-          };
+            ls
+            ll
+            la
+            lla
+            ;
+        }
+        // {
+          inherit (config.hm.home.shellAliases)
+            t # eza related
+            y # yazi
+            ;
         };
-      };
 
-      # faster boot times
-      # systemd.services.NetworkManager-wait-online.enable = false;
+      systemPackages =
+        with pkgs;
+        [
+          curl
+          eza
+          neovim
+          procps
+          ripgrep
+          yazi
+          zoxide
+        ]
+        ++
+          # install gtk theme for root, some apps like gparted only run as root
+          (with config.hm.gtk; [
+            theme.package
+            iconTheme.package
+          ])
+        # add custom user created shell packages
+        ++ (lib.attrValues config.custom.shell.packages)
+        ++ (lib.optional config.hm.custom.helix.enable helix);
+    };
 
-      custom.persist = {
-        root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+    # add custom user created shell packages to pkgs.custom.shell
+    nixpkgs.overlays = [
+      (_: prev: {
+        custom = prev.custom // {
+          shell = config.custom.shell.packages // config.hm.custom.shell.packages;
+        };
+      })
+    ];
 
-        home.directories = [ ".local/state/wireplumber" ];
+    # create symlink to dotfiles from default /etc/nixos
+    custom.symlinks = {
+      "/etc/nixos" = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
+    };
+
+    # create symlinks
+    systemd.tmpfiles.rules = lib.mapAttrsToList (
+      dest: src: "L+ ${dest} - - - - ${src}"
+    ) config.custom.symlinks;
+
+    # setup fonts
+    fonts = {
+      enableDefaultPackages = true;
+      inherit (config.hm.custom.fonts) packages;
+    };
+
+    programs = {
+      # use same config as home-manager
+      bash.interactiveShellInit = config.hm.programs.bash.initExtra;
+
+      file-roller.enable = true;
+
+      # bye bye nano
+      nano.enable = lib.mkForce false;
+    };
+
+    # use gtk theme on qt apps
+    qt = {
+      enable = true;
+      platformTheme = "gnome";
+      style = "adwaita-dark";
+    };
+
+    xdg = {
+      # use mimetypes defined from home-manager
+      mime =
+        let
+          hmMime = config.hm.xdg.mimeApps;
+        in
+        {
+          enable = true;
+          inherit (hmMime) defaultApplications;
+          addedAssociations = hmMime.associations.added;
+          removedAssociations = hmMime.associations.removed;
+        };
+
+      # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
+      terminal-exec = {
+        enable = true;
+        settings = {
+          default = [ "${config.hm.custom.terminal.package.pname}.desktop" ];
+        };
       };
     };
+
+    # faster boot times
+    # systemd.services.NetworkManager-wait-online.enable = false;
+
+    custom.persist = {
+      root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+
+      home.directories = [ ".local/state/wireplumber" ];
+    };
+  };
 }

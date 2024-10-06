@@ -35,19 +35,26 @@ fn main() {
     // write waybar_config back to waybar_config_file as json
     json::write(config_path, &cfg).expect("failed to write updated waybar config");
 
-    let waybar_log =
-        std::fs::File::create("/tmp/waybar.log").expect("failed to create waybar log file");
-
     // open waybar in the background
-    execute::command!("waybar")
-        .arg("--log-level")
-        .arg("info")
-        .stdout(Stdio::from(
-            waybar_log
-                .try_clone()
-                .expect("failed to clone waybar log file"),
-        ))
-        .stderr(Stdio::from(waybar_log))
-        .spawn()
-        .expect("failed to execute waybar");
+    let mut waybar = execute::command!("waybar");
+
+    let waybar_logging = false;
+    if waybar_logging {
+        let waybar_log =
+            std::fs::File::create("/tmp/waybar.log").expect("failed to create waybar log file");
+
+        waybar
+            .arg("--log-level")
+            .arg("info")
+            .stdout(Stdio::from(
+                waybar_log
+                    .try_clone()
+                    .expect("failed to clone waybar log file"),
+            ))
+            .stderr(Stdio::from(waybar_log));
+    } else {
+        waybar.stdout(Stdio::null()).stderr(Stdio::null());
+    }
+
+    waybar.spawn().expect("failed to execute waybar");
 }

@@ -19,6 +19,7 @@ in
             package
           ]);
         default = { };
+        apply = custom.mkShellPackages;
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
           Both string and attr values will be passed as arguments to writeShellApplicationCompletions
