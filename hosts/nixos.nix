@@ -69,7 +69,6 @@ let
 in
 {
   desktop = mkNixosConfiguration "desktop" { };
-  optiplex = mkNixosConfiguration "optiplex" { };
   framework = mkNixosConfiguration "framework" { };
   x1c = mkNixosConfiguration "x1c" { };
   t450 = mkNixosConfiguration "t450" { };

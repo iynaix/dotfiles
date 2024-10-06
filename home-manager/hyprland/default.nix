@@ -137,7 +137,7 @@ in
 
           general =
             let
-              gap = if host == "desktop" || host == "optiplex" then 8 else 4;
+              gap = if host == "desktop" then 8 else 4;
             in
             {
               gaps_in = gap;

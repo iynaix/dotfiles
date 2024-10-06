@@ -38,7 +38,6 @@ let
 in
 {
   desktop = mkHomeConfiguration "desktop" { };
-  optiplex = mkHomeConfiguration "optiplex" { };
   framework = mkHomeConfiguration "framework" { };
   x1c = mkHomeConfiguration "x1c" { };
   t450 = mkHomeConfiguration "t450" { };

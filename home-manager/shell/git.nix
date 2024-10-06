@@ -6,8 +6,7 @@
   ...
 }:
 let
-  hasNixpkgsRepo =
-    host == "desktop" || host == "optiplex" || host == "framework" || host == "x1c" || host == "t450";
+  hasNixpkgsRepo = host == "desktop" || host == "framework" || host == "x1c" || host == "t450";
 in
 {
   programs = {
@@ -79,11 +78,9 @@ in
         // lib.optionalAttrs hasNixpkgsRepo {
           # background maintenance for large git repos:
           # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
-          maintenance =
-            lib.mkIf (host == "desktop" || host == "optiplex" || host == "framework" || host == "t450")
-              {
-                repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
-              };
+          maintenance = lib.mkIf (host == "desktop" || host == "framework" || host == "t450") {
+            repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
+          };
         };
     };
 

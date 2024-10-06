@@ -27,11 +27,6 @@ rec {
   desktopHm = desktop.hm;
   desktopHmo = desktopHm.custom;
 
-  optiplex = flake.nixosConfigurations.optiplex.config;
-  optiplexo = optiplex.custom;
-  optiplexHm = optiplex.hm;
-  optiplexHmo = optiplexHm.custom;
-
   framework = flake.nixosConfigurations.framework.config;
   frameworko = framework.custom;
   frameworkHm = framework.hm;
