@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  host,
   ...
 }:
 {
@@ -13,7 +14,7 @@
         config = {
           player = "mpv";
           # the poor T450 can't take the graphics load shaders put on it
-          # player_arguments = "--profile=anime";
+          player_arguments = if host != "t450" then "--profile=anime" else "";
           show_adult_content = "false";
           provider = "yugen";
           download_dir = "$HOME/Anime";
