@@ -83,7 +83,7 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 }
 
 fn main() -> hyprland::Result<()> {
-    let is_desktop = NixInfo::new().host == "desktop";
+    let is_desktop = NixInfo::new().host == "desktop" || NixInfo::new().host == "optiplex";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
     let mut event_listener = EventListener::new();

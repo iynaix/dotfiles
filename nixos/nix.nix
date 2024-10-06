@@ -128,7 +128,7 @@ in
           ''sort -ui <<< "${lib.concatLines allPkgs}"'';
       };
     }
-    // lib.optionalAttrs (host == "desktop") {
+    // lib.optionalAttrs (host == "desktop" || host == "optiplex") {
       # build and push config for laptop
       nsw-remote = ''
         pushd ${dots} > /dev/null

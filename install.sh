@@ -173,7 +173,7 @@ repo="${repo:-github:elias-ainsworth/dotfiles}"
 
 # qol for thorneos
 if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
-    hosts=("desktop" "framework" "t450" "vm" "vm-hyprland")
+    hosts=("desktop" "framework" "x1c" "t450" "vm" "vm-hyprland")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do

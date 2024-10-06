@@ -24,7 +24,7 @@ let
       extraSpecialArgs = specialArgs // {
         inherit host user;
         isNixOS = false;
-        isLaptop = host == "framework" || host == "t450";
+        isLaptop = host == "framework" || host == "x1c" || host == "t450";
       };
 
       modules = [
@@ -38,6 +38,9 @@ let
 in
 {
   desktop = mkHomeConfiguration "desktop" { };
+  optiplex = mkHomeConfiguration "optiplex" { };
   framework = mkHomeConfiguration "framework" { };
+  x1c = mkHomeConfiguration "x1c" { };
+  t450 = mkHomeConfiguration "t450" { };
   # NOTE: standalone home-manager doesn't make sense for VM config!
 }

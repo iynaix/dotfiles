@@ -27,10 +27,25 @@ rec {
   desktopHm = desktop.hm;
   desktopHmo = desktopHm.custom;
 
+  optiplex = flake.nixosConfigurations.optiplex.config;
+  optiplexo = optiplex.custom;
+  optiplexHm = optiplex.hm;
+  optiplexHmo = optiplexHm.custom;
+
   framework = flake.nixosConfigurations.framework.config;
   frameworko = framework.custom;
   frameworkHm = framework.hm;
   frameworkHmo = frameworkHm.custom;
+
+  x1c = flake.nixosConfigurations.x1c.config;
+  x1co = x1c.custom;
+  x1cHm = x1c.hm;
+  x1cHmo = x1cHm.custom;
+
+  t450 = flake.nixosConfigurations.t450.config;
+  t450o = t450.custom;
+  t450Hm = t450.hm;
+  t450Hmo = t450Hm.custom;
 
   laptop = flake.nixosConfigurations.framework.config;
   laptopo = framework.custom;

@@ -165,7 +165,7 @@ in
           ]
           ++ workspace_keybinds
           # turn monitors off
-          ++ lib.optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
+          ++ lib.optionals (host == "desktop" || host == "optiplex") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
           ++ lib.optionals config.custom.backlight.enable [
             ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
             ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"

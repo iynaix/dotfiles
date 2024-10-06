@@ -37,7 +37,7 @@ in
         description = "List of waybar classes to inverse";
       };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
-        default = host == "desktop";
+        default = host == "desktop" || host == "optiplex";
       };
       extraCss = mkOption {
         type = types.lines;
