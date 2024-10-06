@@ -1,34 +1,18 @@
+use itertools::Itertools;
 use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
-use crate::{colors::NixColors, filename, full_path, nixinfo::NixInfo};
-use std::{collections::HashMap, fs, path::PathBuf};
+use crate::{colors::NixColors, filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
+use std::{collections::HashMap, path::PathBuf};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
 }
 
-pub fn current() -> Option<String> {
-    let curr = NixColors::new().wallpaper;
-
-    let wallpaper = {
-        if curr == "./foo/bar.text" {
-            fs::read_to_string(
-                dirs::runtime_dir()
-                    .expect("could not get $XDG_RUNTIME_DIR")
-                    .join("current_wallpaper"),
-            )
-            .ok()
-        } else {
-            Some(curr)
-        }
-    };
-
-    Some(
-        wallpaper
-            .expect("no wallpaper found")
-            .replace("/persist", ""),
-    )
+pub fn current() -> String {
+    NixColors::new()
+        .expect("could not parse nix.json")
+        .wallpaper
 }
 
 fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
@@ -59,8 +43,7 @@ where
 
 /// returns all files in the wallpaper directory, exlcluding the current wallpaper
 pub fn all() -> Vec<String> {
-    let curr = self::current().unwrap_or_default();
-
+    let curr = self::current();
     filter_images(&self::dir())
         // do not include the current wallpaper
         .filter(|path| curr != *path)
@@ -79,20 +62,8 @@ pub fn random() -> String {
     }
 }
 
-pub fn random_from_dir<P>(dir: P) -> String
-where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
-{
-    filter_images(dir)
-        .collect::<Vec<_>>()
-        .choose(&mut rand::thread_rng())
-        // use fallback image if not available
-        .unwrap_or(&NixInfo::new().fallback)
-        .to_string()
-}
-
 /// reads the wallpaper info from wallpapers.csv
-pub fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
+fn get_wallpaper_info(wallpaper: &str) -> Option<WallInfo> {
     let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
     if !wallpapers_csv.exists() {
         return None;
@@ -102,11 +73,46 @@ pub fn get_wallpaper_info(image: &String) -> Option<WallInfo> {
         std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
     );
 
-    let fname = filename(image);
+    let fname = filename(wallpaper);
     let mut rdr = csv::Reader::from_reader(reader);
     rdr.deserialize::<WallInfo>()
         .flatten()
         .find(|line| line.filename == fname)
+}
+
+/// sets the wallpaper and reloads the wallust theme
+pub fn set(wallpaper: &str, transition: &Option<String>) {
+    let wallpaper_info = get_wallpaper_info(wallpaper);
+
+    // use colorscheme set from nix if available
+    if let Some(cs) = NixInfo::new().colorscheme {
+        wallust::apply_theme(&cs);
+    } else {
+        wallust::from_wallpaper(&wallpaper_info, wallpaper);
+    }
+
+    // set the wallpaper with cropping
+    Swww::new(wallpaper).run(wallpaper_info, transition);
+
+    // do wallust earlier to create the necessary templates
+    wallust::apply_colors();
+}
+
+/// reloads the wallpaper and wallust theme
+pub fn reload(transition: &Option<String>) {
+    set(&current(), transition);
+}
+
+pub fn random_from_dir<P>(dir: P) -> String
+where
+    P: AsRef<std::path::Path> + std::fmt::Debug,
+{
+    filter_images(dir)
+        .collect_vec()
+        .choose(&mut rand::thread_rng())
+        // use fallback image if not available
+        .unwrap_or(&NixInfo::new().fallback)
+        .to_string()
 }
 
 /// euclid's algorithm to find the greatest common divisor
@@ -131,10 +137,10 @@ pub struct WallInfo {
 impl WallInfo {
     pub fn get_geometry(&self, width: i32, height: i32) -> Option<(f64, f64, f64, f64)> {
         self.get_geometry_str(width, height).and_then(|geom| {
-            let geometry: Vec<_> = geom
+            let geometry = geom
                 .split(|c| c == '+' || c == 'x')
                 .filter_map(|s| s.parse::<f64>().ok())
-                .collect();
+                .collect_vec();
 
             match geometry.as_slice() {
                 &[w, h, x, y] => Some((w, h, x, y)),

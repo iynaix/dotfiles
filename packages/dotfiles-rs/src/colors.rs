@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::json;
 use serde::{Deserialize, Deserializer};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Rgb {
     pub r: u8,
     pub g: u8,
@@ -95,17 +95,10 @@ pub struct NixColors {
     pub theme_accents: HashMap<String, Rgb>,
 }
 
-impl Default for NixColors {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl NixColors {
     /// get nix info from ~/.cache after wallust has processed it
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
         json::load("~/.cache/wallust/nix.json")
-            .unwrap_or_else(|_| panic!("unable to read ~/.cache/wallust/nix.json"))
     }
 
     pub fn filter_colors(&self, names: &[&str]) -> HashMap<String, Rgb> {

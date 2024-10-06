@@ -146,7 +146,10 @@ lib.mkMerge [
     };
 
     custom.persist = {
-      home.directories = [ ".config/.supermaven" ];
+      home.directories = [
+        ".supermaven"
+        ".config/.supermaven"
+      ];
     };
   })
 ]

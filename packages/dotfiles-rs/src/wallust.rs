@@ -7,6 +7,8 @@ use crate::{
 use core::panic;
 use execute::Execute;
 use hyprland::keyword::Keyword;
+use image::ImageReader;
+use itertools::Itertools;
 use std::collections::HashMap;
 
 pub const CUSTOM_THEMES: [&str; 6] = [
@@ -68,34 +70,6 @@ fn refresh_zathura() {
     }
 }
 
-/// sort wallust colors by how contrasting they are to the background and foreground
-fn accents_by_contrast() -> Vec<Rgb> {
-    let nixinfo = NixColors::new();
-    // ignore black and white
-    let mut colors: Vec<_> = nixinfo
-        .filter_colors(&["color0", "color7", "color8", "color15"])
-        .into_values()
-        .collect();
-
-    let (x1, y1, z1) = nixinfo.special.background.to_i64();
-    let (x2, y2, z2) = nixinfo.special.foreground.to_i64();
-
-    colors.sort_by_key(|c| {
-        let (x3, y3, z3) = c.to_i64();
-
-        // compute area of the triangle formed by the colors
-        let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
-        let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
-        let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
-
-        // should be square root then halved, but makes no difference if just comparing
-        // negative for sorting in descending order
-        -(t1 * t1 + t2 * t2 + t3 * t3)
-    });
-
-    colors
-}
-
 fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     let color = |idx: usize| {
         colors
@@ -141,11 +115,106 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     .expect("failed to set hyprland sticky border color");
 }
 
+/// sort accents by their color usage within the wallpaper
+fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
+    // open wallpaper and read colors
+    let img = ImageReader::open(wallpaper)
+        .expect("could not open image")
+        .decode()
+        .expect("could not decode image")
+        .to_rgb8();
+
+    let mut color_counts: HashMap<Rgb, usize> = HashMap::new();
+    // sample middle of every 5x5 pixel block
+    for x in (2..img.width()).step_by(5) {
+        for y in (2..img.height()).step_by(5) {
+            let px = img.get_pixel(x, y);
+
+            let closest_color = accents
+                .iter()
+                .enumerate()
+                .min_by_key(|(_, color)| {
+                    color.distance_sq(&Rgb {
+                        r: px[0],
+                        g: px[1],
+                        b: px[2],
+                    })
+                })
+                .expect("could not find closest color");
+
+            // store the closest color
+            *color_counts.entry(closest_color.1.clone()).or_insert(0) += 1;
+        }
+    }
+
+    color_counts
+        .iter()
+        .sorted_by(|a, b| b.1.cmp(a.1))
+        .enumerate()
+        .map(|(n, (color, _count))| (color.clone(), n))
+        .collect()
+}
+
+/// sort accents by how contrasting they are to the background and foreground
+fn accents_by_contrast(accents: &[Rgb]) -> HashMap<Rgb, usize> {
+    let nixcolors = NixColors::new().expect("unable to parse nix.json");
+
+    let (x1, y1, z1) = nixcolors.special.background.to_i64();
+    let (x2, y2, z2) = nixcolors.special.foreground.to_i64();
+
+    accents
+        .iter()
+        .sorted_by_key(|c| {
+            let (x3, y3, z3) = c.to_i64();
+
+            // compute area of the triangle formed by the colors
+            let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
+            let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
+            let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+
+            // should be square root then halved, but makes no difference if just comparing
+            // negative for sorting in descending order
+            -(t1 * t1 + t2 * t2 + t3 * t3)
+        })
+        .enumerate()
+        .map(|(n, color)| (color.clone(), n))
+        .collect()
+}
+
 /// applies the wallust colors to various applications
 pub fn apply_colors() {
-    let has_nix_json = full_path("~/.cache/wallust/nix.json").exists();
-    let hyprland_colors = if has_nix_json {
-        NixColors::new().colors
+    if let Ok(nixcolors) = NixColors::new() {
+        // ignore black and white
+        let colors = nixcolors
+            .filter_colors(&["color0", "color7", "color8", "color15"])
+            .into_values()
+            .collect_vec();
+
+        let by_usage = accents_by_usage(&nixcolors.wallpaper, &colors);
+
+        let by_contrast = accents_by_contrast(&colors);
+
+        #[allow(clippy::cast_precision_loss)]
+        let accents = by_contrast
+            .iter()
+            // calculate score for each color
+            .map(|(color, i)| {
+                #[allow(clippy::cast_precision_loss)]
+                (
+                    (*i as f64).mul_add(0.6, (by_usage[color] as f64) * 0.4),
+                    color.clone(),
+                )
+            })
+            .sorted_by(|a, b| a.0.partial_cmp(&b.0).expect("could not compare floats"))
+            .map(|(_, color)| color)
+            .collect_vec();
+
+        apply_hyprland_colors(&accents, &nixcolors.colors);
+
+        // set the waybar accent color to have more contrast
+        set_waybar_accent(&nixcolors, &accents[0]);
+
+        set_gtk_and_icon_theme(&nixcolors);
     } else {
         #[derive(serde::Deserialize)]
         struct Colorscheme {
@@ -157,16 +226,8 @@ pub fn apply_colors() {
             panic!("unable to read colorscheme at {:?}", &cs_path);
         });
 
-        cs.colors
+        apply_hyprland_colors(&[], &cs.colors);
     };
-
-    let accents = if has_nix_json {
-        accents_by_contrast()
-    } else {
-        Vec::new()
-    };
-
-    apply_hyprland_colors(&accents, &hyprland_colors);
 
     refresh_zathura();
 
@@ -176,18 +237,10 @@ pub fn apply_colors() {
     // refresh wfetch
     kill_wrapped_process("wfetch", "SIGUSR2");
 
-    // set the waybar accent color to have more contrast
-    if let Some(accent) = accents.first() {
-        set_waybar_accent(accent);
-    }
-
-    // refresh waybar
-    kill_wrapped_process("waybar", "SIGUSR2");
-
-    // set gtk theme
-    if has_nix_json {
-        set_gtk_and_icon_theme();
-    }
+    // refresh waybar, process is killed and restarted as sometimes reloading kills the process :(
+    execute::command!("launch-waybar")
+        .spawn()
+        .expect("failed to launch waybar");
 }
 
 /// runs wallust with options from wallpapers.csv
@@ -209,19 +262,17 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .expect("wallust: failed to set colors from wallpaper");
 }
 
-pub fn set_gtk_and_icon_theme() {
-    let nixinfo = NixColors::new();
-
+pub fn set_gtk_and_icon_theme(nixcolors: &NixColors) {
     // ignore black
-    let wallust_colors: Vec<_> = nixinfo
+    let wallust_colors = nixcolors
         .filter_colors(&["color0", "color7"])
         .into_values()
-        .collect();
+        .collect_vec();
 
     let mut variant = String::new();
     let mut min_distance = i64::MAX;
 
-    for (accent_name, accent_color) in nixinfo.theme_accents {
+    for (accent_name, accent_color) in &nixcolors.theme_accents {
         for wallust_color in &wallust_colors {
             let distance = accent_color.distance_sq(wallust_color);
             if distance < min_distance {
@@ -244,9 +295,7 @@ pub fn set_gtk_and_icon_theme() {
         .expect("failed to apply icon theme");
 }
 
-pub fn set_waybar_accent(accent: &Rgb) {
-    let nixinfo = NixColors::new();
-
+pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
     // get inverse color for inversed module classes
     let inverse = accent.inverse();
 
@@ -255,7 +304,7 @@ pub fn set_waybar_accent(accent: &Rgb) {
 
     // replace old foreground color with new inverse color
     css = css.replace(
-        &nixinfo.special.foreground.to_hex_str(),
+        &nixcolors.special.foreground.to_hex_str(),
         &accent.to_hex_str(),
     );
 

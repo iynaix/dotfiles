@@ -96,7 +96,7 @@ where
 pub mod json {
     use super::full_path;
 
-    pub fn load<T, P>(path: P) -> std::io::Result<T>
+    pub fn load<T, P>(path: P) -> Result<T, Box<dyn std::error::Error>>
     where
         T: serde::de::DeserializeOwned,
         P: AsRef<std::path::Path>,
