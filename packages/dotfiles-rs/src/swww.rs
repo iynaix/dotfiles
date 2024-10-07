@@ -51,7 +51,7 @@ fn get_random_transition() -> Vec<String> {
 
     transitions
         .choose(&mut rand::thread_rng())
-        .expect("could not choose transition")
+        .unwrap_or(&Vec::new())
         .iter()
         .map(std::string::ToString::to_string)
         .collect()

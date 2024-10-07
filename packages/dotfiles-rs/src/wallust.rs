@@ -51,22 +51,19 @@ fn refresh_zathura() {
     .iter()
     .find(|line| line.contains("org.pwmt.zathura"))
     {
-        let zathura_pid = zathura_pid_raw
-            .split('"')
-            .max_by_key(|s| s.len())
-            .expect("could not extract zathura pid");
-
-        // send message to zathura via dbus
-        execute::command_args!(
-            "dbus-send",
-            "--type=method_call",
-            &format!("--dest={zathura_pid}"),
-            "/org/pwmt/zathura",
-            "org.pwmt.zathura.ExecuteCommand",
-            "string:source",
-        )
-        .execute()
-        .ok();
+        if let Some(zathura_pid) = zathura_pid_raw.split('"').max_by_key(|s| s.len()) {
+            // send message to zathura via dbus
+            execute::command_args!(
+                "dbus-send",
+                "--type=method_call",
+                &format!("--dest={zathura_pid}"),
+                "/org/pwmt/zathura",
+                "org.pwmt.zathura.ExecuteCommand",
+                "string:source",
+            )
+            .execute()
+            .ok();
+        }
     }
 }
 
@@ -125,9 +122,9 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
         .to_rgb8();
 
     let mut color_counts: HashMap<Rgb, usize> = HashMap::new();
-    // sample middle of every 5x5 pixel block
-    for x in (2..img.width()).step_by(5) {
-        for y in (2..img.height()).step_by(5) {
+    // sample middle of every 9x9 pixel block
+    for x in (4..img.width()).step_by(5) {
+        for y in (4..img.height()).step_by(5) {
             let px = img.get_pixel(x, y);
 
             let closest_color = accents
@@ -282,17 +279,37 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors) {
         }
     }
 
+    let gtk_theme = format!("catppuccin-mocha-{variant}-compact");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/gtk-theme")
         // requires the quotes to be GVariant compatible for dconf
-        .arg(format!("'catppuccin-mocha-{variant}-compact'"))
+        .arg(gtk_theme)
         .execute()
         .expect("failed to apply gtk theme");
 
+    let icon_theme = format!("Tela-{variant}-dark");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/icon-theme")
         // requires the quotes to be GVariant compatible for dconf
-        .arg(format!("'Tela-{variant}-dark'"))
+        .arg(&icon_theme)
         .execute()
         .expect("failed to apply icon theme");
+
+    // update the icon theme for dunst
+    let dunstrc_path = full_path("~/.config/dunst/dunstrc");
+    if let Ok(dunstrc) = std::fs::read_to_string(&dunstrc_path) {
+        let dunstrc = dunstrc
+            .lines()
+            .map(|line| {
+                if line.starts_with("icon_theme") {
+                    format!("icon_theme = {icon_theme}")
+                } else {
+                    line.to_string()
+                }
+            })
+            .collect::<Vec<String>>()
+            .join("\n");
+
+        std::fs::write(dunstrc_path, dunstrc).ok();
+    }
 }
 
 pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
