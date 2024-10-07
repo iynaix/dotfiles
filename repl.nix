@@ -37,6 +37,11 @@ rec {
   x1cHm = x1c.hm;
   x1cHmo = x1cHm.custom;
 
+  t520 = flake.nixosConfigurations.t520.config;
+  t520o = t520.custom;
+  t520Hm = t520.hm;
+  t520Hmo = t520Hm.custom;
+
   t450 = flake.nixosConfigurations.t450.config;
   t450o = t450.custom;
   t450Hm = t450.hm;
