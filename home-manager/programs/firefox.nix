@@ -1,6 +1,8 @@
 {
   config,
   inputs,
+  host,
+  lib,
   pkgs,
   user,
   ...
@@ -17,7 +19,21 @@
           + ''
             wrapProgram "$executablePath" \
               --set 'HOME' '${config.xdg.configHome}' \
-              --append-flags "--name firefox -P ${user}"
+              --append-flags "${
+                lib.concatStringsSep " " (
+                  [
+                    "--name firefox"
+                    # load user firefox profile
+                    "-P ${user}"
+                    # start with urls:
+                    "https://discordapp.com/channels/@me"
+                  ]
+                  ++ lib.optionals (host == "desktop") [
+                    "https://web.whatsapp.com" # requires access via local network
+                    "http://localhost:9091" # transmission
+                  ]
+                )
+              }"
           '';
       });
 

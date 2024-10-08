@@ -10,7 +10,7 @@
   # setup nvim for rust
   programs.nixvim.plugins = {
     lsp.servers = {
-      rust-analyzer = {
+      rust_analyzer = {
         enable = true;
         # do not install the language server
         package = null;

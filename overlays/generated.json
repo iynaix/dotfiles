@@ -53,10 +53,10 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2024.09.27",
-            "sha256": "sha256-OSQ60vkdfo5l4bSoivCen5hDE5Q/tJ4iqlxKtFBjMOE=",
+            "rev": "2024.10.07",
+            "sha256": "sha256-+ktz3f+Wm4OkzJvGuWCavsfr0TB/solGwhE6XliVB4g=",
             "type": "github"
         },
-        "version": "2024.09.27"
+        "version": "2024.10.07"
     }
 }

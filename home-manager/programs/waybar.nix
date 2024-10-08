@@ -52,6 +52,7 @@ in
   config = lib.mkIf config.custom.waybar.enable {
     programs.waybar = {
       enable = isNixOS;
+      package = pkgs.waybar.override { cavaSupport = false; };
       # do not use the systemd service as it is flaky and unreliable
       # https://github.com/nix-community/home-manager/issues/3599
     };

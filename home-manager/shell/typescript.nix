@@ -2,11 +2,11 @@ _: {
   programs.nixvim = {
     plugins = {
       lsp.servers = {
-        emmet-ls.enable = true;
+        emmet_ls.enable = true;
         graphql.enable = true;
         prismals.enable = true;
         tailwindcss.enable = true;
-        ts-ls.enable = true;
+        ts_ls.enable = true;
       };
 
       conform-nvim = {
