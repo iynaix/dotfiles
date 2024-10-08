@@ -14,11 +14,11 @@
     zfs.encryption = false;
 
     # software
-    bittorrent.enable = true;
-    distrobox.enable = true;
+    bittorrent.enable = false;
+    distrobox.enable = false;
     # plasma.enable = true;
-    # syncoid.enable = true;
-    # vercel.enable = true;
+    syncoid.enable = false;
+    vercel.enable = false;
     virtualization.enable = true;
   };
 
