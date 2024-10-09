@@ -1,11 +1,28 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   programs.yazi = {
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;
 
+    plugins = {
+      zfs = pkgs.fetchFromGitHub {
+        owner = "iynaix";
+        repo = "zfs.yazi";
+        rev = "272c203175cf3fd6a4ae9ed49a751973ab2a67aa";
+        hash = "sha256-1PkXXYKs1kixOKhR5SvbmDwWRCX7sd+TXe+bAcYT8xs=";
+      };
+    };
+
     settings = {
+      log = {
+        enabled = true;
+      };
       manager = {
         ratio = [
           0
@@ -68,46 +85,74 @@
       in
       {
         # add keymaps for shortcuts
-        input.prepend_keymap = lib.flatten (
-          lib.mapAttrsToList (keys: loc: [
-            # cd
+        manager.prepend_keymap =
+          lib.flatten (
+            lib.mapAttrsToList (keys: loc: [
+              # cd
+              {
+                on = [ "g" ] ++ lib.stringToCharacters keys;
+                run = "cd ${loc}";
+                desc = "cd to ${loc}";
+              }
+              # new tab
+              {
+                on = [ "t" ] ++ lib.stringToCharacters keys;
+                run = "tab_create ${loc}";
+                desc = "open new tab to ${loc}";
+              }
+              # mv
+              {
+                on = [ "m" ] ++ lib.stringToCharacters keys;
+                run = [
+                  "yank --cut"
+                  "escape --visual --select"
+                  loc
+                ];
+                desc = "move selection to ${loc}";
+              }
+              # cp
+              {
+                on = [ "Y" ] ++ lib.stringToCharacters keys;
+                run = [
+                  "yank"
+                  "escape --visual --select"
+                  loc
+                ];
+                desc = "copy selection to ${loc}";
+              }
+            ]) shortcuts
+          )
+          ++ [
             {
-              on = [ "g" ] ++ lib.stringToCharacters keys;
-              run = "cd ${loc}";
-              desc = "cd to ${loc}";
-            }
-            # new tab
-            {
-              on = [ "t" ] ++ lib.stringToCharacters keys;
-              run = "tab_create ${loc}";
-              desc = "open new tab to ${loc}";
-            }
-            # mv
-            {
-              on = [ "m" ] ++ lib.stringToCharacters keys;
-              run = [
-                "yank --cut"
-                "escape --visual --select"
-                loc
+              on = [
+                "z"
+                "h"
               ];
-              desc = "move selection to ${loc}";
+              run = "plugin zfs --args=prev";
+              desc = "Go to previous ZFS snapshot";
             }
-            # cp
             {
-              on = [ "Y" ] ++ lib.stringToCharacters keys;
-              run = [
-                "yank"
-                "escape --visual --select"
-                loc
+              on = [
+                "z"
+                "l"
               ];
-              desc = "copy selection to ${loc}";
+              run = "plugin zfs --args=next";
+              desc = "Go to next ZFS snapshot";
             }
-          ]) shortcuts
-        );
+            {
+              on = [
+                "z"
+                "e"
+              ];
+              run = "plugin zfs --args=exit";
+              desc = "Exit browsing ZFS snapshots";
+            }
+          ];
       };
   };
 
   home.shellAliases = {
+    lf = "yazi";
     y = "yazi";
   };
 }

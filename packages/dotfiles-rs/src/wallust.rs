@@ -121,7 +121,9 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
         .expect("could not decode image")
         .to_rgb8();
 
-    let mut color_counts: HashMap<Rgb, usize> = HashMap::new();
+    // initialize with each accent as a color might not be used
+    let mut color_counts: HashMap<_, _> = accents.iter().map(|a| (a.clone(), 0)).collect();
+
     // sample middle of every 9x9 pixel block
     for x in (4..img.width()).step_by(5) {
         for y in (4..img.height()).step_by(5) {
@@ -140,7 +142,7 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
                 .expect("could not find closest color");
 
             // store the closest color
-            *color_counts.entry(closest_color.1.clone()).or_insert(0) += 1;
+            *color_counts.entry(closest_color.1.clone()).or_default() += 1;
         }
     }
 
@@ -196,9 +198,15 @@ pub fn apply_colors() {
             .iter()
             // calculate score for each color
             .map(|(color, i)| {
+                // how much of the score should be based on contrast
+                let contrast_pct = 0.78;
+
                 #[allow(clippy::cast_precision_loss)]
                 (
-                    (*i as f64).mul_add(0.6, (by_usage[color] as f64) * 0.4),
+                    (*i as f64).mul_add(
+                        contrast_pct,
+                        (by_usage[color] as f64) * (1.0 - contrast_pct),
+                    ),
                     color.clone(),
                 )
             })
