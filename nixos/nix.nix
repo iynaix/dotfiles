@@ -50,8 +50,6 @@ in
         nix-init
         nix-update
         nixfmt-rfc-style
-        nixpkgs-fmt
-        nixpkgs-review
       ];
   };
 

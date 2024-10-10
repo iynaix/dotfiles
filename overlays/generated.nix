@@ -35,4 +35,16 @@
       sha256 = "sha256-+ktz3f+Wm4OkzJvGuWCavsfr0TB/solGwhE6XliVB4g=";
     };
   };
+  zfs-yazi = {
+    pname = "zfs-yazi";
+    version = "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720";
+    src = fetchFromGitHub {
+      owner = "iynaix";
+      repo = "zfs.yazi";
+      rev = "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720";
+      fetchSubmodules = false;
+      sha256 = "sha256-HHwj82M1XD473zJjav4whCLWL1cM+UferUAr9xTClzw=";
+    };
+    date = "2024-10-11";
+  };
 }

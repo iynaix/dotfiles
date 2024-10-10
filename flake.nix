@@ -12,12 +12,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # use 0.41.2 since 0.42.0 locks up sometimes
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
 
     devenv.url = "github:cachix/devenv";
 
-    # waiting for fix for https://github.com/nix-community/impermanence/issues/216
     impermanence.url = "github:nix-community/impermanence";
 
     sops-nix = {

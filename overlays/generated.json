@@ -58,5 +58,25 @@
             "type": "github"
         },
         "version": "2024.10.07"
+    },
+    "zfs-yazi": {
+        "cargoLocks": null,
+        "date": "2024-10-11",
+        "extract": null,
+        "name": "zfs-yazi",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "iynaix",
+            "repo": "zfs.yazi",
+            "rev": "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720",
+            "sha256": "sha256-HHwj82M1XD473zJjav4whCLWL1cM+UferUAr9xTClzw=",
+            "type": "github"
+        },
+        "version": "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720"
     }
 }

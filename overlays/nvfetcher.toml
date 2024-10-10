@@ -16,3 +16,7 @@ fetch.github = "LGFae/swww"
 [yt-dlp]
 src.github_tag = "yt-dlp/yt-dlp"
 fetch.github = "yt-dlp/yt-dlp"
+
+[zfs-yazi]
+src.git = "https://github.com/iynaix/zfs.yazi"
+fetch.github = "iynaix/zfs.yazi"

@@ -11,12 +11,7 @@
     enableFishIntegration = true;
 
     plugins = {
-      zfs = pkgs.fetchFromGitHub {
-        owner = "iynaix";
-        repo = "zfs.yazi";
-        rev = "272c203175cf3fd6a4ae9ed49a751973ab2a67aa";
-        hash = "sha256-1PkXXYKs1kixOKhR5SvbmDwWRCX7sd+TXe+bAcYT8xs=";
-      };
+      zfs = pkgs.custom.zfs-yazi.src;
     };
 
     settings = {

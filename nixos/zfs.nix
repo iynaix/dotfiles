@@ -24,20 +24,23 @@
         supportedFilesystems.zfs = true;
         # kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
-        kernelPackages = pkgs.linuxPackagesFor (
-          pkgs.linux_xanmod_latest.override {
-            argsOverride = rec {
-              version = "6.10.11";
-              modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
-              src = pkgs.fetchFromGitHub {
-                owner = "xanmod";
-                repo = "linux";
-                rev = modDirVersion;
-                hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
+        kernelPackages =
+          assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.3")
+            "zfs 2.3 supports kernel 6.11 or greater";
+          pkgs.linuxPackagesFor (
+            pkgs.linux_xanmod_latest.override {
+              argsOverride = rec {
+                version = "6.10.11";
+                modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
+                src = pkgs.fetchFromGitHub {
+                  owner = "xanmod";
+                  repo = "linux";
+                  rev = modDirVersion;
+                  hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
+                };
               };
-            };
-          }
-        );
+            }
+          );
         zfs = {
           devNodes =
             if isVm then

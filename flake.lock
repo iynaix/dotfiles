@@ -219,11 +219,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1728452860,
-        "narHash": "sha256-YtknslVeAXyK3zq6AoazydZrC8tisiZzvHsvZJAqMRk=",
+        "lastModified": 1728573431,
+        "narHash": "sha256-p37PxnHGgm6dfuYpYr4iV2AV+U5F44CAK8QAP4kkSxM=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "e7a0bc559f5a66aaa42f5028db6162c4dd4587eb",
+        "rev": "151a82a27c8565774452d02c63d1a35c39563919",
         "type": "github"
       },
       "original": {
@@ -523,11 +523,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1728533014,
-        "narHash": "sha256-fDu4kCTw82r79DpDRjoX9sh2INwZ5l9Alv1kYXVtyHY=",
+        "lastModified": 1728599695,
+        "narHash": "sha256-RK6rd6yBMxwJV9tYVnPM1IFELr9nQzfPIh6FQZxWluA=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "a19c9b6e6fd1d4d82263963345cd8e672dc67aff",
+        "rev": "424d5c0c9b5c58779eeb3844c2a1980ea7953547",
         "type": "gitlab"
       },
       "original": {
@@ -1034,11 +1034,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728337164,
-        "narHash": "sha256-VdRTjJFyq4Q9U7Z/UoC2Q5jK8vSo6E86lHc2OanXtvc=",
+        "lastModified": 1728598744,
+        "narHash": "sha256-sSfvyO5xH3HObHHmh6lp/hcvo7tMjFKd/HXpxyrRnoE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "038630363e7de57c36c417fd2f5d7c14773403e4",
+        "rev": "342a1d682386d3a1d74f9555cb327f2f311dda6e",
         "type": "github"
       },
       "original": {
@@ -1976,11 +1976,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1728485062,
-        "narHash": "sha256-+2e9hAM2GVDF3gywdQI/OA7s4f0Z9rvFuiVxePI41QM=",
+        "lastModified": 1728593423,
+        "narHash": "sha256-xM3+7mvWwM5i+RXD97wQ/fSoQDFidVxNszIfKIv9msE=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "61ec39764fbe1e4f21cf801ea7b9209d527c8135",
+        "rev": "af650ba9401501352d6eaaced192bbb4abfaec87",
         "type": "github"
       },
       "original": {
@@ -1998,11 +1998,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728423244,
-        "narHash": "sha256-+YwNsyIFj3dXyLVQd1ry4pCNmtOpbceKUrkNS8wp9Ho=",
+        "lastModified": 1728513479,
+        "narHash": "sha256-yAR9M1jvuAoahYNxo3RNnPMcua1TAIPurFKmH2/g3lg=",
         "owner": "NuschtOS",
         "repo": "search",
-        "rev": "f276cc3b391493ba3a8b30170776860f9520b7fa",
+        "rev": "5cb7ef512ec20a5b7d60fc70dba014560559698a",
         "type": "github"
       },
       "original": {
