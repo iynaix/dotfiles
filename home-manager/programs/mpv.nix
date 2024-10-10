@@ -3,6 +3,7 @@
   isNixOS,
   lib,
   pkgs,
+  host,
   ...
 }:
 {
@@ -235,10 +236,25 @@
               ]
               ++ shaders
             );
-        anime4k_shaders = map (s: "Anime4K_" + s) [
+        anime4k_shaders_a = map (s: "Anime4K_" + s) [
           "Clamp_Highlights"
           "Restore_CNN_VL"
           "Upscale_CNN_x2_VL"
+          "AutoDownscalePre_x2"
+          "AutoDownscalePre_x4"
+          "Upscale_CNN_x2_M"
+        ];
+        anime4k_shaders_b = map (s: "Anime4K_" + s) [
+          "Clamp_Highlights"
+          "Restore_CNN_Soft_VL"
+          "Upscale_CNN_x2_VL"
+          "AutoDownscalePre_x2"
+          "AutoDownscalePre_x4"
+          "Upscale_CNN_x2_M"
+        ];
+        anime4k_shaders_c = map (s: "Anime4K_" + s) [
+          "Clamp_Highlights"
+          "Upscale_Denoise_CNN_x2_VL"
           "AutoDownscalePre_x2"
           "AutoDownscalePre_x4"
           "Upscale_CNN_x2_M"
@@ -262,8 +278,8 @@
             # deband-grain = 5; # Range 0-4096. Inject grain to cover up bad banding, higher value needed for poor sources.
 
             # set shader defaults
-            glsl-shaders = shaderList anime4k_shaders;
-
+            glsl-shaders = if host == "x1c" then shaderList anime4k_shaders_c else shaderList anime4k_shaders_a;
+            # glsl-shaders = shaderList anime4k_shaders_a;
             dscale = "mitchell";
             cscale = "spline64"; # or ewa_lanczossoft
           };
@@ -280,7 +296,15 @@
                 })
                 [
                   # Anime4K shaders
-                  (createShaderKeybind anime4k_shaders "Anime4K: Mode A (HQ)")
+                  # (
+                  #   if host == "x1c" then
+                  #     createShaderKeybind anime4k_shaders_c "Anime4K: Mode C"
+                  #   else
+                  #     createShaderKeybind anime4k_shaders_a "Anime4K: Mode A (HQ)"
+                  # )
+                  (createShaderKeybind anime4k_shaders_a "Anime4K: Mode A (HQ)")
+                  (createShaderKeybind anime4k_shaders_b "Anime4K: Mode B (HQ)")
+                  (createShaderKeybind anime4k_shaders_c "Anime4K: Mode C (HQ)")
                   # NVScaler shaders
                   (createShaderKeybind [ "NVScaler" ] "NVScaler x2")
                   # AMD FSR shaders

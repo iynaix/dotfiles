@@ -2,15 +2,15 @@
 {
   # use centralized cargo cache
   home.sessionVariables = rec {
-    CARGO_HOME = "/persist/cache${config.xdg.dataHome}/.cargo";
+    CARGO_HOME = "/cache${config.xdg.dataHome}/.cargo";
     CARGO_TARGET_DIR = "${CARGO_HOME}/target";
-    RUSTUP_HOME = "/persist/cache${config.xdg.dataHome}/.rustup";
+    RUSTUP_HOME = "/cache${config.xdg.dataHome}/.rustup";
   };
 
   # setup nvim for rust
   programs.nixvim.plugins = {
     lsp.servers = {
-      rust-analyzer = {
+      rust_analyzer = {
         enable = true;
         # do not install the language server
         package = null;

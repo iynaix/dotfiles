@@ -1,6 +1,5 @@
 {
   config,
-  host,
   lib,
   pkgs,
   user,
@@ -43,20 +42,7 @@ lib.mkIf config.custom.hyprland.enable {
       (openOnWorkspace 7 "$term")
 
       # firefox
-      (openOnWorkspace 9 (
-        toString (
-          [
-            (lib.getExe config.programs.firefox.package)
-            "-P"
-            user # load user firefox profile
-            "https://discordapp.com/channels/@me"
-          ]
-          ++ lib.optionals (host == "desktop") [
-            "https://web.whatsapp.com" # requires access via local network
-            "http://localhost:9091" # transmission
-          ]
-        )
-      ))
+      (openOnWorkspace 9 (lib.getExe config.programs.firefox.package))
 
       # download desktop
       (openOnWorkspace 10 "$term hx ${config.xdg.userDirs.desktop}/yt.txt")

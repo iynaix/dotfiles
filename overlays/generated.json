@@ -53,10 +53,30 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2024.09.27",
-            "sha256": "sha256-OSQ60vkdfo5l4bSoivCen5hDE5Q/tJ4iqlxKtFBjMOE=",
+            "rev": "2024.10.07",
+            "sha256": "sha256-+ktz3f+Wm4OkzJvGuWCavsfr0TB/solGwhE6XliVB4g=",
             "type": "github"
         },
-        "version": "2024.09.27"
+        "version": "2024.10.07"
+    },
+    "zfs-yazi": {
+        "cargoLocks": null,
+        "date": "2024-10-11",
+        "extract": null,
+        "name": "zfs-yazi",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "iynaix",
+            "repo": "zfs.yazi",
+            "rev": "dffe8db6858918ebb0d28088339b5a65d97cea05",
+            "sha256": "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=",
+            "type": "github"
+        },
+        "version": "dffe8db6858918ebb0d28088339b5a65d97cea05"
     }
 }

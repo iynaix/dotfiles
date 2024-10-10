@@ -24,6 +24,7 @@
     pathofbuilding.enable = true;
     rclip.enable = true;
     deadbeef.enable = true;
+    gaming.enable = false;
 
     terminal.size = 12;
 

@@ -1,6 +1,8 @@
 {
   config,
   inputs,
+  host,
+  lib,
   pkgs,
   user,
   ...
@@ -17,7 +19,21 @@
           + ''
             wrapProgram "$executablePath" \
               --set 'HOME' '${config.xdg.configHome}' \
-              --append-flags "--name firefox -P ${user}"
+              --append-flags "${
+                lib.concatStringsSep " " (
+                  [
+                    "--name firefox"
+                    # load user firefox profile
+                    "-P ${user}"
+                    # start with urls:
+                    "https://discordapp.com/channels/@me"
+                  ]
+                  ++ lib.optionals (host == "desktop") [
+                    "https://web.whatsapp.com" # requires access via local network
+                    "http://localhost:9091" # transmission
+                  ]
+                )
+              }"
           '';
       });
 
@@ -27,14 +43,6 @@
       profiles.${user} = {
         # TODO: define keyword searches here?
         # search.engines = [ ];
-
-        isDefault = true;
-        settings = {
-          "browser.display.use_document_fonts" = 0;
-          "browser.ctrlTab.sortByRecentlyUsed" = false;
-          "browser.theme.toolbar-theme" = 0;
-          "general.autoScroll" = true;
-        };
 
         extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
           bitwarden

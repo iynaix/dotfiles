@@ -138,7 +138,7 @@ impl WallInfo {
     pub fn get_geometry(&self, width: i32, height: i32) -> Option<(f64, f64, f64, f64)> {
         self.get_geometry_str(width, height).and_then(|geom| {
             let geometry = geom
-                .split(|c| c == '+' || c == 'x')
+                .split(['+', 'x'])
                 .filter_map(|s| s.parse::<f64>().ok())
                 .collect_vec();
 

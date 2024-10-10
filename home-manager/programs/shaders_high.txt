@@ -1,0 +1,100 @@
+# Optimized shaders for higher-end GPU:
+# Mode: A (HQ)
+"Clamp_Highlights"
+"Restore_CNN_VL"
+"Upscale_CNN_x2_VL"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_M"
+
+# Mode: B (HQ)
+"Clamp_Highlights"
+"Restore_CNN_Soft_VL"
+"Upscale_CNN_x2_VL"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_M"
+
+# Mode: C (HQ)
+"Clamp_Highlights"
+"Upscale_Denoise_CNN_x2_VL"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_M"
+
+# Mode: A+A (HQ)
+"Clamp_Highlights"
+"Restore_CNN_VL"
+"Upscale_CNN_x2_VL"
+"Restore_CNN_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_M"
+
+# Mode: B+B (HQ)
+"Clamp_Highlights"
+"Restore_CNN_Soft_VL"
+"Upscale_CNN_x2_VL"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Restore_CNN_Soft_M"
+"Upscale_CNN_x2_M"
+
+# Mode: C+A (HQ)
+"Clamp_Highlights"
+"Upscale_Denoise_CNN_x2_VL"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Restore_CNN_M"
+"Upscale_CNN_x2_M"
+
+
+# Optimized shaders for lower-end GPU:
+# Mode: A
+"Clamp_Highlights"
+"Restore_CNN_M"
+"Upscale_CNN_x2_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_S"
+
+# Mode:B
+"Clamp_Highlights"
+"Restore_CNN_Soft_M"
+"Upscale_CNN_x2_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_S"
+
+# Mode: C
+"Clamp_Highlights"
+"Upscale_Denoise_CNN_x2_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_S"
+
+# Mode: A+A
+"Clamp_Highlights"
+"Restore_CNN_M"
+"Upscale_CNN_x2_M"
+"Restore_CNN_S"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Upscale_CNN_x2_S"
+
+# Mode: B+B
+"Clamp_Highlights"
+"Restore_CNN_Soft_M"
+"Upscale_CNN_x2_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Restore_CNN_Soft_S"
+"Upscale_CNN_x2_S"
+
+# Mode: C+C
+"Clamp_Highlights"
+"Upscale_Denoise_CNN_x2_M"
+"AutoDownscalePre_x2"
+"AutoDownscalePre_x4"
+"Restore_CNN_S"
+"Upscale_CNN_x2_S"

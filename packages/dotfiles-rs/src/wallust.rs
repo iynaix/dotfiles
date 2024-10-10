@@ -121,7 +121,9 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
         .expect("could not decode image")
         .to_rgb8();
 
-    let mut color_counts: HashMap<Rgb, usize> = HashMap::new();
+    // initialize with each accent as a color might not be used
+    let mut color_counts: HashMap<_, _> = accents.iter().map(|a| (a.clone(), 0)).collect();
+
     // sample middle of every 9x9 pixel block
     for x in (4..img.width()).step_by(5) {
         for y in (4..img.height()).step_by(5) {
@@ -140,7 +142,7 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
                 .expect("could not find closest color");
 
             // store the closest color
-            *color_counts.entry(closest_color.1.clone()).or_insert(0) += 1;
+            *color_counts.entry(closest_color.1.clone()).or_default() += 1;
         }
     }
 
@@ -196,9 +198,15 @@ pub fn apply_colors() {
             .iter()
             // calculate score for each color
             .map(|(color, i)| {
+                // how much of the score should be based on contrast
+                let contrast_pct = 0.78;
+
                 #[allow(clippy::cast_precision_loss)]
                 (
-                    (*i as f64).mul_add(0.6, (by_usage[color] as f64) * 0.4),
+                    (*i as f64).mul_add(
+                        contrast_pct,
+                        (by_usage[color] as f64) * (1.0 - contrast_pct),
+                    ),
                     color.clone(),
                 )
             })
@@ -211,7 +219,7 @@ pub fn apply_colors() {
         // set the waybar accent color to have more contrast
         set_waybar_accent(&nixcolors, &accents[0]);
 
-        set_gtk_and_icon_theme(&nixcolors);
+        set_gtk_and_icon_theme(&nixcolors, &accents[0]);
     } else {
         #[derive(serde::Deserialize)]
         struct Colorscheme {
@@ -259,48 +267,39 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .expect("wallust: failed to set colors from wallpaper");
 }
 
-pub fn set_gtk_and_icon_theme(nixcolors: &NixColors) {
-    // ignore black
-    let wallust_colors = nixcolors
-        .filter_colors(&["color0", "color7"])
-        .into_values()
-        .collect_vec();
+pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
+    let variant = nixcolors
+        .theme_accents
+        .iter()
+        .min_by_key(|(_, theme_color)| theme_color.distance_sq(accent))
+        .expect("no closest theme color found")
+        .0;
 
-    let mut variant = String::new();
-    let mut min_distance = i64::MAX;
-
-    for (accent_name, accent_color) in &nixcolors.theme_accents {
-        for wallust_color in &wallust_colors {
-            let distance = accent_color.distance_sq(wallust_color);
-            if distance < min_distance {
-                variant = accent_name.to_string();
-                min_distance = distance;
-            }
-        }
-    }
+    // requires the single quotes to be GVariant compatible for dconf
+    let gvariant = |v: &str| format!("'{v}'");
 
     let gtk_theme = format!("catppuccin-mocha-{variant}-compact");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/gtk-theme")
-        // requires the quotes to be GVariant compatible for dconf
-        .arg(gtk_theme)
+        .arg(gvariant(&gtk_theme))
         .execute()
         .expect("failed to apply gtk theme");
 
+    // requires the single quotes to be GVariant compatible for dconf
     let icon_theme = format!("Tela-{variant}-dark");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/icon-theme")
-        // requires the quotes to be GVariant compatible for dconf
-        .arg(&icon_theme)
+        .arg(gvariant(&icon_theme))
         .execute()
         .expect("failed to apply icon theme");
 
     // update the icon theme for dunst
-    let dunstrc_path = full_path("~/.config/dunst/dunstrc");
+    let dunstrc_path = full_path("~/.cache/wallust/dunstrc");
+
     if let Ok(dunstrc) = std::fs::read_to_string(&dunstrc_path) {
         let dunstrc = dunstrc
             .lines()
             .map(|line| {
                 if line.starts_with("icon_theme") {
-                    format!("icon_theme = {icon_theme}")
+                    format!("icon_theme=\"{icon_theme}\"")
                 } else {
                     line.to_string()
                 }

@@ -8,7 +8,7 @@
 lib.mkIf config.hm.custom.hyprland.enable {
   programs.hyprland.enable =
     assert (
-      lib.assertMsg (lib.hasPrefix config.programs.hyprland.package.version "0.43.0") "hyprland: updated, sync with hyprnstack?"
+      lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.45") "hyprland updated, sync with hyprnstack?"
     );
     true;
 

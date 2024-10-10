@@ -26,6 +26,9 @@ in
       # include custom packages
       custom =
         (prev.custom or { })
+        // {
+          inherit (sources) zfs-yazi;
+        }
         // (import ../packages {
           inherit (prev) pkgs;
           inherit inputs;

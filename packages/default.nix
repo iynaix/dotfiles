@@ -28,9 +28,6 @@ in
   # boutique rust packages
   dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
 
-  # writeShellApplication with support for completions
-  writeShellApplicationCompletions = callPackage ./write-shell-application-completions { };
-
   # custom tela built with catppucin variant colors
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };
 

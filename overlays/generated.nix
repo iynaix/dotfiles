@@ -26,13 +26,25 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2024.09.27";
+    version = "2024.10.07";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2024.09.27";
+      rev = "2024.10.07";
       fetchSubmodules = false;
-      sha256 = "sha256-OSQ60vkdfo5l4bSoivCen5hDE5Q/tJ4iqlxKtFBjMOE=";
+      sha256 = "sha256-+ktz3f+Wm4OkzJvGuWCavsfr0TB/solGwhE6XliVB4g=";
     };
+  };
+  zfs-yazi = {
+    pname = "zfs-yazi";
+    version = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+    src = fetchFromGitHub {
+      owner = "iynaix";
+      repo = "zfs.yazi";
+      rev = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+      fetchSubmodules = false;
+      sha256 = "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=";
+    };
+    date = "2024-10-11";
   };
 }

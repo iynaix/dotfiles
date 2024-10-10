@@ -89,8 +89,8 @@
 
       variables = {
         TERMINAL = lib.getExe config.hm.custom.terminal.package;
-        EDITOR = "nvim";
-        VISUAL = "nvim";
+        EDITOR = "hx";
+        VISUAL = "hx";
         NIXPKGS_ALLOW_UNFREE = "1";
         STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };

@@ -85,6 +85,7 @@ in
       ];
 
       shellAliases = {
+        hyprland = "Hyprland";
         hypr-log = "hyprctl rollinglog --follow";
       };
     };
@@ -93,7 +94,7 @@ in
       enable = true;
       # package = pkgs.hyprland;
       # package =
-      #   assert (lib.assertMsg (pkgs.hyprland.version == "0.42.0") "hyprland: use version from nixpkgs?");
+      #   assert (lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.42") "hyprland: use version from nixpkgs?");
       #   inputs.hyprland.packages.${pkgs.system}.hyprland;
 
       settings =

@@ -9,7 +9,7 @@ in
     enableCompletion = true;
     historyFile = histFile;
     shellAliases = {
-      ehistory = "nvim ${histFile}";
+      ehistory = "hx ${histFile}";
     };
 
     initExtra = ''

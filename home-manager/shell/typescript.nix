@@ -1,12 +1,16 @@
-_: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     plugins = {
       lsp.servers = {
-        emmet-ls.enable = true;
+        emmet_ls.enable = true;
         graphql.enable = true;
-        prismals.enable = true;
+        prismals = {
+          enable = true;
+          package = pkgs.nodePackages."@prisma/language-server";
+        };
         tailwindcss.enable = true;
-        ts-ls.enable = true;
+        ts_ls.enable = true;
       };
 
       conform-nvim = {

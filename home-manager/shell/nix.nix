@@ -8,6 +8,7 @@
 }:
 let
   dots = "/persist${config.home.homeDirectory}/projects/dotfiles";
+  nixpkgs-review = pkgs.nixpkgs-review.override { withNom = true; };
 in
 {
   home = {
@@ -17,6 +18,7 @@ in
       nix-output-monitor
       nix-tree
       nixfmt-rfc-style
+      nixpkgs-review
       nvfetcher
     ];
 
@@ -199,7 +201,7 @@ in
       };
       # test all packages that depend on this change, used for nixpkgs and copied from the PR template
       nb-dependents = {
-        runtimeInputs = with pkgs; [ nixpkgs-review ];
+        runtimeInputs = [ nixpkgs-review ];
         text = "nixpkgs-review rev HEAD";
       };
       # build and run local package if possible, otherwise run from nixpkgs

@@ -40,7 +40,7 @@ in
   config = {
     home = {
       shellAliases = {
-        ":e" = "nvim";
+        ":e" = "hx";
         ":q" = "exit";
         ":wq" = "exit";
         c = "clear";

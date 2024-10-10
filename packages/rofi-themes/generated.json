@@ -1,7 +1,7 @@
 {
     "rofi-themes": {
         "cargoLocks": null,
-        "date": "2024-10-05",
+        "date": "2024-10-10",
         "extract": null,
         "name": "rofi-themes",
         "passthru": null,
@@ -13,10 +13,10 @@
             "name": null,
             "owner": "adi1090x",
             "repo": "rofi",
-            "rev": "f7bc0216ca7bdb011266615f02385989384b72a4",
-            "sha256": "sha256-FqX75EwWNjy4IMh7xfxRUnXk65A/mZL65yRZuQi6IqA=",
+            "rev": "f3835e7f728bf6d94fb3c2c683c6754e6ccd202e",
+            "sha256": "sha256-xlcI9K6cXJetaphkMW5mVWDshqcXeTtxAAwtOK5fF6s=",
             "type": "github"
         },
-        "version": "f7bc0216ca7bdb011266615f02385989384b72a4"
+        "version": "f3835e7f728bf6d94fb3c2c683c6754e6ccd202e"
     }
 }
