@@ -85,6 +85,7 @@ in
       ];
 
       shellAliases = {
+        hyprland = "Hyprland";
         hypr-log = "hyprctl rollinglog --follow";
       };
     };
