@@ -125,7 +125,9 @@ in
         };
       };
 
-      "/persist/cache" = {
+      # cache are files that should be persisted, but not to snapshot
+      # e.g. npm, cargo cache etc, that could always be redownloaded
+      "/cache" = {
         hideMounts = true;
         inherit (cfg.root.cache) directories files;
 
@@ -140,17 +142,15 @@ in
         getDirPath = prefix: d: "${prefix}${d.dirPath}";
         getFilePath = prefix: f: "${prefix}${f.filePath}";
         persistCfg = config.environment.persistence."/persist";
-        persistCacheCfg = config.environment.persistence."/persist/cache";
+        persistCacheCfg = config.environment.persistence."/cache";
         allDirectories =
           map (getDirPath "/persist") (persistCfg.directories ++ persistCfg.users.${user}.directories)
-          ++ map (getDirPath "/persist/cache") (
+          ++ map (getDirPath "/cache") (
             persistCacheCfg.directories ++ persistCacheCfg.users.${user}.directories
           );
         allFiles =
           map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
-          ++ map (getFilePath "/persist/cache") (
-            persistCacheCfg.files ++ persistCacheCfg.users.${user}.files
-          );
+          ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
         sort-u = arr: lib.concatLines (lib.sort lib.lessThan (lib.unique arr));
       in
       ''

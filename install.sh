@@ -26,7 +26,7 @@ The following ZFS datasets will be created:
     - zroot/nix (mounted at /nix)
     - zroot/tmp (mounted at /tmp)
     - zroot/persist (mounted at /persist)
-    - zroot/persist/cache (mounted at /persist/cache)
+    - zroot/cache (mounted at /cache)
 
 ** IMPORTANT **
 This script assumes that the relevant "fileSystems" are declared within the
