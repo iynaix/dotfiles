@@ -24,7 +24,7 @@ in
 
     waybar = {
       enable = mkEnableOption "waybar" // {
-        default = config.custom.hyprland.enable;
+        default = config.custom.hyprland.enable && !config.custom.headless;
       };
       config = mkOption {
         type = types.submodule { freeformType = (pkgs.formats.json { }).type; };

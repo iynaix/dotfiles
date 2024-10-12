@@ -14,6 +14,7 @@
     ./eza.nix
     ./fish.nix
     ./git.nix
+    ./helix.nix
     ./neovim
     ./nix.nix
     ./rice.nix
@@ -24,6 +25,7 @@
     ./tmux.nix
     ./typescript.nix
     ./yazi.nix
+    ./yt-dlp.nix
     ./zoxide.nix
   ];
 

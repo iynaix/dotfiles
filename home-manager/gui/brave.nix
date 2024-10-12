@@ -1,5 +1,10 @@
-{ lib, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+lib.mkIf (!config.custom.headless) {
   programs.chromium = {
     enable = true;
     package = pkgs.brave;

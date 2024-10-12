@@ -24,7 +24,7 @@ in
   options.custom = with lib; {
     hyprland = {
       enable = mkEnableOption "hyprland" // {
-        default = true;
+        default = !config.custom.headless;
       };
       plugin = mkOption {
         type = types.nullOr (types.enum [ "hyprnstack" ]);

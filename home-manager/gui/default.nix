@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   imports = [
     ./brave.nix
     ./deadbeef.nix
@@ -7,7 +6,6 @@
     ./firefox.nix
     ./ghostty.nix
     ./gtk.nix
-    ./helix.nix
     ./kitty.nix
     ./mpv.nix
     ./nemo.nix
@@ -19,7 +17,6 @@
     ./vscode.nix
     ./wallust.nix
     ./waybar.nix
-    ./yt-dlp.nix
     ./zathura.nix
   ];
 }

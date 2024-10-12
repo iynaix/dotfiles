@@ -5,7 +5,7 @@
   pkgs,
   ...
 }:
-{
+lib.mkIf (!config.custom.headless) {
   home.packages = with pkgs; [
     nemo-fileroller
     nemo-with-extensions

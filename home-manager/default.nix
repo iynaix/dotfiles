@@ -9,8 +9,8 @@
 {
   imports = [
     ./hyprland
-    ./impermanence.nix
-    ./programs
+    ./gui
+    ./impermanence.nix # only contains options
     ./shell
   ];
 
@@ -30,6 +30,10 @@
         type = types.listOf types.package;
         description = "The packages to install for the fonts";
       };
+    };
+    headless = mkEnableOption "headless mode" // {
+      default = false;
+      description = "Whether to enable headless mode, no GUI programs will be available";
     };
     symlinks = mkOption {
       type = types.attrsOf types.str;

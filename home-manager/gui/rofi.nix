@@ -88,7 +88,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (!config.custom.headless) {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland.override {

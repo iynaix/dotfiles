@@ -7,7 +7,7 @@
   user,
   ...
 }:
-{
+lib.mkIf (!config.custom.headless) {
   programs = {
     # use firefox dev edition
     firefox = rec {

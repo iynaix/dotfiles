@@ -169,7 +169,7 @@
     };
 
     # use gtk theme on qt apps
-    qt = {
+    qt = lib.mkIf (!config.hm.custom.headless) {
       enable = true;
       platformTheme = "gnome";
       style = "adwaita-dark";

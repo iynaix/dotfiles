@@ -6,18 +6,22 @@
 }:
 {
   home = {
-    packages = with pkgs; [
-      asciiquarium
-      cbonsai
-      cmatrix
-      fastfetch
-      imagemagick
-      nitch
-      pipes-rs
-      scope-tui
-      tenki
-      inputs.wfetch.packages.${pkgs.system}.wfetch
-    ];
+    packages =
+      with pkgs;
+      [
+        asciiquarium
+        cbonsai
+        cmatrix
+        fastfetch
+        nitch
+        pipes-rs
+        scope-tui
+        tenki
+        inputs.wfetch.packages.${pkgs.system}.wfetch
+      ]
+      ++ lib.optionals (!config.custom.headless) [
+        imagemagick
+      ];
 
     shellAliases = {
       neofetch = "fastfetch --config neofetch";

@@ -8,7 +8,7 @@
 {
   options.custom = with lib; {
     pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
-      default = isNixOS;
+      default = isNixOS && !config.custom.headless;
     };
   };
 

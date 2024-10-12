@@ -1,4 +1,5 @@
-_: {
+{ config, lib, ... }:
+lib.mkIf (!config.custom.headless) {
   programs.vscode.enable = true;
 
   # add password-store: gnome for keyring to work
