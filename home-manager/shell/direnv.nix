@@ -1,6 +1,7 @@
 _: {
   programs.direnv = {
     enable = true;
+    silent = true;
     nix-direnv.enable = true;
   };
 
@@ -10,11 +11,6 @@ _: {
     globals = {
       direnv_silent_load = 1;
     };
-  };
-
-  home = {
-    # silence direnv
-    sessionVariables.DIRENV_LOG_FORMAT = "";
   };
 
   custom.shell.packages = {

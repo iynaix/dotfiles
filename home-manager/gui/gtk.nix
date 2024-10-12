@@ -86,7 +86,7 @@
           };
         };
         iconTheme = {
-          name = "Tela-${defaultAccent}-dark";
+          name = "Tela-${defaultAccent}";
           package = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
         };
         font = {

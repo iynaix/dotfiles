@@ -211,8 +211,21 @@
               autoload_playlist = false;
               max_skip_duration = 60 * 5;
               # sponsorblock overrides
-              categories = ''[ ["internal-chapters", "prologue>Prologue/^Intro; opening>^OP/ OP$/^Opening; ending>^ED/ ED$/^Ending; preview>Preview$; sponsorblock>Sponsor/SponsorBlock"] ]'';
-              skip = ''[ ["internal-chapters", "toggle;toggle_idx;opening;ending;preview;sponsorblock"], ["external-chapters", "toggle;toggle_idx"] ]'';
+              categories =
+                let
+                  categories = {
+                    prologue = "Prologue/^Intro";
+                    opening = "^OP / OP$/^Opening";
+                    ending = "^ED / ED$/^Ending";
+                    preview = "Preview$";
+                    credit = "^Credit";
+                    sponsorblock = "Sponsor/SponsorBlock";
+                  };
+                  categoriesStr = lib.concatStringsSep "; " (lib.mapAttrsToList (k: v: "${k}>${v}") categories);
+                in
+                ''[ ["internal-chapters", "${categoriesStr}"] ]'';
+              skip = ''[ ["internal-chapters", "toggle;toggle_idx;opening;ending;preview;credit;sponsorblock"], ["external-chapters", "toggle;toggle_idx"] ]'';
+              skip_once = true; # allow going back after initial skip
               autoskip_countdown = 0;
               last_chapter_skip_behavior = ''[ ["no-chapters", "silence-skip"], ["internal-chapters", "silence-skip"], ["external-chapters", "silence-skip"] ]'';
             };

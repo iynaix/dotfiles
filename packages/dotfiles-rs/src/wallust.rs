@@ -291,7 +291,7 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .expect("failed to apply gtk theme");
 
     // requires the single quotes to be GVariant compatible for dconf
-    let icon_theme = format!("Tela-{variant}-dark");
+    let icon_theme = format!("Tela-{variant}");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/icon-theme")
         .arg(gvariant(&icon_theme))
         .execute()
