@@ -24,6 +24,19 @@
     };
     date = "2024-09-19";
   };
+  wallust = {
+    pname = "wallust";
+    version = "f0e28a2068881c68881379e8acfeac77cb5c0af3";
+    src = fetchgit {
+      url = "https://codeberg.org/explosion-mental/wallust";
+      rev = "f0e28a2068881c68881379e8acfeac77cb5c0af3";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sha256 = "sha256-5B7cxkI4vRRix97UX9WOpfXORqRfPhzD2qRSzAmYmTw=";
+    };
+    date = "2024-10-08";
+  };
   yt-dlp = {
     pname = "yt-dlp";
     version = "2024.10.07";
@@ -37,13 +50,13 @@
   };
   zfs-yazi = {
     pname = "zfs-yazi";
-    version = "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720";
+    version = "dffe8db6858918ebb0d28088339b5a65d97cea05";
     src = fetchFromGitHub {
       owner = "iynaix";
       repo = "zfs.yazi";
-      rev = "cb3cfd754ade88d0e667f0f013c2a7c1ffd08720";
+      rev = "dffe8db6858918ebb0d28088339b5a65d97cea05";
       fetchSubmodules = false;
-      sha256 = "sha256-HHwj82M1XD473zJjav4whCLWL1cM+UferUAr9xTClzw=";
+      sha256 = "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=";
     };
     date = "2024-10-11";
   };

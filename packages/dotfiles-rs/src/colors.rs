@@ -16,6 +16,70 @@ impl Rgb {
         (i64::from(self.r), i64::from(self.g), i64::from(self.b))
     }
 
+    /// to f64 HSL tuple
+    #[allow(clippy::many_single_char_names)]
+    fn to_hsl(&self) -> (f64, f64, f64) {
+        let r = f64::from(self.r) / 255.0;
+        let g = f64::from(self.g) / 255.0;
+        let b = f64::from(self.b) / 255.0;
+
+        let max = r.max(g).max(b);
+        let min = r.min(g).min(b);
+        let delta = max - min;
+
+        let l = (max + min) / 2.0;
+
+        if delta == 0.0 {
+            (0.0, 0.0, l) // Grayscale
+        } else {
+            let s = if l > 0.5 {
+                delta / (2.0 - max - min)
+            } else {
+                delta / (max + min)
+            };
+
+            let h = if (max - r).abs() < f64::EPSILON {
+                ((g - b) / delta) % 6.0
+            } else if (max - g).abs() < f64::EPSILON {
+                (b - r) / delta + 2.0
+            } else {
+                (r - g) / delta + 4.0
+            } * 60.0;
+
+            (if h < 0.0 { h + 360.0 } else { h }, s, l)
+        }
+    }
+
+    /// from f64 HSL tuple
+    #[allow(clippy::many_single_char_names)]
+    fn from_hsl(h: f64, s: f64, l: f64) -> Self {
+        let c = (1.0 - 2.0f64.mul_add(l, -1.0).abs()) * s;
+        let x = c * (1.0 - ((h / 60.0) % 2.0 - 1.0).abs());
+        let m = l - c / 2.0;
+
+        let (r1, g1, b1) = if h < 60.0 {
+            (c, x, 0.0)
+        } else if h < 120.0 {
+            (x, c, 0.0)
+        } else if h < 180.0 {
+            (0.0, c, x)
+        } else if h < 240.0 {
+            (0.0, x, c)
+        } else if h < 300.0 {
+            (x, 0.0, c)
+        } else {
+            (c, 0.0, x)
+        };
+
+        #[allow(clippy::cast_possible_truncation)]
+        #[allow(clippy::cast_sign_loss)]
+        Self {
+            r: ((r1 + m) * 255.0).round() as u8,
+            g: ((g1 + m) * 255.0).round() as u8,
+            b: ((b1 + m) * 255.0).round() as u8,
+        }
+    }
+
     /// to hex string
     pub fn to_hex_str(&self) -> String {
         format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
@@ -41,6 +105,13 @@ impl Rgb {
             g: 255 - self.g,
             b: 255 - self.b,
         }
+    }
+
+    #[must_use]
+    pub fn complementary(&self) -> Self {
+        let (h, s, l) = self.to_hsl();
+        let comp_h = (h + 180.0) % 360.0; // Complementary hue is 180° away
+        Self::from_hsl(comp_h, s, l)
     }
 }
 

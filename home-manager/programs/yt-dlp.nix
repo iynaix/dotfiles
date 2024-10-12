@@ -22,7 +22,12 @@ let
       done
 
       if ! $has_positional; then
-          args+=("-a" "${config.xdg.userDirs.desktop}/yt.txt")
+          # filter out non urls
+          while IFS= read -r url; do
+              if [[ $url == http* ]]; then
+                  args+=("$url")
+              fi
+          done < "${config.xdg.userDirs.desktop}/yt.txt"
       fi
 
       pushd "${config.xdg.userDirs.download}" > /dev/null
