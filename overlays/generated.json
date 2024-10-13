@@ -58,6 +58,46 @@
         },
         "version": "f0e28a2068881c68881379e8acfeac77cb5c0af3"
     },
+    "yazi-plugins": {
+        "cargoLocks": null,
+        "date": "2024-10-10",
+        "extract": null,
+        "name": "yazi-plugins",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "yazi-rs",
+            "repo": "plugins",
+            "rev": "932b9311a810423659dae172ff8e215366bfc631",
+            "sha256": "sha256-tAccywz2yPtyWGMe8Ff2VAiFFjtTn34qBP2J39H2PdA=",
+            "type": "github"
+        },
+        "version": "932b9311a810423659dae172ff8e215366bfc631"
+    },
+    "yazi-zfs": {
+        "cargoLocks": null,
+        "date": "2024-10-11",
+        "extract": null,
+        "name": "yazi-zfs",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "iynaix",
+            "repo": "zfs.yazi",
+            "rev": "dffe8db6858918ebb0d28088339b5a65d97cea05",
+            "sha256": "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=",
+            "type": "github"
+        },
+        "version": "dffe8db6858918ebb0d28088339b5a65d97cea05"
+    },
     "yt-dlp": {
         "cargoLocks": null,
         "date": null,
@@ -77,25 +117,5 @@
             "type": "github"
         },
         "version": "2024.10.07"
-    },
-    "zfs-yazi": {
-        "cargoLocks": null,
-        "date": "2024-10-11",
-        "extract": null,
-        "name": "zfs-yazi",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "iynaix",
-            "repo": "zfs.yazi",
-            "rev": "dffe8db6858918ebb0d28088339b5a65d97cea05",
-            "sha256": "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=",
-            "type": "github"
-        },
-        "version": "dffe8db6858918ebb0d28088339b5a65d97cea05"
     }
 }

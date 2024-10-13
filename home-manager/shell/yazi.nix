@@ -11,8 +11,13 @@
     enableFishIntegration = true;
 
     plugins = {
-      zfs = pkgs.custom.zfs-yazi.src;
+      git = "${pkgs.custom.yazi-plugins.src}/git.yazi";
+      zfs = pkgs.custom.yazi-zfs.src;
     };
+
+    initLua = ''
+      require("git"):setup()
+    '';
 
     settings = {
       log = {
@@ -29,6 +34,21 @@
         sort_reverse = false;
         linemode = "size";
         show_hidden = true;
+      };
+      # settings for plugins
+      plugin = {
+        prepend_fetchers = [
+          {
+            id = "git";
+            name = "*";
+            run = "git";
+          }
+          {
+            id = "git";
+            name = "*/";
+            run = "git";
+          }
+        ];
       };
     };
 

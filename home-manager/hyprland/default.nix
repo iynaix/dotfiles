@@ -60,6 +60,10 @@ in
               default = "0x0";
               description = "Position of the display, e.g. 0x0";
             };
+            scale = mkOption {
+              type = int;
+              default = 1;
+            };
             vertical = mkOption {
               type = bool;
               description = "Is the display vertical?";
@@ -107,7 +111,7 @@ in
                   d.name
                   "${toString d.width}x${toString d.height}@${toString d.refreshRate}"
                   d.position
-                  "1" # scale
+                  (toString d.scale)
                 ]
                 ++ lib.optionals d.vertical [ "transform,1" ]
               )

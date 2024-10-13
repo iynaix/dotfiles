@@ -12,10 +12,14 @@ src.git = "https://codeberg.org/explosion-mental/wallust"
 # src.manual = "549b30dae0ae9db0bdda780a17d474562378399f"
 fetch.git = "https://codeberg.org/explosion-mental/wallust"
 
+[yazi-plugins]
+src.git = "https://github.com/yazi-rs/plugins"
+fetch.github = "yazi-rs/plugins"
+
+[yazi-zfs]
+src.git = "https://github.com/iynaix/zfs.yazi"
+fetch.github = "iynaix/zfs.yazi"
+
 [yt-dlp]
 src.github_tag = "yt-dlp/yt-dlp"
 fetch.github = "yt-dlp/yt-dlp"
-
-[zfs-yazi]
-src.git = "https://github.com/iynaix/zfs.yazi"
-fetch.github = "iynaix/zfs.yazi"

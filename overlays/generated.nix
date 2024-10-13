@@ -37,6 +37,30 @@
     };
     date = "2024-10-08";
   };
+  yazi-plugins = {
+    pname = "yazi-plugins";
+    version = "932b9311a810423659dae172ff8e215366bfc631";
+    src = fetchFromGitHub {
+      owner = "yazi-rs";
+      repo = "plugins";
+      rev = "932b9311a810423659dae172ff8e215366bfc631";
+      fetchSubmodules = false;
+      sha256 = "sha256-tAccywz2yPtyWGMe8Ff2VAiFFjtTn34qBP2J39H2PdA=";
+    };
+    date = "2024-10-10";
+  };
+  yazi-zfs = {
+    pname = "yazi-zfs";
+    version = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+    src = fetchFromGitHub {
+      owner = "iynaix";
+      repo = "zfs.yazi";
+      rev = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+      fetchSubmodules = false;
+      sha256 = "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=";
+    };
+    date = "2024-10-11";
+  };
   yt-dlp = {
     pname = "yt-dlp";
     version = "2024.10.07";
@@ -47,17 +71,5 @@
       fetchSubmodules = false;
       sha256 = "sha256-+ktz3f+Wm4OkzJvGuWCavsfr0TB/solGwhE6XliVB4g=";
     };
-  };
-  zfs-yazi = {
-    pname = "zfs-yazi";
-    version = "dffe8db6858918ebb0d28088339b5a65d97cea05";
-    src = fetchFromGitHub {
-      owner = "iynaix";
-      repo = "zfs.yazi";
-      rev = "dffe8db6858918ebb0d28088339b5a65d97cea05";
-      fetchSubmodules = false;
-      sha256 = "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=";
-    };
-    date = "2024-10-11";
   };
 }

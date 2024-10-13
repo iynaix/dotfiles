@@ -85,10 +85,11 @@ impl Swww {
 
         let (mon_width, mon_height) = vertical_dimensions(mon);
 
-        let dimensions = format!("{mon_width}x{mon_height}");
-
         let Some((w, h, x, y)) = wall_info.get_geometry(mon_width, mon_height) else {
-            panic!("unable to get geometry for {}: {}", mon.name, dimensions);
+            panic!(
+                "unable to get geometry for {}: {}x{}",
+                mon.name, mon_width, mon_height
+            );
         };
 
         // convert to rgb8 pixel type
@@ -119,6 +120,11 @@ impl Swww {
                 image::ColorType::Rgb8.into(),
             )
             .expect("failed to write webp for swww");
+
+        // HACK: get swww to update the scale, or it thinks it's still 1.0???
+        if (mon.scale - 1.0).abs() > f32::EPSILON {
+            execute::command_args!("swww", "clear").spawn().ok();
+        }
 
         execute::command_args!("swww", "img", "--no-resize")
             .arg("--outputs")

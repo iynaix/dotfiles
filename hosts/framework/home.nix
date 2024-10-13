@@ -4,8 +4,10 @@
     monitors = [
       {
         name = "eDP-1";
-        width = 2256;
-        height = 1504;
+        width = 2880;
+        height = 1920;
+        refreshRate = 120;
+        scale = 2;
         workspaces = [
           1
           2
@@ -32,6 +34,9 @@
   };
 
   wayland.windowManager.hyprland.settings = {
+    misc = {
+      vrr = 1; # variable refresh rate
+    };
     exec-once = [
       # don't blind me on startup
       "${lib.getExe pkgs.brightnessctl} s 25%"
