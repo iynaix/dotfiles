@@ -13,7 +13,7 @@ in
   options.custom = with lib; {
     wallust = {
       enable = mkEnableOption "wallust" // {
-        default = true;
+        default = !config.custom.headless;
       };
       colorscheme = mkOption {
         type = types.nullOr types.str;
