@@ -40,7 +40,7 @@ pub fn apply_theme(theme: &str) {
 }
 
 fn refresh_zathura() {
-    if let Some(zathura_pid_raw) = execute::command_args!(
+    if let Some(zathura_pid) = execute::command_args!(
         "dbus-send",
         "--print-reply",
         "--dest=org.freedesktop.DBus",
@@ -50,20 +50,18 @@ fn refresh_zathura() {
     .execute_stdout_lines()
     .iter()
     .find(|line| line.contains("org.pwmt.zathura"))
+    .and_then(|zathura_pid_raw| zathura_pid_raw.split('"').max_by_key(|s| s.len()))
     {
-        if let Some(zathura_pid) = zathura_pid_raw.split('"').max_by_key(|s| s.len()) {
-            // send message to zathura via dbus
-            execute::command_args!(
-                "dbus-send",
-                "--type=method_call",
-                &format!("--dest={zathura_pid}"),
-                "/org/pwmt/zathura",
-                "org.pwmt.zathura.ExecuteCommand",
-                "string:source",
-            )
-            .execute()
-            .ok();
-        }
+        execute::command_args!(
+            "dbus-send",
+            "--type=method_call",
+            &format!("--dest={zathura_pid}"),
+            "/org/pwmt/zathura",
+            "org.pwmt.zathura.ExecuteCommand",
+            "string:source",
+        )
+        .execute()
+        .ok();
     }
 }
 
@@ -291,7 +289,7 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .expect("failed to apply gtk theme");
 
     // requires the single quotes to be GVariant compatible for dconf
-    let icon_theme = format!("Tela-{variant}");
+    let icon_theme = format!("Tela-{variant}-dark");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/icon-theme")
         .arg(gvariant(&icon_theme))
         .execute()
