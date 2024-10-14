@@ -54,7 +54,7 @@ in
               wallpapers-backup
               ${rsync wallpapers_dir}
 
-              if [ "${remote}" == "iynaix-framework" ]; then
+              if [ "${remote}" == "elias-ainsworth-framework" ]; then
                   ${rsync rclip_dir}
               fi
             '';

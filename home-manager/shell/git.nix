@@ -187,8 +187,8 @@ in
         fi
 
         # check if repo is forked and sync with upstream if it is
-        if gh repo view "iynaix/$REPO_NAME" >/dev/null 2>&1; then
-            gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
+        if gh repo view "elias-ainsworth/$REPO_NAME" >/dev/null 2>&1; then
+            gh repo sync "elias-ainsworth/$REPO_NAME" -b "$BRANCH"
         fi
         git pull origin "$BRANCH"
       '';
