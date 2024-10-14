@@ -12,9 +12,13 @@ lib.mkIf config.hm.custom.hyprland.enable {
     );
     true;
 
-  environment.sessionVariables = lib.mkIf (host == "vm" || host == "vm-hyprland") {
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
-  };
+  environment.variables =
+    {
+      NIXOS_OZONE_WL = "1";
+    }
+    // lib.optionalAttrs (host == "vm" || host == "vm-hyprland") {
+      WLR_RENDERER_ALLOW_SOFTWARE = "1";
+    };
 
   xdg.portal = {
     enable = true;

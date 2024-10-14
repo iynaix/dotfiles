@@ -10,8 +10,8 @@
 {
   imports = [
     ./hyprland
-    ./impermanence.nix
-    ./programs
+    ./gui
+    ./impermanence.nix # only contains options
     ./shell
   ];
 
@@ -37,6 +37,10 @@
         type = types.listOf types.package;
         description = "The packages to install for the fonts";
       };
+    };
+    headless = mkEnableOption "headless mode" // {
+      default = false;
+      description = "Whether to enable headless mode, no GUI programs will be available";
     };
     symlinks = mkOption {
       type = types.attrsOf types.str;
@@ -87,7 +91,7 @@
           # misc utilities for dotfiles written in rust
           custom.dotfiles-rs
         ]
-        ++ (lib.optional config.custom.helix.enable helix)
+        # ++ (lib.optional config.custom.helix.enable helix)
         # home-manager executable only on nixos
         ++ (lib.optional isNixOS home-manager)
         # handle fonts

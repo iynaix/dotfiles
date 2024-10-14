@@ -1,81 +1,92 @@
-{ pkgs, inputs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./languages.nix
     ./themes
   ];
-  home.packages = [ pkgs.lldb_18 ];
-  programs.helix = {
-    enable = true;
-    defaultEditor = true;
-    package = inputs.helix.packages.${pkgs.system}.helix;
-    settings = {
-      theme = "catppuccin-mocha";
-      editor = {
-        line-number = "relative";
-        idle-timeout = 0;
-        auto-format = true;
-        auto-completion = true;
-        mouse = false;
-        statusline = {
-          mode = {
-            normal = "NORMAL";
-            insert = "INSERT";
-            select = "SELECT";
+  options.custom = with lib; {
+    helix.enable = mkEnableOption "helix";
+  };
+  config = lib.mkIf config.custom.helix.enable {
+    home.packages = [ pkgs.lldb_18 ];
+    programs.helix = {
+      enable = true;
+      defaultEditor = true;
+      package = inputs.helix.packages.${pkgs.system}.helix;
+      settings = {
+        theme = "catppuccin-mocha";
+        editor = {
+          line-number = "relative";
+          idle-timeout = 0;
+          auto-format = true;
+          auto-completion = true;
+          mouse = false;
+          statusline = {
+            mode = {
+              normal = "NORMAL";
+              insert = "INSERT";
+              select = "SELECT";
+            };
+            left = [
+              "mode"
+              "separator"
+              "file-name"
+            ];
+            center = [ "spinner" ];
+            right = [
+              "diagnostics"
+              "selections"
+              "position"
+              "file-encoding"
+            ];
+            separator = "|";
           };
-          left = [
-            "mode"
-            "separator"
-            "file-name"
-          ];
-          center = [ "spinner" ];
-          right = [
-            "diagnostics"
-            "selections"
-            "position"
-            "file-encoding"
-          ];
-          separator = "|";
-        };
-        inline-diagnostics = {
-          cursor-line = "warning";
-          other-lines = "disable";
-          prefix-len = 5;
-          max-diagnostics = 10;
-        };
-        cursor-shape = {
-          insert = "bar";
-          normal = "block";
-          select = "underline";
-        };
-        indent-guides = {
-          render = true;
-          character = "▏"; # Some characters that work well: "▏", "┆", "┊", "⸽"
-          skip-levels = 1;
-        };
-        whitespace = {
-          render = {
-            space = "none";
-            tab = "all";
-            nbsp = "all";
-            newline = "none";
+          inline-diagnostics = {
+            cursor-line = "warning";
+            other-lines = "disable";
+            prefix-len = 5;
+            max-diagnostics = 10;
           };
-          characters = {
-            space = "·";
-            nbsp = "⍽";
-            nnbsp = "␣";
-            tab = "→";
-            newline = "⏎";
-            tabpad = "·";
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
           };
-        };
-        lsp = {
-          snippets = true;
-          display-messages = true;
-          display-inlay-hints = true;
-        };
-        file-picker = {
-          hidden = false;
+          indent-guides = {
+            render = true;
+            character = "▏"; # Some characters that work well: "▏", "┆", "┊", "⸽"
+            skip-levels = 1;
+          };
+          whitespace = {
+            render = {
+              space = "none";
+              tab = "none";
+              nbsp = "none";
+              newline = "none";
+            };
+            characters = {
+              space = "·";
+              nbsp = "⍽";
+              nnbsp = "␣";
+              tab = "→";
+              newline = "⏎";
+              tabpad = "·";
+            };
+          };
+          lsp = {
+            snippets = true;
+            display-messages = true;
+            display-inlay-hints = true;
+          };
+          file-picker = {
+            hidden = false;
+          };
         };
       };
     };

@@ -39,6 +39,65 @@
         },
         "version": "ddb0d5dbc83960d0c834d2a4dcb7f541474cb854"
     },
+    "wallust": {
+        "cargoLocks": null,
+        "date": "2024-10-13",
+        "extract": null,
+        "name": "wallust",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "0d452c203c01e89ee80d32f605329118ffa0db44",
+            "sha256": "sha256-Tad+zyhmTr734GEW0A4SNrfWzqcL0gLFsM6MoMrV17k=",
+            "type": "git",
+            "url": "https://codeberg.org/explosion-mental/wallust"
+        },
+        "version": "0d452c203c01e89ee80d32f605329118ffa0db44"
+    },
+    "yazi-plugins": {
+        "cargoLocks": null,
+        "date": "2024-10-14",
+        "extract": null,
+        "name": "yazi-plugins",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "yazi-rs",
+            "repo": "plugins",
+            "rev": "7715b94be546768e31b1c0ab4b32b84656b03fe5",
+            "sha256": "sha256-YtOoe0QfR8MZLSUSuAdAksqvOAb5/oTcI9UpYvRKAIk=",
+            "type": "github"
+        },
+        "version": "7715b94be546768e31b1c0ab4b32b84656b03fe5"
+    },
+    "yazi-zfs": {
+        "cargoLocks": null,
+        "date": "2024-10-11",
+        "extract": null,
+        "name": "yazi-zfs",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "iynaix",
+            "repo": "zfs.yazi",
+            "rev": "dffe8db6858918ebb0d28088339b5a65d97cea05",
+            "sha256": "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=",
+            "type": "github"
+        },
+        "version": "dffe8db6858918ebb0d28088339b5a65d97cea05"
+    },
     "yt-dlp": {
         "cargoLocks": null,
         "date": null,
@@ -58,25 +117,5 @@
             "type": "github"
         },
         "version": "2024.10.07"
-    },
-    "zfs-yazi": {
-        "cargoLocks": null,
-        "date": "2024-10-11",
-        "extract": null,
-        "name": "zfs-yazi",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "iynaix",
-            "repo": "zfs.yazi",
-            "rev": "dffe8db6858918ebb0d28088339b5a65d97cea05",
-            "sha256": "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=",
-            "type": "github"
-        },
-        "version": "dffe8db6858918ebb0d28088339b5a65d97cea05"
     }
 }

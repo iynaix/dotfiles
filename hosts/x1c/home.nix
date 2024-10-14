@@ -21,6 +21,7 @@
       }
     ];
 
+    helix.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;
     deadbeef.enable = true;

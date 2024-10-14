@@ -79,11 +79,10 @@ fn get_start_time(content: &str) -> f32 {
         .find(|line| line.starts_with("start="))
         .expect("no start time found");
 
-    let (_, time) = start_line
+    start_line
         .rsplit_once('=')
-        .unwrap_or_else(|| panic!("invalid start time: {start_line}"));
-    time.parse()
-        .unwrap_or_else(|_| panic!("invalid start time: {time}"))
+        .and_then(|(_, time)| time.parse().ok())
+        .expect("invalid start time")
 }
 
 /// gets the duration of a video in seconds
@@ -103,21 +102,15 @@ where
     let duration = ffmpeg
         .iter()
         .find(|line| line.contains("Duration: "))
-        .expect("no duration found")
-        .rsplit_once("Duration: ")
-        .expect("could not extract duration")
-        .1;
-
-    let duration = duration
-        .split_once(',')
-        .unwrap_or_else(|| panic!("invalid duration: {duration}"))
-        .0
-        .split(':')
-        .map(|t| {
-            t.parse::<f32>()
-                .unwrap_or_else(|_| panic!("invalid duration: {duration}"))
+        .and_then(|line| line.rsplit_once("Duration: "))
+        .and_then(|(_, duration)| duration.split_once(','))
+        .map(|(duration, _)| {
+            duration
+                .split(':')
+                .filter_map(|t| t.parse::<f32>().ok())
+                .collect_vec()
         })
-        .collect_vec();
+        .unwrap_or_default();
 
     match duration.len() {
         1 => duration[0],

@@ -5,7 +5,7 @@
   pkgs,
   ...
 }:
-{
+lib.mkIf (!config.custom.headless) {
   home.packages = with pkgs; [
     nemo-fileroller
     nemo-with-extensions
@@ -29,7 +29,7 @@
         "mimeapps.list".force = true;
       }
       # other OSes seem to override this file
-      // lib.mkIf (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
+      // lib.optionalAttrs (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
   };
 
   gtk.gtk3.bookmarks =

@@ -24,17 +24,17 @@ in
 
     waybar = {
       enable = mkEnableOption "waybar" // {
-        default = config.custom.hyprland.enable;
+        default = config.custom.hyprland.enable && !config.custom.headless;
       };
       config = mkOption {
         type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
-      inversed_classes = mkOption {
+      complementary_classes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "List of waybar classes to inverse";
+        description = "List of waybar classes to use the complementary accent color";
       };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
         default = host == "desktop";
@@ -230,7 +230,7 @@ in
         start_hidden = cfg.hidden;
       };
 
-      waybar.inversed_classes = [
+      waybar.complementary_classes = [
         "idle_inhibitor.activated"
         "network.disconnected"
         "pulseaudio.muted"
@@ -335,12 +335,12 @@ in
                     padding-right: 16px;
                   }
                 ''
-                # add inversed classes to be modified by hypr-wallpaper later
+                # add complementary classes to be modified by hypr-wallpaper at the bottom
                 + lib.concatMapStringsSep "\n" (class: ''
                   ${mkModuleClassName class} {
-                    color: {{color4}}; /* inverse */
+                    color: {{color4}}; /* complementary */
                   }
-                '') cfg.inversed_classes
+                '') cfg.complementary_classes
                 # additional css at the end for highest priority
                 + cfg.extraCss;
 

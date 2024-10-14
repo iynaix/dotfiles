@@ -54,7 +54,7 @@ in
               wallpapers-backup
               ${rsync wallpapers_dir}
 
-              if [ "${remote}" == "elias-ainsworth-framework" ]; then
+              if [ "${remote}" == "iynaix-framework" ]; then
                   ${rsync rclip_dir}
               fi
             '';
@@ -170,9 +170,8 @@ in
           globalSection = {
             csv_path = "${wallpapers_dir}/wallpapers.csv";
             wallpapers_path = wallpapers_dir;
-            min_width = 3440; # ultrawide width
-            # min_height = 1504; # framework height
-            min_height = 900; # t450 height
+            min_width = 3840; # 4k width
+            min_height = 2560; # vertical 1440p
             show_faces = true;
           } // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "hypr-wallpaper $1"; };
 

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  repo_url = "https://raw.githubusercontent.com/elias-ainsworth/dotfiles";
+  repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   user = "nixos";
   mkIso =
     nixpkgs: isoPath:
@@ -21,17 +21,17 @@ let
               systemPackages =
                 [
                   (pkgs.writeShellApplication {
-                    name = "thorneos-install";
+                    name = "iynaixos-install";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/install.sh)";
                   })
                   (pkgs.writeShellApplication {
-                    name = "thorneos-recover";
+                    name = "iynaixos-recover";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                   (pkgs.writeShellApplication {
-                    name = "thorneos-reinstall";
+                    name = "iynaixos-reinstall";
                     runtimeInputs = [ pkgs.curl ];
                     text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
@@ -53,6 +53,10 @@ let
                 y = "yazi";
               };
             };
+
+            # use nmtui instead of wpa_supplicant for minimal iso
+            networking.wireless.enable = false;
+            networking.networkmanager.enable = true;
 
             programs = {
               # bye bye nano
@@ -119,8 +123,8 @@ let
     };
 in
 {
-  kde-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
-  minimal-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
+  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
+  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
   kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma5";
   minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
 }

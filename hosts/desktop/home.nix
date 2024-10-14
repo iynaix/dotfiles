@@ -6,6 +6,7 @@ _: {
         width = 3440;
         height = 1440;
         refreshRate = 144;
+        vrr = true;
         position = "1440x1080";
         workspaces = [
           1
@@ -28,9 +29,10 @@ _: {
       }
       {
         name = "HDMI-A-1";
-        width = 1920;
-        height = 1080;
+        width = 3840;
+        height = 2160;
         position = "1754x0";
+        scale = 2;
         workspaces = [
           8
           9

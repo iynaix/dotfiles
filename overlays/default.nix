@@ -27,7 +27,7 @@ in
       custom =
         (prev.custom or { })
         // {
-          inherit (sources) zfs-yazi;
+          inherit (sources) yazi-plugins yazi-zfs;
         }
         // (import ../packages {
           inherit (prev) pkgs;

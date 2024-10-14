@@ -1,4 +1,5 @@
-_: {
+{ config, lib, ... }:
+lib.mkIf (!config.custom.headless) {
   programs.pqiv = {
     enable = true;
     settings = {

@@ -1,6 +1,7 @@
 _: {
   programs.direnv = {
     enable = true;
+    silent = true;
     nix-direnv.enable = true;
   };
 
@@ -12,13 +13,8 @@ _: {
     };
   };
 
-  home = {
-    # silence direnv
-    sessionVariables.DIRENV_LOG_FORMAT = "";
-  };
-
   custom.shell.packages = {
-    mkdevenv = ''nix flake init --template github:elias-ainsworth/dotfiles#"$1"'';
+    mkdevenv = ''nix flake init --template github:iynaix/dotfiles#"$1"'';
     rmdevenv = ''rm .direnv .devenv'';
     rmdirenv = ''rm .direnv .devenv'';
   };

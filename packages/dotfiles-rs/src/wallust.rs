@@ -40,7 +40,7 @@ pub fn apply_theme(theme: &str) {
 }
 
 fn refresh_zathura() {
-    if let Some(zathura_pid_raw) = execute::command_args!(
+    if let Some(zathura_pid) = execute::command_args!(
         "dbus-send",
         "--print-reply",
         "--dest=org.freedesktop.DBus",
@@ -50,20 +50,18 @@ fn refresh_zathura() {
     .execute_stdout_lines()
     .iter()
     .find(|line| line.contains("org.pwmt.zathura"))
+    .and_then(|zathura_pid_raw| zathura_pid_raw.split('"').max_by_key(|s| s.len()))
     {
-        if let Some(zathura_pid) = zathura_pid_raw.split('"').max_by_key(|s| s.len()) {
-            // send message to zathura via dbus
-            execute::command_args!(
-                "dbus-send",
-                "--type=method_call",
-                &format!("--dest={zathura_pid}"),
-                "/org/pwmt/zathura",
-                "org.pwmt.zathura.ExecuteCommand",
-                "string:source",
-            )
-            .execute()
-            .ok();
-        }
+        execute::command_args!(
+            "dbus-send",
+            "--type=method_call",
+            &format!("--dest={zathura_pid}"),
+            "/org/pwmt/zathura",
+            "org.pwmt.zathura.ExecuteCommand",
+            "string:source",
+        )
+        .execute()
+        .ok();
     }
 }
 
@@ -250,7 +248,13 @@ pub fn apply_colors() {
 
 /// runs wallust with options from wallpapers.csv
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
-    let mut wallust = execute::command_args!("wallust", "run", "--no-cache", "--check-contrast");
+    let mut wallust = execute::command_args!(
+        "wallust",
+        "run",
+        "--no-cache",
+        "--check-contrast",
+        "--dynamic-threshold"
+    );
 
     // normalize the options for wallust
     if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {
@@ -312,24 +316,24 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
 }
 
 pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
-    // get inverse color for inversed module classes
-    let inverse = accent.inverse();
+    // get complementary color for complementary module classes
+    let complementary = accent.complementary();
 
     let css_path = full_path("~/.config/waybar/style.css");
     let mut css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
 
-    // replace old foreground color with new inverse color
+    // replace old foreground color with new complementary color
     css = css.replace(
         &nixcolors.special.foreground.to_hex_str(),
         &accent.to_hex_str(),
     );
 
-    // replace inverse classes
+    // replace complementary classes
     css = css
         .lines()
         .map(|line| {
-            if line.ends_with("/* inverse */") {
-                format!("color: {}; /* inverse */", inverse.to_hex_str())
+            if line.ends_with("/* complementary */") {
+                format!("color: {}; /* complementary */", complementary.to_hex_str())
             } else {
                 line.to_string()
             }

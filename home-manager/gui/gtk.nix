@@ -40,7 +40,7 @@
     let
       inherit (config.custom.gtk) accents defaultAccent;
     in
-    {
+    lib.mkIf (!config.custom.headless) {
       home = {
         pointerCursor = {
           package = pkgs.simp1e-cursors;
@@ -86,7 +86,7 @@
           };
         };
         iconTheme = {
-          name = "Tela-${defaultAccent}-dark";
+          name = "Tela-${defaultAccent}";
           package = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
         };
         font = {

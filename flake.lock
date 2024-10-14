@@ -427,11 +427,11 @@
         "pre-commit-hooks": "pre-commit-hooks_6"
       },
       "locked": {
-        "lastModified": 1728385239,
-        "narHash": "sha256-/rKMkOPNIjfrQDQ+XlGGLH0iLT/wYtdQrBY4rH49IzM=",
+        "lastModified": 1728740426,
+        "narHash": "sha256-Y7bHzOlhA3jSG0zewmrAxFeeiRIK6aASlMyW6IjB0ws=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "f16bfde40bb9df8f9fd88bd3a5036a4a99c09bb1",
+        "rev": "ef61728d91ad5eb91f86cdbcc16070602e7afa16",
         "type": "github"
       },
       "original": {
@@ -544,11 +544,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1728809910,
-        "narHash": "sha256-hG4klxVOUGM567YN3jhq5UjHqpfMPHfVTYWuitdq9qY=",
+        "lastModified": 1728878599,
+        "narHash": "sha256-+h/cfPCUZn08vs+TAII3Is9M/bIMo1K89ZrBhEOu9dE=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "894c1045607011c9d05cd2228d55d6cede3f2090",
+        "rev": "a864309f53a22a8df2e0822daa61a9ee5584782a",
         "type": "gitlab"
       },
       "original": {
@@ -2954,11 +2954,11 @@
         "systems": "systems_11"
       },
       "locked": {
-        "lastModified": 1728440204,
-        "narHash": "sha256-hvhhCWwAvo6ObKKB74j60DiPDeEVKg+nMOqHxEF0fhM=",
+        "lastModified": 1728879375,
+        "narHash": "sha256-wvh1/Mo1T0sshh9838nK3hyPJgRhXRYhEeYFXcHGkEI=",
         "owner": "iynaix",
         "repo": "wfetch",
-        "rev": "119be275dbb0da13618f5521ff7d70d6b5358115",
+        "rev": "ed577b2a2fa9b6a76259c7292ea17621fb36ecce",
         "type": "github"
       },
       "original": {
