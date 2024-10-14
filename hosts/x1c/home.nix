@@ -22,6 +22,7 @@
     ];
 
     helix.enable = true;
+    neovim.enable = false;
     pathofbuilding.enable = true;
     rclip.enable = true;
     deadbeef.enable = true;
