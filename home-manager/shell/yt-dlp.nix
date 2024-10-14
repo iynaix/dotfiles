@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
   mkFormat =
-    height: "bestvideo[height<=${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best";
+    height: ''"bestvideo[height<=${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"'';
 
   # use positional arguments if provided, otherwise use yt.txt
   mkYtDlpWrapper = args: {
@@ -11,9 +11,9 @@ let
           [[ "$1" == -* ]]
       }
 
-      has_positional=false
-      read -ra args <<< "${args}"
+      args=(${args})
 
+      has_positional=false
       for arg in "$@"; do
           if ! is_flag "$arg"; then
               has_positional=true
@@ -59,11 +59,11 @@ in
   };
 
   custom.shell.packages = {
-    yt1080 = mkYtDlpWrapper (mkFormat 1080);
+    yt1080 = mkYtDlpWrapper "--format ${mkFormat 1080}";
     ytdl = mkYtDlpWrapper "--no-cache";
     ytaudio = mkYtDlpWrapper "--audio-format mp3 --extract-audio";
     ytsub = mkYtDlpWrapper "--write-auto-sub --sub-lang='en,eng' --convert-subs srt";
-    ytsubonly = mkYtDlpWrapper "--skip-download --write-subs --write-auto-sub --sub-lang='en,eng' --convert-subs srt ";
+    ytsubonly = mkYtDlpWrapper "--write-auto-sub --sub-lang='en,eng' --convert-subs srt --skip-download --write-subs";
     ytplaylist = mkYtDlpWrapper "--output '%(playlist_index)d - %(title)s.%(ext)s'";
   };
 }

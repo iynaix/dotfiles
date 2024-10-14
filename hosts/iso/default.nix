@@ -15,7 +15,7 @@ let
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
         inputs.home-manager.nixosModules.home-manager
         (
-          { pkgs, ... }:
+          { config, pkgs, ... }:
           {
             environment = {
               systemPackages =
@@ -53,6 +53,26 @@ let
                 y = "yazi";
               };
             };
+
+            # use nmtui instead of wpa_supplicant for minimal iso
+            networking.wireless.enable = false;
+            networking.networkmanager.enable = true;
+
+            # update greeting for iso to suggest networkmanager
+            services.getty.helpLine =
+              ''
+                The "nixos" and "root" accounts have empty passwords.
+
+                To log in over ssh you must set a password for either "nixos" or "root"
+                with `passwd` (prefix with `sudo` for "root"), or add your public key to
+                /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
+
+                If you need a wireless connection, use `nmtui`.
+              ''
+              + lib.optionalString config.services.xserver.enable ''
+                Type `sudo systemctl start display-manager' to
+                start the graphical user interface.
+              '';
 
             programs = {
               # bye bye nano
@@ -119,8 +139,8 @@ let
     };
 in
 {
-  kde-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
-  minimal-iso-stable = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
+  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
+  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
   kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma5";
   minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
 }

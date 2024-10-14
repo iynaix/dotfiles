@@ -8,6 +8,7 @@
         height = 1920;
         refreshRate = 120;
         scale = 2;
+        vrr = true;
         workspaces = [
           1
           2
@@ -26,17 +27,12 @@
     pathofbuilding.enable = true;
     rclip.enable = true;
 
-    terminal.size = 12;
-
     persist = {
       home.directories = [ "Downloads" ];
     };
   };
 
   wayland.windowManager.hyprland.settings = {
-    misc = {
-      vrr = 1; # variable refresh rate
-    };
     exec-once = [
       # don't blind me on startup
       "${lib.getExe pkgs.brightnessctl} s 25%"

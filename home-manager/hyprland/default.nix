@@ -64,6 +64,7 @@ in
               type = int;
               default = 1;
             };
+            vrr = mkEnableOption "Variable Refresh Rate";
             vertical = mkOption {
               type = bool;
               description = "Is the display vertical?";
@@ -114,6 +115,7 @@ in
                   (toString d.scale)
                 ]
                 ++ lib.optionals d.vertical [ "transform,1" ]
+                ++ lib.optionals d.vrr [ "vrr,1" ]
               )
             ))
             ++ [ ",preferred,auto,auto" ];

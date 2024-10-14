@@ -97,16 +97,34 @@ in
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
-    custom.shell.packages = {
-      # NOTE: rofi-power-menu only works for powermenuType = 4!
-      rofi-power-menu = {
-        runtimeInputs = with pkgs; [
-          rofi-wayland
-          custom.rofi-themes
-        ];
-        text = lib.readFile ./rofi-power-menu.sh;
+    custom.shell.packages =
+      {
+        # NOTE: rofi-power-menu only works for powermenuType = 4!
+        rofi-power-menu = {
+          runtimeInputs = with pkgs; [
+            rofi-wayland
+            custom.rofi-themes
+          ];
+          text = lib.readFile ./rofi-power-menu.sh;
+        };
+      }
+      # wifi
+      // lib.optionalAttrs config.custom.wifi.enable {
+        rofi-wifi-menu = {
+          name = "rofi-wifi-menu";
+          runtimeInputs = with pkgs; [
+            libnotify
+            networkmanager
+            config.programs.rofi.package
+          ];
+          text = builtins.readFile (
+            pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
+              hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
+            }
+          );
+        };
       };
-    };
 
     # add blur for rofi shutdown
     wayland.windowManager.hyprland.settings = {
