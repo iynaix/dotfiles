@@ -18,6 +18,10 @@ let
     path = ./rust-stable;
     description = "Rust (latest stable from fenix) dev environment";
   };
+  verilog = {
+    path = ./verilog;
+    description = "Shitty Verilog dev environment";
+  };
 in
 {
   inherit
@@ -25,10 +29,12 @@ in
     python
     rust
     rust-stable
+    verilog
     ;
   js = javascript;
   ts = javascript;
   py = python;
   rs = rust;
   rs-stable = rust-stable;
+  sv = verilog;
 }
