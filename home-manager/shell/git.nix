@@ -106,7 +106,7 @@ in
       gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
       gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
       gpatch = "git diff --no-ext-diff";
-      groot = "cd $(git rev-parse - -show-toplevel)";
+      gr = "cd $(git rev-parse - -show-toplevel)"; # cd back to root
       grh = "git reset --hard";
       gri = "git rebase --interactive";
       gst = "git status -s -b && echo && git log | head -n 1";

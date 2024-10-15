@@ -219,11 +219,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1728740426,
-        "narHash": "sha256-Y7bHzOlhA3jSG0zewmrAxFeeiRIK6aASlMyW6IjB0ws=",
+        "lastModified": 1728993896,
+        "narHash": "sha256-1GVv42nsG/oMFircYlgEyG3Rb0Cr6vJVwy1YvRx6XHI=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "ef61728d91ad5eb91f86cdbcc16070602e7afa16",
+        "rev": "dc7ebaf872306526ea6dcbb2122acca792680701",
         "type": "github"
       },
       "original": {
@@ -310,11 +310,11 @@
         "pre-commit-hooks": "pre-commit-hooks_4"
       },
       "locked": {
-        "lastModified": 1728452860,
-        "narHash": "sha256-YtknslVeAXyK3zq6AoazydZrC8tisiZzvHsvZJAqMRk=",
+        "lastModified": 1728740426,
+        "narHash": "sha256-Y7bHzOlhA3jSG0zewmrAxFeeiRIK6aASlMyW6IjB0ws=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "e7a0bc559f5a66aaa42f5028db6162c4dd4587eb",
+        "rev": "ef61728d91ad5eb91f86cdbcc16070602e7afa16",
         "type": "github"
       },
       "original": {
@@ -523,11 +523,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1728878599,
-        "narHash": "sha256-+h/cfPCUZn08vs+TAII3Is9M/bIMo1K89ZrBhEOu9dE=",
+        "lastModified": 1728965006,
+        "narHash": "sha256-TXBxJMGC6P+cn5La/lIgVzb9ETutsOI3A3urHihB7FA=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "a864309f53a22a8df2e0822daa61a9ee5584782a",
+        "rev": "f4947cf2d1a469b23fee54ad948c539f6aa431a7",
         "type": "gitlab"
       },
       "original": {
@@ -894,11 +894,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1728525360,
-        "narHash": "sha256-o1WlZ1XJhAHFZXtBDo3n7TsKQyIUovdNQJSa1uQYpp0=",
+        "lastModified": 1728979251,
+        "narHash": "sha256-QJksh/mauRa7kcfbVnZVq9bkx0tmRyxdtr3Wsq5Zfdk=",
         "owner": "iynaix",
         "repo": "focal",
-        "rev": "8c7ad556f76cdd97eef98068df6c7f1191457c75",
+        "rev": "627a9168d160f5ea510a0cd77547b02b9384181d",
         "type": "github"
       },
       "original": {
@@ -1034,11 +1034,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728791962,
-        "narHash": "sha256-nr5QiXwQcZmf6/auC1UpX8iAtINMtdi2mH+OkqJQVmU=",
+        "lastModified": 1728903686,
+        "narHash": "sha256-ZHFrGNWDDriZ4m8CA/5kDa250SG1LiiLPApv1p/JF0o=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "64c6325b28ebd708653dd41d88f306023f296184",
+        "rev": "e1aec543f5caf643ca0d94b6a633101942fd065f",
         "type": "github"
       },
       "original": {
@@ -1976,11 +1976,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1728829992,
-        "narHash": "sha256-722PdOQ4uTTAOyS3Ze4H7LXDNVi9FecKbLEvj3Qu0hM=",
+        "lastModified": 1728985146,
+        "narHash": "sha256-Kopqg/ZYUxle3wNruPmISv7uU/iMJQ4/wEqx4rGG4xA=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "619e24366e8ad34230d65a323d26ca981bfa6927",
+        "rev": "25b8d2ab20fbc4a291e83a490382d503c999ab3a",
         "type": "github"
       },
       "original": {
@@ -2453,11 +2453,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1728879375,
-        "narHash": "sha256-wvh1/Mo1T0sshh9838nK3hyPJgRhXRYhEeYFXcHGkEI=",
+        "lastModified": 1729005484,
+        "narHash": "sha256-+Lmd0MaL8THaeCsJVspVqi19+QDFb0dXpUNPeRDObG4=",
         "owner": "iynaix",
         "repo": "wfetch",
-        "rev": "ed577b2a2fa9b6a76259c7292ea17621fb36ecce",
+        "rev": "1e47172ffcb0866c8a7049b8e4a42c4e4e4ff6ec",
         "type": "github"
       },
       "original": {

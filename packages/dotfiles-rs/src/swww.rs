@@ -123,7 +123,10 @@ impl Swww {
 
         // HACK: get swww to update the scale, or it thinks it's still 1.0???
         if (mon.scale - 1.0).abs() > f32::EPSILON {
-            execute::command_args!("swww", "clear").spawn().ok();
+            execute::command_args!("swww", "clear", "--outputs")
+                .arg(&mon.name)
+                .spawn()
+                .ok();
         }
 
         execute::command_args!("swww", "img", "--no-resize")

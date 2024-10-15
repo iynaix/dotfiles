@@ -42,7 +42,7 @@ lib.mkIf config.custom.hyprland.enable {
   custom.waybar = {
     config = {
       "custom/focal" = {
-        exec = ''focal-waybar --signal ${toString signum} --recording "󰑋"'';
+        exec = ''focal-waybar --signal ${toString signum} --recording "󰑋" --interval 2'';
         format = "{}";
         # hide-empty-text = true;
         # return-type = "json";

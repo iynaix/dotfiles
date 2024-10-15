@@ -26,6 +26,7 @@
 
     pathofbuilding.enable = true;
     rclip.enable = true;
+    waybar.hidden = true;
 
     persist = {
       home.directories = [ "Downloads" ];

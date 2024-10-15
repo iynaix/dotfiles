@@ -46,8 +46,10 @@ fn main() {
         .filter(|l| !l.is_empty() && !l.starts_with('#'))
         .collect();
 
-    walk_persist(&PathBuf::from("/persist"), &persist_paths).unwrap_or_else(|e| {
-        eprintln!("An error has occured: {e}");
-        std::process::exit(1);
-    });
+    for root in ["/persist", "/cache"] {
+        walk_persist(&PathBuf::from(root), &persist_paths).unwrap_or_else(|e| {
+            eprintln!("An error has occured: {e}");
+            std::process::exit(1);
+        });
+    }
 }
