@@ -11,7 +11,7 @@ in
 {
   options.custom = with lib; {
     kitty.enable = mkEnableOption "kitty" // {
-      default = isNixOS;
+      default = isNixOS && !config.custom.headless;
     };
   };
 
