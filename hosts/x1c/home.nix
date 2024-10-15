@@ -25,6 +25,8 @@
     neovim.enable = false;
     pathofbuilding.enable = true;
     rclip.enable = true;
+    # music-player is currently broken
+    music-player.enable = false;
     deadbeef.enable = true;
     gaming.enable = false;
 

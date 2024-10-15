@@ -88,9 +88,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # music-player = {
-    #   url = "github:tsirysndr/music-player";
-    # };
+    music-player = {
+      url = "github:tsirysndr/music-player";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # NOTE: This will require your git SSH access to the repo.
     # disable ghostty by commenting out the following input and setting

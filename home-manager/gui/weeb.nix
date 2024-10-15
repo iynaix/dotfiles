@@ -16,7 +16,7 @@
           # the poor T450 can't take the graphics load shaders put on it
           player_arguments = if host != "t450" then "--profile=anime" else "";
           show_adult_content = "false";
-          provider = "yugen";
+          provider = "allanime";
           download_dir = "$HOME/Anime";
           manga_dir = "$HOME/Books/Manga";
           manga_format = "image";
@@ -34,6 +34,7 @@
       };
       custom.persist = {
         home.directories = [
+          "Anime"
           ".local/share/jerry"
         ];
       };

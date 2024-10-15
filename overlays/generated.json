@@ -72,11 +72,11 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "7715b94be546768e31b1c0ab4b32b84656b03fe5",
-            "sha256": "sha256-YtOoe0QfR8MZLSUSuAdAksqvOAb5/oTcI9UpYvRKAIk=",
+            "rev": "e01bc1690a5ba38f72fa25f6382abe7db9aa4708",
+            "sha256": "sha256-/ErlZMlUDc2vga970q3khaqlfI2HI/qOcRxU+OrHrAc=",
             "type": "github"
         },
-        "version": "7715b94be546768e31b1c0ab4b32b84656b03fe5"
+        "version": "e01bc1690a5ba38f72fa25f6382abe7db9aa4708"
     },
     "yazi-zfs": {
         "cargoLocks": null,
