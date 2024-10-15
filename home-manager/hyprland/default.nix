@@ -1,6 +1,7 @@
 {
   config,
   host,
+  inputs,
   isLaptop,
   isVm,
   lib,
@@ -85,7 +86,8 @@ in
     home = {
       packages = with pkgs; [
         # clipboard history
-        cliphist
+        # TODO: cliphist
+        inputs.nixpkgs-cliphist.legacyPackages.${system}.cliphist
         wl-clipboard
       ];
 

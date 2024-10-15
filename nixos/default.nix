@@ -25,6 +25,7 @@
     ./sonarr.nix
     ./sops.nix
     ./syncoid.nix
+    ./tlp.nix
     ./transmission.nix
     ./tty.nix
     ./users.nix

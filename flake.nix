@@ -14,6 +14,9 @@
 
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
 
+    # waiting for fix for https://github.com/NixOS/nixpkgs/issues/348819
+    nixpkgs-cliphist.url = "github:NixOS/nixpkgs/5633bcff0c6162b9e4b5f1264264611e950c8ec7";
+
     devenv.url = "github:cachix/devenv";
 
     impermanence.url = "github:nix-community/impermanence";
