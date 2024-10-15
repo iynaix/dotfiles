@@ -141,14 +141,21 @@ lib.mkMerge [
     programs.nixvim = {
       extraPlugins = with pkgs.vimPlugins; [ supermaven-nvim ];
       extraConfigLua = ''
-        require("supermaven-nvim").setup({})
+        require("supermaven-nvim").setup({
+          condition = function()
+            return string.match(vim.fn.expand("%:t"), "yt.txt")
+          end,
+          keymaps = {
+            accept_suggestion = "<Tab>",
+          },
+        })
       '';
     };
 
     custom.persist = {
       home.directories = [
         ".supermaven"
-        ".config/.supermaven"
+        ".local/share/supermaven"
       ];
     };
   })

@@ -1,5 +1,5 @@
 { config, lib, ... }:
-{
+lib.mkIf (!config.custom.headless) {
   programs = {
     zathura = {
       enable = true;

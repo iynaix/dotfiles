@@ -71,6 +71,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    tuido = {
+      url = "gitlab:Oglo12/tuido";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     jerry = {
       url = "github:justchokingaround/jerry";
       inputs.nixpkgs.follows = "nixpkgs";

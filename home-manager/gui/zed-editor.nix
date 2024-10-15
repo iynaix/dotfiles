@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 {
   home.packages = [ pkgs.zed-editor ];
-  # add password-store: gnome for keyring to work
-  # https://github.com/microsoft/vscode/issues/187338
   home.file.".config/zed/settings.json" = {
     force = true;
     text = ''

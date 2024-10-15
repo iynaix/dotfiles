@@ -124,8 +124,8 @@
         iosevka
         # geist-font
         maple-mono-NF
-        inputs.mamelon.packages.${system}.mamelon
-        inputs.kollektif.packages.${system}.kollektif
+        inputs.mamelon.packages.${system}.default
+        inputs.kollektif.packages.${system}.default
         (nerdfonts.override {
           fonts = [
             "Iosevka"

@@ -2822,6 +2822,7 @@
         "nixpkgs-stable": "nixpkgs-stable_3",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix",
+        "tuido": "tuido",
         "wfetch": "wfetch"
       }
     },
@@ -3169,6 +3170,26 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "tuido": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1703388704,
+        "narHash": "sha256-nzKdoNKMlpaUQogUZP/PoX8TxCEl1qCMXGEW8ZgMO5A=",
+        "owner": "Oglo12",
+        "repo": "tuido",
+        "rev": "44e2317088296f03a7c2954ad561bb366997fe8c",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "Oglo12",
+        "repo": "tuido",
+        "type": "gitlab"
       }
     },
     "umu": {

@@ -15,7 +15,7 @@ let
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
         inputs.home-manager.nixosModules.home-manager
         (
-          { pkgs, ... }:
+          { config, pkgs, ... }:
           {
             environment = {
               systemPackages =
@@ -58,6 +58,22 @@ let
             networking.wireless.enable = false;
             networking.networkmanager.enable = true;
 
+            # update greeting for iso to suggest networkmanager
+            services.getty.helpLine =
+              ''
+                The "nixos" and "root" accounts have empty passwords.
+
+                To log in over ssh you must set a password for either "nixos" or "root"
+                with `passwd` (prefix with `sudo` for "root"), or add your public key to
+                /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
+
+                If you need a wireless connection, use `nmtui`.
+              ''
+              + lib.optionalString config.services.xserver.enable ''
+                Type `sudo systemctl start display-manager' to
+                start the graphical user interface.
+              '';
+
             programs = {
               # bye bye nano
               nano.enable = false;
@@ -95,13 +111,11 @@ let
                   "https://hyprland.cachix.org"
                   "https://nix-community.cachix.org"
                   "https://ghostty.cachix.org"
-                  "https://tsirysndr.cachix.org"
                 ];
                 trusted-public-keys = [
                   "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
                   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
                   "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-                  "tsirysndr.cachix.org-1:fbGYj/T8+9oqrF2c3EaQ33lMqZdb5n81Mk2jRE+C4wA="
                 ];
               };
             };

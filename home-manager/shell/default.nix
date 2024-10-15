@@ -23,6 +23,7 @@
     ./shell.nix
     ./starship.nix
     ./tmux.nix
+    ./tuido.nix
     ./typescript.nix
     ./yazi.nix
     ./yt-dlp.nix

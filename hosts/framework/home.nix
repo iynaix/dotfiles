@@ -27,8 +27,6 @@
     pathofbuilding.enable = true;
     rclip.enable = true;
 
-    terminal.size = 12;
-
     persist = {
       home.directories = [ "Downloads" ];
     };
