@@ -9,7 +9,6 @@ _: {
     ./gtk.nix
     ./kitty.nix
     ./mpv.nix
-    ./music-player.nix
     ./nemo.nix
     ./obs-studio.nix
     ./pathofbuilding.nix
