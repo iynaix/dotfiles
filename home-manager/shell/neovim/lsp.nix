@@ -6,6 +6,7 @@ _: {
         servers = {
           bashls.enable = true;
           # ccls.enable = true; # c / c++
+          denols.enable = true;
           eslint.enable = true;
           jsonls.enable = true;
           # lua-ls.enable = true;

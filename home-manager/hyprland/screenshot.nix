@@ -63,9 +63,9 @@ lib.mkIf config.custom.hyprland.enable {
 
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
-      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
-      "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
+      "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows --freeze"
+      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows --freeze"
+      "$mod_CTRL, backslash, exec, focal image --area selection --ocr --freeze"
       ''ALT, backslash, exec, focal-waybar --toggle --signal ${toString signum} --recording "󰑋" --rofi --no-rounded-windows''
     ];
   };

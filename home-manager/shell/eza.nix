@@ -30,7 +30,7 @@ _: {
 
   programs.eza = {
     enable = true;
-    icons = true;
+    icons = "always";
     extraOptions = [
       "--group-directories-first"
       "--header"
