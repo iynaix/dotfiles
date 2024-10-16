@@ -7,51 +7,57 @@
 let
   cfg = config.custom.rofi;
   rofiThemes = pkgs.custom.rofi-themes;
-  launcherType = 2;
-  launcherStyle = 2;
-  powermenuType = 4;
-  powermenuStyle = 3;
-  powermenuDir = "${rofiThemes}/powermenu/type-${toString powermenuType}";
-  themeStyles =
-    if cfg.theme != null then
-      ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
-    else
-      ''
-        * {
-            background:     {{background}}{{ 60 | alpha_hexa }};
-            background-alt: {{color0}};
-            foreground:     {{foreground}};
-            selected:       {{color4}};
-            active:         {{color6}};
-            urgent:         {{color1}};
-        }
+  patchRasi =
+    name: rasiPath: overrideStyles:
+    let
+      themeStyles =
+        if cfg.theme != null then
+          ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
+        else
+          ''
+            *   {
+                background:     {{background}}{{ 60 | alpha_hexa }};
+                background-alt: {{color0}};
+                foreground:     {{foreground}};
+                selected:       {{color4}};
+                active:         {{color6}};
+                urgent:         {{color1}};
+            }
+          '';
+      # patch rasi here
+      out = pkgs.runCommand name { } ''
+        mkdir $out
+
+        output=$out/${name}
+
+        substitute ${rasiPath} $output \
+          --replace-quiet "@import" "// @import" \
+          --replace-quiet "" "" \
+          --replace-quiet "Iosevka Nerd Font" "DejaVu Sans"
+
+        # prepend
+        cat <<EOF | cat - $output > temp && mv temp $output
+            ${themeStyles}
+        EOF
+
+        # append
+        cat <<EOF >> $output
+          window {
+            width: ${toString cfg.width}px;
+          }
+
+          element normal.normal { background-color: transparent; }
+          inputbar { background-color: transparent; }
+          message { background-color: transparent; }
+          textbox { background-color: transparent; }
+
+          ${overrideStyles}
+        EOF
       '';
-
-  # replace the imports with preset theme / wallust
-  fixupRofiThemesRasi = rasiPath: overrideStyles: ''
-    ${themeStyles}
-    ${lib.replaceStrings
-      [
-        "@import"
-        ""
-      ]
-      [
-        "// @import"
-        ""
-      ]
-      (lib.readFile rasiPath)
-    }
-    window {
-      width: ${toString cfg.width}px;
-    }
-
-    element normal.normal { background-color: transparent; }
-    inputbar { background-color: transparent; }
-    message { background-color: transparent; }
-    textbox { background-color: transparent; }
-
-    ${overrideStyles}
-  '';
+    in
+    "${toString out}/${name}";
+  launcherPath = "${rofiThemes}/launchers/type-2/style-2.rasi";
+  powermenuDir = "${rofiThemes}/powermenu/type-4";
 in
 {
   options.custom = with lib; {
@@ -97,34 +103,10 @@ in
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
-    custom.shell.packages =
-      {
-        # NOTE: rofi-power-menu only works for powermenuType = 4!
-        rofi-power-menu = {
-          runtimeInputs = with pkgs; [
-            rofi-wayland
-            custom.rofi-themes
-          ];
-          text = lib.readFile ./rofi-power-menu.sh;
-        };
-      }
-      # wifi
-      // lib.optionalAttrs config.custom.wifi.enable {
-        rofi-wifi-menu = {
-          name = "rofi-wifi-menu";
-          runtimeInputs = with pkgs; [
-            libnotify
-            networkmanager
-            config.programs.rofi.package
-          ];
-          text = builtins.readFile (
-            pkgs.fetchurl {
-              url = "https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh";
-              hash = "sha256-CRDZE0296EY6FC5XxlfkXHq0X4Sr42/BrUo57W+VRjk=";
-            }
-          );
-        };
-      };
+    home.packages = [
+      # NOTE: rofi-power-menu only works for powermenuType = 4!
+      pkgs.custom.rofi-power-menu
+    ] ++ (lib.optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
     wayland.windowManager.hyprland.settings = {
@@ -144,7 +126,7 @@ in
     custom.wallust.templates = lib.mkIf config.programs.rofi.enable {
       # default launcher
       "rofi.rasi" = {
-        text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        text = patchRasi "rofi.rasi" launcherPath ''
           inputbar { background-color: transparent; }
           element normal.normal { background-color: transparent; }
         '';
@@ -153,7 +135,7 @@ in
 
       # generic single column rofi menu
       "rofi-menu.rasi" = {
-        text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        text = patchRasi "rofi-menu.rasi" launcherPath ''
           listview { columns: 1; }
           prompt { enabled: false; }
           textbox-prompt-colon { enabled: false; }
@@ -162,7 +144,7 @@ in
       };
 
       "rofi-menu-noinput.rasi" = {
-        text = fixupRofiThemesRasi "${rofiThemes}/launchers/type-${toString launcherType}/style-${toString launcherStyle}.rasi" ''
+        text = patchRasi "rofi-menu-noinput.rasi" launcherPath ''
           listview { columns: 1; }
           * { width: 1000; }
           window { height: 625; }
@@ -182,22 +164,20 @@ in
       };
 
       "rofi-power-menu.rasi" = {
-        text = lib.replaceStrings [ "Iosevka Nerd Font" ] [ "DejaVu Sans" ] (
-          fixupRofiThemesRasi "${powermenuDir}/style-${toString powermenuStyle}.rasi" ''
-            * { background-window: @background; } // darken background
-            window {
-              width: 1000px;
-              border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-            }
-            element normal.normal { background-color: var(background-normal); }
-            element selected.normal { background-color: @selected; }
-          ''
-        );
+        text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
+          * { background-window: @background; } // darken background
+          window {
+            width: 1000px;
+            border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+          }
+          element normal.normal { background-color: var(background-normal); }
+          element selected.normal { background-color: @selected; }
+        '';
         target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
       };
 
       "rofi-power-menu-confirm.rasi" = {
-        text = fixupRofiThemesRasi "${powermenuDir}/shared/confirm.rasi" ''
+        text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''
           element { background-color: transparent; }
           element normal.normal { background-color: transparent; }
         '';

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 dots="@dots@"
 hostname="@host@"
 nhArgs=()

@@ -8,6 +8,8 @@
 let
   cfg = config.custom.wallust;
   tomlFormat = pkgs.formats.toml { };
+  # checks if text is a path, assumes no spaces in path
+  isTemplatePath = s: (lib.hasPrefix "/" s) && !(lib.hasInfix " " s);
 in
 {
   options.custom = with lib; {
@@ -31,7 +33,7 @@ in
             options = {
               text = mkOption {
                 type = types.str;
-                description = "Content of the template file";
+                description = "Content of the template file / a template path within the nix store";
               };
               target = mkOption {
                 type = types.str;
@@ -68,19 +70,22 @@ in
           palette = "dark16";
           templates = lib.mapAttrs (
             filename:
-            { target, ... }:
+            { target, text, ... }:
             {
               inherit target;
-              template = filename;
+              template = if isTemplatePath text then text else filename;
             }
           ) cfg.templates;
         };
       }
       //
       # set xdg configFile text and on change for wallust templates
-      (lib.mapAttrs' (
-        template: { text, ... }: lib.nameValuePair "wallust/templates/${template}" { inherit text; }
-      ) cfg.templates);
+      (lib.pipe cfg.templates [
+        (lib.filterAttrs (_: template: !(isTemplatePath template.text)))
+        (lib.mapAttrs' (
+          template: { text, ... }: lib.nameValuePair "wallust/templates/${template}" { inherit text; }
+        ))
+      ]);
 
     custom.wallust.templates = {
       # misc information for nix
