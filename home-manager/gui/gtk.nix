@@ -105,6 +105,8 @@
         };
       };
 
+      qt.enable = true;
+
       # write theme accents into nix.json for rust to read
       custom.wallust.nixJson = {
         theme_accents = accents;

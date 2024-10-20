@@ -59,6 +59,16 @@ in
               fi
             '';
         };
+        # quick recropping of current wallpaper
+        wallpaper-recrop = {
+          runtimeInputs = [ pkgs.custom.dotfiles-rs ];
+          text = ''
+            ${lib.custom.useDirenv wallpapers_proj ''
+              cargo run --release --bin wallfacer "$(cat "$XDG_RUNTIME_DIR"/current_wallpaper)";
+              hypr-wallpaper --reload
+            ''}
+          '';
+        };
         # process wallpapers with upscaling and vertical crop
         wallfacer-add = {
           runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];

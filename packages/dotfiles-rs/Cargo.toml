@@ -13,13 +13,13 @@ dirs = "5.0.1"
 execute = "0.2.13"
 fast_image_resize = { version = "5.0.0", features = ["image", "rayon"] }
 hyprland = { version = "0.4.0-alpha.3" }
-image = "0.25.2"
+image = "0.25.4"
 itertools = "0.13.0"
 rand = "0.8.5"
 rayon = "1.10.0"
 regex = "1.11.0"
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = "1.0.128"
+serde = { version = "1.0.213", features = ["derive"] }
+serde_json = "1.0.132"
 wallust_themes = "1.0.0"
 
 [lints.rust]
@@ -34,6 +34,13 @@ must_use_candidate = { level = "allow", priority = 1 }
 nursery = "deny"
 option_if_let_else = { level = "allow", priority = 1 }
 unwrap_used = "deny"
+
+# faster image operations in dev
+[profile.dev.package.image]
+opt-level = 3
+
+[profile.dev.package.fast_image_resize]
+opt-level = 3
 
 [profile.release]
 strip = true

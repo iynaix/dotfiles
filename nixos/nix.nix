@@ -130,7 +130,7 @@ in
       # build and push config for laptop
       nsw-remote = ''
         pushd ${dots} > /dev/null
-        nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
+        nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${1:-framework}"
         popd > /dev/null
       '';
     };
@@ -152,7 +152,7 @@ in
         dates = "daily";
         options = "--delete-older-than 7d";
       };
-      package = pkgs.lix;
+      package = pkgs.nixVersions.latest;
       registry = {
         nixpkgs-master = {
           from = {
@@ -181,7 +181,7 @@ in
         experimental-features = [
           "nix-command"
           "flakes"
-          "repl-flake"
+          # "repl-flake"
         ];
         substituters = [
           "https://hyprland.cachix.org"

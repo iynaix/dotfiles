@@ -159,10 +159,6 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
     }
 }
 
-pub fn iso8601_filename() -> String {
-    chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
-}
-
 /// swaps the dimenions if the monitor is vertical
 pub fn vertical_dimensions(mon: &hyprland::data::Monitor) -> (i32, i32) {
     if mon.transform as u8 % 2 == 1 {

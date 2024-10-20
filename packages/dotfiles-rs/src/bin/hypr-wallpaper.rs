@@ -1,7 +1,5 @@
 use clap::{ArgGroup, CommandFactory, Parser};
-use dotfiles::{
-    full_path, generate_completions, iso8601_filename, nixinfo::NixInfo, wallpaper, ShellCompletion,
-};
+use dotfiles::{full_path, generate_completions, nixinfo::NixInfo, wallpaper, ShellCompletion};
 use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
@@ -9,7 +7,8 @@ use hyprland::{
     shared::HyprDataActive,
 };
 use itertools::Itertools;
-use std::{collections::HashSet, path::PathBuf};
+use std::collections::HashMap;
+use std::path::PathBuf;
 
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
@@ -91,35 +90,17 @@ fn show_pqiv() {
 }
 
 fn show_history() {
-    let wallpaper_history = full_path("~/Pictures/wallpaper_history");
-
-    // remove broken and duplicate symlinks
-    let mut uniq_history = HashSet::new();
-    let mut final_history = Vec::new();
-
-    for path in std::fs::read_dir(&wallpaper_history)
-        .expect("failed to read wallpaper_history directory")
-        .filter_map(|entry| entry.ok().map(|e| e.path()))
-        .sorted_by(|a, b| b.file_name().cmp(&a.file_name()))
-        // ignore the current wallpaper
-        .skip(1)
-    {
-        if let Ok(resolved) = std::fs::read_link(&path) {
-            if uniq_history.contains(&resolved) {
-                std::fs::remove_file(path).expect("failed to remove duplicate symlink");
-            } else {
-                uniq_history.insert(resolved.clone());
-                final_history.push(path);
-            }
-        } else {
-            std::fs::remove_file(path).expect("failed to remove broken symlink");
-        }
-    }
+    let history = wallpaper::history();
+    let history = history
+        .iter()
+        .skip(1) // skip the current wallpaper
+        .map(|(path, _)| path)
+        .collect_vec();
 
     let pqiv = format!(
         "{} pqiv {}",
         pqiv_float_rule(),
-        final_history
+        history
             .iter()
             .map(|p| format!("'{}'", p.display()))
             .collect_vec()
@@ -129,15 +110,41 @@ fn show_history() {
     dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
 }
 
-fn write_wallpaper_history(wallpaper: &str) {
-    // write the image as a timestamp to a wallpaper_history directory
-    let wallpaper_history = full_path("~/Pictures/wallpaper_history");
-    std::fs::create_dir_all(&wallpaper_history)
-        .expect("failed to create wallpaper_history directory");
+fn write_wallpaper_history(wallpaper: PathBuf) {
+    // not a wallpaper from the wallpapers dir
+    if wallpaper.parent() != Some(&wallpaper::dir()) {
+        return;
+    }
 
-    let target = wallpaper_history.join(iso8601_filename());
-    std::os::unix::fs::symlink(wallpaper, target)
-        .expect("unable to create wallpaper history symlink");
+    let mut history: HashMap<_, _> = wallpaper::history().into_iter().collect();
+    // insert or update timestamp
+    history.insert(wallpaper, chrono::Local::now().into());
+
+    // update the csv
+    let history_csv = full_path("~/Pictures/wallpapers_history.csv");
+    let writer = std::io::BufWriter::new(
+        std::fs::File::create(history_csv).expect("could not create wallpapers_history.csv"),
+    );
+    let mut wtr = csv::WriterBuilder::new()
+        .has_headers(false)
+        .from_writer(writer);
+
+    for (path, dt) in &history {
+        let filename = path
+            .file_name()
+            .expect("could not get timestamp filename")
+            .to_str()
+            .expect("could not convert filename to str");
+
+        let row = [
+            filename,
+            &dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+        ];
+
+        wtr.write_record(row)
+            .unwrap_or_else(|_| panic!("could not write {row:?}"));
+    }
+    wtr.flush().expect("could not flush wallpapers_history.csv");
 }
 
 fn main() {
@@ -198,6 +205,6 @@ fn main() {
     wallpaper::set(&wallpaper, &args.transition);
 
     if !args.reload && !args.no_history {
-        write_wallpaper_history(&wallpaper);
+        write_wallpaper_history(PathBuf::from(wallpaper));
     }
 }

@@ -238,3 +238,34 @@ impl<'de> Deserialize<'de> for WallInfo {
         deserializer.deserialize_struct("WallInfo", FIELDS, WallInfoVisitor)
     }
 }
+
+pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
+    let Ok(history_csv) = std::fs::File::open(full_path("~/Pictures/wallpapers_history.csv"))
+    else {
+        return Vec::new();
+    };
+
+    let mut rdr = csv::ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(std::io::BufReader::new(history_csv));
+
+    rdr.records()
+        .flatten()
+        .filter_map(|row| {
+            let (Some(fname), Some(dt_str)) = (row.get(0), row.get(1)) else {
+                return None;
+            };
+
+            let path = dir().join(fname);
+            if !path.exists() {
+                return None;
+            }
+
+            chrono::DateTime::parse_from_rfc3339(dt_str)
+                .ok()
+                .map(|dt| (path, dt))
+        })
+        .sorted_by_key(|(_, dt)| *dt)
+        .rev()
+        .collect_vec()
+}
