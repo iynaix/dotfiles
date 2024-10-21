@@ -17,6 +17,7 @@
         pipes-rs
         scope-tui
         tenki
+        inputs.wfetch.packages.${pkgs.system}.wfetch
       ]
       ++ lib.optionals (!config.custom.headless) [
         imagemagick
@@ -26,25 +27,6 @@
       neofetch = "fastfetch --config neofetch";
       wwfetch = "wfetch --wallpaper";
     };
-  };
-
-  custom.shell.packages = {
-    wfetch =
-      # automatically handle display scaling for wfetch
-      if config.custom.hyprland.enable then
-        {
-          runtimeInputs = [
-            pkgs.jq
-            config.wayland.windowManager.hyprland.package
-            inputs.wfetch.packages.${pkgs.system}.wfetch
-          ];
-          text = ''
-            scale=$(hyprctl monitors -j | jq -r 'map(select(.focused == true)) | .[0].scale')
-            wfetch --scale "$scale" "$@"
-          '';
-        }
-      else
-        inputs.wfetch.packages.${pkgs.system}.wfetch;
   };
 
   # create xresources

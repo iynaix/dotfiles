@@ -1,31 +1,39 @@
 {
   git,
-  lib,
   nh,
-  writeShellApplication,
+  lib,
+  stdenvNoCC,
+  makeWrapper,
   # variables
   dots ? "$HOME/projects/dotfiles",
-  host ? "desktop",
   name ? "nsw",
+  host ? "desktop",
 }:
-writeShellApplication {
+stdenvNoCC.mkDerivation {
   inherit name;
-  runtimeInputs = [
-    git
-    nh
-  ];
-  text =
-    lib.replaceStrings
-      [
-        "@dots@"
-        "@host@"
-      ]
-      [
-        # not using toString trips up nix flake check
-        (toString dots)
-        (toString host)
-      ]
-      (lib.readFile ./nsw.sh);
+  version = "1.0";
+
+  src = ./.;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postPatch = ''
+    substituteInPlace nsw.sh \
+      --replace-fail "@dots@" "${dots}" \
+      --replace-fail "@host@" "${host}"
+  '';
+
+  postInstall = ''
+    install -D ./nsw.sh $out/bin/nsw
+
+    wrapProgram $out/bin/nsw \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          nh
+        ]
+      }
+  '';
 
   meta = {
     description = "nh wrapper";

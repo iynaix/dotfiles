@@ -6,7 +6,8 @@
   ...
 }:
 let
-  hasNixpkgsRepo = host == "desktop" || host == "framework" || host == "x1c";
+  hasNixpkgsRepo =
+    host == "desktop" || host == "framework" || host == "x1c" || host == "t520" || host == "t450";
 in
 {
   programs = {
@@ -78,9 +79,11 @@ in
         // lib.optionalAttrs hasNixpkgsRepo {
           # background maintenance for large git repos:
           # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
-          maintenance = lib.mkIf (host == "desktop" || host == "framework" || host == "x1c") {
-            repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
-          };
+          maintenance =
+            lib.mkIf (host == "desktop" || host == "framework" || host == "t520" || host == "t450")
+              {
+                repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
+              };
         };
     };
 
@@ -106,7 +109,7 @@ in
       gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
       gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
       gpatch = "git diff --no-ext-diff";
-      gr = "cd $(git rev-parse - -show-toplevel)"; # cd back to root
+      groot = "cd $(git rev-parse - -show-toplevel)";
       grh = "git reset --hard";
       gri = "git rebase --interactive";
       gst = "git status -s -b && echo && git log | head -n 1";

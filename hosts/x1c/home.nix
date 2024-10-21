@@ -22,7 +22,7 @@
     ];
 
     helix.enable = true;
-    neovim.enable = false;
+    # neovim.enable = false;
     pathofbuilding.enable = true;
     rclip.enable = true;
     wallpaper-utils.enable = true;

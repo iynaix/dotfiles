@@ -78,7 +78,7 @@ in
           # creating an overlay for buildRustPackage overlay
           # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
           cargoDeps = prev.rustPlatform.importCargoLock {
-            lockFile = sources.swww.src + "/Cargo.lock";
+            lockFile = "${sources.swww.src}/Cargo.lock";
             allowBuiltinFetchGit = true;
           };
         }

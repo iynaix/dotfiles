@@ -48,6 +48,10 @@ in
   nsw = callPackage ./nsw { };
 
   rofi-themes = w callPackage ./rofi-themes { };
+  rofi-epub-menu = callPackage ./rofi-epub-menu { };
+  rofi-pdf-menu = callPackage ./rofi-pdf-menu { };
+  rofi-power-menu = callPackage ./rofi-power-menu { };
+  rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
 
   vv =
     assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");

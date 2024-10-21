@@ -137,7 +137,7 @@ in
       };
     };
 
-    hm.xdg.stateFile."impermanence.txt".text =
+    hm.xdg.stateFile."impermanence.json".text =
       let
         getDirPath = prefix: d: "${prefix}${d.dirPath}";
         getFilePath = prefix: f: "${prefix}${f.filePath}";
@@ -151,13 +151,11 @@ in
         allFiles =
           map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
           ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
-        sort-u = arr: lib.concatLines (lib.sort lib.lessThan (lib.unique arr));
+        sort-uniq = arr: lib.sort lib.lessThan (lib.unique arr);
       in
-      ''
-        # Directories
-        ${sort-u allDirectories}
-        # Files
-        ${sort-u allFiles}
-      '';
+      lib.strings.toJSON {
+        directories = sort-uniq allDirectories;
+        files = sort-uniq allFiles;
+      };
   };
 }

@@ -2,30 +2,38 @@
   git,
   nh,
   lib,
-  writeShellApplication,
+  stdenvNoCC,
+  makeWrapper,
   # variables
   dots ? "$HOME/projects/dotfiles",
   name ? "hsw",
   host ? "desktop",
 }:
-writeShellApplication {
+stdenvNoCC.mkDerivation {
   inherit name;
-  runtimeInputs = [
-    git
-    nh
-  ];
-  text =
-    lib.replaceStrings
-      [
-        "@dots@"
-        "@host@"
-      ]
-      [
-        # not using toString trips up nix flake check
-        (toString dots)
-        (toString host)
-      ]
-      (lib.readFile ./hsw.sh);
+  version = "1.0";
+
+  src = ./.;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postPatch = ''
+    substituteInPlace hsw.sh \
+      --replace-fail "@dots@" "${dots}" \
+      --replace-fail "@host@" "${host}"
+  '';
+
+  postInstall = ''
+    install -D ./hsw.sh $out/bin/hsw
+
+    wrapProgram $out/bin/hsw \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          nh
+        ]
+      }
+  '';
 
   meta = {
     description = "Switch to a different home-manager configuration";
