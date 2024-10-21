@@ -121,7 +121,6 @@ in
     };
 
     xdg.dataFile."rofi/themes/preview.rasi".text = ''
-      @theme "custom"
       icon-current-entry {
         enabled: true;
         size: 50%;
