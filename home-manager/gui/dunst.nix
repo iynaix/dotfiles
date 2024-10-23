@@ -61,7 +61,7 @@ lib.mkIf (!config.custom.headless) (
       xdg.dataFile = lib.mapAttrs' (
         accent: _:
         let
-          iconTheme = "Tela-${accent}";
+          iconTheme = "Tela-${accent}-dark";
         in
         lib.nameValuePair "icons/${iconTheme}" {
           source = "${config.gtk.iconTheme.package}/share/icons/${iconTheme}";

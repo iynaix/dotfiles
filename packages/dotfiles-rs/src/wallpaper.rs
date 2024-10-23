@@ -2,22 +2,25 @@ use itertools::Itertools;
 use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
-use crate::{colors::NixColors, filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
-use std::{collections::HashMap, path::PathBuf};
+use crate::{filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
 }
 
-pub fn current() -> String {
-    NixColors::new()
-        .expect("could not parse nix.json")
-        .wallpaper
+pub fn current() -> Option<String> {
+    dirs::runtime_dir()
+        .map(|runtime_dir| runtime_dir.join("current_wallpaper"))
+        .and_then(|runtime_file| std::fs::read_to_string(runtime_file).ok())
 }
 
 fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
     dir.as_ref()
         .read_dir()
@@ -41,9 +44,9 @@ where
         })
 }
 
-/// returns all files in the wallpaper directory, exlcluding the current wallpaper
+/// returns all files in the wallpaper directory, excluding the current wallpaper
 pub fn all() -> Vec<String> {
-    let curr = self::current();
+    let curr = self::current().unwrap_or_default();
     filter_images(&self::dir())
         // do not include the current wallpaper
         .filter(|path| curr != *path)
@@ -100,12 +103,12 @@ pub fn set(wallpaper: &str, transition: &Option<String>) {
 
 /// reloads the wallpaper and wallust theme
 pub fn reload(transition: &Option<String>) {
-    set(&current(), transition);
+    set(&current().expect("no current wallpaper set"), transition);
 }
 
 pub fn random_from_dir<P>(dir: P) -> String
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
     filter_images(dir)
         .collect_vec()

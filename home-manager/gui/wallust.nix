@@ -132,11 +132,5 @@ in
         end
       '';
     };
-
-    custom.persist = {
-      home = {
-        cache.directories = [ ".cache/wallust" ];
-      };
-    };
   };
 }

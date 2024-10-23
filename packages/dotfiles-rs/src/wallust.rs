@@ -9,7 +9,8 @@ use execute::Execute;
 use hyprland::keyword::Keyword;
 use image::ImageReader;
 use itertools::Itertools;
-use std::collections::HashMap;
+use regex::Regex;
+use std::{collections::HashMap, path::Path};
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -271,6 +272,18 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .expect("wallust: failed to set colors from wallpaper");
 }
 
+fn replace_in_file<P>(path: P, regexp: &str, replacement: &str)
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
+    if let Ok(content) = std::fs::read_to_string(&path) {
+        let re = Regex::new(regexp).expect("invalid regex");
+
+        std::fs::write(&path, re.replace_all(&content, replacement).into_owned())
+            .unwrap_or_else(|_| panic!("could not write {path:?}"));
+    }
+}
+
 pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
     let variant = nixcolors
         .theme_accents
@@ -295,51 +308,37 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .execute()
         .expect("failed to apply icon theme");
 
-    // update the icon theme for dunst
-    let dunstrc_path = full_path("~/.cache/wallust/dunstrc");
-
-    if let Ok(dunstrc) = std::fs::read_to_string(&dunstrc_path) {
-        let dunstrc = dunstrc
-            .lines()
-            .map(|line| {
-                if line.starts_with("icon_theme") {
-                    format!("icon_theme=\"{icon_theme}\"")
-                } else {
-                    line.to_string()
-                }
-            })
-            .collect::<Vec<String>>()
-            .join("\n");
-
-        std::fs::write(dunstrc_path, dunstrc).ok();
+    // update the icon theme for dunst and qt
+    for file in [
+        full_path("~/.cache/wallust/dunstrc"),
+        full_path("~/.config/qt5ct/qt5ct.conf"),
+        full_path("~/.config/qt6ct/qt6ct.conf"),
+    ] {
+        replace_in_file(file, r"Tela-.*-dark", &icon_theme);
     }
+
+    // restart dunst
+    execute::command_args!("systemctl", "restart", "--user", "dunst.service")
+        .execute()
+        .expect("failed to restart dunst");
 }
 
 pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
     // get complementary color for complementary module classes
     let complementary = accent.complementary();
-
-    let css_path = full_path("~/.config/waybar/style.css");
-    let mut css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
+    let css_file = full_path("~/.config/waybar/style.css");
 
     // replace old foreground color with new complementary color
-    css = css.replace(
+    replace_in_file(
+        &css_file,
         &nixcolors.special.foreground.to_hex_str(),
         &accent.to_hex_str(),
     );
 
-    // replace complementary classes
-    css = css
-        .lines()
-        .map(|line| {
-            if line.ends_with("/* complementary */") {
-                format!("color: {}; /* complementary */", complementary.to_hex_str())
-            } else {
-                line.to_string()
-            }
-        })
-        .collect::<Vec<String>>()
-        .join("\n");
-
-    std::fs::write(css_path, css).expect("could not write waybar css");
+    // replace complementary colors
+    replace_in_file(
+        &css_file,
+        r"color:\s*.*;\s*/\* complementary \*/",
+        &format!("color: {}; /* complementary */", complementary.to_hex_str()),
+    );
 }

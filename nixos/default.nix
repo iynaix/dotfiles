@@ -11,7 +11,6 @@
     ./bluetooth.nix
     ./configuration.nix
     ./docker.nix
-    ./filezilla.nix
     ./gh.nix
     ./hdds.nix
     ./hyprland.nix
@@ -171,8 +170,8 @@
     # use gtk theme on qt apps
     qt = lib.mkIf (!config.hm.custom.headless) {
       enable = true;
-      platformTheme = "gnome";
-      style = "adwaita-dark";
+      platformTheme = "qt5ct";
+      style = "kvantum";
     };
 
     xdg = {

@@ -1,5 +1,5 @@
 use clap::{ArgGroup, CommandFactory, Parser};
-use dotfiles::{full_path, generate_completions, nixinfo::NixInfo, wallpaper, ShellCompletion};
+use dotfiles::{full_path, generate_completions, wallpaper, ShellCompletion};
 use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
@@ -168,7 +168,7 @@ fn main() {
     }
 
     let wallpaper = if args.reload {
-        wallpaper::current()
+        wallpaper::current().expect("no current wallpaper set")
     } else {
         let random_wallpaper = match args.image_or_dir {
             Some(image_or_dir) => {
@@ -182,13 +182,7 @@ fn main() {
                         .to_string()
                 }
             }
-            None => {
-                if full_path("~/.cache/wallust/nix.json").exists() {
-                    wallpaper::random()
-                } else {
-                    NixInfo::new().fallback
-                }
-            }
+            None => wallpaper::random(),
         };
 
         // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
