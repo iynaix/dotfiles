@@ -13,20 +13,10 @@ let
     _callPackage (path + "/default.nix") (
       extraOverrides // { source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource; }
     );
-  # cargo workspaces needed to build rust packages
-  rustSrcs = lib.fileset.toSource {
-    root = ../.;
-    fileset = lib.fileset.unions [
-      ../Cargo.lock
-      ../Cargo.toml
-
-      ./dotfiles-rs
-    ];
-  };
 in
 {
   # boutique rust packages
-  dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
+  dotfiles-rs = callPackage ./dotfiles-rs { };
 
   # custom tela built with catppucin variant colors
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };
@@ -48,8 +38,6 @@ in
   nsw = callPackage ./nsw { };
 
   rofi-themes = w callPackage ./rofi-themes { };
-  rofi-epub-menu = callPackage ./rofi-epub-menu { };
-  rofi-pdf-menu = callPackage ./rofi-pdf-menu { };
   rofi-power-menu = callPackage ./rofi-power-menu { };
   rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
 

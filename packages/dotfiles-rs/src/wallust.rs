@@ -1,6 +1,8 @@
 use crate::{
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
+    nixinfo::NixInfo,
+    rearranged_workspaces,
     wallpaper::WallInfo,
     CommandUtf8,
 };
@@ -9,7 +11,8 @@ use execute::Execute;
 use hyprland::keyword::Keyword;
 use image::ImageReader;
 use itertools::Itertools;
-use std::collections::HashMap;
+use regex::Regex;
+use std::{collections::HashMap, path::Path};
 
 pub const CUSTOM_THEMES: [&str; 6] = [
     "catppuccin-frappe",
@@ -215,7 +218,7 @@ pub fn apply_colors() {
         apply_hyprland_colors(&accents, &nixcolors.colors);
 
         // set the waybar accent color to have more contrast
-        set_waybar_accent(&nixcolors, &accents[0]);
+        set_waybar_colors(&nixcolors, &accents[0]);
 
         set_gtk_and_icon_theme(&nixcolors, &accents[0]);
     } else {
@@ -241,20 +244,15 @@ pub fn apply_colors() {
     kill_wrapped_process("wfetch", "SIGUSR2");
 
     // refresh waybar, process is killed and restarted as sometimes reloading kills the process :(
-    execute::command!("launch-waybar")
-        .spawn()
-        .expect("failed to launch waybar");
+    execute::command_args!("systemctl", "restart", "--user", "waybar.service")
+        .execute()
+        .ok();
 }
 
 /// runs wallust with options from wallpapers.csv
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
-    let mut wallust = execute::command_args!(
-        "wallust",
-        "run",
-        "--no-cache",
-        "--check-contrast",
-        "--dynamic-threshold"
-    );
+    let mut wallust =
+        execute::command_args!("wallust", "run", "--check-contrast", "--dynamic-threshold");
 
     // normalize the options for wallust
     if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {
@@ -269,6 +267,18 @@ pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
         .arg(wallpaper)
         .execute()
         .expect("wallust: failed to set colors from wallpaper");
+}
+
+fn replace_in_file<P>(path: P, regexp: &str, replacement: &str)
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
+    if let Ok(content) = std::fs::read_to_string(&path) {
+        let re = Regex::new(regexp).expect("invalid regex");
+
+        std::fs::write(&path, re.replace_all(&content, replacement).into_owned())
+            .unwrap_or_else(|_| panic!("could not write {path:?}"));
+    }
 }
 
 pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
@@ -295,51 +305,66 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .execute()
         .expect("failed to apply icon theme");
 
-    // update the icon theme for dunst
-    let dunstrc_path = full_path("~/.cache/wallust/dunstrc");
-
-    if let Ok(dunstrc) = std::fs::read_to_string(&dunstrc_path) {
-        let dunstrc = dunstrc
-            .lines()
-            .map(|line| {
-                if line.starts_with("icon_theme") {
-                    format!("icon_theme=\"{icon_theme}\"")
-                } else {
-                    line.to_string()
-                }
-            })
-            .collect::<Vec<String>>()
-            .join("\n");
-
-        std::fs::write(dunstrc_path, dunstrc).ok();
+    // update the icon theme for dunst and qt
+    for file in [
+        full_path("~/.cache/wallust/dunstrc"),
+        full_path("~/.config/qt5ct/qt5ct.conf"),
+        full_path("~/.config/qt6ct/qt6ct.conf"),
+    ] {
+        replace_in_file(file, r"Tela-.*-dark", &icon_theme);
     }
+
+    // restart dunst
+    execute::command_args!("systemctl", "restart", "--user", "dunst.service")
+        .execute()
+        .ok();
 }
 
-pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
+pub fn set_waybar_colors(nixcolors: &NixColors, accent: &Rgb) {
     // get complementary color for complementary module classes
-    let complementary = accent.complementary();
-
-    let css_path = full_path("~/.config/waybar/style.css");
-    let mut css = std::fs::read_to_string(&css_path).expect("could not read waybar css");
+    let css_file = full_path("~/.config/waybar/style.css");
 
     // replace old foreground color with new complementary color
-    css = css.replace(
+    replace_in_file(
+        &css_file,
         &nixcolors.special.foreground.to_hex_str(),
         &accent.to_hex_str(),
     );
 
-    // replace complementary classes
-    css = css
-        .lines()
-        .map(|line| {
-            if line.ends_with("/* complementary */") {
-                format!("color: {}; /* complementary */", complementary.to_hex_str())
-            } else {
-                line.to_string()
-            }
-        })
-        .collect::<Vec<String>>()
-        .join("\n");
+    // replace complementary colors
+    replace_in_file(
+        &css_file,
+        r"color:\s*.*;\s*/\* complementary \*/",
+        &format!(
+            "color: {}; /* complementary */",
+            accent.complementary().to_hex_str()
+        ),
+    );
 
-    std::fs::write(css_path, css).expect("could not write waybar css");
+    // add / remove persistent workspaces to waybar before launching
+    let cfg_file = full_path("~/.config/waybar/config.jsonc");
+
+    let mut cfg: serde_json::Value =
+        json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
+
+    if let NixInfo {
+        waybar_persistent_workspaces: Some(true),
+        ..
+    } = NixInfo::new()
+    {
+        cfg["hyprland/workspaces"]["persistentWorkspaces"] =
+            serde_json::to_value(rearranged_workspaces())
+                .expect("failed to convert rearranged workspaces to json");
+    } else {
+        let hyprland_workspaces = cfg["hyprland/workspaces"]
+            .as_object_mut()
+            .expect("invalid hyprland workspaces");
+        hyprland_workspaces.remove("persistentWorkspaces");
+
+        cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
+            .expect("failed to convert hyprland workspaces to json");
+    }
+
+    // write waybar_config back to waybar_config_file as json
+    json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
 }

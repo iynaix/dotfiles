@@ -28,6 +28,6 @@ impl NixInfo {
     /// get nix info from ~/.config before wallust has processed it
     pub fn new() -> Self {
         json::load("~/.config/wallust/templates/nix.json")
-            .unwrap_or_else(|_| panic!("unable to read ~/.config/wallust/templates/nix.json"))
+            .unwrap_or_else(|_| panic!("unable to read nix.json"))
     }
 }

@@ -4,7 +4,7 @@ use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
     event_listener::EventListener,
     keyword::Keyword,
-    shared::HyprData,
+    shared::{HyprData, WorkspaceType},
 };
 use itertools::Itertools;
 
@@ -72,7 +72,7 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 
     let num_windows = clients.len();
     let split_ratio = if num_windows == 2 {
-        rand::random::<f32>().mul_add(0.1, 0.4)
+        fastrand::f32().mul_add(0.1, 0.4)
     } else if nstack {
         0.0
     } else {
@@ -90,7 +90,7 @@ fn main() -> hyprland::Result<()> {
 
     // only care about dynamic split ratios for oled
     if is_desktop {
-        event_listener.add_window_open_handler(move |data| {
+        event_listener.add_window_opened_handler(move |data| {
             // TODO: cannot resize tiled windows?
             /*
             if ev_args[2] == "mpv" {
@@ -122,10 +122,12 @@ fn main() -> hyprland::Result<()> {
         });
 
         event_listener.add_window_moved_handler(move |data| {
-            split_for_workspace(&data.workspace_name, nstack);
+            if let WorkspaceType::Regular(wksp) = data.workspace_name {
+                split_for_workspace(&wksp, nstack);
+            }
         });
 
-        event_listener.add_window_close_handler(move |address| {
+        event_listener.add_window_closed_handler(move |address| {
             if let Some(wksp_id) = Clients::get()
                 .expect("could not get clients")
                 .iter()
@@ -141,7 +143,7 @@ fn main() -> hyprland::Result<()> {
         if NixInfo::new().monitors.len() == 1 {
             execute::command!("hypr-monitors")
                 .arg("--rofi")
-                .arg(mon)
+                .arg(mon.name)
                 .execute()
                 .expect("failed to run rofi-monitors");
         } else {

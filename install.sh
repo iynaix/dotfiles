@@ -18,7 +18,7 @@ function yesno() {
 }
 
 cat << Introduction
-The *entire* disk with be formatted with a 1GB boot partition
+The *entire* disk will be formatted with a 1GB boot partition
 (labelled NIXBOOT), 16GB of swap, and the rest allocated to ZFS.
 
 The following ZFS datasets will be created:

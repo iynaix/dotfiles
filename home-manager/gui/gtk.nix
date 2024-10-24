@@ -50,10 +50,6 @@
           x11.enable = true;
         };
 
-        sessionVariables = {
-          XCURSOR_SIZE = config.home.pointerCursor.size;
-        };
-
         # plasma seems to override this file?
         file.${config.gtk.gtk2.configLocation}.force = true;
       };
@@ -86,7 +82,7 @@
           };
         };
         iconTheme = {
-          name = "Tela-${defaultAccent}";
+          name = "Tela-${defaultAccent}-dark";
           package = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
         };
         font = {
@@ -104,6 +100,8 @@
           gtk-error-bell = 0;
         };
       };
+
+      qt.enable = true;
 
       # write theme accents into nix.json for rust to read
       custom.wallust.nixJson = {

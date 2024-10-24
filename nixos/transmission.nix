@@ -154,6 +154,15 @@ in
         };
       }
 
+      # filezilla
+      {
+        hm.home.packages = [ pkgs.filezilla ];
+
+        custom = {
+          persist.home.directories = [ ".config/filezilla" ];
+        };
+      }
+
       # only setup rpc password if sops is enabled
       (lib.mkIf config.custom.sops.enable {
         sops.secrets.transmission_rpc.owner = user;

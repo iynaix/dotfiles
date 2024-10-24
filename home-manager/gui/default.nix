@@ -13,6 +13,7 @@ _: {
     ./obs-studio.nix
     ./pathofbuilding.nix
     ./pqiv.nix
+    ./qt.nix
     ./rofi.nix
     ./vlc.nix
     ./vscode.nix

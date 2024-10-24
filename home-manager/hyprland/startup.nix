@@ -22,7 +22,7 @@ lib.mkIf config.custom.hyprland.enable {
       "hypr-ipc &"
 
       "swww-daemon &"
-      "sleep 1; hypr-wallpaper && launch-waybar"
+      "sleep 1; hypr-wallpaper"
 
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"
@@ -33,6 +33,7 @@ lib.mkIf config.custom.hyprland.enable {
       "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
 
       # browsers
+      (openOnWorkspace 1 "brave --incognito")
       (openOnWorkspace 1 "brave --profile-directory=Default")
 
       # file manager
@@ -45,7 +46,7 @@ lib.mkIf config.custom.hyprland.enable {
       (openOnWorkspace 9 (lib.getExe config.programs.firefox.package))
 
       # download desktop
-      (openOnWorkspace 10 "$term hx ${config.xdg.userDirs.desktop}/yt.txt")
+      (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")
       (openOnWorkspace 10 "$term")
 
       # focus the initial workspaces on startup

@@ -1,23 +1,25 @@
 use itertools::Itertools;
-use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
-use crate::{colors::NixColors, filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
-use std::{collections::HashMap, path::PathBuf};
+use crate::{filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
 }
 
-pub fn current() -> String {
-    NixColors::new()
-        .expect("could not parse nix.json")
-        .wallpaper
+pub fn current() -> Option<String> {
+    dirs::runtime_dir()
+        .map(|runtime_dir| runtime_dir.join("current_wallpaper"))
+        .and_then(|runtime_file| std::fs::read_to_string(runtime_file).ok())
 }
 
 fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
     dir.as_ref()
         .read_dir()
@@ -39,27 +41,6 @@ where
 
             None
         })
-}
-
-/// returns all files in the wallpaper directory, exlcluding the current wallpaper
-pub fn all() -> Vec<String> {
-    let curr = self::current();
-    filter_images(&self::dir())
-        // do not include the current wallpaper
-        .filter(|path| curr != *path)
-        .collect()
-}
-
-pub fn random() -> String {
-    if self::dir().exists() {
-        self::all()
-            .choose(&mut rand::thread_rng())
-            // use fallback image if not available
-            .unwrap_or(&NixInfo::new().fallback)
-            .to_string()
-    } else {
-        NixInfo::new().fallback
-    }
 }
 
 /// reads the wallpaper info from wallpapers.csv
@@ -100,19 +81,23 @@ pub fn set(wallpaper: &str, transition: &Option<String>) {
 
 /// reloads the wallpaper and wallust theme
 pub fn reload(transition: &Option<String>) {
-    set(&current(), transition);
+    set(&current().expect("no current wallpaper set"), transition);
 }
 
 pub fn random_from_dir<P>(dir: P) -> String
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
-    filter_images(dir)
-        .collect_vec()
-        .choose(&mut rand::thread_rng())
-        // use fallback image if not available
-        .unwrap_or(&NixInfo::new().fallback)
-        .to_string()
+    if !dir.as_ref().exists() {
+        return NixInfo::new().fallback;
+    }
+
+    let wallpapers = filter_images(dir).collect_vec();
+    if wallpapers.is_empty() {
+        NixInfo::new().fallback
+    } else {
+        wallpapers[fastrand::usize(..wallpapers.len())].to_string()
+    }
 }
 
 /// euclid's algorithm to find the greatest common divisor
@@ -237,4 +222,35 @@ impl<'de> Deserialize<'de> for WallInfo {
         ];
         deserializer.deserialize_struct("WallInfo", FIELDS, WallInfoVisitor)
     }
+}
+
+pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
+    let Ok(history_csv) = std::fs::File::open(full_path("~/Pictures/wallpapers_history.csv"))
+    else {
+        return Vec::new();
+    };
+
+    let mut rdr = csv::ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(std::io::BufReader::new(history_csv));
+
+    rdr.records()
+        .flatten()
+        .filter_map(|row| {
+            let (Some(fname), Some(dt_str)) = (row.get(0), row.get(1)) else {
+                return None;
+            };
+
+            let path = dir().join(fname);
+            if !path.exists() {
+                return None;
+            }
+
+            chrono::DateTime::parse_from_rfc3339(dt_str)
+                .ok()
+                .map(|dt| (path, dt))
+        })
+        .sorted_by_key(|(_, dt)| *dt)
+        .rev()
+        .collect_vec()
 }

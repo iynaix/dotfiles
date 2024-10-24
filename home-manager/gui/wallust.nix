@@ -63,7 +63,7 @@ in
           recursive = true;
         };
         "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
-          backend = "resized";
+          backend = "fastresize";
           color_space = "labmixed";
           check_contrast = true;
           fallback_generator = "interpolate";
@@ -131,12 +131,6 @@ in
             command cat "$wallust_colors"
         end
       '';
-    };
-
-    custom.persist = {
-      home = {
-        cache.directories = [ ".cache/wallust" ];
-      };
     };
   };
 }

@@ -151,8 +151,9 @@ in
     '';
 
     home.packages = [
-      pkgs.custom.rofi-epub-menu
-      pkgs.custom.rofi-pdf-menu
+      # TODO: add better epub and pdf openers
+      # pkgs.custom.rofi-epub-menu
+      # pkgs.custom.rofi-pdf-menu
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       pkgs.custom.rofi-power-menu
     ] ++ (lib.optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);

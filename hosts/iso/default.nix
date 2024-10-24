@@ -100,12 +100,12 @@ let
 
             # quality of life
             nix = {
-              package = pkgs.lix;
+              package = pkgs.nixVersions.latest;
               settings = {
                 experimental-features = [
                   "nix-command"
                   "flakes"
-                  "repl-flake"
+                  # "repl-flake"
                 ];
                 substituters = [
                   "https://hyprland.cachix.org"

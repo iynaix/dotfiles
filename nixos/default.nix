@@ -11,7 +11,6 @@
     ./bluetooth.nix
     ./configuration.nix
     ./docker.nix
-    ./filezilla.nix
     ./gaming.nix
     ./gh.nix
     ./hdds.nix
@@ -174,8 +173,8 @@
     # use gtk theme on qt apps
     qt = {
       enable = true;
-      platformTheme = "gnome";
-      style = "adwaita-dark";
+      platformTheme = "qt5ct";
+      style = "kvantum";
     };
 
     xdg = {

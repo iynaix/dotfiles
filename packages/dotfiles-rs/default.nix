@@ -1,5 +1,4 @@
 {
-  src,
   lib,
   installShellFiles,
   rustPlatform,
@@ -8,9 +7,9 @@ rustPlatform.buildRustPackage {
   pname = "dotfiles-rs";
   version = "0.1.0";
 
-  inherit src;
+  src = ./.;
 
-  cargoLock.lockFile = ../../Cargo.lock;
+  cargoLock.lockFile = ./Cargo.lock;
 
   cargoBuildFlags = [ "-p dotfiles" ];
 

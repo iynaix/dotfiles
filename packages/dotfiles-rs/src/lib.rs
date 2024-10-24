@@ -5,7 +5,7 @@ use hyprland::{data::Monitors, shared::HyprData};
 use nixinfo::NixInfo;
 use std::{
     collections::HashMap,
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::{Command, Stdio},
 };
 
@@ -38,7 +38,7 @@ pub fn generate_completions(
 
 pub fn full_path<P>(p: P) -> PathBuf
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
     let p = p
         .as_ref()
@@ -83,7 +83,7 @@ impl CommandUtf8 for Command {
 
 pub fn filename<P>(path: P) -> String
 where
-    P: AsRef<std::path::Path> + std::fmt::Debug,
+    P: AsRef<Path> + std::fmt::Debug,
 {
     path.as_ref()
         .file_name()
@@ -95,11 +95,12 @@ where
 
 pub mod json {
     use super::full_path;
+    use std::path::Path;
 
     pub fn load<T, P>(path: P) -> Result<T, Box<dyn std::error::Error>>
     where
         T: serde::de::DeserializeOwned,
-        P: AsRef<std::path::Path>,
+        P: AsRef<Path>,
     {
         let path = path.as_ref();
         let contents = std::fs::read_to_string(full_path(path))?;
@@ -109,7 +110,7 @@ pub mod json {
     pub fn write<T, P>(path: P, data: T) -> std::io::Result<()>
     where
         T: serde::Serialize,
-        P: AsRef<std::path::Path>,
+        P: AsRef<Path>,
     {
         let path = path.as_ref();
         let file = std::fs::File::create(full_path(path))?;
@@ -157,10 +158,6 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
             .output()
             .unwrap_or_else(|_| panic!("failed to kill {unwrapped_name}"));
     }
-}
-
-pub fn iso8601_filename() -> String {
-    chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
 }
 
 /// swaps the dimenions if the monitor is vertical
