@@ -61,9 +61,6 @@ _: {
     };
   };
 
-  # home = {
-  #   packages = with pkgs; [
-  #     # hyprlock # build package for testing, but it isn't used
-  #   ];
-  # };
+  # build package for testing, but it isn't used
+  # home.packages = [ pkgs.hyprlock ];
 }

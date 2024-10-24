@@ -230,11 +230,9 @@ in
             # "dimaround,floating:1"
             "bordersize 5,fullscreen:1" # monocle mode
             "float,class:(wlroots)" # hyprland debug session
-          ];
-
-          windowrule = [
-            # do not idle while watching videos
-            "idleinhibit focus,YouTube"
+            # save dialog
+            "float,class:(xdg-desktop-portal-gtk)"
+            "size <50% <50%,class:(xdg-desktop-portal-gtk)"
           ];
 
           exec-once = [

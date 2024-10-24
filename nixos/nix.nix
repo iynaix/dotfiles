@@ -44,13 +44,12 @@ in
   programs.nix-ld.enable = true;
 
   environment = {
-    systemPackages =
-      # for nixlang / nixpkgs
-      with pkgs; [
-        nix-init
-        nix-update
-        nixfmt-rfc-style
-      ];
+    # for nixlang / nixpkgs
+    systemPackages = with pkgs; [
+      nix-init
+      nix-update
+      nixfmt-rfc-style
+    ];
   };
 
   # make a symlink of flake within the generation (e.g. /run/current-system/src)

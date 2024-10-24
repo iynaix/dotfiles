@@ -55,10 +55,10 @@ lib.mkIf (!config.custom.headless) {
     };
   };
 
-  wayland.windowManager.hyprland.settings = {
+  wayland.windowManager.hyprland.settings.windowrulev2 = [
     # do not idle while watching videos
-    windowrule = [ "idleinhibit fullscreen,firefox-aurora" ];
-  };
+    "idleinhibit fullscreen,class:^(firefox)$"
+  ];
 
   custom.persist = {
     home.directories = [

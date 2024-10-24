@@ -60,7 +60,7 @@ in
             '';
         };
         # quick recropping of current wallpaper
-        wallpaper-recrop = {
+        wallpaper-edit = {
           runtimeInputs = [ pkgs.custom.dotfiles-rs ];
           text = ''
             ${lib.custom.useDirenv wallpapers_proj ''
@@ -97,6 +97,13 @@ in
           runtimeInputs = [ pkgs.czkawka ];
           text = ''
             czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
+          '';
+        };
+        # easier editing of wallpapers.csv
+        wallpapers-csv = {
+          runtimeInputs = [ pkgs.csvlens ];
+          text = ''
+            csvlens "${wallpapers_dir}/wallpapers.csv"
           '';
         };
         # fetch wallpapers from pixiv for user

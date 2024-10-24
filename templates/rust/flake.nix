@@ -37,10 +37,6 @@
         };
       });
 
-      packages = forEachSystem (
-        pkgs:
-        rec {
-        }
-      );
+      packages = forEachSystem (pkgs: { });
     };
 }

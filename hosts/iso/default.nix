@@ -18,32 +18,29 @@ let
           { config, pkgs, ... }:
           {
             environment = {
-              systemPackages =
-                [
-                  (pkgs.writeShellApplication {
-                    name = "iynaixos-install";
-                    runtimeInputs = [ pkgs.curl ];
-                    text = "sh <(curl -L ${repo_url}/main/install.sh)";
-                  })
-                  (pkgs.writeShellApplication {
-                    name = "iynaixos-recover";
-                    runtimeInputs = [ pkgs.curl ];
-                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                  })
-                  (pkgs.writeShellApplication {
-                    name = "iynaixos-reinstall";
-                    runtimeInputs = [ pkgs.curl ];
-                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                  })
-                ]
-                ++ (with pkgs; [
-                  btop
-                  eza
-                  git
-                  home-manager
-                  tree
-                  yazi
-                ]);
+              systemPackages = with pkgs; [
+                (pkgs.writeShellApplication {
+                  name = "iynaixos-install";
+                  runtimeInputs = [ pkgs.curl ];
+                  text = "sh <(curl -L ${repo_url}/main/install.sh)";
+                })
+                (pkgs.writeShellApplication {
+                  name = "iynaixos-recover";
+                  runtimeInputs = [ pkgs.curl ];
+                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                })
+                (pkgs.writeShellApplication {
+                  name = "iynaixos-reinstall";
+                  runtimeInputs = [ pkgs.curl ];
+                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                })
+                btop
+                eza
+                git
+                home-manager
+                tree
+                yazi
+              ];
               shellAliases = {
                 eza = "eza '--icons' '--group-directories-first' '--header' '--octal-permissions' '--hyperlink'";
                 ls = "eza";
