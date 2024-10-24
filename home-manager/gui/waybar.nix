@@ -53,8 +53,7 @@ in
     programs.waybar = {
       enable = isNixOS;
       package = pkgs.waybar.override { cavaSupport = false; };
-      # do not use the systemd service as it is flaky and unreliable
-      # https://github.com/nix-community/home-manager/issues/3599
+      systemd.enable = true;
     };
 
     # toggle / launch waybar
@@ -65,29 +64,12 @@ in
       ];
 
       bind = [
-        "$mod, a, exec, ${lib.getExe pkgs.custom.shell.toggle-waybar}"
-        "$mod_SHIFT, a, exec, launch-waybar"
+        ''$mod, a, exec, ${lib.getExe' pkgs.procps "pkill"} -SIGUSR1 waybar''
+        "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
       ];
     };
 
     custom = {
-      shell.packages = {
-        toggle-waybar = {
-          runtimeInputs = with pkgs; [
-            procps
-            custom.dotfiles-rs
-          ];
-          text = ''
-            # toggle waybar visibility if it is running
-            if pgrep waybar > /dev/null; then
-              pkill -SIGUSR1 waybar
-            else
-              launch-waybar
-            fi
-          '';
-        };
-      };
-
       waybar.config = {
         backlight = lib.mkIf config.custom.backlight.enable {
           format = "{icon}   {percent}%";

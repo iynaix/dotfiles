@@ -34,10 +34,9 @@ in
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
     # script to bootstrap a new install
-    environment.systemPackages = with pkgs; [
-      (writeShellApplication {
-        name = "install-remote-secrets";
-        runtimeInputs = [ rsync ];
+    custom.shell.packages = {
+      install-remote-secrets = {
+        runtimeInputs = [ pkgs.rsync ];
         text =
           let
             persistHome = "/persist${homeDir}";
@@ -69,8 +68,8 @@ in
             ${copy ".ssh/"}
             ${copy ".config/sops/age/"}
           '';
-      })
-    ];
+      };
+    };
 
     custom.persist.home = {
       directories = [ ".config/sops" ];

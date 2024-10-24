@@ -1,6 +1,8 @@
 use crate::{
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
+    nixinfo::NixInfo,
+    rearranged_workspaces,
     wallpaper::WallInfo,
     CommandUtf8,
 };
@@ -216,7 +218,7 @@ pub fn apply_colors() {
         apply_hyprland_colors(&accents, &nixcolors.colors);
 
         // set the waybar accent color to have more contrast
-        set_waybar_accent(&nixcolors, &accents[0]);
+        set_waybar_colors(&nixcolors, &accents[0]);
 
         set_gtk_and_icon_theme(&nixcolors, &accents[0]);
     } else {
@@ -242,20 +244,15 @@ pub fn apply_colors() {
     kill_wrapped_process("wfetch", "SIGUSR2");
 
     // refresh waybar, process is killed and restarted as sometimes reloading kills the process :(
-    execute::command!("launch-waybar")
-        .spawn()
-        .expect("failed to launch waybar");
+    execute::command_args!("systemctl", "restart", "--user", "waybar.service")
+        .execute()
+        .ok();
 }
 
 /// runs wallust with options from wallpapers.csv
 pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
-    let mut wallust = execute::command_args!(
-        "wallust",
-        "run",
-        "--no-cache",
-        "--check-contrast",
-        "--dynamic-threshold"
-    );
+    let mut wallust =
+        execute::command_args!("wallust", "run", "--check-contrast", "--dynamic-threshold");
 
     // normalize the options for wallust
     if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {
@@ -320,12 +317,11 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
     // restart dunst
     execute::command_args!("systemctl", "restart", "--user", "dunst.service")
         .execute()
-        .expect("failed to restart dunst");
+        .ok();
 }
 
-pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
+pub fn set_waybar_colors(nixcolors: &NixColors, accent: &Rgb) {
     // get complementary color for complementary module classes
-    let complementary = accent.complementary();
     let css_file = full_path("~/.config/waybar/style.css");
 
     // replace old foreground color with new complementary color
@@ -339,6 +335,36 @@ pub fn set_waybar_accent(nixcolors: &NixColors, accent: &Rgb) {
     replace_in_file(
         &css_file,
         r"color:\s*.*;\s*/\* complementary \*/",
-        &format!("color: {}; /* complementary */", complementary.to_hex_str()),
+        &format!(
+            "color: {}; /* complementary */",
+            accent.complementary().to_hex_str()
+        ),
     );
+
+    // add / remove persistent workspaces to waybar before launching
+    let cfg_file = full_path("~/.config/waybar/config.jsonc");
+
+    let mut cfg: serde_json::Value =
+        json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
+
+    if let NixInfo {
+        waybar_persistent_workspaces: Some(true),
+        ..
+    } = NixInfo::new()
+    {
+        cfg["hyprland/workspaces"]["persistentWorkspaces"] =
+            serde_json::to_value(rearranged_workspaces())
+                .expect("failed to convert rearranged workspaces to json");
+    } else {
+        let hyprland_workspaces = cfg["hyprland/workspaces"]
+            .as_object_mut()
+            .expect("invalid hyprland workspaces");
+        hyprland_workspaces.remove("persistentWorkspaces");
+
+        cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
+            .expect("failed to convert hyprland workspaces to json");
+    }
+
+    // write waybar_config back to waybar_config_file as json
+    json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
 }

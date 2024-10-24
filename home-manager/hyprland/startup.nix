@@ -22,7 +22,7 @@ lib.mkIf config.custom.hyprland.enable {
       "hypr-ipc &"
 
       "swww-daemon &"
-      "sleep 1; hypr-wallpaper && launch-waybar"
+      "sleep 1; hypr-wallpaper"
 
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"

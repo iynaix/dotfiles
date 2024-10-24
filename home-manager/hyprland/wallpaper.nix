@@ -111,13 +111,7 @@ in
 
       gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
 
-      home = {
-        packages = [ pkgs.nomacs ];
-        shellAliases = {
-          # edit the current wallpaper, wallfacer is defined above
-          wallpapers-edit = "wallfacer $(command cat $XDG_RUNTIME_DIR/current_wallpaper)";
-        };
-      };
+      home.packages = [ pkgs.nomacs ];
 
       programs.pqiv.extraConfig = lib.mkAfter ''
         c { command(nomacs $1) }

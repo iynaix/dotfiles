@@ -93,9 +93,7 @@
     ];
   };
 
-  # fix default neovim wrapper desktop entry to run direnv before starting
-  # adapted from notashelf, see:
-  # https://github.com/NotAShelf/nyx/blob/90915f1c6ba4944a3474f44ac036b940db860ee5/homes/notashelf/terminal/editors/neovim/default.nix#L357
+  # TODO: fix default neovim wrapper desktop entry to run direnv before starting?
   xdg = {
     desktopEntries.nvim = {
       name = "Neovim";

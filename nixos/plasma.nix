@@ -24,20 +24,16 @@
       ];
 
       # set dark theme, adapted from plasma-manager
-      xdg.configFile."autostart/plasma-dark-mode.desktop".text =
-        let
-          plasmaDarkMode = pkgs.writeShellScriptBin "plasma-dark-mode" ''
-            plasma-apply-lookandfeel -a org.kde.breezedark.desktop
-            plasma-apply-desktoptheme breeze-dark
-          '';
-        in
-        ''
-          [Desktop Entry]
-          Type=Application
-          Name=Plasma Dark Mode
-          Exec=${lib.getExe plasmaDarkMode}
-          X-KDE-autostart-condition=ksmserver
-        '';
+      xdg.configFile."autostart/plasma-dark-mode.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Plasma Dark Mode
+        Exec=${pkgs.writeShellScript "plasma-dark-mode" ''
+          plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+          plasma-apply-desktoptheme breeze-dark
+        ''}
+        X-KDE-autostart-condition=ksmserver
+      '';
     };
   };
 }

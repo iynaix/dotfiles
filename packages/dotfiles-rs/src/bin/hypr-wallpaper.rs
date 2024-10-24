@@ -47,7 +47,10 @@ pub struct HyprWallpaperArgs {
     pub history: bool,
 
     #[arg(long, action, help = "Do not save history")]
-    pub no_history: bool,
+    pub skip_history: bool,
+
+    #[arg(long, action, help = "Do not resize or set wallpapers")]
+    pub skip_wallpaper: bool,
 
     #[arg(long, action, help = "Transition type for swww")]
     pub transition: Option<String>,
@@ -196,9 +199,11 @@ fn main() {
         random_wallpaper
     };
 
-    wallpaper::set(&wallpaper, &args.transition);
+    if !args.skip_wallpaper {
+        wallpaper::set(&wallpaper, &args.transition);
 
-    if !args.reload && !args.no_history {
-        write_wallpaper_history(PathBuf::from(wallpaper));
+        if !args.reload && !args.skip_history {
+            write_wallpaper_history(PathBuf::from(wallpaper));
+        }
     }
 }
