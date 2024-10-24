@@ -1,5 +1,4 @@
 use itertools::Itertools;
-use rand::seq::SliceRandom;
 use serde::{de, Deserialize, Deserializer};
 
 use crate::{filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
@@ -42,27 +41,6 @@ where
 
             None
         })
-}
-
-/// returns all files in the wallpaper directory, excluding the current wallpaper
-pub fn all() -> Vec<String> {
-    let curr = self::current().unwrap_or_default();
-    filter_images(&self::dir())
-        // do not include the current wallpaper
-        .filter(|path| curr != *path)
-        .collect()
-}
-
-pub fn random() -> String {
-    if self::dir().exists() {
-        self::all()
-            .choose(&mut rand::thread_rng())
-            // use fallback image if not available
-            .unwrap_or(&NixInfo::new().fallback)
-            .to_string()
-    } else {
-        NixInfo::new().fallback
-    }
 }
 
 /// reads the wallpaper info from wallpapers.csv
@@ -110,12 +88,16 @@ pub fn random_from_dir<P>(dir: P) -> String
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
-    filter_images(dir)
-        .collect_vec()
-        .choose(&mut rand::thread_rng())
-        // use fallback image if not available
-        .unwrap_or(&NixInfo::new().fallback)
-        .to_string()
+    if !dir.as_ref().exists() {
+        return NixInfo::new().fallback;
+    }
+
+    let wallpapers = filter_images(dir).collect_vec();
+    if wallpapers.is_empty() {
+        NixInfo::new().fallback
+    } else {
+        wallpapers[fastrand::usize(..wallpapers.len())].to_string()
+    }
 }
 
 /// euclid's algorithm to find the greatest common divisor

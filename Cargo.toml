@@ -1,4 +1,0 @@
-[workspace]
-
-members = ["packages/dotfiles-rs"]
-resolver = "2"

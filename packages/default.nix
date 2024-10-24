@@ -13,20 +13,10 @@ let
     _callPackage (path + "/default.nix") (
       extraOverrides // { source = lib.filterAttrs (k: _: !(lib.hasPrefix "override" k)) firstSource; }
     );
-  # cargo workspaces needed to build rust packages
-  rustSrcs = lib.fileset.toSource {
-    root = ../.;
-    fileset = lib.fileset.unions [
-      ../Cargo.lock
-      ../Cargo.toml
-
-      ./dotfiles-rs
-    ];
-  };
 in
 {
   # boutique rust packages
-  dotfiles-rs = callPackage ./dotfiles-rs { src = rustSrcs; };
+  dotfiles-rs = callPackage ./dotfiles-rs { };
 
   # custom tela built with catppucin variant colors
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };

@@ -49,11 +49,10 @@
     # cargo will be provided via the nix-shell
     crb = {
       text = ''
-        # if no arguments
         if [ $# -eq 0 ]; then
-          cargo run --bin "$(basename "$(pwd)")";
+          cargo run --bin "$(basename "$(pwd)")"
         else
-          cargo run --bin "$1" -- "''${@:2}";
+          cargo run --bin "$1" -- "''${@:2}"
         fi;
       '';
       fishCompletion = "complete -c crb -f -a '(__cargo_bins)'";
@@ -61,11 +60,10 @@
     };
     crrb = {
       text = ''
-        # if no arguments
         if [ $# -eq 0 ]; then
-          cargo run --release --bin "$(basename "$(pwd)")";
+          cargo run --release --bin "$(basename "$(pwd)")"
         else
-          cargo run --release --bin "$1" -- "''${@:2}";
+          cargo run --release --bin "$1" -- "''${@:2}"
         fi;
       '';
       fishCompletion = "complete -c crrb -f -a '(__cargo_bins)'";

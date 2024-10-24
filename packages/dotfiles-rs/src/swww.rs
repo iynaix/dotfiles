@@ -7,7 +7,6 @@ use hyprland::{
 };
 use image::codecs::webp::WebPEncoder;
 use image::{ImageEncoder, ImageReader};
-use rand::seq::SliceRandom;
 use rayon::prelude::*;
 
 /// chooses a random transition
@@ -49,9 +48,7 @@ fn get_random_transition() -> Vec<String> {
         ],
     ];
 
-    transitions
-        .choose(&mut rand::thread_rng())
-        .unwrap_or(&Vec::new())
+    transitions[fastrand::usize(..transitions.len())]
         .iter()
         .map(std::string::ToString::to_string)
         .collect()

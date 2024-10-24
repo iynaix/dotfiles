@@ -185,7 +185,7 @@ fn main() {
                         .to_string()
                 }
             }
-            None => wallpaper::random(),
+            None => wallpaper::random_from_dir(wallpaper::dir()),
         };
 
         // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
