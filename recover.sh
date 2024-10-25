@@ -86,4 +86,4 @@ else
         "sudo nixos-install --flake \"$repo/${git_rev:-main}#$host\" --option tarball-ttl 0"
 fi
 
-echo "Intallation complete. It is now safe to reboot."
+echo "Installation complete. It is now safe to reboot."

@@ -26,6 +26,7 @@ _: {
           6
           7
         ];
+        defaultWorkspace = 7;
       }
       {
         name = "HDMI-A-1";
@@ -38,6 +39,7 @@ _: {
           9
           10
         ];
+        defaultWorkspace = 9;
       }
     ];
 

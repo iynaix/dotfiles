@@ -59,6 +59,11 @@ lib.mkIf (!config.custom.headless) (
           };
         };
       };
+
+      # wait for colorscheme to be ready on boot
+      systemd.user.services.dunst = {
+        Unit.AssertPathExists = [ actualDunstConfig ];
+      };
     }
 
     (lib.mkIf config.services.dunst.enable {

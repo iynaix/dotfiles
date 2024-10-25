@@ -42,6 +42,6 @@ in
   rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
 
   vv =
-    assert (lib.assertMsg (!lib.hasAttr "vv" pkgs) "vv: vv is in nixpkgs");
+    assert (lib.assertMsg (!(pkgs ? "vv")) "vv: vv is in nixpkgs");
     (w callPackage ./vv { });
 }

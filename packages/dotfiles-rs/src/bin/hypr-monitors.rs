@@ -7,10 +7,7 @@ use dotfiles::{
 use hyprland::dispatch;
 use hyprland::{
     data::Monitors,
-    dispatch::{
-        Dispatch, DispatchType, MonitorIdentifier, WorkspaceIdentifier,
-        WorkspaceIdentifierWithSpecial,
-    },
+    dispatch::{Dispatch, DispatchType, MonitorIdentifier, WorkspaceIdentifier},
     keyword::Keyword,
     shared::HyprData,
 };
@@ -65,13 +62,10 @@ fn mirror_monitors(new_mon: &str) {
     .expect("unable to mirror displays");
 }
 
-fn move_workspaces_to_monitors(
-    workspaces: &WorkspacesByMonitor,
-) -> Result<(), hyprland::shared::HyprError> {
-    // move workspaces to monitors
+fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
     for (mon, wksps) in workspaces {
         for wksp in wksps {
-            // note it can error if the workspace is empty has not been created yet
+            // note it can error if the workspace is empty and hasnt been created yet
             dispatch!(
                 MoveWorkspaceToMonitor,
                 WorkspaceIdentifier::Id(*wksp),
@@ -80,31 +74,6 @@ fn move_workspaces_to_monitors(
             .ok();
         }
     }
-
-    // focus workspace on monitors
-    let primary_workspaces = [1, 7, 9];
-    for wksps in workspaces.values() {
-        // focus current workspace if monitor is already active
-        // if let Some(wksp) = active_monitors.get(mon) {
-        //     hypr(["workspace", &wksp.to_string()]);
-        //     continue;
-        // }
-
-        for wksp in wksps {
-            if primary_workspaces.contains(wksp) {
-                dispatch!(Workspace, WorkspaceIdentifierWithSpecial::Id(*wksp,))?;
-                break;
-            }
-        }
-    }
-
-    // focus first / primary monitor
-    dispatch!(
-        FocusMonitor,
-        MonitorIdentifier::Name(workspaces.keys().next().expect("primary monitor not found"),)
-    )?;
-
-    Ok(())
 }
 
 /// distribute the workspaces evenly across all monitors
@@ -188,7 +157,7 @@ fn main() {
         _ => rearranged_workspaces(),
     };
 
-    move_workspaces_to_monitors(&workspaces).expect("failed to move workspaces to monitors");
+    move_workspaces_to_monitors(&workspaces);
 
     // reload wallpaper
     wallpaper::reload(&None);

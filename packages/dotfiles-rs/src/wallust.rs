@@ -244,7 +244,7 @@ pub fn apply_colors() {
     kill_wrapped_process("wfetch", "SIGUSR2");
 
     // refresh waybar, process is killed and restarted as sometimes reloading kills the process :(
-    execute::command_args!("systemctl", "restart", "--user", "waybar.service")
+    execute::command_args!("systemctl", "reload-or-restart", "--user", "waybar.service")
         .execute()
         .ok();
 }
@@ -315,7 +315,7 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
     }
 
     // restart dunst
-    execute::command_args!("systemctl", "restart", "--user", "dunst.service")
+    execute::command_args!("systemctl", "reload-or-restart", "--user", "dunst.service")
         .execute()
         .ok();
 }

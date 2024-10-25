@@ -2,12 +2,14 @@ use crate::json;
 use serde::Deserialize;
 
 #[derive(Clone, Default, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct NixMonitorInfo {
     pub name: String,
     pub workspaces: Vec<i32>,
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct NixInfo {
     pub wallpaper: String,
     pub fallback: String,

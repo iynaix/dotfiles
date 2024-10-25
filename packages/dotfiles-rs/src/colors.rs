@@ -157,6 +157,7 @@ pub struct ColorsSpecial {
 
 #[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct NixColors {
     pub wallpaper: String,
     pub special: ColorsSpecial,
