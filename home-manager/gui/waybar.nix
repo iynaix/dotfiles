@@ -69,6 +69,11 @@ in
       ];
     };
 
+    # wait for colorscheme to be ready on boot
+    systemd.user.services.waybar = {
+      Unit.AssertPathExists = [ "${config.xdg.configHome}/waybar/config.jsonc" ];
+    };
+
     custom = {
       waybar.config = {
         backlight = lib.mkIf config.custom.backlight.enable {
@@ -218,7 +223,7 @@ in
 
       wallust = {
         nixJson = {
-          waybar_persistent_workspaces = cfg.persistentWorkspaces;
+          waybarPersistentWorkspaces = cfg.persistentWorkspaces;
         };
 
         templates = {

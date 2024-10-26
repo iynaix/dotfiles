@@ -21,9 +21,6 @@ lib.mkIf config.custom.hyprland.enable {
       # init ipc listener
       "hypr-ipc &"
 
-      "swww-daemon &"
-      "sleep 1; hypr-wallpaper"
-
       # fix gparted "cannot open display: :0" error
       "${lib.getExe pkgs.xorg.xhost} +local:${user}"
       # fix Authorization required, but no authorization protocol specified error
@@ -33,6 +30,7 @@ lib.mkIf config.custom.hyprland.enable {
       "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
 
       # browsers
+      "hyprctl dispatch workspace 1"
       (openOnWorkspace 1 "brave --incognito")
       (openOnWorkspace 1 "brave --profile-directory=Default")
 
@@ -48,11 +46,37 @@ lib.mkIf config.custom.hyprland.enable {
       # download desktop
       (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")
       (openOnWorkspace 10 "$term")
-
-      # focus the initial workspaces on startup
-      "hyprctl dispatch workspace 9"
-      "hyprctl dispatch workspace 7"
-      "hyprctl dispatch workspace 1"
     ];
+  };
+
+  # start swww and hypr-wallpaper via systemd to minimize reloads
+  systemd.user.services = {
+    swww = {
+      Install.WantedBy = [ "graphical-session.target" ];
+      Unit = {
+        Description = "Wayland wallpaper daemon";
+        PartOf = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = lib.getExe' pkgs.swww "swww-daemon";
+        Restart = "on-failure";
+      };
+    };
+    wallpaper = {
+      Install.WantedBy = [ "graphical-session.target" ];
+      Unit = {
+        Description = "Set the wallpaper and update colorscheme";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "swww.service" ];
+        Requires = [ "swww.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = lib.getExe' pkgs.custom.dotfiles-rs "hypr-wallpaper";
+        # possible race condition, introduce a small delay before starting
+        # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 1";
+      };
+    };
   };
 }

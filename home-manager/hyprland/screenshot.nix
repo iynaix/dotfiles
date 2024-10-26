@@ -15,13 +15,12 @@ let
   signum = 1;
 in
 lib.mkIf config.custom.hyprland.enable {
-  home.packages = lib.mkIf isNixOS (
-    [ focal ]
-    ++ (with pkgs; [
+  home.packages =
+    (with pkgs; [
       swappy
       wf-recorder
     ])
-  );
+    ++ lib.optionals isNixOS [ focal ];
 
   # swappy conf
   xdg.configFile."swappy/config".text = lib.generators.toINI { } {

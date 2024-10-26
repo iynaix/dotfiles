@@ -1,7 +1,6 @@
 {
   config,
   host,
-  inputs,
   isLaptop,
   isVm,
   lib,
@@ -37,46 +36,56 @@ in
     monitors = mkOption {
       type =
         with types;
-        listOf (submodule {
-          options = {
-            name = mkOption {
-              type = str;
-              description = "The name of the display, e.g. eDP-1";
-            };
-            width = mkOption {
-              type = int;
-              description = "Pixel width of the display";
-            };
-            height = mkOption {
-              type = int;
-              description = "Pixel width of the display";
-            };
-            refreshRate = mkOption {
-              type = int;
-              default = 60;
-              description = "Refresh rate of the display";
-            };
-            position = mkOption {
-              type = str;
-              default = "0x0";
-              description = "Position of the display, e.g. 0x0";
-            };
-            scale = mkOption {
-              type = int;
-              default = 1;
-            };
-            vrr = mkEnableOption "Variable Refresh Rate";
-            vertical = mkOption {
-              type = bool;
-              description = "Is the display vertical?";
-              default = false;
-            };
-            workspaces = mkOption {
-              type = listOf int;
-              description = "List of workspace numbers";
-            };
-          };
-        });
+        nonEmptyListOf (
+          submodule (
+            { config, ... }:
+            {
+              options = {
+                name = mkOption {
+                  type = str;
+                  description = "The name of the display, e.g. eDP-1";
+                };
+                width = mkOption {
+                  type = int;
+                  description = "Pixel width of the display";
+                };
+                height = mkOption {
+                  type = int;
+                  description = "Pixel width of the display";
+                };
+                refreshRate = mkOption {
+                  type = int;
+                  default = 60;
+                  description = "Refresh rate of the display";
+                };
+                position = mkOption {
+                  type = str;
+                  default = "0x0";
+                  description = "Position of the display, e.g. 0x0";
+                };
+                scale = mkOption {
+                  type = int;
+                  default = 1;
+                };
+                vrr = mkEnableOption "Variable Refresh Rate";
+                vertical = mkOption {
+                  type = bool;
+                  description = "Is the display vertical?";
+                  default = false;
+                };
+                workspaces = mkOption {
+                  type = nonEmptyListOf int;
+                  description = "List of workspace numbers";
+                };
+                defaultWorkspace = mkOption {
+                  type = types.enum config.workspaces;
+                  default = lib.elemAt config.workspaces 0;
+                  description = "Default workspace for this monitor";
+                };
+              };
+            }
+          )
+        );
       default = [ ];
       description = "Config for monitors";
     };
@@ -86,8 +95,7 @@ in
     home = {
       packages = with pkgs; [
         # clipboard history
-        # TODO: cliphist
-        inputs.nixpkgs-cliphist.legacyPackages.${system}.cliphist
+        cliphist
         wl-clipboard
       ];
 
@@ -232,11 +240,9 @@ in
             # "dimaround,floating:1"
             "bordersize 5,fullscreen:1" # monocle mode
             "float,class:(wlroots)" # hyprland debug session
-          ];
-
-          windowrule = [
-            # do not idle while watching videos
-            "idleinhibit focus,YouTube"
+            # save dialog
+            "float,class:(xdg-desktop-portal-gtk)"
+            "size <50% <50%,class:(xdg-desktop-portal-gtk)"
           ];
 
           exec-once = [
@@ -251,7 +257,13 @@ in
         # bind workspaces to monitors, don't bother if there is only one monitor
         lib.optionalAttrs (lib.length monitors > 1) {
           workspace = lib.custom.mapWorkspaces (
-            { workspace, monitor, ... }: "${workspace},monitor:${monitor.name}"
+            {
+              workspace,
+              monitor,
+              ...
+            }:
+            "${workspace},monitor:${monitor.name}"
+            + lib.optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
           ) monitors;
         };
     };

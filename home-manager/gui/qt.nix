@@ -1,5 +1,7 @@
 # make qt use a dark theme, adapted from:
 # https://github.com/fufexan/dotfiles/blob/main/home/programs/qt.nix
+# also see:
+# https://discourse.nixos.org/t/struggling-to-configure-gtk-qt-theme-on-laptop/42268/
 {
   lib,
   pkgs,
@@ -7,14 +9,6 @@
   ...
 }:
 let
-  KvLibadwaita = pkgs.fetchFromGitHub {
-    owner = "GabePoel";
-    repo = "KvLibadwaita";
-    rev = "87c1ef9f44ec48855fd09ddab041007277e30e37";
-    hash = "sha256-K/2FYOtX0RzwdcGyeurLXAh3j8ohxMrH2OWldqVoLwo=";
-    sparseCheckout = [ "src" ];
-  };
-
   qtctConf = {
     Appearance = {
       custom_palette = false;
@@ -23,7 +17,6 @@ let
       style = "kvantum";
     };
   };
-
   defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
 in
 {
@@ -39,29 +32,30 @@ in
     };
 
     packages = with pkgs; [
-      qt6Packages.qtstyleplugin-kvantum
-      qt6Packages.qt6ct
+      # qt6Packages.qtstyleplugin-kvantum
+      # qt6Packages.qt6ct
       libsForQt5.qtstyleplugin-kvantum
       libsForQt5.qt5ct
     ];
   };
 
   xdg.configFile = {
-    # Kvantum config
+    # Kvantum looks for themes here
     "Kvantum" = {
-      source = "${KvLibadwaita}/src";
+      source = "${pkgs.catppuccin-kvantum.src}/themes";
       recursive = true;
     };
-
-    "Kvantum/kvantum.kvconfig".text = ''
-      [General]
-      theme=KvLibadwaitaDark
-    '';
-
   };
 
   # qtct config
   custom.wallust.templates = {
+    "kvantum.kvconfig" = {
+      text = lib.generators.toINI { } {
+        General.theme = "catppuccin-mocha-${config.custom.gtk.defaultAccent}";
+      };
+      target = "${config.xdg.configHome}/Kvantum/kvantum.kvconfig";
+    };
+
     "qt5ct.conf" = {
       text =
         let

@@ -93,25 +93,22 @@
 
             write-filename-in-watch-later-config = true;
           };
-          scripts =
-            (with pkgs.mpvScripts; [
-              dynamic-crop
-              seekTo
-            ])
+          scripts = with pkgs; [
+            mpvScripts.dynamic-crop
+            mpvScripts.seekTo
             # custom packaged scripts
-            ++ (with pkgs.custom; [
-              mpv-deletefile
-              mpv-nextfile
-              mpv-subsearch
-            ]);
+            custom.mpv-deletefile
+            custom.mpv-nextfile
+            custom.mpv-subsearch
+          ];
         };
 
-        wayland.windowManager.hyprland.settings = {
+        wayland.windowManager.hyprland.settings.windowrulev2 = [
           # do not idle while watching videos
-          windowrule = [ "idleinhibit focus,mpv" ];
+          "idleinhibit focus,class:(mpv)"
           # fix mpv-dynamic-crop unmaximizing the window
-          windowrulev2 = [ "suppressevent maximize, class:(mpv)" ];
-        };
+          "suppressevent maximize,class:(mpv)"
+        ];
 
         home.packages = with pkgs; [ ffmpeg ];
 

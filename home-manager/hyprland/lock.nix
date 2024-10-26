@@ -7,7 +7,7 @@
   ...
 }:
 let
-  lockCmd = lib.getExe pkgs.custom.shell.lock;
+  lockCmd = "${lib.getExe' pkgs.procps "pidof"} hyprlock || ${lib.getExe config.programs.hyprlock.package}";
 in
 {
   options.custom = with lib; {
@@ -20,16 +20,6 @@ in
 
   config = lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
     programs.hyprlock.enable = true;
-
-    custom.shell.packages = {
-      lock = {
-        runtimeInputs = with pkgs; [
-          hyprlock
-          procps
-        ];
-        text = "pidof hyprlock || hyprlock";
-      };
-    };
 
     wayland.windowManager.hyprland.settings = {
       bind = [ "$mod_SHIFT, x, exec, ${lockCmd}" ];

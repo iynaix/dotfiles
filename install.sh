@@ -215,4 +215,4 @@ if [[ $repo == "github:elias-ainsworth/dotfiles" ]]; then
     echo "The IP address of this host is $IP_ADDR"
 fi
 
-echo "Intallation complete. It is now safe to reboot."
+echo "Installation complete. It is now safe to reboot."
