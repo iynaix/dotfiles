@@ -5,7 +5,7 @@
   ...
 }:
 let
-  repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
+  repo_url = "https://raw.githubusercontent.com/elias-ainsworth/dotfiles";
   user = "nixos";
   mkIso =
     nixpkgs: isoPath:
@@ -20,17 +20,17 @@ let
             environment = {
               systemPackages = with pkgs; [
                 (pkgs.writeShellApplication {
-                  name = "iynaixos-install";
+                  name = "elias-ainsworthos-install";
                   runtimeInputs = [ pkgs.curl ];
                   text = "sh <(curl -L ${repo_url}/main/install.sh)";
                 })
                 (pkgs.writeShellApplication {
-                  name = "iynaixos-recover";
+                  name = "elias-ainsworthos-recover";
                   runtimeInputs = [ pkgs.curl ];
                   text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                 })
                 (pkgs.writeShellApplication {
-                  name = "iynaixos-reinstall";
+                  name = "elias-ainsworthos-reinstall";
                   runtimeInputs = [ pkgs.curl ];
                   text = "sh <(curl -L ${repo_url}/main/recover.sh)";
                 })
