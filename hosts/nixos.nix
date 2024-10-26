@@ -26,6 +26,7 @@ let
         isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
         isVm = host == "vm" || host == "vm-hyprland";
+        dots = "/persist/home/${user}/projects/dotfiles";
       };
 
       modules = [
@@ -44,6 +45,7 @@ let
               isNixOS = true;
               isLaptop = host == "xps" || host == "framework";
               isVm = host == "vm" || host == "vm-hyprland";
+              dots = "/persist/home/${user}/projects/dotfiles";
             };
 
             users.${user} = {

@@ -1,5 +1,6 @@
 {
   config,
+  dots,
   lib,
   pkgs,
   ...
@@ -90,7 +91,7 @@ lib.mkMerge [
           homeDir = "/persist/${config.home.homeDirectory}";
           shortcuts = {
             h = homeDir;
-            dots = "${homeDir}/projects/dotfiles";
+            inherit dots;
             cfg = "${homeDir}/.config";
             vd = "${homeDir}/Videos";
             vaa = "${homeDir}/Videos/Anime";

@@ -1,5 +1,6 @@
 {
   config,
+  dots,
   host,
   inputs,
   lib,
@@ -8,9 +9,6 @@
   user,
   ...
 }:
-let
-  dots = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
-in
 # create an fhs environment to run downloaded binaries
 # https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
 # fhs = let

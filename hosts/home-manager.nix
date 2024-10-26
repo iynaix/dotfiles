@@ -25,6 +25,9 @@ let
         inherit host user;
         isNixOS = false;
         isLaptop = host == "xps" || host == "framework";
+        isVm = host == "vm" || host == "vm-hyprland";
+        # NOTE: don't reference /persist on legacy distros
+        dots = "/home/${user}/projects/dotfiles";
       };
 
       modules = [
