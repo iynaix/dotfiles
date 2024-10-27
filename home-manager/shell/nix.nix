@@ -1,5 +1,5 @@
 {
-  config,
+  dots,
   host,
   isNixOS,
   lib,
@@ -7,7 +7,6 @@
   ...
 }:
 let
-  dots = "/persist${config.home.homeDirectory}/projects/dotfiles";
   nixpkgs-review = pkgs.nixpkgs-review.override { withNom = true; };
 in
 {

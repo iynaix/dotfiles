@@ -1,4 +1,5 @@
-_: {
+{ dots, ... }:
+{
   programs.nixvim = {
     plugins = {
       lsp = {
@@ -14,6 +15,14 @@ _: {
             enable = true;
             settings = {
               diagnostic.suppress = [ "sema-escaping-with" ];
+              options = {
+                nixos = {
+                  expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.desktop.options";
+                };
+                home-manager = {
+                  expr = "(builtins.getFlake \"${dots}\").homeConfigurations.desktop.options";
+                };
+              };
             };
           };
           pyright.enable = true;

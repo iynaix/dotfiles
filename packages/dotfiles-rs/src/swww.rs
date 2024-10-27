@@ -135,16 +135,10 @@ impl Swww {
             .expect("failed to execute swww");
     }
 
-    pub fn run(&self, wall_info: Option<WallInfo>, transition: &Option<String>) {
+    pub fn run(&self, wall_info: &WallInfo, transition: &Option<String>) {
         let transition_args = transition.as_ref().map_or_else(get_random_transition, |t| {
             vec!["--transition-type".to_string(), t.to_string()]
         });
-
-        // get the WallInfo for the image if it exists
-        let Some(wall_info) = wall_info else {
-            self.no_crop(&transition_args);
-            return;
-        };
 
         // set the wallpaper per monitor
         let monitors = Monitors::get().expect("could not get monitors").to_vec();
@@ -160,6 +154,6 @@ impl Swww {
 
         monitors
             .par_iter()
-            .for_each(|mon| self.with_crop(mon, &wall_info, &transition_args));
+            .for_each(|mon| self.with_crop(mon, wall_info, &transition_args));
     }
 }

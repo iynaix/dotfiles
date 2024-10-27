@@ -15,6 +15,7 @@
     ./fish.nix
     ./git.nix
     ./helix
+    ./jujutsu.nix
     ./neovim
     ./nix.nix
     ./rice.nix

@@ -500,6 +500,7 @@ dependencies = [
  "itertools 0.13.0",
  "rayon",
  "regex",
+ "rexiv2",
  "serde",
  "serde_json",
  "wallust_themes",
@@ -653,6 +654,16 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi",
+]
+
+[[package]]
+name = "gexiv2-sys"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c4edf7a47be383873c52eb34426723c7c9b040f9e58cf5088f2253cef149daf1"
+dependencies = [
+ "libc",
+ "pkg-config",
 ]
 
 [[package]]
@@ -1359,6 +1370,17 @@ name = "regex-syntax"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
+
+[[package]]
+name = "rexiv2"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11ecb9dccad43fea1bf58ea7bb8e34614446bea8aa00f78add6624d7ee26fb87"
+dependencies = [
+ "gexiv2-sys",
+ "libc",
+ "num-rational",
+]
 
 [[package]]
 name = "rgb"

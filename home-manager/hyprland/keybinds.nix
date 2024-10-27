@@ -114,7 +114,7 @@ in
             # fullscreen
             "$mod, f, fullscreen, 0"
             # "$mod_SHIFT, f, fakefullscreen"
-            "$mod_SHIFT, f, fullscreenstate, -1 2" # hyprland 0.42.0
+            "$mod_SHIFT, f, fullscreenstate, -1 2"
 
             # floating
             "$mod, g, togglefloating"
@@ -127,8 +127,12 @@ in
             # move to next / previous monitor
             "$mod_SHIFT, Tab, movewindow, mon:+1"
 
+            # classic alt tab in a workspace
             "ALT, Tab, cyclenext"
             "ALT_SHIFT, Tab, cyclenext, prev"
+
+            # toggle between prev and current windows
+            "$mod, grave, exec, focuscurrentorlast"
 
             # switches to the next / previous window of the same class
             # hardcoded to SUPER so it doesn't clash on VM
@@ -150,7 +154,7 @@ in
             "$mod, mouse_up, workspace, e-1"
 
             # dunst controls
-            "$mod, grave, exec, dunstctl history-pop"
+            "$mod, n, exec, dunstctl history-pop"
 
             # switching wallpapers or themes
             "$mod, apostrophe, exec, hypr-wallpaper --rofi"

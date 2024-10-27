@@ -27,7 +27,7 @@ let
               if [[ $url == http* ]]; then
                   args+=("$url")
               fi
-          done < "${config.xdg.userDirs.desktop}/yt.txt"
+          done < <(sort -u "${config.xdg.userDirs.desktop}/yt.txt")
       fi
 
       pushd "${config.xdg.userDirs.download}" > /dev/null
