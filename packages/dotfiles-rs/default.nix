@@ -1,6 +1,9 @@
 {
   lib,
   installShellFiles,
+  pkg-config,
+  glib,
+  gexiv2,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage {
@@ -14,7 +17,15 @@ rustPlatform.buildRustPackage {
   cargoBuildFlags = [ "-p dotfiles" ];
 
   # create files for shell autocomplete
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    glib
+    gexiv2 # for reading metadata
+  ];
 
   postInstall = ''
     for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv; do

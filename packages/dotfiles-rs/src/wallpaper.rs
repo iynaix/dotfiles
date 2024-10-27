@@ -1,7 +1,7 @@
 use itertools::Itertools;
-use serde::{de, Deserialize, Deserializer};
+use rexiv2::Metadata;
 
-use crate::{filename, full_path, nixinfo::NixInfo, swww::Swww, wallust};
+use crate::{full_path, nixinfo::NixInfo, swww::Swww, wallust};
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -43,27 +43,9 @@ where
         })
 }
 
-/// reads the wallpaper info from wallpapers.csv
-fn get_wallpaper_info(wallpaper: &str) -> Option<WallInfo> {
-    let wallpapers_csv = full_path("~/Pictures/Wallpapers/wallpapers.csv");
-    if !wallpapers_csv.exists() {
-        return None;
-    }
-
-    let reader = std::io::BufReader::new(
-        std::fs::File::open(wallpapers_csv).expect("could not open wallpapers.csv"),
-    );
-
-    let fname = filename(wallpaper);
-    let mut rdr = csv::Reader::from_reader(reader);
-    rdr.deserialize::<WallInfo>()
-        .flatten()
-        .find(|line| line.filename == fname)
-}
-
 /// sets the wallpaper and reloads the wallust theme
 pub fn set(wallpaper: &str, transition: &Option<String>) {
-    let wallpaper_info = get_wallpaper_info(wallpaper);
+    let wallpaper_info = WallInfo::new_from_file(wallpaper);
 
     // use colorscheme set from nix if available
     if let Some(cs) = NixInfo::new().colorscheme {
@@ -73,7 +55,7 @@ pub fn set(wallpaper: &str, transition: &Option<String>) {
     }
 
     // set the wallpaper with cropping
-    Swww::new(wallpaper).run(wallpaper_info, transition);
+    Swww::new(wallpaper).run(&wallpaper_info, transition);
 
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
@@ -112,14 +94,45 @@ const fn gcd(mut a: i32, mut b: i32) -> i32 {
 
 #[derive(Debug, Clone)]
 pub struct WallInfo {
-    pub filename: String,
-    pub width: u32,
-    pub height: u32,
+    pub path: PathBuf,
     pub geometries: HashMap<String, String>,
     pub wallust: String,
 }
 
 impl WallInfo {
+    pub fn new_from_file<P>(img: P) -> Self
+    where
+        P: AsRef<Path> + std::fmt::Debug,
+    {
+        let meta = Metadata::new_from_path(img.as_ref()).expect("could not init new metadata");
+
+        let mut crops = HashMap::new();
+        let mut wallust = String::new();
+
+        for tag in meta.get_xmp_tags().expect("unable to read xmp tags") {
+            if tag.starts_with("Xmp.wallfacer.crop.") {
+                let aspect = tag
+                    .strip_prefix("Xmp.wallfacer.crop.")
+                    .expect("could not strip crop prefix");
+                let geom = meta.get_tag_string(&tag).expect("could not get crop tag");
+
+                crops.insert(aspect.to_string(), geom);
+            }
+
+            if tag == "Xmp.wallfacer.wallust" {
+                wallust = meta
+                    .get_tag_string(&tag)
+                    .expect("could not get wallust tag");
+            }
+        }
+
+        Self {
+            path: img.as_ref().to_path_buf(),
+            geometries: crops,
+            wallust,
+        }
+    }
+
     pub fn get_geometry(&self, width: i32, height: i32) -> Option<(f64, f64, f64, f64)> {
         self.get_geometry_str(width, height).and_then(|geom| {
             let geometry = geom
@@ -138,89 +151,6 @@ impl WallInfo {
         let divisor = gcd(width, height);
         self.geometries
             .get(&format!("{}x{}", width / divisor, height / divisor))
-    }
-}
-
-impl<'de> Deserialize<'de> for WallInfo {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        #[derive(Deserialize)]
-        #[serde(field_identifier, rename_all = "lowercase")]
-        enum Field {
-            Filename,
-            Faces,
-            Geometries,
-            Wallust,
-        }
-
-        struct WallInfoVisitor;
-
-        impl<'de> de::Visitor<'de> for WallInfoVisitor {
-            type Value = WallInfo;
-
-            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-                formatter.write_str("struct WallInfo2")
-            }
-
-            fn visit_map<V>(self, mut map: V) -> Result<Self::Value, V::Error>
-            where
-                V: de::MapAccess<'de>,
-            {
-                let mut filename = None;
-                let mut width = None;
-                let mut height = None;
-                let mut geometries = HashMap::new();
-                let mut wallust = None;
-
-                while let Some((key, value)) = map.next_entry::<&str, String>()? {
-                    match key {
-                        "filename" => {
-                            filename = Some(value);
-                        }
-                        "width" => {
-                            width = Some(value.parse::<u32>().map_err(de::Error::custom)?);
-                        }
-                        "height" => {
-                            height = Some(value.parse::<u32>().map_err(de::Error::custom)?);
-                        }
-                        // ignore
-                        "faces" => {}
-                        "wallust" => {
-                            wallust = Some(value);
-                        }
-                        _ => {
-                            geometries.insert(key.to_string(), value);
-                        }
-                    }
-                }
-
-                let filename = filename.ok_or_else(|| de::Error::missing_field("filename"))?;
-                let width = width.ok_or_else(|| de::Error::missing_field("width"))?;
-                let height = height.ok_or_else(|| de::Error::missing_field("height"))?;
-                let wallust = wallust.ok_or_else(|| de::Error::missing_field("wallust"))?;
-
-                // geometries have no width and height, calculate from wall info
-                Ok(WallInfo {
-                    filename,
-                    width,
-                    height,
-                    geometries,
-                    wallust,
-                })
-            }
-        }
-
-        const FIELDS: &[&str] = &[
-            "filename",
-            "width",
-            "height",
-            "faces",
-            "geometries",
-            "wallust",
-        ];
-        deserializer.deserialize_struct("WallInfo", FIELDS, WallInfoVisitor)
     }
 }
 

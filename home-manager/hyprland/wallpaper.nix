@@ -99,13 +99,6 @@ in
             czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
           '';
         };
-        # easier editing of wallpapers.csv
-        wallpapers-csv = {
-          runtimeInputs = [ pkgs.csvlens ];
-          text = ''
-            csvlens "${wallpapers_dir}/wallpapers.csv"
-          '';
-        };
         # fetch wallpapers from pixiv for user
         pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
           cargo run --release --bin wall-dl -- "$@"
@@ -179,7 +172,6 @@ in
       xdg.configFile = {
         "wallfacer/config.ini".text = lib.generators.toINIWithGlobalSection { } {
           globalSection = {
-            csv_path = "${wallpapers_dir}/wallpapers.csv";
             wallpapers_path = wallpapers_dir;
             min_width = 3840; # 4k width
             min_height = 2560; # vertical 1440p

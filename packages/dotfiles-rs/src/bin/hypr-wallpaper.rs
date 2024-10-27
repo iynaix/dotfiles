@@ -123,7 +123,7 @@ fn write_wallpaper_history(wallpaper: PathBuf) {
     // insert or update timestamp
     history.insert(wallpaper, chrono::Local::now().into());
 
-    // update the csv
+    // update the history csv
     let history_csv = full_path("~/Pictures/wallpapers_history.csv");
     let writer = std::io::BufWriter::new(
         std::fs::File::create(history_csv).expect("could not create wallpapers_history.csv"),

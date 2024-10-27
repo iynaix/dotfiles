@@ -15,6 +15,9 @@ inputs.devenv.lib.mkShell {
           statix
           nixd
           cargo-edit
+          pkg-config
+          glib
+          gexiv2 # for reading metadata
         ];
 
         languages.rust.enable = true;
