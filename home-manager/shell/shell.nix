@@ -1,5 +1,6 @@
 {
   config,
+  dots,
   lib,
   pkgs,
   ...
@@ -47,7 +48,7 @@ in
         cat = "bat";
         ccat = "command cat";
         crate = "cargo";
-        dots = "cd ${proj_dir}/dotfiles";
+        dots = "cd ${dots}";
         isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
         man = "batman";
         mime = "xdg-mime query filetype";

@@ -249,18 +249,18 @@ pub fn apply_colors() {
         .ok();
 }
 
-/// runs wallust with options from wallpapers.csv
-pub fn from_wallpaper(wallpaper_info: &Option<WallInfo>, wallpaper: &str) {
+/// runs wallust with flags from image metadata if available
+pub fn from_wallpaper(wallpaper_info: &WallInfo, wallpaper: &str) {
     let mut wallust =
         execute::command_args!("wallust", "run", "--check-contrast", "--dynamic-threshold");
 
     // normalize the options for wallust
-    if let Some(WallInfo { wallust: opts, .. }) = wallpaper_info {
-        // split opts into flags
-        if !opts.is_empty() {
-            let opts: Vec<&str> = opts.split(' ').map(str::trim).collect();
-            wallust.args(opts);
-        }
+    let WallInfo { wallust: opts, .. } = wallpaper_info;
+
+    // split opts into flags
+    if !opts.is_empty() {
+        let opts: Vec<&str> = opts.split(' ').map(str::trim).collect();
+        wallust.args(opts);
     }
 
     wallust

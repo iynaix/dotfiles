@@ -151,7 +151,7 @@
     {
       nixosConfigurations = (import ./hosts/nixos.nix commonArgs) // (import ./hosts/iso commonArgs);
 
-      homeConfigurations = import ./hosts/hm.nix commonArgs;
+      homeConfigurations = import ./hosts/home-manager.nix commonArgs;
 
       # devenv for working on dotfiles, provides rust environment
       devShells = forAllSystems (commonArgs': {

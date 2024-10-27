@@ -162,6 +162,7 @@ in
     wayland.windowManager.hyprland.settings = {
       layerrule = [
         "blur,rofi"
+        "dimaround,rofi"
         "ignorealpha 0,rofi"
       ];
 
@@ -170,6 +171,7 @@ in
         "float,class:(Rofi)"
         "center,class:(Rofi)"
         "rounding 12,class:(Rofi)"
+        "dimaround,class:(Rofi)"
       ];
     };
 
