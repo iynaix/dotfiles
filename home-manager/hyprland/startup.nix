@@ -31,7 +31,7 @@ lib.mkIf config.custom.hyprland.enable {
 
       # browsers
       "hyprctl dispatch workspace 1"
-      (openOnWorkspace 1 "brave --incognito")
+      (openOnWorkspace 1 "$term tuido")
       (openOnWorkspace 1 "brave --profile-directory=Default")
 
       # file manager
