@@ -17,7 +17,7 @@
         pipes-rs
         scope-tui
         tenki
-        inputs.wfetch.packages.${pkgs.system}.wfetch
+        inputs.wfetch.packages.${pkgs.system}.wfetch-iynaixos
       ]
       ++ lib.optionals (!config.custom.headless) [
         imagemagick

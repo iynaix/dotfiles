@@ -150,9 +150,10 @@
     };
 
     # create symlinks
-    systemd.tmpfiles.rules = lib.mapAttrsToList (
-      dest: src: "L+ ${dest} - - - - ${src}"
-    ) config.custom.symlinks;
+    systemd.tmpfiles.rules = [
+      # cleanup systemd coredumps once a week
+      "D! /var/lib/systemd/coredump root root 7d"
+    ] ++ (lib.mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
 
     # setup fonts
     fonts = {
@@ -203,7 +204,10 @@
     # systemd.services.NetworkManager-wait-online.enable = false;
 
     custom.persist = {
-      root.directories = lib.mkIf config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+      root.directories = lib.optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+      root.cache.directories = [
+        "/var/lib/systemd/coredump"
+      ];
 
       home.directories = [ ".local/state/wireplumber" ];
     };

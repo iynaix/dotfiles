@@ -133,6 +133,11 @@
           };
         };
       };
+
+      # show compress ratio in zfs list output
+      hm.home.shellAliases = {
+        zfs-list = "zfs list -o name,used,avail,compressratio,mountpoint";
+      };
     }
 
     # setup zfs event daemon for email notifications

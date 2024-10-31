@@ -7,6 +7,7 @@
   ...
 }:
 let
+  tomlFormat = pkgs.formats.toml { };
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   walls_in_dir = "${config.xdg.userDirs.pictures}/wallpapers_in";
   wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallfacer";
@@ -170,24 +171,48 @@ in
 
       # config file for wallfacer
       xdg.configFile = {
-        "wallfacer/config.ini".text = lib.generators.toINIWithGlobalSection { } {
-          globalSection = {
+        "wallfacer/wallfacer.toml".source = tomlFormat.generate "wallfacer.toml" (
+          {
             wallpapers_path = wallpapers_dir;
             min_width = 3840; # 4k width
             min_height = 2560; # vertical 1440p
             show_faces = true;
-          } // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "hypr-wallpaper $1"; };
 
-          sections = {
-            resolutions = {
-              Framework = "2256x1504";
-              HD = "1920x1080";
-              Thumbnail = "1x1";
-              Ultrawide = "3440x1440";
-              Vertical = "1440x2560";
-            };
-          };
-        };
+            resolutions = [
+              {
+                name = "FW";
+                description = "Framework";
+                resolution = "2880x1920";
+              }
+              {
+                name = "HD";
+                description = "Full HD (1920x1080)";
+                resolution = "1920x1080";
+              }
+              {
+                name = "Thumb";
+                description = "Square";
+                resolution = "1x1";
+              }
+              {
+                name = "UW";
+                description = "Ultrawide 34 inch";
+                resolution = "3440x1440";
+              }
+              {
+                name = "Vert";
+                description = "Vertical 1440p";
+                resolution = "1440x2560";
+              }
+              {
+                name = "FW Vert";
+                description = "Framework Vertical";
+                resolution = "1504x2256";
+              }
+            ];
+          }
+          // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "hypr-wallpaper $1"; }
+        );
       };
     })
   ];
