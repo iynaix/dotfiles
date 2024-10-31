@@ -137,10 +137,11 @@
 
       persist = {
         home.directories = [
+          "Books"
           "Desktop"
           "Documents"
           "Pictures"
-          "Books"
+          ".config/libreoffice"
         ];
       };
     };
