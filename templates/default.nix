@@ -1,4 +1,9 @@
 let
+  cplusplus = {
+    path = ./cpp;
+    description = "C++ dev environment";
+  };
+
   javascript = {
     path = ./javascript;
     description = "Javascript / Typescript dev environment";
@@ -21,11 +26,13 @@ let
 in
 {
   inherit
+    cplusplus
     javascript
     python
     rust
     rust-stable
     ;
+  cpp = cplusplus;
   js = javascript;
   ts = javascript;
   py = python;
