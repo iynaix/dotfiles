@@ -12,7 +12,6 @@ let
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };
-  signum = 1;
 in
 lib.mkIf config.custom.hyprland.enable {
   home.packages =
@@ -41,13 +40,12 @@ lib.mkIf config.custom.hyprland.enable {
   custom.waybar = {
     config = {
       "custom/focal" = {
-        exec = ''focal-waybar --signal ${toString signum} --recording "󰑋" --interval 2'';
+        exec = ''focal-waybar --recording "󰑋"'';
         format = "{}";
         # hide-empty-text = true;
         # return-type = "json";
-        signal = signum;
         on-click = "focal video --stop";
-        interval = "once";
+        interval = 2; # poll every 2s
       };
 
       modules-left = lib.mkAfter [ "custom/focal" ];
@@ -65,7 +63,7 @@ lib.mkIf config.custom.hyprland.enable {
       "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
       "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
       "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-      ''ALT, backslash, exec, focal-waybar --toggle --signal ${toString signum} --recording "󰑋" --rofi --no-rounded-windows''
+      ''ALT, backslash, exec, focal video --rofi --no-rounded-windows''
     ];
   };
 }

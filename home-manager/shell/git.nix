@@ -27,21 +27,6 @@ in
             # blame with ignore whitespace and track movement across all commits
             blame = "blame -w -C -C -C";
             diff = "diff --word-diff";
-            # git town
-            append = "town append";
-            contribute = "town contribute";
-            diff-parent = "town diff-parent";
-            hack = "town hack";
-            kill = "town kill";
-            observe = "town observe";
-            park = "town park";
-            prepend = "town prepend";
-            propose = "town propose";
-            rename-branch = "town rename-branch";
-            repo = "town repo";
-            set-parent = "town set-parent";
-            ship = "town ship";
-            sync = "town sync";
           };
           branch = {
             master = {
@@ -116,9 +101,6 @@ in
       # cleanup leftover files from merges
       mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
     };
-
-    # stacked diffs
-    packages = [ pkgs.git-town ];
   };
 
   # extra git functions

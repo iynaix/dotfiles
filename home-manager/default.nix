@@ -107,6 +107,7 @@
           "Desktop"
           "Documents"
           "Pictures"
+          ".config/libreoffice"
         ];
       };
     };
