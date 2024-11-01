@@ -72,9 +72,9 @@ in
           "$mod, w, exec, brave"
           "$mod_SHIFT, w, exec, brave --incognito"
           "$mod, v, exec, $term nvim"
-          "$mod_SHIFT, v, exec, code"
-          ''$mod, period, exec, focusorrun "dotfiles - Visual Studio Code" "code ${config.home.homeDirectory}/projects/dotfiles"''
-          ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - Visual Studio Code" "code ${config.home.homeDirectory}/projects/nixpkgs"''
+          "$mod_SHIFT, v, exec, codium"
+          ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
+          ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
           # exit hyprland
           "$mod_ALT, F4, exit,"
