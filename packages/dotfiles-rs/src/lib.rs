@@ -1,8 +1,8 @@
 use clap::{Subcommand, ValueEnum};
 use clap_complete::{generate, Shell};
 use execute::Execute;
-use hyprland::{data::Monitors, shared::HyprData};
-use nixinfo::NixInfo;
+use hyprland::shared::HyprData;
+use nixinfo::NixMonitorInfo;
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -180,39 +180,129 @@ pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
 pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 
 /// assign workspaces to their rules if possible, otherwise add them to the other monitors
-pub fn rearranged_workspaces() -> WorkspacesByMonitor {
-    let nix_monitors = NixInfo::new().monitors;
-    let active_workspaces: HashMap<String, i32> = Monitors::get()
-        .expect("could not get monitors")
-        .iter()
-        .map(|mon| (mon.name.clone(), mon.active_workspace.id))
-        .collect();
+pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
+    nix_monitors: &[NixMonitorInfo],
+    active_workspaces: &HashMap<String, i32, S>,
+) -> WorkspacesByMonitor {
+    let mut workspaces_by_mon: WorkspacesByMonitor = HashMap::new();
 
-    nix_monitors
+    // not active, add to the monitor with the least workspaces
+    let least_workspaces_mon = nix_monitors
         .iter()
-        .enumerate()
-        .fold(HashMap::new(), |mut acc, (mon_idx, mon)| {
-            let name = &mon.name;
-            match active_workspaces.get(name) {
-                // active, use current workspaces
-                Some(_) => {
-                    acc.entry(name.to_string())
-                        .or_default()
-                        .extend(&mon.workspaces);
-                }
-                // not active, add to the other monitors
-                None => {
-                    for (other_mon_idx, other_mon) in nix_monitors.iter().enumerate() {
-                        let other_name = &other_mon.name;
+        // only monitors that are still active
+        .filter(|mon| active_workspaces.contains_key(&mon.name))
+        .min_by_key(|mon| mon.workspaces.len())
+        .expect("no monitors were found")
+        .name
+        .to_string();
 
-                        if mon_idx != other_mon_idx && active_workspaces.contains_key(other_name) {
-                            acc.entry(other_name.to_string())
-                                .or_default()
-                                .extend(&mon.workspaces);
-                        }
-                    }
-                }
-            }
-            acc
-        })
+    for mon in nix_monitors {
+        if active_workspaces.get(&mon.name).is_some() {
+            // active, use current workspaces
+            workspaces_by_mon
+                .entry(mon.name.to_string())
+                .or_default()
+                .extend(&mon.workspaces);
+        } else {
+            workspaces_by_mon
+                .entry(least_workspaces_mon.to_string())
+                .or_default()
+                .extend(&mon.workspaces);
+        }
+    }
+
+    for wksps in workspaces_by_mon.values_mut() {
+        wksps.sort_unstable();
+    }
+
+    workspaces_by_mon
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rearranged_workspace_remove_monitors() {
+        let nix_monitors = vec![
+            NixMonitorInfo {
+                name: "UW".into(),
+                workspaces: vec![1, 2, 3, 4, 5],
+            },
+            NixMonitorInfo {
+                name: "VERT".into(),
+                workspaces: vec![6, 7],
+            },
+            NixMonitorInfo {
+                name: "PP".into(),
+                workspaces: vec![9],
+            },
+            NixMonitorInfo {
+                name: "FWVERT".into(),
+                workspaces: vec![8, 10],
+            },
+        ];
+
+        let active_wksps_vec = [
+            ("UW".to_string(), 3),
+            ("VERT".to_string(), 7),
+            ("PP".to_string(), 8),
+            ("FWVERT".to_string(), 10),
+        ];
+
+        let remove_monitors = |mons: &[&str]| -> HashMap<String, i32> {
+            active_wksps_vec
+                .iter()
+                .filter(|(name, _)| !mons.contains(&name.as_str()))
+                .cloned()
+                .collect()
+        };
+
+        // sanity check, should be a noop
+        assert_eq!(
+            rearranged_workspaces(&nix_monitors, &remove_monitors(&[])),
+            HashMap::from([
+                ("UW".to_string(), vec![1, 2, 3, 4, 5]),
+                ("VERT".to_string(), vec![6, 7]),
+                ("PP".to_string(), vec![9]),
+                ("FWVERT".to_string(), vec![8, 10]),
+            ]),
+            "No monitors removed"
+        );
+
+        assert_eq!(
+            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT"])),
+            HashMap::from([
+                ("UW".to_string(), vec![1, 2, 3, 4, 5]),
+                ("VERT".to_string(), vec![6, 7]),
+                ("PP".to_string(), vec![8, 9, 10]),
+            ]),
+            "FWVERT removed"
+        );
+
+        assert_eq!(
+            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT", "PP"])),
+            HashMap::from([
+                ("UW".to_string(), vec![1, 2, 3, 4, 5]),
+                ("VERT".to_string(), vec![6, 7, 8, 9, 10]),
+            ]),
+            "PP, FWVERT removed"
+        );
+
+        assert_eq!(
+            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT", "PP", "VERT"])),
+            HashMap::from([("UW".to_string(), vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),]),
+            "VERT, PP, FWVERT removed"
+        );
+
+        assert_eq!(
+            rearranged_workspaces(&nix_monitors, &remove_monitors(&["VERT"])),
+            HashMap::from([
+                ("UW".to_string(), vec![1, 2, 3, 4, 5]),
+                ("PP".to_string(), vec![6, 7, 9]),
+                ("FWVERT".to_string(), vec![8, 10]),
+            ]),
+            "VERT removed"
+        );
+    }
 }

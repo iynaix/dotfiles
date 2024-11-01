@@ -8,7 +8,6 @@ lib.mkIf (!config.custom.headless) {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
-    enableUpdateCheck = false;
     extensions = with pkgs.vscode-extensions; [
       aaron-bond.better-comments
       bbenoist.nix

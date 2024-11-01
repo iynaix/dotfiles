@@ -36,8 +36,6 @@
 
   # fish plugins, home-manager's programs.fish.plugins has a weird format
   home.packages = with pkgs.fishPlugins; [
-    # used as starship's transient prompt does not handle empty commands
-    transient-fish
     # do not add failed commands to history
     sponge
   ];

@@ -96,7 +96,7 @@ in
           in
           ''
             sudo fd --one-file-system --base-directory / --type f --hidden \
-              --exclude "/etc/{ssh,machine-id,passwd,shadow}" \
+              --exclude "/etc/{ssh,passwd,shadow}" \
               --exclude "*.timer" \
               --exclude "/var/lib/NetworkManager" \
               --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
@@ -109,7 +109,7 @@ in
     environment.persistence = {
       "/persist" = {
         hideMounts = true;
-        files = [ "/etc/machine-id" ] ++ cfg.root.files;
+        inherit (cfg.root) files;
         directories = [
           "/var/log" # systemd journal is stored in /var/log/journal
           "/var/lib/nixos" # for persisting user uids and gids

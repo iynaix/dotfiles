@@ -1,4 +1,7 @@
+use std::collections::HashMap;
+
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
+use dotfiles::nixinfo::NixMonitorInfo;
 use dotfiles::wallpaper;
 use dotfiles::{
     generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
@@ -77,10 +80,11 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
 }
 
 /// distribute the workspaces evenly across all monitors
-fn distribute_workspaces(extend_type: &MonitorExtend) -> WorkspacesByMonitor {
+fn distribute_workspaces(
+    extend_type: &MonitorExtend,
+    nix_monitors: &[NixMonitorInfo],
+) -> WorkspacesByMonitor {
     let workspaces: Vec<i32> = (1..=10).collect();
-
-    let nix_monitors = NixInfo::new().monitors;
 
     let all_monitors = Monitors::get().expect("could not get monitors");
     let all_monitors = all_monitors
@@ -150,11 +154,18 @@ fn main() {
     }
 
     // distribute workspaces per monitor
-    let workspaces = match args.extend {
+    let nix_monitors = NixInfo::new().monitors;
+    let workspaces = if let Some(extend_type) = args.extend {
         // --extend
-        Some(extend_type) => distribute_workspaces(&extend_type),
-        // no args, fall through
-        _ => rearranged_workspaces(),
+        distribute_workspaces(&extend_type, &nix_monitors)
+    } else {
+        let active_workspaces: HashMap<_, _> = Monitors::get()
+            .expect("could not get monitors")
+            .iter()
+            .map(|mon| (mon.name.clone(), mon.active_workspace.id))
+            .collect();
+
+        rearranged_workspaces(&nix_monitors, &active_workspaces)
     };
 
     move_workspaces_to_monitors(&workspaces);

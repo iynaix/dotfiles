@@ -8,7 +8,7 @@ use crate::{
 };
 use core::panic;
 use execute::Execute;
-use hyprland::keyword::Keyword;
+use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
 use image::ImageReader;
 use itertools::Itertools;
 use regex::Regex;
@@ -357,11 +357,18 @@ pub fn set_waybar_colors(nixcolors: &NixColors, accent: &Rgb) {
 
     if let NixInfo {
         waybar_persistent_workspaces: Some(true),
+        monitors,
         ..
     } = NixInfo::new()
     {
+        let active_workspaces: HashMap<_, _> = Monitors::get()
+            .expect("could not get monitors")
+            .iter()
+            .map(|mon| (mon.name.clone(), mon.active_workspace.id))
+            .collect();
+
         cfg["hyprland/workspaces"]["persistentWorkspaces"] =
-            serde_json::to_value(rearranged_workspaces())
+            serde_json::to_value(rearranged_workspaces(&monitors, &active_workspaces))
                 .expect("failed to convert rearranged workspaces to json");
     } else {
         let hyprland_workspaces = cfg["hyprland/workspaces"]
