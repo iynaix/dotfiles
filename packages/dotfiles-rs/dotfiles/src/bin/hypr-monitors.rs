@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
 use clap::{value_parser, CommandFactory, Parser, ValueEnum};
-use dotfiles::nixinfo::NixMonitorInfo;
-use dotfiles::wallpaper;
-use dotfiles::{
-    generate_completions, nixinfo::NixInfo, rearranged_workspaces, rofi::Rofi, ShellCompletion,
-    WorkspacesByMonitor,
+use common::{
+    generate_completions,
+    nixinfo::{NixInfo, NixMonitorInfo},
+    rearranged_workspaces,
+    rofi::Rofi,
+    wallpaper, ShellCompletion, WorkspacesByMonitor,
 };
 use hyprland::dispatch;
 use hyprland::{

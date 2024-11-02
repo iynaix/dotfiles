@@ -62,7 +62,6 @@
         [
           curl
           gzip
-          rar # includes unrar
           libreoffice
           trash-cli
           xdg-utils

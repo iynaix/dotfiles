@@ -66,7 +66,7 @@ in
           text = ''
             ${lib.custom.useDirenv wallpapers_proj ''
               cargo run --release --bin wallfacer "$(cat "$XDG_RUNTIME_DIR"/current_wallpaper)";
-              hypr-wallpaper --reload
+              wallpaper --reload
             ''}
           '';
         };
@@ -165,7 +165,7 @@ in
 
         shellAliases = {
           current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
-          wallpapers-history = "hypr-wallpaper --history";
+          wallpapers-history = "wallpaper --history";
         };
       };
 
@@ -211,7 +211,7 @@ in
               }
             ];
           }
-          // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "hypr-wallpaper $1"; }
+          // lib.optionalAttrs config.custom.hyprland.enable { wallpaper_command = "wallpaper $1"; }
         );
       };
     })

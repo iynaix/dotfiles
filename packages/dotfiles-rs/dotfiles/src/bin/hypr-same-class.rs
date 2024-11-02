@@ -1,5 +1,5 @@
 use clap::{CommandFactory, Parser, ValueEnum};
-use dotfiles::{generate_completions, ShellCompletion};
+use common::{generate_completions, ShellCompletion};
 use hyprland::dispatch;
 use hyprland::{
     data::{Client, Clients},

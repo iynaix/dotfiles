@@ -1,5 +1,5 @@
 use clap::{CommandFactory, Parser, ValueEnum};
-use dotfiles::{full_path, generate_completions, CommandUtf8, ShellCompletion};
+use common::{full_path, generate_completions, CommandUtf8, ShellCompletion};
 use itertools::Itertools;
 use std::{
     fs::read_to_string,

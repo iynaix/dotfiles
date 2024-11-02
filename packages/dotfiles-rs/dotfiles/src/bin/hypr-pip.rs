@@ -1,4 +1,4 @@
-use dotfiles::vertical_dimensions;
+use common::vertical_dimensions;
 use hyprland::dispatch;
 use hyprland::{
     data::{Client, Monitor},

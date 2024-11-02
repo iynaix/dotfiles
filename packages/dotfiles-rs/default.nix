@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  cargoBuildFlags = [ "-p dotfiles" ];
+  cargoBuildFlags = [ "--workspace" ];
 
   # create files for shell autocomplete
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    for prog in hypr-monitors hypr-same-class hypr-wallpaper rofi-mpv; do
+    for prog in hypr-monitors hypr-same-class rofi-mpv wallpaper; do
       installShellCompletion --cmd $prog \
         --bash <($out/bin/$prog --generate bash) \
         --fish <($out/bin/$prog --generate fish) \

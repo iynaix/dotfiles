@@ -11,12 +11,12 @@ lib.mkIf (!config.custom.headless) {
   programs.firefox = rec {
     enable = true;
     # use firefox dev edition
-    package = pkgs.firefox-devedition-bin.overrideAttrs (o: {
+    package = pkgs.firefox-devedition.overrideAttrs (o: {
       # launch firefox with user profile
       buildCommand =
         o.buildCommand
         + ''
-          wrapProgram "$executablePath" \
+          wrapProgram "$out/bin/firefox-devedition" \
             --set 'HOME' '${config.xdg.configHome}' \
             --append-flags "${
               lib.concatStringsSep " " (

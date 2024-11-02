@@ -1,4 +1,4 @@
-use dotfiles::{full_path, rofi::Rofi, wallust};
+use common::{full_path, rofi::Rofi, wallust};
 use itertools::Itertools;
 
 struct ThemeEntry {

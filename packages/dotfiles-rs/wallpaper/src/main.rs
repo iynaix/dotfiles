@@ -1,5 +1,5 @@
 use clap::{ArgGroup, CommandFactory, Parser};
-use dotfiles::{full_path, generate_completions, wallpaper, ShellCompletion};
+use common::{full_path, generate_completions, wallpaper, ShellCompletion};
 use hyprland::dispatch;
 use hyprland::{
     data::Monitor,
@@ -13,7 +13,7 @@ use std::path::PathBuf;
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 #[command(
-    name = "hypr-wallpaper",
+    name = "wallpaper",
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 #[command(group(
@@ -155,7 +155,7 @@ fn main() {
 
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-wallpaper", &mut HyprWallpaperArgs::command(), &shell);
+        return generate_completions("wallpaper", &mut HyprWallpaperArgs::command(), &shell);
     }
 
     // show pqiv for selecting wallpaper, via the "w" keybind

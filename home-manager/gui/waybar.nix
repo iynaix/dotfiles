@@ -131,7 +131,7 @@ in
         "custom/nix" = {
           format = "󱄅";
           on-click = "rofi -show drun";
-          on-click-right = "hypr-wallpaper --rofi";
+          on-click-right = "wallpaper --rofi";
           tooltip = false;
         };
 
@@ -319,7 +319,7 @@ in
                     padding-right: 16px;
                   }
                 ''
-                # add complementary classes to be modified by hypr-wallpaper at the bottom
+                # add complementary classes to be modified by wallpaper at the bottom
                 + lib.concatMapStringsSep "\n" (class: ''
                   ${mkModuleClassName class} {
                     color: {{color4}}; /* complementary */

@@ -1,4 +1,4 @@
-use dotfiles::{find_monitor_by_name, nixinfo::NixInfo};
+use common::{find_monitor_by_name, nixinfo::NixInfo};
 use execute::Execute;
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
