@@ -32,10 +32,12 @@ in
     };
 
     packages = with pkgs; [
-      # qt6Packages.qtstyleplugin-kvantum
-      # qt6Packages.qt6ct
-      libsForQt5.qtstyleplugin-kvantum
       libsForQt5.qt5ct
+      libsForQt5.qtstyleplugin-kvantum
+      libsForQt5.qtwayland
+      qt6Packages.qt6ct
+      qt6Packages.qtstyleplugin-kvantum
+      qt6Packages.qtwayland
     ];
   };
 

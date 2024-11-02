@@ -101,18 +101,18 @@ in
           '';
         };
         # fetch wallpapers from pixiv for user
-        pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
-          cargo run --release --bin wall-dl -- "$@"
+        pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/pixiv" ''
+          cargo run --release --bin pixiv -- "$@"
         '';
         # fetch latest followed wallpapers from pixiv
-        pixiv-latest = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/wall-dl" ''
+        pixiv-latest = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/pixiv" ''
           cargo run --release --bin latest -- "$@"
         '';
       };
 
       gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
 
-      home.packages = [ pkgs.nomacs ];
+      home.packages = [ (pkgs.nomacs.override { libsForQt5 = pkgs.kdePackages; }) ];
 
       programs.pqiv.extraConfig = lib.mkAfter ''
         c { command(nomacs $1) }

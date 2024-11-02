@@ -39,4 +39,18 @@
       "${lib.getExe pkgs.brightnessctl} s 25%"
     ];
   };
+
+  # improve framework speaker audio quality
+  # https://reddit.com/r/framework/comments/18cngrn/
+  services.easyeffects = {
+    enable = true;
+    preset = "kieran_levin";
+  };
+
+  xdg.configFile."easyeffects/output".source = pkgs.fetchFromGitHub {
+    owner = "ceiphr";
+    repo = "ee-framework-presets";
+    rev = "27885fe00c97da7c441358c7ece7846722fd12fa";
+    hash = "sha256-z2WmozMDMUkiAd+BEc/5+DHgFXDbw3FdsvBwgIj0JmI=";
+  };
 }
