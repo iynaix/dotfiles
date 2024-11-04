@@ -3,7 +3,6 @@
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -21,65 +20,6 @@ in
   config = lib.mkMerge [
     (lib.mkIf config.custom.wallpaper-utils.enable {
       custom.shell.packages = {
-        # backup wallpapers to secondary drive
-        wallpapers-backup = {
-          runtimeInputs = [
-            pkgs.direnv
-            pkgs.rsync
-          ] ++ lib.optionals config.custom.rclip.enable [ pkgs.rclip ];
-          text = ''
-            rsync -aP --delete --no-links "${wallpapers_dir}" "/media/6TBRED"
-            # update rclip database
-            ${lib.optionalString config.custom.rclip.enable ''
-              pushd "${wallpapers_dir}" > /dev/null
-              # do not use previous python
-              eval "$(direnv export bash)"
-              rclip -f "cat" >  /dev/null
-              popd > /dev/null
-            ''}
-          '';
-        };
-        # sync wallpapers with laptop
-        wallpapers-remote = {
-          runtimeInputs = with pkgs; [
-            rsync
-            custom.shell.wallpapers-backup
-          ];
-          text =
-            let
-              remote = "\${1:-${user}-framework}";
-              rclip_dir = "${config.xdg.dataHome}/rclip";
-              rsync = dir: ''rsync -aP --no-links --mkpath --delete "${dir}/" "${user}@${remote}:${dir}/"'';
-            in
-            ''
-              wallpapers-backup
-              ${rsync wallpapers_dir}
-
-              if [ "${remote}" == "iynaix-framework" ]; then
-                  ${rsync rclip_dir}
-              fi
-            '';
-        };
-        # quick recropping of current wallpaper
-        wallpaper-edit = {
-          runtimeInputs = [ pkgs.custom.dotfiles-rs ];
-          text = ''
-            ${lib.custom.useDirenv wallpapers_proj ''
-              cargo run --release --bin wallfacer "$(cat "$XDG_RUNTIME_DIR"/current_wallpaper)";
-              wallpaper --reload
-            ''}
-          '';
-        };
-        # process wallpapers with upscaling and vertical crop
-        wallfacer-add = {
-          runtimeInputs = [ pkgs.custom.shell.wallpapers-backup ];
-          text = ''
-            ${lib.custom.useDirenv wallpapers_proj ''
-              cargo run --release --bin wallfacer -- add --format webp "$@" "${walls_in_dir}"
-            ''}
-            wallpapers-backup
-          '';
-        };
         # choose custom crops for wallpapers
         wallfacer = {
           text = lib.custom.useDirenv wallpapers_proj ''
@@ -93,20 +33,9 @@ in
             complete -c wallfacer -f -a '(_wallfacer)'
           '';
         };
-        # finds duplicate wallpapers
-        wallpapers-dedupe = {
-          runtimeInputs = [ pkgs.czkawka ];
-          text = ''
-            czkawka_cli image --directories ${wallpapers_dir} --directories ${walls_in_dir}
-          '';
-        };
         # fetch wallpapers from pixiv for user
         pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/pixiv" ''
           cargo run --release --bin pixiv -- "$@"
-        '';
-        # fetch latest followed wallpapers from pixiv
-        pixiv-latest = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/pixiv" ''
-          cargo run --release --bin latest -- "$@"
         '';
       };
 
@@ -130,25 +59,12 @@ in
     })
 
     (lib.mkIf config.custom.rclip.enable {
-      home.packages = [ pkgs.rclip ];
+      home = {
+        packages = [ pkgs.rclip ];
 
-      custom.shell.packages = {
-        # search wallpapers with rclip
-        wallpapers-search = {
-          runtimeInputs = with pkgs; [
-            rclip
-            pqiv
-          ];
-          text = ''
-            pushd "${wallpapers_dir}" > /dev/null
-            rclip --filepath-only "$@" | pqiv --additional-from-stdin
-            popd > /dev/null
-          '';
+        shellAliases = {
+          wallrg = "wallpaper search -t 50";
         };
-      };
-
-      home.shellAliases = {
-        wallrg = "wallpapers-search -t 50";
       };
 
       custom.persist = {
@@ -162,11 +78,6 @@ in
     (lib.mkIf (config.custom.hyprland.enable && isNixOS) {
       home = {
         packages = [ pkgs.swww ];
-
-        shellAliases = {
-          current-wallpaper = "command cat $XDG_RUNTIME_DIR/current_wallpaper";
-          wallpapers-history = "wallpaper --history";
-        };
       };
 
       # config file for wallfacer

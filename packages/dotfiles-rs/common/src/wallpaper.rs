@@ -17,7 +17,7 @@ pub fn current() -> Option<String> {
         .and_then(|runtime_file| std::fs::read_to_string(runtime_file).ok())
 }
 
-fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
+pub fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
@@ -44,18 +44,21 @@ where
 }
 
 /// sets the wallpaper and reloads the wallust theme
-pub fn set(wallpaper: &str, transition: &Option<String>) {
-    let wallpaper_info = WallInfo::new_from_file(wallpaper);
+pub fn set<P>(wallpaper: P, transition: &Option<String>)
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
+    let wallpaper_info = WallInfo::new_from_file(&wallpaper);
 
     // use colorscheme set from nix if available
     if let Some(cs) = NixInfo::new().colorscheme {
         wallust::apply_theme(&cs);
     } else {
-        wallust::from_wallpaper(&wallpaper_info, wallpaper);
+        wallust::from_wallpaper(&wallpaper_info, &wallpaper);
     }
 
     // set the wallpaper with cropping
-    Swww::new(wallpaper).run(&wallpaper_info, transition);
+    Swww::new(&wallpaper).run(&wallpaper_info, transition);
 
     // do wallust earlier to create the necessary templates
     wallust::apply_colors();
@@ -63,7 +66,7 @@ pub fn set(wallpaper: &str, transition: &Option<String>) {
 
 /// reloads the wallpaper and wallust theme
 pub fn reload(transition: &Option<String>) {
-    set(&current().expect("no current wallpaper set"), transition);
+    set(current().expect("no current wallpaper set"), transition);
 }
 
 pub fn random_from_dir<P>(dir: P) -> String

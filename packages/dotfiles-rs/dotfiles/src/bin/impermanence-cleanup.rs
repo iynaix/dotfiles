@@ -41,7 +41,7 @@ fn walk_persist(dir: &Path, persist_paths: &Vec<String>) -> std::io::Result<()> 
 
 fn main() {
     let impermanence_json = dirs::state_dir()
-        .expect("unable to get XDG_STATE_HOME")
+        .expect("unable to get $XDG_STATE_HOME")
         .join("impermanence.json");
 
     let impermenance = serde_json::from_str::<ImpermanencePaths>(

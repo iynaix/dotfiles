@@ -160,9 +160,9 @@ in
           "$mod, n, exec, dunstctl history-pop"
 
           # switching wallpapers or themes
-          "$mod, apostrophe, exec, wallpaper --rofi"
+          "$mod, apostrophe, exec, wallpaper rofi"
           "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
-          "ALT, apostrophe, exec, wallpaper --history"
+          "ALT, apostrophe, exec, wallpaper history"
 
           # special keys
           # "XF86AudioPlay, mpvctl playpause"

@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 use crate::{vertical_dimensions, wallpaper::WallInfo};
 use execute::Execute;
 use fast_image_resize::{images::Image, PixelType, ResizeOptions, Resizer};
@@ -55,13 +57,16 @@ fn get_random_transition() -> Vec<String> {
 }
 
 pub struct Swww {
-    wall: String,
+    wall: PathBuf,
 }
 
 impl Swww {
-    pub fn new(wall: &str) -> Self {
+    pub fn new<P>(wall: P) -> Self
+    where
+        P: AsRef<Path> + std::fmt::Debug,
+    {
         Self {
-            wall: wall.to_string(),
+            wall: wall.as_ref().to_path_buf(),
         }
     }
 

@@ -250,7 +250,10 @@ pub fn apply_colors() {
 }
 
 /// runs wallust with flags from image metadata if available
-pub fn from_wallpaper(wallpaper_info: &WallInfo, wallpaper: &str) {
+pub fn from_wallpaper<P>(wallpaper_info: &WallInfo, wallpaper: P)
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
     let mut wallust =
         execute::command_args!("wallust", "run", "--check-contrast", "--dynamic-threshold");
 
@@ -264,7 +267,7 @@ pub fn from_wallpaper(wallpaper_info: &WallInfo, wallpaper: &str) {
     }
 
     wallust
-        .arg(wallpaper)
+        .arg(wallpaper.as_ref())
         .execute()
         .expect("wallust: failed to set colors from wallpaper");
 }

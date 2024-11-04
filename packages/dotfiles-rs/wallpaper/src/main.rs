@@ -1,50 +1,102 @@
-use clap::{ArgGroup, CommandFactory, Parser};
+use clap::{ArgGroup, Args, CommandFactory, Parser, Subcommand};
 use common::{full_path, generate_completions, wallpaper, ShellCompletion};
-use hyprland::dispatch;
-use hyprland::{
-    data::Monitor,
-    dispatch::{Dispatch, DispatchType},
-    shared::HyprDataActive,
-};
-use itertools::Itertools;
 use std::collections::HashMap;
 use std::path::PathBuf;
+
+pub mod backup;
+pub mod dedupe;
+pub mod pqiv;
+pub mod search;
+pub mod wallfacer;
+
+#[derive(Args, Debug, PartialEq, Eq)]
+pub struct GenerateArgs {
+    #[arg(value_enum, help = "Type of shell completion to generate")]
+    pub shell: ShellCompletion,
+}
+
+#[derive(Subcommand, Debug, PartialEq)]
+enum WallpaperSubcommand {
+    #[command(name = "generate", about = "Generate shell completions", hide = true)]
+    Generate(GenerateArgs),
+
+    #[command(name = "current", about = "Prints the path of the current wallpaper")]
+    Current,
+
+    #[command(name = "reload", about = "Reloads the current wallpaper")]
+    Reload,
+
+    #[command(name = "history", about = "Show wallpaper history selector with pqiv")]
+    History,
+
+    #[command(
+        name = "rofi",
+        visible_alias = "pqiv",
+        about = "Show wallpaper selector with pqiv"
+    )]
+    Rofi,
+
+    #[cfg(feature = "dedupe")]
+    #[command(
+        name = "dedupe",
+        visible_aliases = ["czkawka", "unique", "uniq"],
+        about = "Runs czkawka to show duplicate wallpapers"
+    )]
+    Dedupe,
+
+    #[cfg(feature = "wallfacer")]
+    #[command(
+        name = "edit",
+        visible_alias = "recrop",
+        about = "Edit and reload the current wallpaper with wallfacer"
+    )]
+    Edit(wallfacer::EditArgs),
+
+    #[cfg(feature = "wallfacer")]
+    #[command(
+        name = "add",
+        about = "Processes wallpapers with upscaling and vertical crop"
+    )]
+    Add(wallfacer::AddArgs),
+
+    #[cfg(feature = "rclip")]
+    #[command(
+        name = "search",
+        visible_aliases = ["rg", "grep"],
+        about = "Search for wallpapers using rclip"
+    )]
+    Search(search::SearchArgs),
+
+    #[command(name = "backup", about = "Backup wallpapers to secondary location")]
+    Backup(backup::BackupArgs),
+
+    #[command(
+        name = "remote",
+        visible_alias = "sync",
+        about = "Sync wallpapers to another machine"
+    )]
+    Remote(backup::RemoteArgs),
+    // TODO: Toggle labmixed / lchmixed?
+}
 
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 #[command(
     name = "wallpaper",
-    about = "Changes the wallpaper and updates the colorcheme"
+    about = "Changes the wallpaper and updates the colorcheme",
+    flatten_help = true
 )]
 #[command(group(
     ArgGroup::new("exclusive_group")
-        .args(&["reload", "pqiv", "history", "image_or_dir"])
+        .args(&["reload", "image_or_dir"])
         .multiple(false)
 ))]
-pub struct HyprWallpaperArgs {
-    #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
-    )]
-    pub generate: Option<ShellCompletion>,
+struct WallpaperArgs {
+    #[command(subcommand)]
+    pub command: Option<WallpaperSubcommand>,
 
     #[arg(long, action, help = "Reload current wallpaper")]
     pub reload: bool,
-
-    #[arg(
-        long,
-        action,
-        visible_alias = "rofi",
-        help = "Show wallpaper selector with pqiv",
-        exclusive = true
-    )]
-    pub pqiv: bool,
-
-    #[arg(long, action, help = "Show wallpaper history selector with rofi")]
-    pub history: bool,
 
     #[arg(long, action, help = "Do not save history")]
     pub skip_history: bool,
@@ -64,53 +116,6 @@ pub struct HyprWallpaperArgs {
         // add = ArgValueCandidates::new(get_wallpaper_files)
     )]
     pub image_or_dir: Option<PathBuf>,
-}
-
-fn pqiv_float_rule() -> String {
-    const TARGET_PERCENT: f64 = 0.3;
-
-    let mon = Monitor::get_active().expect("could not get active monitor");
-
-    let mut width = f64::from(mon.width) * TARGET_PERCENT;
-    let mut height = f64::from(mon.height) * TARGET_PERCENT;
-
-    // handle vertical monitor
-    if height > width {
-        std::mem::swap(&mut width, &mut height);
-    }
-
-    format!("[float;size {} {};center]", width.floor(), height.floor())
-}
-
-fn show_pqiv() {
-    let pqiv = format!(
-        "{} pqiv --shuffle '{}'",
-        pqiv_float_rule(),
-        &wallpaper::dir().to_str().expect("invalid wallpaper dir")
-    );
-
-    dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
-}
-
-fn show_history() {
-    let history = wallpaper::history();
-    let history = history
-        .iter()
-        .skip(1) // skip the current wallpaper
-        .map(|(path, _)| path)
-        .collect_vec();
-
-    let pqiv = format!(
-        "{} pqiv {}",
-        pqiv_float_rule(),
-        history
-            .iter()
-            .map(|p| format!("'{}'", p.display()))
-            .collect_vec()
-            .join(" ")
-    );
-
-    dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
 }
 
 fn write_wallpaper_history(wallpaper: PathBuf) {
@@ -151,26 +156,41 @@ fn write_wallpaper_history(wallpaper: PathBuf) {
 }
 
 fn main() {
-    let args = HyprWallpaperArgs::parse();
+    let args = WallpaperArgs::parse();
 
-    // print shell completions
-    if let Some(shell) = args.generate {
-        return generate_completions("wallpaper", &mut HyprWallpaperArgs::command(), &shell);
-    }
+    let is_reload = args.reload || args.command == Some(WallpaperSubcommand::Reload);
 
-    // show pqiv for selecting wallpaper, via the "w" keybind
-    if args.pqiv {
-        show_pqiv();
+    // handle subcommand
+    if let Some(command) = args.command {
+        match command {
+            WallpaperSubcommand::Generate(args) => {
+                generate_completions("focal", &mut WallpaperArgs::command(), &args.shell);
+            }
+            WallpaperSubcommand::Current => println!(
+                "{}",
+                wallpaper::current().unwrap_or_else(|| {
+                    eprintln!("Failed to get current wallpaper");
+                    std::process::exit(1)
+                })
+            ),
+            WallpaperSubcommand::Reload => {} // handled later
+            WallpaperSubcommand::History => pqiv::show_history(),
+            WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
+            #[cfg(feature = "dedupe")]
+            WallpaperSubcommand::Dedupe => dedupe::dedupe(),
+            #[cfg(feature = "wallfacer")]
+            WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
+            #[cfg(feature = "wallfacer")]
+            WallpaperSubcommand::Add(args) => wallfacer::add(args),
+            #[cfg(feature = "rclip")]
+            WallpaperSubcommand::Search(args) => search::search(args),
+            WallpaperSubcommand::Backup(args) => backup::backup(args),
+            WallpaperSubcommand::Remote(args) => backup::remote(args),
+        }
         return;
     }
 
-    // show rofi for selecting wallpaper history
-    if args.history {
-        show_history();
-        return;
-    }
-
-    let wallpaper = if args.reload {
+    let wallpaper = if is_reload {
         wallpaper::current().expect("no current wallpaper set")
     } else {
         let random_wallpaper = match args.image_or_dir {
@@ -202,7 +222,7 @@ fn main() {
     if !args.skip_wallpaper {
         wallpaper::set(&wallpaper, &args.transition);
 
-        if !args.reload && !args.skip_history {
+        if !is_reload && !args.skip_history {
             write_wallpaper_history(PathBuf::from(wallpaper));
         }
     }

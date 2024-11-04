@@ -17,7 +17,7 @@ pub mod wallpaper;
 pub mod wallust;
 
 // utilities for generating shell completions
-#[derive(Subcommand, ValueEnum, Debug, Clone)]
+#[derive(Subcommand, ValueEnum, Debug, Clone, PartialEq, Eq)]
 pub enum ShellCompletion {
     Bash,
     Zsh,

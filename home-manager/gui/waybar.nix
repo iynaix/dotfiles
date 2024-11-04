@@ -131,7 +131,7 @@ in
         "custom/nix" = {
           format = "󱄅";
           on-click = "rofi -show drun";
-          on-click-right = "wallpaper --rofi";
+          on-click-right = "wallpaper rofi";
           tooltip = false;
         };
 
