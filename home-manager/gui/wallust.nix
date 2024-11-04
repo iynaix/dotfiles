@@ -64,7 +64,7 @@ in
         };
         "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
           backend = "fastresize";
-          color_space = "lchmixed";
+          color_space = "labmixed";
           check_contrast = true;
           fallback_generator = "interpolate";
           palette = "dark16";

@@ -60,24 +60,22 @@ fn command_output_to_lines(output: &[u8]) -> Vec<String> {
 }
 
 pub trait CommandUtf8 {
-    fn execute_stdout_lines(&mut self) -> Vec<String>;
+    fn execute_stdout_lines(&mut self) -> Result<Vec<String>, std::io::Error>;
 
-    fn execute_stderr_lines(&mut self) -> Vec<String>;
+    fn execute_stderr_lines(&mut self) -> Result<Vec<String>, std::io::Error>;
 }
 
 impl CommandUtf8 for Command {
-    fn execute_stdout_lines(&mut self) -> Vec<String> {
-        self.stdout(Stdio::piped()).execute_output().map_or_else(
-            |_| Vec::new(),
-            |output| command_output_to_lines(&output.stdout),
-        )
+    fn execute_stdout_lines(&mut self) -> Result<Vec<String>, std::io::Error> {
+        self.stdout(Stdio::piped())
+            .execute_output()
+            .map(|output| command_output_to_lines(&output.stdout))
     }
 
-    fn execute_stderr_lines(&mut self) -> Vec<String> {
-        self.stderr(Stdio::piped()).execute_output().map_or_else(
-            |_| Vec::new(),
-            |output| command_output_to_lines(&output.stderr),
-        )
+    fn execute_stderr_lines(&mut self) -> Result<Vec<String>, std::io::Error> {
+        self.stderr(Stdio::piped())
+            .execute_output()
+            .map(|output| command_output_to_lines(&output.stderr))
     }
 }
 
@@ -147,7 +145,8 @@ pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
         .arg(signal)
         .arg("--exact")
         .arg(wrapped_name)
-        .execute_stdout_lines();
+        .execute_stdout_lines()
+        .expect("could not get wrapped process");
 
     if !wrapped_processes.is_empty() {
         Command::new("pkill")

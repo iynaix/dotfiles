@@ -86,19 +86,16 @@ lib.extend (
       };
 
       # uses the direnv of a directory
-      useDirenv =
-        dir: content:
-        let
-          direnv = libprev.getExe pkgs.direnv;
-        in
+      direnvCargoRun =
+        {
+          dir,
+          bin ? builtins.baseNameOf dir,
+          args ? "",
+        }:
         ''
           pushd ${dir} > /dev/null
-          # activate direnv, it's always bash for a script
-          eval "$(${direnv} export bash)"
-          ${content}
+          ${libprev.getExe pkgs.direnv} exec "${dir}" cargo run --release --bin "${bin}" --manifest-path "${dir}/Cargo.toml" -- ${args} "$@"
           popd > /dev/null
-          # deactivate direnv by evaluating in the context of the original directory
-          eval "$(${direnv} export bash)"
         '';
     };
   }

@@ -7,6 +7,7 @@ pub mod backup;
 pub mod dedupe;
 pub mod pqiv;
 pub mod search;
+pub mod toggle;
 pub mod wallfacer;
 
 #[derive(Args, Debug, PartialEq, Eq)]
@@ -76,7 +77,12 @@ enum WallpaperSubcommand {
         about = "Sync wallpapers to another machine"
     )]
     Remote(backup::RemoteArgs),
-    // TODO: Toggle labmixed / lchmixed?
+
+    #[command(
+        name = "toggle",
+        about = "Toggles and saves the colorspace for wallust"
+    )]
+    Toggle(toggle::ToggleArgs),
 }
 
 #[allow(clippy::struct_excessive_bools)]
@@ -186,6 +192,7 @@ fn main() {
             WallpaperSubcommand::Search(args) => search::search(args),
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),
+            WallpaperSubcommand::Toggle(args) => toggle::toggle(args),
         }
         return;
     }

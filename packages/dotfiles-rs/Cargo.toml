@@ -3,7 +3,6 @@ resolver = "2"
 members = ["common", "dotfiles", "wallpaper"]
 
 [workspace.package]
-name = "dotfiles"
 version = "0.1.0"
 edition = "2021"
 

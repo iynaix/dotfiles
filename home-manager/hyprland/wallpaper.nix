@@ -8,7 +8,6 @@ let
   tomlFormat = pkgs.formats.toml { };
   wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
   walls_in_dir = "${config.xdg.userDirs.pictures}/wallpapers_in";
-  wallpapers_proj = "/persist${config.home.homeDirectory}/projects/wallfacer";
 in
 {
   options.custom = with lib; {
@@ -37,9 +36,9 @@ in
       (lib.mkIf config.custom.wallfacer.enable {
         custom.shell.packages = {
           wallfacer = {
-            text = lib.custom.useDirenv wallpapers_proj ''
-              cargo run --release --bin wallfacer -- "$@"
-            '';
+            text = lib.custom.direnvCargoRun {
+              dir = "${config.home.homeDirectory}/projects/wallfacer";
+            };
             # bash completion isn't helpful as there are 1000s of images
             fishCompletion = ''
               function _wallfacer
@@ -100,9 +99,9 @@ in
       (lib.mkIf config.custom.wallpaper-extras.enable {
         custom.shell.packages = {
           # fetch wallpapers from pixiv for user
-          pixiv = lib.custom.useDirenv "/persist${config.home.homeDirectory}/projects/pixiv" ''
-            cargo run --release --bin pixiv -- "$@"
-          '';
+          pixiv = lib.custom.direnvCargoRun {
+            dir = "${config.home.homeDirectory}/projects/pixiv";
+          };
         };
 
         gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];

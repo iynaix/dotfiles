@@ -51,6 +51,7 @@ fn refresh_zathura() {
         "org.freedesktop.DBus.ListNames",
     )
     .execute_stdout_lines()
+    .unwrap_or_default()
     .iter()
     .find(|line| line.contains("org.pwmt.zathura"))
     .and_then(|zathura_pid_raw| zathura_pid_raw.split('"').max_by_key(|s| s.len()))

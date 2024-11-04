@@ -42,7 +42,8 @@ pub fn search(args: SearchArgs) {
     let rclip_results = cmd
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
-        .execute_stdout_lines();
+        .execute_stdout_lines()
+        .unwrap_or_default();
 
     all_results.extend(rclip_results);
     execute::command_args!("pqiv", "--additional-from-stdin")

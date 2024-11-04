@@ -98,7 +98,9 @@ where
             .to_str()
             .unwrap_or_else(|| panic!("could not convert video path {vid_path:?} to str")),
     )
-    .execute_stderr_lines();
+    .execute_stderr_lines()
+    .unwrap_or_default();
+
     let duration = ffmpeg
         .iter()
         .find(|line| line.contains("Duration: "))

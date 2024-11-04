@@ -1665,6 +1665,10 @@ dependencies = [
  "execute",
  "hyprland",
  "itertools 0.13.0",
+ "regex",
+ "rexiv2",
+ "serde",
+ "toml",
  "whoami",
 ]
 
