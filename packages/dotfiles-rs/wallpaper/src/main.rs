@@ -199,9 +199,14 @@ fn main() {
                     wallpaper::random_from_dir(&image_or_dir)
                 } else {
                     std::fs::canonicalize(&image_or_dir)
-                        .unwrap_or_else(|_| panic!("invalid wallpaper: {image_or_dir:?}"))
+                        .unwrap_or_else(|_| {
+                            panic!(
+                                "{} is not a valid image / subcommand",
+                                &image_or_dir.display()
+                            )
+                        })
                         .to_str()
-                        .unwrap_or_else(|| panic!("could not conver {image_or_dir:?} to str"))
+                        .unwrap_or_else(|| panic!("could not convert {image_or_dir:?} to str"))
                         .to_string()
                 }
             }

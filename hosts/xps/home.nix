@@ -20,6 +20,7 @@ _: {
       }
     ];
 
+    qtStyleFix = false;
     terminal.size = 10;
 
     persist = {

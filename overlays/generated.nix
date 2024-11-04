@@ -39,15 +39,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "ad52adf917d6dd679dbc2dcefa3a9384654bd1c7";
+    version = "102a0cd75d3dd288bf20b0f2990105d4c0e0f599";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "ad52adf917d6dd679dbc2dcefa3a9384654bd1c7";
+      rev = "102a0cd75d3dd288bf20b0f2990105d4c0e0f599";
       fetchSubmodules = false;
-      sha256 = "sha256-UOSH8RM+6VkQqi14bwUdFUNm8CgbDRlNial9VevjYuU=";
+      sha256 = "sha256-xM5WOf8/8rmdZZVNUGIjQ5t2O/zFYOf17I4WNi45URU=";
     };
-    date = "2024-10-26";
+    date = "2024-11-03";
   };
   yazi-zfs = {
     pname = "yazi-zfs";
@@ -63,13 +63,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2024.10.22";
+    version = "2024.11.04";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2024.10.22";
+      rev = "2024.11.04";
       fetchSubmodules = false;
-      sha256 = "sha256-KlucN67zdxv1Fr/ftqirD5imES0PgScpZHSHA4lLgb8=";
+      sha256 = "sha256-JeceQLQ7oocASBRjj/8GFaEd2RuafFrzrQTEsG8dao8=";
     };
   };
 }
