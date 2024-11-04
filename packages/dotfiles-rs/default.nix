@@ -1,6 +1,7 @@
 {
   lib,
   installShellFiles,
+  makeWrapper,
   pkg-config,
   glib,
   gexiv2,
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage {
   # create files for shell autocomplete
   nativeBuildInputs = [
     installShellFiles
+    makeWrapper
     pkg-config
   ];
 

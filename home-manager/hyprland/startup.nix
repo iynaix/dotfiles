@@ -72,7 +72,7 @@ lib.mkIf config.custom.hyprland.enable {
       };
       Service = {
         Type = "oneshot";
-        ExecStart = lib.getExe' pkgs.custom.dotfiles-rs "wallpaper";
+        ExecStart = lib.getExe' config.custom.dotfiles.package "wallpaper";
         # possible race condition, introduce a small delay before starting
         # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
         ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 1";

@@ -93,7 +93,8 @@
       pathofbuilding.enable = true;
       rclip.enable = true;
       vlc.enable = true;
-      wallpaper-utils.enable = true;
+      wallfacer.enable = true;
+      wallpaper-extras.enable = true;
       # wallust.colorscheme = "tokyo-night";
       waybar = {
         enable = true;

@@ -26,6 +26,7 @@
 
     pathofbuilding.enable = true;
     rclip.enable = true;
+    wallfacer.enable = true;
     waybar.hidden = true;
 
     persist = {
