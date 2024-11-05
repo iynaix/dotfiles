@@ -63,7 +63,7 @@ enum WallpaperSubcommand {
     #[cfg(feature = "rclip")]
     #[command(
         name = "search",
-        visible_aliases = ["rg", "grep"],
+        visible_aliases = ["rg", "grep", "find"],
         about = "Search for wallpapers using rclip"
     )]
     Search(search::SearchArgs),
@@ -80,6 +80,7 @@ enum WallpaperSubcommand {
 
     #[command(
         name = "toggle",
+        visible_alias = "colorspace",
         about = "Toggles and saves the colorspace for wallust"
     )]
     Toggle(toggle::ToggleArgs),
@@ -89,8 +90,7 @@ enum WallpaperSubcommand {
 #[derive(Parser, Debug)]
 #[command(
     name = "wallpaper",
-    about = "Changes the wallpaper and updates the colorcheme",
-    flatten_help = true
+    about = "Changes the wallpaper and updates the colorcheme"
 )]
 #[command(group(
     ArgGroup::new("exclusive_group")

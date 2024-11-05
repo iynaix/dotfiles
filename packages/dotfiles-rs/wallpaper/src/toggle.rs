@@ -1,5 +1,5 @@
 use clap::{Args, ValueEnum};
-use regex::Regex;
+use regex::RegexBuilder;
 use rexiv2::Metadata;
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
@@ -54,7 +54,6 @@ fn get_wallust_config_colorspace() -> Result<Colorspace, Box<dyn std::error::Err
         .join("wallust/wallust.toml");
 
     let content = std::fs::read_to_string(&wallust_toml)?;
-
     let toml_content: WallustConfig = toml::from_str(&content)?;
 
     Ok(toml_content.color_space)
@@ -65,7 +64,10 @@ fn new_wallust_tag(
     default_colorspace: &Colorspace,
     colorspace_arg: Option<Colorspace>,
 ) -> String {
-    let colorspace_re = Regex::new(COLORSPACE_RE).expect("could not compile regex");
+    let colorspace_re = RegexBuilder::new(COLORSPACE_RE)
+        .case_insensitive(true)
+        .build()
+        .expect("could not compile regex");
     let re_matches = colorspace_re.captures(tag);
 
     let tag_colorspace = re_matches.as_ref().map_or_else(

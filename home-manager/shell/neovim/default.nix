@@ -117,6 +117,7 @@
 
   home.shellAliases = {
     nano = "nvim";
+    neovim = "nvim";
     v = "nvim";
   };
 
