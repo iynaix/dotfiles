@@ -23,5 +23,6 @@ _: {
     ./weeb.nix
     ./zathura.nix
     ./zed-editor.nix
+    ./zellij.nix
   ];
 }
