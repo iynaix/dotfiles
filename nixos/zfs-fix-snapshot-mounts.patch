@@ -1,0 +1,52 @@
+diff --git a/cmd/mount_zfs.c b/cmd/mount_zfs.c
+index 283074daf..fc9220950 100644
+--- a/cmd/mount_zfs.c
++++ b/cmd/mount_zfs.c
+@@ -269,7 +269,8 @@ main(int argc, char **argv)
+ 		return (MOUNT_USAGE);
+ 	}
+ 
+-	if (sloppy || libzfs_envvar_is_set("ZFS_MOUNT_HELPER")) {
++	if (!zfsutil || sloppy ||
++	    libzfs_envvar_is_set("ZFS_MOUNT_HELPER")) {
+ 		zfs_adjust_mount_options(zhp, mntpoint, mntopts, mtabopt);
+ 	}
+ 
+@@ -336,7 +337,7 @@ main(int argc, char **argv)
+ 		    dataset, mntpoint, mntflags, zfsflags, mntopts, mtabopt);
+ 
+ 	if (!fake) {
+-		if (!remount && !sloppy &&
++		if (zfsutil && !sloppy &&
+ 		    !libzfs_envvar_is_set("ZFS_MOUNT_HELPER")) {
+ 			error = zfs_mount_at(zhp, mntopts, mntflags, mntpoint);
+ 			if (error) {
+diff --git a/module/os/linux/zfs/zfs_ctldir.c b/module/os/linux/zfs/zfs_ctldir.c
+index f60d6ae91..0ab99513c 100644
+--- a/module/os/linux/zfs/zfs_ctldir.c
++++ b/module/os/linux/zfs/zfs_ctldir.c
+@@ -1163,9 +1163,9 @@ zfsctl_snapshot_mount(struct path *path, int flags)
+ 	zfsvfs_t *zfsvfs;
+ 	zfsvfs_t *snap_zfsvfs;
+ 	zfs_snapentry_t *se;
+-	char *full_name, *full_path, *options;
+-	char *argv[] = { "/usr/bin/env", "mount", "-i", "-t", "zfs", "-n",
+-	    "-o", NULL, NULL, NULL, NULL };
++	char *full_name, *full_path;
++	char *argv[] = { "/usr/bin/env", "mount", "-t", "zfs", "-n", NULL, NULL,
++	    NULL };
+ 	char *envp[] = { NULL };
+ 	int error;
+ 	struct path spath;
+@@ -1256,9 +1256,8 @@ zfsctl_snapshot_mount(struct path *path, int flags)
+ 	 * value from call_usermodehelper() will be (exitcode << 8 + signal).
+ 	 */
+ 	dprintf("mount; name=%s path=%s\n", full_name, full_path);
+-	argv[7] = options;
+-	argv[8] = full_name;
+-	argv[9] = full_path;
++	argv[5] = full_name;
++	argv[6] = full_path;
+ 	error = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC);
+ 	if (error) {
+ 		if (!(error & MOUNT_BUSY << 8)) {

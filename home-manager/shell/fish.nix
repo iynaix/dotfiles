@@ -16,7 +16,8 @@
         '';
       };
       # use abbreviations instead of aliases
-      shellAliases = lib.mkForce { };
+      preferAbbrs = true;
+      # seems like shell abbreviations take precedence over aliases
       shellAbbrs = config.home.shellAliases // {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
@@ -26,6 +27,8 @@
 
         # set options for plugins
         set sponge_regex_patterns 'password|passwd'
+
+        # bind --mode default \t complete-and-search
       '';
       # setup vi mode
       interactiveShellInit = ''
@@ -36,8 +39,6 @@
 
   # fish plugins, home-manager's programs.fish.plugins has a weird format
   home.packages = with pkgs.fishPlugins; [
-    # used as starship's transient prompt does not handle empty commands
-    transient-fish
     # do not add failed commands to history
     sponge
   ];

@@ -47,11 +47,6 @@ rec {
   t450Hm = t450.hm;
   t450Hmo = t450Hm.custom;
 
-  laptop = flake.nixosConfigurations.framework.config;
-  laptopo = framework.custom;
-  laptopHm = framework.hm;
-  laptopHmo = frameworkHm.custom;
-
   vm = flake.nixosConfigurations.vm.config;
   vmo = vm.custom;
   vmHm = vm.hm;

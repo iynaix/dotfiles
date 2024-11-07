@@ -7,7 +7,6 @@
 }:
 let
   homeDir = "/persist${config.hm.home.homeDirectory}";
-  proj_dir = "/persist${config.hm.home.homeDirectory}/projects";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in
@@ -149,7 +148,9 @@ in
 
           # process downloaded files
           shell.packages = {
-            renamer = lib.custom.useDirenv "${proj_dir}/renamer" ''cargo run --release --bin renamer'';
+            renamer = lib.custom.direnvCargoRun {
+              dir = "${homeDir}/projects/renamer";
+            };
           };
         };
       }

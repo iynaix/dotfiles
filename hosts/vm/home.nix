@@ -21,7 +21,7 @@ _: {
     ];
 
     hyprland.enable = false;
-
     pathofbuilding.enable = false;
+    qtStyleFix = false;
   };
 }

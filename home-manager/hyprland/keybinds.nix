@@ -75,9 +75,9 @@ in
             "$mod_CTRL, w, exec, rofi-pdf-menu"
             "$mod, t, exec, jerry"
             "$mod, v, exec, $term hx"
-            "$mod_SHIFT, v, exec, zeditor"
-            ''$mod, period, exec, focusorrun "dotfiles - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/dotfiles"''
-            ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - Zed Editor" "zeditor --new ${config.home.homeDirectory}/projects/nixpkgs"''
+            "$mod_SHIFT, v, exec, codium"
+            ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
+            ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
             # exit hyprland
             "$mod_ALT, F4, exit,"
@@ -157,9 +157,9 @@ in
             "$mod, n, exec, dunstctl history-pop"
 
             # switching wallpapers or themes
-            "$mod, apostrophe, exec, hypr-wallpaper --rofi"
+            "$mod, apostrophe, exec, wallpaper rofi"
             "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
-            "ALT, apostrophe, exec, hypr-wallpaper --history"
+            "ALT, apostrophe, exec, wallpaper history"
 
             # special keys
             # "XF86AudioPlay, mpvctl playpause"

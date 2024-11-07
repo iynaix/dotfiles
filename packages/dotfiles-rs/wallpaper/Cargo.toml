@@ -1,0 +1,29 @@
+[package]
+name = "wallpaper"
+version.workspace = true
+edition.workspace = true
+
+[features]
+default = ["rclip", "wallfacer", "dedupe"]
+dedupe = []
+rclip = []
+wallfacer = []
+
+[lints]
+workspace = true
+
+[dependencies]
+common = { workspace = true }
+chrono = "0.4.38"
+clap = { version = "4.5.20", features = ["derive", "string"] }
+clap_complete = { version = "4.5.37", features = ["unstable-dynamic"] }
+csv = "1.3.0"
+dirs = "5.0.1"
+execute = "0.2.13"
+hyprland = { version = "0.4.0-beta.1" }
+itertools = "0.13.0"
+rexiv2 = "0.10.0"
+serde = "1.0.214"
+toml = "0.8.19"
+whoami = "1.5.2"
+regex = "1.11.1"

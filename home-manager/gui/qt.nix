@@ -20,74 +20,84 @@ let
   defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
 in
 {
-  qt = {
-    enable = true;
-    platformTheme.name = "qtct";
-    style.name = "kvantum";
-  };
-
-  home = {
-    sessionVariables = {
-      XCURSOR_SIZE = builtins.div config.home.pointerCursor.size 2;
-    };
-
-    packages = with pkgs; [
-      # qt6Packages.qtstyleplugin-kvantum
-      # qt6Packages.qt6ct
-      libsForQt5.qtstyleplugin-kvantum
-      libsForQt5.qt5ct
-    ];
-  };
-
-  xdg.configFile = {
-    # Kvantum looks for themes here
-    "Kvantum" = {
-      source = "${pkgs.catppuccin-kvantum.src}/themes";
-      recursive = true;
+  options.custom = with lib; {
+    qtStyleFix = mkEnableOption "fix styling for qt applications" // {
+      default = !config.custom.headless;
     };
   };
 
-  # qtct config
-  custom.wallust.templates = {
-    "kvantum.kvconfig" = {
-      text = lib.generators.toINI { } {
-        General.theme = "catppuccin-mocha-${config.custom.gtk.defaultAccent}";
+  config = lib.mkIf (config.custom.qtStyleFix && !config.custom.headless) {
+    qt = {
+      enable = true;
+      platformTheme.name = "qtct";
+      style.name = "kvantum";
+    };
+
+    home = {
+      sessionVariables = {
+        XCURSOR_SIZE = builtins.div config.home.pointerCursor.size 2;
       };
-      target = "${config.xdg.configHome}/Kvantum/kvantum.kvconfig";
+
+      packages = with pkgs; [
+        libsForQt5.qt5ct
+        libsForQt5.qtstyleplugin-kvantum
+        libsForQt5.qtwayland
+        qt6Packages.qt6ct
+        qt6Packages.qtstyleplugin-kvantum
+        qt6Packages.qtwayland
+      ];
     };
 
-    "qt5ct.conf" = {
-      text =
-        let
-          default = ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
-        in
-        lib.generators.toINI { } (
-          qtctConf
-          // {
-            Fonts = {
-              fixed = default;
-              general = default;
-            };
-          }
-        );
-      target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
+    xdg.configFile = {
+      # Kvantum looks for themes here
+      "Kvantum" = {
+        source = "${pkgs.catppuccin-kvantum.src}/themes";
+        recursive = true;
+      };
     };
 
-    "qt6ct.conf" = {
-      text =
-        let
-          default = ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
-        in
-        lib.generators.toINI { } (
-          qtctConf
-          // {
-            Fonts = {
-              fixed = default;
-              general = default;
-            };
-          }
-        );
-      target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
+    # qtct config
+    custom.wallust.templates = {
+      "kvantum.kvconfig" = {
+        text = lib.generators.toINI { } {
+          General.theme = "catppuccin-mocha-${config.custom.gtk.defaultAccent}";
+        };
+        target = "${config.xdg.configHome}/Kvantum/kvantum.kvconfig";
+      };
+
+      "qt5ct.conf" = {
+        text =
+          let
+            default = ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+          in
+          lib.generators.toINI { } (
+            qtctConf
+            // {
+              Fonts = {
+                fixed = default;
+                general = default;
+              };
+            }
+          );
+        target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
+      };
+
+      "qt6ct.conf" = {
+        text =
+          let
+            default = ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
+          in
+          lib.generators.toINI { } (
+            qtctConf
+            // {
+              Fonts = {
+                fixed = default;
+                general = default;
+              };
+            }
+          );
+        target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
+      };
     };
   };
 }
