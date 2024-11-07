@@ -51,7 +51,13 @@
             else
               "/dev/disk/by-partuuid";
 
-          package = pkgs.zfs_unstable;
+          # fix .zfs/snapshot mounts being empty, see
+          # https://github.com/NixOS/nixpkgs/issues/257505#issuecomment-2458692894
+          # reverts zfs commit: https://github.com/openzfs/zfs/commit/34118eac06fba83
+          package = pkgs.zfs_unstable.overrideAttrs (o: {
+            patches = o.patches ++ [ ./zfs-fix-snapshot-mounts.patch ];
+          });
+
           requestEncryptionCredentials = config.custom.zfs.encryption;
         };
       };
