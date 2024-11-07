@@ -14,7 +14,9 @@
     helix.enable = mkEnableOption "helix";
   };
   config = lib.mkIf config.custom.helix.enable {
-    home.packages = [ pkgs.lldb_18 ];
+    home.packages = with pkgs; [
+      lldb_18
+    ];
     programs.helix = {
       enable = true;
       defaultEditor = true;

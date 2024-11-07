@@ -1,5 +1,6 @@
 _: {
   imports = [
+    ./arduino.nix
     ./brave.nix
     ./deadbeef.nix
     ./dunst.nix

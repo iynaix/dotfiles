@@ -25,7 +25,7 @@
     # neovim.enable = false;
     pathofbuilding.enable = true;
     rclip.enable = true;
-    wallpaper-utils.enable = true;
+    wallfacer.enable = true;
     deadbeef.enable = true;
     gaming.enable = false;
 

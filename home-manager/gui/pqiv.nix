@@ -20,7 +20,7 @@ lib.mkIf (!config.custom.headless) {
 
       [keybindings]
       t { montage_mode_enter() }
-      w { command(hypr-wallpaper $1) }
+      w { command(wallpaper $1) }
       x { command(rm $1) }
       y { command(wl-copy $1) }
       z { toggle_scale_mode(0) }

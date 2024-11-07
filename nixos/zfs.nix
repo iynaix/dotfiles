@@ -22,25 +22,25 @@
       boot = {
         # booting with zfs
         supportedFilesystems.zfs = true;
-        # kernelPackages = pkgs.linuxPackages_xanmod_latest;
+        kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
-        kernelPackages =
-          assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.3")
-            "zfs 2.3 supports kernel 6.11 or greater";
-          pkgs.linuxPackagesFor (
-            pkgs.linux_xanmod_latest.override {
-              argsOverride = rec {
-                version = "6.10.11";
-                modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
-                src = pkgs.fetchFromGitHub {
-                  owner = "xanmod";
-                  repo = "linux";
-                  rev = modDirVersion;
-                  hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
-                };
-              };
-            }
-          );
+        # kernelPackages =
+        #   assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.3")
+        #     "zfs 2.3 supports kernel 6.11 or greater";
+        #   pkgs.linuxPackagesFor (
+        #     pkgs.linux_xanmod_latest.override {
+        #       argsOverride = rec {
+        #         version = "6.10.11";
+        #         modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
+        #         src = pkgs.fetchFromGitHub {
+        #           owner = "xanmod";
+        #           repo = "linux";
+        #           rev = modDirVersion;
+        #           hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
+        #         };
+        #       };
+        #     }
+        #   );
         zfs = {
           devNodes =
             if isVm then
@@ -51,7 +51,13 @@
             else
               "/dev/disk/by-partuuid";
 
-          package = pkgs.zfs_unstable;
+          # fix .zfs/snapshot mounts being empty, see
+          # https://github.com/NixOS/nixpkgs/issues/257505#issuecomment-2458692894
+          # reverts zfs commit: https://github.com/openzfs/zfs/commit/34118eac06fba83
+          package = pkgs.zfs_unstable.overrideAttrs (o: {
+            patches = o.patches ++ [ ./zfs-fix-snapshot-mounts.patch ];
+          });
+
           requestEncryptionCredentials = config.custom.zfs.encryption;
         };
       };

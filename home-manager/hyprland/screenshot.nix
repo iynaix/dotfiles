@@ -8,6 +8,8 @@
 }:
 let
   focal = inputs.focal.packages.${pkgs.system}.default.override {
+    # TODO: remove when wf-recorder is fixed upstream
+    inherit (pkgs) wf-recorder;
     hyprland = config.wayland.windowManager.hyprland.package;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
@@ -63,7 +65,7 @@ lib.mkIf config.custom.hyprland.enable {
       "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
       "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
       "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-      ''ALT, backslash, exec, focal, video --rofi --no-rounded-windows''
+      ''ALT, backslash, exec, focal video --rofi --no-rounded-windows''
     ];
   };
 }

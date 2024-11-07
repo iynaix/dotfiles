@@ -49,7 +49,7 @@ lib.mkIf config.custom.hyprland.enable {
     ];
   };
 
-  # start swww and hypr-wallpaper via systemd to minimize reloads
+  # start swww and wallpaper via systemd to minimize reloads
   systemd.user.services = {
     swww = {
       Install.WantedBy = [ "graphical-session.target" ];
@@ -72,7 +72,7 @@ lib.mkIf config.custom.hyprland.enable {
       };
       Service = {
         Type = "oneshot";
-        ExecStart = lib.getExe' pkgs.custom.dotfiles-rs "hypr-wallpaper";
+        ExecStart = lib.getExe' config.custom.dotfiles.package "wallpaper";
         # possible race condition, introduce a small delay before starting
         # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
         ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 1";

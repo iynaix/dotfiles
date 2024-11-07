@@ -32,7 +32,7 @@ _: {
     pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = false;
-    wallpaper-utils.enable = true;
+    wallfacer.enable = true;
     # wallust.colorscheme = "tokyo-night";
     waybar = {
       enable = true;
