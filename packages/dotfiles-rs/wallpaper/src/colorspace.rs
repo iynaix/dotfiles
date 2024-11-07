@@ -76,13 +76,20 @@ fn new_wallust_tag(
     );
 
     // use the colorspace arg if provided
-    let new_colorspace = colorspace_arg.unwrap_or(
-        // toggle the colorspace
+    let new_colorspace = colorspace_arg.unwrap_or_else(|| {
+        // default is labmixed, so first toggle is lchmixed
+        if tag.is_empty() {
+            return Colorspace::LchMixed;
+        }
+
+        // toggle the colorspace: labmixed -> lchmixed -> lab -> lch -> labmixed
         match tag_colorspace {
-            Colorspace::LabMixed | Colorspace::Lab => Colorspace::LchMixed,
+            Colorspace::LabMixed => Colorspace::LchMixed,
+            Colorspace::LchMixed => Colorspace::Lab,
+            Colorspace::Lab => Colorspace::Lch,
             _ => Colorspace::LabMixed,
-        },
-    );
+        }
+    });
 
     re_matches.map_or_else(
         || {
@@ -167,13 +174,13 @@ mod tests {
     #[test]
     fn test_new_wallust_tag() {
         for (tag, expected) in [
-            ("", "--colorspace labmixed"),
+            ("", "--colorspace lchmixed"), // default is labmixed, so first toggle is lchmixed
             ("--colorspace labmixed", "--colorspace lchmixed"),
-            ("--colorspace lchmixed", "--colorspace labmixed"),
-            ("--colorspace lab", "--colorspace lchmixed"),
+            ("--colorspace lchmixed", "--colorspace lab"),
+            ("--colorspace lab", "--colorspace lch"),
             (
-                "--colorspace labmixed --palette harddark16",
-                "--colorspace lchmixed --palette harddark16",
+                "-b full --colorspace labmixed --palette harddark16",
+                "-b full --colorspace lchmixed --palette harddark16",
             ),
         ] {
             assert_eq!(new_wallust_tag(tag, &Colorspace::LchMixed, None), expected);

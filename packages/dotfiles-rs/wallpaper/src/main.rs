@@ -4,10 +4,10 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 pub mod backup;
+pub mod colorspace;
 pub mod dedupe;
 pub mod pqiv;
 pub mod search;
-pub mod toggle;
 pub mod wallfacer;
 
 #[derive(Args, Debug, PartialEq, Eq)]
@@ -79,11 +79,11 @@ enum WallpaperSubcommand {
     Remote(backup::RemoteArgs),
 
     #[command(
-        name = "toggle",
-        visible_alias = "colorspace",
+        name = "colorspace",
+        visible_aliases = ["toggle", "cycle"],
         about = "Toggles and saves the colorspace for wallust"
     )]
-    Toggle(toggle::ToggleArgs),
+    Toggle(colorspace::ToggleArgs),
 }
 
 #[allow(clippy::struct_excessive_bools)]
@@ -170,7 +170,7 @@ fn main() {
     if let Some(command) = args.command {
         match command {
             WallpaperSubcommand::Generate(args) => {
-                generate_completions("focal", &mut WallpaperArgs::command(), &args.shell);
+                generate_completions("wallpaper", &mut WallpaperArgs::command(), &args.shell);
             }
             WallpaperSubcommand::Current => println!(
                 "{}",
@@ -192,7 +192,7 @@ fn main() {
             WallpaperSubcommand::Search(args) => search::search(args),
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),
-            WallpaperSubcommand::Toggle(args) => toggle::toggle(args),
+            WallpaperSubcommand::Toggle(args) => colorspace::toggle(args),
         }
         return;
     }
