@@ -77,16 +77,15 @@ fn new_wallust_tag(
 
     // use the colorspace arg if provided
     let new_colorspace = colorspace_arg.unwrap_or_else(|| {
-        // default is labmixed, so first toggle is lchmixed
+        // default is lab, so first toggle is labmixed
         if tag.is_empty() {
-            return Colorspace::LchMixed;
+            return Colorspace::LabMixed;
         }
 
         // toggle the colorspace: labmixed -> lchmixed -> lab -> lch -> labmixed
         match tag_colorspace {
             Colorspace::LabMixed => Colorspace::LchMixed,
-            Colorspace::LchMixed => Colorspace::Lab,
-            Colorspace::Lab => Colorspace::Lch,
+            Colorspace::LchMixed => Colorspace::Lch,
             _ => Colorspace::LabMixed,
         }
     });
@@ -174,10 +173,10 @@ mod tests {
     #[test]
     fn test_new_wallust_tag() {
         for (tag, expected) in [
-            ("", "--colorspace lchmixed"), // default is labmixed, so first toggle is lchmixed
+            ("", "--colorspace labmixed"), // default is lab, so first toggle is labmixed
             ("--colorspace labmixed", "--colorspace lchmixed"),
-            ("--colorspace lchmixed", "--colorspace lab"),
-            ("--colorspace lab", "--colorspace lch"),
+            ("--colorspace lchmixed", "--colorspace lch"),
+            ("--colorspace lab", "--colorspace labmixed"),
             (
                 "-b full --colorspace labmixed --palette harddark16",
                 "-b full --colorspace lchmixed --palette harddark16",
