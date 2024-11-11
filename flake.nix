@@ -37,6 +37,12 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    nvf = {
+      # url = "github:notashelf/nvf";
+      url = "github:elias-ainsworth/nvf";
+      # url = "github:notashelf/nvf/v0.7";
+    };
+
     helix = {
       url = "github:helix-editor/helix";
     };
@@ -112,7 +118,11 @@
   # flake-utils is unnecessary
   # https://ayats.org/blog/no-flake-utils/
   outputs =
-    inputs@{ nixpkgs, self, ... }:
+    inputs@{
+      nixpkgs,
+      self,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs {

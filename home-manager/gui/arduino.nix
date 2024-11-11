@@ -9,7 +9,7 @@
     {
       custom.persist = {
         home.directories = [
-          "arduino"
+          "arduino/"
         ];
       };
       home = {
