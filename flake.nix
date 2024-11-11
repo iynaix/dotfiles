@@ -39,8 +39,9 @@
 
     nvf = {
       # url = "github:notashelf/nvf";
-      url = "github:elias-ainsworth/nvf";
       # url = "github:notashelf/nvf/v0.7";
+      # waiting for merge https://github.com/NotAShelf/nvf/pull/458
+      url = "github:elias-ainsworth/nvf";
     };
 
     helix = {
