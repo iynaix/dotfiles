@@ -87,7 +87,7 @@
             display-inlay-hints = true;
           };
           file-picker = {
-            hidden = false;
+            hidden = true;
           };
         };
       };
