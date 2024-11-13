@@ -23,7 +23,8 @@ lib.mkIf (!config.custom.headless) {
         page-padding = 1;
         adjust-open = "best-fit";
         recolor = true; # invert by default
-        selection-clipboard = "wl-clipboard";
+        selection-clipboard = "clipboard";
+        selection-notification = true;
       };
     };
   };
