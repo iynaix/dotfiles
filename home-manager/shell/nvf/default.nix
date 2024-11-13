@@ -56,8 +56,8 @@
               package = pkgs.nixd;
             };
             format = {
-              type = "nixpkgs-fmt";
-              package = pkgs.nixfmt-rfc-style;
+              type = "alejandra";
+              package = pkgs.alejandra;
             };
           };
 
