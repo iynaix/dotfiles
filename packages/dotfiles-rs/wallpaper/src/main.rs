@@ -107,7 +107,7 @@ struct WallpaperArgs {
     #[arg(long, action, help = "Do not save history")]
     pub skip_history: bool,
 
-    #[arg(long, action, help = "Do not resize or set wallpapers")]
+    #[arg(long, action, help = "Do not resize or set wallpaper")]
     pub skip_wallpaper: bool,
 
     #[arg(long, action, help = "Transition type for swww")]

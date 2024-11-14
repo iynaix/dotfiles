@@ -166,10 +166,13 @@ in
 
           decoration = {
             rounding = 4;
-            drop_shadow = !isVm;
-            shadow_range = 4;
-            shadow_render_power = 3;
-            "col.shadow" = "rgba(1a1a1aee)";
+
+            shadow = {
+              enabled = !isVm;
+              range = 4;
+              render_power = 3;
+              color = "rgba(1a1a1aee)";
+            };
 
             # dim_inactive = true
             # dim_strength = 0.05
