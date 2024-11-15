@@ -1,128 +1,17 @@
-use clap::{ArgGroup, Args, CommandFactory, Parser, Subcommand};
-use common::{full_path, generate_completions, wallpaper, ShellCompletion};
+use clap::{CommandFactory, Parser};
+use clap_complete::{generate, Shell};
+use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
+use common::{full_path, wallpaper};
 use std::collections::HashMap;
 use std::path::PathBuf;
 
 pub mod backup;
+pub mod cli;
 pub mod colorspace;
 pub mod dedupe;
 pub mod pqiv;
 pub mod search;
 pub mod wallfacer;
-
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct GenerateArgs {
-    #[arg(value_enum, help = "Type of shell completion to generate")]
-    pub shell: ShellCompletion,
-}
-
-#[derive(Subcommand, Debug, PartialEq)]
-enum WallpaperSubcommand {
-    #[command(name = "generate", about = "Generate shell completions", hide = true)]
-    Generate(GenerateArgs),
-
-    #[command(name = "current", about = "Prints the path of the current wallpaper")]
-    Current,
-
-    #[command(name = "reload", about = "Reloads the current wallpaper")]
-    Reload,
-
-    #[command(name = "history", about = "Show wallpaper history selector with pqiv")]
-    History,
-
-    #[command(
-        name = "rofi",
-        visible_alias = "pqiv",
-        about = "Show wallpaper selector with pqiv"
-    )]
-    Rofi,
-
-    #[cfg(feature = "dedupe")]
-    #[command(
-        name = "dedupe",
-        visible_aliases = ["czkawka", "unique", "uniq"],
-        about = "Runs czkawka to show duplicate wallpapers"
-    )]
-    Dedupe,
-
-    #[cfg(feature = "wallfacer")]
-    #[command(
-        name = "edit",
-        visible_alias = "recrop",
-        about = "Edit and reload the current wallpaper with wallfacer"
-    )]
-    Edit(wallfacer::EditArgs),
-
-    #[cfg(feature = "wallfacer")]
-    #[command(
-        name = "add",
-        about = "Processes wallpapers with upscaling and vertical crop"
-    )]
-    Add(wallfacer::AddArgs),
-
-    #[cfg(feature = "rclip")]
-    #[command(
-        name = "search",
-        visible_aliases = ["rg", "grep", "find"],
-        about = "Search for wallpapers using rclip"
-    )]
-    Search(search::SearchArgs),
-
-    #[command(name = "backup", about = "Backup wallpapers to secondary location")]
-    Backup(backup::BackupArgs),
-
-    #[command(
-        name = "remote",
-        visible_alias = "sync",
-        about = "Sync wallpapers to another machine"
-    )]
-    Remote(backup::RemoteArgs),
-
-    #[command(
-        name = "colorspace",
-        visible_aliases = ["toggle", "cycle"],
-        about = "Toggles and saves the colorspace for wallust"
-    )]
-    Toggle(colorspace::ToggleArgs),
-}
-
-#[allow(clippy::struct_excessive_bools)]
-#[derive(Parser, Debug)]
-#[command(
-    name = "wallpaper",
-    about = "Changes the wallpaper and updates the colorcheme"
-)]
-#[command(group(
-    ArgGroup::new("exclusive_group")
-        .args(&["reload", "image_or_dir"])
-        .multiple(false)
-))]
-struct WallpaperArgs {
-    #[command(subcommand)]
-    pub command: Option<WallpaperSubcommand>,
-
-    #[arg(long, action, help = "Reload current wallpaper")]
-    pub reload: bool,
-
-    #[arg(long, action, help = "Do not save history")]
-    pub skip_history: bool,
-
-    #[arg(long, action, help = "Do not resize or set wallpaper")]
-    pub skip_wallpaper: bool,
-
-    #[arg(long, action, help = "Transition type for swww")]
-    pub transition: Option<String>,
-
-    // optional image to use, uses a random one otherwise
-    #[arg(
-        action,
-        value_hint = clap::ValueHint::AnyPath,
-        value_name = "PATH",
-        help = "An image or directory path",
-        // add = ArgValueCandidates::new(get_wallpaper_files)
-    )]
-    pub image_or_dir: Option<PathBuf>,
-}
 
 fn write_wallpaper_history(wallpaper: PathBuf) {
     // not a wallpaper from the wallpapers dir
@@ -167,34 +56,47 @@ fn main() {
     let is_reload = args.reload || args.command == Some(WallpaperSubcommand::Reload);
 
     // handle subcommand
-    if let Some(command) = args.command {
-        match command {
-            WallpaperSubcommand::Generate(args) => {
-                generate_completions("wallpaper", &mut WallpaperArgs::command(), &args.shell);
+    if !is_reload {
+        if let Some(command) = args.command {
+            match command {
+                WallpaperSubcommand::Generate(args) => {
+                    let mut cmd = WallpaperArgs::command();
+                    match &args.shell {
+                        ShellCompletion::Bash => {
+                            generate(Shell::Bash, &mut cmd, "wallpaper", &mut std::io::stdout());
+                        }
+                        ShellCompletion::Zsh => {
+                            generate(Shell::Zsh, &mut cmd, "wallpaper", &mut std::io::stdout());
+                        }
+                        ShellCompletion::Fish => {
+                            generate(Shell::Fish, &mut cmd, "wallpaper", &mut std::io::stdout());
+                        }
+                    }
+                }
+                WallpaperSubcommand::Current => println!(
+                    "{}",
+                    wallpaper::current().unwrap_or_else(|| {
+                        eprintln!("Failed to get current wallpaper");
+                        std::process::exit(1)
+                    })
+                ),
+                WallpaperSubcommand::Reload => {} // handled later
+                WallpaperSubcommand::History => pqiv::show_history(),
+                WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
+                #[cfg(feature = "dedupe")]
+                WallpaperSubcommand::Dedupe => dedupe::dedupe(),
+                #[cfg(feature = "wallfacer")]
+                WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
+                #[cfg(feature = "wallfacer")]
+                WallpaperSubcommand::Add(args) => wallfacer::add(args),
+                #[cfg(feature = "rclip")]
+                WallpaperSubcommand::Search(args) => search::search(args),
+                WallpaperSubcommand::Backup(args) => backup::backup(args),
+                WallpaperSubcommand::Remote(args) => backup::remote(args),
+                WallpaperSubcommand::Toggle(args) => colorspace::toggle(args),
             }
-            WallpaperSubcommand::Current => println!(
-                "{}",
-                wallpaper::current().unwrap_or_else(|| {
-                    eprintln!("Failed to get current wallpaper");
-                    std::process::exit(1)
-                })
-            ),
-            WallpaperSubcommand::Reload => {} // handled later
-            WallpaperSubcommand::History => pqiv::show_history(),
-            WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
-            #[cfg(feature = "dedupe")]
-            WallpaperSubcommand::Dedupe => dedupe::dedupe(),
-            #[cfg(feature = "wallfacer")]
-            WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
-            #[cfg(feature = "wallfacer")]
-            WallpaperSubcommand::Add(args) => wallfacer::add(args),
-            #[cfg(feature = "rclip")]
-            WallpaperSubcommand::Search(args) => search::search(args),
-            WallpaperSubcommand::Backup(args) => backup::backup(args),
-            WallpaperSubcommand::Remote(args) => backup::remote(args),
-            WallpaperSubcommand::Toggle(args) => colorspace::toggle(args),
+            return;
         }
-        return;
     }
 
     let wallpaper = if is_reload {
@@ -207,10 +109,7 @@ fn main() {
                 } else {
                     std::fs::canonicalize(&image_or_dir)
                         .unwrap_or_else(|_| {
-                            panic!(
-                                "{} is not a valid image / subcommand",
-                                &image_or_dir.display()
-                            )
+                            panic!("{} is not a valid image / command", &image_or_dir.display())
                         })
                         .to_str()
                         .unwrap_or_else(|| panic!("could not convert {image_or_dir:?} to str"))

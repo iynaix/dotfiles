@@ -1,26 +1,11 @@
-use clap::{Args, ValueEnum};
 use regex::RegexBuilder;
 use rexiv2::Metadata;
 use serde::Deserialize;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+
+use crate::cli::{Colorspace, ColorspaceArgs};
 
 const COLORSPACE_RE: &str = r"\b(lab|labmixed|lch|lchmixed|lchansi)\b";
-
-#[derive(Debug, Clone, Default, ValueEnum, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
-pub enum Colorspace {
-    #[default]
-    #[clap(name = "lab")]
-    Lab,
-    #[clap(name = "labmixed")]
-    LabMixed,
-    #[clap(name = "lch")]
-    Lch,
-    #[clap(name = "lchmixed")]
-    LchMixed,
-    #[clap(name = "lchansi")]
-    LchAnsi,
-}
 
 impl std::fmt::Display for Colorspace {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -124,20 +109,7 @@ fn update_image_colorspace(image: &Path, meta: &Metadata, wallust_tag: &str) -> 
     Ok(())
 }
 
-#[allow(clippy::module_name_repetitions)]
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct ToggleArgs {
-    #[arg(short, long, help = "Colorspace to use")]
-    pub colorspace: Option<Colorspace>,
-
-    #[arg(
-        name = "IMAGE",
-        help = "Wallpaper to edit, defaults to current wallpaper"
-    )]
-    pub file: Option<PathBuf>,
-}
-
-pub fn toggle(args: ToggleArgs) {
+pub fn toggle(args: ColorspaceArgs) {
     let image = args.file.unwrap_or_else(|| {
         crate::wallpaper::current()
             .expect("failed to get current wallpaper")

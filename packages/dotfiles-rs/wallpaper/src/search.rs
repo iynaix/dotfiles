@@ -1,3 +1,4 @@
+use crate::cli::SearchArgs;
 use common::{
     filename,
     wallpaper::{self, filter_images},
@@ -5,24 +6,6 @@ use common::{
 };
 use execute::Execute;
 use std::process::Stdio;
-
-use clap::Args;
-
-#[allow(clippy::module_name_repetitions)]
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct SearchArgs {
-    #[arg(
-        short,
-        long,
-        name = "TOP",
-        default_value = "50",
-        help = "Number of top results to display"
-    )]
-    top: u32,
-
-    #[arg(name = "QUERY", help = "Search query")]
-    query: String,
-}
 
 pub fn search(args: SearchArgs) {
     let wall_dir = wallpaper::dir();

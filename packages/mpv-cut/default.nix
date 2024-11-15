@@ -11,7 +11,6 @@ buildLua (
     dontBuild = true;
 
     scriptPath = "main.lua";
-    passthru.scriptName = "main.lua";
 
     meta = {
       description = "An mpv plugin for cutting videos incredibly quickly.";

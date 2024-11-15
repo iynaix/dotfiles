@@ -135,7 +135,7 @@ in
           "ALT_SHIFT, Tab, cyclenext, prev"
 
           # toggle between prev and current windows
-          "$mod, grave, exec, focuscurrentorlast"
+          "$mod, grave, focuscurrentorlast"
 
           # switches to the next / previous window of the same class
           # hardcoded to SUPER so it doesn't clash on VM
