@@ -1,22 +1,16 @@
 {
   inputs,
-  system,
   specialArgs,
   user ? "iynaix",
   lib,
   ...
-}:
+}@args:
 let
   # provide an optional { pkgs } 2nd argument to override the pkgs
   mkHomeConfiguration =
     host:
     {
-      pkgs ? (
-        import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        }
-      ),
+      pkgs ? args.pkgs,
     }:
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs lib;

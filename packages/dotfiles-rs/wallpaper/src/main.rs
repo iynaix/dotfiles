@@ -2,8 +2,7 @@ use clap::{CommandFactory, Parser};
 use clap_complete::{generate, Shell};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
 use common::{full_path, wallpaper};
-use std::collections::HashMap;
-use std::path::PathBuf;
+use std::{collections::HashMap, io::Read, path::PathBuf};
 
 pub mod backup;
 pub mod cli;
@@ -103,6 +102,31 @@ fn main() {
         wallpaper::current().expect("no current wallpaper set")
     } else {
         let random_wallpaper = match args.image_or_dir {
+            // use stdin instead
+            Some(p) if p == PathBuf::from("-") => {
+                let mut buf = Vec::new();
+                std::io::stdin()
+                    .read_to_end(&mut buf)
+                    .expect("unable to read stdin");
+
+                // valid image, write stdin to a file
+                if let Ok(format) = image::guess_format(&buf) {
+                    // need to write the extension or Image has problems guessing the format later
+                    let ext = format.extensions_str()[0];
+
+                    let output = format!("/tmp/__wall__{}.{ext}", fastrand::u32(10000..));
+                    std::fs::write(&output, &buf).expect("could not write stdin to file");
+                    output
+                } else {
+                    String::from_utf8(buf)
+                        .ok()
+                        .and_then(|s| std::fs::canonicalize(s.trim()).ok())
+                        .map_or_else(
+                            || panic!("unable to parse stdin"),
+                            |p| p.to_string_lossy().to_string(),
+                        )
+                }
+            }
             Some(image_or_dir) => {
                 if image_or_dir.is_dir() {
                     wallpaper::random_from_dir(&image_or_dir)

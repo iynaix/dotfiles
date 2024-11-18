@@ -5,10 +5,7 @@ use std::path::PathBuf;
 #[allow(clippy::module_name_repetitions)]
 #[derive(Args, Debug, PartialEq, Eq)]
 pub struct BackupArgs {
-    #[arg(
-        name = "TARGET",
-        help = "Wallpaper to edit, defaults to current wallpaper"
-    )]
+    #[arg(name = "PATH", help = "Path to backup wallpapers to")]
     pub target: Option<PathBuf>,
 }
 
@@ -198,7 +195,7 @@ pub struct WallpaperArgs {
         action,
         value_hint = clap::ValueHint::AnyPath,
         value_name = "PATH",
-        help = "An image or directory path",
+        help = "An image or directory path, use - for stdin",
         // add = ArgValueCandidates::new(get_wallpaper_files)
     )]
     pub image_or_dir: Option<PathBuf>,

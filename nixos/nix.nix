@@ -178,6 +178,7 @@
         experimental-features = [
           "nix-command"
           "flakes"
+          "pipe-operators"
           # "repl-flake"
         ];
         substituters = [

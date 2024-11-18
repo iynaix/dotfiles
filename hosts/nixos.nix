@@ -1,22 +1,16 @@
 {
   inputs,
   lib,
-  system,
   specialArgs,
   user ? "iynaix",
   ...
-}:
+}@args:
 let
   # provide an optional { pkgs } 2nd argument to override the pkgs
   mkNixosConfiguration =
     host:
     {
-      pkgs ? (
-        import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        }
-      ),
+      pkgs ? args.pkgs,
     }:
     lib.nixosSystem {
       inherit pkgs;
