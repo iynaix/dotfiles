@@ -98,6 +98,15 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
+
+      # FIXME: allow rclip to use later deps
+      rclip = prev.rclip.overridePythonAttrs {
+        pythonRelaxDeps = [
+          "pillow"
+          "torch"
+          "torchvision"
+        ];
+      };
     })
   ];
 }

@@ -60,7 +60,7 @@
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2024-11-12",
+        "date": "2024-11-16",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -72,11 +72,11 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "fb3ae9093bdd06b257516e90acbe73821410d849",
-            "sha256": "sha256-mBn29LLHLeeGf2ifwNaonyh0jdSo1goIiIgvgtc4QLE=",
+            "rev": "4a6edc3349a2a9850075363965d05b9063817df4",
+            "sha256": "sha256-RYa7wbFGZ9citYYdF9FYJwzUGBmIUvNBdORpBPb6ZnQ=",
             "type": "github"
         },
-        "version": "fb3ae9093bdd06b257516e90acbe73821410d849"
+        "version": "4a6edc3349a2a9850075363965d05b9063817df4"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
@@ -112,10 +112,10 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2024.11.04",
-            "sha256": "sha256-JeceQLQ7oocASBRjj/8GFaEd2RuafFrzrQTEsG8dao8=",
+            "rev": "2024.11.18",
+            "sha256": "sha256-TpQry/qUxqAvj4gQJecGSAlw850WxjK1KU43JpecPAU=",
             "type": "github"
         },
-        "version": "2024.11.04"
+        "version": "2024.11.18"
     }
 }
