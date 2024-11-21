@@ -73,7 +73,7 @@ pub struct ColorspaceArgs {
     pub colorspace: Option<Colorspace>,
 
     #[arg(
-        name = "IMAGE",
+        name = "COLORSPACE_OR_IMAGE",
         help = "Wallpaper to edit, defaults to current wallpaper"
     )]
     pub file: Option<PathBuf>,

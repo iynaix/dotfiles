@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.48.2";
+    version = "v2.49.2";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.48.2";
+      rev = "v2.49.2";
       fetchSubmodules = false;
-      sha256 = "sha256-KMj+aS+xd96pt1NhqL3CBKj83ZfiX2npmJtwUFa00qU=";
+      sha256 = "sha256-rxvReL2ofdaQdKmIg2lMDT0thN1IkeJMf1B7+HWlQaI=";
     };
   };
   swww = {
@@ -39,15 +39,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "4a6edc3349a2a9850075363965d05b9063817df4";
+    version = "ab7068ef7569a477899e2aebe5948e933909c38d";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "4a6edc3349a2a9850075363965d05b9063817df4";
+      rev = "ab7068ef7569a477899e2aebe5948e933909c38d";
       fetchSubmodules = false;
-      sha256 = "sha256-RYa7wbFGZ9citYYdF9FYJwzUGBmIUvNBdORpBPb6ZnQ=";
+      sha256 = "sha256-0is0kiLEvTUasOGX882OnnrkvTUGVlfT4ohBmrWY8pc=";
     };
-    date = "2024-11-16";
+    date = "2024-11-20";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
