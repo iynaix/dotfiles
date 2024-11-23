@@ -1,5 +1,8 @@
-use clap::{CommandFactory, Parser, ValueEnum};
-use common::{generate_completions, ShellCompletion};
+use clap::{CommandFactory, Parser};
+use dotfiles::{
+    cli::{Direction, HyprSameClassArgs},
+    generate_completions,
+};
 use hyprland::dispatch;
 use hyprland::{
     data::{Client, Clients},
@@ -7,31 +10,6 @@ use hyprland::{
     shared::{HyprData, HyprDataActiveOptional},
 };
 use itertools::Itertools;
-
-#[derive(ValueEnum, Clone, Debug)]
-pub enum Direction {
-    Next,
-    Prev,
-}
-
-#[derive(Parser, Debug)]
-#[command(
-    name = "hypr-same-class",
-    about = "Focus next / prev window of same class"
-)]
-pub struct HyprSameClassArgs {
-    #[arg(value_enum)]
-    pub direction: Option<Direction>,
-
-    #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
-    )]
-    pub generate: Option<ShellCompletion>,
-}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = HyprSameClassArgs::parse();

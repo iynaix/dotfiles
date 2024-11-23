@@ -21,7 +21,7 @@
         };
 
         spellcheck = {
-          enable = true;
+          enable = false;
         };
 
         lsp = {
@@ -48,7 +48,6 @@
           enableFormat = true;
           enableTreesitter = true;
           enableExtraDiagnostics = true;
-
           nix = {
             enable = true;
             lsp = {
@@ -65,7 +64,7 @@
           html.enable = true;
           css.enable = true;
           ts.enable = true;
-          lua.enable = true;
+          lua.enable = false;
           bash.enable = true;
           # clang = {
           #   enable = true;
@@ -114,16 +113,20 @@
         autocomplete = {
           enable = true;
           type = "nvim-cmp";
+          mappings = {
+            next = "<C-j>";
+            previous = "<C-k>";
+          };
         };
 
         filetree = {
           nvimTree = {
-            enable = true;
+            enable = false;
           };
         };
 
         tabline = {
-          nvimBufferline.enable = true;
+          nvimBufferline.enable = false;
         };
 
         treesitter.context.enable = true;
@@ -143,7 +146,7 @@
 
         minimap = {
           minimap-vim.enable = false;
-          codewindow.enable = true; # lighter, faster, and uses lua for configuration
+          codewindow.enable = false; # lighter, faster, and uses lua for configuration
         };
 
         dashboard = {
@@ -156,7 +159,7 @@
         };
 
         projects = {
-          project-nvim.enable = true;
+          project-nvim.enable = false;
         };
 
         utility = {
@@ -168,7 +171,7 @@
           motion = {
             hop.enable = true;
             leap.enable = true;
-            precognition.enable = false;
+            precognition.enable = true;
           };
 
           images = {

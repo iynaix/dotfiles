@@ -29,7 +29,6 @@ in
   mpv-cut = w pkgs.mpvScripts.callPackage ./mpv-cut { };
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { };
   mpv-nextfile = w pkgs.mpvScripts.callPackage ./mpv-nextfile { };
-  mpv-smartskip = w pkgs.mpvScripts.callPackage ./mpv-smartskip { };
   mpv-sub-select = w pkgs.mpvScripts.callPackage ./mpv-sub-select { };
   mpv-subsearch = w pkgs.mpvScripts.callPackage ./mpv-subsearch { };
 

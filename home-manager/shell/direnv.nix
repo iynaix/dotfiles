@@ -1,4 +1,5 @@
-_: {
+{ config, lib, ... }:
+{
   programs.direnv = {
     enable = true;
     silent = true;
@@ -14,7 +15,12 @@ _: {
   };
 
   custom.shell.packages = {
-    mkdevenv = ''nix flake init --template github:elias-ainsworth/dotfiles#"$1"'';
+    # mkdevenv = ''nix flake init --template github:elias-ainsworth/dotfiles#"$1"'';
+    mkdevenv = {
+      text = lib.custom.direnvCargoRunQuiet {
+        dir = "${config.home.homeDirectory}/projects/mkdevenv";
+      };
+    };
     rmdevenv = ''rm -rf .direnv .devenv'';
     rmdirenv = ''rm -rf .direnv .devenv'';
   };

@@ -97,6 +97,19 @@ lib.extend (
           ${libprev.getExe pkgs.direnv} exec "${dir}" cargo run --release --bin "${bin}" --manifest-path "${dir}/Cargo.toml" -- ${args} "$@"
           popd > /dev/null
         '';
+
+      # TODO: Get rid of this later
+      direnvCargoRunQuiet =
+        {
+          dir,
+          bin ? builtins.baseNameOf dir,
+          args ? "",
+        }:
+        ''
+          pushd ${dir} > /dev/null
+          ${libprev.getExe pkgs.direnv} exec "${dir}" cargo run --quiet --release --bin "${bin}" --manifest-path "${dir}/Cargo.toml" -- ${args} "$@"
+          popd > /dev/null
+        '';
     };
   }
 )

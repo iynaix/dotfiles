@@ -59,14 +59,15 @@ rustPlatform.buildRustPackage {
         --fish <($out/bin/$prog --generate fish) \
         --zsh <($out/bin/$prog --generate zsh)
     done
+    installManPage dotfiles/target/man/*
 
-    # wallpaper generate is a subcommand
     for prog in wallpaper; do
       installShellCompletion --cmd $prog \
         --bash <($out/bin/$prog generate bash) \
         --fish <($out/bin/$prog generate fish) \
         --zsh <($out/bin/$prog generate zsh)
     done
+    installManPage wallpaper/target/man/*
   '';
 
   postFixup = ''

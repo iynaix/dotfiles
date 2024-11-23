@@ -11,7 +11,6 @@ buildLua (
     dontBuild = true;
 
     scriptPath = "delete_file.lua";
-    passthru.scriptName = "delete_file.lua";
 
     meta = {
       description = "Deletes files played through mpv";

@@ -1,6 +1,7 @@
 _: {
   custom = {
     virtualization.enable = true;
+    distrobox.enable = true;
   };
 
   networking.hostId = "ec7351ab"; # required for zfs

@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.48.2";
+    version = "v2.49.2";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.48.2";
+      rev = "v2.49.2";
       fetchSubmodules = false;
-      sha256 = "sha256-KMj+aS+xd96pt1NhqL3CBKj83ZfiX2npmJtwUFa00qU=";
+      sha256 = "sha256-rxvReL2ofdaQdKmIg2lMDT0thN1IkeJMf1B7+HWlQaI=";
     };
   };
   swww = {
@@ -39,37 +39,37 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "dc118798fbc59eda7abaede9f9450490196b09c5";
+    version = "f1fb6cc1df9d829173b21dbc1e45ea6606a46f98";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "dc118798fbc59eda7abaede9f9450490196b09c5";
+      rev = "f1fb6cc1df9d829173b21dbc1e45ea6606a46f98";
       fetchSubmodules = false;
-      sha256 = "sha256-HdHhXh2dVaXudrdM0nUs3fIq7+1m/47em86NCU9Rfr0=";
+      sha256 = "sha256-OdRs3MLtP/HaPwlO4ygbmmCmLKPPi6TnfQD8umWY+Mw=";
     };
-    date = "2024-11-09";
+    date = "2024-11-23";
   };
-  yazi-zfs = {
-    pname = "yazi-zfs";
-    version = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+  yazi-time-travel = {
+    pname = "yazi-time-travel";
+    version = "737c9bc79142b05616c2fa8f3a246615755dffd8";
     src = fetchFromGitHub {
       owner = "iynaix";
-      repo = "zfs.yazi";
-      rev = "dffe8db6858918ebb0d28088339b5a65d97cea05";
+      repo = "time-travel.yazi";
+      rev = "737c9bc79142b05616c2fa8f3a246615755dffd8";
       fetchSubmodules = false;
-      sha256 = "sha256-7C18UnMD8SDYYzS2T3/DqXHPy9Q+0K8YteTwLQTwTSM=";
+      sha256 = "sha256-cmGyT8pwMU3xmk5Or9zcsDlKz8wPiuRdwb/Yhjefo2U=";
     };
-    date = "2024-10-11";
+    date = "2024-11-12";
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2024.11.04";
+    version = "2024.11.18";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2024.11.04";
+      rev = "2024.11.18";
       fetchSubmodules = false;
-      sha256 = "sha256-JeceQLQ7oocASBRjj/8GFaEd2RuafFrzrQTEsG8dao8=";
+      sha256 = "sha256-TpQry/qUxqAvj4gQJecGSAlw850WxjK1KU43JpecPAU=";
     };
   };
 }

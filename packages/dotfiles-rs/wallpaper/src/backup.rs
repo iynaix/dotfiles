@@ -1,20 +1,7 @@
-use clap::Args;
+use crate::cli::{BackupArgs, RemoteArgs};
 use common::{full_path, wallpaper};
 use execute::Execute;
-use std::{
-    path::{Path, PathBuf},
-    process::Stdio,
-};
-
-#[allow(clippy::module_name_repetitions)]
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct BackupArgs {
-    #[arg(
-        name = "TARGET",
-        help = "Wallpaper to edit, defaults to current wallpaper"
-    )]
-    pub target: Option<PathBuf>,
-}
+use std::{path::Path, process::Stdio};
 
 pub fn backup(args: BackupArgs) {
     let target = args.target.unwrap_or_else(|| full_path("/media/6TBRED"));
@@ -56,12 +43,6 @@ fn rsync(
         .arg(&path_str)
         .arg(format!("{user}@{remote_host}:{path_str}"))
         .execute_output()
-}
-
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct RemoteArgs {
-    #[arg(name = "REMOTE", help = "Hostname of remote machine")]
-    pub hostname: Option<String>,
 }
 
 pub fn remote(args: RemoteArgs) {

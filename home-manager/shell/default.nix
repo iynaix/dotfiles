@@ -15,7 +15,9 @@
     ./fish.nix
     ./git.nix
     ./helix
+    ./iamb
     ./jujutsu.nix
+    ./music-player.nix
     # ./neovim
     ./nix.nix
     ./nvf
@@ -85,6 +87,7 @@
         jq
         mdcat # terminal markdown viewer and processor
         ouch # better compression and decompression utility
+        procs # better ps
         sd # better sed
         ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
       ]

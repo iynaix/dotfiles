@@ -55,7 +55,7 @@ in
             {
               wallpapers_path = wallpapers_dir;
               min_width = 3840; # 4k width
-              min_height = 2560; # vertical 1440p
+              min_height = 2880; # lg dualup height
               show_faces = true;
 
               resolutions = [
@@ -134,7 +134,10 @@ in
 
         custom.persist = {
           home = {
-            directories = [ ".cache/clip" ];
+            directories = [
+              ".cache/clip"
+              ".cache/huggingface"
+            ];
             cache.directories = [ ".local/share/rclip" ];
           };
         };

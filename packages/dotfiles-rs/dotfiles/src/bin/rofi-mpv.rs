@@ -1,35 +1,14 @@
-use clap::{CommandFactory, Parser, ValueEnum};
-use common::{full_path, generate_completions, CommandUtf8, ShellCompletion};
+use clap::{CommandFactory, Parser};
+use common::{full_path, CommandUtf8};
+use dotfiles::{
+    cli::{RofiMpvArgs, RofiMpvMedia},
+    generate_completions,
+};
 use itertools::Itertools;
 use std::{
     fs::read_to_string,
     path::{Path, PathBuf},
 };
-
-#[derive(ValueEnum, Clone, Debug)]
-pub enum RofiMpvMedia {
-    Anime,
-    TV,
-}
-
-#[derive(Parser, Debug)]
-#[command(
-    name = "rofi-media",
-    about = "Plays the next episode of anime or tv shows"
-)]
-pub struct RofiMpvArgs {
-    #[arg(value_enum)]
-    pub media: Option<RofiMpvMedia>,
-
-    #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
-    )]
-    pub generate: Option<ShellCompletion>,
-}
 
 type Video = (PathBuf, String);
 

@@ -11,7 +11,6 @@ buildLua (
     dontBuild = true;
 
     scriptPath = "nextfile.lua";
-    passthru.scriptName = "nextfile.lua";
 
     meta = {
       description = "Force open next or previous file in the currently playing files directory";
