@@ -34,8 +34,8 @@
     };
 
     # store docker images on zroot/cache
-    custom.persist = {
-      home = {
+    hm.custom.persist = {
+      home.cache = {
         directories = [ ".local/share/containers" ];
       };
     };

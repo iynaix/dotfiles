@@ -72,7 +72,7 @@ in
           "$mod, w, exec, brave"
           "$mod_SHIFT, w, exec, brave --incognito"
           "$mod, v, exec, $term nvim"
-          "$mod_SHIFT, v, exec, codium"
+          "$mod_SHIFT, v, exec, ${lib.getExe pkgs.custom.shell.rofi-edit-proj}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 

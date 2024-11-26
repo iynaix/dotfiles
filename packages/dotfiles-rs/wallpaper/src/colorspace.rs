@@ -131,6 +131,7 @@ pub fn toggle(args: ColorspaceArgs) {
         .unwrap_or_default();
 
     let updated_tag = new_wallust_tag(&raw_tag, colorspace_arg);
+    println!("Updated tag: \"{updated_tag}\"");
 
     // save the file
     update_image_colorspace(&image, &meta, &updated_tag)

@@ -8,6 +8,7 @@ pub mod backup;
 pub mod cli;
 pub mod colorspace;
 pub mod dedupe;
+pub mod metadata;
 pub mod pqiv;
 pub mod search;
 pub mod wallfacer;
@@ -92,7 +93,8 @@ fn main() {
                 WallpaperSubcommand::Search(args) => search::search(args),
                 WallpaperSubcommand::Backup(args) => backup::backup(args),
                 WallpaperSubcommand::Remote(args) => backup::remote(args),
-                WallpaperSubcommand::Toggle(args) => colorspace::toggle(args),
+                WallpaperSubcommand::Colorspace(args) => colorspace::toggle(args),
+                WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
             }
             return;
         }
