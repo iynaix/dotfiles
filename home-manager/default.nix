@@ -119,15 +119,14 @@
         noto-fonts-cjk-sans
         noto-fonts-emoji
         iosevka
-        # geist-font
-        maple-mono-NF
+        # maple-mono-NF
         inputs.mamelon.packages.${system}.default
-        inputs.kollektif.packages.${system}.default
+        # inputs.kollektif.packages.${system}.default
         (nerdfonts.override {
           fonts = [
-            "Iosevka"
+            # "Iosevka"
             "JetBrainsMono"
-            "MPlus"
+            # "MPlus"
           ];
         })
       ];

@@ -11,7 +11,6 @@ buildLua (
     dontBuild = true;
 
     scriptPath = "sub-select.lua";
-    passthru.scriptName = "sub-select.lua";
 
     meta = {
       description = "Automatically skip chapters based on title";

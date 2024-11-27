@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./arduino.nix
+    # ./arduino.nix
     ./brave.nix
     ./deadbeef.nix
     ./dunst.nix
@@ -22,7 +22,7 @@ _: {
     ./waybar.nix
     ./weeb.nix
     ./zathura.nix
-    ./zed-editor.nix
+    # ./zed-editor.nix
     ./zellij.nix
   ];
 }

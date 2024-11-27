@@ -20,7 +20,7 @@ lib.mkMerge [
       plugins = {
         full-border = "${pkgs.custom.yazi-plugins.src}/full-border.yazi";
         git = "${pkgs.custom.yazi-plugins.src}/git.yazi";
-        zfs = pkgs.custom.yazi-zfs.src;
+        time-travel = pkgs.custom.yazi-time-travel.src;
       };
 
       initLua = ''
@@ -175,24 +175,24 @@ lib.mkMerge [
                   "z"
                   "h"
                 ];
-                run = "plugin zfs --args=prev";
-                desc = "Go to previous ZFS snapshot";
+                run = "plugin time-travel --args=prev";
+                desc = "Go to previous snapshot";
               }
               {
                 on = [
                   "z"
                   "l"
                 ];
-                run = "plugin zfs --args=next";
-                desc = "Go to next ZFS snapshot";
+                run = "plugin time-travel --args=next";
+                desc = "Go to next snapshot";
               }
               {
                 on = [
                   "z"
                   "e"
                 ];
-                run = "plugin zfs --args=exit";
-                desc = "Exit browsing ZFS snapshots";
+                run = "plugin time-travel --args=exit";
+                desc = "Exit browsing snapshots";
               }
             ];
         };

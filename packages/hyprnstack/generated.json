@@ -13,10 +13,10 @@
             "name": null,
             "owner": "zakk4223",
             "repo": "hyprNstack",
-            "rev": "4a3c707ab81c50170de6bbdf6809b470c987cabf",
-            "sha256": "sha256-OIT+Z4ixQ9jrjLkJXrQGI5jTKTddqvZp6d2BQ3ubqbg=",
+            "rev": "0eb3c1fee1f33c632498dc598488412133ca5e3c",
+            "sha256": "sha256-DKHudLsH28QwOkx3TVgo78trlAB1QCw/J0jAuDyiqZ8=",
             "type": "github"
         },
-        "version": "4a3c707ab81c50170de6bbdf6809b470c987cabf"
+        "version": "0eb3c1fee1f33c632498dc598488412133ca5e3c"
     }
 }

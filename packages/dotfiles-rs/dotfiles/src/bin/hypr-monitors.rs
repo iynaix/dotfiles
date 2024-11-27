@@ -1,12 +1,15 @@
 use std::collections::HashMap;
 
-use clap::{value_parser, CommandFactory, Parser, ValueEnum};
+use clap::{CommandFactory, Parser};
 use common::{
-    generate_completions,
     nixinfo::{NixInfo, NixMonitorInfo},
     rearranged_workspaces,
     rofi::Rofi,
-    wallpaper, ShellCompletion, WorkspacesByMonitor,
+    wallpaper, WorkspacesByMonitor,
+};
+use dotfiles::{
+    cli::{HyprMonitorArgs, MonitorExtend},
+    generate_completions,
 };
 use hyprland::dispatch;
 use hyprland::{
@@ -16,41 +19,6 @@ use hyprland::{
     shared::HyprData,
 };
 use itertools::Itertools;
-
-#[derive(ValueEnum, Debug, Clone)]
-pub enum MonitorExtend {
-    Primary,
-    Secondary,
-}
-
-#[derive(Parser, Debug)]
-#[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
-/// Utilities for working with adding or removing monitors in hyprland
-/// Without arguments, it redistributes the workspaces across all monitors
-pub struct HyprMonitorArgs {
-    #[arg(
-        long,
-        value_parser = value_parser!(MonitorExtend),
-        help = "Set new monitor(s) to be primary or secondary"
-    )]
-    pub extend: Option<MonitorExtend>,
-
-    #[arg(long, name = "MONITOR", action, help = "Mirrors the primary monitor")]
-    pub mirror: Option<String>,
-
-    // show rofi menu for selecting monitor
-    #[arg(long, action, help = "Show rofi menu for monitor options")]
-    pub rofi: Option<String>,
-
-    #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
-    )]
-    pub generate: Option<ShellCompletion>,
-}
 
 /// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {

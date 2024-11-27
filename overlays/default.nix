@@ -27,7 +27,7 @@ in
       custom =
         (prev.custom or { })
         // {
-          inherit (sources) yazi-plugins yazi-zfs;
+          inherit (sources) yazi-plugins yazi-time-travel;
         }
         // (import ../packages {
           inherit (prev) pkgs;
@@ -98,6 +98,15 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
+
+      # FIXME: allow rclip to use later deps
+      rclip = prev.rclip.overridePythonAttrs {
+        pythonRelaxDeps = [
+          "pillow"
+          "torch"
+          "torchvision"
+        ];
+      };
     })
   ];
 }

@@ -1,5 +1,3 @@
-use clap::{Subcommand, ValueEnum};
-use clap_complete::{generate, Shell};
 use execute::Execute;
 use hyprland::shared::HyprData;
 use nixinfo::NixMonitorInfo;
@@ -15,26 +13,6 @@ pub mod rofi;
 pub mod swww;
 pub mod wallpaper;
 pub mod wallust;
-
-// utilities for generating shell completions
-#[derive(Subcommand, ValueEnum, Debug, Clone, PartialEq, Eq)]
-pub enum ShellCompletion {
-    Bash,
-    Zsh,
-    Fish,
-}
-
-pub fn generate_completions(
-    progname: &str,
-    cmd: &mut clap::Command,
-    shell_completion: &ShellCompletion,
-) {
-    match shell_completion {
-        ShellCompletion::Bash => generate(Shell::Bash, cmd, progname, &mut std::io::stdout()),
-        ShellCompletion::Zsh => generate(Shell::Zsh, cmd, progname, &mut std::io::stdout()),
-        ShellCompletion::Fish => generate(Shell::Fish, cmd, progname, &mut std::io::stdout()),
-    }
-}
 
 pub fn full_path<P>(p: P) -> PathBuf
 where

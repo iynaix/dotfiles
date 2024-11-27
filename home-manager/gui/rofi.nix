@@ -107,8 +107,8 @@ in
         kb-accept-entry = "Control+m,Return,KP_Enter";
         kb-mode-next = "Control+Alt+l";
         kb-mode-previous = "Control+Alt+h";
-        kb-row-up = "Control+k,Up";
-        kb-row-down = "Control+j,Down";
+        kb-row-up = "Control+k,Control+p,Up";
+        kb-row-down = "Control+j,Control+n,Down";
         kb-row-left = "Control+h";
         kb-row-right = "Control+l";
         kb-mode-complete = "Control+Shift+L";

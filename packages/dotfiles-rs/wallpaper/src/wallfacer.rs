@@ -1,10 +1,7 @@
-use clap::Args;
+use crate::cli::{AddArgs, EditArgs};
 use common::{full_path, wallpaper};
 use execute::Execute;
-use std::{
-    path::PathBuf,
-    process::{Command, Stdio},
-};
+use std::process::{Command, Stdio};
 
 struct Wallfacer {
     command: Command,
@@ -58,15 +55,6 @@ impl Wallfacer {
     }
 }
 
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct EditArgs {
-    #[arg(
-        name = "IMAGE",
-        help = "Wallpaper to edit, defaults to current wallpaper"
-    )]
-    pub file: Option<PathBuf>,
-}
-
 pub fn edit(args: EditArgs) {
     let image = args.file.unwrap_or_else(|| {
         wallpaper::current()
@@ -79,16 +67,6 @@ pub fn edit(args: EditArgs) {
 
     // reload the wallpaper
     wallpaper::set(&image, &None);
-}
-
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct AddArgs {
-    // TODO: misc wallfacer arguments?
-    #[arg(
-        name = "IMAGES",
-        help = "Directories or images to add, defaults to wallpapers_in"
-    )]
-    pub images_or_dirs: Option<Vec<PathBuf>>,
 }
 
 pub fn add(args: AddArgs) {

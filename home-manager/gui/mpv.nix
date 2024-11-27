@@ -200,7 +200,10 @@
       # sponsorblock + smartskip settings
       {
         programs.mpv = {
-          scripts = (with pkgs.mpvScripts; [ sponsorblock ]) ++ [ pkgs.custom.mpv-smartskip ];
+          scripts = with pkgs.mpvScripts; [
+            smartskip
+            sponsorblock
+          ];
           scriptOpts = {
             "SmartSkip" = {
               add_chapter_on_skip = false;
