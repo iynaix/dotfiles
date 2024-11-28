@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   custom = {
     monitors = [
@@ -6,7 +11,7 @@
         name = "eDP-1";
         width = 2880;
         height = 1920;
-        refreshRate = 120;
+        refreshRate = if config.specialisation == "otg" then 120 else 60;
         scale = 2;
         vrr = true;
         workspaces = [
@@ -37,7 +42,7 @@
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       # don't blind me on startup
-      "${lib.getExe pkgs.brightnessctl} s 25%"
+      "${lib.getExe pkgs.brightnessctl} s 20%"
     ];
   };
 

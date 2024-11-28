@@ -1,5 +1,6 @@
 {
   config,
+  isLaptop,
   lib,
   pkgs,
   ...
@@ -199,6 +200,11 @@
 
     # faster boot times
     # systemd.services.NetworkManager-wait-online.enable = false;
+
+    # create an otg specialisation for laptops
+    specialisation = {
+      otg.configuration = lib.mkIf isLaptop { };
+    };
 
     custom.persist = {
       root.directories = lib.optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
