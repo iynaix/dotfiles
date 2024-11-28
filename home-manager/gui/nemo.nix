@@ -10,6 +10,7 @@ lib.mkIf (!config.custom.headless) {
     nemo-fileroller
     nemo-with-extensions
     webp-pixbuf-loader # for webp thumbnails
+    xdg-terminal-exec
   ];
 
   xdg = {
@@ -49,10 +50,10 @@ lib.mkIf (!config.custom.headless) {
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      exec = lib.getExe config.custom.terminal.package;
+      exec = lib.getExe pkgs.xdg-terminal-exec;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      exec = lib.getExe config.custom.terminal.package;
+      exec = lib.getExe pkgs.xdg-terminal-exec;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

@@ -10,6 +10,9 @@
           name = "Elias Ainsworth";
         };
         ui.pager = "${lib.getExe pkgs.bat} --plain --theme base16";
+        template-aliases = {
+          "format_short_id(id)" = "id.shortest()";
+        };
       };
     };
   };

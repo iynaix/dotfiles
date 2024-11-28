@@ -5,8 +5,6 @@ use std::path::Path;
 
 use crate::cli::{Colorspace, ColorspaceArgs};
 
-const COLORSPACE_RE: &str = r"\b(lab|labmixed|lch|lchmixed|lchansi)\b";
-
 impl std::fmt::Display for Colorspace {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", format!("{self:?}").to_lowercase())
@@ -44,46 +42,38 @@ fn get_wallust_config_colorspace() -> Result<Colorspace, Box<dyn std::error::Err
     Ok(toml_content.color_space)
 }
 
-fn new_wallust_tag(
-    tag: &str,
-    default_colorspace: &Colorspace,
-    colorspace_arg: Option<Colorspace>,
-) -> String {
-    let colorspace_re = RegexBuilder::new(COLORSPACE_RE)
+fn new_wallust_tag(raw_tag: &str, colorspace_arg: Option<Colorspace>) -> String {
+    let colorspace_re = RegexBuilder::new(r"\b(lab|labmixed|lch|lchmixed|lchansi)\b")
         .case_insensitive(true)
         .build()
         .expect("could not compile regex");
-    let re_matches = colorspace_re.captures(tag);
+    let re_matches = colorspace_re.captures(raw_tag);
+    let tag_colorspace = re_matches.as_ref().and_then(|m| m[1].parse().ok());
 
-    let tag_colorspace = re_matches.as_ref().map_or_else(
-        || default_colorspace.clone(),
-        |m| m[1].parse().unwrap_or_else(|_| default_colorspace.clone()),
-    );
+    // toggle the colorspace: labmixed -> lchmixed -> lab -> lch -> labmixed
+    let next_colorspace = |c: Colorspace| match c {
+        Colorspace::LabMixed => Colorspace::LchMixed,
+        Colorspace::LchMixed => Colorspace::Lch,
+        Colorspace::Lch => Colorspace::Lab,
+        _ => Colorspace::LabMixed,
+    };
 
     // use the colorspace arg if provided
-    let new_colorspace = colorspace_arg.unwrap_or_else(|| {
-        // default is lab, so first toggle is labmixed
-        if tag.is_empty() {
-            return Colorspace::LabMixed;
-        }
-
-        // toggle the colorspace: labmixed -> lchmixed -> lab -> lch -> labmixed
-        match tag_colorspace {
-            Colorspace::LabMixed => Colorspace::LchMixed,
-            Colorspace::LchMixed => Colorspace::Lch,
-            _ => Colorspace::LabMixed,
-        }
+    let final_colorspace = colorspace_arg.unwrap_or_else(|| {
+        next_colorspace(
+            tag_colorspace.unwrap_or_else(|| get_wallust_config_colorspace().unwrap_or_default()),
+        )
     });
 
     re_matches.map_or_else(
         || {
-            format!("{tag} --colorspace {new_colorspace}")
+            format!("{raw_tag} --colorspace {final_colorspace}")
                 .trim()
                 .to_string()
         },
         |_| {
             colorspace_re
-                .replace_all(tag, new_colorspace.to_string())
+                .replace_all(raw_tag, final_colorspace.to_string())
                 .to_string()
         },
     )
@@ -110,13 +100,27 @@ fn update_image_colorspace(image: &Path, meta: &Metadata, wallust_tag: &str) -> 
 }
 
 pub fn toggle(args: ColorspaceArgs) {
-    let image = args.file.unwrap_or_else(|| {
-        crate::wallpaper::current()
-            .expect("failed to get current wallpaper")
-            .into()
-    });
+    let mut colorspace_arg = args.colorspace;
+    let image = args.file.map_or_else(
+        || {
+            crate::wallpaper::current()
+                .expect("failed to get current wallpaper")
+                .into()
+        },
+        |img| {
+            let img_str = img.to_string_lossy().to_lowercase();
+            let img_str = img_str.as_str();
+            if matches!(img_str, "lab" | "labmixed" | "lch" | "lchmixed" | "lchansi") {
+                // use the colorspace arg if provided
+                colorspace_arg = img_str.parse().ok();
 
-    let default_colorspace = get_wallust_config_colorspace().unwrap_or_default();
+                return crate::wallpaper::current()
+                    .expect("failed to get current wallpaper")
+                    .into();
+            }
+            img
+        },
+    );
 
     // read wallust config from image
     let meta = Metadata::new_from_path(&image)
@@ -126,8 +130,7 @@ pub fn toggle(args: ColorspaceArgs) {
         .get_tag_string("Xmp.wallfacer.wallust")
         .unwrap_or_default();
 
-    let updated_tag = new_wallust_tag(&raw_tag, &default_colorspace, args.colorspace);
-
+    let updated_tag = new_wallust_tag(&raw_tag, colorspace_arg);
     println!("Updated tag: \"{updated_tag}\"");
 
     // save the file
@@ -148,13 +151,14 @@ mod tests {
             ("", "--colorspace labmixed"), // default is lab, so first toggle is labmixed
             ("--colorspace labmixed", "--colorspace lchmixed"),
             ("--colorspace lchmixed", "--colorspace lch"),
+            ("--colorspace lch", "--colorspace lab"),
             ("--colorspace lab", "--colorspace labmixed"),
             (
                 "-b full --colorspace labmixed --palette harddark16",
                 "-b full --colorspace lchmixed --palette harddark16",
             ),
         ] {
-            assert_eq!(new_wallust_tag(tag, &Colorspace::LchMixed, None), expected);
+            assert_eq!(new_wallust_tag(tag, None), expected);
         }
     }
 }

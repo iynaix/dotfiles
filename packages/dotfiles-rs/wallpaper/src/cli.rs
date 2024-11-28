@@ -42,12 +42,15 @@ pub struct EditArgs {
 
 #[derive(Args, Debug, PartialEq, Eq)]
 pub struct AddArgs {
-    // TODO: misc wallfacer arguments?
+    #[arg(raw = true, hide = true, required = false, last = false)]
+    pub rest: Vec<String>,
+
     #[arg(
         name = "IMAGES",
-        help = "Directories or images to add, defaults to wallpapers_in"
+        help = "Directories or images to add, defaults to wallpapers_in",
+        last = true
     )]
-    pub images_or_dirs: Option<Vec<PathBuf>>,
+    pub image_or_dir: Option<PathBuf>,
 }
 
 #[derive(Debug, Clone, Default, ValueEnum, Deserialize, PartialEq, Eq)]
@@ -73,8 +76,17 @@ pub struct ColorspaceArgs {
     pub colorspace: Option<Colorspace>,
 
     #[arg(
-        name = "IMAGE",
+        name = "COLORSPACE_OR_IMAGE",
         help = "Wallpaper to edit, defaults to current wallpaper"
+    )]
+    pub file: Option<PathBuf>,
+}
+
+#[derive(Args, Debug, PartialEq, Eq)]
+pub struct MetadataArgs {
+    #[arg(
+        name = "IMAGE",
+        help = "Image to display metadata for, defaults to current wallpaper"
     )]
     pub file: Option<PathBuf>,
 }
@@ -160,7 +172,13 @@ pub enum WallpaperSubcommand {
         visible_aliases = ["toggle", "cycle"],
         about = "Toggles and saves the colorspace for wallust"
     )]
-    Toggle(ColorspaceArgs),
+    Colorspace(ColorspaceArgs),
+
+    #[command(
+        name = "metadata",
+        about = "Prints metadata for the current wallpaper / image"
+    )]
+    Metadata(MetadataArgs),
 }
 
 #[allow(clippy::struct_excessive_bools)]
@@ -187,6 +205,19 @@ pub struct WallpaperArgs {
     #[arg(long, action, help = "Do not resize or set wallpaper")]
     pub skip_wallpaper: bool,
 
+    // TODO: pass through specific swww arguments?
+    /*
+    -f, --filter
+    -t, --transition-type
+    --transition-step
+    --transition-duration
+    --transition-fps
+    --transition-angle
+    --transition-pos
+    --transition-bezier
+    --transition-wave
+    --invert-y
+    */
     #[arg(long, action, help = "Transition type for swww")]
     pub transition: Option<String>,
 

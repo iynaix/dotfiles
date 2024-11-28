@@ -1,7 +1,10 @@
 use crate::cli::{AddArgs, EditArgs};
 use common::{full_path, wallpaper};
 use execute::Execute;
-use std::process::{Command, Stdio};
+use std::{
+    path::PathBuf,
+    process::{Command, Stdio},
+};
 
 struct Wallfacer {
     command: Command,
@@ -70,14 +73,24 @@ pub fn edit(args: EditArgs) {
 }
 
 pub fn add(args: AddArgs) {
-    let images_or_dirs = args
-        .images_or_dirs
-        .unwrap_or_else(|| vec![full_path("~/Pictures/wallpapers_in")]);
+    let mut image_or_dir = args
+        .image_or_dir
+        .unwrap_or_else(|| full_path("~/Pictures/wallpapers_in"));
+
+    let mut rest_args = args.rest.clone();
+    if !args.rest.is_empty() {
+        let last = args.rest.last().expect("no arguments provided");
+        if PathBuf::from(last).exists() {
+            image_or_dir = last.into();
+            rest_args.pop();
+        }
+    }
 
     Wallfacer::new()
         .arg("add")
         .arg("--format")
         .arg("webp")
-        .args(images_or_dirs)
+        .args(rest_args)
+        .arg(image_or_dir)
         .run();
 }

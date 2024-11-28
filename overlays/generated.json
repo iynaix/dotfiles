@@ -13,11 +13,11 @@
             "name": null,
             "owner": "PathOfBuildingCommunity",
             "repo": "PathOfBuilding",
-            "rev": "v2.49.2",
-            "sha256": "sha256-rxvReL2ofdaQdKmIg2lMDT0thN1IkeJMf1B7+HWlQaI=",
+            "rev": "v2.49.3",
+            "sha256": "sha256-ZpvSI3W2pWPy37PDT4T4NpgFSoS7bk5d59vvCL2nWnM=",
             "type": "github"
         },
-        "version": "v2.49.2"
+        "version": "v2.49.3"
     },
     "swww": {
         "cargoLocks": null,
@@ -60,7 +60,7 @@
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2024-11-23",
+        "date": "2024-11-25",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -72,11 +72,11 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "f1fb6cc1df9d829173b21dbc1e45ea6606a46f98",
-            "sha256": "sha256-OdRs3MLtP/HaPwlO4ygbmmCmLKPPi6TnfQD8umWY+Mw=",
+            "rev": "38418ddc9247de206645ed284c804b5e179452a1",
+            "sha256": "sha256-cdPeIhtTzSYhJZ3v3Xlq8J3cOmR7ZiOGl5q48Qgthyk=",
             "type": "github"
         },
-        "version": "f1fb6cc1df9d829173b21dbc1e45ea6606a46f98"
+        "version": "38418ddc9247de206645ed284c804b5e179452a1"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
