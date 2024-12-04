@@ -21,7 +21,7 @@
     },
     "swww": {
         "cargoLocks": null,
-        "date": "2024-10-31",
+        "date": "2024-11-30",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -33,11 +33,11 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "0db3f4eb192f1c9bf914efcc1d2aba809da5d78a",
-            "sha256": "sha256-+8YUJsNzvgAeZYLfbHYfYlad/iS+6Eec/LWzL1ZIGfY=",
+            "rev": "1bd7166f0e06bbb4f1c175b35bfef582b4e639ac",
+            "sha256": "sha256-yp7P0gQ0EThnOL2Fy87S6IsKdyrUSA/oMVk3BvNrJKE=",
             "type": "github"
         },
-        "version": "0db3f4eb192f1c9bf914efcc1d2aba809da5d78a"
+        "version": "1bd7166f0e06bbb4f1c175b35bfef582b4e639ac"
     },
     "wallust": {
         "cargoLocks": null,
@@ -60,7 +60,7 @@
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2024-11-28",
+        "date": "2024-12-03",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -72,11 +72,11 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "2491a93e2ce425768fe58559106544932b14c64a",
-            "sha256": "sha256-geg0UjwzXALZl+XYGFzwSx4hcNwXCZykvfUV0/U8QwE=",
+            "rev": "40eafa3e4c7383db865ac1d61bbc0fa22be0ef01",
+            "sha256": "sha256-Ey3lDmhFLpp/sD3sC/kNgsN7JZz+i2dU+bvqKODOxzo=",
             "type": "github"
         },
-        "version": "2491a93e2ce425768fe58559106544932b14c64a"
+        "version": "40eafa3e4c7383db865ac1d61bbc0fa22be0ef01"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
@@ -112,10 +112,10 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2024.11.18",
-            "sha256": "sha256-TpQry/qUxqAvj4gQJecGSAlw850WxjK1KU43JpecPAU=",
+            "rev": "2024.12.03",
+            "sha256": "sha256-0Ko3CNc0R3BPMvRGUGuLbid+nHKw+14y0l4wDpfPp6E=",
             "type": "github"
         },
-        "version": "2024.11.18"
+        "version": "2024.12.03"
     }
 }

@@ -8,8 +8,6 @@
 }:
 let
   focal = inputs.focal.packages.${pkgs.system}.default.override {
-    # TODO: remove when wf-recorder is fixed upstream
-    inherit (pkgs) wf-recorder;
     hyprland = config.wayland.windowManager.hyprland.package;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
