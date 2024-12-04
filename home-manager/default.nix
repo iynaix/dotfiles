@@ -15,6 +15,11 @@
   ];
 
   options.custom = with lib; {
+    autologinCommand = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Command to run after autologin";
+    };
     fonts = {
       regular = mkOption {
         type = types.str;
@@ -81,9 +86,7 @@
       let
         normalizeHome = p: if (lib.hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
       in
-      lib.mapAttrsToList (
-        dest: src: "L+ ${normalizeHome dest} - - - - ${normalizeHome src}"
-      ) config.custom.symlinks;
+      lib.mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.custom.symlinks;
 
     xdg = {
       enable = true;

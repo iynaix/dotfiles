@@ -19,9 +19,25 @@
     {
       # autologin
       services = {
-        displayManager.autoLogin.user = lib.mkDefault (
-          if config.boot.zfs.requestEncryptionCredentials then user else null
-        );
+        greetd =
+          let
+            inherit (config.hm.custom) autologinCommand;
+          in
+          lib.mkIf (config.boot.zfs.requestEncryptionCredentials && autologinCommand != null) {
+            enable = true;
+
+            settings = {
+              default_session = {
+                command = autologinCommand;
+              };
+
+              initial_session = {
+                inherit user;
+                command = autologinCommand;
+              };
+            };
+          };
+
         getty.autologinUser = config.services.displayManager.autoLogin.user;
       };
 
