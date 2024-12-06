@@ -8,12 +8,13 @@ let
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   user = "nixos";
   mkIso =
-    nixpkgs: isoPath:
-    lib.nixosSystem {
+    nixpkgs: home-manager: isoPath:
+    # use the lib from the nixpkgs passed in, so the nixos version will be correct
+    nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
-        inputs.home-manager.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
         (
           { config, pkgs, ... }:
           {
@@ -36,7 +37,6 @@ let
                 })
                 btop
                 eza
-                git
                 home-manager
                 tree
                 yazi
@@ -136,8 +136,12 @@ let
     };
 in
 {
-  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma5";
-  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
-  kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma5";
-  minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
+  kde-iso =
+    mkIso inputs.nixpkgs-stable inputs.home-manager-stable
+      "installation-cd-graphical-calamares-plasma5";
+  minimal-iso = mkIso inputs.nixpkgs-stable inputs.home-manager-stable "installation-cd-minimal";
+  kde-iso-unstable =
+    mkIso inputs.nixpkgs inputs.home-manager
+      "installation-cd-graphical-calamares-plasma5";
+  minimal-iso-unstable = mkIso inputs.nixpkgs inputs.home-manager "installation-cd-minimal";
 }

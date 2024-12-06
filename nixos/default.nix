@@ -202,8 +202,8 @@
     # systemd.services.NetworkManager-wait-online.enable = false;
 
     # create an otg specialisation for laptops
-    specialisation = {
-      otg.configuration = lib.mkIf isLaptop { };
+    specialisation = lib.mkIf isLaptop {
+      otg.configuration = { };
     };
 
     custom.persist = {
