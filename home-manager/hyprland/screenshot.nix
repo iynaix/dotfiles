@@ -36,8 +36,8 @@ lib.mkIf config.custom.hyprland.enable {
     };
   };
 
-  # add focal module to waybar
-  custom.waybar = {
+  # add focal module to waybar (don't use for otg specialisation)
+  custom.waybar = lib.mkIf (config.specialisation != "otg") {
     config = {
       "custom/focal" = {
         exec = ''focal-waybar --recording "󰑋"'';

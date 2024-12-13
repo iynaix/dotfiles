@@ -22,23 +22,11 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  cargoBuildFlags =
-    [
-      "--workspace"
-      "--no-default-features"
-    ]
-    ++ lib.optionals useRclip [
-      "--features"
-      "rclip"
-    ]
-    ++ lib.optionals useWallfacer [
-      "--features"
-      "wallfacer"
-    ]
-    ++ lib.optionals useDedupe [
-      "--features"
-      "dedupe"
-    ];
+  buildNoDefaultFeatures = true;
+  buildFeatures =
+    lib.optionals useRclip [ "rclip" ]
+    ++ lib.optionals useWallfacer [ "wallfacer" ]
+    ++ lib.optionals useDedupe [ "dedupe" ];
 
   # create files for shell autocomplete
   nativeBuildInputs = [

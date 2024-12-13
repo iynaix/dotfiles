@@ -1,6 +1,5 @@
 {
   config,
-  isLaptop,
   lib,
   pkgs,
   ...
@@ -23,9 +22,9 @@
     ./qmk.nix
     ./sonarr.nix
     ./sops.nix
+    ./specialisations.nix
     ./syncoid.nix
     ./transmission.nix
-    ./tty.nix
     ./users.nix
     ./vercel.nix
     ./virt-manager.nix
@@ -200,11 +199,6 @@
 
     # faster boot times
     # systemd.services.NetworkManager-wait-online.enable = false;
-
-    # create an otg specialisation for laptops
-    specialisation = lib.mkIf isLaptop {
-      otg.configuration = { };
-    };
 
     custom.persist = {
       root.directories = lib.optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
