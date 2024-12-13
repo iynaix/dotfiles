@@ -215,6 +215,7 @@ lib.mkMerge [
   {
     programs.yazi = {
       plugins = mkYaziPlugin "smart-enter" ''
+        --- @sync entry
         return {
         	entry = function()
             local h = cx.active.current.hovered
@@ -225,7 +226,7 @@ lib.mkMerge [
       keymap.manager.prepend_keymap = [
         {
           on = "l";
-          run = "plugin --sync smart-enter";
+          run = "plugin smart-enter";
           desc = "Enter the child directory, or open the file";
         }
       ];
@@ -237,6 +238,7 @@ lib.mkMerge [
   {
     programs.yazi = {
       plugins = mkYaziPlugin "smart-paste" ''
+        --- @sync entry
         return {
           entry = function()
             local h = cx.active.current.hovered
@@ -253,7 +255,7 @@ lib.mkMerge [
       keymap.manager.prepend_keymap = [
         {
           on = "p";
-          run = "plugin --sync smart-paste";
+          run = "plugin smart-paste";
           desc = "Paste into the hovered directory or CWD";
         }
       ];
@@ -264,10 +266,11 @@ lib.mkMerge [
   {
     programs.yazi = {
       plugins = mkYaziPlugin "arrow" ''
+        --- @sync entry
         return {
-          entry = function(_, args)
+          entry = function(_, job)
             local current = cx.active.current
-            local new = (current.cursor + args[1]) % #current.files
+            local new = (current.cursor + job.args[1]) % #current.files
             ya.manager_emit("arrow", { new - current.cursor })
           end,
         }
@@ -275,11 +278,11 @@ lib.mkMerge [
       keymap.manager.prepend_keymap = [
         {
           on = "k";
-          run = "plugin --sync arrow --args=-1";
+          run = "plugin arrow --args=-1";
         }
         {
           on = "j";
-          run = "plugin --sync arrow --args=1";
+          run = "plugin arrow --args=1";
         }
       ];
     };
