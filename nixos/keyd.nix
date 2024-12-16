@@ -14,7 +14,7 @@
   config = lib.mkIf config.custom.keyd.enable {
     services.keyd = {
       enable = true;
-      keyboards.true = {
+      keyboards.default = {
         ids = [ "*" ];
         settings.main = {
           capslock = "overload(meta, esc)";
