@@ -23,10 +23,10 @@
     ./qmk.nix
     ./sonarr.nix
     ./sops.nix
+    ./specialisations.nix
     ./syncoid.nix
     ./tlp.nix
     ./transmission.nix
-    ./tty.nix
     ./users.nix
     ./vercel.nix
     ./virt-manager.nix
@@ -89,8 +89,8 @@
 
       variables = {
         TERMINAL = lib.getExe config.hm.custom.terminal.package;
-        EDITOR = "hx";
-        VISUAL = "hx";
+        EDITOR = "nvim";
+        VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
         STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };

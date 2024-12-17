@@ -5,6 +5,8 @@ _: {
 
   networking.hostId = "abb4d116"; # required for zfs
 
+  hardware.framework.laptop13.audioEnhancement.enable = true;
+
   # touchpad support
   services.libinput.enable = true;
 

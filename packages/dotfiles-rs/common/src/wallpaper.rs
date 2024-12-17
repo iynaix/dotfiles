@@ -3,7 +3,7 @@ use rexiv2::Metadata;
 
 use crate::{full_path, nixinfo::NixInfo, swww::Swww, wallust};
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     path::{Path, PathBuf},
 };
 
@@ -163,6 +163,13 @@ pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
         return Vec::new();
     };
 
+    let images: HashSet<String> = dir()
+        .read_dir()
+        .expect("unable to read wallpapers dir")
+        .flatten()
+        .map(|entry| entry.file_name().to_string_lossy().to_string())
+        .collect();
+
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(false)
         .from_reader(std::io::BufReader::new(history_csv));
@@ -174,14 +181,13 @@ pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
                 return None;
             };
 
-            let path = dir().join(fname);
-            if !path.exists() {
+            if !images.contains(fname) {
                 return None;
             }
 
             chrono::DateTime::parse_from_rfc3339(dt_str)
                 .ok()
-                .map(|dt| (path, dt))
+                .map(|dt| (dir().join(fname), dt))
         })
         .sorted_by_key(|(_, dt)| *dt)
         .rev()

@@ -19,8 +19,10 @@
     ];
     programs.helix = {
       enable = true;
-      defaultEditor = true;
-      package = inputs.helix.packages.${pkgs.system}.helix;
+      defaultEditor = false;
+      # I'm tired of compiling rust to write rust...
+      package = inputs.helix.packages.${pkgs.system}.default;
+      # package = pkgs.helix;
       settings = {
         theme = "catppuccin-mocha";
         editor = {
@@ -37,10 +39,11 @@
             };
             left = [
               "mode"
-              "separator"
+              # "separator"
+              "spinner"
               "file-name"
             ];
-            center = [ "spinner" ];
+            center = [ ];
             right = [
               "diagnostics"
               "selections"

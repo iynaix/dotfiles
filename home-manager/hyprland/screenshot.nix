@@ -8,8 +8,6 @@
 }:
 let
   focal = inputs.focal.packages.${pkgs.system}.default.override {
-    # TODO: remove when wf-recorder is fixed upstream
-    inherit (pkgs) wf-recorder;
     hyprland = config.wayland.windowManager.hyprland.package;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
@@ -38,8 +36,8 @@ lib.mkIf config.custom.hyprland.enable {
     };
   };
 
-  # add focal module to waybar
-  custom.waybar = {
+  # add focal module to waybar (don't use for otg specialisation)
+  custom.waybar = lib.mkIf (config.specialisation != "otg") {
     config = {
       "custom/focal" = {
         exec = ''focal-waybar --recording "󰑋"'';

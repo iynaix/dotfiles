@@ -219,7 +219,7 @@ pub fn apply_colors() {
         apply_hyprland_colors(&accents, &nixcolors.colors);
 
         // set the waybar accent color to have more contrast
-        set_waybar_colors(&nixcolors, &accents[0]);
+        set_waybar_colors(&accents[0]);
 
         set_gtk_and_icon_theme(&nixcolors, &accents[0]);
     } else {
@@ -332,25 +332,22 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .ok();
 }
 
-pub fn set_waybar_colors(nixcolors: &NixColors, accent: &Rgb) {
+pub fn set_waybar_colors(accent: &Rgb) {
     // get complementary color for complementary module classes
     let css_file = full_path("~/.config/waybar/style.css");
 
     // replace old foreground color with new complementary color
     replace_in_file(
         &css_file,
-        &nixcolors.special.foreground.to_hex_str(),
-        &accent.to_hex_str(),
+        r"accent .*;",
+        &format!("accent {};", accent.to_hex_str()),
     );
 
     // replace complementary colors
     replace_in_file(
         &css_file,
-        r"color:\s*.*;\s*/\* complementary \*/",
-        &format!(
-            "color: {}; /* complementary */",
-            accent.complementary().to_hex_str()
-        ),
+        r"complementary .*;",
+        &format!("complementary {};", accent.complementary().to_hex_str()),
     );
 
     // add / remove persistent workspaces to waybar before launching

@@ -35,7 +35,9 @@ in
       # outputs the current nixos generation
       nix-current-generation = ''
         # previous desktop versions: 1196
-        sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}'
+            base=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+        prev=${if host == "desktop" then "1196" else "0"}
+        echo $((base + prev))
       '';
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw =

@@ -11,7 +11,7 @@
     enable = true;
     enableMan = false; # do not generate manpages
 
-    defaultEditor = false;
+    defaultEditor = true;
     viAlias = true;
     vimAlias = true;
 
@@ -23,7 +23,7 @@
     colorschemes.catppuccin = {
       enable = true;
       settings.flavour = "mocha";
-      # transparentBackground = true;
+      settings.transparent_background = true;
     };
 
     performance.combinePlugins.enable = true;
