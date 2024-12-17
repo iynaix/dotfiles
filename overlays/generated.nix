@@ -14,62 +14,62 @@
   };
   swww = {
     pname = "swww";
-    version = "0db3f4eb192f1c9bf914efcc1d2aba809da5d78a";
+    version = "004dfd8b91c1d271b499bb99eb7c6746b1c2e069";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "0db3f4eb192f1c9bf914efcc1d2aba809da5d78a";
+      rev = "004dfd8b91c1d271b499bb99eb7c6746b1c2e069";
       fetchSubmodules = false;
-      sha256 = "sha256-+8YUJsNzvgAeZYLfbHYfYlad/iS+6Eec/LWzL1ZIGfY=";
+      sha256 = "sha256-fgLWCUouo4RhTfLB5/aPT8mpU/GVgbUiubwrHYg0pTI=";
     };
-    date = "2024-10-31";
+    date = "2024-12-05";
   };
   wallust = {
     pname = "wallust";
-    version = "7ff46aa6fcbbb872b33da72325a8c341107293ea";
+    version = "3f3d808a7e2e847dba1827ccc4140738d06b3adf";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust";
-      rev = "7ff46aa6fcbbb872b33da72325a8c341107293ea";
+      rev = "3f3d808a7e2e847dba1827ccc4140738d06b3adf";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "sha256-oqrNcyOQuAeWsEqni2kzTwVOrF44YGNAuqXyBEEKGzc=";
+      sha256 = "sha256-GBJMERieXLQy0CmjohjwjMUP0NBTjPHMXfs9eEBQDtI=";
     };
-    date = "2024-11-09";
+    date = "2024-12-15";
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "38418ddc9247de206645ed284c804b5e179452a1";
+    version = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "38418ddc9247de206645ed284c804b5e179452a1";
+      rev = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
       fetchSubmodules = false;
-      sha256 = "sha256-cdPeIhtTzSYhJZ3v3Xlq8J3cOmR7ZiOGl5q48Qgthyk=";
+      sha256 = "sha256-w9dSXW0NpgMOTnBlL/tzlNSCyRpZNT4XIcWZW5NlIUQ=";
     };
-    date = "2024-11-25";
+    date = "2024-12-16";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
-    version = "737c9bc79142b05616c2fa8f3a246615755dffd8";
+    version = "85baafd0b18515ccf0851e8d35f9306ec98f3c40";
     src = fetchFromGitHub {
       owner = "iynaix";
       repo = "time-travel.yazi";
-      rev = "737c9bc79142b05616c2fa8f3a246615755dffd8";
+      rev = "85baafd0b18515ccf0851e8d35f9306ec98f3c40";
       fetchSubmodules = false;
-      sha256 = "sha256-cmGyT8pwMU3xmk5Or9zcsDlKz8wPiuRdwb/Yhjefo2U=";
+      sha256 = "sha256-kOpj/GJ7xIFfJDsuTvced5MYiC4ZLA0TgsqvcRnyALI=";
     };
-    date = "2024-11-12";
+    date = "2024-12-13";
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2024.11.18";
+    version = "2024.12.13";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2024.11.18";
+      rev = "2024.12.13";
       fetchSubmodules = false;
-      sha256 = "sha256-TpQry/qUxqAvj4gQJecGSAlw850WxjK1KU43JpecPAU=";
+      sha256 = "sha256-c+WWFJPsh9l2AZX98eecTrFmGx46mDAGeAaosuj6qZg=";
     };
   };
 }

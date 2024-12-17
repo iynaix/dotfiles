@@ -31,11 +31,6 @@ in
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
-      complementary_classes = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "List of waybar classes to use the complementary accent color";
-      };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
         default = host == "desktop";
       };
@@ -214,13 +209,6 @@ in
         start_hidden = cfg.hidden;
       };
 
-      waybar.complementary_classes = [
-        "idle_inhibitor.activated"
-        "network.disconnected"
-        "pulseaudio.muted"
-        "custom/focal"
-      ];
-
       wallust = {
         nixJson = {
           waybarPersistentWorkspaces = cfg.persistentWorkspaces;
@@ -234,10 +222,22 @@ in
           "waybar.css" =
             let
               margin = "12px";
+              # define colors as gtk css variables
+              colorNames = [
+                "background"
+                "foreground"
+                "cursor"
+              ] ++ map (i: "color${toString i}") (lib.range 0 15);
+              colorDefinitions =
+                ''
+                  @define-color accent {{foreground}};
+                  @define-color complementary {{color4}};
+                ''
+                + (lib.concatMapStringsSep "\n" (name: ''@define-color ${name} {{${name}}};'') colorNames);
               baseModuleCss = ''
                 font-family: ${config.custom.fonts.regular};
                 font-weight: bold;
-                color: {{foreground}};
+                color: @accent;
                 transition: none;
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
                 border-bottom:  2px solid transparent;
@@ -268,6 +268,8 @@ in
             {
               text =
                 ''
+                  ${colorDefinitions}
+
                   * {
                     border: none;
                     border-radius: 0;
@@ -292,12 +294,8 @@ in
                   }
 
                   #workspaces button.active {
-                    border-bottom:  2px solid {{foreground}};
+                    border-bottom:  2px solid @accent;
                     background-color: rgba(255,255,255, 0.25);
-                  }
-                ''
-                + lib.optionalString cfg.idleInhibitor ''
-                  ${mkModuleClassName "idle_inhibitor"} {                  ;
                   }
                 ''
                 +
@@ -318,14 +316,22 @@ in
                     font-size: 17px;
                     padding-right: 16px;
                   }
-                ''
-                # add complementary classes to be modified by wallpaper at the bottom
-                + lib.concatMapStringsSep "\n" (class: ''
-                  ${mkModuleClassName class} {
-                    color: {{color4}}; /* complementary */
+                  ${mkModuleClassName "idle_inhibitor.activated"} {
+                    color: @complementary;
                   }
-                '') cfg.complementary_classes
-                # additional css at the end for highest priority
+                ''
+                # add complementary classes
+                + ''
+                  ${
+                    lib.concatMapStringsSep ", " mkModuleClassName [
+                      "network.disconnected"
+                      "pulseaudio.muted"
+                      "custom/focal"
+                    ]
+                  } {
+                    color: @complementary;
+                  }
+                ''
                 + cfg.extraCss;
 
               target = "${config.xdg.configHome}/waybar/style.css";

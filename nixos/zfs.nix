@@ -54,16 +54,17 @@
           # fix .zfs/snapshot mounts being empty, see
           # https://github.com/NixOS/nixpkgs/issues/257505#issuecomment-2458692894
           # reverts zfs commit: https://github.com/openzfs/zfs/commit/34118eac06fba83
-          package = pkgs.zfs_unstable.overrideAttrs (o: {
-            src = pkgs.fetchFromGitHub {
-              owner = "openzfs";
-              repo = "zfs";
-              rev = "zfs-2.3.0-rc3";
-              hash = "sha256-9s8Sb5+vksFsFI2Ra432QXexmbX3R17dzYzzLZviel0=";
-            };
-
-            patches = o.patches ++ [ ./zfs-fix-snapshot-mounts.patch ];
-          });
+          # package = pkgs.zfs_unstable.overrideAttrs (o: {
+          #   src = pkgs.fetchFromGitHub {
+          #     owner = "openzfs";
+          #     repo = "zfs";
+          #     rev = "zfs-2.3.0-rc3";
+          #     hash = "sha256-9s8Sb5+vksFsFI2Ra432QXexmbX3R17dzYzzLZviel0=";
+          #   };
+          #
+          #   patches = o.patches ++ [ ./zfs-fix-snapshot-mounts.patch ];
+          # });
+          package = pkgs.zfs_unstable;
 
           requestEncryptionCredentials = config.custom.zfs.encryption;
         };

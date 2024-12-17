@@ -9,6 +9,8 @@ let
   openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
 in
 lib.mkIf config.custom.hyprland.enable {
+  custom.autologinCommand = lib.getExe config.wayland.windowManager.hyprland.package;
+
   # start hyprland
   programs.bash.profileExtra = ''
     if [ "$(tty)" = "/dev/tty1" ]; then

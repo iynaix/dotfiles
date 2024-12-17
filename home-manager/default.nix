@@ -16,6 +16,11 @@
   ];
 
   options.custom = with lib; {
+    autologinCommand = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Command to run after autologin";
+    };
     fonts = {
       regular = mkOption {
         type = types.str;
@@ -30,7 +35,7 @@
       monospace = mkOption {
         type = types.str;
         default = "JetBrainsMono Nerd Font";
-        # default = "Geist Mono";
+        # default = "Geist Mono NerdFont";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
@@ -103,9 +108,7 @@
       let
         normalizeHome = p: if (lib.hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
       in
-      lib.mapAttrsToList (
-        dest: src: "L+ ${normalizeHome dest} - - - - ${normalizeHome src}"
-      ) config.custom.symlinks;
+      lib.mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.custom.symlinks;
 
     xdg = {
       enable = true;
@@ -115,20 +118,12 @@
 
     custom = {
       fonts.packages = with pkgs; [
+        inputs.mamelon.packages.${system}.default
+        nerd-fonts.geist-mono
+        nerd-fonts.jetbrains-mono
         noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-emoji
-        iosevka
-        # maple-mono-NF
-        inputs.mamelon.packages.${system}.default
-        # inputs.kollektif.packages.${system}.default
-        (nerdfonts.override {
-          fonts = [
-            # "Iosevka"
-            "JetBrainsMono"
-            # "MPlus"
-          ];
-        })
       ];
 
       persist = {

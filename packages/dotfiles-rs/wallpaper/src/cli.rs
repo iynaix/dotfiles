@@ -185,6 +185,7 @@ pub enum WallpaperSubcommand {
 #[derive(Parser, Debug)]
 #[command(
     name = "wallpaper",
+    infer_subcommands = true,
     about = "Changes the wallpaper and updates the colorcheme"
 )]
 #[command(group(

@@ -3,6 +3,7 @@
   programs.ripgrep = {
     enable = true;
     arguments = [
+      "--smart-case"
       "--ignore-file=${config.xdg.configHome}/ripgrep/.ignore"
     ];
   };

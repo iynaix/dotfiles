@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
@@ -12,10 +12,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
+    home-manager-stable = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
 
-    # waiting for fix for https://github.com/NixOS/nixpkgs/issues/348819
-    nixpkgs-cliphist.url = "github:NixOS/nixpkgs/5633bcff0c6162b9e4b5f1264264611e950c8ec7";
+    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
 
     devenv.url = "github:cachix/devenv";
 
@@ -37,15 +39,9 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    nvf = {
-      # url = "github:notashelf/nvf";
-      # url = "github:notashelf/nvf/v0.7";
-      # waiting for merge https://github.com/NotAShelf/nvf/pull/458
-      url = "github:elias-ainsworth/nvf";
-    };
-
     helix = {
       url = "github:helix-editor/helix";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nil = {
@@ -73,6 +69,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixcord = {
+      url = "github:kaylorben/nixcord";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-gaming = {
       url = "github:fufexan/nix-gaming";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -95,11 +96,6 @@
 
     mamelon = {
       url = "github:elias-ainsworth/mamelon-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    kollektif = {
-      url = "github:elias-ainsworth/kollektif-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -129,6 +125,14 @@
       pkgs = import inputs.nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        # FIXME: sonarr doesn't build because dotnet 6.0 is EOL
+        # https://github.com/NixOS/nixpkgs/issues/360592
+        config.permittedInsecurePackages = [
+          "aspnetcore-runtime-6.0.36"
+          "aspnetcore-runtime-wrapped-6.0.36"
+          "dotnet-sdk-6.0.428"
+          "dotnet-sdk-wrapped-6.0.428"
+        ];
       };
       lib = import ./lib.nix {
         inherit (nixpkgs) lib;

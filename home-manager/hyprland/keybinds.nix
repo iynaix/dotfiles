@@ -27,12 +27,11 @@ in
         # $1 is string to search for in window title
         # $2 is the command to run if the window isn't found
         text = ''
-          address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | \"address:\(.address)\"")
-
+          address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
           if [ -z "$address" ]; then
             eval "$2"
           else
-            hyprctl dispatch focuswindow "$address"
+            hyprctl dispatch focuswindow "address:$address"
           fi
         '';
       };
@@ -74,7 +73,7 @@ in
             "$mod_SHIFT, w, exec, rofi-epub-menu"
             "$mod_CTRL, w, exec, rofi-pdf-menu"
             "$mod, t, exec, jerry"
-            "$mod, v, exec, $term hx"
+            "$mod, v, exec, $term nvim"
             "$mod_SHIFT, v, exec, ${lib.getExe pkgs.custom.shell.rofi-edit-proj}"
             ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
             ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''

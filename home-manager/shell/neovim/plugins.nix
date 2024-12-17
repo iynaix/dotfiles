@@ -18,6 +18,7 @@ lib.mkMerge [
         luasnip.enable = true;
         nvim-autopairs.enable = true;
         nvim-tree.enable = true;
+        presence-nvim.enable = true;
         project-nvim.enable = true;
         tmux-navigator.enable = true;
         treesitter = {

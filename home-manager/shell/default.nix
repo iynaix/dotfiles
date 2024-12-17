@@ -18,9 +18,9 @@
     ./iamb
     ./jujutsu.nix
     ./music-player.nix
-    # ./neovim
+    ./neovim
     ./nix.nix
-    ./nvf
+    # ./nvf
     ./rice.nix
     ./ripgrep.nix
     ./rust.nix

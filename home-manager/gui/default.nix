@@ -1,8 +1,8 @@
 _: {
   imports = [
-    # ./arduino.nix
     ./brave.nix
     ./deadbeef.nix
+    ./discord.nix
     ./dunst.nix
     ./firefox.nix
     ./gaming.nix
@@ -22,7 +22,6 @@ _: {
     ./waybar.nix
     ./weeb.nix
     ./zathura.nix
-    # ./zed-editor.nix
     ./zellij.nix
   ];
 }

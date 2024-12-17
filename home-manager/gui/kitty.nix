@@ -26,6 +26,8 @@ in
       settings = {
         enable_audio_bell = false;
         copy_on_select = "clipboard";
+        cursor_trail = 1;
+        cursor_trail_start_threshold = 10;
         scrollback_lines = 10000;
         update_check_interval = 0;
         window_padding_width = terminal.padding;
