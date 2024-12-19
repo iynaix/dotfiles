@@ -39,15 +39,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "62f078905b4de55f19e328452c8a1f889ff2f6f4";
+    version = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "62f078905b4de55f19e328452c8a1f889ff2f6f4";
+      rev = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
       fetchSubmodules = false;
-      sha256 = "sha256-PSVzjC1sdaIOtK5ave4kn3Ck8YwpjO3N9uV/WE6Skdo=";
+      sha256 = "sha256-w9dSXW0NpgMOTnBlL/tzlNSCyRpZNT4XIcWZW5NlIUQ=";
     };
-    date = "2024-12-12";
+    date = "2024-12-16";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
