@@ -137,7 +137,7 @@ in
     };
     # searches git history, can never remember this stupid thing
     # 2nd argument is target path and subsequent arguments are passed through
-    gsearch = ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
+    grg = ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
     # checkout main / master, whichever exists
     gmain = ''
       if git show-ref --verify --quiet refs/heads/master; then

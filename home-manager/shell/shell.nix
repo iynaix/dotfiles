@@ -125,6 +125,8 @@ in
           ];
           text = ''yazi "$(dirname "$(dirname "$(where "$1")")")"'';
         } // binariesCompletion "ywhere";
+        # uniq but maintain original order
+        uuniq = "awk '!x[$0]++'";
       };
 
     # pj cannot be implemented as script as it needs to change the directory of the shell
