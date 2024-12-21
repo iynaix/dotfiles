@@ -44,7 +44,7 @@
                 width = 3840;
                 height = 2160;
                 position = "1754x0";
-                scale = 2;
+                scale = 1.5;
                 workspaces = [
                   9
                 ];

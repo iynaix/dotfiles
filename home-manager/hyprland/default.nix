@@ -64,8 +64,8 @@ in
                   description = "Position of the display, e.g. 0x0";
                 };
                 scale = mkOption {
-                  type = int;
-                  default = 1;
+                  type = float;
+                  default = 1.0;
                 };
                 vrr = mkEnableOption "Variable Refresh Rate";
                 vertical = mkOption {
