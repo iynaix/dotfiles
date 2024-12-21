@@ -15,7 +15,7 @@
       };
     }
     # create an otg specialisation for laptops
-    // lib.mkIf isLaptop {
+    // lib.optionalAttrs isLaptop {
       otg.configuration = { };
     };
 }

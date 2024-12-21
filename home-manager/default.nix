@@ -34,8 +34,7 @@
       };
       monospace = mkOption {
         type = types.str;
-        default = "JetBrainsMono Nerd Font";
-        # default = "Geist Mono NerdFont";
+        default = "JetBrainsMono Nerd Font"; # Idk I honestly like both default = "Geist Mono NerdFont";
         description = "The font to use for monospace text";
       };
       packages = mkOption {

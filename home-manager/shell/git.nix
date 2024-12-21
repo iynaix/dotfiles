@@ -86,10 +86,10 @@ in
       glg = "git log";
       gm = "git merge";
       gp = "git push";
-      gpf = "git push --force-with-lease";
+      fgp = "git push --force-with-lease";
       glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
       gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
-      gpcf = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
+      fgpc = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
       gpatch = "git diff --no-ext-diff";
       gr = "cd $(git rev-parse - -show-toplevel)"; # cd back to root
       grh = "git reset --hard";

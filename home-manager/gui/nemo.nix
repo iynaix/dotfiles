@@ -7,6 +7,7 @@
 }:
 lib.mkIf (!config.custom.headless) {
   home.packages = with pkgs; [
+    p7zip-rar # support for encrypted archives
     nemo-fileroller
     nemo-with-extensions
     webp-pixbuf-loader # for webp thumbnails
