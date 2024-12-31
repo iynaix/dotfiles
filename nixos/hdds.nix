@@ -1,5 +1,10 @@
-{ lib, config, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
+  inherit (config.hm.custom) mswindows;
   cfg = config.custom.hdds;
   wdred = "/media/6TBRED";
   wdred-dataset = "zfs-wdred6-1/media";
@@ -15,9 +20,6 @@ in
         default = config.custom.hdds.enable;
       };
       ironwolf22 = mkEnableOption "Ironwolf Pro 22TB" // {
-        default = config.custom.hdds.enable;
-      };
-      windows = mkEnableOption "Windows" // {
         default = config.custom.hdds.enable;
       };
     };
@@ -70,7 +72,7 @@ in
     boot = {
       loader.grub = {
         extraEntries = lib.concatLines (
-          lib.optional cfg.windows ''
+          lib.optional mswindows ''
             menuentry "Windows 11" {
               insmod part_gpt
               insmod fat
@@ -102,7 +104,7 @@ in
       #   options = ["nofail" "x-gvfs-hide" "subvol=/@"];
       # };
 
-      "/media/windows" = lib.mkIf cfg.windows {
+      "/media/windows" = lib.mkIf mswindows {
         device = "/dev/disk/by-uuid/94F422A4F4228916";
         fsType = "ntfs-3g";
         options = [
@@ -111,7 +113,7 @@ in
         ];
       };
 
-      "/media/windowsgames" = lib.mkIf cfg.windows {
+      "/media/windowsgames" = lib.mkIf mswindows {
         device = "/dev/disk/by-label/GAMES";
         fsType = "ntfs-3g";
         options = [

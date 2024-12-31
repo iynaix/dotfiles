@@ -18,6 +18,7 @@ reboot=''
 lock=''
 suspend=''
 logout=''
+windows=''
 yes=''
 no=''
 
@@ -25,6 +26,7 @@ no=''
 rofi_cmd() {
 	rofi -dmenu \
 		-p "Goodbye ${USER}" \
+		-sep "|" \
 		-mesg "Uptime: $uptime" \
 		-theme "$HOME/.cache/wallust/rofi-power-menu.rasi"
 }
@@ -44,8 +46,7 @@ confirm_exit() {
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	# echo -e "$lock\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
-	echo -e "$shutdown\n$reboot\n$suspend\n$logout\n$lock" | rofi_cmd
+	echo -n "$shutdown|$reboot|$windows|$suspend|$logout|$lock" | rofi_cmd
 }
 
 # Execute Command
@@ -62,6 +63,8 @@ run_cmd() {
 			systemctl suspend
 		elif [[ $1 == '--logout' ]]; then
 			loginctl kill-user "$(whoami)"
+		elif [[ $1 == '--windows' ]]; then
+			reboot-to-windows
 		fi
 	else
 		exit 0
@@ -86,5 +89,8 @@ case ${chosen} in
         ;;
     "$logout")
 		run_cmd --logout
+        ;;
+    "$windows")
+		run_cmd --windows
         ;;
 esac

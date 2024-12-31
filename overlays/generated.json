@@ -41,7 +41,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2024-12-15",
+        "date": "2024-12-22",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -51,16 +51,16 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "3f3d808a7e2e847dba1827ccc4140738d06b3adf",
-            "sha256": "sha256-GBJMERieXLQy0CmjohjwjMUP0NBTjPHMXfs9eEBQDtI=",
+            "rev": "7a5df5fdff072e7a9008578c5e108fc5b3a32b93",
+            "sha256": "sha256-r5RObyYsn5TtxzX+OpXn1SC0bBWkT0ut1qrQjY4Z81Y=",
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust"
         },
-        "version": "3f3d808a7e2e847dba1827ccc4140738d06b3adf"
+        "version": "7a5df5fdff072e7a9008578c5e108fc5b3a32b93"
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2024-12-16",
+        "date": "2024-12-24",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -72,11 +72,11 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "7afba3a73cdd69f346408b77ea5aac26fe09e551",
-            "sha256": "sha256-w9dSXW0NpgMOTnBlL/tzlNSCyRpZNT4XIcWZW5NlIUQ=",
+            "rev": "71c4fc2e6fa1d6f70c85bf525842d6888d1ffa46",
+            "sha256": "sha256-X3R5bsnzGv1TVXOKdhAyspDMguVAyc9tvCxJlypUUAA=",
             "type": "github"
         },
-        "version": "7afba3a73cdd69f346408b77ea5aac26fe09e551"
+        "version": "71c4fc2e6fa1d6f70c85bf525842d6888d1ffa46"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
@@ -112,10 +112,10 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2024.12.13",
-            "sha256": "sha256-c+WWFJPsh9l2AZX98eecTrFmGx46mDAGeAaosuj6qZg=",
+            "rev": "2024.12.23",
+            "sha256": "sha256-6zv2NqbUxirMwa6OCzeKXuqLB4sFiYAcy3TYke2jhKc=",
             "type": "github"
         },
-        "version": "2024.12.13"
+        "version": "2024.12.23"
     }
 }

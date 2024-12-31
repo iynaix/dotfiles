@@ -1,7 +1,6 @@
 {
   config,
   host,
-  isLaptop,
   isNixOS,
   lib,
   pkgs,
@@ -12,16 +11,6 @@ let
 in
 {
   options.custom = with lib; {
-    backlight.enable = mkEnableOption "Backlight" // {
-      default = isLaptop;
-    };
-    battery.enable = mkEnableOption "Battery" // {
-      default = isLaptop;
-    };
-    wifi.enable = mkEnableOption "Wifi" // {
-      default = isLaptop;
-    };
-
     waybar = {
       enable = mkEnableOption "waybar" // {
         default = config.custom.hyprland.enable && !config.custom.headless;

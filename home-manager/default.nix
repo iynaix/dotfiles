@@ -8,6 +8,7 @@
 }:
 {
   imports = [
+    ./hardware.nix
     ./hyprland
     ./gui
     ./impermanence.nix # only contains options

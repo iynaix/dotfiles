@@ -26,19 +26,6 @@
 
   services.displayManager.autoLogin.user = user;
 
-  # use 10gb tmpfs for /tmp
-  fileSystems."/tmp" = lib.mkIf (config.specialisation != "tty") (
-    lib.mkForce {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = [
-        "defaults"
-        "size=10G"
-        "mode=755"
-      ];
-    }
-  );
-
   networking = {
     interfaces.enp5s0.wakeOnLan.enable = true;
     # open ports for devices on the local network

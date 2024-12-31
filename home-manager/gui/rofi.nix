@@ -105,7 +105,7 @@ in
 
     home.packages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      pkgs.custom.rofi-power-menu
+      (pkgs.custom.rofi-power-menu.override { hasWindows = config.custom.mswindows; })
     ] ++ (lib.optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
@@ -165,18 +165,23 @@ in
         target = "${config.xdg.cacheHome}/wallust/rofi-menu-noinput.rasi";
       };
 
-      "rofi-power-menu.rasi" = {
-        text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
-          * { background-window: @background; } // darken background
-          window {
-            width: 1000px;
-            border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-          }
-          element normal.normal { background-color: var(background-normal); }
-          element selected.normal { background-color: @selected; }
-        '';
-        target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
-      };
+      "rofi-power-menu.rasi" =
+        let
+          columns = if config.custom.mswindows then 6 else 5;
+        in
+        {
+          text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
+            * { background-window: @background; } // darken background
+            window {
+              width: ${toString (columns * 200)}px;
+              border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+            }
+            element normal.normal { background-color: var(background-normal); }
+            element selected.normal { background-color: @selected; }
+            listview { columns: ${toString columns}; }
+          '';
+          target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
+        };
 
       "rofi-power-menu-confirm.rasi" = {
         text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''
