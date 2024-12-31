@@ -81,6 +81,7 @@
             ]
         );
 
+      bambu.enable = true;
       framework_vertical.enable = false;
       deadbeef.enable = true;
       ghostty.enable = false;

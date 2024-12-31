@@ -29,6 +29,7 @@
       }
     ];
 
+    bambu.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;
     wallfacer.enable = true;

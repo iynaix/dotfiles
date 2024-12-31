@@ -1,5 +1,6 @@
 _: {
   imports = [
+    ./bambu.nix
     ./brave.nix
     ./deadbeef.nix
     ./dunst.nix
