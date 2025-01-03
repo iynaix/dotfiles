@@ -98,6 +98,10 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
+
+      rclip = prev.rclip.overridePythonAttrs (o: {
+        pythonRelaxDeps = o.pythonRelaxDeps ++ [ "numpy" ];
+      });
     })
   ];
 }
