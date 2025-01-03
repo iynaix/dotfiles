@@ -48,13 +48,14 @@ lib.mkIf config.custom.bittorrent.enable (
               inherit (config.sops) secrets;
             in
             ''
-              outDir=/tmp/sonarr-ical-sync
-              mkdir -p "$outDir"
+                            outDir=/tmp/sonarr-ical-sync
+                            mkdir -p "$outDir"
 
-              SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
-              curl "http://localhost:8989/feed/v3/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
+                            SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
+                            curl "http://localhost:8989/feed/v3/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
 
-              NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="$outDir" --prod
+              cd "$outdir"
+              NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="." --prod
             '';
         };
       };

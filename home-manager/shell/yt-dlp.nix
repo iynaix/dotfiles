@@ -5,7 +5,10 @@ let
 
   # use positional arguments if provided, otherwise use yt.txt
   mkYtDlpWrapper = args: {
-    runtimeInputs = [ pkgs.yt-dlp ];
+    runtimeInputs = with pkgs; [
+      gawk
+      yt-dlp
+    ];
     text = ''
       is_flag() {
           [[ "$1" == -* ]]
@@ -27,7 +30,7 @@ let
               if [[ $url == http* ]]; then
                   args+=("$url")
               fi
-          done < <(sort -u "${config.xdg.userDirs.desktop}/yt.txt")
+          done < <(awk '!x[$0]++' "${config.xdg.userDirs.desktop}/yt.txt")
       fi
 
       pushd "${config.xdg.userDirs.download}" > /dev/null

@@ -34,6 +34,7 @@
     wallfacer.enable = true;
     deadbeef.enable = true;
     gaming.enable = false;
+    ghostty.enable = true;
 
     terminal.size = 12;
 

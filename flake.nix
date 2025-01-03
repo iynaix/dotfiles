@@ -110,6 +110,11 @@
     # ghostty = {
     #   url = "git+ssh://git@github.com/mitchellh/ghostty";
     # };
+
+    # ghostty is stable let's goooo
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
   };
 
   # flake-utils is unnecessary
