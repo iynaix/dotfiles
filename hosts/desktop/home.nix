@@ -54,7 +54,7 @@
                 width = 2256;
                 height = 1504;
                 position = "4880x1080";
-                scale = 2;
+                scale = 2.0;
                 vertical = true;
                 workspaces = [
                   8
@@ -70,7 +70,7 @@
                 width = 3840;
                 height = 2160;
                 position = "1754x0";
-                scale = 2;
+                scale = 2.0;
                 workspaces = [
                   8
                   9

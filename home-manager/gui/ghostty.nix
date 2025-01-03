@@ -50,7 +50,7 @@ in
       # term = "xterm-kitty";
       # theme = "catppuccin-mocha";
       window-decoration = false;
-      window-padding-x = terminal.padding;
+      window-padding-x = terminal.padding - 5;
       window-padding-y = terminal.padding;
     };
 

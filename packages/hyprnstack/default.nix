@@ -1,10 +1,10 @@
 {
   lib,
-  gcc13Stdenv,
+  gcc14Stdenv,
   hyprland,
   source,
 }:
-gcc13Stdenv.mkDerivation (
+gcc14Stdenv.mkDerivation (
   source
   // {
     inherit (hyprland) nativeBuildInputs;
