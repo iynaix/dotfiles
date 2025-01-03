@@ -32,7 +32,7 @@ in
         description = "Additional waybar config (wallust templating can be used)";
       };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
-        default = host == "desktop";
+        default = host == "desktop" || host == "t520";
       };
       extraCss = mkOption {
         type = types.lines;
