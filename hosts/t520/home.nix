@@ -6,6 +6,7 @@ _: {
         width = 1920;
         height = 1080;
         refreshRate = 60;
+        scale = 0.75;
         workspaces = [
           1
           2
@@ -22,10 +23,11 @@ _: {
     ];
 
     deadbeef.enable = true;
+    gaming.enable = true;
     ghostty.enable = false;
     hyprland = {
-      plugin = "hyprnstack";
-      lock = false;
+      # plugin = "hyprnstack";
+      lock = true;
       qtile = false;
     };
     obs-studio.enable = false;
