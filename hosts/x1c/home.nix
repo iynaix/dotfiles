@@ -27,14 +27,13 @@
       }
     ];
 
-    helix.enable = false;
-    # neovim.enable = false;
-    pathofbuilding.enable = true;
-    rclip.enable = true;
-    wallfacer.enable = true;
     deadbeef.enable = true;
     gaming.enable = false;
     ghostty.enable = true;
+    helix.enable = false;
+    pathofbuilding.enable = true;
+    rclip.enable = true;
+    wallfacer.enable = true;
 
     terminal.size = 12;
 

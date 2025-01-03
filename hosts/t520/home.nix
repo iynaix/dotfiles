@@ -24,7 +24,7 @@ _: {
 
     deadbeef.enable = true;
     gaming.enable = true;
-    ghostty.enable = false;
+    ghostty.enable = true;
     hyprland = {
       # plugin = "hyprnstack";
       lock = true;
