@@ -19,11 +19,11 @@ lib.mkIf config.custom.hyprland.enable {
   '';
 
   wayland.windowManager.hyprland.settings = {
-
     # HACK: Temporarily get waybar to launch.
-    exec = [
-      "pgrep waybar || waybar &"
-    ];
+    # exec = [
+    #   "pgrep waybar || waybar &"
+    # ];
+
     exec-once = [
       # init ipc listener
       "hypr-ipc &"

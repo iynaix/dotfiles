@@ -37,7 +37,7 @@ _: {
     wallfacer.enable = true;
     # wallust.colorscheme = "tokyo-night";
     waybar = {
-      enable = true;
+      enable = false;
       hidden = false;
       # waybar.persistentWorkspaces = true;
     };
