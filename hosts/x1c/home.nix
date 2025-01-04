@@ -34,7 +34,7 @@
     pathofbuilding.enable = true;
     rclip.enable = false;
     wallfacer.enable = true;
-    waybar.enable = true;
+    waybar.enable = false;
 
     terminal.size = 12;
 
