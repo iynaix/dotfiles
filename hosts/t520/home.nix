@@ -32,7 +32,7 @@ _: {
     };
     obs-studio.enable = false;
     pathofbuilding.enable = true;
-    rclip.enable = true;
+    rclip.enable = false;
     vlc.enable = false;
     wallfacer.enable = true;
     # wallust.colorscheme = "tokyo-night";
