@@ -1,7 +1,7 @@
 {
     "mpv-sub-select": {
         "cargoLocks": null,
-        "date": "2024-08-31",
+        "date": "2024-12-22",
         "extract": null,
         "name": "mpv-sub-select",
         "passthru": null,
@@ -13,10 +13,10 @@
             "name": null,
             "owner": "CogentRedTester",
             "repo": "mpv-sub-select",
-            "rev": "9b0043ba6042ba01fdd2533281313b70cbc98be4",
-            "sha256": "sha256-ZLWwkwrFaOg7PnuC23VaZ0P3zMhm1JmVf0eH9lqO0BY=",
+            "rev": "77d0148aa6aa952f07f06212cabe32d54dfdf49e",
+            "sha256": "sha256-VxwwTxE8c8rRQt/m2NA7cRC7+7O1ItYFFGv81nxqIxg=",
             "type": "github"
         },
-        "version": "9b0043ba6042ba01fdd2533281313b70cbc98be4"
+        "version": "77d0148aa6aa952f07f06212cabe32d54dfdf49e"
     }
 }

@@ -32,8 +32,9 @@
     ghostty.enable = true;
     helix.enable = false;
     pathofbuilding.enable = true;
-    rclip.enable = true;
+    rclip.enable = false;
     wallfacer.enable = true;
+    waybar.enable = true;
 
     terminal.size = 12;
 
