@@ -1,8 +1,8 @@
 _: {
   imports = [
+    ./bambu.nix
     ./brave.nix
     ./deadbeef.nix
-    ./discord.nix
     ./dunst.nix
     ./firefox.nix
     ./gaming.nix
@@ -22,6 +22,5 @@ _: {
     ./waybar.nix
     ./weeb.nix
     ./zathura.nix
-    ./zellij.nix
   ];
 }

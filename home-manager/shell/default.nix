@@ -20,14 +20,12 @@
     ./music-player.nix
     ./neovim
     ./nix.nix
-    # ./nvf
     ./rice.nix
     ./ripgrep.nix
     ./rust.nix
     ./shell.nix
     ./starship.nix
     ./tmux.nix
-    ./tuido.nix
     ./typescript.nix
     ./yazi.nix
     ./yt-dlp.nix

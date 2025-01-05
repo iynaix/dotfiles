@@ -5,25 +5,6 @@
   ...
 }:
 {
-  # Bootloader.
-  boot = {
-    # enable stage-1 bootloader
-    initrd.systemd.enable = true;
-    loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-      grub = {
-        enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        theme = pkgs.custom.distro-grub-themes-nixos;
-      };
-    };
-    supportedFilesystems.ntfs = true;
-  };
-
   networking.hostName = "${user}-${host}"; # Define your hostname.
 
   # Enable networking

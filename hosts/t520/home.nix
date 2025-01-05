@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   custom = {
     monitors = [
       {
@@ -6,7 +7,7 @@ _: {
         width = 1920;
         height = 1080;
         refreshRate = 60;
-        scale = 0.75;
+        scale = 0.50;
         workspaces = [
           1
           2
@@ -31,17 +32,19 @@ _: {
       qtile = false;
     };
     obs-studio.enable = false;
-    pathofbuilding.enable = true;
-    rclip.enable = false;
+    pathofbuilding.enable = false;
+    rclip.enable = true;
     vlc.enable = false;
     wallfacer.enable = true;
     # wallust.colorscheme = "tokyo-night";
     waybar = {
-      enable = false;
+      enable = true;
       hidden = false;
       # waybar.persistentWorkspaces = true;
     };
   };
+
+  terminal.package = pkgs.ghostty;
 
   # home = {
   #   packages = with pkgs; [

@@ -9,6 +9,7 @@
     ./audio.nix
     ./auth.nix
     ./bluetooth.nix
+    ./boot.nix
     ./configuration.nix
     ./docker.nix
     ./gaming.nix

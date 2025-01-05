@@ -120,42 +120,9 @@ in
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
     };
 
-    xdg.dataFile."rofi/themes/preview.rasi".text = ''
-      icon-current-entry {
-        enabled: true;
-        size: 50%;
-        dynamic: true;
-        padding: 10px;
-        background-color: inherit;
-      }
-      listview-split {
-        background-color: transparent;
-        border-radius: 0px;
-        cycle: true;
-        dynamic : true;
-        orientation: horizontal;
-        border: 0px solid;
-        children: [listview,icon-current-entry];
-      }
-      listview {
-        lines: 10;
-      }
-      mainbox {
-        children: [inputbar,listview-split];
-      }
-      @media (enabled: env(EPUB, false)) {
-        icon-current-entry {
-          size: 35%;
-        }
-      }
-    '';
-
     home.packages = [
-      # TODO: add better epub and pdf openers
-      # pkgs.custom.rofi-epub-menu
-      # pkgs.custom.rofi-pdf-menu
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      pkgs.custom.rofi-power-menu
+      (pkgs.custom.rofi-power-menu.override { hasWindows = config.custom.mswindows; })
     ] ++ (lib.optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
@@ -215,18 +182,23 @@ in
         target = "${config.xdg.cacheHome}/wallust/rofi-menu-noinput.rasi";
       };
 
-      "rofi-power-menu.rasi" = {
-        text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
-          * { background-window: @background; } // darken background
-          window {
-            width: 1000px;
-            border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-          }
-          element normal.normal { background-color: var(background-normal); }
-          element selected.normal { background-color: @selected; }
-        '';
-        target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
-      };
+      "rofi-power-menu.rasi" =
+        let
+          columns = if config.custom.mswindows then 6 else 5;
+        in
+        {
+          text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
+            * { background-window: @background; } // darken background
+            window {
+              width: ${toString (columns * 200)}px;
+              border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+            }
+            element normal.normal { background-color: var(background-normal); }
+            element selected.normal { background-color: @selected; }
+            listview { columns: ${toString columns}; }
+          '';
+          target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
+        };
 
       "rofi-power-menu-confirm.rasi" = {
         text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''

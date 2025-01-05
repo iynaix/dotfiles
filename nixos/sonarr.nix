@@ -11,7 +11,7 @@ lib.mkIf config.custom.bittorrent.enable (
       services = {
         sonarr = {
           enable = true;
-          # skips checks for faster builds
+          # skip checks for faster builds
           package = pkgs.sonarr.overrideAttrs { doCheck = false; };
           inherit user;
         };
@@ -41,20 +41,23 @@ lib.mkIf config.custom.bittorrent.enable (
         sonarr-ical-sync = {
           runtimeInputs = with pkgs; [
             curl
-            netlify-cli
+            # TODO: remove when nodejs 22 compatability is fixed
+            (netlify-cli.override {
+              buildNpmPackage = args: pkgs.buildNpmPackage (args // { nodejs = pkgs.nodejs_20; });
+            })
           ];
           text =
             let
               inherit (config.sops) secrets;
             in
             ''
-                            outDir=/tmp/sonarr-ical-sync
-                            mkdir -p "$outDir"
+              outDir=/tmp/sonarr-ical-sync
+              mkdir -p "$outDir"
 
-                            SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
-                            curl "http://localhost:8989/feed/v3/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
+              SONARR_API_KEY="$(cat ${secrets.sonarr_api_key.path})"
+              curl "http://localhost:8989/feed/v3/calendar/Sonarr.ics?apikey=$SONARR_API_KEY" -o "$outDir/Sonarr.ics"
 
-              cd "$outdir"
+              cd "$outDir"
               NETLIFY_SITE_ID="$(cat ${secrets.netlify_site_id.path})" netlify deploy --dir="." --prod
             '';
         };

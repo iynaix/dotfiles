@@ -27,15 +27,16 @@
       }
     ];
 
+    bambu.enable = false;
     deadbeef.enable = true;
     gaming.enable = false;
     ghostty.enable = true;
     helix.enable = false;
-    pathofbuilding.enable = true;
-    rclip.enable = false;
+    pathofbuilding.enable = false;
+    rclip.enable = true;
     wallfacer.enable = true;
-    waybar.enable = false;
 
+    terminal.package = pkgs.ghostty;
     terminal.size = 12;
 
     persist = {
@@ -49,7 +50,7 @@
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       # don't blind me on startup
-      "${lib.getExe pkgs.brightnessctl} s 50%"
+      "${lib.getExe pkgs.brightnessctl} s 75%"
     ];
   };
 }
