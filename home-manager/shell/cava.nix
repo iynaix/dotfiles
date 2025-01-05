@@ -1,6 +1,6 @@
 { config, lib, ... }:
 {
-  programs.cava.enable = false;
+  programs.cava.enable = true;
 
   custom.wallust.templates.cava = lib.mkIf config.programs.cava.enable {
     text = lib.custom.toQuotedINI {
