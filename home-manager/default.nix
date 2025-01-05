@@ -9,6 +9,7 @@
 }:
 {
   imports = [
+    ./hardware.nix
     ./hyprland
     ./gui
     ./impermanence.nix # only contains options
@@ -34,7 +35,8 @@
       };
       monospace = mkOption {
         type = types.str;
-        default = "JetBrainsMono Nerd Font"; # Idk I honestly like both default = "Geist Mono NerdFont";
+        # default = "JetBrainsMono Nerd Font"; # Idk I honestly like both default = "Geist Mono NerdFont";
+        default = "Yuki Code";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
@@ -118,6 +120,7 @@
     custom = {
       fonts.packages = with pkgs; [
         inputs.mamelon.packages.${system}.default
+        # inputs.yuki-code.packages.${system}.default
         nerd-fonts.geist-mono
         nerd-fonts.jetbrains-mono
         noto-fonts

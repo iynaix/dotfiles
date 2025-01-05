@@ -10,7 +10,7 @@
   options = {
     warnings = lib.mkOption {
       apply = lib.filter (
-        w: !(lib.strings.hasInfix "The options silently discard others by the order of precedence" w)
+        w: !(lib.strings.hasInfix "If multiple of these password options are set at the same time" w)
       );
     };
   };

@@ -4,25 +4,33 @@
   makeWrapper,
   libnotify,
   networkmanager,
+  procps,
   rofi,
+  grub2,
+  hasWindows ? false,
 }:
 stdenvNoCC.mkDerivation {
   pname = "rofi-power-menu";
-  version = "1.0";
+  version = "1.1";
 
   src = ./.;
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    install -D ./rofi-power-menu.sh $out/bin/rofi-power-menu
+    mkdir -p $out/bin
+    substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu \
+      --replace-fail '${lib.optionalString (!hasWindows) "|$windows"}' ""
+    chmod +x $out/bin/rofi-power-menu
 
     wrapProgram $out/bin/rofi-power-menu \
       --prefix PATH : ${
         lib.makeBinPath [
+          procps # for uptime
           libnotify
           networkmanager
           rofi
+          grub2
         ]
       }
   '';

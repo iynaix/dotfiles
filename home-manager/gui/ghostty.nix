@@ -1,13 +1,11 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
 }:
 let
   cfg = config.custom.ghostty;
-  ghostty = inputs.ghostty.packages.${pkgs.system}.default;
   inherit (config.custom) terminal;
 in
 {
@@ -23,12 +21,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home = {
-      packages = [ ghostty ];
-      sessionVariables = {
-        GHOSTTY_RESOURCES_DIR = "${ghostty}/share";
-      };
-    };
+    home.packages = [ pkgs.ghostty ];
 
     xdg.configFile."ghostty/config".text = lib.generators.toKeyValue {
       mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
@@ -50,10 +43,10 @@ in
       # term = "xterm-kitty";
       # theme = "catppuccin-mocha";
       window-decoration = false;
-      window-padding-x = terminal.padding - 5;
+      window-padding-x = terminal.padding;
       window-padding-y = terminal.padding;
     };
 
-    wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${lib.getExe ghostty}" ];
+    wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${lib.getExe pkgs.ghostty}" ];
   };
 }

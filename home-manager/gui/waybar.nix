@@ -1,7 +1,6 @@
 {
   config,
   host,
-  isLaptop,
   isNixOS,
   lib,
   pkgs,
@@ -12,16 +11,6 @@ let
 in
 {
   options.custom = with lib; {
-    backlight.enable = mkEnableOption "Backlight" // {
-      default = isLaptop;
-    };
-    battery.enable = mkEnableOption "Battery" // {
-      default = isLaptop;
-    };
-    wifi.enable = mkEnableOption "Wifi" // {
-      default = isLaptop;
-    };
-
     waybar = {
       enable = mkEnableOption "waybar" // {
         default = config.custom.hyprland.enable && !config.custom.headless;
@@ -32,7 +21,7 @@ in
         description = "Additional waybar config (wallust templating can be used)";
       };
       idleInhibitor = mkEnableOption "Idle inhibitor" // {
-        default = host == "desktop" || host == "t520";
+        default = host == "desktop" || host == "desktop";
       };
       extraCss = mkOption {
         type = types.lines;
@@ -146,6 +135,19 @@ in
           #   default = "·";
           #   urgent = "󰊠";
           # };
+          format = "{icon}";
+          format-icons = {
+            "1" = "一";
+            "2" = "二";
+            "3" = "三";
+            "4" = "四";
+            "5" = "五";
+            "6" = "六";
+            "7" = "七";
+            "8" = "八";
+            "9" = "九";
+            "10" = "十";
+          };
         };
 
         # "hyprland/window" = {
