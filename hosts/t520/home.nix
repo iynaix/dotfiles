@@ -42,9 +42,9 @@
       hidden = false;
       # waybar.persistentWorkspaces = true;
     };
-  };
 
-  terminal.package = pkgs.ghostty;
+    terminal.package = pkgs.ghostty;
+  };
 
   # home = {
   #   packages = with pkgs; [
