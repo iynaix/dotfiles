@@ -14,7 +14,9 @@ lib.mkIf config.custom.hyprland.enable {
   # start hyprland
   programs.bash.profileExtra = ''
     if [ "$(tty)" = "/dev/tty1" ]; then
-      exec Hyprland &> /dev/null
+      if uwsm check may-start; then
+          exec uwsm start hyprland-uwsm.desktop
+      fi
     fi
   '';
 
@@ -52,33 +54,38 @@ lib.mkIf config.custom.hyprland.enable {
   };
 
   # start swww and wallpaper via systemd to minimize reloads
-  systemd.user.services = {
-    swww = {
-      Install.WantedBy = [ "graphical-session.target" ];
-      Unit = {
-        Description = "Wayland wallpaper daemon";
-        PartOf = [ "graphical-session.target" ];
+  systemd.user.services =
+    let
+      graphicalTarget = config.wayland.systemd.target;
+    in
+    {
+      swww = {
+        Install.WantedBy = [ graphicalTarget ];
+        Unit = {
+          Description = "Wayland wallpaper daemon";
+          After = [ graphicalTarget ];
+          PartOf = [ graphicalTarget ];
+        };
+        Service = {
+          ExecStart = lib.getExe' pkgs.swww "swww-daemon";
+          Restart = "on-failure";
+        };
       };
-      Service = {
-        ExecStart = lib.getExe' pkgs.swww "swww-daemon";
-        Restart = "on-failure";
+      wallpaper = {
+        Install.WantedBy = [ "swww.service" ];
+        Unit = {
+          Description = "Set the wallpaper and update colorscheme";
+          PartOf = [ graphicalTarget ];
+          After = [ "swww.service" ];
+          Requires = [ "swww.service" ];
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = lib.getExe' config.custom.dotfiles.package "wallpaper";
+          # possible race condition, introduce a small delay before starting
+          # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
+          ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 1";
+        };
       };
     };
-    wallpaper = {
-      Install.WantedBy = [ "graphical-session.target" ];
-      Unit = {
-        Description = "Set the wallpaper and update colorscheme";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "swww.service" ];
-        Requires = [ "swww.service" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = lib.getExe' config.custom.dotfiles.package "wallpaper";
-        # possible race condition, introduce a small delay before starting
-        # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
-        ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 1";
-      };
-    };
-  };
 }

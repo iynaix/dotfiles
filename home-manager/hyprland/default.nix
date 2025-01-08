@@ -113,6 +113,10 @@ in
       #   assert (lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.42") "hyprland: use version from nixpkgs?");
       #   inputs.hyprland.packages.${pkgs.system}.hyprland;
 
+      # https://wiki.hyprland.org/Useful-Utilities/Systemd-start/#installation
+      # conflicts with programs.hyprland.withUWSM in nixos
+      systemd.enable = false;
+
       settings =
         {
           monitor =

@@ -6,11 +6,16 @@
   ...
 }:
 lib.mkIf config.hm.custom.hyprland.enable {
-  programs.hyprland.enable =
-    assert (
-      lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.47") "hyprland updated, sync with hyprnstack?"
-    );
-    true;
+  programs.hyprland = {
+    enable =
+      assert (
+        lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.47") "hyprland updated, sync with hyprnstack?"
+      );
+      true;
+
+    # needed for setting the wayland environment variables
+    withUWSM = true;
+  };
 
   environment.variables =
     {
