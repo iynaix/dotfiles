@@ -45,7 +45,7 @@ let
             users.${user} = {
               imports = [
                 inputs.nix-index-database.hmModules.nix-index
-                inputs.nixvim.homeManagerModules.nixvim
+                inputs.nvf.homeManagerModules.nvf
                 ./${host}/home.nix # host specific home-manager configuration
                 ../home-manager
               ];
@@ -53,11 +53,7 @@ let
           };
         }
         # alias for home-manager
-        (lib.mkAliasOptionModule [ "hm" ] [
-          "home-manager"
-          "users"
-          user
-        ])
+        (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops
       ];

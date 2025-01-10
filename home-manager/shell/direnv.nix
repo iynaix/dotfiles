@@ -6,12 +6,12 @@ _: {
   };
 
   # vim support
-  programs.nixvim = {
-    plugins.direnv.enable = true;
-    globals = {
-      direnv_silent_load = 1;
-    };
-  };
+  # programs.nixvim = {
+  #   plugins.direnv.enable = true;
+  #   globals = {
+  #     direnv_silent_load = 1;
+  #   };
+  # };
 
   custom.shell.packages = {
     mkdevenv = ''nix flake init --template github:iynaix/dotfiles#"$1"'';

@@ -7,30 +7,6 @@
     RUSTUP_HOME = "/cache${config.xdg.dataHome}/.rustup";
   };
 
-  # setup nvim for rust
-  programs.nixvim.plugins = {
-    lsp.servers = {
-      rust_analyzer = {
-        enable = true;
-        # do not install the language server
-        package = null;
-        autostart = true;
-        cmd = null;
-        installCargo = false;
-        installRustc = false;
-        settings.check.command = "clippy";
-      };
-    };
-
-    conform-nvim = {
-      settings = {
-        formatters_by_ft = {
-          rust = [ "rustfmt" ];
-        };
-      };
-    };
-  };
-
   # add the custom completions for both fish and fish
   programs = {
     fish.functions = {

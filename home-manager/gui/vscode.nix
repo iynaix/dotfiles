@@ -70,6 +70,7 @@ lib.mkIf (!config.custom.headless) {
   custom.persist = {
     home.directories = [
       ".config/VSCodium"
+      ".supermaven"
       ".vscode-oss"
     ];
   };

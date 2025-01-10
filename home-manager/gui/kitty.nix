@@ -53,22 +53,22 @@ in
     };
 
     # remove padding while in neovim
-    programs.nixvim.extraConfigLua = ''
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
-          if vim.env.TERM == "xterm-kitty" then
-            vim.fn.system(string.format('kitty @ --to %s set-spacing padding=0', vim.env.KITTY_LISTEN_ON))
-          end
-        end
-      })
+    # programs.nixvim.extraConfigLua = ''
+    #   vim.api.nvim_create_autocmd("VimEnter", {
+    #     callback = function()
+    #       if vim.env.TERM == "xterm-kitty" then
+    #         vim.fn.system(string.format('kitty @ --to %s set-spacing padding=0', vim.env.KITTY_LISTEN_ON))
+    #       end
+    #     end
+    #   })
 
-      vim.api.nvim_create_autocmd("VimLeave", {
-        callback = function()
-          if vim.env.TERM == "xterm-kitty" then
-            vim.fn.system(string.format('kitty @ --to %s set-spacing padding=${toString terminal.padding}', vim.env.KITTY_LISTEN_ON))
-          end
-        end
-      })
-    '';
+    #   vim.api.nvim_create_autocmd("VimLeave", {
+    #     callback = function()
+    #       if vim.env.TERM == "xterm-kitty" then
+    #         vim.fn.system(string.format('kitty @ --to %s set-spacing padding=${toString terminal.padding}', vim.env.KITTY_LISTEN_ON))
+    #       end
+    #     end
+    #   })
+    # '';
   };
 }

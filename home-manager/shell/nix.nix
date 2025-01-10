@@ -342,12 +342,7 @@ in
       };
     };
 
-  programs = {
-    nix-index.enable = true;
-    nixvim.plugins = {
-      nix.enable = true;
-    };
-  };
+  programs.nix-index.enable = true;
 
   custom.persist = {
     home = {
