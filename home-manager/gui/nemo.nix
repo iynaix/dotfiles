@@ -44,6 +44,7 @@ lib.mkIf (!config.custom.headless) {
       "file://${homeDir}/projects/dotfiles"
       "file://${homeDir}/projects/nixpkgs"
       "file://${homeDir}/projects/coinfc Work"
+      "file://${homeDir}/Documents"
       "file://${homeDir}/Pictures/Wallpapers"
       "file:///persist Persist"
     ];

@@ -37,7 +37,11 @@ in
         # previous desktop versions: 1196
         base=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
         prev=${if host == "desktop" then "1196" else "0"}
-        echo $((base + prev))
+        if [ "$prev" -gt 0 ]; then
+          echo "$base ($((base + prev)))"
+        else
+          echo "$base"
+        fi
       '';
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw =

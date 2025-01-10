@@ -126,18 +126,20 @@
             border = false;
           };
           scripts = with pkgs.mpvScripts; [
-            modernx-zydezu
+            modernz
             thumbfast
           ];
           scriptOpts = {
-            modernx = {
-              compactmode = true;
-              keybindings = false;
-              noxmas = true;
-              showfilesize = false;
-              showinfo = true;
-              showloop = false;
-              showontop = false;
+            modernz = {
+              window_top_bar = false;
+              greenandgrumpy = true;
+              jump_buttons = false;
+              speed_button = true;
+              ontop_button = false; # pin button
+              chapter_skip_buttons = true;
+              track_nextprev_buttons = false;
+              seekbarfg_color = "#FFFFFF";
+              seekbarbg_color = "#7F7F7F"; # 50% gray
             };
           };
         };

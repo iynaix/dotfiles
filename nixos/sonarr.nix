@@ -41,10 +41,7 @@ lib.mkIf config.custom.bittorrent.enable (
         sonarr-ical-sync = {
           runtimeInputs = with pkgs; [
             curl
-            # TODO: remove when nodejs 22 compatability is fixed
-            (netlify-cli.override {
-              buildNpmPackage = args: pkgs.buildNpmPackage (args // { nodejs = pkgs.nodejs_20; });
-            })
+            netlify-cli
           ];
           text =
             let

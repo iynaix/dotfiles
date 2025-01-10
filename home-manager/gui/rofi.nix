@@ -178,6 +178,7 @@ in
             }
             element normal.normal { background-color: var(background-normal); }
             element selected.normal { background-color: @selected; }
+            element-text { vertical-align: 0; }
             listview { columns: ${toString columns}; }
           '';
           target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
