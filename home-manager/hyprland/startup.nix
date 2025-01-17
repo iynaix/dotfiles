@@ -6,20 +6,17 @@
   ...
 }:
 let
-  startHyprland = ''
-    if uwsm check may-start; then
-        exec uwsm start hyprland-uwsm.desktop
-    fi
-  '';
   openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
 in
 lib.mkIf config.custom.hyprland.enable {
-  custom.autologinCommand = startHyprland;
+  custom.autologinCommand = "uwsm start hyprland-uwsm.desktop";
 
   # start hyprland
   programs.bash.profileExtra = ''
     if [ "$(tty)" = "/dev/tty1" ]; then
-      ${startHyprland}
+      if uwsm check may-start; then
+        exec uwsm start hyprland-uwsm.desktop
+      fi
     fi
   '';
 
