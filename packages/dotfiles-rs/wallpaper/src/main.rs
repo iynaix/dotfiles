@@ -2,7 +2,11 @@ use clap::{CommandFactory, Parser};
 use clap_complete::{generate, Shell};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
 use common::{full_path, wallpaper};
-use std::{collections::HashMap, io::Read, path::PathBuf};
+use std::{
+    collections::HashMap,
+    io::{Read, Write},
+    path::PathBuf,
+};
 
 pub mod backup;
 pub mod cli;
@@ -50,6 +54,61 @@ fn write_wallpaper_history(wallpaper: PathBuf) {
     wtr.flush().expect("could not flush wallpapers_history.csv");
 }
 
+fn get_random_wallpaper(image_or_dir: Option<PathBuf>) -> String {
+    let random_wallpaper = match image_or_dir {
+        // use stdin instead
+        Some(p) if p == PathBuf::from("-") => {
+            let mut buf = Vec::new();
+            std::io::stdin()
+                .read_to_end(&mut buf)
+                .expect("unable to read stdin");
+
+            // valid image, write stdin to a file
+            if let Ok(format) = image::guess_format(&buf) {
+                // need to write the extension or Image has problems guessing the format later
+                let ext = format.extensions_str()[0];
+
+                let output = format!("/tmp/__wall__{}.{ext}", fastrand::u32(10000..));
+                std::fs::write(&output, &buf).expect("could not write stdin to file");
+                output
+            } else {
+                String::from_utf8(buf)
+                    .ok()
+                    .and_then(|s| std::fs::canonicalize(s.trim()).ok())
+                    .map_or_else(
+                        || panic!("unable to parse stdin"),
+                        |p| p.to_string_lossy().to_string(),
+                    )
+            }
+        }
+        Some(image_or_dir) => {
+            if image_or_dir.is_dir() {
+                wallpaper::random_from_dir(&image_or_dir)
+            } else {
+                std::fs::canonicalize(&image_or_dir)
+                    .unwrap_or_else(|_| {
+                        panic!("{} is not a valid image / command", &image_or_dir.display())
+                    })
+                    .to_str()
+                    .unwrap_or_else(|| panic!("could not convert {image_or_dir:?} to str"))
+                    .to_string()
+            }
+        }
+        None => wallpaper::random_from_dir(wallpaper::dir()),
+    };
+
+    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
+    std::fs::write(
+        dirs::runtime_dir()
+            .expect("could not get $XDG_RUNTIME_DIR")
+            .join("current_wallpaper"),
+        &random_wallpaper,
+    )
+    .ok();
+
+    random_wallpaper
+}
+
 fn main() {
     let args = WallpaperArgs::parse();
 
@@ -80,7 +139,27 @@ fn main() {
                         std::process::exit(1)
                     })
                 ),
-                WallpaperSubcommand::Reload => {} // handled later
+                WallpaperSubcommand::Rm => {
+                    let fname = wallpaper::current().unwrap_or_else(|| {
+                        eprintln!("Failed to get current wallpaper");
+                        std::process::exit(1)
+                    });
+
+                    print!("Delete {fname}? (y/N): ");
+                    std::io::stdout().flush().expect("could not flush stdout");
+
+                    let mut input = String::new();
+                    std::io::stdin()
+                        .read_line(&mut input)
+                        .expect("could not read stdin");
+
+                    if input.trim().eq_ignore_ascii_case("y") {
+                        std::fs::remove_file(&fname).unwrap_or_else(|_| {
+                            eprintln!("Error deleting {fname}");
+                            std::process::exit(1);
+                        });
+                    }
+                }
                 WallpaperSubcommand::History => pqiv::show_history(),
                 WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
                 #[cfg(feature = "dedupe")]
@@ -95,6 +174,7 @@ fn main() {
                 WallpaperSubcommand::Remote(args) => backup::remote(args),
                 WallpaperSubcommand::Colorspace(args) => colorspace::toggle(args),
                 WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
+                WallpaperSubcommand::Reload => {} // handled later
             }
             return;
         }
@@ -103,57 +183,7 @@ fn main() {
     let wallpaper = if is_reload {
         wallpaper::current().expect("no current wallpaper set")
     } else {
-        let random_wallpaper = match args.image_or_dir {
-            // use stdin instead
-            Some(p) if p == PathBuf::from("-") => {
-                let mut buf = Vec::new();
-                std::io::stdin()
-                    .read_to_end(&mut buf)
-                    .expect("unable to read stdin");
-
-                // valid image, write stdin to a file
-                if let Ok(format) = image::guess_format(&buf) {
-                    // need to write the extension or Image has problems guessing the format later
-                    let ext = format.extensions_str()[0];
-
-                    let output = format!("/tmp/__wall__{}.{ext}", fastrand::u32(10000..));
-                    std::fs::write(&output, &buf).expect("could not write stdin to file");
-                    output
-                } else {
-                    String::from_utf8(buf)
-                        .ok()
-                        .and_then(|s| std::fs::canonicalize(s.trim()).ok())
-                        .map_or_else(
-                            || panic!("unable to parse stdin"),
-                            |p| p.to_string_lossy().to_string(),
-                        )
-                }
-            }
-            Some(image_or_dir) => {
-                if image_or_dir.is_dir() {
-                    wallpaper::random_from_dir(&image_or_dir)
-                } else {
-                    std::fs::canonicalize(&image_or_dir)
-                        .unwrap_or_else(|_| {
-                            panic!("{} is not a valid image / command", &image_or_dir.display())
-                        })
-                        .to_str()
-                        .unwrap_or_else(|| panic!("could not convert {image_or_dir:?} to str"))
-                        .to_string()
-                }
-            }
-            None => wallpaper::random_from_dir(wallpaper::dir()),
-        };
-
-        // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
-        let _ = std::fs::write(
-            dirs::runtime_dir()
-                .expect("could not get $XDG_RUNTIME_DIR")
-                .join("current_wallpaper"),
-            &random_wallpaper,
-        );
-
-        random_wallpaper
+        get_random_wallpaper(args.image_or_dir)
     };
 
     if !args.skip_wallpaper {

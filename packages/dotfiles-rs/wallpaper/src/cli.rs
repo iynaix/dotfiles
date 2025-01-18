@@ -113,7 +113,10 @@ pub enum WallpaperSubcommand {
     #[command(name = "current", about = "Prints the path of the current wallpaper")]
     Current,
 
-    #[command(name = "reload", about = "Reloads the current wallpaper")]
+    #[command(name = "rm", about = "Deletes the current wallpaper", visible_aliases = ["remove", "delete", "yeet"])]
+    Rm,
+
+    #[command(name = "reload", about = "Reloads the current wallpaper", visible_aliases = ["refresh"])]
     Reload,
 
     #[command(name = "history", about = "Show wallpaper history selector with pqiv")]

@@ -15,7 +15,7 @@ lib.mkIf config.custom.hyprland.enable {
   programs.bash.profileExtra = ''
     if [ "$(tty)" = "/dev/tty1" ]; then
       if uwsm check may-start; then
-        exec uwsm start hyprland-uwsm.desktop
+        ${config.custom.autologinCommand}
       fi
     fi
   '';

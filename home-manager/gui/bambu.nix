@@ -20,6 +20,8 @@
       home = {
         directories = [
           ".config/BambuStudio"
+          ".config/FreeCAD"
+          ".local/share/FreeCAD"
         ];
       };
     };

@@ -59,14 +59,21 @@ in
         "${wdred}/TV" = "${ironwolf}/TV";
       };
 
-    # add bookmarks for gtk
-    hm.gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
-      "file://${ironwolf}/Anime Anime"
-      "file://${ironwolf}/Anime/Current Anime Current"
-      "file://${ironwolf}/TV TV"
-      "file://${ironwolf}/TV/Current TV Current"
-      "file://${ironwolf}/Movies"
-    ];
+    hm = {
+      # add bookmarks for gtk
+      gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
+        "file://${ironwolf}/Anime Anime"
+        "file://${ironwolf}/Anime/Current Anime Current"
+        "file://${ironwolf}/TV TV"
+        "file://${ironwolf}/TV/Current TV Current"
+        "file://${ironwolf}/Movies"
+      ];
+
+      # add btop monitoring for extra hdds
+      custom.btop.disks =
+        lib.optional cfg.wdred6 "/media/6TBRED"
+        ++ lib.optional cfg.ironwolf22 "/media/IRONWOLF22";
+    };
 
     # dual boot windows
     boot = {

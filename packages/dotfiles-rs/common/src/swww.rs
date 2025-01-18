@@ -137,7 +137,9 @@ impl Swww {
             .args(transition_args)
             .arg(&fname)
             .spawn()
-            .expect("failed to execute swww");
+            .expect("failed to execute swww")
+            .wait()
+            .expect("failed to wait for swww");
     }
 
     pub fn run(&self, wall_info: &WallInfo, transition: &Option<String>) {
