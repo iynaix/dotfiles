@@ -109,19 +109,26 @@ in
     environment.persistence = {
       "/persist" = {
         hideMounts = true;
-        inherit (cfg.root) files;
-        directories = [
-          "/var/log" # systemd journal is stored in /var/log/journal
-          "/var/lib/nixos" # for persisting user uids and gids
-        ] ++ cfg.root.directories;
+        files = lib.unique cfg.root.files;
+        directories = lib.unique (
+          [
+            "/var/log" # systemd journal is stored in /var/log/journal
+            "/var/lib/nixos" # for persisting user uids and gids
+          ]
+          ++ cfg.root.directories
+        );
 
         users.${user} = {
-          files = cfg.home.files ++ hmPersistCfg.home.files;
-          directories = [
-            "projects"
-            ".cache/dconf"
-            ".config/dconf"
-          ] ++ cfg.home.directories ++ hmPersistCfg.home.directories;
+          files = lib.unique (cfg.home.files ++ hmPersistCfg.home.files);
+          directories = lib.unique (
+            [
+              "projects"
+              ".cache/dconf"
+              ".config/dconf"
+            ]
+            ++ cfg.home.directories
+            ++ hmPersistCfg.home.directories
+          );
         };
       };
 
@@ -129,10 +136,12 @@ in
       # e.g. npm, cargo cache etc, that could always be redownloaded
       "/cache" = {
         hideMounts = true;
-        inherit (cfg.root.cache) directories files;
+        files = lib.unique cfg.root.cache.files;
+        directories = lib.unique cfg.root.cache.directories;
 
         users.${user} = {
-          inherit (hmPersistCfg.home.cache) directories files;
+          files = lib.unique hmPersistCfg.home.cache.files;
+          directories = lib.unique hmPersistCfg.home.cache.directories;
         };
       };
     };

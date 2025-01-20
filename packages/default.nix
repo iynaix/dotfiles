@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 let
   inherit (pkgs) lib callPackage;
   # injects a source parameter from nvfetcher
@@ -15,7 +15,14 @@ let
     );
 in
 {
-  # boutique rust packages
+  # neovim config via nvf
+  neovim-iynaix =
+    (inputs.nvf.lib.neovimConfiguration {
+      inherit pkgs;
+      modules = [ ./neovim ];
+    }).neovim;
+
+  # ricing glue
   dotfiles-rs = callPackage ./dotfiles-rs { };
 
   # custom tela built with catppucin variant colors

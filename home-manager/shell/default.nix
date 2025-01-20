@@ -16,7 +16,7 @@
     ./git.nix
     ./helix.nix
     ./jujutsu.nix
-    ./neovim
+    ./neovim.nix
     ./nix.nix
     ./rice.nix
     ./ripgrep.nix

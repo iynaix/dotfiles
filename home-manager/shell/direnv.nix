@@ -15,8 +15,8 @@ _: {
 
   custom.shell.packages = {
     mkdevenv = ''nix flake init --template github:iynaix/dotfiles#"$1"'';
-    rmdevenv = ''rm .direnv .devenv'';
-    rmdirenv = ''rm .direnv .devenv'';
+    redevenv = ''rm .direnv .devenv'';
+    redirenv = ''rm .direnv .devenv'';
   };
 
   custom.persist = {
