@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 let
   mkFormat =
-    height: ''"bestvideo[height<=${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"'';
+    height:
+    ''"bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[format_note~='(?i)original']/best[ext=mp4]/best"'';
 
   # use positional arguments if provided, otherwise use yt.txt
   mkYtDlpWrapper = args: {

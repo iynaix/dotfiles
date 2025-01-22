@@ -45,7 +45,7 @@
 
   # set as default interactive shell
   programs.kitty.settings.shell = lib.mkForce (lib.getExe pkgs.fish);
-  custom.ghostty.config.command = lib.mkForce (lib.getExe pkgs.fish);
+  programs.ghostty.settings.command = lib.mkForce (lib.getExe pkgs.fish);
 
   custom.persist = {
     home = {
