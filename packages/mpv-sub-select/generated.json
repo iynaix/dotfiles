@@ -15,6 +15,7 @@
             "repo": "mpv-sub-select",
             "rev": "77d0148aa6aa952f07f06212cabe32d54dfdf49e",
             "sha256": "sha256-VxwwTxE8c8rRQt/m2NA7cRC7+7O1ItYFFGv81nxqIxg=",
+            "sparseCheckout": [],
             "type": "github"
         },
         "version": "77d0148aa6aa952f07f06212cabe32d54dfdf49e"

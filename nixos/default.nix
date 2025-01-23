@@ -199,9 +199,6 @@
       };
     };
 
-    # faster boot times
-    # systemd.services.NetworkManager-wait-online.enable = false;
-
     custom.persist = {
       root.directories = lib.optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
       root.cache.directories = [

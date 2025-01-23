@@ -118,7 +118,7 @@
         };
       }
 
-      # modernx-zydezu settings
+      # modernz settings
       {
         programs.mpv = {
           config = lib.mkAfter {

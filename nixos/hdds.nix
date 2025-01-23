@@ -26,10 +26,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # non os zfs disks
-    boot.zfs.extraPools =
-      lib.optional cfg.ironwolf22 "zfs-ironwolf22-1" ++ (lib.optional cfg.wdred6 "zfs-wdred6-1");
-
     services.sanoid = {
       enable = true;
 
@@ -110,6 +106,16 @@ in
       #   fsType = "btrfs";
       #   options = ["nofail" "x-gvfs-hide" "subvol=/@"];
       # };
+
+      "/media/6TBRED" = lib.mkIf cfg.wdred6 {
+        device = "zfs-wdred6-1/media";
+        fsType = "zfs";
+      };
+
+      "/media/IRONWOLF22" = lib.mkIf cfg.ironwolf22 {
+        device = "zfs-ironwolf22-1/media";
+        fsType = "zfs";
+      };
 
       "/media/windows" = lib.mkIf mswindows {
         device = "/dev/disk/by-uuid/94F422A4F4228916";

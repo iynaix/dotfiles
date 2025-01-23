@@ -15,6 +15,7 @@
             "repo": "mpv-scripts",
             "rev": "9bdce0050144cb24f92475f7bdd77180e0e4c26b",
             "sha256": "sha256-9P/8q/OZXfaJMS08acQP4h3/zUA5mKRQee0JmkXcz1w=",
+            "sparseCheckout": [],
             "type": "github"
         },
         "version": "9bdce0050144cb24f92475f7bdd77180e0e4c26b"

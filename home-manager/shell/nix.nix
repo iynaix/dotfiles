@@ -24,7 +24,6 @@ in
     shellAliases = {
       nfl = "nix flake lock";
       nfu = "nix flake update";
-      nfui = "nix flake lock --update-input";
       nsh = "nix-shell --command fish -p";
       nshp = "nix-shell --pure --command fish -p";
     };
@@ -66,25 +65,25 @@ in
 
           if [ "$#" -eq 0 ]; then
             # run nvfetcher for overlays
-            nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+            nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
 
             # run nvfetcher for packages
             mapfile -t pkg_tomls < <(fd nvfetcher.toml packages)
 
             for pkg_toml in "''${pkg_tomls[@]}"; do
                 pkg_dir=$(dirname "$pkg_toml")
-                nvfetcher --config "$pkg_toml" --build-dir "$pkg_dir"
+                nvfetcher --keep-old --config "$pkg_toml" --build-dir "$pkg_dir"
             done
           else
             # special case
             if [ "$1" = "main" ]; then
-              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+              nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
             elif  [[ -d "./packages/$1" ]]; then
               # run nvfetcher for just the package
-              nvfetcher --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
+              nvfetcher --keep-old --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
             else
               # run nvfetcher for overlays
-              nvfetcher --config overlays/nvfetcher.toml --build-dir overlays
+              nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
             fi
             exit
           fi

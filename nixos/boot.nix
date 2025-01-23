@@ -21,9 +21,16 @@
         efiSupport = true;
         theme = pkgs.custom.distro-grub-themes-nixos;
       };
+      timeout = 3;
     };
     supportedFilesystems.ntfs = true;
   };
+
+  # faster boot times
+  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+
+  # reduce journald logs
+  services.journald.extraConfig = ''SystemMaxUse=50M'';
 
   custom.shell.packages = {
     reboot-to-windows = {

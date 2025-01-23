@@ -15,6 +15,7 @@
             "repo": "hyprNstack",
             "rev": "28e5226d565e441ff0e575a7bf33bbae3149a2ea",
             "sha256": "sha256-AGBLyODcwYIufxQEgkLIwYN3lXiFMmAUVczWmko8UF4=",
+            "sparseCheckout": [],
             "type": "github"
         },
         "version": "28e5226d565e441ff0e575a7bf33bbae3149a2ea"

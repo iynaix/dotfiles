@@ -15,6 +15,7 @@
             "repo": "rofi",
             "rev": "2e0efe5054ac7eb502a585dd6b3575a65b80ce72",
             "sha256": "sha256-TVZ7oTdgZ6d9JaGGa6kVkK7FMjNeuhVTPNj2d7zRWzM=",
+            "sparseCheckout": [],
             "type": "github"
         },
         "version": "2e0efe5054ac7eb502a585dd6b3575a65b80ce72"

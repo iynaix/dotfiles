@@ -37,6 +37,11 @@
 {
   # execute shebangs that assume hardcoded shell paths
   services.envfs.enable = true;
+  # envfs sets usrbinenv activation script to "" with mkForce
+  system.activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
+    mkdir -p /usr/bin
+    chmod 0755 /usr/bin
+  '';
 
   # run unpatched binaries on nixos
   programs.nix-ld.enable = true;

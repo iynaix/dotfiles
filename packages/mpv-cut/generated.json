@@ -15,6 +15,7 @@
             "repo": "mpv-cut",
             "rev": "3b18f1161ffb2ff822c88cb97e099772d4b3c26d",
             "sha256": "sha256-c4NHJM1qeXXBz8oyGUzS9QiAzRYiNKjmArM1K0Q2Xo0=",
+            "sparseCheckout": [],
             "type": "github"
         },
         "version": "3b18f1161ffb2ff822c88cb97e099772d4b3c26d"

@@ -12,7 +12,8 @@
 
   config = lib.mkIf (!config.custom.headless) {
     home.packages = with pkgs; [
-      bambu-studio
+      # wait for https://github.com/NixOS/nixpkgs/pull/376159 to be merged
+      (bambu-studio.override { boost = pkgs.boost186; })
       freecad-wayland
     ];
 
