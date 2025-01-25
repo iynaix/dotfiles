@@ -27,11 +27,7 @@
         powerManagement.enable = true;
         open = false;
         nvidiaSettings = false;
-        # TODO: bambu-studio doesn't show the prepare / preview pane on nvidia 565:
-        # https://github.com/bambulab/BambuStudio/issues/5166
-        package =
-          with config.boot.kernelPackages.nvidiaPackages;
-          if config.hm.custom.bambu.enable then production else beta;
+        package = config.boot.kernelPackages.nvidiaPackages.beta;
       };
       graphics.extraPackages = with pkgs; [
         vaapiVdpau
