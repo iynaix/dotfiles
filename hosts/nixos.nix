@@ -45,7 +45,6 @@ let
             users.${user} = {
               imports = [
                 inputs.nix-index-database.hmModules.nix-index
-                inputs.nvf.homeManagerModules.nvf
                 ./${host}/home.nix # host specific home-manager configuration
                 ../home-manager
               ];
