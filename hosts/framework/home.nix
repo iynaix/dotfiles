@@ -29,7 +29,8 @@
       }
     ];
 
-    bambu.enable = true;
+    modelling3d.enable = true;
+    printing3d.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;
     wallfacer.enable = true;

@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./bambu.nix
+    ./3dprinting.nix
     ./brave.nix
     ./deadbeef.nix
     ./dunst.nix

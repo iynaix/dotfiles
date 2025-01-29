@@ -81,7 +81,6 @@
             ]
         );
 
-      bambu.enable = true;
       framework_vertical.enable = false;
       deadbeef.enable = true;
       ghostty.enable = false;
@@ -90,6 +89,8 @@
         lock = false;
         qtile = false;
       };
+      modelling3d.enable = true;
+      printing3d.enable = true;
       obs-studio.enable = false;
       pathofbuilding.enable = true;
       rclip.enable = true;

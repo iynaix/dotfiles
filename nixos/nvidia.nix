@@ -27,7 +27,14 @@
         powerManagement.enable = true;
         open = false;
         nvidiaSettings = false;
-        package = config.boot.kernelPackages.nvidiaPackages.beta;
+        package =
+          let
+            betaPkg = config.boot.kernelPackages.nvidiaPackages.beta;
+          in
+          assert (
+            lib.assertMsg (lib.versionOlder betaPkg.version "565.78") "nvidia updated, check slicers / freecad"
+          );
+          betaPkg;
       };
       graphics.extraPackages = with pkgs; [
         vaapiVdpau
