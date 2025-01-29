@@ -65,7 +65,8 @@ if [ -n "$untrackedFiles" ]; then
 fi
 
 if [ "$showProgress" = true ]; then
-    sudo nixos-rebuild "$nhCommand" --flake ".#$hostname" "${restArgs[@]}"
+    # use remote sudo only uses sudo during the switch to the new generation
+    nixos-rebuild "$nhCommand" --use-remote-sudo --flake ".#$hostname" "${restArgs[@]}"
 else
     nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi

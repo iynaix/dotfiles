@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  self,
   system ? "x86_64-linux",
   ...
 }:
@@ -40,7 +41,16 @@ let
                 home-manager
                 tree
                 yazi
+                # custom neovim
+                self.packages.${system}.neovim-iynaix
               ];
+
+              variables = {
+                EDITOR = "nvim";
+                VISUAL = "nvim";
+                NIXPKGS_ALLOW_UNFREE = "1";
+              };
+
               shellAliases = {
                 eza = "eza '--icons' '--group-directories-first' '--header' '--octal-permissions' '--hyperlink'";
                 ls = "eza";
@@ -48,6 +58,9 @@ let
                 la = "eza -a";
                 lla = "eza -la";
                 y = "yazi";
+                nano = "nvim";
+                neovim = "nvim";
+                v = "nvim";
               };
             };
 
@@ -74,10 +87,6 @@ let
             programs = {
               # bye bye nano
               nano.enable = false;
-              neovim = {
-                enable = true;
-                defaultEditor = true;
-              };
             };
 
             # enable SSH in the boot process.
@@ -136,10 +145,10 @@ in
 {
   kde-iso =
     mkIso inputs.nixpkgs-stable inputs.home-manager-stable
-      "installation-cd-graphical-calamares-plasma5";
+      "installation-cd-graphical-calamares-plasma6";
   minimal-iso = mkIso inputs.nixpkgs-stable inputs.home-manager-stable "installation-cd-minimal";
   kde-iso-unstable =
     mkIso inputs.nixpkgs inputs.home-manager
-      "installation-cd-graphical-calamares-plasma5";
+      "installation-cd-graphical-calamares-plasma6";
   minimal-iso-unstable = mkIso inputs.nixpkgs inputs.home-manager "installation-cd-minimal";
 }

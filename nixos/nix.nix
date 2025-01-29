@@ -37,11 +37,16 @@
 {
   # execute shebangs that assume hardcoded shell paths
   services.envfs.enable = true;
-  # envfs sets usrbinenv activation script to "" with mkForce
-  system.activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
-    mkdir -p /usr/bin
-    chmod 0755 /usr/bin
-  '';
+  system = {
+    # envfs sets usrbinenv activation script to "" with mkForce
+    activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
+      mkdir -p /usr/bin
+      chmod 0755 /usr/bin || true
+    '';
+
+    # make a symlink of flake within the generation (e.g. /run/current-system/src)
+    extraSystemBuilderCmds = "ln -s ${self.sourceInfo.outPath} $out/src";
+  };
 
   # run unpatched binaries on nixos
   programs.nix-ld.enable = true;
@@ -54,9 +59,6 @@
       nixfmt-rfc-style
     ];
   };
-
-  # make a symlink of flake within the generation (e.g. /run/current-system/src)
-  system.extraSystemBuilderCmds = "ln -s ${self.sourceInfo.outPath} $out/src";
 
   systemd.tmpfiles.rules = [
     # cleanup nixpkgs-review cache on boot

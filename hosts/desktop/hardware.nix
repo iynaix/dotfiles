@@ -12,7 +12,6 @@
       "nvme"
       "usbhid"
       "usb_storage"
-      "uas"
       "sd_mod"
     ];
     initrd.kernelModules = [ ];

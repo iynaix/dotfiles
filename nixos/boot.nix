@@ -8,8 +8,12 @@
 {
   # Bootloader.
   boot = {
-    # enable stage-1 bootloader
-    initrd.systemd.enable = true;
+    initrd = {
+      # enable stage-1 bootloader
+      systemd.enable = true;
+      # always allow booting from usb
+      availableKernelModules = [ "uas" ];
+    };
     loader = {
       efi = {
         canTouchEfiVariables = true;

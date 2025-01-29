@@ -83,7 +83,7 @@
 
       framework_vertical.enable = false;
       deadbeef.enable = true;
-      ghostty.enable = false;
+      ghostty.enable = true;
       hyprland = {
         plugin = "hyprnstack";
         lock = false;

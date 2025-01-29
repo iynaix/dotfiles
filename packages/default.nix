@@ -15,7 +15,9 @@ let
     );
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
 in
-{
+rec {
+  default = install;
+
   install = pkgs.writeShellApplication {
     name = "iynaixos-install";
     runtimeInputs = [ pkgs.curl ];
@@ -32,7 +34,7 @@ in
   neovim-iynaix =
     (inputs.nvf.lib.neovimConfiguration {
       inherit pkgs;
-      modules = [ ./neovim ];
+      modules = [ ./neovim-iynaix ];
     }).neovim;
 
   # ricing glue

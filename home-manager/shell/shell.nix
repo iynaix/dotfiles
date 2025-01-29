@@ -57,6 +57,7 @@ in
         np = "cd ${proj_dir}/nixpkgs";
         open = "xdg-open";
         py = "python";
+        w = "watch -cn1 -x cat";
         coinfc = "pj coinfc";
 
         # cd aliases

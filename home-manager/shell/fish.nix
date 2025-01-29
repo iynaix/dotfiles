@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  fishPath = lib.getExe config.programs.fish.package;
+in
 {
   programs = {
     fish = {
@@ -39,13 +42,19 @@
 
   # fish plugins, home-manager's programs.fish.plugins has a weird format
   home.packages = with pkgs.fishPlugins; [
-    # do not add failed commands to history
-    sponge
+    sponge # do not add failed commands to history
   ];
 
-  # set as default interactive shell
-  programs.kitty.settings.shell = lib.mkForce (lib.getExe pkgs.fish);
-  programs.ghostty.settings.command = lib.mkForce (lib.getExe pkgs.fish);
+  # set as default interactive shell, also set $SHELL for nix shell to pick up
+  programs = {
+    kitty.settings = {
+      env = "SHELL=${fishPath}";
+      shell = lib.mkForce (lib.getExe config.programs.fish.package);
+    };
+    ghostty.settings = {
+      command = lib.mkForce "SHELL=${fishPath} ${fishPath}";
+    };
+  };
 
   custom.persist = {
     home = {
