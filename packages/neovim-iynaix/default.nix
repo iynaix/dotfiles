@@ -48,6 +48,11 @@
     searchCase = "smart";
     useSystemClipboard = true;
 
+    # spellcheck = {
+    #   enable = true;
+    #   programmingWordlist.enable = true;
+    # };
+
     # autocmds
     luaConfigPost = # lua
       ''

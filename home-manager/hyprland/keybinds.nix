@@ -30,7 +30,7 @@ in
           address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
 
           if [ -z "$address" ]; then
-            eval "$2"
+            eval "uwsm app -- $2"
           else
             hyprctl dispatch focuswindow "address:$address"
           fi
@@ -41,6 +41,8 @@ in
     wayland.windowManager.hyprland.settings = {
       bind =
         let
+          # exec using uwsm
+          uexec = program: "exec, uwsm app -- ${program}";
           workspace_keybinds = lib.flatten (
             (lib.custom.mapWorkspaces (
               { workspace, key, ... }:
@@ -64,15 +66,15 @@ in
           );
         in
         [
-          "$mod, Return, exec, $term"
-          "$mod_SHIFT, Return, exec, rofi -show drun"
+          "$mod, Return, ${uexec "$term"}"
+          "$mod_SHIFT, Return, ${uexec ''rofi -show drun -run-command "uwsm app -- {cmd}"''}"
           "$mod, BackSpace, killactive,"
-          "$mod, e, exec, nemo ${config.xdg.userDirs.download}"
-          "$mod_SHIFT, e, exec, $term yazi ${config.xdg.userDirs.download}"
-          "$mod, w, exec, brave"
-          "$mod_SHIFT, w, exec, brave --incognito"
-          "$mod, v, exec, $term nvim"
-          "$mod_SHIFT, v, exec, ${lib.getExe pkgs.custom.shell.rofi-edit-proj}"
+          "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
+          "$mod_SHIFT, e, ${uexec "$term yazi ${config.xdg.userDirs.download}"}"
+          "$mod, w, ${uexec "brave"}"
+          "$mod_SHIFT, w, ${uexec "brave --incognito"}"
+          "$mod, v, ${uexec "$term nvim"}"
+          "$mod_SHIFT, v, ${uexec (lib.getExe pkgs.custom.shell.rofi-edit-proj)}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
@@ -80,8 +82,8 @@ in
           "$mod_ALT, F4, exit,"
 
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, exec, rofi-power-menu"
-          "$mod_CTRL, v, exec, cliphist list | rofi -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi | cliphist decode | wl-copy"
+          "CTRL_ALT, Delete, ${uexec "rofi-power-menu"}"
+          "$mod_CTRL, v, exec, cliphist list | ${uexec "rofi -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi"} | cliphist decode | wl-copy"
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, hypr-monitors"
@@ -160,9 +162,9 @@ in
           "$mod, n, exec, dunstctl history-pop"
 
           # switching wallpapers or themes
-          "$mod, apostrophe, exec, wallpaper rofi"
-          "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
-          "ALT, apostrophe, exec, wallpaper history"
+          "$mod, apostrophe, ${uexec "wallpaper rofi"}"
+          "$mod_SHIFT, apostrophe, ${uexec "rofi-wallust-theme"}"
+          "ALT, apostrophe, ${uexec "wallpaper history"}"
 
           # special keys
           # "XF86AudioPlay, mpvctl playpause"

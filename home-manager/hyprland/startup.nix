@@ -6,7 +6,8 @@
   ...
 }:
 let
-  openOnWorkspace = workspace: program: "[workspace ${toString workspace} silent] ${program}";
+  openOnWorkspace =
+    workspace: program: "[workspace ${toString workspace} silent] uwsm app -- ${program}";
 in
 lib.mkIf config.custom.hyprland.enable {
   custom.autologinCommand = "uwsm start hyprland-uwsm.desktop";
