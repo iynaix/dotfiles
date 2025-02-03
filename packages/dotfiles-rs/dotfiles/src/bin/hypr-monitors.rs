@@ -140,5 +140,5 @@ fn main() {
     move_workspaces_to_monitors(&workspaces);
 
     // reload wallpaper
-    wallpaper::reload(&None);
+    wallpaper::reload(None);
 }

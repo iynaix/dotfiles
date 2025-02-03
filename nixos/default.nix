@@ -116,7 +116,7 @@
         [
           curl
           eza
-          procps
+          (lib.hiPrio procps) # for uptime
           ripgrep
           yazi
           zoxide

@@ -69,7 +69,7 @@ pub fn edit(args: EditArgs) {
     wallfacer.arg(&image).run();
 
     // reload the wallpaper
-    wallpaper::set(&image, &None);
+    wallpaper::set(&image, None);
 }
 
 pub fn add(args: AddArgs) {

@@ -32,7 +32,7 @@
             betaPkg = config.boot.kernelPackages.nvidiaPackages.beta;
           in
           assert (
-            lib.assertMsg (lib.versionOlder betaPkg.version "565.78") "nvidia updated, check slicers / freecad"
+            lib.assertMsg (lib.versionOlder betaPkg.version "570.87") "nvidia updated, check slicers / freecad"
           );
           betaPkg;
       };

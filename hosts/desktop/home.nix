@@ -13,7 +13,7 @@
             width = 3440;
             height = 1440;
             refreshRate = 144;
-            vrr = true;
+            # vrr = true;
             position = "1440x1080";
             workspaces = [
               1

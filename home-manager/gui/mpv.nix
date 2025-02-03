@@ -138,6 +138,7 @@
               ontop_button = false; # pin button
               chapter_skip_buttons = true;
               track_nextprev_buttons = false;
+              hover_effect_color = "#7F7F7F"; # 50% gray
               seekbarfg_color = "#FFFFFF";
               seekbarbg_color = "#7F7F7F"; # 50% gray
             };

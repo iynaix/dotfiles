@@ -30,7 +30,12 @@ in
   config = lib.mkIf config.custom.hyprland.enable (
     lib.mkMerge [
       {
-        home.packages = [ config.custom.dotfiles.package ];
+        home = {
+          shellAliases = {
+            wall = "wallpaper";
+          };
+          packages = [ config.custom.dotfiles.package ];
+        };
       }
 
       (lib.mkIf config.custom.wallfacer.enable {

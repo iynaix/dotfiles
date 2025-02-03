@@ -85,12 +85,7 @@ where
         .find(|line| line.contains("Duration: "))
         .and_then(|line| line.rsplit_once("Duration: "))
         .and_then(|(_, duration)| duration.split_once(','))
-        .map(|(duration, _)| {
-            duration
-                .split(':')
-                .filter_map(|t| t.parse::<f32>().ok())
-                .collect_vec()
-        })
+        .map(|(duration, _)| duration.split(':').flat_map(str::parse).collect_vec())
         .unwrap_or_default();
 
     match duration.len() {

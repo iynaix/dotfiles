@@ -20,30 +20,34 @@ let
           { config, pkgs, ... }:
           {
             environment = {
-              systemPackages = with pkgs; [
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-install";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/install.sh)";
-                })
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-recover";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                })
-                (pkgs.writeShellApplication {
-                  name = "iynaixos-reinstall";
-                  runtimeInputs = [ pkgs.curl ];
-                  text = "sh <(curl -L ${repo_url}/main/recover.sh)";
-                })
-                btop
-                eza
-                home-manager
-                tree
-                yazi
-                # custom neovim
-                self.packages.${system}.neovim-iynaix
-              ];
+              systemPackages =
+                with pkgs;
+                [
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-install";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/install.sh)";
+                  })
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-recover";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                  })
+                  (pkgs.writeShellApplication {
+                    name = "iynaixos-reinstall";
+                    runtimeInputs = [ pkgs.curl ];
+                    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+                  })
+                  bat
+                  btop
+                  eza
+                  home-manager
+                  tree
+                  yazi
+                  # custom neovim
+                  self.packages.${system}.neovim-iynaix
+                ]
+                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ kitty ];
 
               variables = {
                 EDITOR = "nvim";
@@ -52,6 +56,8 @@ let
               };
 
               shellAliases = {
+                cat = "bat";
+                ccat = "command cat";
                 eza = "eza '--icons' '--group-directories-first' '--header' '--octal-permissions' '--hyperlink'";
                 ls = "eza";
                 ll = "eza -l";
@@ -107,18 +113,29 @@ let
             # quality of life
             nix = {
               package = pkgs.nixVersions.latest;
+              registry = {
+                nixos-unstable = {
+                  from = {
+                    type = "indirect";
+                    id = "nixos-unstable";
+                  };
+                  to = {
+                    type = "github";
+                    owner = "NixOS";
+                    repo = "nixpkgs";
+                    rev = "nixos-unstable";
+                  };
+                };
+              };
               settings = {
                 experimental-features = [
                   "nix-command"
                   "flakes"
-                  # "repl-flake"
                 ];
                 substituters = [
-                  "https://hyprland.cachix.org"
                   "https://nix-community.cachix.org"
                 ];
                 trusted-public-keys = [
-                  "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
                   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
                 ];
               };

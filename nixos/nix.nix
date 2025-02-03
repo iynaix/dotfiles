@@ -158,7 +158,8 @@
       };
       package = pkgs.nixVersions.latest;
       registry = {
-        nixpkgs-master = {
+        n.flake = inputs.nixpkgs-stable;
+        master = {
           from = {
             type = "indirect";
             id = "nixpkgs-master";
@@ -169,7 +170,7 @@
             repo = "nixpkgs";
           };
         };
-        nixpkgs-stable.flake = inputs.nixpkgs-stable;
+        stable.flake = inputs.nixpkgs-stable;
       };
       settings = {
         auto-optimise-store = true; # Optimise symlinks

@@ -4,10 +4,7 @@ use common::wallpaper;
 use rexiv2::Metadata;
 
 pub fn aspect_ratio(aspect: &str) -> f64 {
-    let aspect: Vec<_> = aspect
-        .split('x')
-        .filter_map(|s| s.parse::<f64>().ok())
-        .collect();
+    let aspect: Vec<_> = aspect.split('x').flat_map(str::parse::<f64>).collect();
 
     assert!(aspect.len() == 2, "invalid aspect ratio: {aspect:?}");
 

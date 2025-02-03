@@ -187,7 +187,7 @@ fn main() {
     };
 
     if !args.skip_wallpaper {
-        wallpaper::set(&wallpaper, &args.transition);
+        wallpaper::set(&wallpaper, args.transition.as_ref());
 
         if !is_reload && !args.skip_history {
             write_wallpaper_history(PathBuf::from(wallpaper));

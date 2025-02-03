@@ -44,7 +44,7 @@ where
 }
 
 /// sets the wallpaper and reloads the wallust theme
-pub fn set<P>(wallpaper: P, transition: &Option<String>)
+pub fn set<P>(wallpaper: P, transition: Option<&String>)
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
@@ -65,7 +65,7 @@ where
 }
 
 /// reloads the wallpaper and wallust theme
-pub fn reload(transition: &Option<String>) {
+pub fn reload(transition: Option<&String>) {
     set(current().expect("no current wallpaper set"), transition);
 }
 
@@ -140,7 +140,7 @@ impl WallInfo {
         self.get_geometry_str(width, height).and_then(|geom| {
             let geometry = geom
                 .split(['+', 'x'])
-                .filter_map(|s| s.parse::<f64>().ok())
+                .flat_map(str::parse::<f64>)
                 .collect_vec();
 
             match geometry.as_slice() {

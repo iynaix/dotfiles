@@ -29,7 +29,7 @@ in
         set fish_greeting
 
         # set options for plugins
-        set sponge_regex_patterns 'password|passwd'
+        set sponge_regex_patterns 'password|passwd|^kill'
 
         # bind --mode default \t complete-and-search
       '';
