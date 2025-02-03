@@ -23,6 +23,9 @@
       direnv = {
         package = direnv-vim;
       };
+      vim-tmux-navigator = {
+        package = vim-tmux-navigator;
+      };
     };
 
     options = {

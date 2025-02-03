@@ -1,48 +1,66 @@
-_: {
+{ pkgs, ... }:
+{
   programs.tmux = {
     enable = true;
-    prefix = "C-b";
     terminal = "tmux-256color";
+    prefix = "C-Space";
     mouse = true;
     keyMode = "vi";
-    escapeTime = 0; # no delay for esc key press
+    clock24 = true;
     baseIndex = 1; # index panes and windows from 1
     customPaneNavigationAndResize = true; # use vim keys to navigate panes
-    extraConfig = ''
-      # Saner splitting.
-      bind v split-window -h
-      bind s split-window -v
+    sensibleOnTop = true;
 
-      # 16 million colors please
-      set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
+    plugins = with pkgs.tmuxPlugins; [
+      vim-tmux-navigator
+      yank
+      {
+        # TODO: remove override when https://github.com/NixOS/nixpkgs/pull/379030 is merged
+        plugin = catppuccin.overrideAttrs (_: {
+          src = pkgs.fetchFromGitHub {
+            owner = "catppuccin";
+            repo = "tmux";
+            rev = "v2.1.2";
+            hash = "sha256-vBYBvZrMGLpMU059a+Z4SEekWdQD0GrDqBQyqfkEHPg=";
+          };
+        });
+        extraConfig = # tmux
+          ''
+            set -g @catppuccin_status_background "none"
+          '';
+      }
+    ];
 
-      # Activity
-      setw -g monitor-activity off
-      set -g visual-activity off
+    extraConfig = # tmux
+      ''
+        # Allow true color support
+        set -ga terminal-overrides ",*:RGB"
+        # Allow changing cursor shape
+        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
 
-      # Automatically set window title
-      setw -g automatic-rename on
-      set -g set-titles on
+        # Keybinds
+        bind BSpace confirm kill-session
+        unbind r
+        bind r source-file ~/.config/tmux/tmux.conf
 
-      # Cleaner status bar
-      set -g status-style bg=default
-      # set -g status-position top
+        # Saner splitting.
+        bind v split-window -h
+        bind s split-window -v
 
-      set -g status-left ""
-      set -g status-right ""
+        # Activity
+        setw -g monitor-activity off
+        set -g visual-activity off
 
-      set -g pane-border-style bg=default,fg=colour8
-      set -g pane-active-border-style bg=default,fg=colour7
+        # Automatically set window title
+        setw -g automatic-rename on
+        set -g set-titles on
 
-      set -g message-style bg=colour8,fg=colour0
-
-      setw -g window-status-format "#[fg=colour7,nobold,nounderscore,noitalics] #[fg=colour7] #W #[fg=colour0,nobold,nounderscore,noitalics]"
-      setw -g window-status-style bg=default,fg=colour7
-
-      setw -g window-status-current-style bg=default,fg=colour7
-      setw -g window-status-current-format "#[fg=colour0,nobold,nounderscore,noitalics] #[fg=colour4] #W #[fg=colour0,nobold,nounderscore,noitalics]"
-
-      setw -g window-status-activity-style fg=colour8
-    '';
+        # Customize tmux catppuccin, needs to be done after plugin is loaded
+        set -g status-right-length 100
+        set -g status-left-length 100
+        set -g status-left ""
+        set -g status-right "#{E:@catppuccin_status_application}"
+        set -ag status-right "#{E:@catppuccin_status_session}"
+      '';
   };
 }
