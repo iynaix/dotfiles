@@ -45,7 +45,8 @@ in
         # allow orca-slicer to be open bambu studio links
         xdg.mimeApps.defaultApplications = {
           "x-scheme-handler/orcaslicer" = "OrcaSlicer.desktop";
-          "x-scheme-handler/bambustudio" = "OrcaSlicer.desktop";
+          "x-scheme-handler/bambustudio" = "OrcaSlicer.desktop"; # makerworld
+          "x-scheme-handler/prusaslicer" = "OrcaSlicer.desktop"; # printables
         };
 
         custom.persist = {

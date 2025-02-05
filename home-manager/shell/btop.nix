@@ -4,6 +4,7 @@
     btop = {
       disks = mkOption {
         type = types.listOf types.str;
+        default = [ ];
         description = "List of disks to monitor in btop";
       };
     };

@@ -14,21 +14,7 @@
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
       yank
-      {
-        # TODO: remove override when https://github.com/NixOS/nixpkgs/pull/379030 is merged
-        plugin = catppuccin.overrideAttrs (_: {
-          src = pkgs.fetchFromGitHub {
-            owner = "catppuccin";
-            repo = "tmux";
-            rev = "v2.1.2";
-            hash = "sha256-vBYBvZrMGLpMU059a+Z4SEekWdQD0GrDqBQyqfkEHPg=";
-          };
-        });
-        extraConfig = # tmux
-          ''
-            set -g @catppuccin_status_background "none"
-          '';
-      }
+      catppuccin
     ];
 
     extraConfig = # tmux
@@ -60,6 +46,7 @@
         set -g window-active-style "bg=terminal"
 
         # Customize tmux catppuccin, needs to be done after plugin is loaded
+        set -g @catppuccin_status_background "none"
         set -g status-right-length 100
         set -g status-left-length 100
         set -g status-left ""
