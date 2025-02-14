@@ -1,5 +1,7 @@
 {
   pkgs,
+  lib,
+  dots ? null,
   ...
 }:
 {
@@ -23,6 +25,10 @@
       direnv = {
         package = direnv-vim;
       };
+      oil = {
+        package = oil-nvim;
+        setup = "require('oil').setup()";
+      };
       vim-tmux-navigator = {
         package = vim-tmux-navigator;
       };
@@ -45,7 +51,6 @@
     };
 
     # misc meta settings
-    disableArrows = true; # no arrow keys
     lineNumberMode = "relNumber";
     preventJunkFiles = true;
     searchCase = "smart";
@@ -115,9 +120,17 @@
       nix = {
         enable = true;
         format.type = "nixfmt";
-        # TODO: change to nixd when supported:
-        # https://github.com/NotAShelf/nvf/pull/458
-        lsp.server = "nil";
+        lsp = {
+          server = "nixd";
+          options = lib.mkIf (dots != null) {
+            nixos = {
+              expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.desktop.options";
+            };
+            home-manager = {
+              expr = "(builtins.getFlake \"${dots}\").homeConfigurations.desktop.options";
+            };
+          };
+        };
       };
       python.enable = true;
       rust = {
@@ -145,10 +158,10 @@
     autopairs.nvim-autopairs.enable = true;
     binds.whichKey.enable = true;
     comments.comment-nvim.enable = true;
-    filetree.nvimTree = {
-      enable = true;
-      openOnSetup = false;
-    };
+    # filetree.nvimTree = {
+    #   enable = true;
+    #   openOnSetup = false;
+    # };
     git.enable = true;
     # enable dashboard?
     lazy.enable = true;

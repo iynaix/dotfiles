@@ -3,13 +3,13 @@
 {
   path-of-building = {
     pname = "path-of-building";
-    version = "v2.49.3";
+    version = "v2.50.0";
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
-      rev = "v2.49.3";
+      rev = "v2.50.0";
       fetchSubmodules = false;
-      sha256 = "sha256-ZpvSI3W2pWPy37PDT4T4NpgFSoS7bk5d59vvCL2nWnM=";
+      sha256 = "sha256-mclbLRYFNWgn/f4CyaINJlLq06uWh0+ks82Lger4w9w=";
     };
   };
   swww = {
@@ -52,15 +52,15 @@
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
-    version = "85baafd0b18515ccf0851e8d35f9306ec98f3c40";
+    version = "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2";
     src = fetchFromGitHub {
       owner = "iynaix";
       repo = "time-travel.yazi";
-      rev = "85baafd0b18515ccf0851e8d35f9306ec98f3c40";
+      rev = "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2";
       fetchSubmodules = false;
-      sha256 = "sha256-kOpj/GJ7xIFfJDsuTvced5MYiC4ZLA0TgsqvcRnyALI=";
+      sha256 = "sha256-ZZgn5rsBzvZcnDWZfjMBPRg9QUz4FTq5UIPWfnwXHQs=";
     };
-    date = "2024-12-13";
+    date = "2025-02-14";
   };
   yt-dlp = {
     pname = "yt-dlp";

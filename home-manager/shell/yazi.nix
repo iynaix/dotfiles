@@ -7,7 +7,7 @@
 }:
 let
   mkYaziPlugin = name: text: {
-    "${name}" = toString (pkgs.writeTextDir "${name}.yazi/init.lua" text) + "/${name}.yazi";
+    "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
   };
 in
 lib.mkMerge [
@@ -185,7 +185,7 @@ lib.mkMerge [
                   "z"
                   "h"
                 ];
-                run = "plugin time-travel --args=prev";
+                run = "plugin time-travel prev";
                 desc = "Go to previous snapshot";
               }
               {
@@ -193,7 +193,7 @@ lib.mkMerge [
                   "z"
                   "l"
                 ];
-                run = "plugin time-travel --args=next";
+                run = "plugin time-travel next";
                 desc = "Go to next snapshot";
               }
               {
@@ -201,7 +201,7 @@ lib.mkMerge [
                   "z"
                   "e"
                 ];
-                run = "plugin time-travel --args=exit";
+                run = "plugin time-travel exit";
                 desc = "Exit browsing snapshots";
               }
             ];
@@ -288,11 +288,11 @@ lib.mkMerge [
       keymap.manager.prepend_keymap = [
         {
           on = "k";
-          run = "plugin arrow --args=-1";
+          run = "plugin arrow -1";
         }
         {
           on = "j";
-          run = "plugin arrow --args=1";
+          run = "plugin arrow 1";
         }
       ];
     };

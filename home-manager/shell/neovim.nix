@@ -5,7 +5,7 @@
   ...
 }:
 let
-  customNeovim = pkgs.custom.neovim-iynaix;
+  customNeovim = pkgs.custom.neovim-iynaixos;
   nvim-with-direnv = pkgs.writeShellApplication {
     name = "nvim-with-direnv";
     runtimeInputs = [
@@ -13,11 +13,7 @@ let
       customNeovim
     ];
     text = ''
-      git_root=$(git -C "$(dirname "$1")" rev-parse --show-toplevel 2>/dev/null || echo "$1")
-
-      if git -C "$(dirname "$1")" rev-parse --git-dir >/dev/null 2>&1; then
-          direnv exec "$git_root" nvim "$@"
-      else
+      if ! direnv exec "$(dirname "$1")" nvim "$@"; then
           nvim "$@"
       fi
     '';

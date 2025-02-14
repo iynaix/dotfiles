@@ -1,4 +1,8 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  ...
+}:
 let
   inherit (pkgs) lib callPackage;
   # injects a source parameter from nvfetcher
@@ -35,6 +39,16 @@ rec {
     (inputs.nvf.lib.neovimConfiguration {
       inherit pkgs;
       modules = [ ./neovim-iynaix ];
+    }).neovim;
+
+  # full neovim with nixd setup (requires path to dotfiles repo)
+  neovim-iynaixos =
+    (inputs.nvf.lib.neovimConfiguration {
+      inherit pkgs;
+      modules = [ ./neovim-iynaix ];
+      extraSpecialArgs = {
+        dots = "/persist/home/iynaix/projects/dotfiles";
+      };
     }).neovim;
 
   # ricing glue
