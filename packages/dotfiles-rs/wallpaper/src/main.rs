@@ -54,10 +54,10 @@ fn write_wallpaper_history(wallpaper: PathBuf) {
     wtr.flush().expect("could not flush wallpapers_history.csv");
 }
 
-fn get_random_wallpaper(image_or_dir: Option<PathBuf>) -> String {
+fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
     let random_wallpaper = match image_or_dir {
         // use stdin instead
-        Some(p) if p == PathBuf::from("-") => {
+        Some(p) if *p == PathBuf::from("-") => {
             let mut buf = Vec::new();
             std::io::stdin()
                 .read_to_end(&mut buf)
@@ -83,9 +83,9 @@ fn get_random_wallpaper(image_or_dir: Option<PathBuf>) -> String {
         }
         Some(image_or_dir) => {
             if image_or_dir.is_dir() {
-                wallpaper::random_from_dir(&image_or_dir)
+                wallpaper::random_from_dir(image_or_dir)
             } else {
-                std::fs::canonicalize(&image_or_dir)
+                std::fs::canonicalize(image_or_dir)
                     .unwrap_or_else(|_| {
                         panic!("{} is not a valid image / command", &image_or_dir.display())
                     })
@@ -107,6 +107,33 @@ fn get_random_wallpaper(image_or_dir: Option<PathBuf>) -> String {
     .ok();
 
     random_wallpaper
+}
+
+fn wallpaper_rm(wallpaper: &str, transition: Option<&str>) {
+    let fname = wallpaper::current().unwrap_or_else(|| {
+        eprintln!("Failed to get current wallpaper");
+        std::process::exit(1)
+    });
+
+    print!("Delete {fname}? (y/N): ");
+    std::io::stdout().flush().expect("could not flush stdout");
+
+    let mut input = String::new();
+    std::io::stdin()
+        .read_line(&mut input)
+        .expect("could not read stdin");
+
+    if input.trim().eq_ignore_ascii_case("y") {
+        std::fs::remove_file(&fname).unwrap_or_else(|_| {
+            eprintln!("Error deleting {fname}");
+            std::process::exit(1);
+        });
+    }
+
+    // load next wallpaper
+    wallpaper::set(wallpaper, transition);
+
+    write_wallpaper_history(PathBuf::from(wallpaper));
 }
 
 fn main() {
@@ -140,25 +167,10 @@ fn main() {
                     })
                 ),
                 WallpaperSubcommand::Rm => {
-                    let fname = wallpaper::current().unwrap_or_else(|| {
-                        eprintln!("Failed to get current wallpaper");
-                        std::process::exit(1)
-                    });
-
-                    print!("Delete {fname}? (y/N): ");
-                    std::io::stdout().flush().expect("could not flush stdout");
-
-                    let mut input = String::new();
-                    std::io::stdin()
-                        .read_line(&mut input)
-                        .expect("could not read stdin");
-
-                    if input.trim().eq_ignore_ascii_case("y") {
-                        std::fs::remove_file(&fname).unwrap_or_else(|_| {
-                            eprintln!("Error deleting {fname}");
-                            std::process::exit(1);
-                        });
-                    }
+                    wallpaper_rm(
+                        &get_random_wallpaper(args.image_or_dir.as_ref()),
+                        args.transition.as_deref(),
+                    );
                 }
                 WallpaperSubcommand::History => pqiv::show_history(),
                 WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
@@ -183,11 +195,11 @@ fn main() {
     let wallpaper = if is_reload {
         wallpaper::current().expect("no current wallpaper set")
     } else {
-        get_random_wallpaper(args.image_or_dir)
+        get_random_wallpaper(args.image_or_dir.as_ref())
     };
 
     if !args.skip_wallpaper {
-        wallpaper::set(&wallpaper, args.transition.as_ref());
+        wallpaper::set(&wallpaper, args.transition.as_deref());
 
         if !is_reload && !args.skip_history {
             write_wallpaper_history(PathBuf::from(wallpaper));

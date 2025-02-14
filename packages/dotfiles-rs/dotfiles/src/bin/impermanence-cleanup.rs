@@ -10,7 +10,7 @@ pub struct ImpermanencePaths {
     pub files: Vec<String>,
 }
 
-fn walk_persist(dir: &Path, persist_paths: &Vec<String>) -> std::io::Result<()> {
+fn walk_persist(dir: &Path, persist_paths: &[String]) -> std::io::Result<()> {
     for entry in fs::read_dir(dir)? {
         let path = entry?.path();
         let path_str = path.display().to_string();

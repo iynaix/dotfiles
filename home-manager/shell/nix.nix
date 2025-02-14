@@ -241,7 +241,7 @@ in
             exit 1
         fi
 
-        nix eval --raw "nixpkgs#$1.outPath"
+        NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw "nixpkgs#$1.outPath"
       '';
       # creates a file with the symlink contents and renames the original symlink to .orig
       nsymlink = ''
@@ -302,7 +302,7 @@ in
         fi
 
         # echo then run the command
-        cmd="nix why-depends \"$parent\" \"$child\""
+        cmd="nix why-depends --all --precise \"$parent\" \"$child\""
         echo "$cmd" >&2
         eval "$cmd"
       '';

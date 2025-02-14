@@ -139,6 +139,14 @@
       '';
     };
 
+  # never going to read html docs locally
+  documentation = {
+    enable = true;
+    doc.enable = true;
+    man.enable = true;
+    dev.enable = false;
+  };
+
   nix =
     let
       nixPath = [

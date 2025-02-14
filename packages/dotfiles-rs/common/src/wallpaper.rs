@@ -44,7 +44,7 @@ where
 }
 
 /// sets the wallpaper and reloads the wallust theme
-pub fn set<P>(wallpaper: P, transition: Option<&String>)
+pub fn set<P>(wallpaper: P, transition: Option<&str>)
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
@@ -65,7 +65,7 @@ where
 }
 
 /// reloads the wallpaper and wallust theme
-pub fn reload(transition: Option<&String>) {
+pub fn reload(transition: Option<&str>) {
     set(current().expect("no current wallpaper set"), transition);
 }
 
@@ -150,10 +150,11 @@ impl WallInfo {
         })
     }
 
-    pub fn get_geometry_str(&self, width: i32, height: i32) -> Option<&String> {
+    pub fn get_geometry_str(&self, width: i32, height: i32) -> Option<&str> {
         let divisor = gcd(width, height);
         self.geometries
             .get(&format!("{}x{}", width / divisor, height / divisor))
+            .map(std::string::String::as_str)
     }
 }
 

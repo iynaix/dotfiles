@@ -8,6 +8,11 @@ in
 {
   vim = {
     keymaps = [
+      # disable arrow keys in normal mode
+      (mkKeymap "n" "<up>" "<nop>")
+      (mkKeymap "n" "<down>" "<nop>")
+      (mkKeymap "n" "<left>" "<nop>")
+      (mkKeymap "n" "<right>" "<nop>")
       # fix page up and page down so the cursor doesn't move
       (mkKeymap "n" "<PageUp>" "<C-U>")
       (mkKeymap "n" "<PageDown>" "<C-D>")
@@ -71,7 +76,6 @@ in
       (mkKeymap "n" "k" "gk")
       (mkKeymap "n" "gj" "j")
       (mkKeymap "n" "gk" "k")
-      # TODO: incsearch?
       # better quickfix navigation
       (mkKeymap "n" "<C-J>" ":cnext<CR>")
       (mkKeymap "n" "<C-K>" ":cprevious<CR>")

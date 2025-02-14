@@ -142,7 +142,7 @@ impl Swww {
             .expect("failed to wait for swww");
     }
 
-    pub fn run(&self, wall_info: &WallInfo, transition: Option<&String>) {
+    pub fn run(&self, wall_info: &WallInfo, transition: Option<&str>) {
         let transition_args = transition.as_ref().map_or_else(get_random_transition, |t| {
             vec!["--transition-type".to_string(), (*t).to_string()]
         });

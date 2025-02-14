@@ -44,6 +44,16 @@ lib.mkMerge [
           linemode = "size";
           show_hidden = true;
         };
+        opener = {
+          # activate direnv before opening files
+          # https://github.com/sxyazi/yazi/discussions/1083
+          edit = [
+            {
+              run = "direnv exec . $EDITOR $1";
+              block = true;
+            }
+          ];
+        };
         # settings for plugins
         plugin = {
           prepend_fetchers = [

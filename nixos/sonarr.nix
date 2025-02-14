@@ -11,8 +11,6 @@ lib.mkIf config.custom.bittorrent.enable (
       services = {
         sonarr = {
           enable = true;
-          # skip checks for faster builds
-          package = pkgs.sonarr.overrideAttrs { doCheck = false; };
           inherit user;
         };
 

@@ -165,6 +165,7 @@
       bash.interactiveShellInit = config.hm.programs.bash.initExtra;
 
       file-roller.enable = true;
+      git.enable = true;
 
       # bye bye nano
       nano.enable = lib.mkForce false;
