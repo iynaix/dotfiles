@@ -25,13 +25,15 @@ rec {
   install = pkgs.writeShellApplication {
     name = "iynaixos-install";
     runtimeInputs = [ pkgs.curl ];
-    text = "sh <(curl -L ${repo_url}/main/install.sh)";
+    text = # sh
+      "sh <(curl -L ${repo_url}/main/install.sh)";
   };
 
   recover = pkgs.writeShellApplication {
     name = "iynaixos-recover";
     runtimeInputs = [ pkgs.curl ];
-    text = "sh <(curl -L ${repo_url}/main/recover.sh)";
+    text = # sh
+      "sh <(curl -L ${repo_url}/main/recover.sh)";
   };
 
   # neovim config via nvf

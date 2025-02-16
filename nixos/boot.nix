@@ -39,10 +39,11 @@
   custom.shell.packages = {
     reboot-to-windows = {
       runtimeInputs = [ pkgs.grub2 ];
-      text = ''
-        sudo grub-reboot "Windows 11"
-        sudo reboot
-      '';
+      text = # sh
+        ''
+          sudo grub-reboot "Windows 11"
+          sudo reboot
+        '';
     };
   };
 

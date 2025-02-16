@@ -27,7 +27,8 @@ in
           pkgs.procps
           config.programs.hyprlock.package
         ];
-        text = ''pidof hyprlock || hyprlock'';
+        text = # sh
+          ''pidof hyprlock || hyprlock'';
       };
     };
 

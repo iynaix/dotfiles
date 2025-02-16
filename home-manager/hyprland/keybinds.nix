@@ -26,15 +26,16 @@ in
         ];
         # $1 is string to search for in window title
         # $2 is the command to run if the window isn't found
-        text = ''
-          address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
+        text = # sh
+          ''
+            address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
 
-          if [ -z "$address" ]; then
-            eval "uwsm app -- $2"
-          else
-            hyprctl dispatch focuswindow "address:$address"
-          fi
-        '';
+            if [ -z "$address" ]; then
+              eval "uwsm app -- $2"
+            else
+              hyprctl dispatch focuswindow "address:$address"
+            fi
+          '';
       };
     };
 

@@ -96,16 +96,19 @@
     fish = {
       # fix starship prompt to only have newlines after the first command
       # https://github.com/starship/starship/issues/560#issuecomment-1465630645
-      shellInit = ''
-        function prompt_newline --on-event fish_postexec
-          echo ""
-        end
-      '';
-      interactiveShellInit = lib.mkAfter ''
-        function starship_transient_prompt_func
-          starship module character
-        end
-      '';
+      shellInit = # fish
+        ''
+          function prompt_newline --on-event fish_postexec
+            echo ""
+          end
+        '';
+      interactiveShellInit =
+        lib.mkAfter # fish
+          ''
+            function starship_transient_prompt_func
+              starship module character
+            end
+          '';
     };
 
     # some sort of race condition with kitty and starship

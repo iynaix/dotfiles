@@ -153,9 +153,10 @@
         };
 
         # disable bookmarks functionality
-        xdg.configFile."mpv-cut/config.lua".text = ''
-          KEY_BOOKMARK_ADD = ""
-        '';
+        xdg.configFile."mpv-cut/config.lua".text = # lua
+          ''
+            KEY_BOOKMARK_ADD = ""
+          '';
       }
 
       # sub-select settings

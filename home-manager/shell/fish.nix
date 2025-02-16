@@ -13,10 +13,11 @@ in
       enable = true;
       functions = {
         # use vi key bindings with hybrid emacs keybindings
-        fish_user_key_bindings = ''
-          fish_default_key_bindings -M insert
-          fish_vi_key_bindings --no-erase insert
-        '';
+        fish_user_key_bindings = # fish
+          ''
+            fish_default_key_bindings -M insert
+            fish_vi_key_bindings --no-erase insert
+          '';
       };
       # use abbreviations instead of aliases
       preferAbbrs = true;
@@ -24,19 +25,21 @@ in
       shellAbbrs = config.home.shellAliases // {
         ehistory = "nvim ${config.xdg.dataHome}/fish/fish_history";
       };
-      shellInit = ''
-        # shut up welcome message
-        set fish_greeting
+      shellInit = # fish
+        ''
+          # shut up welcome message
+          set fish_greeting
 
-        # set options for plugins
-        set sponge_regex_patterns 'password|passwd|^kill'
+          # set options for plugins
+          set sponge_regex_patterns 'password|passwd|^kill'
 
-        # bind --mode default \t complete-and-search
-      '';
+          # bind --mode default \t complete-and-search
+        '';
       # setup vi mode
-      interactiveShellInit = ''
-        fish_vi_key_bindings
-      '';
+      interactiveShellInit = # fish
+        ''
+          fish_vi_key_bindings
+        '';
     };
   };
 

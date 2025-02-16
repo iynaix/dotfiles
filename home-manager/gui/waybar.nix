@@ -223,16 +223,17 @@ in
                   @define-color complementary {{color4}};
                 ''
                 + (lib.concatMapStringsSep "\n" (name: ''@define-color ${name} {{${name}}};'') colorNames);
-              baseModuleCss = ''
-                font-family: ${config.custom.fonts.regular};
-                font-weight: bold;
-                color: @accent;
-                transition: none;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                border-bottom:  2px solid transparent;
-                padding-left: ${margin};
-                padding-right: ${margin};
-              '';
+              baseModuleCss = # css
+                ''
+                  font-family: ${config.custom.fonts.regular};
+                  font-weight: bold;
+                  color: @accent;
+                  transition: none;
+                  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                  border-bottom:  2px solid transparent;
+                  padding-left: ${margin};
+                  padding-right: ${margin};
+                '';
               mkModuleClassName =
                 mod:
                 "#${

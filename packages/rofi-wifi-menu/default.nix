@@ -19,17 +19,18 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postInstall = ''
-    install -D ./rofi-wifi-menu.sh $out/bin/rofi-wifi-menu
+  postInstall = # sh
+    ''
+      install -D ./rofi-wifi-menu.sh $out/bin/rofi-wifi-menu
 
-    wrapProgram $out/bin/rofi-wifi-menu \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          libnotify
-          networkmanager
-        ]
-      }
-  '';
+      wrapProgram $out/bin/rofi-wifi-menu \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            libnotify
+            networkmanager
+          ]
+        }
+    '';
 
   meta = {
     description = "A bash script using nmcli and rofi to make a wifi menu for your favorite window manager";

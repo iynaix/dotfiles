@@ -16,12 +16,13 @@
     custom.shell.packages = {
       vercel-backup = {
         runtimeInputs = [ pkgs.postgresql_15 ];
-        text = ''
-          mkdir -p "/media/6TBRED/Vercel"
+        text = # sh
+          ''
+            mkdir -p "/media/6TBRED/Vercel"
 
-          VERCEL_POSTGRES="$(cat ${config.sops.secrets.vercel_postgres.path})"
-          pg_dump "$VERCEL_POSTGRES" --file="/media/6TBRED/Vercel/vercel-coinfc-$(date +%F).sql"
-        '';
+            VERCEL_POSTGRES="$(cat ${config.sops.secrets.vercel_postgres.path})"
+            pg_dump "$VERCEL_POSTGRES" --file="/media/6TBRED/Vercel/vercel-coinfc-$(date +%F).sql"
+          '';
       };
     };
 

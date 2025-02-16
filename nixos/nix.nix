@@ -71,53 +71,58 @@
     {
       # set the current generation or given generation number as default to boot
       ndefault = {
-        text = ''
-          if [ "$#" -eq 0 ]; then
-            sudo /run/current-system/bin/switch-to-configuration boot
-          else
-            sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
-          fi
-        '';
-        bashCompletion = ''
-          _ndefault() {
-              local profile_dir="/nix/var/nix/profiles"
-              local profiles=$(command ls -1 "$profile_dir" | \
-                  grep -E '^system-[0-9]+-link$' | \
-                  sed -E 's/^system-([0-9]+)-link$/\1/' | \
-                  sort -rnu)
-              COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
-          }
+        text = # sh
+          ''
+            if [ "$#" -eq 0 ]; then
+              sudo /run/current-system/bin/switch-to-configuration boot
+            else
+              sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
+            fi
+          '';
+        bashCompletion = # sh
+          ''
+            _ndefault() {
+                local profile_dir="/nix/var/nix/profiles"
+                local profiles=$(command ls -1 "$profile_dir" | \
+                    grep -E '^system-[0-9]+-link$' | \
+                    sed -E 's/^system-([0-9]+)-link$/\1/' | \
+                    sort -rnu)
+                COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
+            }
 
-          complete -F _ndefault ndefault
-        '';
-        fishCompletion = ''
-          function _ndefault
-              set -l profile_dir "/nix/var/nix/profiles"
-              command ls -1 "$profile_dir" | \
-                string match -r '^system-([0-9]+)-link$' | \
-                string replace -r '^system-([0-9]+)-link$' '$1' | \
-                sort -ru
-          end
+            complete -F _ndefault ndefault
+          '';
+        fishCompletion = # fish
+          ''
+            function _ndefault
+                set -l profile_dir "/nix/var/nix/profiles"
+                command ls -1 "$profile_dir" | \
+                  string match -r '^system-([0-9]+)-link$' | \
+                  string replace -r '^system-([0-9]+)-link$' '$1' | \
+                  sort -ru
+            end
 
-          complete --keep-order -c ndefault -f -a "(_ndefault)"
-        '';
+            complete --keep-order -c ndefault -f -a "(_ndefault)"
+          '';
       };
       # build iso images
       nbuild-iso = {
         runtimeInputs = [ pkgs.nixos-generators ];
-        text = ''
-          pushd ${dots} > /dev/null
-          nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-          popd > /dev/null
-        '';
-        fishCompletion = ''
-          function _nbuild_iso
-            nix eval --impure --json --expr \
-              'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-              ${lib.getExe pkgs.jq} -r '.[]' | grep iso
-            end
-            complete -c nbuild-iso -f -a '(_nbuild_iso)'
-        '';
+        text = # sh
+          ''
+            pushd ${dots} > /dev/null
+            nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
+            popd > /dev/null
+          '';
+        fishCompletion = # fish
+          ''
+            function _nbuild_iso
+              nix eval --impure --json --expr \
+                'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
+                ${lib.getExe pkgs.jq} -r '.[]' | grep iso
+              end
+              complete -c nbuild-iso -f -a '(_nbuild_iso)'
+          '';
       };
       # list all installed packages
       nix-list-packages = {
@@ -132,11 +137,12 @@
     }
     // lib.optionalAttrs (host == "desktop") {
       # build and push config for laptop
-      nsw-remote = ''
-        pushd ${dots} > /dev/null
-        nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
-        popd > /dev/null
-      '';
+      nsw-remote = # sh
+        ''
+          pushd ${dots} > /dev/null
+          nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
+          popd > /dev/null
+        '';
     };
 
   # never going to read html docs locally

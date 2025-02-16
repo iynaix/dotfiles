@@ -17,23 +17,25 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postPatch = ''
-    substituteInPlace hsw.sh \
-      --replace-fail "@dots@" "${dots}" \
-      --replace-fail "@host@" "${host}"
-  '';
+  postPatch = # sh
+    ''
+      substituteInPlace hsw.sh \
+        --replace-fail "@dots@" "${dots}" \
+        --replace-fail "@host@" "${host}"
+    '';
 
-  postInstall = ''
-    install -D ./hsw.sh $out/bin/hsw
+  postInstall = # sh
+    ''
+      install -D ./hsw.sh $out/bin/hsw
 
-    wrapProgram $out/bin/hsw \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          git
-          nh
-        ]
-      }
-  '';
+      wrapProgram $out/bin/hsw \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            git
+            nh
+          ]
+        }
+    '';
 
   meta = {
     description = "Switch to a different home-manager configuration";

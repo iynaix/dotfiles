@@ -8,12 +8,13 @@
     ];
   };
 
-  xdg.configFile."ripgrep/.ignore".text = ''
-    # global ignore file for ripgrep
-    .envrc
-    .ignore
-    *.lock
-    generated.nix
-    generated.json
-  '';
+  xdg.configFile."ripgrep/.ignore".text = # sh
+    ''
+      # global ignore file for ripgrep
+      .envrc
+      .ignore
+      *.lock
+      generated.nix
+      generated.json
+    '';
 }

@@ -41,11 +41,12 @@ in
 
       # add default font to silence null font errors
       lsix = prev.lsix.overrideAttrs (o: {
-        postFixup = ''
-          substituteInPlace $out/bin/lsix \
-            --replace-fail '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
-          ${o.postFixup}
-        '';
+        postFixup = # sh
+          ''
+            substituteInPlace $out/bin/lsix \
+              --replace-fail '#fontfamily=Mincho' 'fontfamily="JetBrainsMono-NF-Regular"'
+            ${o.postFixup}
+          '';
       });
 
       # fix nix package count for nitch
@@ -63,6 +64,7 @@ in
           let
             data = prev.path-of-building.passthru.data.overrideAttrs sources.path-of-building;
           in
+          # sh
           ''
             qtWrapperArgs+=(
               --set LUA_PATH "$LUA_PATH"

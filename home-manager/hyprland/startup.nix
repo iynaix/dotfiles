@@ -13,13 +13,14 @@ lib.mkIf config.custom.hyprland.enable {
   custom.autologinCommand = "uwsm start hyprland-uwsm.desktop";
 
   # start hyprland
-  programs.bash.profileExtra = ''
-    if [ "$(tty)" = "/dev/tty1" ]; then
-      if uwsm check may-start; then
-        ${config.custom.autologinCommand}
+  programs.bash.profileExtra = # sh
+    ''
+      if [ "$(tty)" = "/dev/tty1" ]; then
+        if uwsm check may-start; then
+          ${config.custom.autologinCommand}
+        fi
       fi
-    fi
-  '';
+    '';
 
   wayland.windowManager.hyprland.settings = {
     exec-once = [

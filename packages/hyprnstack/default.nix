@@ -17,14 +17,16 @@ gcc14Stdenv.mkDerivation (
     mesonBuildPhase = "true";
     mesonInstallPhase = "true";
 
-    buildPhase = ''
-      make all
-    '';
+    buildPhase = # sh
+      ''
+        make all
+      '';
 
-    installPhase = ''
-      mkdir -p $out/lib
-      cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
-    '';
+    installPhase = # sh
+      ''
+        mkdir -p $out/lib
+        cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
+      '';
 
     meta = with lib; {
       homepage = "https://github.com/zakk4223/hyprNStack";

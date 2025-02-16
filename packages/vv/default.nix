@@ -13,21 +13,23 @@ stdenvNoCC.mkDerivation (
   // {
     nativeBuildInputs = [ makeWrapper ];
 
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 vv -t $out/bin
-      runHook postInstall
-    '';
+    installPhase = # sh
+      ''
+        runHook preInstall
+        install -Dm755 vv -t $out/bin
+        runHook postInstall
+      '';
 
-    postFixup = ''
-      wrapProgram $out/bin/vv \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            file
-            imagemagick
-          ]
-        }
-    '';
+    postFixup = # sh
+      ''
+        wrapProgram $out/bin/vv \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              file
+              imagemagick
+            ]
+          }
+      '';
 
     meta = {
       homepage = "https://github.com/hackerb9/vv";

@@ -9,34 +9,35 @@ let
       gawk
       yt-dlp
     ];
-    text = ''
-      is_flag() {
-          [[ "$1" == -* ]]
-      }
+    text = # sh
+      ''
+        is_flag() {
+            [[ "$1" == -* ]]
+        }
 
-      args=(${args})
+        args=(${args})
 
-      has_positional=false
-      for arg in "$@"; do
-          if ! is_flag "$arg"; then
-              has_positional=true
-          fi
-          args+=("$arg")
-      done
+        has_positional=false
+        for arg in "$@"; do
+            if ! is_flag "$arg"; then
+                has_positional=true
+            fi
+            args+=("$arg")
+        done
 
-      if ! $has_positional; then
-          # filter out non urls
-          while IFS= read -r url; do
-              if [[ $url == http* ]]; then
-                  args+=("$url")
-              fi
-          done < <(awk '!x[$0]++' "${config.xdg.userDirs.desktop}/yt.txt")
-      fi
+        if ! $has_positional; then
+            # filter out non urls
+            while IFS= read -r url; do
+                if [[ $url == http* ]]; then
+                    args+=("$url")
+                fi
+            done < <(awk '!x[$0]++' "${config.xdg.userDirs.desktop}/yt.txt")
+        fi
 
-      pushd "${config.xdg.userDirs.download}" > /dev/null
-      yt-dlp "''${args[@]}"
-      popd > /dev/null
-    '';
+        pushd "${config.xdg.userDirs.download}" > /dev/null
+        yt-dlp "''${args[@]}"
+        popd > /dev/null
+      '';
   };
 in
 {

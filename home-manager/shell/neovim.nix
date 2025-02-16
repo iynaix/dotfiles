@@ -12,11 +12,12 @@ let
       config.programs.direnv.package
       customNeovim
     ];
-    text = ''
-      if ! direnv exec "$(dirname "$1")" nvim "$@"; then
-          nvim "$@"
-      fi
-    '';
+    text = # sh
+      ''
+        if ! direnv exec "$(dirname "$1")" nvim "$@"; then
+            nvim "$@"
+        fi
+      '';
   };
 in
 {

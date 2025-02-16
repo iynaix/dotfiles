@@ -23,10 +23,11 @@ lib.mkMerge [
         time-travel = pkgs.custom.yazi-time-travel.src;
       };
 
-      initLua = ''
-        require("full-border"):setup({ type = ui.Border.ROUNDED })
-        require("git"):setup()
-      '';
+      initLua = # lua
+        ''
+          require("full-border"):setup({ type = ui.Border.ROUNDED })
+          require("git"):setup()
+        '';
 
       settings = {
         log = {
@@ -124,7 +125,8 @@ lib.mkMerge [
               # dropping to shell
               {
                 on = "!";
-                run = ''shell "$SHELL" --block --confirm'';
+                run = # sh
+                  ''shell "$SHELL" --block --confirm'';
                 desc = "Open shell here";
               }
               # close input by a single Escape press
@@ -139,7 +141,8 @@ lib.mkMerge [
                   "g"
                   "r"
                 ];
-                run = ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
+                run = # sh
+                  ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
                 desc = "Cd to root of current git repo";
               }
             ]

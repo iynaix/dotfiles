@@ -32,10 +32,11 @@ lib.mkMerge [
       name = "gh";
       paths = [ pkgs.gh ];
       buildInputs = [ pkgs.makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/gh \
-          --run 'export GITHUB_TOKEN=$(cat ${config.sops.secrets.github_token.path})'
-      '';
+      postBuild = # sh
+        ''
+          wrapProgram $out/bin/gh \
+            --run 'export GITHUB_TOKEN=$(cat ${config.sops.secrets.github_token.path})'
+        '';
       meta.mainProgram = "gh";
     };
   })

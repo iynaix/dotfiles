@@ -45,12 +45,13 @@ in
               dir = "${config.home.homeDirectory}/projects/wallfacer";
             };
             # bash completion isn't helpful as there are 1000s of images
-            fishCompletion = ''
-              function _wallfacer
-                find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
-              end
-              complete -c wallfacer -f -a '(_wallfacer)'
-            '';
+            fishCompletion = # fish
+              ''
+                function _wallfacer
+                  find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
+                end
+                complete -c wallfacer -f -a '(_wallfacer)'
+              '';
           };
         };
 

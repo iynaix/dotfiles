@@ -23,13 +23,15 @@ inputs.devenv.lib.mkShell {
         languages.rust.enable = true;
 
         scripts = {
-          crb.exec = ''
-            cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"
-          '';
+          crb.exec = # sh
+            ''
+              cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"
+            '';
 
-          crrb.exec = ''
-            cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --release --bin "$1" -- "''${@:2}"
-          '';
+          crrb.exec = # sh
+            ''
+              cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --release --bin "$1" -- "''${@:2}"
+            '';
         };
 
         pre-commit = {

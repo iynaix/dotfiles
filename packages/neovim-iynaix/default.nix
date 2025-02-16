@@ -149,6 +149,7 @@
       formatOnSave = true;
       # lightbulb.enable = true;
       lspkind.enable = true;
+      otter-nvim.enable = true; # provide lsp for embedded languages
       trouble.enable = true;
       # lspSignature?
       # mappings?

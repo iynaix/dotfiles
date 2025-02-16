@@ -40,7 +40,8 @@ lib.mkIf config.custom.hyprland.enable {
   custom.waybar = lib.mkIf (config.specialisation != "otg") {
     config = {
       "custom/focal" = {
-        exec = ''focal-waybar --recording "󰑋"'';
+        exec = # sh
+          ''focal-waybar --recording "󰑋"'';
         format = "{}";
         # hide-empty-text = true;
         # return-type = "json";
@@ -51,11 +52,12 @@ lib.mkIf config.custom.hyprland.enable {
       modules-left = lib.mkAfter [ "custom/focal" ];
     };
 
-    extraCss = ''
-      #custom-focal {
-        font-size: 24px;
-      }
-    '';
+    extraCss = # css
+      ''
+        #custom-focal {
+          font-size: 24px;
+        }
+      '';
   };
 
   wayland.windowManager.hyprland.settings = {
