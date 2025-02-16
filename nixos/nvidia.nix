@@ -27,7 +27,7 @@ in
       kernelModules = [ "nvidia-uvm" ];
       # use nvidia framebuffer
       # https://wiki.gentoo.org/wiki/NVIDIA/nvidia-drivers#Kernel_module_parameters for more info.
-      kernelParams = [ "nvidia-drm.fbdev=1" ];
+      # kernelParams = [ "nvidia-drm.fbdev=1" ];
     };
 
     hardware = {
@@ -63,6 +63,19 @@ in
       trusted-public-keys = [
         "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
       ];
+    };
+
+    # hyprland settings just for nvidia
+    hm.wayland.windowManager.hyprland.settings = {
+      cursor = {
+        # no_hardware_cursors = true;
+        use_cpu_buffer = 1;
+      };
+
+      render = {
+        explicit_sync = 1;
+        # allow_early_buffer_release = true;
+      };
     };
   };
 }

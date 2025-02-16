@@ -48,6 +48,18 @@ pub fn set<P>(wallpaper: P, transition: Option<&str>)
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
+    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
+    std::fs::write(
+        dirs::runtime_dir()
+            .expect("could not get $XDG_RUNTIME_DIR")
+            .join("current_wallpaper"),
+        wallpaper
+            .as_ref()
+            .to_str()
+            .expect("could not convert wallpaper path to str"),
+    )
+    .ok();
+
     let wallpaper_info = WallInfo::new_from_file(&wallpaper);
 
     // use colorscheme set from nix if available

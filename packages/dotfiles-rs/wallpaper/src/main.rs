@@ -55,7 +55,7 @@ fn write_wallpaper_history(wallpaper: PathBuf) {
 }
 
 fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
-    let random_wallpaper = match image_or_dir {
+    match image_or_dir {
         // use stdin instead
         Some(p) if *p == PathBuf::from("-") => {
             let mut buf = Vec::new();
@@ -95,27 +95,16 @@ fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
             }
         }
         None => wallpaper::random_from_dir(wallpaper::dir()),
-    };
-
-    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
-    std::fs::write(
-        dirs::runtime_dir()
-            .expect("could not get $XDG_RUNTIME_DIR")
-            .join("current_wallpaper"),
-        &random_wallpaper,
-    )
-    .ok();
-
-    random_wallpaper
+    }
 }
 
 fn wallpaper_rm(wallpaper: &str, transition: Option<&str>) {
-    let fname = wallpaper::current().unwrap_or_else(|| {
+    let current = wallpaper::current().unwrap_or_else(|| {
         eprintln!("Failed to get current wallpaper");
         std::process::exit(1)
     });
 
-    print!("Delete {fname}? (y/N): ");
+    print!("Delete {current}? (y/N): ");
     std::io::stdout().flush().expect("could not flush stdout");
 
     let mut input = String::new();
@@ -124,16 +113,16 @@ fn wallpaper_rm(wallpaper: &str, transition: Option<&str>) {
         .expect("could not read stdin");
 
     if input.trim().eq_ignore_ascii_case("y") {
-        std::fs::remove_file(&fname).unwrap_or_else(|_| {
-            eprintln!("Error deleting {fname}");
+        // load next wallpaper
+        wallpaper::set(wallpaper, transition);
+
+        write_wallpaper_history(PathBuf::from(wallpaper));
+
+        std::fs::remove_file(&current).unwrap_or_else(|_| {
+            eprintln!("Error deleting {current}");
             std::process::exit(1);
         });
     }
-
-    // load next wallpaper
-    wallpaper::set(wallpaper, transition);
-
-    write_wallpaper_history(PathBuf::from(wallpaper));
 }
 
 fn main() {

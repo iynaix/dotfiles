@@ -263,7 +263,14 @@ in
             swallow_regex = "^([Kk]itty|[Ww]ezterm|[Gg]hostty)$";
           };
 
-          debug.disable_logs = false;
+          ecosystem = {
+            no_update_news = true;
+            no_donation_nag = true;
+          };
+
+          debug = {
+            disable_logs = false;
+          };
 
           windowrulev2 = [
             # "dimaround,floating:1"

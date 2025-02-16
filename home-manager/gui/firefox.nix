@@ -46,7 +46,7 @@ mkIf (!config.custom.headless) {
       # TODO: define keyword searches here?
       # search.engines = [ ];
 
-      extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
+      extensions.packages = with inputs.firefox-addons.packages.${pkgs.system}; [
         bitwarden
         darkreader
         screenshot-capture-annotate

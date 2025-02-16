@@ -29,6 +29,9 @@
         package = oil-nvim;
         setup = "require('oil').setup()";
       };
+      rooter = {
+        package = vim-rooter;
+      };
       vim-tmux-navigator = {
         package = vim-tmux-navigator;
       };
@@ -99,6 +102,13 @@
           command = "set number relativenumber",
         })
       '';
+
+    dashboard = {
+      startify = {
+        enable = true;
+        changeToVCRoot = true;
+      };
+    };
 
     languages = {
       enableFormat = true;
