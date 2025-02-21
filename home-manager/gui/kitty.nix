@@ -5,17 +5,18 @@
   ...
 }:
 let
+  inherit (lib) hasPrefix mkEnableOption mkIf;
   cfg = config.custom.kitty;
   inherit (config.custom) terminal;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     kitty.enable = mkEnableOption "kitty" // {
       default = isNixOS && !config.custom.headless;
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     programs.kitty = {
       enable = true;
       themeFile = "Catppuccin-Mocha";
@@ -39,7 +40,7 @@ in
         remote_control_password = ''"" set-spacing''; # only allow setting of padding
         listen_on = "unix:/tmp/kitty-socket";
       };
-      extraConfig = lib.mkIf (lib.hasPrefix "JetBrains" terminal.font) ''
+      extraConfig = mkIf (hasPrefix "JetBrains" terminal.font) ''
         font_features JetBrainsMonoNF-Regular +zero
         font_features JetBrainsMonoNF-Bold +zero
         font_features JetBrainsMonoNF-Italic +zero

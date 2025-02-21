@@ -1,5 +1,8 @@
 { config, lib, ... }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) mkIf;
+in
+mkIf (!config.custom.headless) {
   programs.pqiv = {
     enable = true;
     settings = {

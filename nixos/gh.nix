@@ -5,7 +5,10 @@
   user,
   ...
 }:
-lib.mkMerge [
+let
+  inherit (lib) mkIf mkMerge;
+in
+mkMerge [
   {
     hm = {
       programs.gh = {
@@ -24,7 +27,7 @@ lib.mkMerge [
   }
 
   # setup auth token for gh if sops is enabled
-  (lib.mkIf config.custom.sops.enable {
+  (mkIf config.custom.sops.enable {
     sops.secrets.github_token.owner = user;
 
     # wrap gh to set GITHUB_TOKEN

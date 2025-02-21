@@ -1,4 +1,7 @@
 { lib, ... }:
+let
+  inherit (lib) concatStrings mkAfter;
+in
 {
   programs = {
     starship = {
@@ -15,7 +18,7 @@
         in
         {
           add_newline = false;
-          format = lib.concatStrings [
+          format = concatStrings [
             # begin left format
             "$username"
             "$hostname"
@@ -103,12 +106,12 @@
           end
         '';
       interactiveShellInit =
-        lib.mkAfter # fish
-          ''
-            function starship_transient_prompt_func
-              starship module character
-            end
-          '';
+        # fish
+        mkAfter ''
+          function starship_transient_prompt_func
+            starship module character
+          end
+        '';
     };
 
     # some sort of race condition with kitty and starship

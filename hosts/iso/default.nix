@@ -50,7 +50,7 @@ let
                   # custom neovim
                   self.packages.${system}.neovim-iynaix
                 ]
-                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ kitty ];
+                ++ optionals (lib.hasInfix "plasma" isoPath) [ kitty ];
 
               variables = {
                 EDITOR = "nvim";
@@ -107,7 +107,7 @@ let
                 KbdInteractiveAuthentication = false;
               };
             };
-            systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
+            systemd.services.sshd.wantedBy = pkgs.mkForce [ "multi-user.target" ];
             users.users.root.openssh.authorizedKeys.keyFiles = [
               ../../home-manager/id_rsa.pub
               ../../home-manager/id_ed25519.pub

@@ -4,6 +4,13 @@
   ...
 }:
 let
+  inherit (lib)
+    concatLines
+    mkEnableOption
+    mkIf
+    optional
+    optionalAttrs
+    ;
   inherit (config.hm.custom) mswindows;
   cfg = config.custom.hdds;
   wdred = "/media/6TBRED";
@@ -13,7 +20,7 @@ let
   inherit (config.hm.home) homeDirectory;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     hdds = {
       enable = mkEnableOption "Desktop HDDs";
       wdred6 = mkEnableOption "WD Red 6TB" // {
@@ -25,18 +32,18 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services.sanoid = {
       enable = true;
 
       datasets = {
-        ${ironwolf-dataset} = lib.mkIf cfg.ironwolf22 {
+        ${ironwolf-dataset} = mkIf cfg.ironwolf22 {
           hourly = 3;
           daily = 10;
           weekly = 2;
           monthly = 0;
         };
-        ${wdred-dataset} = lib.mkIf cfg.wdred6 {
+        ${wdred-dataset} = mkIf cfg.wdred6 {
           hourly = 3;
           daily = 10;
           weekly = 2;
@@ -47,9 +54,9 @@ in
 
     # symlinks from hdds
     custom.symlinks =
-      lib.optionalAttrs cfg.ironwolf22 { "${homeDirectory}/Downloads" = "${ironwolf}/Downloads"; }
-      // lib.optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
-      // lib.optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
+      optionalAttrs cfg.ironwolf22 { "${homeDirectory}/Downloads" = "${ironwolf}/Downloads"; }
+      // optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
+      // optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
         "${wdred}/Anime" = "${ironwolf}/Anime";
         "${wdred}/Movies" = "${ironwolf}/Movies";
         "${wdred}/TV" = "${ironwolf}/TV";
@@ -57,7 +64,7 @@ in
 
     hm = {
       # add bookmarks for gtk
-      gtk.gtk3.bookmarks = lib.mkIf cfg.ironwolf22 [
+      gtk.gtk3.bookmarks = mkIf cfg.ironwolf22 [
         "file://${ironwolf}/Anime Anime"
         "file://${ironwolf}/Anime/Current Anime Current"
         "file://${ironwolf}/TV TV"
@@ -67,15 +74,15 @@ in
 
       # add btop monitoring for extra hdds
       custom.btop.disks =
-        lib.optional cfg.wdred6 "/media/6TBRED"
-        ++ lib.optional cfg.ironwolf22 "/media/IRONWOLF22";
+        optional cfg.wdred6 "/media/6TBRED"
+        ++ optional cfg.ironwolf22 "/media/IRONWOLF22";
     };
 
     # dual boot windows
     boot = {
       loader.grub = {
-        extraEntries = lib.concatLines (
-          lib.optional mswindows ''
+        extraEntries = concatLines (
+          optional mswindows ''
             menuentry "Windows 11" {
               insmod part_gpt
               insmod fat
@@ -86,7 +93,7 @@ in
             }
           ''
         );
-        # ++ (lib.optional cfg.archlinux ''
+        # ++ (optional cfg.archlinux ''
         #   menuentry "Arch Linux" {
         #     insmod gzio
         #     insmod part_gpt
@@ -101,23 +108,23 @@ in
 
     # hide disks
     fileSystems = {
-      # "/media/archlinux" = lib.mkIf cfg.archlinux {
+      # "/media/archlinux" = mkIf cfg.archlinux {
       #   device = "/dev/disk/by-uuid/e630c4b1-075e-42a9-bd4e-894273e99ac7";
       #   fsType = "btrfs";
       #   options = ["nofail" "x-gvfs-hide" "subvol=/@"];
       # };
 
-      "/media/6TBRED" = lib.mkIf cfg.wdred6 {
+      "/media/6TBRED" = mkIf cfg.wdred6 {
         device = "zfs-wdred6-1/media";
         fsType = "zfs";
       };
 
-      "/media/IRONWOLF22" = lib.mkIf cfg.ironwolf22 {
+      "/media/IRONWOLF22" = mkIf cfg.ironwolf22 {
         device = "zfs-ironwolf22-1/media";
         fsType = "zfs";
       };
 
-      "/media/windows" = lib.mkIf mswindows {
+      "/media/windows" = mkIf mswindows {
         device = "/dev/disk/by-uuid/94F422A4F4228916";
         fsType = "ntfs-3g";
         options = [
@@ -126,7 +133,7 @@ in
         ];
       };
 
-      "/media/windowsgames" = lib.mkIf mswindows {
+      "/media/windowsgames" = mkIf mswindows {
         device = "/dev/disk/by-label/GAMES";
         fsType = "ntfs-3g";
         options = [

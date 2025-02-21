@@ -1,8 +1,11 @@
 { config, lib, ... }:
+let
+  inherit (lib) mkIf;
+in
 {
   programs.cava.enable = true;
 
-  custom.wallust.templates.cava = lib.mkIf config.programs.cava.enable {
+  custom.wallust.templates.cava = mkIf config.programs.cava.enable {
     text = lib.custom.toQuotedINI {
       general = {
         # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.

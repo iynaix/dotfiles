@@ -6,42 +6,61 @@
   ...
 }:
 let
+  inherit (lib)
+    filterAttrs
+    hasInfix
+    hasPrefix
+    listToAttrs
+    mapAttrs
+    mapAttrs'
+    mkEnableOption
+    mkIf
+    mkOption
+    nameValuePair
+    pipe
+    range
+    ;
+  inherit (lib.strings) toJSON;
+  inherit (lib.types)
+    attrsOf
+    nullOr
+    str
+    submodule
+    ;
   cfg = config.custom.wallust;
   tomlFormat = pkgs.formats.toml { };
   # checks if text is a path, assumes no spaces in path
-  isTemplatePath = s: (lib.hasPrefix "/" s) && !(lib.hasInfix " " s);
+  isTemplatePath = s: (hasPrefix "/" s) && !(hasInfix " " s);
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     wallust = {
       enable = mkEnableOption "wallust" // {
         default = !config.custom.headless;
       };
       colorscheme = mkOption {
-        type = types.nullOr types.str;
+        type = nullOr str;
         default = null;
         description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
       };
       nixJson = mkOption {
-        type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
+        type = submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Data to be written to nix.json for use in other programs at runtime.";
       };
       templates = mkOption {
-        type = types.attrsOf (
-          types.submodule {
-            options = {
-              text = mkOption {
-                type = types.str;
-                description = "Content of the template file / a template path within the nix store";
-              };
-              target = mkOption {
-                type = types.str;
-                description = "Absolute path to the file to write the template (after templating), e.g. ~/.config/dunst/dunstrc";
-              };
+        type = attrsOf (submodule {
+          options = {
+            text = mkOption {
+              type = str;
+              description = "Content of the template file / a template path within the nix store";
             };
-          }
-        );
+            target = mkOption {
+              type = str;
+              description = "Absolute path to the file to write the template (after templating), e.g. ~/.config/dunst/dunstrc";
+            };
+          };
+        });
         default = [ ];
         description = ''
           Example templates, which are just a file you wish to apply `wallust` generated colors to.
@@ -68,7 +87,7 @@ in
           check_contrast = true;
           fallback_generator = "interpolate";
           palette = "dark16";
-          templates = lib.mapAttrs (
+          templates = mapAttrs (
             filename:
             { target, text, ... }:
             {
@@ -80,17 +99,17 @@ in
       }
       //
       # set xdg configFile text and on change for wallust templates
-      (lib.pipe cfg.templates [
-        (lib.filterAttrs (_: template: !(isTemplatePath template.text)))
-        (lib.mapAttrs' (
-          template: { text, ... }: lib.nameValuePair "wallust/templates/${template}" { inherit text; }
+      (pipe cfg.templates [
+        (filterAttrs (_: template: !(isTemplatePath template.text)))
+        (mapAttrs' (
+          template: { text, ... }: nameValuePair "wallust/templates/${template}" { inherit text; }
         ))
       ]);
 
     custom.wallust.templates = {
       # misc information for nix
       "nix.json" = {
-        text = lib.strings.toJSON (
+        text = toJSON (
           # use pywal template syntax here
           {
             wallpaper = "{{wallpaper}}";
@@ -103,11 +122,11 @@ in
               foreground = "{{foreground}}";
               cursor = "{{cursor}}";
             };
-            colors = lib.listToAttrs (
+            colors = listToAttrs (
               map (i: {
                 name = "color${toString i}";
                 value = "{{color${toString i}}}";
-              }) (lib.range 0 15)
+              }) (range 0 15)
             );
           }
           // cfg.nixJson
@@ -118,14 +137,14 @@ in
 
     # setup wallust colorschemes for shells
     programs = {
-      bash.initExtra = lib.mkIf config.custom.wallust.enable ''
+      bash.initExtra = mkIf config.custom.wallust.enable ''
         wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
         if [ -e "$wallust_colors" ]; then
           command cat "$wallust_colors"
         fi
       '';
 
-      fish.shellInit = lib.mkIf config.custom.wallust.enable ''
+      fish.shellInit = mkIf config.custom.wallust.enable ''
         set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
         if test -e "$wallust_colors"
             command cat "$wallust_colors"

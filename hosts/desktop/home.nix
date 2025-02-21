@@ -1,6 +1,9 @@
 { config, lib, ... }:
+let
+  inherit (lib) mkEnableOption;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     framework_vertical.enable = mkEnableOption "framework vertical display";
   };
 

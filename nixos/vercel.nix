@@ -5,12 +5,15 @@
   user,
   ...
 }:
+let
+  inherit (lib) getExe mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     vercel.enable = mkEnableOption "Vercel Backups";
   };
 
-  config = lib.mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
+  config = mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
     sops.secrets.vercel_postgres.owner = user;
 
     custom.shell.packages = {
@@ -30,7 +33,7 @@
       services.vercel-backup = {
         serviceConfig.Type = "oneshot";
         serviceConfig.User = user;
-        script = lib.getExe pkgs.custom.shell.vercel-backup;
+        script = getExe pkgs.custom.shell.vercel-backup;
       };
       timers.vercel-backup = {
         wantedBy = [ "timers.target" ];

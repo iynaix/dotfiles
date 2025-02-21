@@ -4,7 +4,10 @@
   pkgs,
   ...
 }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) mkIf;
+in
+mkIf (!config.custom.headless) {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;

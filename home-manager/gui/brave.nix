@@ -4,7 +4,10 @@
   pkgs,
   ...
 }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) getExe mkIf;
+in
+mkIf (!config.custom.headless) {
   programs.chromium = {
     enable = true;
     package = pkgs.brave;
@@ -55,8 +58,8 @@ lib.mkIf (!config.custom.headless) {
 
   # set default browser
   home.sessionVariables = {
-    DEFAULT_BROWSER = lib.getExe pkgs.brave;
-    BROWSER = lib.getExe pkgs.brave;
+    DEFAULT_BROWSER = getExe pkgs.brave;
+    BROWSER = getExe pkgs.brave;
   };
 
   xdg.mimeApps.defaultApplications = {

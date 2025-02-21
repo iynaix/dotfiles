@@ -6,18 +6,25 @@
   ...
 }:
 let
+  inherit (lib)
+    flatten
+    getExe
+    mkEnableOption
+    mkIf
+    optionals
+    ;
   inherit (config.custom) monitors;
-  pamixer = lib.getExe pkgs.pamixer;
+  pamixer = getExe pkgs.pamixer;
   qtile_like = config.custom.hyprland.qtile;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     hyprland = {
       qtile = mkEnableOption "qtile like behavior for workspaces";
     };
   };
 
-  config = lib.mkIf config.custom.hyprland.enable {
+  config = mkIf config.custom.hyprland.enable {
     custom.shell.packages = {
       focusorrun = {
         runtimeInputs = with pkgs; [
@@ -44,7 +51,7 @@ in
         let
           # exec using uwsm
           uexec = program: "exec, uwsm app -- ${program}";
-          workspace_keybinds = lib.flatten (
+          workspace_keybinds = flatten (
             (lib.custom.mapWorkspaces (
               { workspace, key, ... }:
               if qtile_like then
@@ -75,7 +82,7 @@ in
           "$mod, w, ${uexec "brave"}"
           "$mod_SHIFT, w, ${uexec "brave --incognito"}"
           "$mod, v, ${uexec "$term nvim"}"
-          "$mod_SHIFT, v, ${uexec (lib.getExe pkgs.custom.shell.rofi-edit-proj)}"
+          "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
@@ -177,10 +184,10 @@ in
         ]
         ++ workspace_keybinds
         # turn monitors off
-        ++ lib.optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
-        ++ lib.optionals config.custom.backlight.enable [
-          ",XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} set 5%-"
-          ",XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} set +5%"
+        ++ optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
+        ++ optionals config.custom.backlight.enable [
+          ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"
+          ",XF86MonBrightnessUp, exec, ${getExe pkgs.brightnessctl} set +5%"
         ];
 
       # Move/resize windows with mainMod + LMB/RMB and dragging

@@ -4,14 +4,17 @@
   isLaptop,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     keyd.enable = mkEnableOption "keyd" // {
       default = isLaptop;
     };
   };
 
-  config = lib.mkIf config.custom.keyd.enable {
+  config = mkIf config.custom.keyd.enable {
     services.keyd = {
       enable = true;
       keyboards.default = {

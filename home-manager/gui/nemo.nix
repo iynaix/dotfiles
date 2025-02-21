@@ -5,7 +5,10 @@
   pkgs,
   ...
 }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) getExe mkIf optionalAttrs;
+in
+mkIf (!config.custom.headless) {
   home.packages = with pkgs; [
     p7zip-rar # support for encrypted archives
     nemo-fileroller
@@ -31,7 +34,7 @@ lib.mkIf (!config.custom.headless) {
         "mimeapps.list".force = true;
       }
       # other OSes seem to override this file
-      // lib.optionalAttrs (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
+      // optionalAttrs (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
   };
 
   gtk.gtk3.bookmarks =
@@ -52,10 +55,10 @@ lib.mkIf (!config.custom.headless) {
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      exec = lib.getExe pkgs.xdg-terminal-exec;
+      exec = getExe pkgs.xdg-terminal-exec;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      exec = lib.getExe pkgs.xdg-terminal-exec;
+      exec = getExe pkgs.xdg-terminal-exec;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

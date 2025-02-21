@@ -5,11 +5,12 @@
   ...
 }:
 let
+  inherit (lib) getExe mkEnableOption mkIf;
   cfg = config.custom.ghostty;
   inherit (config.custom) terminal;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     ghostty = {
       enable = mkEnableOption "ghostty" // {
         default = true;
@@ -17,7 +18,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     programs.ghostty = {
       enable = true;
       enableBashIntegration = true;
@@ -38,6 +39,6 @@ in
       };
     };
 
-    wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${lib.getExe pkgs.ghostty}" ];
+    wayland.windowManager.hyprland.settings.bind = [ "$mod, q, exec, ${getExe pkgs.ghostty}" ];
   };
 }

@@ -6,38 +6,55 @@
   ...
 }:
 let
+  inherit (lib)
+    any
+    assertMsg
+    attrValues
+    concatLines
+    filter
+    hasInfix
+    hasPrefix
+    lessThan
+    mkForce
+    mkOption
+    pipe
+    sort
+    unique
+    ;
+  inherit (lib.strings) toJSON;
+  inherit (lib.types) listOf str;
   cfg = config.custom.persist;
   hmPersistCfg = config.hm.custom.persist;
   assertNoHomeDirs =
     paths:
-    assert (lib.assertMsg (!lib.any (lib.hasPrefix "/home") paths) "/home used in a root persist!");
+    assert (assertMsg (!any (hasPrefix "/home") paths) "/home used in a root persist!");
     paths;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     persist = {
       root = {
         directories = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [ ];
           apply = assertNoHomeDirs;
           description = "Directories to persist in root filesystem";
         };
         files = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [ ];
           apply = assertNoHomeDirs;
           description = "Files to persist in root filesystem";
         };
         cache = {
           directories = mkOption {
-            type = types.listOf types.str;
+            type = listOf str;
             default = [ ];
             apply = assertNoHomeDirs;
             description = "Directories to persist, but not to snapshot";
           };
           files = mkOption {
-            type = types.listOf types.str;
+            type = listOf str;
             default = [ ];
             apply = assertNoHomeDirs;
             description = "Files to persist, but not to snapshot";
@@ -46,12 +63,12 @@ in
       };
       home = {
         directories = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [ ];
           description = "Directories to persist in home directory";
         };
         files = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [ ];
           description = "Files to persist in home directory";
         };
@@ -66,7 +83,7 @@ in
     # root and home on tmpfs
     # neededForBoot is required, so there won't be permission errors creating directories or symlinks
     # https://github.com/nix-community/impermanence/issues/149#issuecomment-1806604102
-    fileSystems."/" = lib.mkForce {
+    fileSystems."/" = mkForce {
       device = "tmpfs";
       fsType = "tmpfs";
       neededForBoot = true;
@@ -86,12 +103,12 @@ in
         runtimeInputs = [ pkgs.fd ];
         text =
           let
-            wallustExcludes = lib.pipe config.hm.custom.wallust.templates [
-              lib.attrValues
+            wallustExcludes = pipe config.hm.custom.wallust.templates [
+              attrValues
               (map (a: a.target))
-              (lib.filter (t: !(lib.hasInfix "wallust" t)))
+              (filter (t: !(hasInfix "wallust" t)))
               (map (t: ''--exclude "${t}" \''))
-              lib.concatLines
+              concatLines
             ];
           in
           ''
@@ -109,8 +126,8 @@ in
     environment.persistence = {
       "/persist" = {
         hideMounts = true;
-        files = lib.unique cfg.root.files;
-        directories = lib.unique (
+        files = unique cfg.root.files;
+        directories = unique (
           [
             "/var/log" # systemd journal is stored in /var/log/journal
             "/var/lib/nixos" # for persisting user uids and gids
@@ -119,8 +136,8 @@ in
         );
 
         users.${user} = {
-          files = lib.unique (cfg.home.files ++ hmPersistCfg.home.files);
-          directories = lib.unique (
+          files = unique (cfg.home.files ++ hmPersistCfg.home.files);
+          directories = unique (
             [
               "projects"
               ".cache/dconf"
@@ -136,12 +153,12 @@ in
       # e.g. npm, cargo cache etc, that could always be redownloaded
       "/cache" = {
         hideMounts = true;
-        files = lib.unique cfg.root.cache.files;
-        directories = lib.unique cfg.root.cache.directories;
+        files = unique cfg.root.cache.files;
+        directories = unique cfg.root.cache.directories;
 
         users.${user} = {
-          files = lib.unique hmPersistCfg.home.cache.files;
-          directories = lib.unique hmPersistCfg.home.cache.directories;
+          files = unique hmPersistCfg.home.cache.files;
+          directories = unique hmPersistCfg.home.cache.directories;
         };
       };
     };
@@ -160,9 +177,9 @@ in
         allFiles =
           map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
           ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
-        sort-uniq = arr: lib.sort lib.lessThan (lib.unique arr);
+        sort-uniq = arr: sort lessThan (unique arr);
       in
-      lib.strings.toJSON {
+      toJSON {
         directories = sort-uniq allDirectories;
         files = sort-uniq allFiles;
       };

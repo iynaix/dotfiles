@@ -1,9 +1,13 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
+let
+  inherit (lib) optionals;
+in
 {
   home = {
     packages =
@@ -19,7 +23,7 @@
         tenki
         (inputs.wfetch.packages.${pkgs.system}.default.override { iynaixos = true; })
       ]
-      ++ lib.optionals (!config.custom.headless) [
+      ++ optionals (!config.custom.headless) [
         imagemagick
       ];
 

@@ -1,5 +1,8 @@
 { config, lib, ... }:
-lib.mkIf config.custom.hyprland.enable {
+let
+  inherit (lib) mkIf;
+in
+mkIf config.custom.hyprland.enable {
   services.hypridle = {
     enable = true;
 

@@ -1,5 +1,17 @@
 { lib, pkgs, ... }:
-lib.extend (
+let
+  inherit (lib)
+    extend
+    functionArgs
+    intersectAttrs
+    isDerivation
+    isString
+    length
+    mapAttrs
+    optional
+    ;
+in
+extend (
   _: libprev: {
     # namespace for custom functions
     custom = rec {
@@ -34,25 +46,25 @@ lib.extend (
         let
           inherit (pkgs) writeShellApplication writeTextFile symlinkJoin;
           # get the needed arguments for writeShellApplication
-          app = writeShellApplication (lib.intersectAttrs (lib.functionArgs writeShellApplication) shellArgs);
+          app = writeShellApplication (intersectAttrs (functionArgs writeShellApplication) shellArgs);
           completions =
-            lib.optional (bashCompletion != null) (writeTextFile {
+            optional (bashCompletion != null) (writeTextFile {
               name = "${name}.bash";
               destination = "/share/bash-completion/completions/${name}.bash";
               text = bashCompletion;
             })
-            ++ lib.optional (zshCompletion != null) (writeTextFile {
+            ++ optional (zshCompletion != null) (writeTextFile {
               name = "${name}.zsh";
               destination = "/share/zsh/site-functions/_${name}";
               text = zshCompletion;
             })
-            ++ lib.optional (fishCompletion != null) (writeTextFile {
+            ++ optional (fishCompletion != null) (writeTextFile {
               name = "${name}.fish";
               destination = "/share/fish/vendor_completions.d/${name}.fish";
               text = fishCompletion;
             });
         in
-        if lib.length completions == 0 then
+        if length completions == 0 then
           app
         else
           symlinkJoin {
@@ -62,15 +74,15 @@ lib.extend (
           };
 
       # produces an attrset shell package with completions from either a string / writeShellApplication attrset / package
-      mkShellPackages = lib.mapAttrs (
+      mkShellPackages = mapAttrs (
         name: value:
-        if lib.isString value then
+        if isString value then
           pkgs.writeShellApplication {
             inherit name;
             text = value;
           }
         # packages
-        else if lib.isDerivation value then
+        else if isDerivation value then
           value
         # attrs to pass to writeShellApplication
         else

@@ -6,16 +6,17 @@
   ...
 }:
 let
+  inherit (lib) mkEnableOption mkIf;
   homeDir = config.hm.home.homeDirectory;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     sops.enable = mkEnableOption "sops" // {
       default = true;
     };
   };
 
-  config = lib.mkIf config.custom.sops.enable {
+  config = mkIf config.custom.sops.enable {
     sops = {
       # to edit secrets file, run "sops hosts/secrets.json"
       defaultSopsFile = ../hosts/secrets.json;

@@ -5,14 +5,17 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
       default = isNixOS && !config.custom.headless;
     };
   };
 
-  config = lib.mkIf config.custom.pathofbuilding.enable {
+  config = mkIf config.custom.pathofbuilding.enable {
     home.packages = [ pkgs.path-of-building ];
 
     wayland.windowManager.hyprland.settings = {

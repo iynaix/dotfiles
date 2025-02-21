@@ -7,10 +7,11 @@
   ...
 }:
 let
-  lockCmd = lib.getExe config.custom.shell.packages.lock;
+  inherit (lib) getExe mkEnableOption mkIf;
+  lockCmd = getExe config.custom.shell.packages.lock;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     hyprland = {
       lock = mkEnableOption "locking of host" // {
         default = isLaptop && isNixOS;
@@ -18,7 +19,7 @@ in
     };
   };
 
-  config = lib.mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
+  config = mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
     programs.hyprlock.enable = true;
 
     custom.shell.packages = {
@@ -38,7 +39,7 @@ in
       bind = [ "$mod_SHIFT, x, exec, ${lockCmd}" ];
 
       # handle laptop lid
-      bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
+      bindl = mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
     };
 
     # lock on idle

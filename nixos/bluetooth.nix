@@ -4,14 +4,17 @@
   lib,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     bluetooth.enable = mkEnableOption "Bluetooth" // {
       default = isLaptop;
     };
   };
 
-  config = lib.mkIf config.custom.bluetooth.enable {
+  config = mkIf config.custom.bluetooth.enable {
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -24,7 +27,7 @@
       services.mpris-proxy.enable = true;
 
       # add bluetooth audio icon to waybar
-      custom.waybar.config.pulseaudio = lib.mkIf hmCfg.config.programs.waybar.enable {
+      custom.waybar.config.pulseaudio = mkIf hmCfg.config.programs.waybar.enable {
         format-bluetooth = "  {volume}%";
       };
     };

@@ -1,5 +1,8 @@
 { config, lib, ... }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) mkIf;
+in
+mkIf (!config.custom.headless) {
   programs = {
     zathura = {
       enable = true;
@@ -31,7 +34,7 @@ lib.mkIf (!config.custom.headless) {
     "application/pdf" = "org.pwmt.zathura.desktop";
   };
 
-  custom.wallust.templates.zathurarc = lib.mkIf config.programs.zathura.enable {
+  custom.wallust.templates.zathurarc = mkIf config.programs.zathura.enable {
     text = ''
       set default-bg                  "{{color0}}"
       set default-fg                  "{{color10}}"

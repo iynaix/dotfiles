@@ -5,11 +5,19 @@
   pkgs,
   ...
 }:
-lib.mkIf config.hm.custom.hyprland.enable {
+let
+  inherit (lib)
+    assertMsg
+    mkIf
+    optionalAttrs
+    versionOlder
+    ;
+in
+mkIf config.hm.custom.hyprland.enable {
   programs.hyprland = {
     enable =
       assert (
-        lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.48") "hyprland updated, sync with hyprnstack?"
+        assertMsg (versionOlder config.programs.hyprland.package.version "0.48") "hyprland updated, sync with hyprnstack?"
       );
       true;
 
@@ -21,7 +29,7 @@ lib.mkIf config.hm.custom.hyprland.enable {
     {
       NIXOS_OZONE_WL = "1";
     }
-    // lib.optionalAttrs (host == "vm" || host == "vm-hyprland") {
+    // optionalAttrs (host == "vm" || host == "vm-hyprland") {
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
     };
 

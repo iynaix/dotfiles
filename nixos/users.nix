@@ -4,18 +4,26 @@
   user,
   ...
 }:
+let
+  inherit (lib)
+    filter
+    hasInfix
+    mkForce
+    mkIf
+    mkMerge
+    mkOption
+    ;
+in
 {
   # silence warning about setting multiple user password options
   # https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990
   options = {
-    warnings = lib.mkOption {
-      apply = lib.filter (
-        w: !(lib.strings.hasInfix "If multiple of these password options are set at the same time" w)
-      );
+    warnings = mkOption {
+      apply = filter (w: !(hasInfix "If multiple of these password options are set at the same time" w));
     };
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     {
       # autologin
       services = {
@@ -23,7 +31,7 @@
           let
             inherit (config.hm.custom) autologinCommand;
           in
-          lib.mkIf (config.boot.zfs.requestEncryptionCredentials && autologinCommand != null) {
+          mkIf (config.boot.zfs.requestEncryptionCredentials && autologinCommand != null) {
             enable = true;
 
             settings = {
@@ -66,7 +74,7 @@
     }
 
     # use sops for user passwords if enabled
-    (lib.mkIf config.custom.sops.enable (
+    (mkIf config.custom.sops.enable (
       let
         inherit (config.sops) secrets;
       in
@@ -80,8 +88,8 @@
         # create a password with for root and $user with:
         # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
         users.users = {
-          root.hashedPasswordFile = lib.mkForce secrets.rp.path;
-          ${user}.hashedPasswordFile = lib.mkForce secrets.up.path;
+          root.hashedPasswordFile = mkForce secrets.rp.path;
+          ${user}.hashedPasswordFile = mkForce secrets.up.path;
         };
       }
     ))

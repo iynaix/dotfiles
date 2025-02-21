@@ -5,6 +5,8 @@
   ...
 }:
 let
+  inherit (lib) mkIf mkOption optionals;
+  inherit (lib.types) enum int nullOr;
   cfg = config.custom.rofi;
   rofiThemes = pkgs.custom.rofi-themes;
   patchRasi =
@@ -60,41 +62,39 @@ let
   powermenuDir = "${rofiThemes}/powermenu/type-4";
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     rofi = {
       theme = mkOption {
-        type = types.nullOr (
-          types.enum [
-            "adapta"
-            "arc"
-            "black"
-            "catppuccin"
-            "cyberpunk"
-            "dracula"
-            "everforest"
-            "gruvbox"
-            "lovelace"
-            "navy"
-            "nord"
-            "onedark"
-            "paper"
-            "solarized"
-            "tokyonight"
-            "yousai"
-          ]
-        );
+        type = nullOr (enum [
+          "adapta"
+          "arc"
+          "black"
+          "catppuccin"
+          "cyberpunk"
+          "dracula"
+          "everforest"
+          "gruvbox"
+          "lovelace"
+          "navy"
+          "nord"
+          "onedark"
+          "paper"
+          "solarized"
+          "tokyonight"
+          "yousai"
+        ]);
         default = null;
         description = "Rofi launcher theme";
       };
       width = mkOption {
-        type = types.int;
+        type = int;
         default = 800;
         description = "Rofi launcher width";
       };
     };
   };
 
-  config = lib.mkIf (!config.custom.headless) {
+  config = mkIf (!config.custom.headless) {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland.override {
@@ -106,7 +106,7 @@ in
     home.packages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       (pkgs.custom.rofi-power-menu.override { hasWindows = config.custom.mswindows; })
-    ] ++ (lib.optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
+    ] ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
     wayland.windowManager.hyprland.settings = {
@@ -125,7 +125,7 @@ in
       ];
     };
 
-    custom.wallust.templates = lib.mkIf config.programs.rofi.enable {
+    custom.wallust.templates = mkIf config.programs.rofi.enable {
       # default launcher
       "rofi.rasi" = {
         text = patchRasi "rofi.rasi" launcherPath ''

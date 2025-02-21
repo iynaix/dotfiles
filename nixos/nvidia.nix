@@ -4,12 +4,21 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib)
+    assertMsg
+    mkEnableOption
+    mkIf
+    optionalAttrs
+    versionOlder
+    ;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     nvidia.enable = mkEnableOption "Nvidia GPU";
   };
 
-  config = lib.mkIf config.custom.nvidia.enable {
+  config = mkIf config.custom.nvidia.enable {
     # enable nvidia support
     services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -32,7 +41,7 @@
             betaPkg = config.boot.kernelPackages.nvidiaPackages.beta;
           in
           assert (
-            lib.assertMsg (lib.versionOlder betaPkg.version "570.87") "nvidia updated, check slicers / freecad"
+            assertMsg (versionOlder betaPkg.version "570.87") "nvidia updated, check slicers / freecad"
           );
           betaPkg;
       };
@@ -43,7 +52,7 @@
       ];
     };
 
-    environment.variables = lib.optionalAttrs config.programs.hyprland.enable {
+    environment.variables = optionalAttrs config.programs.hyprland.enable {
       LIBVA_DRIVER_NAME = "nvidia";
       GBM_BACKEND = "nvidia-drm";
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";

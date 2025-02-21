@@ -4,11 +4,15 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) attrNames mkIf mkOption;
+  inherit (lib.types) attrsOf enum str;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     gtk = {
       accents = mkOption {
-        type = types.attrsOf types.str;
+        type = attrsOf str;
         default = {
           blue = "#89b4fa";
           flamingo = "#f2cdcd";
@@ -29,7 +33,7 @@
       };
 
       defaultAccent = mkOption {
-        type = types.enum (attrNames config.custom.gtk.accents);
+        type = enum (attrNames config.custom.gtk.accents);
         default = "blue";
         description = "Default GTK theme accent";
       };
@@ -40,7 +44,7 @@
     let
       inherit (config.custom.gtk) accents defaultAccent;
     in
-    lib.mkIf (!config.custom.headless) {
+    mkIf (!config.custom.headless) {
       home = {
         pointerCursor = {
           package = pkgs.simp1e-cursors;
@@ -72,7 +76,7 @@
           name = "catppuccin-mocha-${defaultAccent}-compact";
           package = pkgs.catppuccin-gtk.override {
             # allow all accents so the closest matching color can be selected by dotfiles-rs
-            accents = lib.attrNames accents;
+            accents = attrNames accents;
             variant = "mocha";
             tweaks = [
               # "black" # black tweak for oled

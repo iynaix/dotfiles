@@ -4,12 +4,15 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     vlc.enable = mkEnableOption "vlc";
   };
 
-  config = lib.mkIf config.custom.vlc.enable {
+  config = mkIf config.custom.vlc.enable {
     home.packages = [ pkgs.vlc ];
 
     custom.persist = {

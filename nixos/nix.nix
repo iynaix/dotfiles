@@ -9,6 +9,16 @@
   user,
   ...
 }:
+let
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    getExe
+    mkOverride
+    optionalAttrs
+    sort
+    ;
+in
 # create an fhs environment to run downloaded binaries
 # https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
 # fhs = let
@@ -39,7 +49,7 @@
   services.envfs.enable = true;
   system = {
     # envfs sets usrbinenv activation script to "" with mkForce
-    activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
+    activationScripts.usrbinenv = mkOverride (50 - 1) ''
       mkdir -p /usr/bin
       chmod 0755 /usr/bin || true
     '';
@@ -119,7 +129,7 @@
             function _nbuild_iso
               nix eval --impure --json --expr \
                 'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-                ${lib.getExe pkgs.jq} -r '.[]' | grep iso
+                ${getExe pkgs.jq} -r '.[]' | grep iso
               end
               complete -c nbuild-iso -f -a '(_nbuild_iso)'
           '';
@@ -132,10 +142,10 @@
               config.environment.systemPackages ++ config.users.users.${user}.packages ++ config.hm.home.packages
             );
           in
-          ''sort -ui <<< "${lib.concatLines allPkgs}"'';
+          ''sort -ui <<< "${concatLines allPkgs}"'';
       };
     }
-    // lib.optionalAttrs (host == "desktop") {
+    // optionalAttrs (host == "desktop") {
       # build and push config for laptop
       nsw-remote = # sh
         ''
@@ -214,15 +224,15 @@
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
       };
-      # // lib.optionalAttrs (config.nix.package.pname == "lix") {
+      # // optionalAttrs (config.nix.package.pname == "lix") {
       #   repl-overlays = [ ./repl-overlays.nix ];
       # };
     };
 
   # better nixos generation label
   # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
-  system.nixos.label = lib.concatStringsSep "-" (
-    (lib.sort (x: y: x < y) config.system.nixos.tags)
+  system.nixos.label = concatStringsSep "-" (
+    (sort (x: y: x < y) config.system.nixos.tags)
     ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
   );
 
@@ -241,7 +251,7 @@
           prefix = ''(import ${flake-compat} { src = ${dots}; }).defaultNix.nixosConfigurations.${host}'';
         in
         prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
-          makeWrapper ${lib.getExe prev.nixos-option} $out/bin/nixos-option \
+          makeWrapper ${getExe prev.nixos-option} $out/bin/nixos-option \
             --add-flags --config_expr \
             --add-flags "\"${prefix}.config\"" \
             --add-flags --options_expr \

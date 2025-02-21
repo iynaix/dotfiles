@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "nh wrapper";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = [ lib.maintainers.iynaix ];
     platforms = lib.platforms.linux;
   };
 }

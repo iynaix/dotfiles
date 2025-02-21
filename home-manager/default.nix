@@ -6,6 +6,23 @@
   user,
   ...
 }:
+let
+  inherit (lib)
+    hasPrefix
+    mapAttrsToList
+    mkEnableOption
+    mkOption
+    optional
+    optionals
+    ;
+  inherit (lib.types)
+    attrsOf
+    listOf
+    nullOr
+    package
+    str
+    ;
+in
 {
   imports = [
     ./hardware.nix
@@ -15,25 +32,25 @@
     ./shell
   ];
 
-  options.custom = with lib; {
+  options.custom = {
     autologinCommand = mkOption {
-      type = types.nullOr types.str;
+      type = nullOr str;
       default = null;
       description = "Command to run after autologin";
     };
     fonts = {
       regular = mkOption {
-        type = types.str;
+        type = str;
         default = "Geist Regular";
         description = "The font to use for regular text";
       };
       monospace = mkOption {
-        type = types.str;
+        type = str;
         default = "JetBrainsMono Nerd Font";
         description = "The font to use for monospace text";
       };
       packages = mkOption {
-        type = types.listOf types.package;
+        type = listOf package;
         description = "The packages to install for the fonts";
       };
     };
@@ -42,7 +59,7 @@
       description = "Whether to enable headless mode, no GUI programs will be available";
     };
     symlinks = mkOption {
-      type = types.attrsOf types.str;
+      type = attrsOf str;
       default = { };
       description = "Symlinks to create in the format { dest = src;}";
     };
@@ -72,11 +89,11 @@
           trash-cli
           xdg-utils
         ]
-        ++ (lib.optional config.custom.helix.enable helix)
+        ++ (optional config.custom.helix.enable helix)
         # home-manager executable only on nixos
-        ++ (lib.optional isNixOS home-manager)
+        ++ (optional isNixOS home-manager)
         # handle fonts
-        ++ (lib.optionals (!isNixOS) config.custom.fonts.packages);
+        ++ (optionals (!isNixOS) config.custom.fonts.packages);
     };
 
     # Let Home Manager install and manage itself.
@@ -85,9 +102,9 @@
     # create symlinks
     systemd.user.tmpfiles.rules =
       let
-        normalizeHome = p: if (lib.hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
+        normalizeHome = p: if (hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
       in
-      lib.mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.custom.symlinks;
+      mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.custom.symlinks;
 
     xdg = {
       enable = true;

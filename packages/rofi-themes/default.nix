@@ -20,13 +20,13 @@ stdenvNoCC.mkDerivation (
         runHook postInstall
       '';
 
-    meta = with lib; {
+    meta = {
       description = "A huge collection of Rofi based custom Applets, Launchers & Powermenus";
       homepage = "https://github.com/adi1090x/rofi";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ iynaix ];
+      license = lib.licenses.gpl3Only;
+      maintainers = [ lib.maintainers.iynaix ];
       mainProgram = "rofi-themes";
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   }
 )

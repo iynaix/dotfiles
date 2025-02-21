@@ -6,6 +6,7 @@
   ...
 }:
 let
+  inherit (lib) mkIf optionalAttrs;
   hasNixpkgsRepo = host == "desktop" || host == "framework";
 in
 {
@@ -60,10 +61,10 @@ in
             autoUpdate = true;
           };
         }
-        // lib.optionalAttrs hasNixpkgsRepo {
+        // optionalAttrs hasNixpkgsRepo {
           # background maintenance for large git repos:
           # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
-          maintenance = lib.mkIf (host == "desktop" || host == "framework") {
+          maintenance = mkIf (host == "desktop" || host == "framework") {
             repo = "/persist${config.home.homeDirectory}/projects/nixpkgs";
           };
         };

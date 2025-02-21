@@ -6,8 +6,11 @@
   lib,
   ...
 }:
+let
+  inherit (lib) mkEnableOption;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     backlight.enable = mkEnableOption "Backlight" // {
       default = isLaptop;
     };

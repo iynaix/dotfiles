@@ -28,11 +28,11 @@ gcc14Stdenv.mkDerivation (
         cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
       '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/zakk4223/hyprNStack";
       description = "Hyprland HyprNStack Plugin";
-      maintainers = with maintainers; [ iynaix ];
-      platforms = platforms.linux;
+      maintainers = [ lib.maintainers.iynaix ];
+      platforms = lib.platforms.linux;
     };
   }
 )

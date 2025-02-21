@@ -4,6 +4,25 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib)
+    attrValues
+    getExe
+    mapAttrsToList
+    mkForce
+    mkIf
+    mkOption
+    optional
+    optionals
+    ;
+  inherit (lib.types)
+    attrs
+    attrsOf
+    oneOf
+    package
+    str
+    ;
+in
 {
   imports = [
     ./audio.nix
@@ -32,17 +51,15 @@
     ./zfs.nix
   ];
 
-  options.custom = with lib; {
+  options.custom = {
     shell = {
       packages = mkOption {
-        type =
-          with types;
-          attrsOf (oneOf [
-            str
-            attrs
-            package
-          ]);
-        apply = custom.mkShellPackages;
+        type = attrsOf (oneOf [
+          str
+          attrs
+          package
+        ]);
+        apply = lib.custom.mkShellPackages;
         default = { };
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
@@ -60,7 +77,7 @@
       };
     };
     symlinks = mkOption {
-      type = types.attrsOf types.str;
+      type = attrsOf str;
       default = { };
       description = "Symlinks to create in the format { dest = src;}";
     };
@@ -86,7 +103,7 @@
       pathsToLink = [ "/share/fish" ];
 
       variables = {
-        TERMINAL = lib.getExe config.hm.custom.terminal.package;
+        TERMINAL = getExe config.hm.custom.terminal.package;
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
@@ -116,7 +133,7 @@
         [
           curl
           eza
-          (lib.hiPrio procps) # for uptime
+          (hiPrio procps) # for uptime
           ripgrep
           yazi
           zoxide
@@ -125,13 +142,13 @@
         ]
         ++
           # install gtk theme for root, some apps like gparted only run as root
-          (with config.hm.gtk; [
-            theme.package
-            iconTheme.package
-          ])
+          [
+            config.hm.gtk.theme.package
+            config.hm.gtk.iconTheme.package
+          ]
         # add custom user created shell packages
-        ++ (lib.attrValues config.custom.shell.packages)
-        ++ (lib.optional config.hm.custom.helix.enable helix);
+        ++ (attrValues config.custom.shell.packages)
+        ++ (optional config.hm.custom.helix.enable helix);
     };
 
     # add custom user created shell packages to pkgs.custom.shell
@@ -152,7 +169,7 @@
     systemd.tmpfiles.rules = [
       # cleanup systemd coredumps once a week
       "D! /var/lib/systemd/coredump root root 7d"
-    ] ++ (lib.mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
+    ] ++ (mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
 
     # setup fonts
     fonts = {
@@ -168,11 +185,11 @@
       git.enable = true;
 
       # bye bye nano
-      nano.enable = lib.mkForce false;
+      nano.enable = mkForce false;
     };
 
     # use gtk theme on qt apps
-    qt = lib.mkIf (!config.hm.custom.headless) {
+    qt = mkIf (!config.hm.custom.headless) {
       enable = true;
       platformTheme = "qt5ct";
       style = "kvantum";
@@ -201,7 +218,7 @@
     };
 
     custom.persist = {
-      root.directories = lib.optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+      root.directories = optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
       root.cache.directories = [
         "/var/lib/systemd/coredump"
       ];

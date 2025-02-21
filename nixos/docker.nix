@@ -4,16 +4,19 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     distrobox.enable = mkEnableOption "distrobox";
     docker.enable = mkEnableOption "docker" // {
       default = config.custom.distrobox.enable;
     };
   };
 
-  config = lib.mkIf (config.custom.docker.enable || config.custom.distrobox.enable) {
-    environment.systemPackages = lib.mkIf config.custom.distrobox.enable [ pkgs.distrobox ];
+  config = mkIf (config.custom.docker.enable || config.custom.distrobox.enable) {
+    environment.systemPackages = mkIf config.custom.distrobox.enable [ pkgs.distrobox ];
 
     virtualisation = {
       podman = {
@@ -24,7 +27,7 @@
         defaultNetwork.settings.dns_enabled = true;
       };
 
-      containers.storage.settings = lib.mkIf (config.fileSystems."/".fsType == "zfs") {
+      containers.storage.settings = mkIf (config.fileSystems."/".fsType == "zfs") {
         storage = {
           driver = "zfs";
           graphroot = "/var/lib/containers/storage";

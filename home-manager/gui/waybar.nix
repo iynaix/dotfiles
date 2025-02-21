@@ -7,16 +7,32 @@
   ...
 }:
 let
+  inherit (lib)
+    concatMapStringsSep
+    getExe
+    getExe'
+    head
+    last
+    mkEnableOption
+    mkIf
+    mkOption
+    optional
+    optionalString
+    range
+    replaceStrings
+    ;
+  inherit (lib.strings) toJSON;
+  inherit (lib.types) lines submodule;
   cfg = config.custom.waybar;
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     waybar = {
       enable = mkEnableOption "waybar" // {
         default = config.custom.hyprland.enable && !config.custom.headless;
       };
       config = mkOption {
-        type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
+        type = submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
@@ -24,7 +40,7 @@ in
         default = host == "desktop";
       };
       extraCss = mkOption {
-        type = types.lines;
+        type = lines;
         default = "";
         description = "Additional css to add to the waybar style.css";
       };
@@ -33,7 +49,7 @@ in
     };
   };
 
-  config = lib.mkIf config.custom.waybar.enable {
+  config = mkIf config.custom.waybar.enable {
     programs.waybar = {
       enable = isNixOS;
       package = pkgs.waybar.override { cavaSupport = false; };
@@ -48,7 +64,7 @@ in
       ];
 
       bind = [
-        ''$mod, a, exec, ${lib.getExe' pkgs.procps "pkill"} -SIGUSR1 waybar''
+        ''$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 waybar''
         "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
       ];
     };
@@ -60,7 +76,7 @@ in
 
     custom = {
       waybar.config = {
-        backlight = lib.mkIf config.custom.backlight.enable {
+        backlight = mkIf config.custom.backlight.enable {
           format = "{icon}   {percent}%";
           format-icons = [
             "󰃞"
@@ -68,11 +84,11 @@ in
             "󰃝"
             "󰃠"
           ];
-          on-scroll-down = "${lib.getExe pkgs.brightnessctl} s 1%-";
-          on-scroll-up = "${lib.getExe pkgs.brightnessctl} s +1%";
+          on-scroll-down = "${getExe pkgs.brightnessctl} s 1%-";
+          on-scroll-up = "${getExe pkgs.brightnessctl} s +1%";
         };
 
-        battery = lib.mkIf config.custom.battery.enable {
+        battery = mkIf config.custom.battery.enable {
           format = "{icon}    {capacity}%";
           format-charging = "     {capacity}%";
           format-icons = [
@@ -119,7 +135,7 @@ in
           tooltip = false;
         };
 
-        idle_inhibitor = lib.mkIf cfg.idleInhibitor {
+        idle_inhibitor = mkIf cfg.idleInhibitor {
           format = "{icon}";
           format-icons = {
             activated = "";
@@ -150,15 +166,15 @@ in
 
         modules-center = [ "hyprland/workspaces" ];
 
-        modules-left = [ "custom/nix" ] ++ (lib.optional cfg.idleInhibitor "idle_inhibitor");
+        modules-left = [ "custom/nix" ] ++ (optional cfg.idleInhibitor "idle_inhibitor");
 
         modules-right =
           [
             "network"
             "pulseaudio"
           ]
-          ++ (lib.optional config.custom.backlight.enable "backlight")
-          ++ (lib.optional config.custom.battery.enable "battery")
+          ++ (optional config.custom.backlight.enable "backlight")
+          ++ (optional config.custom.battery.enable "battery")
           ++ [ "clock" ];
 
         network =
@@ -172,7 +188,7 @@ in
                 format = "    {essid}";
                 format-ethernet = " ";
                 # rofi wifi script
-                on-click = lib.getExe pkgs.custom.rofi-wifi-menu;
+                on-click = getExe pkgs.custom.rofi-wifi-menu;
                 on-click-right = "${config.custom.terminal.exec} nmtui";
               }
             else
@@ -189,7 +205,7 @@ in
             "󰕾"
           ];
           format-muted = "󰖁  Muted";
-          on-click = "${lib.getExe pkgs.pamixer} -t";
+          on-click = "${getExe pkgs.pamixer} -t";
           on-click-right = "pwvucontrol";
           scroll-step = 1;
           tooltip = false;
@@ -205,7 +221,7 @@ in
 
         templates = {
           "waybar.jsonc" = {
-            text = lib.strings.toJSON cfg.config;
+            text = toJSON cfg.config;
             target = "${config.xdg.configHome}/waybar/config.jsonc";
           };
           "waybar.css" =
@@ -216,13 +232,13 @@ in
                 "background"
                 "foreground"
                 "cursor"
-              ] ++ map (i: "color${toString i}") (lib.range 0 15);
+              ] ++ map (i: "color${toString i}") (range 0 15);
               colorDefinitions =
                 ''
                   @define-color accent {{foreground}};
                   @define-color complementary {{color4}};
                 ''
-                + (lib.concatMapStringsSep "\n" (name: ''@define-color ${name} {{${name}}};'') colorNames);
+                + (concatMapStringsSep "\n" (name: ''@define-color ${name} {{${name}}};'') colorNames);
               baseModuleCss = # css
                 ''
                   font-family: ${config.custom.fonts.regular};
@@ -237,7 +253,7 @@ in
               mkModuleClassName =
                 mod:
                 "#${
-                  lib.replaceStrings
+                  replaceStrings
                     [
                       "hyprland/"
                       "/"
@@ -250,7 +266,7 @@ in
                 }";
               mkModulesCss =
                 arr:
-                lib.concatMapStringsSep "\n" (mod: ''
+                concatMapStringsSep "\n" (mod: ''
                   ${mkModuleClassName mod} {
                     ${baseModuleCss}
                   }'') arr;
@@ -291,17 +307,17 @@ in
                 +
                   # remove padding for the outermost modules
                   ''
-                    ${mkModuleClassName (lib.head cfg.config.modules-left)} {
+                    ${mkModuleClassName (head cfg.config.modules-left)} {
                       padding-left: 0;
                       margin-left: ${margin};
                     }
-                    ${mkModuleClassName (lib.last cfg.config.modules-right)} {
+                    ${mkModuleClassName (last cfg.config.modules-right)} {
                       padding-right: 0;
                       margin-right: ${margin};
                     }
                   ''
                 # idle inhibitor icon is wonky, add extra padding
-                + lib.optionalString cfg.idleInhibitor ''
+                + optionalString cfg.idleInhibitor ''
                   ${mkModuleClassName "idle_inhibitor"} {
                     font-size: 17px;
                     padding-right: 16px;
@@ -313,7 +329,7 @@ in
                 # add complementary classes
                 + ''
                   ${
-                    lib.concatMapStringsSep ", " mkModuleClassName [
+                    concatMapStringsSep ", " mkModuleClassName [
                       "network.disconnected"
                       "pulseaudio.muted"
                       "custom/focal"

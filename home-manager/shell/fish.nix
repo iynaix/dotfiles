@@ -5,7 +5,8 @@
   ...
 }:
 let
-  fishPath = lib.getExe config.programs.fish.package;
+  inherit (lib) getExe mkForce;
+  fishPath = getExe config.programs.fish.package;
 in
 {
   programs = {
@@ -52,10 +53,10 @@ in
   programs = {
     kitty.settings = {
       env = "SHELL=${fishPath}";
-      shell = lib.mkForce (lib.getExe config.programs.fish.package);
+      shell = mkForce (getExe config.programs.fish.package);
     };
     ghostty.settings = {
-      command = lib.mkForce "SHELL=${fishPath} ${fishPath}";
+      command = mkForce "SHELL=${fishPath} ${fishPath}";
     };
   };
 

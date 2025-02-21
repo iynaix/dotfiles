@@ -1,4 +1,7 @@
 { lib, pkgs, ... }:
+let
+  inherit (lib) getExe';
+in
 {
   custom = {
     plasma.enable = true;
@@ -22,7 +25,7 @@
     enable = true;
     wantedBy = [ "graphical-session.target" ];
     serviceConfig = {
-      ExecStart = "${lib.getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
+      ExecStart = "${getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
     };
     unitConfig = {
       ConditionVirtualization = "vm";

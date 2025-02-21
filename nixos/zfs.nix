@@ -6,9 +6,17 @@
   user,
   ...
 }:
+let
+  inherit (lib)
+    getExe
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
+in
 # NOTE: zfs datasets are created via install.sh
 {
-  options.custom = with lib; {
+  options.custom = {
     zfs = {
       encryption = mkEnableOption "zfs encryption" // {
         default = true;
@@ -17,7 +25,7 @@
     };
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     {
       boot = {
         # booting with zfs
@@ -25,13 +33,13 @@
         kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
-        #   assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.3")
+        #   assert assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
         #     "zfs 2.3 supports kernel 6.11 or greater";
         #   pkgs.linuxPackagesFor (
         #     pkgs.linux_xanmod_latest.override {
         #       argsOverride = rec {
         #         version = "6.10.11";
-        #         modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
+        #         modDirVersion = versions.pad 3 "${version}-xanmod1";
         #         src = pkgs.fetchFromGitHub {
         #           owner = "xanmod";
         #           repo = "linux";
@@ -135,7 +143,7 @@
     }
 
     # setup zfs event daemon for email notifications
-    (lib.mkIf config.custom.zfs.zed {
+    (mkIf config.custom.zfs.zed {
       sops.secrets.zfs-zed.owner = user;
 
       # setup email for zfs event daemon to use
@@ -161,7 +169,7 @@
         settings = {
           ZED_DEBUG_LOG = "/tmp/zed.debug.log";
           ZED_EMAIL_ADDR = [ "${user}@gmail.com" ];
-          ZED_EMAIL_PROG = lib.getExe pkgs.msmtp;
+          ZED_EMAIL_PROG = getExe pkgs.msmtp;
           ZED_EMAIL_OPTS = "@ADDRESS@";
 
           ZED_NOTIFY_INTERVAL_SECS = 3600;

@@ -5,6 +5,7 @@
   ...
 }:
 let
+  inherit (lib) getExe;
   customNeovim = pkgs.custom.neovim-iynaixos;
   nvim-with-direnv = pkgs.writeShellApplication {
     name = "nvim-with-direnv";
@@ -38,7 +39,7 @@ in
       icon = "nvim";
       terminal = true;
       # load direnv before opening nvim
-      exec = "${lib.getExe nvim-with-direnv} %f";
+      exec = "${getExe nvim-with-direnv} %f";
     };
 
     mimeApps = {

@@ -7,6 +7,7 @@
   ...
 }:
 let
+  inherit (lib) optionalAttrs;
   nixpkgs-review = pkgs.nixpkgs-review.override { withNom = true; };
 in
 {
@@ -337,7 +338,7 @@ in
         text = # sh
           ''
             json=$(cat - | hjson -j 2> /dev/null)
-            nix eval --expr "lib.strings.fromJSON '''$json'''" | nixfmt -q
+            nix eval --expr "fromJSON '''$json'''" | nixfmt -q
           '';
       };
       yaml2nix = {
@@ -348,12 +349,12 @@ in
         text = # sh
           ''
             yaml=$(cat - | yq)
-            nix eval --expr "lib.strings.fromJSON '''$yaml'''" | nixfmt -q
+            nix eval --expr "fromJSON '''$yaml'''" | nixfmt -q
           '';
       };
     }
     # nh home doesnt have boot or test
-    // lib.optionalAttrs isNixOS {
+    // optionalAttrs isNixOS {
       # nixos-rebuild boot
       nsb = {
         runtimeInputs = [ pkgs.custom.shell.nsw ];

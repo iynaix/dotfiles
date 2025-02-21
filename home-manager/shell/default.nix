@@ -5,6 +5,15 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib)
+    attrValues
+    getExe
+    mkIf
+    mkOption
+    ;
+  inherit (lib.types) int package str;
+in
 {
   imports = [
     ./bash.nix
@@ -30,40 +39,40 @@
     ./zoxide.nix
   ];
 
-  options.custom = with lib; {
+  options.custom = {
     terminal = {
       package = mkOption {
-        type = types.package;
+        type = package;
         default = pkgs.kitty;
         description = "Terminal package to use.";
       };
 
       exec = mkOption {
-        type = types.str;
-        default = lib.getExe config.custom.terminal.package;
+        type = str;
+        default = getExe config.custom.terminal.package;
         description = "Terminal command to execute other programs.";
       };
 
       font = mkOption {
-        type = types.str;
+        type = str;
         default = config.custom.fonts.monospace;
         description = "Font for the terminal.";
       };
 
       size = mkOption {
-        type = types.int;
+        type = int;
         default = 10;
         description = "Font size for the terminal.";
       };
 
       padding = mkOption {
-        type = types.int;
+        type = int;
         default = 12;
         description = "Padding for the terminal.";
       };
 
       opacity = mkOption {
-        type = types.str;
+        type = str;
         default = "0.8";
         description = "Opacity for the terminal.";
       };
@@ -86,10 +95,10 @@
         ugrep
       ]
       # add custom user created shell packages
-      ++ (lib.attrValues config.custom.shell.packages);
+      ++ (attrValues config.custom.shell.packages);
 
     # add custom user created shell packages to pkgs.custom.shell
-    nixpkgs.overlays = lib.mkIf (!isNixOS) [
+    nixpkgs.overlays = mkIf (!isNixOS) [
       (_: prev: {
         custom = (prev.custom or { }) // {
           shell = config.custom.shell.packages;

@@ -6,11 +6,17 @@
   ...
 }:
 let
+  inherit (lib)
+    flatten
+    mapAttrsToList
+    mkMerge
+    stringToCharacters
+    ;
   mkYaziPlugin = name: text: {
     "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
   };
 in
-lib.mkMerge [
+mkMerge [
   {
     programs.yazi = {
       enable = true;
@@ -146,23 +152,23 @@ lib.mkMerge [
                 desc = "Cd to root of current git repo";
               }
             ]
-            ++ lib.flatten (
-              lib.mapAttrsToList (keys: loc: [
+            ++ flatten (
+              mapAttrsToList (keys: loc: [
                 # cd
                 {
-                  on = [ "g" ] ++ lib.stringToCharacters keys;
+                  on = [ "g" ] ++ stringToCharacters keys;
                   run = "cd ${loc}";
                   desc = "cd to ${loc}";
                 }
                 # new tab
                 {
-                  on = [ "t" ] ++ lib.stringToCharacters keys;
+                  on = [ "t" ] ++ stringToCharacters keys;
                   run = "tab_create ${loc}";
                   desc = "open new tab to ${loc}";
                 }
                 # mv
                 {
-                  on = [ "m" ] ++ lib.stringToCharacters keys;
+                  on = [ "m" ] ++ stringToCharacters keys;
                   run = [
                     "yank --cut"
                     "escape --visual --select"
@@ -172,7 +178,7 @@ lib.mkMerge [
                 }
                 # cp
                 {
-                  on = [ "Y" ] ++ lib.stringToCharacters keys;
+                  on = [ "Y" ] ++ stringToCharacters keys;
                   run = [
                     "yank"
                     "escape --visual --select"

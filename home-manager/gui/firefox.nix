@@ -7,7 +7,10 @@
   user,
   ...
 }:
-lib.mkIf (!config.custom.headless) {
+let
+  inherit (lib) concatStringsSep mkIf optionals;
+in
+mkIf (!config.custom.headless) {
   programs.firefox = rec {
     enable = true;
     # use firefox dev edition
@@ -19,7 +22,7 @@ lib.mkIf (!config.custom.headless) {
           wrapProgram "$out/bin/firefox-devedition" \
             --set 'HOME' '${config.xdg.configHome}' \
             --append-flags "${
-              lib.concatStringsSep " " (
+              concatStringsSep " " (
                 [
                   "--name firefox"
                   # load user firefox profile
@@ -27,7 +30,7 @@ lib.mkIf (!config.custom.headless) {
                   # start with urls:
                   "https://discordapp.com/channels/@me"
                 ]
-                ++ lib.optionals (host == "desktop") [
+                ++ optionals (host == "desktop") [
                   "https://web.whatsapp.com" # requires access via local network
                   "http://localhost:9091" # transmission
                 ]

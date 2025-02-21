@@ -5,6 +5,9 @@
   user,
   ...
 }:
+let
+  inherit (lib) getExe mkForce mkIf;
+in
 {
   # Bootloader.
   boot = {
@@ -31,7 +34,7 @@
   };
 
   # faster boot times
-  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+  systemd.services.NetworkManager-wait-online.wantedBy = mkForce [ ];
 
   # reduce journald logs
   services.journald.extraConfig = ''SystemMaxUse=50M'';
@@ -48,12 +51,12 @@
   };
 
   # allow rebooting directly into windows which requires sudo, see above
-  security.sudo.extraRules = lib.mkIf config.hm.custom.mswindows [
+  security.sudo.extraRules = mkIf config.hm.custom.mswindows [
     {
       users = [ user ];
       commands = [
         {
-          command = lib.getExe pkgs.custom.shell.reboot-to-windows;
+          command = getExe pkgs.custom.shell.reboot-to-windows;
           options = [ "NOPASSWD" ];
         }
       ];

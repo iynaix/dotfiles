@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Switch to a different home-manager configuration";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = [ lib.maintainers.iynaix ];
     platforms = lib.platforms.linux;
   };
 }

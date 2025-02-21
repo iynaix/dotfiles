@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
     description = "A bash script using nmcli and rofi to make a wifi menu for your favorite window manager";
     homepage = "https://github.com/ericmurphyxyz/rofi-wifi-menu";
     license = lib.licenses.unfree; # nix-init did not find a license
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = [ lib.maintainers.iynaix ];
     mainProgram = "rofi-wifi-menu";
     platforms = lib.platforms.all;
   };

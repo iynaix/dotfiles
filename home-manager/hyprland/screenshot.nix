@@ -7,19 +7,20 @@
   ...
 }:
 let
+  inherit (lib) mkAfter mkIf optionals;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
     hyprland = config.wayland.windowManager.hyprland.package;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };
 in
-lib.mkIf config.custom.hyprland.enable {
+mkIf config.custom.hyprland.enable {
   home.packages =
     (with pkgs; [
       swappy
       wf-recorder
     ])
-    ++ lib.optionals isNixOS [ focal ];
+    ++ optionals isNixOS [ focal ];
 
   # swappy conf
   xdg.configFile."swappy/config".text = lib.generators.toINI { } {
@@ -37,7 +38,7 @@ lib.mkIf config.custom.hyprland.enable {
   };
 
   # add focal module to waybar (don't use for otg specialisation)
-  custom.waybar = lib.mkIf (config.specialisation != "otg") {
+  custom.waybar = mkIf (config.specialisation != "otg") {
     config = {
       "custom/focal" = {
         exec = # sh
@@ -49,7 +50,7 @@ lib.mkIf config.custom.hyprland.enable {
         interval = 2; # poll every 2s
       };
 
-      modules-left = lib.mkAfter [ "custom/focal" ];
+      modules-left = mkAfter [ "custom/focal" ];
     };
 
     extraCss = # css

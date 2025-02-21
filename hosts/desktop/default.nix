@@ -5,6 +5,9 @@
   user,
   ...
 }:
+let
+  inherit (lib) mkIf;
+in
 {
   custom = {
     # hardware
@@ -41,7 +44,7 @@
 
   # enable flirc usb ir receiver
   hardware.flirc.enable = false;
-  environment.systemPackages = lib.mkIf config.hardware.flirc.enable [ pkgs.flirc ];
+  environment.systemPackages = mkIf config.hardware.flirc.enable [ pkgs.flirc ];
 
   # fix intel i225-v ethernet dying due to power management
   # https://reddit.com/r/buildapc/comments/xypn1m/network_card_intel_ethernet_controller_i225v_igc/

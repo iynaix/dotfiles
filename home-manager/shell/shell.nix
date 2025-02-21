@@ -6,10 +6,11 @@
   ...
 }:
 let
+  inherit (lib) mkOption types;
   proj_dir = "/persist${config.home.homeDirectory}/projects";
 in
 {
-  options.custom = with lib; {
+  options.custom = {
     shell = {
       packages = mkOption {
         type =
@@ -20,7 +21,7 @@ in
             package
           ]);
         default = { };
-        apply = custom.mkShellPackages;
+        apply = lib.custom.mkShellPackages;
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
           Both string and attr values will be passed as arguments to writeShellApplicationCompletions

@@ -1,9 +1,18 @@
 { config, lib, ... }:
+let
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    mapAttrsToList
+    mkOption
+    ;
+  inherit (lib.types) listOf str;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     btop = {
       disks = mkOption {
-        type = types.listOf types.str;
+        type = listOf str;
         default = [ ];
         description = "List of disks to monitor in btop";
       };
@@ -26,7 +35,7 @@
         swap_disk = false;
         use_fstab = false;
         only_physical = false;
-        disks_filter = lib.concatStringsSep " " (
+        disks_filter = concatStringsSep " " (
           [
             "/"
             "/boot"
@@ -37,8 +46,8 @@
       };
     };
 
-    xdg.configFile."btop/themes/catppuccin-mocha.theme".text = lib.concatLines (
-      lib.mapAttrsToList (key: value: ''theme[${key}]="${value}"'') {
+    xdg.configFile."btop/themes/catppuccin-mocha.theme".text = concatLines (
+      mapAttrsToList (key: value: ''theme[${key}]="${value}"'') {
         main_bg = "#1E1E2E";
         main_fg = "#CDD6F4";
         title = "#CDD6F4";

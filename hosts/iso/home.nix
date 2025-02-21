@@ -5,6 +5,9 @@
   user,
   ...
 }:
+let
+  inherit (lib) mkIf;
+in
 {
   home = {
     username = user;
@@ -14,7 +17,7 @@
 
   # set dark theme for kde, adapted from plasma-manager
   xdg.configFile = {
-    "autostart/plasma-dark-mode.desktop" = lib.mkIf (lib.hasInfix "plasma" isoPath) {
+    "autostart/plasma-dark-mode.desktop" = mkIf (lib.hasInfix "plasma" isoPath) {
       text = ''
         [Desktop Entry]
         Type=Application

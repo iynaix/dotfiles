@@ -4,12 +4,15 @@
   user,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     syncoid.enable = mkEnableOption "syncoid";
   };
 
-  config = lib.mkIf config.custom.syncoid.enable {
+  config = mkIf config.custom.syncoid.enable {
     # allow syncoid to ssh into NAS
     users.users = {
       syncoid.openssh.authorizedKeys.keyFiles = [

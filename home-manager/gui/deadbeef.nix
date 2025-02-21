@@ -4,12 +4,15 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     deadbeef.enable = mkEnableOption "deadbeef";
   };
 
-  config = lib.mkIf config.custom.deadbeef.enable {
+  config = mkIf config.custom.deadbeef.enable {
     home.packages = [ pkgs.deadbeef ];
 
     custom.persist = {

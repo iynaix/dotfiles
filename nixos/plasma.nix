@@ -4,19 +4,22 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkForce mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     plasma.enable = mkEnableOption "Plasma Desktop";
   };
 
-  config = lib.mkIf config.custom.plasma.enable {
+  config = mkIf config.custom.plasma.enable {
     services = {
       xserver.enable = true;
       xserver.desktopManager.plasma5.enable = true;
     };
 
     hm = {
-      custom.hyprland.enable = lib.mkForce false;
+      custom.hyprland.enable = mkForce false;
 
       home.packages = with pkgs; [
         # plasma5 currently still uses x11

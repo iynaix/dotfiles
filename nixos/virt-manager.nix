@@ -5,12 +5,15 @@
   lib,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     virtualization.enable = mkEnableOption "VM support";
   };
 
-  config = lib.mkIf config.custom.virtualization.enable {
+  config = mkIf config.custom.virtualization.enable {
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
     # https://discourse.nixos.org/t/virt-manager-cannot-find-virtiofsd/26752/2

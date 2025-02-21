@@ -4,12 +4,15 @@
   pkgs,
   ...
 }:
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  options.custom = with lib; {
+  options.custom = {
     qmk.enable = mkEnableOption "QMK";
   };
 
-  config = lib.mkIf config.custom.qmk.enable {
+  config = mkIf config.custom.qmk.enable {
     hardware.keyboard.qmk.enable = true;
 
     # required for vial to work
