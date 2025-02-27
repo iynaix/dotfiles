@@ -154,7 +154,7 @@ pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
         .cloned()
 }
 
-pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
+pub type WorkspacesByMonitor = HashMap<NixMonitorInfo, Vec<i32>>;
 
 /// assign workspaces to their rules if possible, otherwise add them to the other monitors
 pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
@@ -169,20 +169,18 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
         // only monitors that are still active
         .filter(|mon| active_workspaces.contains_key(&mon.name))
         .min_by_key(|mon| mon.workspaces.len())
-        .expect("no monitors were found")
-        .name
-        .to_string();
+        .expect("no monitors were found");
 
     for mon in nix_monitors {
         if active_workspaces.get(&mon.name).is_some() {
             // active, use current workspaces
             workspaces_by_mon
-                .entry(mon.name.to_string())
+                .entry(mon.clone())
                 .or_default()
                 .extend(&mon.workspaces);
         } else {
             workspaces_by_mon
-                .entry(least_workspaces_mon.to_string())
+                .entry(least_workspaces_mon.clone())
                 .or_default()
                 .extend(&mon.workspaces);
         }
@@ -201,22 +199,33 @@ mod tests {
 
     #[test]
     fn test_rearranged_workspace_remove_monitors() {
+        let by_workspace_name = |wksps_by_mon: &WorkspacesByMonitor| -> HashMap<String, Vec<i32>> {
+            wksps_by_mon
+                .iter()
+                .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                .collect()
+        };
+
         let nix_monitors = vec![
             NixMonitorInfo {
                 name: "UW".into(),
                 workspaces: vec![1, 2, 3, 4, 5],
+                ..Default::default()
             },
             NixMonitorInfo {
                 name: "VERT".into(),
                 workspaces: vec![6, 7],
+                ..Default::default()
             },
             NixMonitorInfo {
                 name: "PP".into(),
                 workspaces: vec![9],
+                ..Default::default()
             },
             NixMonitorInfo {
                 name: "FWVERT".into(),
                 workspaces: vec![8, 10],
+                ..Default::default()
             },
         ];
 
@@ -237,7 +246,7 @@ mod tests {
 
         // sanity check, should be a noop
         assert_eq!(
-            rearranged_workspaces(&nix_monitors, &remove_monitors(&[])),
+            by_workspace_name(&rearranged_workspaces(&nix_monitors, &remove_monitors(&[]))),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7]),
@@ -248,7 +257,10 @@ mod tests {
         );
 
         assert_eq!(
-            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT"])),
+            by_workspace_name(&rearranged_workspaces(
+                &nix_monitors,
+                &remove_monitors(&["FWVERT"])
+            )),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7]),
@@ -258,7 +270,10 @@ mod tests {
         );
 
         assert_eq!(
-            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT", "PP"])),
+            by_workspace_name(&rearranged_workspaces(
+                &nix_monitors,
+                &remove_monitors(&["FWVERT", "PP"])
+            )),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7, 8, 9, 10]),
@@ -267,13 +282,19 @@ mod tests {
         );
 
         assert_eq!(
-            rearranged_workspaces(&nix_monitors, &remove_monitors(&["FWVERT", "PP", "VERT"])),
+            by_workspace_name(&rearranged_workspaces(
+                &nix_monitors,
+                &remove_monitors(&["FWVERT", "PP", "VERT"])
+            )),
             HashMap::from([("UW".to_string(), vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),]),
             "VERT, PP, FWVERT removed"
         );
 
         assert_eq!(
-            rearranged_workspaces(&nix_monitors, &remove_monitors(&["VERT"])),
+            by_workspace_name(&rearranged_workspaces(
+                &nix_monitors,
+                &remove_monitors(&["VERT"])
+            )),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("PP".to_string(), vec![6, 7, 9]),

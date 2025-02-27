@@ -22,7 +22,6 @@ let
     optionals
     ;
   inherit (lib.types)
-    bool
     enum
     float
     int
@@ -89,10 +88,10 @@ in
                 default = 1.0;
               };
               vrr = mkEnableOption "Variable Refresh Rate";
-              vertical = mkOption {
-                type = bool;
-                description = "Is the display vertical?";
-                default = false;
+              transform = mkOption {
+                type = int;
+                description = "Tranform for rotation";
+                default = 0;
               };
               workspaces = mkOption {
                 type = nonEmptyListOf int;
@@ -150,7 +149,7 @@ in
                   d.position
                   (toString d.scale)
                 ]
-                ++ optionals d.vertical [ "transform,1" ]
+                ++ optionals (d.transform != 0) [ "transform,${toString d.transform}" ]
                 ++ optionals d.vrr [ "vrr,1" ]
               )
             ))

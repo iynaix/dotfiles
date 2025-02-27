@@ -39,13 +39,13 @@ mkIf config.custom.hyprland.enable (mkMerge [
             { monitor, workspace, ... }:
             let
               isUltrawide = builtins.div (monitor.width * 1.0) monitor.height > builtins.div 16.0 9;
-              stacks = if (monitor.vertical || isUltrawide) then 3 else 2;
+              stacks = if ((monitor.transform != 0) || isUltrawide) then 3 else 2;
             in
             concatStringsSep "," (
               [
                 workspace
                 "layoutopt:nstack-stacks:${toString stacks}"
-                "layoutopt:nstack-orientation:${if monitor.vertical then "top" else "left"}"
+                "layoutopt:nstack-orientation:${if (monitor.transform != 0) then "top" else "left"}"
               ]
               ++ optionals (!isUltrawide) [ "layoutopt:nstack-mfact:0.0" ]
             )
@@ -60,7 +60,7 @@ mkIf config.custom.hyprland.enable (mkMerge [
     wayland.windowManager.hyprland.settings.workspace = mkAfter (
       lib.custom.mapWorkspaces (
         { monitor, workspace, ... }:
-        "${workspace},layoutopt:orientation:${if monitor.vertical then "top" else "left"}"
+        "${workspace},layoutopt:orientation:${if (monitor.transform != 0) then "top" else "left"}"
       ) config.custom.monitors
     );
   })

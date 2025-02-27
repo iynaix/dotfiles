@@ -97,9 +97,13 @@ mkMerge [
           ];
         };
 
-        status.separator_style = {
-          fg = "red";
-          bg = "red";
+        mode = {
+          normal_main = {
+            bg = "cyan";
+          };
+          # normal_alt = {
+          #   bg = "cyan";
+          # };
         };
       };
 

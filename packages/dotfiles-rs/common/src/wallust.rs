@@ -368,9 +368,13 @@ pub fn set_waybar_colors(accent: &Rgb) {
             .map(|mon| (mon.name.clone(), mon.active_workspace.id))
             .collect();
 
-        cfg["hyprland/workspaces"]["persistentWorkspaces"] =
-            serde_json::to_value(rearranged_workspaces(&monitors, &active_workspaces))
-                .expect("failed to convert rearranged workspaces to json");
+        let new_wksps: HashMap<String, Vec<i32>> =
+            rearranged_workspaces(&monitors, &active_workspaces)
+                .iter()
+                .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                .collect();
+        cfg["hyprland/workspaces"]["persistentWorkspaces"] = serde_json::to_value(new_wksps)
+            .expect("failed to convert rearranged workspaces to json");
     } else {
         let hyprland_workspaces = cfg["hyprland/workspaces"]
             .as_object_mut()

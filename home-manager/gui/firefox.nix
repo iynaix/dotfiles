@@ -11,7 +11,7 @@ let
   inherit (lib) concatStringsSep mkIf optionals;
 in
 mkIf (!config.custom.headless) {
-  programs.firefox = rec {
+  programs.firefox = {
     enable = true;
     # use firefox dev edition
     package = pkgs.firefox-devedition.overrideAttrs (o: {
@@ -39,8 +39,7 @@ mkIf (!config.custom.headless) {
         '';
     });
 
-    vendorPath = ".config/.mozilla";
-    configPath = "${vendorPath}/firefox";
+    configPath = ".config/.mozilla/firefox";
 
     profiles.${user} = {
       # TODO: define keyword searches here?

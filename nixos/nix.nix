@@ -236,30 +236,6 @@ in
     ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
   );
 
-  # add nixos-option workaround for flakes
-  # https://github.com/NixOS/nixpkgs/issues/97855#issuecomment-1075818028
-  nixpkgs.overlays = [
-    (_: prev: {
-      nixos-option =
-        let
-          flake-compat = prev.fetchFromGitHub {
-            owner = "edolstra";
-            repo = "flake-compat";
-            rev = "12c64ca55c1014cdc1b16ed5a804aa8576601ff2";
-            hash = "sha256-hY8g6H2KFL8ownSiFeMOjwPC8P0ueXpCVEbxgda3pko=";
-          };
-          prefix = ''(import ${flake-compat} { src = ${dots}; }).defaultNix.nixosConfigurations.${host}'';
-        in
-        prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
-          makeWrapper ${getExe prev.nixos-option} $out/bin/nixos-option \
-            --add-flags --config_expr \
-            --add-flags "\"${prefix}.config\"" \
-            --add-flags --options_expr \
-            --add-flags "\"${prefix}.options\""
-        '';
-    })
-  ];
-
   # enable man-db cache for fish to be able to find manpages
   # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
   documentation.man.generateCaches = true;

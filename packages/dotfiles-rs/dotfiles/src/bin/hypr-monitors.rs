@@ -35,15 +35,24 @@ fn mirror_monitors(new_mon: &str) {
 }
 
 fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
+    let is_nstack = Keyword::get("general:layout")
+        .expect("unable to get hyprland layout")
+        .value
+        .to_string()
+        .as_str()
+        == "nstack";
+
     for (mon, wksps) in workspaces {
         for wksp in wksps {
             // note it can error if the workspace is empty and hasnt been created yet
             dispatch!(
                 MoveWorkspaceToMonitor,
                 WorkspaceIdentifier::Id(*wksp),
-                MonitorIdentifier::Name(mon)
+                MonitorIdentifier::Name(&mon.name)
             )
             .ok();
+
+            Keyword::set("workspace", mon.layoutopts(*wksp, is_nstack)).ok();
         }
     }
 }
@@ -58,7 +67,7 @@ fn distribute_workspaces(
     let all_monitors = Monitors::get().expect("could not get monitors");
     let all_monitors = all_monitors
         .iter()
-        // putt the nix_monitors first
+        // put the nix_monitors first
         .sorted_by_key(|a| {
             let is_base_monitor = nix_monitors.iter().any(|m| m.name == a.name);
             (
@@ -82,7 +91,15 @@ fn distribute_workspaces(
             let wksps = &workspaces[start..end];
             start += len;
 
-            (mon.name.clone(), wksps.to_vec())
+            let nixmon = NixMonitorInfo {
+                name: mon.name.to_string(),
+                width: mon.width,
+                height: mon.height,
+                transform: mon.transform as u8,
+                workspaces: wksps.to_vec(),
+            };
+
+            (nixmon, wksps.to_vec())
         })
         .collect()
 }
