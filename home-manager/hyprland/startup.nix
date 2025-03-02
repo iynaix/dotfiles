@@ -47,8 +47,8 @@ mkIf config.custom.hyprland.enable {
       # terminal
       (openOnWorkspace 7 "$term")
 
-      # firefox
-      (openOnWorkspace 9 (getExe config.programs.firefox.package))
+      # librewolf
+      (openOnWorkspace 9 (getExe config.programs.librewolf.package))
 
       # download desktop
       (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")

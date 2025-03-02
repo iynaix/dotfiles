@@ -43,7 +43,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2025-02-23",
+        "date": "2025-03-01",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -53,13 +53,13 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "237410843a16e3a3d3597bae790e9db85b2c5a43",
-            "sha256": "sha256-7A02ETRM+focJnuXEl22bSZq3QZmoNFsSL0B+yYoIzs=",
+            "rev": "70817f238fb1c7b7fb2830690b399317269dfeef",
+            "sha256": "sha256-L0HnGfFAoFRSOUaUJmzs27fP0weUSaVzgB2Lu2TdYag=",
             "sparseCheckout": [],
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust"
         },
-        "version": "237410843a16e3a3d3597bae790e9db85b2c5a43"
+        "version": "70817f238fb1c7b7fb2830690b399317269dfeef"
     },
     "yazi-plugins": {
         "cargoLocks": null,

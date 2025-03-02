@@ -47,7 +47,7 @@ fn rsync(
 
 pub fn remote(args: RemoteArgs) {
     let user = whoami::username();
-    let remote_host = args.hostname.unwrap_or_else(|| format!("{user}-framework"));
+    let remote_host = args.hostname.unwrap_or_else(|| "framework".to_string());
 
     // backup to default location before syncing with remote
     backup(BackupArgs { target: None });

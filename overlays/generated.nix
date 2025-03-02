@@ -26,17 +26,17 @@
   };
   wallust = {
     pname = "wallust";
-    version = "237410843a16e3a3d3597bae790e9db85b2c5a43";
+    version = "70817f238fb1c7b7fb2830690b399317269dfeef";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust";
-      rev = "237410843a16e3a3d3597bae790e9db85b2c5a43";
+      rev = "70817f238fb1c7b7fb2830690b399317269dfeef";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
       sparseCheckout = [ ];
-      sha256 = "sha256-7A02ETRM+focJnuXEl22bSZq3QZmoNFsSL0B+yYoIzs=";
+      sha256 = "sha256-L0HnGfFAoFRSOUaUJmzs27fP0weUSaVzgB2Lu2TdYag=";
     };
-    date = "2025-02-23";
+    date = "2025-03-01";
   };
   yazi-plugins = {
     pname = "yazi-plugins";

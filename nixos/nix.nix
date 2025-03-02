@@ -150,7 +150,7 @@ in
       nsw-remote = # sh
         ''
           pushd ${dots} > /dev/null
-          nixos-rebuild switch --target-host "root@''${1:-${user}-framework}" --flake ".#''${2:-framework}"
+          nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
           popd > /dev/null
         '';
     };
