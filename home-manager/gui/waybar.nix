@@ -52,7 +52,6 @@ in
   config = mkIf config.custom.waybar.enable {
     programs.waybar = {
       enable = isNixOS;
-      package = pkgs.waybar.override { cavaSupport = false; };
       systemd.enable = true;
     };
 

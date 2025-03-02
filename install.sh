@@ -37,6 +37,14 @@ proceeding or your install WILL NOT BOOT.
 
 Introduction
 
+# ZFS "fileSystems" declarations can be referenced from zfs.nix
+# ZFS also requires the following options to be set within host config:
+#   networking.hostId (can be generated using: head -c 8 /etc/machine-id)
+#   zfs.devNodes
+#       "/dev/disk/by-id" for Intel CPUs
+#       "/dev/disk/by-partuuid" for AMD CPUs / within VMs
+# impermanence setup can be referenced from impermanence.nix
+
 # in a vm, special case
 if [[ -b "/dev/vda" ]]; then
     DISK="/dev/vda"
@@ -108,7 +116,7 @@ echo "Creating Boot Disk"
 sudo mkfs.fat -F 32 "$BOOTDISK" -n NIXBOOT
 
 # setup encryption
-use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")
+use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config with boot.zfs.requestEncryptionCredentials = true)")
 if [[ $use_encryption == "y" ]]; then
     encryption_options=(-O encryption=aes-256-gcm -O keyformat=passphrase -O keylocation=prompt)
 else
@@ -128,6 +136,7 @@ sudo zpool create -f \
     "${encryption_options[@]}" \
     zroot "$ZFSDISK"
 
+# NOTE: legacy mounts are used so they can be managed by fstab and swapped out via nixos configuration, e.g. for tmpfs
 echo "Creating /"
 sudo zfs create -o mountpoint=legacy zroot/root
 sudo zfs snapshot zroot/root@blank
@@ -167,11 +176,11 @@ else
 fi
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
-# Get repo to install from
+# get repo to install from
 read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
 repo="${repo:-github:iynaix/dotfiles}"
 
-# qol for iynaix os
+# only relevant for IynaixOS
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
     hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
 
@@ -191,6 +200,7 @@ if [[ $repo == "github:iynaix/dotfiles" ]]; then
         fi
     done
 else
+    # non IynaixOS, prompt for host
     read -rp "Which host to install?" host
 fi
 
@@ -204,7 +214,7 @@ else
     sudo nixos-install --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
 fi
 
-# only relevant for iynaix os
+# only relevant for IynaixOS
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
     echo "To setup secrets, run \"install-remote-secrets\" on the other host."
 

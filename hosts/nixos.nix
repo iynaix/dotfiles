@@ -11,15 +11,16 @@ let
     host:
     {
       pkgs ? args.pkgs,
+      isVm ? false,
+      extraConfig ? { },
     }:
     lib.nixosSystem {
       inherit pkgs;
 
       specialArgs = specialArgs // {
-        inherit host user;
+        inherit host user isVm;
         isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
-        isVm = host == "vm" || host == "vm-hyprland";
         dots = "/persist/home/${user}/projects/dotfiles";
       };
 
@@ -35,10 +36,9 @@ let
             useUserPackages = true;
 
             extraSpecialArgs = specialArgs // {
-              inherit host user;
+              inherit host user isVm;
               isNixOS = true;
               isLaptop = host == "xps" || host == "framework";
-              isVm = host == "vm" || host == "vm-hyprland";
               dots = "/persist/home/${user}/projects/dotfiles";
             };
 
@@ -55,13 +55,28 @@ let
         (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops
+        extraConfig
       ];
     };
+  mkVm =
+    host: mkNixosConfigurationArgs:
+    mkNixosConfiguration host (mkNixosConfigurationArgs // { isVm = true; });
 in
 {
   desktop = mkNixosConfiguration "desktop" { };
   framework = mkNixosConfiguration "framework" { };
   xps = mkNixosConfiguration "xps" { };
-  vm = mkNixosConfiguration "vm" { };
-  vm-hyprland = mkNixosConfiguration "vm-hyprland" { };
+  vm = mkVm "vm" { };
+  # hyprland can be used within a VM on AMD
+  vm-hyprland = mkVm "vm" {
+    extraConfig = {
+      custom.plasma.enable = lib.mkForce true;
+      home-manager.users.${user}.custom.hyprland.enable = lib.mkOverride (50 - 1) true;
+    };
+  };
+  # create VMs for each host configuration, build using
+  # nixos-rebuild build-vm --flake .#desktop-vm
+  desktop-vm = mkVm "desktop" { isVm = true; };
+  framework-vm = mkVm "framework" { isVm = true; };
+  xps-vm = mkVm "xps" { isVm = true; };
 }

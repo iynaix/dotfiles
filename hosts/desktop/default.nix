@@ -1,12 +1,13 @@
 {
   config,
+  isVm,
   lib,
   pkgs,
   user,
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf mkMerge;
 in
 {
   custom = {
@@ -25,18 +26,19 @@ in
     virtualization.enable = true;
   };
 
-  networking.hostId = "89eaa833"; # required for zfs
-
   services.displayManager.autoLogin.user = user;
 
-  networking = {
-    interfaces.enp5s0.wakeOnLan.enable = true;
-    # open ports for devices on the local network
-    firewall.extraCommands = # sh
-      ''
-        iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
-      '';
-  };
+  networking = mkMerge [
+    { hostId = "89eaa833"; } # required for zfs
+    (mkIf (!isVm) {
+      interfaces.enp5s0.wakeOnLan.enable = true;
+      # open ports for devices on the local network
+      firewall.extraCommands = # sh
+        ''
+          iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
+        '';
+    })
+  ];
 
   # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
   # https://unix.stackexchange.com/a/253401

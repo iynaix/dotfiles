@@ -48,6 +48,7 @@ in
     ./users.nix
     ./vercel.nix
     ./virt-manager.nix
+    ./vm.nix
     ./zfs.nix
   ];
 

@@ -6,3 +6,4 @@ target
 .devenv
 .direnv
 .vscode
+*.qcow2

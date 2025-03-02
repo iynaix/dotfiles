@@ -28,8 +28,6 @@ in
   config = mkMerge [
     {
       boot = {
-        # booting with zfs
-        supportedFilesystems.zfs = true;
         kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
