@@ -28,7 +28,7 @@ in
   config = mkMerge [
     {
       boot = {
-        kernelPackages = pkgs.linuxPackages_xanmod_latest;
+        kernelPackages = pkgs.linuxPackages_xanmod;
         # lock xanmod version
         # kernelPackages =
         #   assert assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
@@ -209,7 +209,7 @@ in
 
       https://forum.proxmox.com/threads/no-email-notification-for-zfs-status-degraded.87629/#post-520096
 
-      manually offling a disk without -f *does not* send an email!
+      manually offing a disk without -f *does not* send an email!
     */
   ];
 }

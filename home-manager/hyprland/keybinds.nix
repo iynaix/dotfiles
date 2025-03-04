@@ -91,7 +91,7 @@ in
 
           # without the rounding, the blur shows up around the corners
           "CTRL_ALT, Delete, ${uexec "rofi-power-menu"}"
-          "$mod_CTRL, v, exec, cliphist list | ${uexec "rofi -dmenu -theme ${config.xdg.cacheHome}/wallust/rofi-menu.rasi"} | cliphist decode | wl-copy"
+          ''$mod_CTRL, v, exec, cliphist list | uwsm app -- rofi -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, hypr-monitors"
