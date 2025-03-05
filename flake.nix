@@ -19,8 +19,6 @@
 
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
 
-    devenv.url = "github:cachix/devenv";
-
     impermanence.url = "github:nix-community/impermanence";
 
     sops-nix = {
@@ -99,8 +97,8 @@
       homeConfigurations = import ./hosts/home-manager.nix commonArgs;
 
       # devenv for working on dotfiles, provides rust environment
-      devShells = forAllSystems (commonArgs': {
-        default = import ./devenv.nix commonArgs';
+      devShells = forAllSystems (_: {
+        default = import ./shell.nix { inherit pkgs; };
       });
 
       inherit lib self;

@@ -1,0 +1,78 @@
+{
+  "default_stages": [
+    "pre-commit"
+  ],
+  "repos": [
+    {
+      "hooks": [
+        {
+          "always_run": false,
+          "args": [],
+          "entry": "deadnix --edit --fail",
+          "exclude": "(generated.nix|templates/.*/flake.nix)",
+          "exclude_types": [],
+          "fail_fast": false,
+          "files": "\\.nix$",
+          "id": "deadnix",
+          "language": "system",
+          "name": "deadnix",
+          "pass_filenames": true,
+          "require_serial": false,
+          "stages": [
+            "pre-commit"
+          ],
+          "types": [
+            "file"
+          ],
+          "types_or": [],
+          "verbose": false
+        },
+        {
+          "always_run": false,
+          "args": [],
+          "entry": "nixfmt",
+          "exclude": "(generated.nix)",
+          "exclude_types": [],
+          "fail_fast": false,
+          "files": "\\.nix$",
+          "id": "nixfmt-rfc-style",
+          "language": "system",
+          "name": "nixfmt-rfc-style",
+          "pass_filenames": true,
+          "require_serial": false,
+          "stages": [
+            "pre-commit"
+          ],
+          "types": [
+            "file"
+          ],
+          "types_or": [],
+          "verbose": false
+        },
+        {
+          "always_run": false,
+          "args": [],
+          "entry": "statix check --format errfmt",
+          "exclude": "(generated.nix)",
+          "exclude_types": [],
+          "fail_fast": false,
+          "files": "\\.nix$",
+          "id": "statix",
+          "language": "system",
+          "name": "statix",
+          "pass_filenames": false,
+          "require_serial": false,
+          "stages": [
+            "pre-commit"
+          ],
+          "types": [
+            "file"
+          ],
+          "types_or": [],
+          "verbose": false
+        }
+      ],
+      "repo": "local"
+    }
+  ]
+}
