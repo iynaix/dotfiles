@@ -32,6 +32,9 @@
       rooter = {
         package = vim-rooter;
       };
+      spectre = {
+        package = nvim-spectre;
+      };
       vim-tmux-navigator = {
         package = vim-tmux-navigator;
       };

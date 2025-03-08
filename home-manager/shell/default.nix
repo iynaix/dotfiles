@@ -43,8 +43,14 @@ in
     terminal = {
       package = mkOption {
         type = package;
-        default = pkgs.kitty;
+        default = config.programs.ghostty.package;
         description = "Terminal package to use.";
+      };
+
+      desktop = mkOption {
+        type = str;
+        default = "${config.custom.terminal.package.pname}.desktop";
+        description = "Name of desktop file for the terminal";
       };
 
       exec = mkOption {

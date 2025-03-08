@@ -14,15 +14,15 @@
   };
   swww = {
     pname = "swww";
-    version = "3e2e2ba8f44469a1446138ee97d2988e22b093bf";
+    version = "412326e40a399e61e15a31147569e97c69900dba";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "3e2e2ba8f44469a1446138ee97d2988e22b093bf";
+      rev = "412326e40a399e61e15a31147569e97c69900dba";
       fetchSubmodules = false;
-      sha256 = "sha256-XBwgv80YfLZ70XYVEnR0nA7Rz5jP241D5FiwrTg7tDk=";
+      sha256 = "sha256-brdkJiO8RGebFz9lElNNDYKGmfuQiGuuy30eKoFhUbY=";
     };
-    date = "2025-01-17";
+    date = "2025-03-05";
   };
   wallust = {
     pname = "wallust";
@@ -40,15 +40,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "3d0c7c6be9dbdf64a387a9a141eb8d22863db8d7";
+    version = "ceb053febb836dfd48200038d010ab9bc9d9c43f";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "3d0c7c6be9dbdf64a387a9a141eb8d22863db8d7";
+      rev = "ceb053febb836dfd48200038d010ab9bc9d9c43f";
       fetchSubmodules = false;
-      sha256 = "sha256-4e+jcvJPPNhtfTxr7g+INpyyRrevXY3oxKqzdin6ENw=";
+      sha256 = "sha256-yBcbvzWU2FI7vkeqL7+ZIoQboybaPIiH4fV9yMqdHlM=";
     };
-    date = "2025-03-02";
+    date = "2025-03-07";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

@@ -50,7 +50,7 @@ let
                   # custom neovim
                   self.packages.${system}.neovim-iynaix
                 ]
-                ++ optionals (lib.hasInfix "plasma" isoPath) [ kitty ];
+                ++ optionals (lib.hasInfix "plasma" isoPath) [ ghostty ];
 
               variables = {
                 EDITOR = "nvim";

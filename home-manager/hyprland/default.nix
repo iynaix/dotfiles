@@ -12,6 +12,7 @@ let
     concatStringsSep
     elemAt
     forEach
+    getExe
     length
     mkDefault
     mkEnableOption
@@ -175,7 +176,8 @@ in
 
           "$mod" = if isVm then "ALT" else "SUPER";
 
-          "$term" = "${config.custom.terminal.exec}";
+          "$term" = "${getExe config.custom.terminal.package}";
+          "$termexec" = "${config.custom.terminal.exec}";
 
           general =
             let

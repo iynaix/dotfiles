@@ -51,7 +51,7 @@ mkIf config.custom.hyprland.enable {
       (openOnWorkspace 9 (getExe config.programs.librewolf.package))
 
       # download desktop
-      (openOnWorkspace 10 "$term nvim ${config.xdg.userDirs.desktop}/yt.txt")
+      (openOnWorkspace 10 "$termexec nvim ${config.xdg.userDirs.desktop}/yt.txt")
       (openOnWorkspace 10 "$term")
     ];
   };

@@ -81,6 +81,7 @@ in
       (mkKeymap "n" "<C-K>" ":cprevious<CR>")
       # vim fugitive
       (mkKeymap "n" "<leader>gs" ":G<CR>")
+      # nvim spectre
     ];
   };
 }

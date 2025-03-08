@@ -78,10 +78,10 @@ in
           "$mod_SHIFT, Return, ${uexec ''rofi -show drun -run-command "uwsm app -- {cmd}"''}"
           "$mod, BackSpace, killactive,"
           "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
-          "$mod_SHIFT, e, ${uexec "$term yazi ${config.xdg.userDirs.download}"}"
+          "$mod_SHIFT, e, ${uexec "$termexec yazi ${config.xdg.userDirs.download}"}"
           "$mod, w, ${uexec "brave"}"
           "$mod_SHIFT, w, ${uexec "brave --incognito"}"
-          "$mod, v, ${uexec "$term nvim"}"
+          "$mod, v, ${uexec "$termexec nvim"}"
           "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
