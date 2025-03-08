@@ -47,6 +47,7 @@ mkIf config.custom.bittorrent.enable (mkMerge [
           let
             inherit (config.sops) secrets;
           in
+          # sh
           ''
             outDir=/tmp/sonarr-ical-sync
             mkdir -p "$outDir"

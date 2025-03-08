@@ -16,6 +16,7 @@ let
         if cfg.theme != null then
           ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
         else
+          # css
           ''
             *   {
                 background:     {{background}}{{ 60 | alpha_hexa }};

@@ -58,8 +58,8 @@ mkIf (!config.custom.headless) {
 
   # set default browser
   home.sessionVariables = {
-    DEFAULT_BROWSER = getExe pkgs.brave;
-    BROWSER = getExe pkgs.brave;
+    DEFAULT_BROWSER = getExe config.programs.chromium.package;
+    BROWSER = getExe config.programs.chromium.package;
   };
 
   xdg.mimeApps.defaultApplications = {

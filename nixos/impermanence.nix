@@ -111,6 +111,7 @@ in
               concatLines
             ];
           in
+          # sh
           ''
             sudo fd --one-file-system --base-directory / --type f --hidden \
               --exclude "/etc/{ssh,passwd,shadow}" \

@@ -232,7 +232,7 @@ in
                 "foreground"
                 "cursor"
               ] ++ map (i: "color${toString i}") (range 0 15);
-              colorDefinitions =
+              colorDefinitions = # css
                 ''
                   @define-color accent {{foreground}};
                   @define-color complementary {{color4}};
@@ -271,7 +271,7 @@ in
                   }'') arr;
             in
             {
-              text =
+              text = # css
                 ''
                   ${colorDefinitions}
 
@@ -305,6 +305,7 @@ in
                 ''
                 +
                   # remove padding for the outermost modules
+                  # css
                   ''
                     ${mkModuleClassName (head cfg.config.modules-left)} {
                       padding-left: 0;
@@ -316,16 +317,20 @@ in
                     }
                   ''
                 # idle inhibitor icon is wonky, add extra padding
-                + optionalString cfg.idleInhibitor ''
-                  ${mkModuleClassName "idle_inhibitor"} {
-                    font-size: 17px;
-                    padding-right: 16px;
-                  }
-                  ${mkModuleClassName "idle_inhibitor.activated"} {
-                    color: @complementary;
-                  }
-                ''
+                +
+                  optionalString cfg.idleInhibitor
+                    # css
+                    ''
+                      ${mkModuleClassName "idle_inhibitor"} {
+                        font-size: 17px;
+                        padding-right: 16px;
+                      }
+                      ${mkModuleClassName "idle_inhibitor.activated"} {
+                        color: @complementary;
+                      }
+                    ''
                 # add complementary classes
+                # css
                 + ''
                   ${
                     concatMapStringsSep ", " mkModuleClassName [

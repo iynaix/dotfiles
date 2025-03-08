@@ -43,6 +43,7 @@ in
             persistHome = "/persist${homeDir}";
             copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
           in
+          # sh
           ''
             read -rp "Enter ip of remote host: " remote
             target="/mnt${persistHome}"

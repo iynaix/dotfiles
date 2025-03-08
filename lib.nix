@@ -104,6 +104,7 @@ extend (
           bin ? builtins.baseNameOf dir,
           args ? "",
         }:
+        # sh
         ''
           pushd ${dir} > /dev/null
           ${libprev.getExe pkgs.direnv} exec "${dir}" cargo run --release --bin "${bin}" --manifest-path "${dir}/Cargo.toml" -- ${args} "$@"
