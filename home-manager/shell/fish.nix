@@ -41,13 +41,28 @@ in
         ''
           fish_vi_key_bindings
         '';
+
+      # fish plugins, must be an attrset
+      plugins = [
+        # do not add failed commands to history
+        {
+          name = "sponge";
+          inherit (pkgs.fishPlugins.sponge) src;
+        }
+        # reloads fish completions whenever directories are added to $XDG_DATA_DIRS,
+        # e.g. in nix shells or direnv
+        {
+          name = "fish-completion-sync";
+          src = pkgs.fetchFromGitHub {
+            owner = "iynaix";
+            repo = "fish-completion-sync";
+            rev = "4f058ad2986727a5f510e757bc82cbbfca4596f0";
+            hash = "sha256-kHpdCQdYcpvi9EFM/uZXv93mZqlk1zCi2DRhWaDyK5g=";
+          };
+        }
+      ];
     };
   };
-
-  # fish plugins, home-manager's programs.fish.plugins has a weird format
-  home.packages = with pkgs.fishPlugins; [
-    sponge # do not add failed commands to history
-  ];
 
   # set as default interactive shell, also set $SHELL for nix shell to pick up
   programs = {

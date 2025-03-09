@@ -1,6 +1,5 @@
 {
   config,
-  host,
   isNixOS,
   lib,
   pkgs,
@@ -36,9 +35,7 @@ in
         default = { };
         description = "Additional waybar config (wallust templating can be used)";
       };
-      idleInhibitor = mkEnableOption "Idle inhibitor" // {
-        default = host == "desktop";
-      };
+      idleInhibitor = mkEnableOption "Idle inhibitor";
       extraCss = mkOption {
         type = lines;
         default = "";
