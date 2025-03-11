@@ -19,6 +19,7 @@ _: {
     ./vscode.nix
     ./wallust.nix
     ./waybar.nix
+    ./wm.nix # generic functionality for all WMs
     ./zathura.nix
   ];
 }

@@ -2,16 +2,35 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
-  inherit (lib) getExe getExe' mkIf;
-  openOnWorkspace =
-    workspace: program: "[workspace ${toString workspace} silent] uwsm app -- ${program}";
+  inherit (lib)
+    concatMapStringsSep
+    getExe
+    getExe'
+    mkAfter
+    mkBefore
+    mkMerge
+    mkIf
+    optionalString
+    ;
 in
 mkIf config.custom.hyprland.enable {
-  custom.autologinCommand = "uwsm start hyprland-uwsm.desktop";
+  custom = {
+    autologinCommand = "uwsm start hyprland-uwsm.desktop";
+    startup = mkMerge [
+      (mkBefore [
+        # init ipc listener
+        "hypr-ipc &"
+        # stop fucking with my cursors
+        "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
+      ])
+      (mkAfter [
+        "hyprctl dispatch workspace 1"
+      ])
+    ];
+  };
 
   # start hyprland
   programs.bash.profileExtra = # sh
@@ -24,36 +43,18 @@ mkIf config.custom.hyprland.enable {
     '';
 
   wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      # init ipc listener
-      "hypr-ipc &"
-
-      # fix gparted "cannot open display: :0" error
-      "${getExe pkgs.xorg.xhost} +local:${user}"
-      # fix Authorization required, but no authorization protocol specified error
-      # "${getExe pkgs.xorg.xhost} si:localuser:root"
-
-      # stop fucking with my cursors
-      "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
-
-      # browsers
-      "hyprctl dispatch workspace 1"
-      (openOnWorkspace 1 "brave --incognito")
-      (openOnWorkspace 1 "brave --profile-directory=Default")
-
-      # file manager
-      (openOnWorkspace 4 "nemo")
-
-      # terminal
-      (openOnWorkspace 7 "$term")
-
-      # librewolf
-      (openOnWorkspace 9 (getExe config.programs.librewolf.package))
-
-      # download desktop
-      (openOnWorkspace 10 "$termexec nvim ${config.xdg.userDirs.desktop}/yt.txt")
-      (openOnWorkspace 10 "$term")
-    ];
+    exec-once = map (
+      prog:
+      if builtins.isString prog then
+        prog
+      else
+        let
+          inherit (prog) exec packages workspace;
+          rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+          finalExec = if exec == null then concatMapStringsSep "\n" getExe packages else exec;
+        in
+        "${rules} uwsm app -- ${finalExec}"
+    ) config.custom.startup;
   };
 
   # start swww and wallpaper via systemd to minimize reloads

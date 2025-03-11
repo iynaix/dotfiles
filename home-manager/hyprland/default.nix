@@ -4,13 +4,11 @@
   isLaptop,
   isVm,
   lib,
-  pkgs,
   ...
 }:
 let
   inherit (lib)
     concatStringsSep
-    elemAt
     forEach
     getExe
     length
@@ -22,15 +20,7 @@ let
     optionalString
     optionals
     ;
-  inherit (lib.types)
-    enum
-    float
-    int
-    nonEmptyListOf
-    nullOr
-    str
-    submodule
-    ;
+  inherit (lib.types) enum nullOr;
   inherit (config.custom) monitors;
 in
 {
@@ -55,72 +45,10 @@ in
         default = null;
       };
     };
-
-    monitors = mkOption {
-      type = nonEmptyListOf (
-        submodule (
-          { config, ... }:
-          {
-            options = {
-              name = mkOption {
-                type = str;
-                description = "The name of the display, e.g. eDP-1";
-              };
-              width = mkOption {
-                type = int;
-                description = "Pixel width of the display";
-              };
-              height = mkOption {
-                type = int;
-                description = "Pixel width of the display";
-              };
-              refreshRate = mkOption {
-                type = int;
-                default = 60;
-                description = "Refresh rate of the display";
-              };
-              position = mkOption {
-                type = str;
-                default = "0x0";
-                description = "Position of the display, e.g. 0x0";
-              };
-              scale = mkOption {
-                type = float;
-                default = 1.0;
-              };
-              vrr = mkEnableOption "Variable Refresh Rate";
-              transform = mkOption {
-                type = int;
-                description = "Tranform for rotation";
-                default = 0;
-              };
-              workspaces = mkOption {
-                type = nonEmptyListOf int;
-                description = "List of workspace numbers";
-              };
-              defaultWorkspace = mkOption {
-                type = enum config.workspaces;
-                default = elemAt config.workspaces 0;
-                description = "Default workspace for this monitor";
-              };
-            };
-          }
-        )
-      );
-      default = [ ];
-      description = "Config for monitors";
-    };
   };
 
   config = mkIf config.custom.hyprland.enable {
     home = {
-      packages = with pkgs; [
-        swww
-        # clipboard history
-        cliphist
-        wl-clipboard
-      ];
-
       shellAliases = {
         hyprland = "Hyprland";
         hypr-log = "hyprctl rollinglog --follow";
@@ -158,8 +86,6 @@ in
 
           # https://wiki.hyprland.org/Configuring/Environment-variables/
           env = [
-            "QT_QPA_PLATFORM,wayland;xcb"
-            # "GDK_BACKEND,wayland,x11,*"
             "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
             "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.size}"
           ];
@@ -280,11 +206,6 @@ in
             # save dialog
             "float,class:(xdg-desktop-portal-gtk)"
             "size <50% <50%,class:(xdg-desktop-portal-gtk)"
-          ];
-
-          exec-once = [
-            # clipboard manager
-            "wl-paste --watch cliphist store"
           ];
 
           # handle trackpad settings
