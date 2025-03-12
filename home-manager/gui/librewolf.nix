@@ -56,6 +56,7 @@ mkIf (!config.custom.headless) {
       ];
 
       settings = {
+        "extensions.autoDisableScopes" = 0; # enable extensions immediately upon new install
         "privacy.clearOnShutdown_v2.cache" = false;
         "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

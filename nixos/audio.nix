@@ -1,5 +1,5 @@
-{ pkgs, ... }:
-{
+# { pkgs, ... }:
+_: {
   # setup pipewire for audio
   security.rtkit.enable = true;
   services = {
@@ -8,10 +8,21 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-    };
 
-    pulseaudio.enable = false;
+      extraConfig = {
+        pipewire-pulse = {
+          switch-on-connect = {
+            "pulse.cmd" = [
+              {
+                cmd = "load-module";
+                args = [ "module-switch-on-connect" ];
+              }
+            ];
+          };
+        };
+      };
+    };
   };
 
-  environment.systemPackages = with pkgs; [ pwvucontrol ];
+  # environment.systemPackages = with pkgs; [ pwvucontrol ];
 }

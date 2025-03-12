@@ -28,7 +28,7 @@ in
   config = mkMerge [
     {
       boot = {
-        kernelPackages = pkgs.linuxPackages_xanmod;
+        kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
         #   assert assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
