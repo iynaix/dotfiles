@@ -65,14 +65,8 @@ in
   };
 
   # set as default interactive shell, also set $SHELL for nix shell to pick up
-  programs = {
-    kitty.settings = {
-      env = "SHELL=${fishPath}";
-      shell = mkForce (getExe config.programs.fish.package);
-    };
-    ghostty.settings = {
-      command = mkForce "SHELL=${fishPath} ${fishPath}";
-    };
+  programs.ghostty.settings = {
+    command = mkForce "SHELL=${fishPath} ${fishPath}";
   };
 
   custom.persist = {

@@ -113,9 +113,5 @@ in
           end
         '';
     };
-
-    # some sort of race condition with kitty and starship
-    # https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
-    kitty.shellIntegration.enableBashIntegration = false;
   };
 }

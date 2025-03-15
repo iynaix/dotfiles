@@ -28,10 +28,6 @@ NIXPKGS_ALLOW_UNFREE=1 home-manager --extra-experimental-features "nix-command f
 
 Reboot.
 
-### Post Install
-
-- Install `kitty` on the host OS, the nix package requires [nixGL](https://github.com/guibou/nixGL) to run.
-
 ### TODO
 - gtk theme doesn't seem to be working
 - hyprland stuff

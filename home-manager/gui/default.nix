@@ -6,7 +6,6 @@ _: {
     ./dunst.nix
     ./ghostty.nix
     ./gtk.nix
-    ./kitty.nix
     ./librewolf.nix
     ./mpv.nix
     ./nemo.nix
