@@ -106,7 +106,9 @@ in
 
     home.packages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      (pkgs.custom.rofi-power-menu.override { hasWindows = config.custom.mswindows; })
+      (pkgs.custom.rofi-power-menu.override {
+        reboot-to-windows = if config.custom.mswindows then pkgs.custom.shell.reboot-to-windows else null;
+      })
     ] ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown

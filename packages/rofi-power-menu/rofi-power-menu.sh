@@ -64,7 +64,7 @@ run_cmd() {
 		elif [[ $1 == '--logout' ]]; then
 			loginctl kill-user "$(whoami)"
 		elif [[ $1 == '--windows' ]]; then
-			reboot-to-windows
+			sudo reboot-to-windows
 		fi
 	else
 		exit 0

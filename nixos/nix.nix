@@ -50,8 +50,10 @@ in
   system = {
     # envfs sets usrbinenv activation script to "" with mkForce
     activationScripts.usrbinenv = mkOverride (50 - 1) ''
-      mkdir -p /usr/bin
-      chmod 0755 /usr/bin || true
+      if [ ! -d "/usr/bin" ]; then
+        mkdir -p /usr/bin
+        chmod 0755 /usr/bin
+      fi
     '';
 
     # make a symlink of flake within the generation (e.g. /run/current-system/src)

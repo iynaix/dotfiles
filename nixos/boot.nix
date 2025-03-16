@@ -44,8 +44,8 @@ in
       runtimeInputs = [ pkgs.grub2 ];
       text = # sh
         ''
-          sudo grub-reboot "Windows 11"
-          sudo reboot
+          grub-reboot "Windows 11"
+          reboot
         '';
     };
   };

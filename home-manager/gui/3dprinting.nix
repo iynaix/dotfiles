@@ -18,7 +18,6 @@ let
     name = "orca-slicer";
     paths = [
       pkgs.orca-slicer
-      # write
       (pkgs.writeTextFile {
         name = "model-step.xml";
         text = # xml
@@ -41,11 +40,16 @@ let
       shared-mime-info
     ];
     postBuild =
+      # use zink workaround for nvidia, see:
+      # https://github.com/klylabs/OrcaSlicer/blob/5d6bc146e8b6a1eba7db78d2c6a706f51d49ec67/src/platform/unix/BuildLinuxImage.sh.in#L60
       lib.optionalString (host == "desktop") # sh
         ''
           wrapProgram $out/bin/orca-slicer \
             --set __GLX_VENDOR_LIBRARY_NAME mesa \
-            --set __EGL_VENDOR_LIBRARY_FILENAMES ${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
+            --set __EGL_VENDOR_LIBRARY_FILENAMES ${pkgs.mesa}/share/glvnd/egl_vendor.d/50_mesa.json \
+            --set MESA_LOADER_DRIVER_OVERRIDE zink \
+            --set GALLIUM_DRIVER zink \
+            --set WEBKIT_DISABLE_DMABUF_RENDERER 1
         '';
     meta.mainProgram = "orca-slicer";
   };

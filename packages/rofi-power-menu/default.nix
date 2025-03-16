@@ -6,8 +6,7 @@
   networkmanager,
   procps,
   rofi,
-  grub2,
-  hasWindows ? false,
+  reboot-to-windows ? null,
 }:
 stdenvNoCC.mkDerivation {
   pname = "rofi-power-menu";
@@ -21,7 +20,7 @@ stdenvNoCC.mkDerivation {
     ''
       mkdir -p $out/bin
       substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu \
-        --replace-fail '${lib.optionalString (!hasWindows) "|$windows"}' ""
+        --replace-fail '${lib.optionalString (reboot-to-windows != null) "|$windows"}' ""
       chmod +x $out/bin/rofi-power-menu
 
       wrapProgram $out/bin/rofi-power-menu \
@@ -31,7 +30,7 @@ stdenvNoCC.mkDerivation {
             libnotify
             networkmanager
             rofi
-            grub2
+            reboot-to-windows
           ]
         }
     '';

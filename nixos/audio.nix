@@ -1,5 +1,5 @@
-# { pkgs, ... }:
-_: {
+{ pkgs, ... }:
+{
   # setup pipewire for audio
   security.rtkit.enable = true;
   services = {
@@ -24,5 +24,5 @@ _: {
     };
   };
 
-  # environment.systemPackages = with pkgs; [ pwvucontrol ];
+  environment.systemPackages = with pkgs; [ pwvucontrol ];
 }
