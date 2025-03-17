@@ -21,6 +21,7 @@ in
         pipes-rs
         scope-tui
         tenki
+        terminal-colors
         (inputs.wfetch.packages.${pkgs.system}.default.override { iynaixos = true; })
       ]
       ++ optionals (!config.custom.headless) [

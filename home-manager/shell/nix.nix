@@ -32,18 +32,60 @@ in
 
   custom.shell.packages =
     {
-      # outputs the current nixos generation
-      nix-current-generation = # sh
-        ''
-          # previous desktop versions: 1196
-          base=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
-          prev=${if host == "desktop" then "1196" else "0"}
-          if [ "$prev" -gt 0 ]; then
-            echo "$base ($((base + prev)))"
-          else
-            echo "$base"
-          fi
-        '';
+      # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
+      ngeneration = {
+        text = # sh
+          ''
+            curr=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+
+            if [ "$#" -eq 0 ]; then
+              # previous desktop versions: 1196
+              prev=${if host == "desktop" then "1196" else "0"}
+              if [ "$prev" -gt 0 ]; then
+                echo "$curr ($((curr + prev)))"
+              else
+                echo "$curr"
+              fi
+            else
+              if [[ -f "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" ]]; then
+                sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
+              else
+                target="/nix/var/nix/profiles/system-$((curr + $1))-link/bin/switch-to-configuration"
+                if [[ -f "$target" ]]; then
+                  sudo "$target" boot
+                else
+                  echo "No generation $((curr + $1)) found."
+                  exit 1
+                fi
+              fi
+            fi
+          '';
+        bashCompletion = # sh
+          ''
+            _ngeneration() {
+                local profile_dir="/nix/var/nix/profiles"
+                local profiles=$(command ls -1 "$profile_dir" | \
+                    grep -E '^system-[0-9]+-link$' | \
+                    sed -E 's/^system-([0-9]+)-link$/\1/' | \
+                    sort -rnu)
+                COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
+            }
+
+            complete -F _ngeneration ngeneration
+          '';
+        fishCompletion = # fish
+          ''
+            function _ngeneration
+                set -l profile_dir "/nix/var/nix/profiles"
+                command ls -1 "$profile_dir" | \
+                  string match -r '^system-([0-9]+)-link$' | \
+                  string replace -r '^system-([0-9]+)-link$' '$1' | \
+                  sort -ru
+            end
+
+            complete --keep-order -c ngeneration -f -a "(_ngeneration)"
+          '';
+      };
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw =
         if isNixOS then

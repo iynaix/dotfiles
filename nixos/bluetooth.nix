@@ -22,12 +22,12 @@ in
 
     services.blueman.enable = true;
 
-    hm = hmCfg: {
+    hm = {
       # control media player over bluetooth
       services.mpris-proxy.enable = true;
 
       # add bluetooth audio icon to waybar
-      custom.waybar.config.pulseaudio = mkIf hmCfg.config.programs.waybar.enable {
+      custom.waybar.config.pulseaudio = {
         format-bluetooth = "  {volume}%";
       };
     };
