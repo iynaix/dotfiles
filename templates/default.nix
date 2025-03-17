@@ -4,6 +4,11 @@ let
     description = "Javascript / Typescript dev environment";
   };
 
+  javascript-devenv = {
+    path = ./javascript-devenv;
+    description = "Javascript / Typescript dev environment using devenv";
+  };
+
   python = {
     path = ./python;
     description = "Python dev environment";
@@ -13,22 +18,18 @@ let
     path = ./rust;
     description = "Rust dev environment";
   };
-
-  rust-stable = {
-    path = ./rust-stable;
-    description = "Rust (latest stable from fenix) dev environment";
-  };
 in
 {
   inherit
     javascript
+    javascript-devenv
     python
     rust
-    rust-stable
     ;
   js = javascript;
   ts = javascript;
+  js-devenv = javascript-devenv;
+  ts-devenv = javascript-devenv;
   py = python;
   rs = rust;
-  rs-stable = rust-stable;
 }

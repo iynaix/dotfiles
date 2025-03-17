@@ -2,37 +2,28 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
-    devenv.url = "github:cachix/devenv";
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      devenv,
-      systems,
-      ...
-    }@inputs:
+    { nixpkgs, systems, ... }:
     let
       forEachSystem =
-        function:
-        nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system: function nixpkgs.legacyPackages.${system});
+        function: nixpkgs.lib.genAttrs (import systems) (system: function nixpkgs.legacyPackages.${system});
     in
     {
       devShells = forEachSystem (pkgs: {
-        default = devenv.lib.mkShell {
-          inherit inputs pkgs;
-          modules = [
-            {
-              # https://devenv.sh/reference/options/
-              dotenv.disableHint = true;
+        default = pkgs.mkShell {
+          env = {
+            # Required by rust-analyzer
+            RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+          };
 
-              packages = with pkgs; [
-                cargo-edit
-              ];
-
-              languages.rust.enable = true;
-            }
+          nativeBuildInputs = with pkgs; [
+            cargo
+            rustc
+            rust-analyzer
+            rustfmt
+            clippy
           ];
         };
       });
