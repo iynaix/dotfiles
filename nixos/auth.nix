@@ -42,6 +42,7 @@ mkMerge [
   {
     security = {
       polkit.enable = true;
+
       # i can't type
       sudo.extraConfig = "Defaults passwd_tries=10";
     } // optionalAttrs config.hm.programs.hyprlock.enable { pam.services.hyprlock = { }; };

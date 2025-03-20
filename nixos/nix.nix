@@ -195,12 +195,17 @@ in
       # };
     };
 
-  # better nixos generation label
-  # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
-  system.nixos.label = concatStringsSep "-" (
-    (sort (x: y: x < y) config.system.nixos.tags)
-    ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
-  );
+  system = {
+    # use nixos-rebuild-ng to rebuild the system
+    rebuild.enableNg = true;
+
+    # better nixos generation label
+    # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
+    nixos.label = concatStringsSep "-" (
+      (sort (x: y: x < y) config.system.nixos.tags)
+      ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
+    );
+  };
 
   # enable man-db cache for fish to be able to find manpages
   # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661

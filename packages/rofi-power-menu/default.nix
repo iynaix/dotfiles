@@ -19,8 +19,13 @@ stdenvNoCC.mkDerivation {
   postInstall = # sh
     ''
       mkdir -p $out/bin
-      substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu \
-        --replace-fail '${lib.optionalString (reboot-to-windows != null) "|$windows"}' ""
+      ${
+        if (reboot-to-windows == null) then
+          ''substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu --replace-fail '|$windows' ""''
+        else
+          "cp ./rofi-power-menu.sh $out/bin/rofi-power-menu"
+      }
+
       chmod +x $out/bin/rofi-power-menu
 
       wrapProgram $out/bin/rofi-power-menu \
