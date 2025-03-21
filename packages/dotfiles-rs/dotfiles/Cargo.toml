@@ -18,7 +18,7 @@ hyprland = { version = "0.4.0-beta.2" }
 itertools = "0.14.0"
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
-wallust_themes = "1.0.0"
+wallust_themes = "1.1.0"
 
 [build-dependencies]
 clap = { version = "4.5.32", features = ["derive", "string"] }

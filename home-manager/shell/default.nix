@@ -79,7 +79,7 @@ in
 
       opacity = mkOption {
         type = str;
-        default = "0.8";
+        default = "0.85";
         description = "Opacity for the terminal.";
       };
     };
@@ -115,6 +115,9 @@ in
     programs = {
       bat = {
         enable = true;
+        config = {
+          style = "grid";
+        };
         extraPackages = [
           (pkgs.symlinkJoin {
             name = "batman";

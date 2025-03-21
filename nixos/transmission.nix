@@ -127,7 +127,7 @@ in
             name = "Transmission Remote";
             genericName = "BitTorrent Client";
             icon = "transmission";
-            exec = "transmission-remote -a %U";
+            exec = ''transmission-remote -a "%U"'';
           };
 
           desktopEntries.transmission-web = {

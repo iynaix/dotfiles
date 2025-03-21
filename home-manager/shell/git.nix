@@ -34,6 +34,7 @@ in
           # blame with ignore whitespace and track movement across all commits
           blame = "blame -w -C -C -C";
           diff = "diff --word-diff";
+          cdiff = "diff --no-ext-diff";
         };
         branch = {
           master = {

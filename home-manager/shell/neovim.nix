@@ -39,7 +39,7 @@ in
       icon = "nvim";
       terminal = true;
       # load direnv before opening nvim
-      exec = "${getExe nvim-with-direnv} %f";
+      exec = ''${getExe nvim-with-direnv} "%F"'';
     };
 
     mimeApps = {

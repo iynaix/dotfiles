@@ -71,8 +71,11 @@ else
     nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
-if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
-    currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
-    echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
+if [ $? -eq 0 ]; then
+    if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
+        currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+        echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
+    fi
 fi
+
 popd > /dev/null

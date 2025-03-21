@@ -41,6 +41,9 @@ rec {
     (inputs.nvf.lib.neovimConfiguration {
       inherit pkgs;
       modules = [ ./neovim-iynaix ];
+      extraSpecialArgs = {
+        dots = null;
+      };
     }).neovim;
 
   # full neovim with nixd setup (requires path to dotfiles repo)

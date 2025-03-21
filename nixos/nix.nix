@@ -146,7 +146,7 @@ in
         dates = "daily";
         options = "--delete-older-than 7d";
       };
-      package = pkgs.nixVersions.latest;
+      package = pkgs.lix;
       registry = {
         n.flake = inputs.nixpkgs-stable;
         master = {
@@ -176,8 +176,7 @@ in
         experimental-features = [
           "nix-command"
           "flakes"
-          "pipe-operators"
-          # "repl-flake"
+          # "pipe-operators"
         ];
         substituters = [
           "https://hyprland.cachix.org"

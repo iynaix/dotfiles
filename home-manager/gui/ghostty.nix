@@ -65,6 +65,7 @@ in
       enableBashIntegration = true;
       enableFishIntegration = true;
       settings = {
+        alpha-blending = "linear-corrected";
         background-opacity = terminal.opacity;
         confirm-close-surface = false;
         copy-on-select = "clipboard";

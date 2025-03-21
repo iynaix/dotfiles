@@ -1,10 +1,10 @@
 use crate::{
+    CommandUtf8,
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
     nixinfo::NixInfo,
     rearranged_workspaces,
     wallpaper::WallInfo,
-    CommandUtf8,
 };
 use core::panic;
 use execute::Execute;
@@ -160,22 +160,16 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
 fn accents_by_contrast(accents: &[Rgb]) -> HashMap<Rgb, usize> {
     let nixcolors = NixColors::new().expect("unable to parse nix.json");
 
-    let (x1, y1, z1) = nixcolors.special.background.to_i64();
-    let (x2, y2, z2) = nixcolors.special.foreground.to_i64();
-
+    // sort by contrast to background
     accents
         .iter()
-        .sorted_by_key(|c| {
-            let (x3, y3, z3) = c.to_i64();
+        .sorted_by(|c1, c2| {
+            let contrast1 = c1.contrast_ratio(&nixcolors.special.background);
+            let contrast2 = c2.contrast_ratio(&nixcolors.special.background);
 
-            // compute area of the triangle formed by the colors
-            let t1 = (y2 - y1) * (z3 - z1) - (z2 - z1) * (y3 - y1);
-            let t2 = (z2 - z1) * (x3 - x1) - (x2 - x1) * (z3 - z1);
-            let t3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
-
-            // should be square root then halved, but makes no difference if just comparing
-            // negative for sorting in descending order
-            -(t1 * t1 + t2 * t2 + t3 * t3)
+            contrast2
+                .partial_cmp(&contrast1)
+                .unwrap_or(std::cmp::Ordering::Equal)
         })
         .enumerate()
         .map(|(n, color)| (color.clone(), n))

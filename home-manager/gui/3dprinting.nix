@@ -96,6 +96,7 @@ in
         };
       };
     })
+
     # CAD
     (mkIf config.custom.modelling3d.enable {
       home.packages = [
