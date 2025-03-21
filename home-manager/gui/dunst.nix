@@ -66,6 +66,11 @@ mkIf (!config.custom.headless) (mkMerge [
       };
     };
 
+    # show dunst history
+    wayland.windowManager.hyprland.settings.bind = [
+      "$mod, n, exec, dunstctl history-pop"
+    ];
+
     # wait for colorscheme to be ready on boot
     systemd.user.services.dunst = {
       Unit.AssertPathExists = [ actualDunstConfig ];

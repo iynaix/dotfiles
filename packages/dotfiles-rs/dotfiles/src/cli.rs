@@ -1,4 +1,4 @@
-use clap::{value_parser, Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand, ValueEnum, value_parser};
 
 // utilities for generating shell completions
 #[derive(Subcommand, ValueEnum, Debug, Clone, PartialEq, Eq)]
@@ -14,7 +14,7 @@ pub enum MonitorExtend {
     Secondary,
 }
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Default)]
 #[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
 /// Utilities for working with adding or removing monitors in hyprland
 /// Without arguments, it redistributes the workspaces across all monitors

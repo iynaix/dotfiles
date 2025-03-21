@@ -1,5 +1,5 @@
 use common::{find_monitor_by_name, nixinfo::NixInfo};
-use execute::Execute;
+use dotfiles::{cli::HyprMonitorArgs, monitors::hypr_monitors};
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
     event_listener::EventListener,
@@ -86,11 +86,11 @@ fn main() -> hyprland::Result<()> {
     let is_desktop = NixInfo::new().host == "desktop";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
-    let mut event_listener = EventListener::new();
+    let mut listener = EventListener::new();
 
     // only care about dynamic split ratios for oled
     if is_desktop {
-        event_listener.add_window_opened_handler(move |data| {
+        listener.add_window_opened_handler(move |data| {
             // TODO: cannot resize tiled windows?
             /*
             if ev_args[2] == "mpv" {
@@ -121,13 +121,13 @@ fn main() -> hyprland::Result<()> {
             split_for_workspace(&data.workspace_name, nstack);
         });
 
-        event_listener.add_window_moved_handler(move |data| {
+        listener.add_window_moved_handler(move |data| {
             if let WorkspaceType::Regular(wksp) = data.workspace_name {
                 split_for_workspace(&wksp, nstack);
             }
         });
 
-        event_listener.add_window_closed_handler(move |address| {
+        listener.add_window_closed_handler(move |address| {
             if let Some(wksp_id) = Clients::get()
                 .expect("could not get clients")
                 .iter()
@@ -138,28 +138,24 @@ fn main() -> hyprland::Result<()> {
         });
     }
 
-    event_listener.add_monitor_added_handler(|mon| {
+    listener.add_monitor_added_handler(|mon| {
         // single monitor in config; is laptop
         if NixInfo::new().monitors.len() == 1 {
-            execute::command!("hypr-monitors")
-                .arg("--rofi")
-                .arg(mon.name)
-                .execute()
-                .expect("failed to run rofi-monitors");
+            // --rofi
+            hypr_monitors(HyprMonitorArgs {
+                rofi: Some(mon.name),
+                ..Default::default()
+            });
         } else {
             // desktop, redistribute workspaces
-            execute::command!("hypr-monitors")
-                .execute()
-                .expect("failed to run hypr-monitors");
+            hypr_monitors(HyprMonitorArgs::default());
         }
     });
 
-    event_listener.add_monitor_removed_handler(|_mon| {
+    listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
-        execute::command!("hypr-monitors")
-            .execute()
-            .expect("failed to run hypr-monitors");
+        hypr_monitors(HyprMonitorArgs::default());
     });
 
-    event_listener.start_listener()
+    listener.start_listener()
 }

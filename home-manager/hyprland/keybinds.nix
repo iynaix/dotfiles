@@ -166,9 +166,6 @@ in
           "$mod, mouse_down, workspace, e+1"
           "$mod, mouse_up, workspace, e-1"
 
-          # dunst controls
-          "$mod, n, exec, dunstctl history-pop"
-
           # switching wallpapers or themes
           "$mod, apostrophe, ${uexec "wallpaper rofi"}"
           "$mod_SHIFT, apostrophe, ${uexec "rofi-wallust-theme"}"
