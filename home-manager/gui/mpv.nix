@@ -116,7 +116,7 @@ in
         ];
       };
 
-      wayland.windowManager.hyprland.settings.windowrulev2 = [
+      wayland.windowManager.hyprland.settings.windowrule = [
         # do not idle while watching videos
         "idleinhibit focus,class:(mpv)"
         # fix mpv-dynamic-crop unmaximizing the window

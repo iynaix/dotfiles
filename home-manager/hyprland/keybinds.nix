@@ -110,10 +110,10 @@ in
           "$mod_SHIFT, j, movewindow, d"
 
           # resizing windows
-          "$mod_CTRL, h, resizeactive, -20 0"
-          "$mod_CTRL, l, resizeactive, 20 0"
-          "$mod_CTRL, k, resizeactive, 0 -20"
-          "$mod_CTRL, j, resizeactive, 0 20"
+          # "$mod_CTRL, h, resizeactive, -20 0"
+          # "$mod_CTRL, l, resizeactive, 20 0"
+          # "$mod_CTRL, k, resizeactive, 0 -20"
+          # "$mod_CTRL, j, resizeactive, 0 20"
 
           "$mod, b, layoutmsg, swapwithmaster"
 

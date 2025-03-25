@@ -70,7 +70,7 @@ mkIf (!config.custom.headless) {
     "x-scheme-handler/unknown" = "brave.desktop";
   };
 
-  wayland.windowManager.hyprland.settings.windowrulev2 = [
+  wayland.windowManager.hyprland.settings.windowrule = [
     # do not idle while watching videos
     "idleinhibit fullscreen,class:^(brave)$"
     "idleinhibit focus,class:^(brave)$,title:(.*)(YouTube)(.*)"

@@ -286,7 +286,12 @@ in
               fi
           fi
 
-          nix run "$src#$1" -- "''${@:2}"
+          if [ "$src" = "nixpkgs" ]; then
+              # don't bother me about unfree
+              NIXPKGS_ALLOW_UNFREE=1 nix run --impure "$src#$1" -- "''${@:2}"
+          else
+              nix run "$src#$1" -- "''${@:2}"
+          fi
         '';
       npath = # sh
         ''

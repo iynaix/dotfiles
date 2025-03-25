@@ -147,6 +147,7 @@ in
           #   default = "·";
           #   urgent = "󰊠";
           # };
+          format = "{name}";
         };
 
         # "hyprland/window" = {

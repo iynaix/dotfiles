@@ -17,7 +17,7 @@ mkIf config.hm.custom.hyprland.enable {
   programs.hyprland = {
     enable =
       assert (
-        assertMsg (versionOlder config.programs.hyprland.package.version "0.48") "hyprland updated, sync with hyprnstack?"
+        assertMsg (versionOlder config.programs.hyprland.package.version "0.49") "hyprland updated, sync with hyprnstack?"
       );
       true;
 

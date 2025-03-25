@@ -20,7 +20,7 @@ in
 
     wayland.windowManager.hyprland.settings = {
       # starts floating for some reason?
-      windowrulev2 = [ "tile,class:(pobfrontend)" ];
+      windowrule = [ "tile,class:(pobfrontend)" ];
     };
 
     custom.persist = {

@@ -20,5 +20,6 @@ _: {
     ./waybar.nix
     ./wm.nix # generic functionality for all WMs
     ./zathura.nix
+    ./zoom.nix
   ];
 }

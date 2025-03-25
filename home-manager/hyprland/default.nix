@@ -199,7 +199,7 @@ in
             disable_logs = false;
           };
 
-          windowrulev2 = [
+          windowrule = [
             # "dimaround,floating:1"
             "bordersize 5,fullscreen:1" # monocle mode
             "float,class:(wlroots)" # hyprland debug session

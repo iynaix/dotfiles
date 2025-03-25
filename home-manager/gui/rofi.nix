@@ -120,7 +120,7 @@ in
       ];
 
       # force center rofi on monitor
-      windowrulev2 = [
+      windowrule = [
         "float,class:(Rofi)"
         "center,class:(Rofi)"
         "rounding 12,class:(Rofi)"

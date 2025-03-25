@@ -6,8 +6,6 @@
   },
 }:
 tela-icon-theme.overrideAttrs (oldAttrs: {
-  dontCheckForBrokenSymlinks = true;
-
   postPatch =
     let
       themeColors = lib.pipe colors [
@@ -29,7 +27,6 @@ tela-icon-theme.overrideAttrs (oldAttrs: {
         '') colors
       );
     in
-
     (oldAttrs.postPatch or "")
     + ''
       substitute ${./install.sh} install.sh \

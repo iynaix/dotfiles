@@ -94,21 +94,21 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 
     // pink border for monocle windows
     Keyword::set(
-        "windowrulev2",
+        "windowrule",
         format!("bordercolor {},fullscreen:1", accent_or_color(1, 5),),
     )
     .expect("failed to set hyprland fakefullscreen border color");
 
     // teal border for floating windows
     Keyword::set(
-        "windowrulev2",
+        "windowrule",
         format!("bordercolor {},floating:1", accent_or_color(2, 6)),
     )
     .expect("failed to set hyprland floating border color");
 
     // yellow border for sticky (must be floating) windows
     Keyword::set(
-        "windowrulev2",
+        "windowrule",
         format!("bordercolor {},pinned:1", color(3).to_rgb_str()),
     )
     .expect("failed to set hyprland sticky border color");

@@ -3,13 +3,13 @@
 {
   hyprNStack = {
     pname = "hyprNStack";
-    version = "e05c16c9877c09820079b28899a6f9f4e76abd52";
+    version = "e5d7cb332148898a86fbdb7477531e20442347d3";
     src = fetchFromGitHub {
       owner = "zakk4223";
       repo = "hyprNstack";
-      rev = "e05c16c9877c09820079b28899a6f9f4e76abd52";
+      rev = "e5d7cb332148898a86fbdb7477531e20442347d3";
       fetchSubmodules = false;
-      sha256 = "sha256-6PqHyXB5SHIhVuIN7Gkjn7RX5wfvBFINJYh4eLNkqIg=";
+      sha256 = "sha256-XRiqgQHHOsNp54jBr4fj1j2lVrRgifS0pOfa3NLerGA=";
     };
   };
 }
