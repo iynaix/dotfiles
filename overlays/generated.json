@@ -1,25 +1,4 @@
 {
-    "path-of-building": {
-        "cargoLocks": null,
-        "date": null,
-        "extract": null,
-        "name": "path-of-building",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "PathOfBuildingCommunity",
-            "repo": "PathOfBuilding",
-            "rev": "v2.52.3",
-            "sha256": "sha256-hwluSZGYRMN32dSLIe8Cs6l6R84V5fNCuHYtoc7+b00=",
-            "sparseCheckout": [],
-            "type": "github"
-        },
-        "version": "v2.52.3"
-    },
     "swww": {
         "cargoLocks": null,
         "date": "2025-03-05",
@@ -43,7 +22,7 @@
     },
     "wallust": {
         "cargoLocks": null,
-        "date": "2025-03-24",
+        "date": "2025-03-31",
         "extract": null,
         "name": "wallust",
         "passthru": null,
@@ -53,13 +32,13 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "0ed47d16d64428164af5da07830faf78f83c1966",
-            "sha256": "sha256-n3FXPlm8nructXh+Wc7BgJvxas6OFHEPbTe2QWjEpsg=",
+            "rev": "bcd8b60372fb3521bf2b357a51e924f3b9b70a48",
+            "sha256": "sha256-EKC21+TGNXfz3Xplmkkt6QYuFYwYK/p8k9FwmqFWJY8=",
             "sparseCheckout": [],
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust"
         },
-        "version": "0ed47d16d64428164af5da07830faf78f83c1966"
+        "version": "bcd8b60372fb3521bf2b357a51e924f3b9b70a48"
     },
     "yazi-plugins": {
         "cargoLocks": null,

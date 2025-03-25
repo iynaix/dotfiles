@@ -1,7 +1,3 @@
-[path-of-building]
-src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
-fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
-
 [swww]
 src.git = "https://github.com/Horus645/swww"
 # src.manual = "9a012646e66420ab8058b9f595cdfa0c14625755"

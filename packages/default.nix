@@ -66,6 +66,8 @@ rec {
 
   hyprnstack = w callPackage ./hyprnstack { };
 
+  path-of-building = w callPackage ./path-of-building { };
+
   # mpv plugins
   mpv-cut = w pkgs.mpvScripts.callPackage ./mpv-cut { };
   mpv-deletefile = w pkgs.mpvScripts.callPackage ./mpv-deletefile { };

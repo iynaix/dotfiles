@@ -16,7 +16,7 @@ in
   };
 
   config = mkIf config.custom.pathofbuilding.enable {
-    home.packages = [ pkgs.path-of-building ];
+    home.packages = [ pkgs.custom.path-of-building ];
 
     wayland.windowManager.hyprland.settings = {
       # starts floating for some reason?
