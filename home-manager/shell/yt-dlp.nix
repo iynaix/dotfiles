@@ -51,6 +51,7 @@ in
         no-mtime = true;
         output = "%(title)s.%(ext)s";
         sponsorblock-mark = "all";
+        # restrict-filenames = true;
         windows-filenames = true;
       };
     };

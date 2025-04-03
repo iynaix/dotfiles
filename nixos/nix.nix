@@ -146,7 +146,7 @@ in
         dates = "daily";
         options = "--delete-older-than 7d";
       };
-      package = pkgs.lix;
+      package = pkgs.lixPackageSets.latest.lix;
       registry = {
         n.flake = inputs.nixpkgs-stable;
         master = {

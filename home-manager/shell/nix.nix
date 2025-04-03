@@ -293,15 +293,6 @@ in
               nix run "$src#$1" -- "''${@:2}"
           fi
         '';
-      npath = # sh
-        ''
-          if [ "$#" -eq 0 ]; then
-              echo "no package specified."
-              exit 1
-          fi
-
-          NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw "nixpkgs#$1.outPath"
-        '';
       # creates a file with the symlink contents and renames the original symlink to .orig
       nsymlink = # sh
         ''
@@ -326,10 +317,19 @@ in
             fi
           done
         '';
-      ynpath = {
+      nattr = # sh
+        ''
+          if [ "$#" -eq 0 ]; then
+              echo "no package specified."
+              exit 1
+          fi
+
+          NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw "nixpkgs#$1.outPath"
+        '';
+      ynattr = {
         runtimeInputs = with pkgs; [
           yazi
-          custom.shell.npath
+          custom.shell.nattr
         ];
         text = # sh
           ''
@@ -338,7 +338,7 @@ in
                 exit 1
             fi
 
-            PKG_DIR=$(npath "$1")
+            PKG_DIR=$(nattr "$1")
             # path not found, build it
             if [ ! -e "$PKG_DIR" ]; then
                 nix build "nixpkgs#$1" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1

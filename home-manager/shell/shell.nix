@@ -118,22 +118,22 @@ in
         md = # sh
           ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
         # improved which for nix
-        where = {
+        nwhich = {
           text = # sh
             ''readlink -f "$(which "$1")"'';
-        } // binariesCompletion "where";
-        cwhere = {
+        } // binariesCompletion "nwhich";
+        cwhich = {
           text = # sh
-            ''cat "$(where "$1")"'';
-        } // binariesCompletion "cwhere";
-        ywhere = {
+            ''cat "$(nwhich "$1")"'';
+        } // binariesCompletion "cwhich";
+        ywhich = {
           runtimeInputs = with pkgs; [
             yazi
-            custom.shell.where
+            custom.shell.nwhich
           ];
           text = # sh
-            ''yazi "$(dirname "$(dirname "$(where "$1")")")"'';
-        } // binariesCompletion "ywhere";
+            ''yazi "$(dirname "$(dirname "$(nwhich "$1")")")"'';
+        } // binariesCompletion "ywhich";
         # uniq but maintain original order
         uuniq = "awk '!x[$0]++'";
       };

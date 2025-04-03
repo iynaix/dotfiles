@@ -196,11 +196,15 @@ in
 
         pulseaudio = {
           format = "{icon}  {volume}%";
-          format-icons = [
-            "󰕿"
-            "󰖀"
-            "󰕾"
-          ];
+          format-icons = {
+            default = [
+              "󰕿"
+              "󰖀"
+              "󰕾"
+            ];
+            headphone = "󰋋";
+            headphone-muted = "󰟎";
+          };
           format-muted = "󰖁  Muted";
           on-click = "${getExe pkgs.pamixer} -t";
           on-click-right = getExe pkgs.pwvucontrol;

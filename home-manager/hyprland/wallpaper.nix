@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   pkgs,
   ...
@@ -49,9 +50,13 @@ in
     (mkIf config.custom.wallfacer.enable {
       custom.shell.packages = {
         wallfacer = {
-          text = lib.custom.direnvCargoRun {
-            dir = "${config.home.homeDirectory}/projects/wallfacer";
-          };
+          text =
+            # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
+            # https://github.com/tauri-apps/tauri/issues/10702
+            lib.optionalString (host == "desktop") "export WEBKIT_DISABLE_DMABUF_RENDERER=1\n"
+            + lib.custom.direnvCargoRun {
+              dir = "${config.home.homeDirectory}/projects/wallfacer";
+            };
           # bash completion isn't helpful as there are 1000s of images
           fishCompletion = # fish
             ''

@@ -3,41 +3,41 @@
 {
   swww = {
     pname = "swww";
-    version = "412326e40a399e61e15a31147569e97c69900dba";
+    version = "3e2ea80f7beda0d222db5acaf768efbc3800aee9";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "412326e40a399e61e15a31147569e97c69900dba";
+      rev = "3e2ea80f7beda0d222db5acaf768efbc3800aee9";
       fetchSubmodules = false;
-      sha256 = "sha256-brdkJiO8RGebFz9lElNNDYKGmfuQiGuuy30eKoFhUbY=";
+      sha256 = "sha256-h+hBelFhaf3NIwjxBjUWco+hhvO5xwzdcWaPtBWWweI=";
     };
-    date = "2025-03-05";
+    date = "2025-04-03";
   };
   wallust = {
     pname = "wallust";
-    version = "bcd8b60372fb3521bf2b357a51e924f3b9b70a48";
+    version = "df96738439e8254272432fa68aec93952c6e73ac";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust";
-      rev = "bcd8b60372fb3521bf2b357a51e924f3b9b70a48";
+      rev = "df96738439e8254272432fa68aec93952c6e73ac";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
       sparseCheckout = [ ];
-      sha256 = "sha256-EKC21+TGNXfz3Xplmkkt6QYuFYwYK/p8k9FwmqFWJY8=";
+      sha256 = "sha256-urcy06w67a3ki3OJn0DbXE5KZqI8nsZx2FX0uIkVbJo=";
     };
-    date = "2025-03-31";
+    date = "2025-04-01";
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "273019910c1111a388dd20e057606016f4bd0d17";
+    version = "a1738e8088366ba73b33da5f45010796fb33221e";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "273019910c1111a388dd20e057606016f4bd0d17";
+      rev = "a1738e8088366ba73b33da5f45010796fb33221e";
       fetchSubmodules = false;
-      sha256 = "sha256-80mR86UWgD11XuzpVNn56fmGRkvj0af2cFaZkU8M31I=";
+      sha256 = "sha256-eiLkIWviGzG9R0XP1Cik3Bg0s6lgk3nibN6bZvo8e9o=";
     };
-    date = "2025-03-19";
+    date = "2025-04-08";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
@@ -53,13 +53,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.03.27";
+    version = "2025.03.31";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.03.27";
+      rev = "2025.03.31";
       fetchSubmodules = false;
-      sha256 = "sha256-zTbPS2AzU8DHECSKm9LcgS0GECzQAhU02DkhSFzxbuY=";
+      sha256 = "sha256-csw91VbzY9IursMQFGwnlobZI3U6QOBDo31oq+X0ETI=";
     };
   };
 }
