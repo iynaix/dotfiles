@@ -28,7 +28,6 @@ let
     submodule
     ;
   cfg = config.custom.wallust;
-  tomlFormat = pkgs.formats.toml { };
   # checks if text is a path, assumes no spaces in path
   isTemplatePath = s: (hasPrefix "/" s) && !(hasInfix " " s);
 in
@@ -72,16 +71,10 @@ in
 
   config = {
     # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
-    home.packages = [ pkgs.wallust ];
-
-    xdg.configFile =
-      {
-        # add custom themes in pywal format
-        "wallust/themes" = {
-          source = ./wallust;
-          recursive = true;
-        };
-        "wallust/wallust.toml".source = tomlFormat.generate "wallust-toml" {
+    programs = {
+      wallust = {
+        enable = true;
+        settings = {
           backend = "fastresize";
           color_space = "lab";
           check_contrast = true;
@@ -95,6 +88,31 @@ in
               template = if isTemplatePath text then text else filename;
             }
           ) cfg.templates;
+        };
+      };
+
+      # setup wallust colorschemes for shells
+      bash.initExtra = mkIf config.custom.wallust.enable ''
+        wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
+        if [ -e "$wallust_colors" ]; then
+          command cat "$wallust_colors"
+        fi
+      '';
+
+      fish.shellInit = mkIf config.custom.wallust.enable ''
+        set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
+        if test -e "$wallust_colors"
+            command cat "$wallust_colors"
+        end
+      '';
+    };
+
+    xdg.configFile =
+      {
+        # add custom themes in pywal format
+        "wallust/themes" = {
+          source = ./wallust;
+          recursive = true;
         };
       }
       //
@@ -133,23 +151,6 @@ in
         );
         target = "${config.xdg.cacheHome}/wallust/nix.json";
       };
-    };
-
-    # setup wallust colorschemes for shells
-    programs = {
-      bash.initExtra = mkIf config.custom.wallust.enable ''
-        wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
-        if [ -e "$wallust_colors" ]; then
-          command cat "$wallust_colors"
-        fi
-      '';
-
-      fish.shellInit = mkIf config.custom.wallust.enable ''
-        set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
-        if test -e "$wallust_colors"
-            command cat "$wallust_colors"
-        end
-      '';
     };
   };
 }
