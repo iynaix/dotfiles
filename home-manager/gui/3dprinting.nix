@@ -100,9 +100,7 @@ in
     # CAD
     (mkIf config.custom.modelling3d.enable {
       home.packages = [
-        # freecad segfaults on starup on nvidia
-        # https://github.com/NixOS/nixpkgs/issues/366299
-        (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
+        pkgs.freecad-wayland
       ];
 
       custom.persist = {

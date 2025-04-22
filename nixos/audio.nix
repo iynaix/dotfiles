@@ -56,6 +56,7 @@ in
         # show DAC as headphones
         format-icons = {
           "alsa_output.usb-SAVITECH_Bravo-X_USB_Audio-01.analog-stereo" = "󰋋";
+          "alsa_output.usb-Yoyodyne_Consulting_ODAC-revB-01.analog-stereo" = "󰋋";
           "alsa_output.usb-Kanto_Audio_ORA_by_Kanto_20240130-00.analog-stereo" = "󰓃";
         };
       };

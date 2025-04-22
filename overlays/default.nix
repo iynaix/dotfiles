@@ -83,16 +83,6 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
-
-      rclip = prev.rclip.overridePythonAttrs (_o: rec {
-        version = "2.0.3";
-        src = prev.fetchFromGitHub {
-          owner = "yurijmikhalevich";
-          repo = "rclip";
-          tag = "v${version}";
-          hash = "sha256-su4obAafWQC2XfJi31AN1zuZe+9QtCdF4F3WbtusVRQ=";
-        };
-      });
     })
   ];
 }

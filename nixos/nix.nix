@@ -131,10 +131,7 @@ in
 
   nix =
     let
-      nixPath = [
-        "nixpkgs=flake:nixpkgs"
-        # "/nix/var/nix/profiles/per-user/root/channels"
-      ];
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
     in
     {
       channel.enable = false;
@@ -147,8 +144,7 @@ in
         options = "--delete-older-than 7d";
       };
       package = pkgs.lixPackageSets.latest.lix;
-      registry = {
-        n.flake = inputs.nixpkgs-stable;
+      registry = (lib.mapAttrs (_: flake: { inherit flake; }) inputs) // {
         master = {
           from = {
             type = "indirect";
@@ -160,12 +156,12 @@ in
             repo = "nixpkgs";
           };
         };
-        stable.flake = inputs.nixpkgs-stable;
       };
       settings = {
         auto-optimise-store = true; # Optimise symlinks
         # re-evaluate on every rebuild instead of "cached failure of attribute" error
         # eval-cache = false;
+        flake-registry = ""; # don't use the global flake registry, define everything explicitly
         # required to be set, for some reason nix.nixPath does not write to nix.conf
         nix-path = nixPath;
         warn-dirty = false;
@@ -189,9 +185,6 @@ in
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
       };
-      # // optionalAttrs (config.nix.package.pname == "lix") {
-      #   repl-overlays = [ ./repl-overlays.nix ];
-      # };
     };
 
   system = {
