@@ -36,8 +36,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur.url = "github:nix-community/NUR";
-
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -54,8 +52,6 @@
     };
   };
 
-  # flake-utils is unnecessary
-  # https://ayats.org/blog/no-flake-utils/
   outputs =
     inputs@{ nixpkgs, self, ... }:
     let

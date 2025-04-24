@@ -137,7 +137,7 @@ pub fn hypr_monitors(args: HyprMonitorArgs) {
                 eprintln!("No selection made, exiting...");
                 std::process::exit(1);
             }
-        };
+        }
     }
 
     // --mirror

@@ -179,6 +179,8 @@ in
           ",XF86AudioRaiseVolume, exec, ${pamixer} -i 5"
           ",XF86AudioMute, exec, ${pamixer} -t"
         ]
+        # invert windows
+        ++ optionals config.custom.hyprland.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
         # turn monitors off
         ++ optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]

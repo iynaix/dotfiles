@@ -13,7 +13,7 @@ let
 in
 {
   wayland.windowManager.hyprland =
-    if (config.custom.hyprland.plugin == "hyprnstack") then
+    if config.custom.hyprland.hyprnstack then
       {
         plugins = [
           # always build with actual hyprland to keep versions in sync

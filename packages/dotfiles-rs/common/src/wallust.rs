@@ -228,7 +228,7 @@ pub fn apply_colors() {
         });
 
         apply_hyprland_colors(&[], &cs.colors);
-    };
+    }
 
     refresh_zathura();
 

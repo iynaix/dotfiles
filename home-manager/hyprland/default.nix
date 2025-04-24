@@ -4,6 +4,7 @@
   isLaptop,
   isVm,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -15,12 +16,10 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
     optionalAttrs
     optionalString
     optionals
     ;
-  inherit (lib.types) enum nullOr;
   inherit (config.custom) monitors;
 in
 {
@@ -39,10 +38,9 @@ in
       enable = mkEnableOption "hyprland" // {
         default = !config.custom.headless;
       };
-      plugin = mkOption {
-        type = nullOr (enum [ "hyprnstack" ]);
-        description = "Plugin to enable for hyprland";
-        default = null;
+      hyprnstack = mkEnableOption "hyprnstack";
+      hypr-darkwindow = mkEnableOption "hypr-darkwindow" // {
+        default = true;
       };
     };
   };
@@ -65,6 +63,13 @@ in
       # https://wiki.hyprland.org/Useful-Utilities/Systemd-start/#installation
       # conflicts with programs.hyprland.withUWSM in nixos
       systemd.enable = false;
+
+      plugins = optionals config.custom.hyprland.hypr-darkwindow [
+        # always build with actual hyprland to keep versions in sync
+        (pkgs.custom.hypr-darkwindow.override {
+          hyprland = config.wayland.windowManager.hyprland.package;
+        })
+      ];
 
       settings =
         {

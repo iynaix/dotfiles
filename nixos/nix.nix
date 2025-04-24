@@ -14,6 +14,8 @@ let
     concatLines
     concatStringsSep
     getExe
+    mapAttrs
+    mapAttrsToList
     mkOverride
     optionalAttrs
     sort
@@ -131,7 +133,8 @@ in
 
   nix =
     let
-      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
+      nixPath = mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
+      registry = mapAttrs (_: flake: { inherit flake; }) inputs;
     in
     {
       channel.enable = false;
@@ -144,7 +147,8 @@ in
         options = "--delete-older-than 7d";
       };
       package = pkgs.lixPackageSets.latest.lix;
-      registry = (lib.mapAttrs (_: flake: { inherit flake; }) inputs) // {
+      registry = registry // {
+        n = registry.nixpkgs;
         master = {
           from = {
             type = "indirect";

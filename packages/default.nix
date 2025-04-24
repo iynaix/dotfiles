@@ -64,7 +64,8 @@ rec {
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
-  hyprnstack = w callPackage ./hyprnstack { };
+  hyprnstack = callPackage ./hyprnstack { };
+  hypr-darkwindow = callPackage ./hypr-darkwindow { };
 
   path-of-building = w callPackage ./path-of-building { };
 

@@ -109,7 +109,7 @@ mkMerge [
 
       keymap =
         let
-          homeDir = "/persist/${config.home.homeDirectory}";
+          homeDir = "/persist${config.home.homeDirectory}";
           shortcuts = {
             h = homeDir;
             inherit dots;

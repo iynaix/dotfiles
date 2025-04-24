@@ -40,9 +40,7 @@ in
           let
             betaPkg = config.boot.kernelPackages.nvidiaPackages.beta;
           in
-          assert (
-            assertMsg (versionOlder betaPkg.version "575.51.03") "nvidia updated, check orca-slicer / freecad-wayland"
-          );
+          assert (assertMsg (versionOlder betaPkg.version "575.51.03") "nvidia updated, check orca-slicer");
           betaPkg;
       };
       graphics.extraPackages = with pkgs; [

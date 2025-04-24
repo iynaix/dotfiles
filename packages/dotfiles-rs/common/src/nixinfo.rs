@@ -32,7 +32,7 @@ impl NixMonitorInfo {
                 "2"
             };
             opts.push(format!("layoutopt:nstack-stacks:{stacks}"));
-        };
+        }
 
         if is_nstack && !is_ultrawide {
             opts.push("layoutopt:nstack-mfact:0.0".to_string());

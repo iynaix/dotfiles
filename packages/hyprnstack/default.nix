@@ -2,37 +2,44 @@
   lib,
   gcc14Stdenv,
   hyprland,
-  source,
+  fetchFromGitHub,
 }:
-gcc14Stdenv.mkDerivation (
-  source
-  // {
-    inherit (hyprland) nativeBuildInputs;
+gcc14Stdenv.mkDerivation {
+  pname = "hyprNStack";
+  version = "e5d7cb332148898a86fbdb7477531e20442347d3";
+  src = fetchFromGitHub {
+    owner = "zakk4223";
+    repo = "hyprNstack";
+    rev = "e5d7cb332148898a86fbdb7477531e20442347d3";
+    fetchSubmodules = false;
+    sha256 = "sha256-XRiqgQHHOsNp54jBr4fj1j2lVrRgifS0pOfa3NLerGA=";
+  };
 
-    buildInputs = [ hyprland ] ++ hyprland.buildInputs;
+  inherit (hyprland) nativeBuildInputs;
 
-    # Skip meson phases
-    configurePhase = "true";
-    mesonConfigurePhase = "true";
-    mesonBuildPhase = "true";
-    mesonInstallPhase = "true";
+  buildInputs = [ hyprland.dev ] ++ hyprland.buildInputs;
 
-    buildPhase = # sh
-      ''
-        make all
-      '';
+  # Skip meson phases
+  configurePhase = "true";
+  mesonConfigurePhase = "true";
+  mesonBuildPhase = "true";
+  mesonInstallPhase = "true";
 
-    installPhase = # sh
-      ''
-        mkdir -p $out/lib
-        cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
-      '';
+  buildPhase = # sh
+    ''
+      make all
+    '';
 
-    meta = {
-      homepage = "https://github.com/zakk4223/hyprNStack";
-      description = "Hyprland HyprNStack Plugin";
-      maintainers = [ lib.maintainers.iynaix ];
-      platforms = lib.platforms.linux;
-    };
-  }
-)
+  installPhase = # sh
+    ''
+      mkdir -p $out/lib
+      cp nstackLayoutPlugin.so $out/lib/libhyprNStack.so
+    '';
+
+  meta = {
+    homepage = "https://github.com/zakk4223/hyprNStack";
+    description = "Hyprland HyprNStack Plugin";
+    maintainers = [ lib.maintainers.iynaix ];
+    platforms = lib.platforms.linux;
+  };
+}

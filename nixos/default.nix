@@ -137,8 +137,16 @@ in
           killall
           (hiPrio procps) # for uptime
           ripgrep
-          yazi
           zoxide
+          # use same config as home-manager
+          (pkgs.symlinkJoin {
+            name = "yazi";
+            paths = [ pkgs.yazi ];
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = # sh
+              ''wrapProgram $out/bin/yazi --set YAZI_CONFIG_HOME "${config.hm.xdg.configHome}/yazi"'';
+            meta.mainProgram = "yazi";
+          })
           # use the package configured by nvf
           custom.neovim-iynaixos
         ]
@@ -188,6 +196,20 @@ in
 
       # bye bye nano
       nano.enable = mkForce false;
+
+      # yazi =
+      #   let
+      #     yaziHm = config.hm.programs.yazi;
+      #   in
+      #   {
+      #     enable = true;
+      #     # initLua = "${config.hm.xdg.configHome}/yazi/init.lua";
+      #     # settings = {
+      #     #   inherit (yaziHm) theme keymap;
+      #     #   yazi = yaziHm.settings;
+      #     # };
+
+      #   };
     };
 
     # use gtk theme on qt apps

@@ -155,7 +155,7 @@ pub enum WallpaperSubcommand {
     #[cfg(feature = "rclip")]
     #[command(
         name = "search",
-        visible_aliases = ["rg", "grep", "find"],
+        visible_aliases = ["rg", "grep", "find", "rclip"],
         about = "Search for wallpapers using rclip"
     )]
     Search(SearchArgs),
