@@ -1,4 +1,5 @@
 {
+  config,
   dots,
   host,
   isNixOS,
@@ -347,6 +348,14 @@ in
             yazi "$PKG_DIR"
           '';
       };
+      # tui for searching nix packages or options
+      nrg = {
+        runtimeInputs = with pkgs; [
+          config.programs.fzf.package
+          nix-search-tv
+        ];
+        text = builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh";
+      };
       # what depends on the given package in the current nixos install?
       ndepends = # sh
         ''
@@ -420,7 +429,10 @@ in
 
   custom.persist = {
     home = {
-      cache.directories = [ ".cache/nix-index" ];
+      cache.directories = [
+        ".cache/nix-index"
+        ".cache/nix-search-tv"
+      ];
     };
   };
 }

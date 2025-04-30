@@ -35,22 +35,25 @@ _: {
         position = "1754x0";
         scale = 2.0;
         workspaces = [
-          9
-        ];
-      }
-      {
-        name = "DP-3";
-        width = 2256;
-        height = 1504;
-        position = "4880x1080";
-        scale = 1.5666666666666666; # 47/30
-        transform = 3;
-        workspaces = [
           8
+          9
           10
         ];
-        defaultWorkspace = 10;
+        defaultWorkspace = 9;
       }
+      # {
+      #   name = "DP-3";
+      #   width = 2256;
+      #   height = 1504;
+      #   position = "4880x1080";
+      #   scale = 1.5666666666666666; # 47/30
+      #   transform = 3;
+      #   workspaces = [
+      #     8
+      #     10
+      #   ];
+      #   defaultWorkspace = 10;
+      # }
     ];
 
     deadbeef.enable = true;

@@ -96,11 +96,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2025.03.31",
-            "sha256": "sha256-csw91VbzY9IursMQFGwnlobZI3U6QOBDo31oq+X0ETI=",
+            "rev": "2025.04.30",
+            "sha256": "sha256-vsMWzZu+kxlxYT5Cq+diNApzE3Cg22Hg0j9eDKLowWI=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2025.03.31"
+        "version": "2025.04.30"
     }
 }
