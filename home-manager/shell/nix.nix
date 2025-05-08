@@ -410,12 +410,26 @@ in
       };
     }
     # nh home doesnt have boot or test
+    // {
+      # home-manager build
+      nsb = {
+        runtimeInputs = [ pkgs.custom.shell.hsw ];
+        text = # sh
+          ''hsw build "$@"'';
+      };
+    }
     // optionalAttrs isNixOS {
       # nixos-rebuild boot
-      nsb = {
+      nsbt = {
         runtimeInputs = [ pkgs.custom.shell.nsw ];
         text = # sh
           ''nsw boot "$@"'';
+      };
+      # nixos-rebuild build
+      nsb = {
+        runtimeInputs = [ pkgs.custom.shell.nsw ];
+        text = # sh
+          ''nsw build "$@"'';
       };
       # nixos-rebuild test
       nst = {

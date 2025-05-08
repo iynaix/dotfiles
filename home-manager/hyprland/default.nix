@@ -217,18 +217,31 @@ in
           gestures = mkIf isLaptop { workspace_swipe = true; };
         }
         //
-        # bind workspaces to monitors, don't bother if there is only one monitor
-        optionalAttrs (length monitors > 1) {
-          workspace = lib.custom.mapWorkspaces (
-            {
-              workspace,
-              monitor,
-              ...
-            }:
-            "${workspace},monitor:${monitor.name}"
-            + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
-          ) monitors;
-        };
+          # bind workspaces to monitors, don't bother if there is only one monitor
+          optionalAttrs (length monitors > 1) {
+            workspace = lib.custom.mapWorkspaces (
+              {
+                workspace,
+                monitor,
+                ...
+              }:
+              "${workspace},monitor:${monitor.name}"
+              + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
+            ) monitors;
+          }
+        //
+          # nvidia specific settings
+          optionalAttrs config.custom.nvidia.enable {
+            cursor = {
+              # no_hardware_cursors = true;
+              use_cpu_buffer = 1;
+            };
+
+            render = {
+              explicit_sync = 1;
+              # allow_early_buffer_release = true;
+            };
+          };
     };
 
     # hyprland crash reports

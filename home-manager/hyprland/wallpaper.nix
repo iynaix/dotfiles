@@ -1,6 +1,5 @@
 {
   config,
-  host,
   lib,
   pkgs,
   ...
@@ -53,7 +52,7 @@ in
           text =
             # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
             # https://github.com/tauri-apps/tauri/issues/10702
-            lib.optionalString (host == "desktop") "export WEBKIT_DISABLE_DMABUF_RENDERER=1\n"
+            lib.optionalString config.custom.nvidia.enable "export WEBKIT_DISABLE_DMABUF_RENDERER=1\n"
             + lib.custom.direnvCargoRun {
               dir = "${config.home.homeDirectory}/projects/wallfacer";
             };

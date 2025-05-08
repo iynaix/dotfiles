@@ -4,6 +4,7 @@ dots="@dots@"
 hostname="@host@"
 nhArgs=()
 restArgs=()
+nhCommand="switch"
 showProgress=false
 
 while (( "$#" )); do
@@ -25,6 +26,10 @@ while (( "$#" )); do
         showProgress=true
         shift
         ;;
+    switch|build)
+        nhCommand="$1"
+        shift
+        ;;
     *) # everything else
         restArgs+=("$1")
         shift
@@ -41,9 +46,9 @@ if [ -n "$untrackedFiles" ]; then
 fi
 
 if [ "$showProgress" = true ]; then
-    home-manager switch --flake ".#$hostname" "${restArgs[@]}"
+    home-manager "$nhCommand" --flake ".#$hostname" "${restArgs[@]}"
 else
-    nh home switch --configuration "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+    nh home "$nhCommand" "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
 popd > /dev/null
