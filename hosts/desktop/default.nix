@@ -13,7 +13,6 @@ in
   custom = {
     # hardware
     hdds.enable = true;
-    nvidia.enable = true;
     qmk.enable = false;
     zfs.encryption = false;
 

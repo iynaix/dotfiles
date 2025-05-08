@@ -1,6 +1,5 @@
 {
   config,
-  host,
   lib,
   pkgs,
   ...
@@ -15,7 +14,7 @@ let
   # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
   nvidiaSoftwareRenderingWorkaround =
     bin: pkg:
-    if (host == "desktop") then
+    if config.custom.nvidia.enable then
       pkgs.symlinkJoin {
         name = bin;
         paths = [ pkg ];

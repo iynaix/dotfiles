@@ -115,7 +115,6 @@
 
     languages = {
       enableFormat = true;
-      enableLSP = true;
       enableTreesitter = true;
 
       # TODO: misc plugins
@@ -159,6 +158,7 @@
     };
 
     lsp = {
+      enable = true;
       formatOnSave = true;
       # lightbulb.enable = true;
       lspkind.enable = true;

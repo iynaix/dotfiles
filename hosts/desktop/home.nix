@@ -64,6 +64,7 @@ _: {
       qtile = false;
     };
     modelling3d.enable = true;
+    nvidia.enable = true;
     printing3d.enable = true;
     obs-studio.enable = false;
     pathofbuilding.enable = true;
