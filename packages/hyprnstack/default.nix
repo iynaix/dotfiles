@@ -4,15 +4,14 @@
   hyprland,
   fetchFromGitHub,
 }:
-gcc14Stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprNStack";
-  version = "e5d7cb332148898a86fbdb7477531e20442347d3";
+  version = "1959ecbc50071e5e182b6ce0edff92245870caf1";
   src = fetchFromGitHub {
     owner = "zakk4223";
     repo = "hyprNstack";
-    rev = "e5d7cb332148898a86fbdb7477531e20442347d3";
-    fetchSubmodules = false;
-    sha256 = "sha256-XRiqgQHHOsNp54jBr4fj1j2lVrRgifS0pOfa3NLerGA=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-LL1+gGBQcb+P0hiCGhHKDIhy7+UqwUBmU+kh0YQTYI0=";
   };
 
   inherit (hyprland) nativeBuildInputs;
@@ -42,4 +41,4 @@ gcc14Stdenv.mkDerivation {
     maintainers = [ lib.maintainers.iynaix ];
     platforms = lib.platforms.linux;
   };
-}
+})

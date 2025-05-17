@@ -28,7 +28,7 @@ in
     custom.shell.packages = {
       focusorrun = {
         runtimeInputs = with pkgs; [
-          hyprland
+          config.wayland.windowManager.hyprland.package
           jq
         ];
         # $1 is string to search for in window title
