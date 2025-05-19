@@ -7,6 +7,8 @@ _: {
 
   hardware.framework.laptop13.audioEnhancement.enable = true;
 
+  qmk.enable = true;
+
   # touchpad support
   services.libinput.enable = true;
 

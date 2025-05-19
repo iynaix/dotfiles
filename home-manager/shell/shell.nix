@@ -58,6 +58,7 @@ in
         np = "cd ${proj_dir}/nixpkgs";
         open = "xdg-open";
         py = "python";
+        sl = "ls";
         w = "watch -cn1 -x cat";
         coinfc = "pj coinfc";
 
