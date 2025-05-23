@@ -44,6 +44,10 @@ in
     };
   };
 
+  programs.btop.settings = {
+    custom_gpu_name0 = "AMD Radeon 780M";
+  };
+
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       # don't blind me on startup

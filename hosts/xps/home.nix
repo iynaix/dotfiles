@@ -23,6 +23,10 @@ _: {
     qtStyleFix = false;
     terminal.size = 10;
 
+    programs.btop.settings = {
+      custom_gpu_name0 = "Intel HD Graphics 5500";
+    };
+
     persist = {
       home.directories = [ "Downloads" ];
     };

@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-let
-  hasNixpkgsRepo = host == "desktop" || host == "framework";
-in
 {
   programs = {
     git = {
@@ -19,7 +16,7 @@ in
         background = "dark";
       };
 
-      maintenance = lib.mkIf hasNixpkgsRepo {
+      maintenance = lib.mkIf (host == "desktop" || host == "framework") {
         enable = true;
         # background maintenance for large git repos:
         # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance

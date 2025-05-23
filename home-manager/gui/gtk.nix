@@ -55,7 +55,7 @@ in
         };
 
         # plasma seems to override this file?
-        file.${config.gtk.gtk2.configLocation}.force = true;
+        file.${config.gtk.gtk2.configLocation}.force = lib.mkForce true;
       };
 
       dconf.settings = {
