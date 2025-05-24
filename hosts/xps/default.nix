@@ -1,4 +1,13 @@
-_: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  inherit (lib) getExe mkIf;
+in
+{
   custom = { };
 
   networking.hostId = "abb4d116"; # required for zfs
@@ -9,4 +18,14 @@ _: {
 
   # touchpad support
   services.libinput.enable = true;
+
+  security.wrappers = mkIf config.hm.programs.btop.enable {
+    btop = {
+      capabilities = "cap_perfmon=+ep";
+      group = "wheel";
+      owner = "root";
+      permissions = "0750";
+      source = getExe pkgs.btop;
+    };
+  };
 }
