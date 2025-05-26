@@ -58,38 +58,24 @@ mkIf config.custom.hyprland.enable {
   };
 
   # start swww and wallpaper via systemd to minimize reloads
-  systemd.user.services =
-    let
-      graphicalTarget = config.wayland.systemd.target;
-    in
-    {
-      swww = {
-        Install.WantedBy = [ graphicalTarget ];
-        Unit = {
-          Description = "Wayland wallpaper daemon";
-          After = [ graphicalTarget ];
-          PartOf = [ graphicalTarget ];
-        };
-        Service = {
-          ExecStart = getExe' pkgs.swww "swww-daemon";
-          Restart = "on-failure";
-        };
+  services.swww.enable = true;
+
+  systemd.user.services = {
+    wallpaper = {
+      Install.WantedBy = [ "swww.service" ];
+      Unit = {
+        Description = "Set the wallpaper and update colorscheme";
+        PartOf = [ config.wayland.systemd.target ];
+        After = [ "swww.service" ];
+        Requires = [ "swww.service" ];
       };
-      wallpaper = {
-        Install.WantedBy = [ "swww.service" ];
-        Unit = {
-          Description = "Set the wallpaper and update colorscheme";
-          PartOf = [ graphicalTarget ];
-          After = [ "swww.service" ];
-          Requires = [ "swww.service" ];
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = getExe' config.custom.dotfiles.package "wallpaper";
-          # possible race condition, introduce a small delay before starting
-          # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
-          ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 1";
-        };
+      Service = {
+        Type = "oneshot";
+        ExecStart = getExe' config.custom.dotfiles.package "wallpaper";
+        # possible race condition, introduce a small delay before starting
+        # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
+        ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 1";
       };
     };
+  };
 }

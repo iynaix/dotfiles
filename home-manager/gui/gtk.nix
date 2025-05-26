@@ -52,10 +52,8 @@ in
           size = 28;
           gtk.enable = true;
           x11.enable = true;
+          hyprcursor.enable = config.custom.hyprland.enable;
         };
-
-        # plasma seems to override this file?
-        file.${config.gtk.gtk2.configLocation}.force = lib.mkForce true;
       };
 
       dconf.settings = {
@@ -94,7 +92,10 @@ in
           package = pkgs.geist-font;
           size = 10;
         };
-        gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
+        gtk2 = {
+          configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
+          force = true; # plasma seems to override this file?
+        };
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = 1;
           gtk-error-bell = 0;

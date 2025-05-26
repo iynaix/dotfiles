@@ -28,7 +28,6 @@ mkIf (!config.custom.headless) {
       y { command(wl-copy $1) }
       z { toggle_scale_mode(0) }
       ? { command(>pqiv --show-bindings) }
-      <BackSpace> { nop() }
       <Left> { goto_file_relative(-1) }
       <Right> { goto_file_relative(1) }
       <Up> { nop() }

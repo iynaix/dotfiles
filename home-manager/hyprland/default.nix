@@ -89,12 +89,6 @@ in
             ))
             ++ [ ",preferred,auto,auto" ];
 
-          # https://wiki.hyprland.org/Configuring/Environment-variables/
-          env = [
-            "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
-            "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.size}"
-          ];
-
           input = {
             kb_layout = "us";
             follow_mouse = 1;
@@ -102,6 +96,7 @@ in
             touchpad = mkIf isLaptop {
               natural_scroll = false;
               disable_while_typing = true;
+              clickfinger_behavior = true;
             };
           };
 

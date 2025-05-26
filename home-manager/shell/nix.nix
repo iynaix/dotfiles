@@ -354,6 +354,8 @@ in
           config.programs.fzf.package
           nix-search-tv
         ];
+        # ignore checks since i didn't write this
+        checkPhase = "";
         text = builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh";
       };
       # what depends on the given package in the current nixos install?

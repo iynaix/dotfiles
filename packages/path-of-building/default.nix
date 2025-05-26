@@ -4,6 +4,7 @@
 }:
 path-of-building.overrideAttrs {
   inherit (source) version;
+  __intentionallyOverridingVersion = true;
 
   preFixup =
     let
