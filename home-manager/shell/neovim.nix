@@ -1,12 +1,14 @@
 {
   config,
+  dots,
+  host,
   lib,
   pkgs,
   ...
 }:
 let
   inherit (lib) getExe;
-  customNeovim = pkgs.custom.neovim-iynaixos;
+  customNeovim = pkgs.custom.neovim-iynaix.override { inherit dots host; };
   nvim-direnv = pkgs.writeShellApplication {
     name = "nvim-direnv";
     runtimeInputs = [

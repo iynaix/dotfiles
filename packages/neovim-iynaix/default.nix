@@ -2,6 +2,7 @@
   pkgs,
   lib,
   dots ? null,
+  host ? "desktop",
   ...
 }:
 {
@@ -138,12 +139,8 @@
         lsp = {
           server = "nixd";
           options = lib.mkIf (dots != null) {
-            nixos = {
-              expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.desktop.options";
-            };
-            home-manager = {
-              expr = "(builtins.getFlake \"${dots}\").homeConfigurations.desktop.options";
-            };
+            nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
+            home-manager.expr = "(builtins.getFlake \"${dots}\").homeConfigurations.${host}.options";
           };
         };
       };

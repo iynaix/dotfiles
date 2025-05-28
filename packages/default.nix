@@ -36,25 +36,18 @@ rec {
       "sh <(curl -L ${repo_url}/main/recover.sh)";
   };
 
-  # neovim config via nvf
-  neovim-iynaix =
-    (inputs.nvf.lib.neovimConfiguration {
-      inherit pkgs;
-      modules = [ ./neovim-iynaix ];
-      extraSpecialArgs = {
-        dots = null;
-      };
-    }).neovim;
-
   # full neovim with nixd setup (requires path to dotfiles repo)
-  neovim-iynaixos =
+  neovim-iynaix = pkgs.callPackage (
+    {
+      dots ? null,
+      host ? "desktop",
+    }:
     (inputs.nvf.lib.neovimConfiguration {
       inherit pkgs;
       modules = [ ./neovim-iynaix ];
-      extraSpecialArgs = {
-        dots = "/persist/home/iynaix/projects/dotfiles";
-      };
-    }).neovim;
+      extraSpecialArgs = { inherit dots host; };
+    }).neovim
+  ) { };
 
   # ricing glue
   dotfiles-rs = callPackage ./dotfiles-rs { };

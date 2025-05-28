@@ -1,5 +1,6 @@
 {
   config,
+  dots,
   lib,
   pkgs,
   ...
@@ -148,7 +149,7 @@ in
             meta.mainProgram = "yazi";
           })
           # use the package configured by nvf
-          custom.neovim-iynaixos
+          (custom.neovim-iynaix.override { inherit dots host; })
         ]
         ++
           # install gtk theme for root, some apps like gparted only run as root
