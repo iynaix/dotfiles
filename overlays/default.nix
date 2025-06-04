@@ -84,21 +84,6 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
-
-      # fix mpv purple screen
-      # https://github.com/NixOS/nixpkgs/issues/412382
-      mpv-unwrapped = prev.mpv-unwrapped.override {
-        libplacebo = prev.libplacebo.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [
-            (prev.fetchpatch {
-              name = "fix-shaders.patch";
-              url = "https://github.com/haasn/libplacebo/commit/4c6d99edee23284f93b07f0f045cd660327465eb.patch";
-              revert = true;
-              hash = "sha256-zoCgd9POlhFTEOzQmSHFZmJXgO8Zg/f9LtSTSQq5nUA=";
-            })
-          ];
-        });
-      };
     })
   ];
 }

@@ -38,7 +38,7 @@ in
     enableFishIntegration = true;
 
     settings = {
-      manager = {
+      mgr = {
         ratio = [
           0
           1
@@ -53,7 +53,7 @@ in
     };
 
     theme = {
-      manager = {
+      mgr = {
         preview_hovered = {
           underline = false;
         };

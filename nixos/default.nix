@@ -133,6 +133,7 @@ in
       systemPackages =
         with pkgs;
         [
+          bonk # mkdir and touch in one
           curl
           eza
           killall

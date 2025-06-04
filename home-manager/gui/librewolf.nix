@@ -76,6 +76,12 @@ mkIf (!config.custom.headless) {
     };
   };
 
+  # remove the leftover native messaging hosts directory
+  home.file = {
+    ".librewolf/native-messaging-hosts".enable = lib.mkForce false;
+    ".mozilla/native-messaging-hosts".enable = lib.mkForce false;
+  };
+
   custom.persist = {
     home.directories = [
       ".cache/librewolf"

@@ -39,7 +39,7 @@ mkMerge [
         log = {
           enabled = true;
         };
-        manager = {
+        mgr = {
           ratio = [
             0
             1
@@ -79,7 +79,7 @@ mkMerge [
       };
 
       theme = {
-        manager = {
+        mgr = {
           preview_hovered = {
             underline = false;
           };
