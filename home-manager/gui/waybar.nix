@@ -126,8 +126,7 @@ in
 
         "custom/nix" = {
           format = "󱄅";
-          on-click = "rofi -show drun";
-          on-click-right = "wallpaper rofi";
+          on-click = "exec, uwsm app -- rofi-power-menu";
           tooltip = false;
         };
 

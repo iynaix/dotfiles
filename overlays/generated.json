@@ -1,7 +1,7 @@
 {
     "swww": {
         "cargoLocks": null,
-        "date": "2025-06-06",
+        "date": "2025-06-09",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -13,12 +13,12 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "7ceddc01359d4af29ec1db8a7b390290126626b8",
-            "sha256": "sha256-qvxG8UhO7MsS0lWVGfHUsBKevAa+VJe41NrcX1ZCJdU=",
+            "rev": "44d3cdf82669c2bd7ea31cee3c158a838df1b5e4",
+            "sha256": "sha256-GXqXZn29r7ktL01KBzlPZ+9b1fdnAPF8qhsQxhiqAsQ=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "7ceddc01359d4af29ec1db8a7b390290126626b8"
+        "version": "44d3cdf82669c2bd7ea31cee3c158a838df1b5e4"
     },
     "wallust": {
         "cargoLocks": null,
@@ -96,11 +96,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2025.05.22",
-            "sha256": "sha256-Ahdu52dTbRz+8c06yQ6QOTVcbVYP2d1iYjYyjKDi8Wk=",
+            "rev": "2025.06.09",
+            "sha256": "sha256-l18DeZRQjyNc1OoSCsOk5BLYL6QjG246i+sQn0AWZEc=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2025.05.22"
+        "version": "2025.06.09"
     }
 }

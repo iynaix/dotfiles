@@ -157,10 +157,10 @@ in
       }
 
       # fix Authorization required, but no authorization protocol specified error
-      # {
-      #   packages = [ pkgs.xorg.xhost ];
-      #   exec = "xhost si:localuser:root";
-      # }
+      {
+        packages = [ pkgs.xorg.xhost ];
+        exec = "xhost si:localuser:root";
+      }
 
       # clipboard manager
       {
@@ -185,5 +185,8 @@ in
         wl-clipboard
       ];
     };
+
+    # WM agnostic polkit authentication agent
+    services.polkit-gnome.enable = true;
   };
 }

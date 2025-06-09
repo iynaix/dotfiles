@@ -358,6 +358,15 @@ in
         checkPhase = "";
         text = builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh";
       };
+      nlocate-lib = {
+        runtimeInputs = [
+          config.programs.ripgrep.package
+          config.programs.nix-index.package
+        ];
+        text = ''
+          nix-locate -- "lib/$1" | rg -v '^\('
+        '';
+      };
       # what depends on the given package in the current nixos install?
       ndepends = # sh
         ''
