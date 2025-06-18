@@ -130,7 +130,7 @@ mkMerge [
         in
         {
           # add keymaps for shortcuts
-          manager.prepend_keymap =
+          mgr.prepend_keymap =
             [
               # dropping to shell
               {
@@ -246,7 +246,7 @@ mkMerge [
           end,
         }
       '';
-      keymap.manager.prepend_keymap = [
+      keymap.mgr.prepend_keymap = [
         {
           on = "l";
           run = "plugin smart-enter";
@@ -275,7 +275,7 @@ mkMerge [
           end,
         }
       '';
-      keymap.manager.prepend_keymap = [
+      keymap.mgr.prepend_keymap = [
         {
           on = "p";
           run = "plugin smart-paste";
@@ -298,7 +298,7 @@ mkMerge [
           end,
         }
       '';
-      keymap.manager.prepend_keymap = [
+      keymap.mgr.prepend_keymap = [
         {
           on = "k";
           run = "plugin arrow -1";
