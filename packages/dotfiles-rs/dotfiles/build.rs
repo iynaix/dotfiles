@@ -12,8 +12,8 @@ fn generate_man_pages() -> Result<(), Box<dyn std::error::Error>> {
 
     // man pages for each command
     for cmd in [
-        cli::HyprMonitorArgs::command(),
-        cli::HyprSameClassArgs::command(),
+        cli::WmMonitorArgs::command(),
+        cli::WmSameClassArgs::command(),
         cli::RofiMpvArgs::command(),
     ] {
         let mut buffer = Vec::default();

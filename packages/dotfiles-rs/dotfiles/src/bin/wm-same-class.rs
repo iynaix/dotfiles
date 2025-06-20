@@ -1,6 +1,6 @@
 use clap::{CommandFactory, Parser};
 use dotfiles::{
-    cli::{Direction, HyprSameClassArgs},
+    cli::{Direction, WmSameClassArgs},
     generate_completions,
 };
 use hyprland::dispatch;
@@ -12,11 +12,11 @@ use hyprland::{
 use itertools::Itertools;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args = HyprSameClassArgs::parse();
+    let args = WmSameClassArgs::parse();
 
     // print shell completions
     if let Some(shell) = args.generate {
-        generate_completions("hypr-same-class", &mut HyprSameClassArgs::command(), &shell);
+        generate_completions("wm-same-class", &mut WmSameClassArgs::command(), &shell);
         std::process::exit(0);
     }
 

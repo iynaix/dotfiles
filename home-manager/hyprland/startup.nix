@@ -71,7 +71,14 @@ mkIf config.custom.hyprland.enable {
       };
       Service = {
         Type = "oneshot";
-        ExecStart = getExe' config.custom.dotfiles.package "wallpaper";
+        ExecStart =
+          let
+            dotsExe = getExe' config.custom.dotfiles.package;
+          in
+          pkgs.writeShellScript "wallpaper-startup" ''
+            ${dotsExe "wallpaper"}
+            ${dotsExe "wm-monitors"}
+          '';
         # possible race condition, introduce a small delay before starting
         # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
         ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 1";

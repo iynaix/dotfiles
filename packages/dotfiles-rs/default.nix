@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage {
 
   postInstall = # sh
     ''
-      for prog in hypr-monitors hypr-same-class rofi-mpv; do
+      for prog in wm-monitors wm-same-class rofi-mpv; do
         installShellCompletion --cmd $prog \
           --bash <($out/bin/$prog --generate bash) \
           --fish <($out/bin/$prog --generate fish) \

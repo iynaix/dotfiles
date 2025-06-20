@@ -94,7 +94,7 @@ in
           ''$mod_CTRL, v, exec, cliphist list | uwsm app -- rofi -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
 
           # reset monitors
-          "CTRL_SHIFT, Escape, exec, hypr-monitors"
+          "CTRL_SHIFT, Escape, exec, wm-monitors"
 
           # bind = $mod, P, pseudo, # dwindle
           # bind = $mod, J, togglesplit, # dwindle
@@ -149,11 +149,11 @@ in
 
           # switches to the next / previous window of the same class
           # hardcoded to SUPER so it doesn't clash on VM
-          "CTRL_ALT_, Tab, exec, hypr-same-class next"
-          "CTRL_ALT_SHIFT, Tab, exec, hypr-same-class prev"
+          "CTRL_ALT_, Tab, exec, wm-same-class next"
+          "CTRL_ALT_SHIFT, Tab, exec, wm-same-class prev"
 
           # picture in picture mode
-          "$mod, p, exec, hypr-pip"
+          "$mod, p, exec, wm-pip"
 
           # add / remove master windows
           "$mod, m, layoutmsg, addmaster"

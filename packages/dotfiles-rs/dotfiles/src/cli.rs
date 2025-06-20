@@ -15,10 +15,10 @@ pub enum MonitorExtend {
 }
 
 #[derive(Parser, Debug, Default)]
-#[command(name = "hypr-monitors", about = "Re-arranges workspaces to monitor")]
+#[command(name = "wm-monitors", about = "Re-arranges workspaces to monitor")]
 /// Utilities for working with adding or removing monitors in hyprland
 /// Without arguments, it redistributes the workspaces across all monitors
-pub struct HyprMonitorArgs {
+pub struct WmMonitorArgs {
     #[arg(
         long,
         value_parser = value_parser!(MonitorExtend),
@@ -51,10 +51,10 @@ pub enum Direction {
 
 #[derive(Parser, Debug)]
 #[command(
-    name = "hypr-same-class",
+    name = "wm-same-class",
     about = "Focus next / prev window of same class"
 )]
-pub struct HyprSameClassArgs {
+pub struct WmSameClassArgs {
     #[arg(value_enum)]
     pub direction: Option<Direction>,
 

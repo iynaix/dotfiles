@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    cli::{HyprMonitorArgs, MonitorExtend},
+    cli::{MonitorExtend, WmMonitorArgs},
     generate_completions,
 };
 use clap::CommandFactory;
@@ -105,10 +105,10 @@ fn distribute_workspaces(
         .collect()
 }
 
-pub fn hypr_monitors(args: HyprMonitorArgs) {
+pub fn wm_monitors(args: WmMonitorArgs) {
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("hypr-monitors", &mut HyprMonitorArgs::command(), &shell);
+        return generate_completions("wm-monitors", &mut WmMonitorArgs::command(), &shell);
     }
 
     let mut mirror = args.mirror;

@@ -1,5 +1,5 @@
 use common::{find_monitor_by_name, nixinfo::NixInfo};
-use dotfiles::{cli::HyprMonitorArgs, monitors::hypr_monitors};
+use dotfiles::{cli::WmMonitorArgs, monitors::wm_monitors};
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
     event_listener::EventListener,
@@ -142,19 +142,19 @@ fn main() -> hyprland::Result<()> {
         // single monitor in config; is laptop
         if NixInfo::new().monitors.len() == 1 {
             // --rofi
-            hypr_monitors(HyprMonitorArgs {
+            wm_monitors(WmMonitorArgs {
                 rofi: Some(mon.name),
                 ..Default::default()
             });
         } else {
             // desktop, redistribute workspaces
-            hypr_monitors(HyprMonitorArgs::default());
+            wm_monitors(WmMonitorArgs::default());
         }
     });
 
     listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
-        hypr_monitors(HyprMonitorArgs::default());
+        wm_monitors(WmMonitorArgs::default());
     });
 
     listener.start_listener()
