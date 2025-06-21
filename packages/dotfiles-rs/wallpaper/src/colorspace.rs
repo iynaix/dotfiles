@@ -100,6 +100,11 @@ fn update_image_colorspace(image: &Path, meta: &Metadata, wallust_tag: &str) -> 
 }
 
 pub fn toggle(args: ColorspaceArgs) {
+    // not registering a namespace seems to result in an error while saving if image has no existing
+    // wallfacer xmp tags
+    rexiv2::register_xmp_namespace("http://example.com/wallfacer", "wallfacer")
+        .expect("could not register wallfacer namespace");
+
     let mut colorspace_arg = args.colorspace;
     let image = args.file.map_or_else(
         || {

@@ -3,15 +3,15 @@
 {
   swww = {
     pname = "swww";
-    version = "398a4048e389341dfd55285c53518a8ea3930ec4";
+    version = "805a355da574fed46e664606660e2499f02e2174";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "398a4048e389341dfd55285c53518a8ea3930ec4";
+      rev = "805a355da574fed46e664606660e2499f02e2174";
       fetchSubmodules = false;
-      sha256 = "sha256-ZAC5TbkshztW2IeDorhaxUmVCHf2tJCSGIGHSNl91Ns=";
+      sha256 = "sha256-+sdV7NFueCeBLrsl7lrqzlG5tPNqDe/zlcIb8TYxQl8=";
     };
-    date = "2025-06-17";
+    date = "2025-06-23";
   };
   wallust = {
     pname = "wallust";
@@ -29,15 +29,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "86d28e4fb4f25f36cc501b8cb0badb37a6b14263";
+    version = "5eea960d1576afb6b0af85f53c8e0db41aa9a7cf";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "86d28e4fb4f25f36cc501b8cb0badb37a6b14263";
+      rev = "5eea960d1576afb6b0af85f53c8e0db41aa9a7cf";
       fetchSubmodules = false;
-      sha256 = "sha256-m/gJTDm0cVkIdcQ1ZJliPqBhNKoCW1FciLkuq7D1mxo=";
+      sha256 = "sha256-6ymB52z7Nije1Wq5dlOsU+ZEANw2y5rg5e7B2XeDjTQ=";
     };
-    date = "2025-06-18";
+    date = "2025-06-24";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
@@ -53,13 +53,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.06.09";
+    version = "2025.06.25";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.06.09";
+      rev = "2025.06.25";
       fetchSubmodules = false;
-      sha256 = "sha256-l18DeZRQjyNc1OoSCsOk5BLYL6QjG246i+sQn0AWZEc=";
+      sha256 = "sha256-ZEhruWP4RBeyw2vCF0CG7xvMur8RzVmTgi5Kz4nkNII=";
     };
   };
 }

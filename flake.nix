@@ -65,7 +65,7 @@
         inherit pkgs;
         inherit (inputs) home-manager;
       };
-      createCommonArgs = system: {
+      commonArgsForSystem = system: {
         inherit
           self
           inputs
@@ -78,7 +78,7 @@
           inherit self inputs;
         };
       };
-      commonArgs = createCommonArgs system;
+      commonArgs = commonArgsForSystem system;
       # call with forAllSystems (commonArgs: function body)
       forAllSystems =
         fn:
@@ -87,7 +87,7 @@
           "aarch64-linux"
           "x86_64-darwin"
           "aarch64-darwin"
-        ] (system: fn (createCommonArgs system));
+        ] (system: fn (commonArgsForSystem system));
     in
     {
       nixosConfigurations = (import ./hosts/nixos.nix commonArgs) // (import ./hosts/iso commonArgs);
@@ -101,7 +101,7 @@
 
       inherit lib self;
 
-      packages = forAllSystems (commonArgs': (import ./packages commonArgs'));
+      packages = forAllSystems (import ./packages);
 
       # templates for devenvs
       templates = import ./templates;

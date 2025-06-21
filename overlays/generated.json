@@ -1,7 +1,7 @@
 {
     "swww": {
         "cargoLocks": null,
-        "date": "2025-06-17",
+        "date": "2025-06-23",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -13,12 +13,12 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "398a4048e389341dfd55285c53518a8ea3930ec4",
-            "sha256": "sha256-ZAC5TbkshztW2IeDorhaxUmVCHf2tJCSGIGHSNl91Ns=",
+            "rev": "805a355da574fed46e664606660e2499f02e2174",
+            "sha256": "sha256-+sdV7NFueCeBLrsl7lrqzlG5tPNqDe/zlcIb8TYxQl8=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "398a4048e389341dfd55285c53518a8ea3930ec4"
+        "version": "805a355da574fed46e664606660e2499f02e2174"
     },
     "wallust": {
         "cargoLocks": null,
@@ -42,7 +42,7 @@
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2025-06-18",
+        "date": "2025-06-24",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -54,12 +54,12 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "86d28e4fb4f25f36cc501b8cb0badb37a6b14263",
-            "sha256": "sha256-m/gJTDm0cVkIdcQ1ZJliPqBhNKoCW1FciLkuq7D1mxo=",
+            "rev": "5eea960d1576afb6b0af85f53c8e0db41aa9a7cf",
+            "sha256": "sha256-6ymB52z7Nije1Wq5dlOsU+ZEANw2y5rg5e7B2XeDjTQ=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "86d28e4fb4f25f36cc501b8cb0badb37a6b14263"
+        "version": "5eea960d1576afb6b0af85f53c8e0db41aa9a7cf"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
@@ -96,11 +96,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2025.06.09",
-            "sha256": "sha256-l18DeZRQjyNc1OoSCsOk5BLYL6QjG246i+sQn0AWZEc=",
+            "rev": "2025.06.25",
+            "sha256": "sha256-ZEhruWP4RBeyw2vCF0CG7xvMur8RzVmTgi5Kz4nkNII=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2025.06.09"
+        "version": "2025.06.25"
     }
 }

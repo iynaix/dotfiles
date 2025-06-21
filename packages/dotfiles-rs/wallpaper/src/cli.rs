@@ -189,7 +189,7 @@ pub enum WallpaperSubcommand {
 #[command(
     name = "wallpaper",
     infer_subcommands = true,
-    about = "Changes the wallpaper and updates the colorcheme"
+    about = "Changes the wallpaper and updates the colorscheme"
 )]
 #[command(group(
     ArgGroup::new("exclusive_group")

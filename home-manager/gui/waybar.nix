@@ -273,7 +273,7 @@ in
                   ${colorDefinitions}
 
                   * {
-                    font-family: "Geist Mono Regular";
+                    font-family: "${config.custom.fonts.regular}";
                     font-weight: bold;
                     color: @accent;
                     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
