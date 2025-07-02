@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -30,6 +31,15 @@ in
 
     programs.ghostty = {
       enable = true;
+      # fix for ghostty with kernel regression in 6.15.4:
+      # https://github.com/NixOS/nixpkgs/issues/421442
+      package = pkgs.ghostty.overrideAttrs (_: {
+        preBuild = ''
+          shopt -s globstar
+          sed -i 's/^const xev = @import("xev");$/const xev = @import("xev").Epoll;/' **/*.zig
+          shopt -u globstar
+        '';
+      });
       enableBashIntegration = true;
       enableFishIntegration = true;
       settings = {
