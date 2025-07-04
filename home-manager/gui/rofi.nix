@@ -96,7 +96,7 @@ in
     };
   };
 
-  config = mkIf (!config.custom.headless) {
+  config = mkIf (config.custom.wm != "tty") {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland.override {

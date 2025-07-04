@@ -7,7 +7,7 @@
 let
   inherit (lib) getExe mkIf;
 in
-mkIf (!config.custom.headless) {
+mkIf (config.custom.wm != "tty") {
   programs.chromium = {
     enable = true;
     package = pkgs.brave;

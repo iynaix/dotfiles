@@ -42,7 +42,7 @@ in
     modelling3d.enable = mkEnableOption "3d modelling";
   };
 
-  config = mkIf (!config.custom.headless) (mkMerge [
+  config = mkIf (config.custom.wm != "tty") (mkMerge [
     # slicers
     (mkIf config.custom.printing3d.enable {
       home.packages = [

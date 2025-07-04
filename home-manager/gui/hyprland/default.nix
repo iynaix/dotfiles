@@ -35,9 +35,6 @@ in
 
   options.custom = {
     hyprland = {
-      enable = mkEnableOption "hyprland" // {
-        default = !config.custom.headless;
-      };
       hyprnstack = mkEnableOption "hyprnstack";
       hypr-darkwindow = mkEnableOption "hypr-darkwindow" // {
         default = true;
@@ -45,7 +42,7 @@ in
     };
   };
 
-  config = mkIf config.custom.hyprland.enable {
+  config = mkIf (config.custom.wm == "hyprland") {
     home = {
       shellAliases = {
         hyprland = "Hyprland";
@@ -215,11 +212,7 @@ in
           # bind workspaces to monitors, don't bother if there is only one monitor
           optionalAttrs (length monitors > 1) {
             workspace = lib.custom.mapWorkspaces (
-              {
-                workspace,
-                monitor,
-                ...
-              }:
+              { workspace, monitor, ... }:
               "${workspace},monitor:${monitor.name}"
               + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
             ) monitors;

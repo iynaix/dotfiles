@@ -13,7 +13,7 @@ let
     versionOlder
     ;
 in
-mkIf config.hm.custom.hyprland.enable {
+mkIf (config.hm.custom.wm == "hyprland") {
   programs.hyprland = {
     enable =
       assert (

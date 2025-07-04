@@ -8,7 +8,7 @@
 let
   inherit (lib) getExe mkIf optionalAttrs;
 in
-mkIf (!config.custom.headless) {
+mkIf (config.custom.wm != "tty") {
   home.packages = with pkgs; [
     p7zip-rar # support for encrypted archives
     nemo-fileroller

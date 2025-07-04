@@ -15,7 +15,7 @@ let
     mkEnableOption
     mkIf
     mkOption
-    optional
+    optionals
     optionalString
     range
     replaceStrings
@@ -28,7 +28,7 @@ in
   options.custom = {
     waybar = {
       enable = mkEnableOption "waybar" // {
-        default = config.custom.hyprland.enable && !config.custom.headless;
+        default = config.custom.wm == "hyprland" && config.custom.wm != "tty";
       };
       config = mkOption {
         type = submodule { freeformType = (pkgs.formats.json { }).type; };
@@ -60,7 +60,7 @@ in
       ];
 
       bind = [
-        ''$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 waybar''
+        "$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 waybar"
         "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
       ];
     };
@@ -162,15 +162,15 @@ in
 
         modules-center = [ "hyprland/workspaces" ];
 
-        modules-left = [ "custom/nix" ] ++ (optional cfg.idleInhibitor "idle_inhibitor");
+        modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);
 
         modules-right =
           [
             "network"
             "pulseaudio"
           ]
-          ++ (optional config.custom.backlight.enable "backlight")
-          ++ (optional config.custom.battery.enable "battery")
+          ++ (optionals config.custom.backlight.enable [ "backlight" ])
+          ++ (optionals config.custom.battery.enable [ "battery" ])
           ++ [ "clock" ];
 
         network =
@@ -188,7 +188,9 @@ in
                 on-click-right = "${config.custom.terminal.exec} nmtui";
               }
             else
-              { format-ethernet = ""; }
+              {
+                format-ethernet = "";
+              }
           );
 
         position = "top";
@@ -238,7 +240,7 @@ in
                   @define-color accent {{foreground}};
                   @define-color complementary {{color4}};
                 ''
-                + (concatMapStringsSep "\n" (name: ''@define-color ${name} {{${name}}};'') colorNames);
+                + (concatMapStringsSep "\n" (name: "@define-color ${name} {{${name}}};") colorNames);
               baseModuleCss = # css
                 ''
                   transition: none;
@@ -246,20 +248,7 @@ in
                   padding-left: ${margin};
                   padding-right: ${margin};
                 '';
-              mkModuleClassName =
-                mod:
-                "#${
-                  replaceStrings
-                    [
-                      "hyprland/"
-                      "/"
-                    ]
-                    [
-                      ""
-                      "-"
-                    ]
-                    mod
-                }";
+              mkModuleClassName = mod: "#${replaceStrings [ "hyprland/" "/" ] [ "" "-" ] mod}";
               mkModulesCss =
                 arr:
                 concatMapStringsSep "\n" (mod: ''

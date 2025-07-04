@@ -1,14 +1,10 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 let
   inherit (lib)
     concatLines
     mkEnableOption
     mkIf
-    optional
+    optionals
     optionalAttrs
     ;
   inherit (config.hm.custom) mswindows;
@@ -54,7 +50,9 @@ in
 
     # symlinks from hdds
     custom.symlinks =
-      optionalAttrs cfg.ironwolf22 { "${homeDirectory}/Downloads" = "${ironwolf}/Downloads"; }
+      optionalAttrs cfg.ironwolf22 {
+        "${homeDirectory}/Downloads" = "${ironwolf}/Downloads";
+      }
       // optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
       // optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
         "${wdred}/Anime" = "${ironwolf}/Anime";
@@ -74,26 +72,28 @@ in
 
       # add btop monitoring for extra hdds
       custom.btop.disks =
-        optional cfg.wdred6 "/media/6TBRED"
-        ++ optional cfg.ironwolf22 "/media/IRONWOLF22";
+        optionals cfg.wdred6 [ "/media/6TBRED" ]
+        ++ optionals cfg.ironwolf22 [ "/media/IRONWOLF22" ];
     };
 
     # dual boot windows
     boot = {
       loader.grub = {
         extraEntries = concatLines (
-          optional mswindows ''
-            menuentry "Windows 11" {
-              insmod part_gpt
-              insmod fat
-              insmod search_fs_uuid
-              insmod chain
-              search --fs-uuid --set=root FA1C-F224
-              chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-            }
-          ''
+          optionals mswindows [
+            ''
+              menuentry "Windows 11" {
+                insmod part_gpt
+                insmod fat
+                insmod search_fs_uuid
+                insmod chain
+                search --fs-uuid --set=root FA1C-F224
+                chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+              }
+            ''
+          ]
         );
-        # ++ (optional cfg.archlinux ''
+        # ++ (optionals cfg.archlinux [''
         #   menuentry "Arch Linux" {
         #     insmod gzio
         #     insmod part_gpt
@@ -102,7 +102,7 @@ in
         #     linux /vmlinuz-linux root=UUID=e630c4b1-075e-42a9-bd4e-894273e99ac7 rw rootflags=subvol=@ loglevel=3 quiet
         #     initrd /amd-ucode.img /initramfs-linux.img
         #   }
-        # ''));
+        # '']));
       };
     };
 

@@ -16,7 +16,7 @@ let
     optionalString
     ;
 in
-mkIf config.custom.hyprland.enable {
+mkIf (config.custom.wm == "hyprland") {
   custom = {
     autologinCommand = "uwsm start hyprland-uwsm.desktop";
     startup = mkMerge [
@@ -26,9 +26,7 @@ mkIf config.custom.hyprland.enable {
         # stop fucking with my cursors
         "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
       ])
-      (mkAfter [
-        "hyprctl dispatch workspace 1"
-      ])
+      (mkAfter [ "hyprctl dispatch workspace 1" ])
     ];
   };
 

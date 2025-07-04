@@ -2,7 +2,7 @@
 let
   inherit (lib) mkIf;
 in
-mkIf config.custom.hyprland.enable {
+mkIf (config.custom.wm == "hyprland") {
   services.hypridle = {
     enable = true;
 

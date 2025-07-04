@@ -7,7 +7,7 @@
 let
   inherit (lib) mkIf;
 in
-mkIf (!config.custom.headless) {
+mkIf (config.custom.wm != "tty") {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;

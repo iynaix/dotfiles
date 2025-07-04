@@ -13,7 +13,7 @@ let
     mkForce
     mkIf
     mkOption
-    optional
+    optionalAttrs
     optionals
     ;
   inherit (lib.types)
@@ -92,13 +92,16 @@ in
     programs.dconf.enable = true;
 
     environment = {
-      etc = {
-        # universal git settings
-        "gitconfig".text = config.hm.xdg.configFile."git/config".text;
-        # get gparted to use system theme
-        "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
-        "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
-      };
+      etc =
+        {
+          # universal git settings
+          "gitconfig".text = config.hm.xdg.configFile."git/config".text;
+        }
+        // optionalAttrs (config.hm.custom.wm != "tty") {
+          # get gparted to use system theme
+          "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
+          "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
+        };
 
       # install fish completions for fish
       # https://github.com/nix-community/home-manager/pull/2408
@@ -154,13 +157,13 @@ in
         ]
         ++
           # install gtk theme for root, some apps like gparted only run as root
-          [
+          (optionals (config.hm.custom.wm != "tty") [
             config.hm.gtk.theme.package
             config.hm.gtk.iconTheme.package
-          ]
+          ])
         # add custom user created shell packages
         ++ (attrValues config.custom.shell.packages)
-        ++ (optional config.hm.custom.helix.enable helix);
+        ++ (optionals config.hm.custom.helix.enable [ helix ]);
     };
 
     # add custom user created shell packages to pkgs.custom.shell
@@ -198,24 +201,10 @@ in
 
       # bye bye nano
       nano.enable = mkForce false;
-
-      # yazi =
-      #   let
-      #     yaziHm = config.hm.programs.yazi;
-      #   in
-      #   {
-      #     enable = true;
-      #     # initLua = "${config.hm.xdg.configHome}/yazi/init.lua";
-      #     # settings = {
-      #     #   inherit (yaziHm) theme keymap;
-      #     #   yazi = yaziHm.settings;
-      #     # };
-
-      #   };
     };
 
     # use gtk theme on qt apps
-    qt = mkIf (!config.hm.custom.headless) {
+    qt = mkIf (config.hm.custom.wm != "tty") {
       enable = true;
       platformTheme = "qt5ct";
       style = "kvantum";
@@ -245,9 +234,7 @@ in
 
     custom.persist = {
       root.directories = optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
-      root.cache.directories = [
-        "/var/lib/systemd/coredump"
-      ];
+      root.cache.directories = [ "/var/lib/systemd/coredump" ];
 
       home.directories = [ ".local/state/wireplumber" ];
     };

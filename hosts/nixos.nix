@@ -70,8 +70,7 @@ in
   # hyprland can be used within a VM on AMD
   vm-hyprland = mkVm "vm" {
     extraConfig = {
-      custom.plasma.enable = lib.mkForce false;
-      home-manager.users.${user}.custom.hyprland.enable = lib.mkOverride (50 - 1) true;
+      home-manager.users.${user}.custom.wm = lib.mkForce "hyprland";
     };
   };
   # create VMs for each host configuration, build using

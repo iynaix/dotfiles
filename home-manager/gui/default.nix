@@ -6,11 +6,13 @@ _: {
     ./dunst.nix
     ./ghostty.nix
     ./gtk.nix
+    ./hyprland
     ./librewolf.nix
     ./mpv.nix
     ./nemo.nix
     ./obs-studio.nix
     ./pathofbuilding.nix
+    ./plasma.nix
     ./pqiv.nix
     ./qt.nix
     ./rofi.nix

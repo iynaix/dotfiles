@@ -4,7 +4,6 @@ let
 in
 {
   custom = {
-    plasma.enable = true;
     zfs = {
       encryption = false;
       zed = true;

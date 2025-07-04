@@ -15,7 +15,7 @@ let
   # NOTE: real dunst config is read from here
   actualDunstConfig = "${config.xdg.cacheHome}/wallust/dunstrc";
 in
-mkIf (!config.custom.headless) (mkMerge [
+mkIf (config.custom.wm != "tty") (mkMerge [
   {
     services.dunst = {
       enable = true;

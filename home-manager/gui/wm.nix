@@ -23,6 +23,15 @@ let
 in
 {
   options.custom = {
+    wm = mkOption {
+      description = "The WM to use, either hyprland, plasma or tty";
+      type = enum [
+        "hyprland"
+        "plasma"
+        "tty"
+      ];
+      default = "hyprland";
+    };
     monitors = mkOption {
       description = "Config for monitors";
       type = nonEmptyListOf (

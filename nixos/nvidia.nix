@@ -11,8 +11,8 @@ let
     optionalAttrs
     versionOlder
     ;
+  # NOTE: nvidia.enable is a home-manager option so it can be referenced within home-manager as well
 in
-# NOTE: nvidia.enable is a home-manager option so it can be referenced within home-manager as well
 mkIf config.hm.custom.nvidia.enable {
   # enable nvidia support
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -45,7 +45,7 @@ mkIf config.hm.custom.nvidia.enable {
     ];
   };
 
-  environment.variables = optionalAttrs config.programs.hyprland.enable {
+  environment.variables = optionalAttrs (config.hm.custom.wm == "hyprland") {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";

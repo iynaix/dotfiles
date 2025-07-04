@@ -24,7 +24,7 @@ in
     };
   };
 
-  config = mkIf config.custom.hyprland.enable {
+  config = mkIf (config.custom.wm == "hyprland") {
     custom.shell.packages = {
       focusorrun = {
         runtimeInputs = with pkgs; [

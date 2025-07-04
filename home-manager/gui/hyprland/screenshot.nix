@@ -14,7 +14,7 @@ let
     ocr = true;
   };
 in
-mkIf config.custom.hyprland.enable {
+mkIf (config.custom.wm == "hyprland") {
   home.packages =
     (with pkgs; [
       swappy
@@ -66,7 +66,7 @@ mkIf config.custom.hyprland.enable {
       "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
       "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
       "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-      ''ALT, backslash, exec, focal video --rofi --no-rounded-windows''
+      "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
     ];
   };
 }

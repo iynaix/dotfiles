@@ -24,7 +24,7 @@ in
         terminal-colors
         (inputs.wfetch.packages.${pkgs.system}.default.override { iynaixos = true; })
       ]
-      ++ optionals (!config.custom.headless) [
+      ++ optionals (config.custom.wm != "tty") [
         imagemagick
       ];
 

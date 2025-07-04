@@ -35,7 +35,7 @@ in
   options.custom = {
     wallust = {
       enable = mkEnableOption "wallust" // {
-        default = !config.custom.headless;
+        default = config.custom.wm != "tty";
       };
       colorscheme = mkOption {
         type = nullOr str;

@@ -19,7 +19,7 @@ in
     };
   };
 
-  config = mkIf (config.custom.hyprland.enable && config.custom.hyprland.lock) {
+  config = mkIf (config.custom.wm == "hyprland" && config.custom.hyprland.lock) {
     programs.hyprlock.enable = true;
 
     custom.shell.packages = {
@@ -29,7 +29,7 @@ in
           config.programs.hyprlock.package
         ];
         text = # sh
-          ''pidof hyprlock || hyprlock'';
+          "pidof hyprlock || hyprlock";
       };
     };
 

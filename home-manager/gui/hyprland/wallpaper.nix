@@ -36,7 +36,7 @@ in
     };
   };
 
-  config = mkIf config.custom.hyprland.enable (mkMerge [
+  config = mkIf (config.custom.wm == "hyprland") (mkMerge [
     {
       home = {
         shellAliases = {
@@ -52,7 +52,9 @@ in
           text =
             # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
             # https://github.com/tauri-apps/tauri/issues/10702
-            lib.optionalString config.custom.nvidia.enable "export WEBKIT_DISABLE_DMABUF_RENDERER=1\n"
+            lib.optionalString config.custom.nvidia.enable ''
+              export WEBKIT_DISABLE_DMABUF_RENDERER=1
+            ''
             + lib.custom.direnvCargoRun {
               dir = "${config.home.homeDirectory}/projects/wallfacer";
             };
@@ -109,7 +111,9 @@ in
               }
             ];
           }
-          // optionalAttrs config.custom.hyprland.enable { wallpaper_command = "wallpaper $1"; }
+          // optionalAttrs (config.custom.wm == "hyprland") {
+            wallpaper_command = "wallpaper $1";
+          }
         );
       };
     })

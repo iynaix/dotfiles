@@ -11,7 +11,7 @@ in
 {
   options.custom = {
     pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
-      default = isNixOS && !config.custom.headless;
+      default = isNixOS && config.custom.wm != "tty";
     };
   };
 

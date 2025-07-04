@@ -2,7 +2,7 @@
 let
   inherit (lib) mkIf;
 in
-mkIf (!config.custom.headless) {
+mkIf (config.custom.wm != "tty") {
   programs.pqiv = {
     enable = true;
     settings = {

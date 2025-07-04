@@ -44,7 +44,7 @@ in
     let
       inherit (config.custom.gtk) accents defaultAccent;
     in
-    mkIf (!config.custom.headless) {
+    mkIf (config.custom.wm != "tty") {
       home = {
         pointerCursor = {
           package = pkgs.simp1e-cursors;
@@ -52,7 +52,7 @@ in
           size = 28;
           gtk.enable = true;
           x11.enable = true;
-          hyprcursor.enable = config.custom.hyprland.enable;
+          hyprcursor.enable = config.custom.wm == "hyprland";
         };
       };
 

@@ -23,11 +23,11 @@ in
 {
   options.custom = {
     qtStyleFix = mkEnableOption "fix styling for qt applications" // {
-      default = !config.custom.headless;
+      default = config.custom.wm != "tty";
     };
   };
 
-  config = mkIf (config.custom.qtStyleFix && !config.custom.headless) {
+  config = mkIf (config.custom.qtStyleFix && config.custom.wm != "tty") {
     qt = {
       enable = true;
       platformTheme.name = "qtct";
