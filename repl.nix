@@ -8,34 +8,38 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
+  inherit (flake) lib;
 in
 rec {
-  inherit (flake) inputs lib self;
-  inherit (flake.inputs) nixpkgs;
+  inherit lib;
+  inherit (flake) inputs self;
   inherit flake host user;
 
   # default host
+  inherit (flake.nixosConfigurations.${host}) pkgs;
   c = flake.nixosConfigurations.${host}.config;
-  inherit (flake.nixosConfigurations.${host}) config;
+  config = c;
   o = c.custom;
   inherit (c) hm;
   hmo = hm.custom;
-  inherit (flake.nixosConfigurations.${host}) pkgs;
-
-  desktop = flake.nixosConfigurations.desktop.config;
-  desktopo = desktop.custom;
-  desktopHm = desktop.hm;
-  desktopHmo = desktopHm.custom;
-
-  framework = flake.nixosConfigurations.framework.config;
-  frameworko = framework.custom;
-  frameworkHm = framework.hm;
-  frameworkHmo = frameworkHm.custom;
-
-  vm = flake.nixosConfigurations.vm.config;
-  vmo = vm.custom;
-  vmHm = vm.hm;
-  vmHmo = vmHm.custom;
-
+}
+// lib.pipe (lib.attrNames flake.nixosConfigurations) [
+  (lib.filter (n: !(lib.hasInfix "-" n)))
+  (map (
+    name:
+    let
+      cfg = flake.nixosConfigurations.${name}.config;
+    in
+    {
+      # utility variables for each host
+      "${name}" = cfg;
+      "${name}o" = cfg.custom;
+      "${name}Hm" = cfg.hm;
+      "${name}Hmo" = cfg.hm.custom;
+    }
+  ))
+  lib.mergeAttrsList
+]
+// {
   # your code here
 }

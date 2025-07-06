@@ -15,6 +15,7 @@ let
     ;
   inherit (config.custom) monitors;
   pamixer = getExe pkgs.pamixer;
+  rofiExe = getExe config.programs.rofi.package;
   qtile_like = config.custom.hyprland.qtile;
 in
 {
@@ -75,7 +76,7 @@ in
         in
         [
           "$mod, Return, ${uexec "$term"}"
-          "$mod_SHIFT, Return, ${uexec ''rofi -show drun -run-command "uwsm app -- {cmd}"''}"
+          "$mod_SHIFT, Return, ${uexec ''${rofiExe} -show drun -run-command "uwsm app -- {cmd}"''}"
           "$mod, BackSpace, killactive,"
           "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
           "$mod_SHIFT, e, ${uexec "$termexec yazi ${config.xdg.userDirs.download}"}"
@@ -91,7 +92,7 @@ in
 
           # without the rounding, the blur shows up around the corners
           "CTRL_ALT, Delete, ${uexec "rofi-power-menu"}"
-          ''$mod_CTRL, v, exec, cliphist list | uwsm app -- rofi -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
+          ''$mod_CTRL, v, exec, cliphist list | uwsm app -- ${rofiExe} -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, wm-monitors"
