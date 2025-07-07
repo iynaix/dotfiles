@@ -126,8 +126,6 @@ in
         };
       };
 
-      gtk.gtk3.bookmarks = [ "file://${walls_in_dir} Walls In" ];
-
       home.packages = [ (pkgs.nomacs.override { libsForQt5 = pkgs.kdePackages; }) ];
 
       programs.pqiv.extraConfig = mkAfter ''

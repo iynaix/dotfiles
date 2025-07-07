@@ -53,7 +53,24 @@ rec {
   dotfiles-rs = callPackage ./dotfiles-rs { };
 
   # custom tela built with catppucin variant colors
-  tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };
+  tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme {
+    colors = {
+      blue = "#89b4fa";
+      flamingo = "#f2cdcd";
+      green = "#a6e3a1";
+      lavender = "#b4befe";
+      maroon = "#eba0ac";
+      mauve = "#cba6f7";
+      peach = "#fab387";
+      pink = "#f5c2e7";
+      red = "#f38ba8";
+      rosewater = "#f5e0dc";
+      sapphire = "#74c7ec";
+      sky = "#89dceb";
+      teal = "#94e2d5";
+      yellow = "#f9e2af";
+    };
+  };
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 

@@ -31,9 +31,31 @@ tela-icon-theme.overrideAttrs (oldAttrs: {
     in
     (oldAttrs.postPatch or "")
     + ''
+      # add the nix logo
+      cp ${./nix.svg} src/scalable/mimetypes/text-x-nix.svg
+
       substitute ${./install.sh} install.sh \
         --replace-fail @THEME_COLORS@ "${themeColors}" \
         --replace-fail @THEME_HELP@ "${themeHelp}" \
         --replace-fail @THEME_IF@ "${themeIf}"
+    '';
+
+  # removed jdupes as it is slow and rather pointless
+  installPhase = ''
+    runHook preInstall
+
+    patchShebangs install.sh
+    mkdir -p $out/share/icons
+    ./install.sh -a -d $out/share/icons
+
+    runHook postInstall
+  '';
+
+  # add nix logo for *.nix files through the use of a mimetype
+  postInstall =
+    (oldAttrs.postInstall or "")
+    + ''
+      mkdir -p $out/share/mime/packages
+      cp ${./nix.xml} $out/share/mime/packages/nix.xml
     '';
 })

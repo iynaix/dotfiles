@@ -6,7 +6,12 @@
   ...
 }:
 let
-  inherit (lib) getExe mkIf optionalAttrs;
+  inherit (lib)
+    getExe
+    mkIf
+    optionalAttrs
+    optionals
+    ;
 in
 mkIf (config.custom.wm != "tty") {
   home.packages = with pkgs; [
@@ -49,6 +54,9 @@ mkIf (config.custom.wm != "tty") {
       "file://${homeDir}/projects/coinfc Work"
       "file://${homeDir}/Documents"
       "file://${homeDir}/Pictures/Wallpapers"
+    ]
+    ++ optionals config.custom.wallpaper-extras.enable [ "file://${homeDir}/Pictures/Walls In" ]
+    ++ [
       "file:///persist Persist"
     ];
 
