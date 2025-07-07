@@ -14,7 +14,7 @@ let
     ocr = true;
   };
 in
-mkIf (config.custom.wm == "hyprland") {
+mkIf config.custom.isWm {
   home.packages =
     (with pkgs; [
       swappy
@@ -68,5 +68,15 @@ mkIf (config.custom.wm == "hyprland") {
       "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
       "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
     ];
+  };
+
+  programs.niri.settings = {
+    binds = {
+      "Mod+backslash".action.spawn =
+        "focal image --area selection --no-notify --no-save --no-rounded-windows";
+      "Mod+Shift+backslash".action.spawn = "focal image --edit swappy --rofi --no-rounded-windows";
+      "Mod+Ctrl+backslash".action.spawn = "focal image --area selection --ocr";
+      "Alt+backslash".action.spawn = "focal video --rofi --no-rounded-windows";
+    };
   };
 }

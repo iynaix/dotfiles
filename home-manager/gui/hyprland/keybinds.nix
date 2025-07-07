@@ -1,6 +1,5 @@
 {
   config,
-  host,
   lib,
   pkgs,
   ...
@@ -91,7 +90,7 @@ in
           "$mod_ALT, F4, exit,"
 
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, ${uexec "rofi-power-menu"}"
+          "CTRL_ALT, Delete, ${uexec (getExe config.custom.rofi-power-menu.package)}"
           ''$mod_CTRL, v, exec, cliphist list | uwsm app -- ${rofiExe} -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
 
           # reset monitors
@@ -183,8 +182,6 @@ in
         # invert windows
         ++ optionals config.custom.hyprland.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
-        # turn monitors off
-        ++ optionals (host == "desktop") [ "$mod_SHIFT_CTRL, x, dpms, off" ]
         ++ optionals config.custom.backlight.enable [
           ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"
           ",XF86MonBrightnessUp, exec, ${getExe pkgs.brightnessctl} set +5%"

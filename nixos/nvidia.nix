@@ -45,7 +45,7 @@ mkIf config.hm.custom.nvidia.enable {
     ];
   };
 
-  environment.variables = optionalAttrs (config.hm.custom.wm == "hyprland") {
+  environment.variables = optionalAttrs config.hm.custom.isWm {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";

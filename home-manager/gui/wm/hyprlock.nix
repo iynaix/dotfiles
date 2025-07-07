@@ -1,46 +1,32 @@
 {
   config,
   isLaptop,
-  isNixOS,
   lib,
   pkgs,
   ...
 }:
 let
-  inherit (lib) getExe mkEnableOption mkIf;
-  lockCmd = getExe config.custom.shell.packages.lock;
-in
-{
-  options.custom = {
-    hyprland = {
-      lock = mkEnableOption "locking of host" // {
-        default = isLaptop && isNixOS;
-      };
-    };
+  inherit (lib) getExe mkIf mkMerge;
+  lockPkg = pkgs.writeShellApplication {
+    name = "lock";
+    runtimeInputs = [
+      pkgs.procps
+      config.programs.hyprlock.package
+    ];
+    text = # sh
+      "pidof hyprlock || hyprlock";
   };
-
-  config = mkIf (config.custom.wm == "hyprland" && config.custom.hyprland.lock) {
+  lockCmd = getExe lockPkg;
+in
+mkMerge [
+  (mkIf config.custom.lock.enable {
     programs.hyprlock.enable = true;
 
     custom.shell.packages = {
-      lock = {
-        runtimeInputs = [
-          pkgs.procps
-          config.programs.hyprlock.package
-        ];
-        text = # sh
-          "pidof hyprlock || hyprlock";
-      };
+      lock = lockPkg;
     };
 
     home.packages = [ config.custom.shell.packages.lock ];
-
-    wayland.windowManager.hyprland.settings = {
-      bind = [ "$mod_SHIFT, x, exec, ${lockCmd}" ];
-
-      # handle laptop lid
-      bindl = mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
-    };
 
     # lock on idle
     services.hypridle = {
@@ -133,5 +119,31 @@ in
         };
       target = "${config.xdg.configHome}/hypr/hyprlock.conf";
     };
-  };
-}
+  })
+
+  # settings for hyprland
+  {
+    wayland.windowManager.hyprland.settings =
+      let
+        lockOrDpms = if config.custom.lock.enable then "exec, ${lockCmd}" else "dpms, off";
+      in
+      {
+        bind = [ "$mod_SHIFT_CTRL, x, ${lockOrDpms}" ];
+
+        # handle laptop lid
+        bindl = mkIf isLaptop [ ",switch:Lid Switch, ${lockOrDpms}" ];
+      };
+  }
+
+  # settings for niri
+  {
+    programs.niri.settings = {
+      binds = {
+        "Mod+Shift+x".action =
+          if config.custom.lock.enable then { spawn = lockCmd; } else { power-off-monitors = { }; };
+      };
+
+      # TODO: handle laptop lid?
+    };
+  }
+]

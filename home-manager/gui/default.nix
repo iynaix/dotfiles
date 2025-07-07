@@ -2,10 +2,10 @@ _: {
   imports = [
     ./hyprland
     ./niri
+    ./wm
     ./3dprinting.nix
     ./brave.nix
     ./deadbeef.nix
-    ./dunst.nix
     ./ghostty.nix
     ./gtk.nix
     ./librewolf.nix
@@ -19,10 +19,8 @@ _: {
     ./rofi.nix
     ./vlc.nix
     ./vscode.nix
-    ./wallust.nix
-    ./waybar.nix
-    ./wm.nix # generic functionality for all WMs
     ./zathura.nix
     ./zoom.nix
+
   ];
 }

@@ -2,7 +2,7 @@
   ...
 }:
 {
-  imports = [ ./binds.nix ];
+  imports = [ ./keybinds.nix ];
 
   config = {
     programs.niri.settings = {

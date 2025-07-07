@@ -1,6 +1,8 @@
 # generic functionality for all WMs
 {
   config,
+  isLaptop,
+  isNixOS,
   lib,
   pkgs,
   user,
@@ -9,6 +11,7 @@
 let
   inherit (lib) elemAt mkEnableOption mkOption;
   inherit (lib.types)
+    bool
     enum
     float
     int
@@ -22,6 +25,16 @@ let
     ;
 in
 {
+  imports = [
+    ./dunst.nix
+    ./hypridle.nix
+    ./hyprlock.nix
+    ./screenshot.nix
+    ./wallpaper.nix
+    ./wallust.nix
+    ./waybar.nix
+  ];
+
   options.custom = {
     wm = mkOption {
       description = "The WM to use, either hyprland, plasma or tty";
@@ -33,6 +46,18 @@ in
       ];
       default = "hyprland";
     };
+
+    isWm = mkOption {
+      description = "Readonly option to check if the WM is hyprland or niri";
+      type = bool;
+      default = config.custom.wm == "hyprland" || config.custom.wm == "niri";
+      readOnly = true;
+    };
+
+    lock.enable = mkEnableOption "screen locking of host" // {
+      default = config.custom.isWm && isLaptop && isNixOS;
+    };
+
     monitors = mkOption {
       description = "Config for monitors";
       type = nonEmptyListOf (

@@ -28,7 +28,7 @@ in
   options.custom = {
     waybar = {
       enable = mkEnableOption "waybar" // {
-        default = config.custom.wm == "hyprland" && config.custom.wm != "tty";
+        default = config.custom.isWm;
       };
       config = mkOption {
         type = submodule { freeformType = (pkgs.formats.json { }).type; };

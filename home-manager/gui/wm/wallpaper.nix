@@ -36,7 +36,7 @@ in
     };
   };
 
-  config = mkIf (config.custom.wm == "hyprland") (mkMerge [
+  config = mkIf config.custom.isWm (mkMerge [
     {
       home = {
         shellAliases = {
@@ -111,7 +111,7 @@ in
               }
             ];
           }
-          // optionalAttrs (config.custom.wm == "hyprland") {
+          // optionalAttrs config.custom.isWm {
             wallpaper_command = "wallpaper $1";
           }
         );

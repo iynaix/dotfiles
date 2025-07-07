@@ -60,9 +60,9 @@ _: {
     ghostty.enable = true;
     hyprland = {
       hyprnstack = true;
-      lock = false;
       qtile = false;
     };
+    lock.enable = false;
     modelling3d.enable = true;
     nvidia.enable = true;
     printing3d.enable = true;

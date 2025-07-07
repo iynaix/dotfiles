@@ -25,12 +25,8 @@ in
 {
   imports = [
     ./hyprnstack.nix
-    ./idle.nix
     ./keybinds.nix
-    ./lock.nix
-    ./screenshot.nix
     ./startup.nix
-    ./wallpaper.nix
   ];
 
   options.custom = {
@@ -99,7 +95,7 @@ in
 
           "$mod" = if isVm then "ALT" else "SUPER";
 
-          "$term" = "${getExe config.custom.terminal.package}";
+          "$term" = getExe config.custom.terminal.package;
           "$termexec" = "${config.custom.terminal.exec}";
 
           general =

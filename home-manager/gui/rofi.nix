@@ -6,8 +6,17 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkOption optionals;
-  inherit (lib.types) enum int nullOr;
+  inherit (lib)
+    mkIf
+    mkOption
+    optionals
+    ;
+  inherit (lib.types)
+    enum
+    int
+    nullOr
+    package
+    ;
   cfg = config.custom.rofi;
   rofiThemes = pkgs.custom.rofi-themes;
   patchRasi =
@@ -94,6 +103,18 @@ in
         description = "Rofi launcher width";
       };
     };
+
+    # allow setting a custom rofi-power-menu package to add the reboot to windows option
+    rofi-power-menu = {
+      package = mkOption {
+        type = package;
+        default = pkgs.custom.rofi-power-menu.override {
+          reboot-to-windows =
+            if (config.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+        };
+      };
+      description = "Package to use for rofi-power-menu";
+    };
   };
 
   config = mkIf (config.custom.wm != "tty") {
@@ -107,10 +128,7 @@ in
 
     home.packages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      (pkgs.custom.rofi-power-menu.override {
-        reboot-to-windows =
-          if (config.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
-      })
+      config.custom.rofi-power-menu.package
     ] ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown

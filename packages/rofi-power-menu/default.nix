@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/adi1090x/rofi";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.iynaix ];
-    mainProgram = "rofi-wifi-menu";
+    mainProgram = "rofi-power-menu";
     platforms = lib.platforms.all;
   };
 }
