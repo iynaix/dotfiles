@@ -22,6 +22,10 @@ rec {
   o = c.custom;
   inherit (c) hm;
   hmo = hm.custom;
+
+  # testing niri specialisation
+  niri = c.specialisation.niri.configuration;
+  niriHm = niri.hm;
 }
 // lib.pipe (lib.attrNames flake.nixosConfigurations) [
   (lib.filter (n: !(lib.hasInfix "-" n)))

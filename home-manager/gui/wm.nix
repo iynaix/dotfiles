@@ -27,6 +27,7 @@ in
       description = "The WM to use, either hyprland, plasma or tty";
       type = enum [
         "hyprland"
+        "niri"
         "plasma"
         "tty"
       ];

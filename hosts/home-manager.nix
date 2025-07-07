@@ -26,7 +26,7 @@ let
 
       modules = [
         inputs.nix-index-database.hmModules.nix-index
-        inputs.nvf.homeManagerModules.nvf
+        inputs.niri.homeModules.niri
         ./${host}/home.nix # host specific home-manager configuration
         ../home-manager
         ../overlays

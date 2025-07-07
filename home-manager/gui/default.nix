@@ -1,12 +1,13 @@
 _: {
   imports = [
+    ./hyprland
+    ./niri
     ./3dprinting.nix
     ./brave.nix
     ./deadbeef.nix
     ./dunst.nix
     ./ghostty.nix
     ./gtk.nix
-    ./hyprland
     ./librewolf.nix
     ./mpv.nix
     ./nemo.nix

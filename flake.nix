@@ -19,6 +19,11 @@
 
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
 
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     sops-nix = {

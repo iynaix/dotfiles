@@ -9,6 +9,10 @@ in
       tty.configuration = {
         hm.custom.wm = "tty";
       };
+
+      niri.configuration = {
+        hm.custom.wm = "niri";
+      };
     }
     # create an otg specialisation for laptops
     // optionalAttrs isLaptop { otg.configuration = { }; };
