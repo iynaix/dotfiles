@@ -82,10 +82,15 @@ in
                 default = 60;
                 description = "Refresh rate of the display";
               };
-              position = mkOption {
-                type = str;
-                default = "0x0";
-                description = "Position of the display, e.g. 0x0";
+              position-x = mkOption {
+                type = int;
+                default = 0;
+                description = "Position x coordinate of the display";
+              };
+              position-y = mkOption {
+                type = int;
+                default = 0;
+                description = "Position y coordinate of the display";
               };
               scale = mkOption {
                 type = float;

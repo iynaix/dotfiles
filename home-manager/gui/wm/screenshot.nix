@@ -10,6 +10,7 @@ let
   inherit (lib) mkAfter mkIf optionals;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
     hyprland = config.wayland.windowManager.hyprland.package;
+    # niri = config.programs.niri.package;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };

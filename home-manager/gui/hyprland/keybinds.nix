@@ -79,18 +79,19 @@ in
           "$mod, BackSpace, killactive,"
           "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
           "$mod_SHIFT, e, ${uexec "$termexec yazi ${config.xdg.userDirs.download}"}"
-          "$mod, w, ${uexec "brave"}"
-          "$mod_SHIFT, w, ${uexec "brave --incognito"}"
+          "$mod, w, ${uexec (getExe config.programs.chromium.package)}"
+          "$mod_SHIFT, w, ${uexec "${getExe config.programs.chromium.package} --incognito"}"
           "$mod, v, ${uexec "$termexec nvim"}"
           "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
           # exit hyprland
-          "$mod_ALT, F4, exit,"
-
+          "ALT, F4, exit,"
           # without the rounding, the blur shows up around the corners
           "CTRL_ALT, Delete, ${uexec (getExe config.custom.rofi-power-menu.package)}"
+
+          # clipboard history
           ''$mod_CTRL, v, exec, cliphist list | uwsm app -- ${rofiExe} -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
 
           # reset monitors
@@ -109,17 +110,11 @@ in
           "$mod_SHIFT, k, movewindow, u"
           "$mod_SHIFT, j, movewindow, d"
 
-          # resizing windows
-          # "$mod_CTRL, h, resizeactive, -20 0"
-          # "$mod_CTRL, l, resizeactive, 20 0"
-          # "$mod_CTRL, k, resizeactive, 0 -20"
-          # "$mod_CTRL, j, resizeactive, 0 20"
-
           "$mod, b, layoutmsg, swapwithmaster"
 
-          # focus the previous / next desktop in the current monitor (DE style)
-          "CTRL_ALT, Left, workspace, m-1"
-          "CTRL_ALT, Right, workspace, m+1"
+          # focus the previous / next workspace in the current monitor (DE style)
+          "$mod, Left, workspace, m-1"
+          "$mod, Right, workspace, m+1"
 
           # monocle mode
           "$mod, z, fullscreen, 1"

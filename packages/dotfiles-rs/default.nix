@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage {
 
   buildNoDefaultFeatures = true;
   buildFeatures =
-    lib.optionals useRclip [ "rclip" ]
+    [ "hyprland" ] # TODO: make optional
+    ++ lib.optionals useRclip [ "rclip" ]
     ++ lib.optionals useWallfacer [ "wallfacer" ]
     ++ lib.optionals useDedupe [ "dedupe" ];
 

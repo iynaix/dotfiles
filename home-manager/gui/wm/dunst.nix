@@ -71,6 +71,10 @@ mkIf (config.custom.wm != "tty") (mkMerge [
       "$mod, n, exec, dunstctl history-pop"
     ];
 
+    programs.niri.settings.binds = {
+      "Mod+n".action.spawn = "dunstctl history-pop";
+    };
+
     # wait for colorscheme to be ready on boot
     systemd.user.services.dunst = {
       Unit.AssertPathExists = [ actualDunstConfig ];

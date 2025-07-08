@@ -73,7 +73,7 @@ in
                 [
                   d.name
                   "${toString d.width}x${toString d.height}@${toString d.refreshRate}"
-                  d.position
+                  "${toString d.position-x}x${toString d.position-y}"
                   (toString d.scale)
                 ]
                 ++ optionals (d.transform != 0) [ "transform,${toString d.transform}" ]

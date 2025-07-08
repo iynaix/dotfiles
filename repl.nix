@@ -10,24 +10,7 @@ let
   flake = builtins.getFlake (toString ./.);
   inherit (flake) lib;
 in
-rec {
-  inherit lib;
-  inherit (flake) inputs self;
-  inherit flake host user;
-
-  # default host
-  inherit (flake.nixosConfigurations.${host}) pkgs;
-  c = flake.nixosConfigurations.${host}.config;
-  config = c;
-  o = c.custom;
-  inherit (c) hm;
-  hmo = hm.custom;
-
-  # testing niri specialisation
-  niri = c.specialisation.niri.configuration;
-  niriHm = niri.hm;
-}
-// lib.pipe (lib.attrNames flake.nixosConfigurations) [
+lib.pipe (lib.attrNames flake.nixosConfigurations) [
   (lib.filter (n: !(lib.hasInfix "-" n)))
   (map (
     name:
@@ -44,6 +27,22 @@ rec {
   ))
   lib.mergeAttrsList
 ]
-// {
+// rec {
+  inherit lib;
+  inherit (flake) inputs self;
+  inherit flake host user;
+
+  # default host
+  inherit (flake.nixosConfigurations.${host}) pkgs;
+  c = flake.nixosConfigurations.${host}.config;
+  config = c;
+  o = c.custom;
+  inherit (c) hm;
+  hmo = hm.custom;
+
+  # testing niri specialisation
+  niri = c.specialisation.niri.configuration;
+  niriHm = niri.hm;
+
   # your code here
 }

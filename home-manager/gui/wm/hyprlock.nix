@@ -137,13 +137,19 @@ mkMerge [
 
   # settings for niri
   {
-    programs.niri.settings = {
-      binds = {
-        "Mod+Shift+x".action =
+    programs.niri.settings =
+      let
+        lockOrDpms =
           if config.custom.lock.enable then { spawn = lockCmd; } else { power-off-monitors = { }; };
-      };
+      in
+      {
+        binds = {
+          "Mod+Shift+x".action = lockOrDpms;
+        };
 
-      # TODO: handle laptop lid?
-    };
+        switch-events = mkIf isLaptop {
+          lid-open = lockOrDpms;
+        };
+      };
   }
 ]

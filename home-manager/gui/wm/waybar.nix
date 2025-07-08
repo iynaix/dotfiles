@@ -126,7 +126,7 @@ in
 
         "custom/nix" = {
           format = "󱄅";
-          on-click = "exec, uwsm app -- rofi-power-menu";
+          on-click = getExe config.custom.rofi-power-menu.package;
           tooltip = false;
         };
 
@@ -160,9 +160,9 @@ in
         layer = "top";
         margin = "0";
 
-        modules-center = [ "hyprland/workspaces" ];
-
         modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);
+
+        modules-center = [ "${config.custom.wm}/workspaces" ];
 
         modules-right =
           [

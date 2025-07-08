@@ -1,4 +1,9 @@
-{ isLaptop, lib, ... }:
+{
+  config,
+  isLaptop,
+  lib,
+  ...
+}:
 let
   inherit (lib) optionalAttrs;
 in
@@ -9,9 +14,15 @@ in
       tty.configuration = {
         hm.custom.wm = "tty";
       };
-
+    }
+    // optionalAttrs (config.hm.custom.wm == "hyprland") {
       niri.configuration = {
         hm.custom.wm = "niri";
+      };
+    }
+    // optionalAttrs (config.hm.custom.wm == "niri") {
+      hyprland.configuration = {
+        hm.custom.wm = "hyprland";
       };
     }
     # create an otg specialisation for laptops
