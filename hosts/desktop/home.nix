@@ -71,7 +71,7 @@ _: {
     rclip.enable = true;
     vlc.enable = true;
     wallfacer.enable = true;
-    wallpaper-extras.enable = true;
+    wallpaper-tools.enable = true;
     # wallust.colorscheme = "tokyo-night";
     waybar = {
       enable = true;

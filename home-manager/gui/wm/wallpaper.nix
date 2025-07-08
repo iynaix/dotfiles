@@ -22,12 +22,12 @@ in
   options.custom = {
     rclip.enable = mkEnableOption "rclip";
     wallfacer.enable = mkEnableOption "wallfacer";
-    wallpaper-extras.enable = mkEnableOption "additional tools for wallpapers, e.g. fetching and editing";
+    wallpaper-tools.enable = mkEnableOption "additional tools for wallpapers, e.g. fetching and editing";
     dotfiles = {
       package = mkOption {
         type = package;
         default = pkgs.custom.dotfiles-rs.override {
-          useDedupe = config.custom.wallpaper-extras.enable;
+          useDedupe = config.custom.wallpaper-tools.enable;
           useRclip = config.custom.rclip.enable;
           useWallfacer = config.custom.wallfacer.enable;
         };
@@ -118,7 +118,7 @@ in
       };
     })
 
-    (mkIf config.custom.wallpaper-extras.enable {
+    (mkIf config.custom.wallpaper-tools.enable {
       custom.shell.packages = {
         # fetch wallpapers from pixiv for user
         pixiv = lib.custom.direnvCargoRun {
