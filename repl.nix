@@ -43,6 +43,7 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
   # testing niri specialisation
   niri = c.specialisation.niri.configuration;
   niriHm = niri.hm;
+  niriConfig = niri.hm.programs.niri.finalConfig;
 
   # your code here
 }

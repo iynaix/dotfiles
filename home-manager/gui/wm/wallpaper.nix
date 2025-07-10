@@ -6,11 +6,12 @@
 }:
 let
   inherit (lib)
+    getExe'
     mkAfter
     mkEnableOption
     mkIf
-    mkOption
     mkMerge
+    mkOption
     optionalAttrs
     ;
   inherit (lib.types) package;
@@ -27,11 +28,12 @@ in
       package = mkOption {
         type = package;
         default = pkgs.custom.dotfiles-rs.override {
+          inherit (config.custom) wm;
           useDedupe = config.custom.wallpaper-tools.enable;
           useRclip = config.custom.rclip.enable;
           useWallfacer = config.custom.wallfacer.enable;
         };
-        description = "Package to use for dotfiles";
+        description = "Package to use for dotfiles-rs";
       };
     };
   };
@@ -43,6 +45,39 @@ in
           wall = "wallpaper";
         };
         packages = [ config.custom.dotfiles.package ];
+      };
+    }
+
+    # handle setting the wallpaper on startup
+
+    # start swww and wallpaper via systemd to minimize reloads
+    {
+      services.swww.enable = true;
+
+      systemd.user.services = {
+        wallpaper = {
+          Install.WantedBy = [ "swww.service" ];
+          Unit = {
+            Description = "Set the wallpaper and update colorscheme";
+            PartOf = [ config.wayland.systemd.target ];
+            After = [ "swww.service" ];
+            Requires = [ "swww.service" ];
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart =
+              let
+                dotsExe = getExe' config.custom.dotfiles.package;
+              in
+              pkgs.writeShellScript "wallpaper-startup" ''
+                ${dotsExe "wallpaper"}
+                ${dotsExe "wm-monitors"}
+              '';
+            # possible race condition, introduce a small delay before starting
+            # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
+            ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 1";
+          };
+        };
       };
     }
 

@@ -2,11 +2,7 @@ use std::path::{Path, PathBuf};
 
 use crate::{vertical_dimensions, wallpaper::WallInfo};
 use execute::Execute;
-use fast_image_resize::{images::Image, PixelType, ResizeOptions, Resizer};
-use hyprland::{
-    data::{Monitor, Monitors},
-    shared::{HyprData, HyprDataVec},
-};
+use fast_image_resize::{PixelType, ResizeOptions, Resizer, images::Image};
 use image::codecs::webp::WebPEncoder;
 use image::{ImageEncoder, ImageReader};
 use rayon::prelude::*;
@@ -78,7 +74,27 @@ impl Swww {
             .expect("failed to set wallpaper");
     }
 
-    fn with_crop(&self, mon: &Monitor, wall_info: &WallInfo, transition_args: &[String]) {
+    /*
+    fn iter_monitor_dimensions(&self) -> impl Iterator<Item = (i32, i32)> {
+        let nixcolors = NixColors::new().expect("unable to parse nix.json");
+
+        nixcolors
+            .filter_colors(&["color0", "color7", "color8", "color15"])
+            .into_values()
+            .map(|color| {
+                let (w, h) = vertical_dimensions(mon);
+                (color.to_rgb_str(), w, h)
+            })
+            .collect_vec()
+    }
+    */
+
+    fn with_crop(
+        &self,
+        mon: &hyprland::data::Monitor,
+        wall_info: &WallInfo,
+        transition_args: &[String],
+    ) {
         let img = ImageReader::open(&self.wall)
             .expect("could not open image")
             .decode()
@@ -148,19 +164,25 @@ impl Swww {
         });
 
         // set the wallpaper per monitor
-        let monitors = Monitors::get().expect("could not get monitors").to_vec();
+        {
+            use hyprland::shared::{HyprData, HyprDataVec};
+            let monitors = hyprland::data::Monitors::get()
+                .expect("could not get monitors")
+                .to_vec();
 
-        // bail if any monitor doesn't have geometry info
-        if monitors.iter().any(|m| {
-            let (mw, mh) = vertical_dimensions(m);
-            wall_info.get_geometry_str(mw, mh).is_none()
-        }) {
-            self.no_crop(&transition_args);
-            return;
+            // TODO: set per monitor, instead of bailing
+            // bail if image doesn't have geometry info for any image
+            if monitors.iter().any(|m| {
+                let (mw, mh) = vertical_dimensions(m);
+                wall_info.get_geometry_str(mw, mh).is_none()
+            }) {
+                self.no_crop(&transition_args);
+                return;
+            }
+
+            monitors
+                .par_iter()
+                .for_each(|mon| self.with_crop(mon, wall_info, &transition_args));
         }
-
-        monitors
-            .par_iter()
-            .for_each(|mon| self.with_crop(mon, wall_info, &transition_args));
     }
 }

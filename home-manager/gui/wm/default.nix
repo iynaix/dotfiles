@@ -5,7 +5,6 @@
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -15,11 +14,8 @@ let
     enum
     float
     int
-    listOf
     nonEmptyListOf
-    nullOr
     oneOf
-    package
     str
     submodule
     ;
@@ -78,7 +74,10 @@ in
                 description = "Pixel width of the display";
               };
               refreshRate = mkOption {
-                type = int;
+                type = oneOf [
+                  int
+                  str
+                ];
                 default = 60;
                 description = "Refresh rate of the display";
               };
@@ -117,101 +116,24 @@ in
       );
       default = [ ];
     };
-
-    startup = mkOption {
-      description = "Programs to run on startup";
-      type = listOf (oneOf [
-        str
-        (submodule {
-          options = {
-            exec = mkOption {
-              type = nullOr str;
-              description = "Command to execute";
-              default = null;
-            };
-            packages = mkOption {
-              type = listOf package;
-              default = [ ];
-              description = "Packages / dependencies required for exec";
-            };
-            workspace = mkOption {
-              type = nullOr int;
-              description = "Optional workspace to start program on";
-              default = null;
-            };
-          };
-        })
-      ]);
-      default = [ ];
-    };
   };
 
   config = {
-    custom.startup = [
-      # browsers
-      {
-        exec = "brave --incognito";
-        packages = [ config.programs.chromium.package ];
-        workspace = 1;
-      }
-      {
-        exec = "brave --profile-directory=Default";
-        packages = [ config.programs.chromium.package ];
-        workspace = 1;
-      }
-
-      # file manager
-      {
-        packages = [ pkgs.nemo-with-extensions ];
-        workspace = 4;
-      }
-
-      # terminal
-      {
-        packages = [ config.custom.terminal.package ];
-        workspace = 7;
-      }
-
-      # librewolf for discord
-      {
-        packages = [ config.programs.librewolf.package ];
-        workspace = 9;
-      }
-
-      # download related
-      {
-        exec = "${config.custom.terminal.exec} nvim ${config.xdg.userDirs.desktop}/yt.txt";
-        packages = [ config.custom.terminal.package ];
-        workspace = 10;
-      }
-      {
-        packages = [ config.custom.terminal.package ];
-        workspace = 10;
-      }
-
-      # misc
-      # fix gparted "cannot open display: :0" error
-      {
-        packages = [ pkgs.xorg.xhost ];
-        exec = "xhost +local:${user}";
-      }
-
-      # fix Authorization required, but no authorization protocol specified error
-      {
-        packages = [ pkgs.xorg.xhost ];
-        exec = "xhost si:localuser:root";
-      }
-
-      # clipboard manager
-      {
-        packages = with pkgs; [
-          cliphist
-          wl-clipboard
+    custom.shell.packages = {
+      rofi-clipboard-history = {
+        runtimeInputs = [
+          config.programs.rofi.package
+          config.services.cliphist.package
+          pkgs.wl-clipboard
         ];
-        exec = "wl-paste --watch cliphist store";
-      }
-    ];
-
+        text = # sh
+          ''
+            cliphist list | \
+            rofi  -dmenu -theme \"${config.xdg.cacheHome}/wallust/rofi-menu.rasi\" | \
+            cliphist decode | \
+            wl-copy'';
+      };
+    };
     home = {
       sessionVariables = {
         QT_QPA_PLATFORM = "wayland;xcb";
@@ -227,6 +149,13 @@ in
     };
 
     # WM agnostic polkit authentication agent
-    services.polkit-gnome.enable = true;
+    services = {
+      cliphist = {
+        enable = true;
+        allowImages = true;
+      };
+
+      polkit-gnome.enable = true;
+    };
   };
 }

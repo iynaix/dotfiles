@@ -2,6 +2,7 @@
 
 dots="@dots@"
 hostname="@host@"
+specialisation="@specialisation@"
 nhArgs=()
 restArgs=()
 hostnameOverride="$hostname"
@@ -64,11 +65,16 @@ if [ -n "$untrackedFiles" ]; then
     git add "$untrackedFiles"
 fi
 
+specialisationArgs=()
+if [ -n "$specialisation" ]; then
+   specialisationArgs=("--specialisation" "$specialisation")
+fi
+
 if [ "$showProgress" = true ]; then
     # use remote sudo only uses sudo during the switch to the new generation
-    nixos-rebuild "$nhCommand" --use-remote-sudo --flake ".#$hostname" "${restArgs[@]}"
+    nixos-rebuild "$nhCommand" --use-remote-sudo --flake ".#$hostname" "${specialisationArgs[@]}" "${restArgs[@]}"
 else
-    nh os "$nhCommand" --hostname "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+    nh os "$nhCommand" --hostname "$hostname" "${specialisationArgs[@]}" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
 if [ $? -eq 0 ]; then

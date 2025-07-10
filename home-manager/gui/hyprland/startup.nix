@@ -2,57 +2,56 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 let
   inherit (lib)
-    concatMapStringsSep
     getExe
     getExe'
-    mkAfter
-    mkBefore
-    mkMerge
     mkIf
-    optionalString
     ;
 in
 mkIf (config.custom.wm == "hyprland") {
   custom = {
     autologinCommand = "uwsm start hyprland-uwsm.desktop";
-    startup = mkMerge [
-      (mkBefore [
-        # init ipc listener
-        "hypr-ipc &"
-        # stop fucking with my cursors
-        "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
-      ])
-      (mkAfter [ "hyprctl dispatch workspace 1" ])
-    ];
   };
 
-  # start hyprland
-  programs.bash.profileExtra = # sh
-    ''
-      if [ "$(tty)" = "/dev/tty1" ]; then
-        if uwsm check may-start; then
-          ${config.custom.autologinCommand}
-        fi
-      fi
-    '';
-
   wayland.windowManager.hyprland.settings = {
-    exec-once = map (
-      prog:
-      if builtins.isString prog then
-        prog
-      else
-        let
-          inherit (prog) exec packages workspace;
-          rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-          finalExec = if exec == null then concatMapStringsSep "\n" getExe packages else exec;
-        in
-        "${rules} uwsm app -- ${finalExec}"
-    ) config.custom.startup;
+    exec-once =
+      let
+        braveExe = getExe config.programs.chromium.package;
+      in
+      [
+        # init ipc listener
+        "hypr-ipc &"
+
+        # browsers
+        "[workspace 1 silent] uwsm app -- ${braveExe} --incognito"
+        "[workspace 1 silent] uwsm app -- ${braveExe} --profile-directory=Default"
+        # file manager
+        "[workspace 4 silent] uwsm app -- nemo"
+        # terminal
+        "[workspace 7 silent] uwsm app -- ${getExe config.custom.terminal.package}"
+
+        # librewolf for discord
+        "[workspace 9 silent] uwsm app -- ${getExe config.programs.librewolf.package}"
+
+        # download related
+        "[workspace 10 silent] uwsm app -- ${config.custom.terminal.exec} nvim ${config.xdg.userDirs.desktop}/yt.txt"
+        "[workspace 10 silent] uwsm app -- ${getExe config.custom.terminal.package}"
+
+        # misc
+        # fix gparted "cannot open display: :0" error
+        "uwsm app -- ${getExe pkgs.xorg.xhost} +local:${user}"
+        # fix Authorization required, but no authorization protocol specified error
+        "uwsm app -- ${getExe pkgs.xorg.xhost} si:localuser:root"
+
+        # stop fucking with my cursors
+        "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
+        "hyprctl dispatch workspace 1"
+
+      ];
   };
 
   # start swww and wallpaper via systemd to minimize reloads

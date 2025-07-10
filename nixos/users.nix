@@ -31,8 +31,8 @@ in
           let
             inherit (config.hm.custom) autologinCommand;
           in
-          mkIf (config.boot.zfs.requestEncryptionCredentials && autologinCommand != null) {
-            enable = true;
+          {
+            enable = autologinCommand != null;
 
             settings = {
               default_session = {

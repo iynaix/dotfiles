@@ -10,10 +10,15 @@
   pqiv,
   rsync,
   rclip,
+  wm ? "hyprland",
   useDedupe ? false,
   useRclip ? false,
   useWallfacer ? false,
 }:
+assert lib.assertOneOf "dotfiles-rs wm" wm [
+  "hyprland"
+  "niri"
+];
 rustPlatform.buildRustPackage {
   pname = "dotfiles-rs";
   version = "0.1.0";
@@ -24,7 +29,8 @@ rustPlatform.buildRustPackage {
 
   buildNoDefaultFeatures = true;
   buildFeatures =
-    [ "hyprland" ] # TODO: make optional
+    lib.optionals (wm == "hyprland") [ "hyprland" ]
+    ++ lib.optionals (wm == "niri") [ "niri" ]
     ++ lib.optionals useRclip [ "rclip" ]
     ++ lib.optionals useWallfacer [ "wallfacer" ]
     ++ lib.optionals useDedupe [ "dedupe" ];

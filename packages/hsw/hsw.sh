@@ -2,6 +2,7 @@
 
 dots="@dots@"
 hostname="@host@"
+specialisation="@specialisation@"
 nhArgs=()
 restArgs=()
 nhCommand="switch"
@@ -45,10 +46,15 @@ if [ -n "$untrackedFiles" ]; then
     git add "$untrackedFiles"
 fi
 
+specialisationArgs=()
+if [ -n "$specialisation" ]; then
+   specialisationArgs=("--specialisation" "$specialisation")
+fi
+
 if [ "$showProgress" = true ]; then
-    home-manager "$nhCommand" --flake ".#$hostname" "${restArgs[@]}"
+    home-manager "$nhCommand" --flake ".#$hostname" "${specialisationArgs[@]}" "${restArgs[@]}"
 else
-    nh home "$nhCommand" "$hostname" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+    nh home "$nhCommand" "$hostname" "${specialisationArgs[@]}" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
 fi
 
 popd > /dev/null

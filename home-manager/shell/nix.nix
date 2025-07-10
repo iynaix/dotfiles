@@ -93,11 +93,13 @@ in
           pkgs.custom.nsw.override {
             inherit dots host;
             name = "nsw";
+            specialisation = if config.specialisation == { } then "" else config.specialisation;
           }
         else
           pkgs.custom.hsw.override {
             inherit dots host;
             name = "nsw";
+            specialisation = if config.specialisation == { } then "" else config.specialisation;
           };
       # update all nvfetcher overlays and packages
       nv-update = {

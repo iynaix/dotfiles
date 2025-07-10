@@ -1,5 +1,4 @@
 use execute::Execute;
-use hyprland::shared::HyprData;
 use nixinfo::NixMonitorInfo;
 use std::{
     collections::HashMap,
@@ -147,6 +146,7 @@ pub fn vertical_dimensions(mon: &hyprland::data::Monitor) -> (i32, i32) {
 }
 
 pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
+    use hyprland::shared::HyprData;
     hyprland::data::Monitors::get()
         .expect("could not get monitors")
         .iter()

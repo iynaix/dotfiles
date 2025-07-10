@@ -112,8 +112,8 @@ in
           reboot-to-windows =
             if (config.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
         };
+        description = "Package to use for rofi-wifi-menu";
       };
-      description = "Package to use for rofi-power-menu";
     };
   };
 

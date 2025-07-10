@@ -1,5 +1,5 @@
 use clap::{CommandFactory, Parser};
-use clap_complete::{generate, Shell};
+use clap_complete::{Shell, generate};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
 use common::{full_path, wallpaper};
 use std::{
@@ -90,7 +90,9 @@ fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
                         panic!("{} is not a valid image / command", &image_or_dir.display())
                     })
                     .to_str()
-                    .unwrap_or_else(|| panic!("could not convert {image_or_dir:?} to str"))
+                    .unwrap_or_else(|| {
+                        panic!("could not convert {} to str", image_or_dir.display())
+                    })
                     .to_string()
             }
         }

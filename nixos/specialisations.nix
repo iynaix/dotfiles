@@ -1,5 +1,4 @@
 {
-  config,
   isLaptop,
   lib,
   ...
@@ -14,13 +13,11 @@ in
       tty.configuration = {
         hm.custom.wm = "tty";
       };
-    }
-    // optionalAttrs (config.hm.custom.wm == "hyprland") {
+
       niri.configuration = {
         hm.custom.wm = "niri";
       };
-    }
-    // optionalAttrs (config.hm.custom.wm == "niri") {
+
       hyprland.configuration = {
         hm.custom.wm = "hyprland";
       };

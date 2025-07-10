@@ -5,7 +5,7 @@
   libnotify,
   networkmanager,
   procps,
-  rofi,
+  rofi-wayland,
   reboot-to-windows ? null,
 }:
 stdenvNoCC.mkDerivation {
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
             procps # for uptime
             libnotify
             networkmanager
-            rofi
+            rofi-wayland
             reboot-to-windows
           ]
         }

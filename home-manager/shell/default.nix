@@ -44,7 +44,7 @@ in
       package = mkOption {
         type = package;
         default = config.programs.ghostty.package;
-        description = "Terminal package to use.";
+        description = "Package to use for the terminal";
       };
 
       desktop = mkOption {

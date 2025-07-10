@@ -51,6 +51,8 @@ rec {
 
   # ricing glue
   dotfiles-rs = callPackage ./dotfiles-rs { };
+  dotfiles-rs-hyprland = callPackage ./dotfiles-rs { wm = "hyprland"; };
+  dotfiles-rs-niri = callPackage ./dotfiles-rs { wm = "niri"; };
 
   # custom tela built with catppucin variant colors
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme {

@@ -5,6 +5,7 @@
   makeWrapper,
   libnotify,
   networkmanager,
+  rofi-wayland,
 }:
 stdenvNoCC.mkDerivation {
   pname = "rofi-wifi-menu";
@@ -28,6 +29,7 @@ stdenvNoCC.mkDerivation {
           lib.makeBinPath [
             libnotify
             networkmanager
+            rofi-wayland
           ]
         }
     '';

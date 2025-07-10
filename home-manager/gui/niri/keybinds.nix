@@ -8,13 +8,17 @@ let
   inherit (lib)
     flatten
     getExe
+    isList
     mergeAttrsList
     mkIf
     optionalAttrs
+    splitString
+    toInt
     ;
   inherit (config.custom) monitors;
   pamixerExe = getExe pkgs.pamixer;
-  termExe = getExe config.custom.terminal.package;
+  termExec =
+    cmd: (splitString " " config.custom.terminal.exec) ++ (if isList cmd then cmd else [ cmd ]);
   rofiExe = getExe config.programs.rofi.package;
 in
 mkIf (config.custom.wm == "niri") {
@@ -43,31 +47,49 @@ mkIf (config.custom.wm == "niri") {
         # show hotkey overlay
         "Mod+Shift+Slash".action.show-hotkey-overlay = { };
 
-        "Mod+Return".action.spawn = termExe;
-        "Mod+Shift+Return".action.spawn = rofiExe;
+        "Mod+Return".action.spawn = getExe config.custom.terminal.package;
+        "Mod+Shift+Return".action.spawn = [
+          rofiExe
+          "-show"
+          "drun"
+        ];
         "Mod+BackSpace" = {
           action.close-window = { };
           repeat = false;
         };
 
-        "Mod+E".action.spawn = "nemo ${config.xdg.userDirs.download}";
-        "Mod+Shift+E".action.spawn = "${config.custom.terminal.exec} yazi ${config.xdg.userDirs.download}";
-        "Mod+W".action.spawn = lib.getExe config.programs.chromium.package;
-        "Mod+Shift+W".action.spawn = "${getExe config.programs.chromium.package} --incognito";
-        "Mod+V".action.spawn = "${config.custom.terminal.exec} nvim";
+        "Mod+E".action.spawn = [
+          "nemo"
+          config.xdg.userDirs.download
+        ];
+        "Mod+Shift+E".action.spawn = termExec [
+          "yazi"
+          config.xdg.userDirs.download
+        ];
+        "Mod+W".action.spawn = getExe config.programs.chromium.package;
+        "Mod+Shift+W".action.spawn = [
+          (getExe config.programs.chromium.package)
+          "--incognito"
+        ];
+        "Mod+V".action.spawn = termExec [ "nvim" ];
         "Mod+Shift+V".action.spawn = getExe pkgs.custom.shell.rofi-edit-proj;
-        "Mod+period".action.spawn =
-          "focusorrun \"dotfiles - VSCodium\" \"codium ${config.home.homeDirectory}/projects/dotfiles\"";
-        "Mod+Shift+period".action.spawn =
-          "focusorrun \"nixpkgs - VSCodium\" \"codium ${config.home.homeDirectory}/projects/nixpkgs\"";
+        "Mod+period".action.spawn = [
+          "focusorrun"
+          "dotfiles - VSCodium"
+          "codium ${config.home.homeDirectory}/projects/dotfiles"
+        ];
+        "Mod+Shift+period".action.spawn = [
+          "focusorrun"
+          "nixpkgs - VSCodium"
+          "codium ${config.home.homeDirectory}/projects/nixpkgs"
+        ];
 
         # exit niri
         "Alt+F4".action.quit = { };
-        "Ctrl+Alt+Delete".action.spawn = getExe pkgs.custom.rofi-power-menu;
+        "Ctrl+Alt+Delete".action.spawn = getExe config.custom.rofi-power-menu.package;
 
         # clipboard history
-        "Mod+Ctrl+V".action.spawn =
-          "cliphist list | ${rofiExe} -dmenu -theme \"${config.xdg.cacheHome}/wallust/rofi-menu.rasi\" | cliphist decode | wl-copy";
+        "Mod+Ctrl+V".action.spawn = getExe pkgs.custom.shell.rofi-clipboard-history;
 
         # TODO: reset monitors?
         # "CTRL_SHIFT, Escape, exec, wm-monitors"
@@ -116,9 +138,6 @@ mkIf (config.custom.wm == "niri") {
         "Mod+I".action.focus-workspace-up = { };
         "Mod+Shift+U".action.move-column-to-workspace-down = { };
         "Mod+Shift+I".action.move-column-to-workspace-up = { };
-
-        # TODO: sticky
-        # "$mod, s, pin"
 
         # TODO: classic alt tab in a workspace?
         # "ALT, Tab, cyclenext"
@@ -185,21 +204,38 @@ mkIf (config.custom.wm == "niri") {
         # Mod+Space".action ="switch-layout"next"";
         # Mod+Shift+Space".action ="switch-layout"prev"";
 
-        "Mod+Apostrophe".action.spawn = "wallpaper rofi";
+        "Mod+Apostrophe".action.spawn = [
+          "wallpaper"
+          "rofi"
+        ];
         "Mod+Shift+Apostrophe".action.spawn = "rofi-wallust-theme";
-        "Alt+Apostrophe".action.spawn = "wallpaper history";
+        "Alt+Apostrophe".action.spawn = [
+          "wallpaper"
+          "history"
+        ];
 
         # audio
         "XF86AudioLowerVolume" = {
-          action.spawn = "${pamixerExe} -d 5";
+          action.spawn = [
+            pamixerExe
+            "-d"
+            "5"
+          ];
           allow-when-locked = true;
         };
         "XF86AudioRaiseVolume" = {
-          action.spawn = "${pamixerExe} -i 5";
+          action.spawn = [
+            pamixerExe
+            "-i"
+            "5"
+          ];
           allow-when-locked = true;
         };
         "XF86AudioMute" = {
-          action.spawn = "${pamixerExe} -t";
+          action.spawn = [
+            pamixerExe
+            "-t"
+          ];
           allow-when-locked = true;
         };
       }
@@ -242,9 +278,9 @@ mkIf (config.custom.wm == "niri") {
             [
               {
                 # Switch workspaces with mainMod + [0-9]
-                "Mod+${key}".action.focus-workspace = workspace;
+                "Mod+${key}".action.focus-workspace = toInt workspace;
                 # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                "Mod+Shift+${key}".action.move-column-to-workspace = workspace;
+                "Mod+Shift+${key}".action.move-column-to-workspace = toInt workspace;
               }
             ]
           ))
@@ -253,11 +289,17 @@ mkIf (config.custom.wm == "niri") {
       )
       // optionalAttrs config.custom.backlight.enable {
         "XF86MonBrightnessDown" = {
-          action.spawn = "${getExe pkgs.brightnessctl} set +5%";
+          action.spawn = [
+            (getExe pkgs.brightnessctl)
+            "set +5%"
+          ];
           allow-when-locked = true;
         };
         "XF86MonBrightnessUp" = {
-          action.spawn = "${getExe pkgs.brightnessctl} set 5%-";
+          action.spawn = [
+            (getExe pkgs.brightnessctl)
+            "set 5%-"
+          ];
           allow-when-locked = true;
         };
       };

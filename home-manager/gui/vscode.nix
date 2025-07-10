@@ -52,6 +52,10 @@ mkIf (config.custom.wm != "tty") {
 
   custom.shell.packages = {
     rofi-edit-proj = {
+      runtimeInputs = [
+        config.programs.rofi.package
+        config.programs.vscode.package
+      ];
       text = # sh
         ''
           proj_dir="/persist${config.home.homeDirectory}/projects";

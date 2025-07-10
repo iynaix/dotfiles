@@ -1,5 +1,5 @@
 use clap::{CommandFactory, Parser};
-use common::{full_path, CommandUtf8};
+use common::{CommandUtf8, full_path};
 use dotfiles::{
     cli::{RofiMpvArgs, RofiMpvMedia},
     generate_completions,
@@ -112,7 +112,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     // get list of files in the current directory
     let current_files = path
         .read_dir()
-        .unwrap_or_else(|_| panic!("could not read current directory: {path:?}"))
+        .unwrap_or_else(|_| panic!("could not read current directory: {}", path.display()))
         .flatten()
         .map(|e| e.path())
         .sorted()
@@ -122,7 +122,7 @@ fn get_episode((path, content): Video) -> Option<PathBuf> {
     let current_index = current_files
         .iter()
         .position(|path| path == &path.clone())
-        .unwrap_or_else(|| panic!("could not get index of {path:?}"));
+        .unwrap_or_else(|| panic!("could not get index of {}", path.display()));
 
     current_files
         .get(current_index + 1)
@@ -146,6 +146,6 @@ fn main() {
     let video = latest_file(&args.media.unwrap_or_else(|| panic!("{no_media}")));
 
     if let Some(to_play) = get_episode(video) {
-        println!("Playing {to_play:?}");
+        println!("Playing {}", to_play.display());
     }
 }

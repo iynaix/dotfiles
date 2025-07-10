@@ -72,7 +72,10 @@ mkIf (config.custom.wm != "tty") (mkMerge [
     ];
 
     programs.niri.settings.binds = {
-      "Mod+n".action.spawn = "dunstctl history-pop";
+      "Mod+n".action.spawn = [
+        "dunstctl"
+        "history-pop"
+      ];
     };
 
     # wait for colorscheme to be ready on boot

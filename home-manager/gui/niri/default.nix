@@ -16,7 +16,10 @@ let
     ;
 in
 {
-  imports = [ ./keybinds.nix ];
+  imports = [
+    ./keybinds.nix
+    ./startup.nix
+  ];
 
   config = mkIf (config.custom.wm == "niri") {
     programs.niri = {
@@ -24,6 +27,11 @@ in
 
       settings = mkMerge [
         {
+          environment = {
+            DISPLAY = ":0";
+            NIXOS_OZONE_WL = "1";
+          };
+
           input = {
             keyboard = {
               xkb = {
@@ -47,6 +55,7 @@ in
 
             # setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
             focus-follows-mouse = {
+              enable = true;
               max-scroll-amount = "95%";
             };
           };
@@ -144,10 +153,6 @@ in
               };
             };
 
-          # Add lines like this to spawn processes at startup.
-          spawn-at-startup = [
-          ];
-
           # no client-side decorations
           prefer-no-csd = true;
 
@@ -155,6 +160,21 @@ in
 
           # Window rules let you adjust behavior for individual windows.
           window-rules = [
+            # rounded corners for all windows
+            {
+              geometry-corner-radius =
+                let
+                  radius = 4.0;
+                in
+                {
+                  top-left = radius;
+                  top-right = radius;
+                  bottom-left = radius;
+                  bottom-right = radius;
+                };
+              clip-to-geometry = true;
+            }
+
             # Work around WezTerm's initial configure bug
             # by setting an empty default-column-width.
             # {

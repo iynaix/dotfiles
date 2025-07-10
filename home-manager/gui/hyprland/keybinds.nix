@@ -15,6 +15,7 @@ let
   inherit (config.custom) monitors;
   pamixer = getExe pkgs.pamixer;
   rofiExe = getExe config.programs.rofi.package;
+  termExec = cmd: "${config.custom.terminal.exec} ${cmd}";
   qtile_like = config.custom.hyprland.qtile;
 in
 {
@@ -74,14 +75,14 @@ in
           );
         in
         [
-          "$mod, Return, ${uexec "$term"}"
+          "$mod, Return, ${uexec (getExe config.custom.terminal.package)}"
           "$mod_SHIFT, Return, ${uexec ''${rofiExe} -show drun -run-command "uwsm app -- {cmd}"''}"
           "$mod, BackSpace, killactive,"
           "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
-          "$mod_SHIFT, e, ${uexec "$termexec yazi ${config.xdg.userDirs.download}"}"
+          "$mod_SHIFT, e, ${uexec (termExec "yazi ${config.xdg.userDirs.download}")}"
           "$mod, w, ${uexec (getExe config.programs.chromium.package)}"
           "$mod_SHIFT, w, ${uexec "${getExe config.programs.chromium.package} --incognito"}"
-          "$mod, v, ${uexec "$termexec nvim"}"
+          "$mod, v, ${uexec (termExec "nvim")}"
           "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
           ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
@@ -92,13 +93,10 @@ in
           "CTRL_ALT, Delete, ${uexec (getExe config.custom.rofi-power-menu.package)}"
 
           # clipboard history
-          ''$mod_CTRL, v, exec, cliphist list | uwsm app -- ${rofiExe} -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | cliphist decode | wl-copy''
+          "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, wm-monitors"
-
-          # bind = $mod, P, pseudo, # dwindle
-          # bind = $mod, J, togglesplit, # dwindle
 
           "$mod, h, movefocus, l"
           "$mod, l, movefocus, r"

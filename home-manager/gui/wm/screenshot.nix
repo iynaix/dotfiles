@@ -7,7 +7,11 @@
   ...
 }:
 let
-  inherit (lib) mkAfter mkIf optionals;
+  inherit (lib)
+    mkAfter
+    mkIf
+    optionals
+    ;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
     hyprland = config.wayland.windowManager.hyprland.package;
     # niri = config.programs.niri.package;
@@ -73,11 +77,36 @@ mkIf config.custom.isWm {
 
   programs.niri.settings = {
     binds = {
-      "Mod+backslash".action.spawn =
-        "focal image --area selection --no-notify --no-save --no-rounded-windows";
-      "Mod+Shift+backslash".action.spawn = "focal image --edit swappy --rofi --no-rounded-windows";
-      "Mod+Ctrl+backslash".action.spawn = "focal image --area selection --ocr";
-      "Alt+backslash".action.spawn = "focal video --rofi --no-rounded-windows";
+      "Mod+backslash".action.spawn = [
+        "focal"
+        "image"
+        "--area"
+        "selection"
+        "--no-notify"
+        "--no-save"
+        "--no-rounded-windows"
+      ];
+      "Mod+Shift+backslash".action.spawn = [
+        "focal"
+        "image"
+        "--edit"
+        "swappy"
+        "--rofi"
+        "--no-rounded-windows"
+      ];
+      "Mod+Ctrl+backslash".action.spawn = [
+        "focal"
+        "image"
+        "--area"
+        "selection"
+        "--ocr"
+      ];
+      "Alt+backslash".action.spawn = [
+        "focal"
+        "video"
+        "--rofi"
+        "--no-rounded-windows"
+      ];
     };
   };
 }

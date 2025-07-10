@@ -65,6 +65,22 @@ in
       ];
     };
 
+    programs.niri.settings = {
+      binds = {
+        "Mod+A".action.spawn = [
+          (getExe' pkgs.procps "pkill")
+          "-SIGUSR1"
+          "waybar"
+        ];
+        "Mod+Shift+A".action.spawn = [
+          "systemctl"
+          "--user"
+          "restart"
+          "waybar.service"
+        ];
+      };
+    };
+
     # wait for colorscheme to be ready on boot
     systemd.user.services.waybar = {
       Unit.AssertPathExists = [ "${config.xdg.configHome}/waybar/config.jsonc" ];

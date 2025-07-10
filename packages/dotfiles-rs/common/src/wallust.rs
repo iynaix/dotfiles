@@ -8,7 +8,6 @@ use crate::{
 };
 use core::panic;
 use execute::Execute;
-use hyprland::{data::Monitors, keyword::Keyword, shared::HyprData};
 use image::ImageReader;
 use itertools::Itertools;
 use regex::Regex;
@@ -70,6 +69,8 @@ fn refresh_zathura() {
 }
 
 fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
+    use hyprland::keyword::Keyword;
+
     let color = |idx: usize| {
         colors
             .get(&format!("color{idx}"))
@@ -210,7 +211,10 @@ pub fn apply_colors() {
             .map(|(_, color)| color)
             .collect_vec();
 
-        apply_hyprland_colors(&accents, &nixcolors.colors);
+        #[cfg(feature = "hyprland")]
+        {
+            apply_hyprland_colors(&accents, &nixcolors.colors);
+        }
 
         // set the waybar accent color to have more contrast
         set_waybar_colors(&accents[0]);
@@ -350,33 +354,38 @@ pub fn set_waybar_colors(accent: &Rgb) {
     let mut cfg: serde_json::Value =
         json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
 
-    if let NixInfo {
-        waybar_persistent_workspaces: Some(true),
-        monitors,
-        ..
-    } = NixInfo::new()
+    #[cfg(feature = "hyprland")]
     {
-        let active_workspaces: HashMap<_, _> = Monitors::get()
-            .expect("could not get monitors")
-            .iter()
-            .map(|mon| (mon.name.clone(), mon.active_workspace.id))
-            .collect();
+        use hyprland::{data::Monitors, shared::HyprData};
 
-        let new_wksps: HashMap<String, Vec<i32>> =
-            rearranged_workspaces(&monitors, &active_workspaces)
+        if let NixInfo {
+            waybar_persistent_workspaces: Some(true),
+            monitors,
+            ..
+        } = NixInfo::new()
+        {
+            let active_workspaces: HashMap<_, _> = Monitors::get()
+                .expect("could not get monitors")
                 .iter()
-                .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                .map(|mon| (mon.name.clone(), mon.active_workspace.id))
                 .collect();
-        cfg["hyprland/workspaces"]["persistentWorkspaces"] = serde_json::to_value(new_wksps)
-            .expect("failed to convert rearranged workspaces to json");
-    } else {
-        let hyprland_workspaces = cfg["hyprland/workspaces"]
-            .as_object_mut()
-            .expect("invalid hyprland workspaces");
-        hyprland_workspaces.remove("persistentWorkspaces");
 
-        cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
-            .expect("failed to convert hyprland workspaces to json");
+            let new_wksps: HashMap<String, Vec<i32>> =
+                rearranged_workspaces(&monitors, &active_workspaces)
+                    .iter()
+                    .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                    .collect();
+            cfg["hyprland/workspaces"]["persistentWorkspaces"] = serde_json::to_value(new_wksps)
+                .expect("failed to convert rearranged workspaces to json");
+        } else {
+            let hyprland_workspaces = cfg["hyprland/workspaces"]
+                .as_object_mut()
+                .expect("invalid hyprland workspaces");
+            hyprland_workspaces.remove("persistentWorkspaces");
+
+            cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
+                .expect("failed to convert hyprland workspaces to json");
+        }
     }
 
     // write waybar_config back to waybar_config_file as json

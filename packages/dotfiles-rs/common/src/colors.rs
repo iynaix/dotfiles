@@ -36,7 +36,7 @@ impl Rgb {
         let min = r.min(g).min(b);
         let delta = max - min;
 
-        let l = (max + min) / 2.0;
+        let l = f64::midpoint(max, min);
 
         if delta == 0.0 {
             (0.0, 0.0, l) // Grayscale
