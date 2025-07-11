@@ -29,8 +29,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // if activewindow.floating {
         //     dispatch!(ToggleFullscreen(FullscreenType::Real))?;
         // } else {
+        #[allow(clippy::cast_sign_loss)]
+        #[allow(clippy::cast_possible_truncation)]
         if !activewindow.floating {
-            const PADDING: i32 = 30; // target distance from corner of screen
+            const PADDING: u32 = 30; // target distance from corner of screen
 
             #[allow(clippy::cast_possible_truncation)]
             dispatch!(
@@ -41,13 +43,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let activewindow = Client::get_active()?.expect("no active window");
 
             let (curr_width, curr_height) = vertical_dimensions(&curr_mon);
-            let mon_bottom = curr_mon.y + curr_height;
-            let mon_right = curr_mon.x + curr_width;
+            let mon_bottom = curr_mon.y as u32 + curr_height;
+            let mon_right = curr_mon.x as u32 + curr_width;
 
-            #[allow(clippy::cast_possible_truncation)]
-            let delta_x = mon_right - PADDING - target_w as i32 - i32::from(activewindow.at.0);
-            #[allow(clippy::cast_possible_truncation)]
-            let delta_y = mon_bottom - PADDING - target_h as i32 - i32::from(activewindow.at.1);
+            let delta_x = mon_right - PADDING - target_w as u32 - activewindow.at.0 as u32;
+            let delta_y = mon_bottom - PADDING - target_h as u32 - activewindow.at.1 as u32;
 
             #[allow(clippy::cast_possible_truncation)]
             dispatch!(MoveActive, Position::Delta(delta_x as i16, delta_y as i16))

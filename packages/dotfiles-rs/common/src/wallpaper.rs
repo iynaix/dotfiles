@@ -98,7 +98,7 @@ where
 }
 
 /// euclid's algorithm to find the greatest common divisor
-const fn gcd(mut a: i32, mut b: i32) -> i32 {
+const fn gcd(mut a: u32, mut b: u32) -> u32 {
     while b != 0 {
         let tmp = b;
         b = a % b;
@@ -148,7 +148,7 @@ impl WallInfo {
         }
     }
 
-    pub fn get_geometry(&self, width: i32, height: i32) -> Option<(f64, f64, f64, f64)> {
+    pub fn get_geometry(&self, width: u32, height: u32) -> Option<(f64, f64, f64, f64)> {
         self.get_geometry_str(width, height).and_then(|geom| {
             let geometry = geom
                 .split(['+', 'x'])
@@ -162,7 +162,7 @@ impl WallInfo {
         })
     }
 
-    pub fn get_geometry_str(&self, width: i32, height: i32) -> Option<&str> {
+    pub fn get_geometry_str(&self, width: u32, height: u32) -> Option<&str> {
         let divisor = gcd(width, height);
         self.geometries
             .get(&format!("{}x{}", width / divisor, height / divisor))

@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use crate::{vertical_dimensions, wallpaper::WallInfo};
+use crate::wallpaper::WallInfo;
 use execute::Execute;
 use fast_image_resize::{PixelType, ResizeOptions, Resizer, images::Image};
 use image::codecs::webp::WebPEncoder;
@@ -66,32 +66,23 @@ impl Swww {
         }
     }
 
-    fn no_crop(&self, transition_args: &[String]) {
-        execute::command_args!("swww", "img")
+    // no crop info, just let swww crop the center
+    fn mon_without_crop(&self, mon_name: &str, transition_args: &[String]) {
+        execute::command_args!("swww", "img", "--outputs")
+            .arg(mon_name)
             .args(transition_args)
             .arg(&self.wall)
             .execute()
             .expect("failed to set wallpaper");
     }
 
-    /*
-    fn iter_monitor_dimensions(&self) -> impl Iterator<Item = (i32, i32)> {
-        let nixcolors = NixColors::new().expect("unable to parse nix.json");
-
-        nixcolors
-            .filter_colors(&["color0", "color7", "color8", "color15"])
-            .into_values()
-            .map(|color| {
-                let (w, h) = vertical_dimensions(mon);
-                (color.to_rgb_str(), w, h)
-            })
-            .collect_vec()
-    }
-    */
-
-    fn with_crop(
+    // use crop info from wallpaper for swww
+    fn mon_with_crop(
         &self,
-        mon: &hyprland::data::Monitor,
+        mon_name: &str,
+        mon_width: u32,
+        mon_height: u32,
+        mon_scale: f64,
         wall_info: &WallInfo,
         transition_args: &[String],
     ) {
@@ -101,13 +92,8 @@ impl Swww {
             .expect("could not decode image")
             .to_rgb8();
 
-        let (mon_width, mon_height) = vertical_dimensions(mon);
-
         let Some((w, h, x, y)) = wall_info.get_geometry(mon_width, mon_height) else {
-            panic!(
-                "unable to get geometry for {}: {}x{}",
-                mon.name, mon_width, mon_height
-            );
+            panic!("unable to get geometry for {mon_name}: {mon_width}x{mon_height}",);
         };
 
         // convert to rgb8 pixel type
@@ -115,7 +101,7 @@ impl Swww {
             .expect("Failed to create source image view");
 
         #[allow(clippy::cast_sign_loss)]
-        let mut dest = Image::new(mon_width as u32, mon_height as u32, PixelType::U8x3);
+        let mut dest = Image::new(mon_width, mon_height, PixelType::U8x3);
 
         Resizer::new()
             .resize(
@@ -125,7 +111,7 @@ impl Swww {
             )
             .expect("failed to resize image");
 
-        let fname = format!("/tmp/swww__{}.webp", mon.name);
+        let fname = format!("/tmp/swww__{mon_name}.webp");
         let mut result_buf =
             std::io::BufWriter::new(std::fs::File::create(&fname).expect("could not create file"));
 
@@ -133,23 +119,23 @@ impl Swww {
         WebPEncoder::new_lossless(&mut result_buf)
             .write_image(
                 dest.buffer(),
-                mon_width as u32,
-                mon_height as u32,
+                mon_width,
+                mon_height,
                 image::ColorType::Rgb8.into(),
             )
             .expect("failed to write webp for swww");
 
         // HACK: get swww to update the scale, or it thinks it's still 1.0???
-        if (mon.scale - 1.0).abs() > f32::EPSILON {
+        if (mon_scale - 1.0).abs() > f64::EPSILON {
             execute::command_args!("swww", "clear", "--outputs")
-                .arg(&mon.name)
+                .arg(mon_name)
                 .spawn()
                 .ok();
         }
 
         execute::command_args!("swww", "img", "--no-resize")
             .arg("--outputs")
-            .arg(&mon.name)
+            .arg(mon_name)
             .args(transition_args)
             .arg(&fname)
             .spawn()
@@ -164,25 +150,59 @@ impl Swww {
         });
 
         // set the wallpaper per monitor
+        #[cfg(feature = "hyprland")]
         {
+            use crate::vertical_dimensions;
             use hyprland::shared::{HyprData, HyprDataVec};
             let monitors = hyprland::data::Monitors::get()
                 .expect("could not get monitors")
                 .to_vec();
 
-            // TODO: set per monitor, instead of bailing
-            // bail if image doesn't have geometry info for any image
-            if monitors.iter().any(|m| {
-                let (mw, mh) = vertical_dimensions(m);
-                wall_info.get_geometry_str(mw, mh).is_none()
-            }) {
-                self.no_crop(&transition_args);
-                return;
-            }
+            monitors.par_iter().for_each(|mon| {
+                let (mw, mh) = vertical_dimensions(mon);
+
+                match wall_info.get_geometry_str(mw, mh) {
+                    Some(_) => self.mon_with_crop(
+                        &mon.name,
+                        u32::from(mon.width),
+                        u32::from(mon.height),
+                        f64::from(mon.scale),
+                        wall_info,
+                        &transition_args,
+                    ),
+                    None => self.mon_without_crop(&mon.name, &transition_args),
+                }
+            });
+        }
+
+        #[cfg(feature = "niri")]
+        {
+            use niri_ipc::{Request, Response, socket::Socket};
+
+            let Ok(Response::Outputs(monitors)) = Socket::connect()
+                .expect("failed to connect to niri socket")
+                .send(Request::Outputs)
+                .expect("failed to send Outputs request to niri")
+            else {
+                panic!("unexpected response from niri, should be Outputs");
+            };
 
             monitors
                 .par_iter()
-                .for_each(|mon| self.with_crop(mon, wall_info, &transition_args));
+                // ignore disabled monitors
+                .for_each(|(_, mon)| match mon.logical {
+                    None => self.mon_without_crop(&mon.name, &transition_args),
+                    Some(logical) => {
+                        self.mon_with_crop(
+                            &mon.name,
+                            logical.width,
+                            logical.height,
+                            logical.scale,
+                            wall_info,
+                            &transition_args,
+                        );
+                    }
+                });
         }
     }
 }

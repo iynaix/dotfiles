@@ -2,8 +2,6 @@ use crate::{
     CommandUtf8,
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
-    nixinfo::NixInfo,
-    rearranged_workspaces,
     wallpaper::WallInfo,
 };
 use core::panic;
@@ -348,15 +346,17 @@ pub fn set_waybar_colors(accent: &Rgb) {
         &format!("complementary {};", accent.complementary().to_hex_str()),
     );
 
-    // add / remove persistent workspaces to waybar before launching
-    let cfg_file = full_path("~/.config/waybar/config.jsonc");
-
-    let mut cfg: serde_json::Value =
-        json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
-
+    // write persistent workspaces config to waybar
     #[cfg(feature = "hyprland")]
     {
+        use crate::{nixinfo::NixInfo, rearranged_workspaces};
         use hyprland::{data::Monitors, shared::HyprData};
+
+        // add / remove persistent workspaces to waybar before launching
+        let cfg_file = full_path("~/.config/waybar/config.jsonc");
+
+        let mut cfg: serde_json::Value =
+            json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
 
         if let NixInfo {
             waybar_persistent_workspaces: Some(true),
@@ -386,8 +386,8 @@ pub fn set_waybar_colors(accent: &Rgb) {
             cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
                 .expect("failed to convert hyprland workspaces to json");
         }
-    }
 
-    // write waybar_config back to waybar_config_file as json
-    json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
+        // write waybar_config back to waybar_config_file as json
+        json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
+    }
 }
