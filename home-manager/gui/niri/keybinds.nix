@@ -23,8 +23,7 @@ let
 in
 mkIf (config.custom.wm == "niri") {
   custom.shell.packages = {
-    # TODO: focusorrun executable
-    focusorrun = {
+    focus-or-run = {
       runtimeInputs = with pkgs; [
         config.wayland.windowManager.hyprland.package
         jq
@@ -33,7 +32,12 @@ mkIf (config.custom.wm == "niri") {
       # $2 is the command to run if the window isn't found
       text = # sh
         ''
-          eval "$2"
+          id=$(niri msg -j windows | jq -r ".[] | select(.title | contains(\"$1\")) | .id")
+          if [ -z "$id" ]; then
+            eval "$2"
+          else
+            niri msg action focus-window --id "$id"
+          fi
         '';
     };
   };
@@ -74,12 +78,12 @@ mkIf (config.custom.wm == "niri") {
         "Mod+V".action.spawn = termExec [ "nvim" ];
         "Mod+Shift+V".action.spawn = getExe pkgs.custom.shell.rofi-edit-proj;
         "Mod+period".action.spawn = [
-          "focusorrun"
+          "focus-or-run"
           "dotfiles - VSCodium"
           "codium ${config.home.homeDirectory}/projects/dotfiles"
         ];
         "Mod+Shift+period".action.spawn = [
-          "focusorrun"
+          "focus-or-run"
           "nixpkgs - VSCodium"
           "codium ${config.home.homeDirectory}/projects/nixpkgs"
         ];
@@ -103,21 +107,14 @@ mkIf (config.custom.wm == "niri") {
         };
 
         "Mod+H".action.focus-column-left = { };
-        "Mod+J".action.focus-window-down = { };
-        "Mod+K".action.focus-window-up = { };
+        "Mod+J".action.focus-window-or-workspace-down = { };
+        "Mod+K".action.focus-window-or-workspace-up = { };
         "Mod+L".action.focus-column-right = { };
 
         "Mod+Shift+H".action.move-column-left = { };
-        "Mod+Shift+J".action.move-window-down = { };
-        "Mod+Shift+K".action.move-window-up = { };
+        "Mod+Shift+J".action.move-window-down-or-to-workspace-down = { };
+        "Mod+Shift+K".action.move-window-up-or-to-workspace-up = { };
         "Mod+Shift+L".action.move-column-right = { };
-
-        # Alternative commands that move across workspaces when reaching
-        # the first or last window in a column.
-        # Mod+J".action ="focus-window-or-workspace-down";
-        # Mod+K".action ="focus-window-or-workspace-up";
-        # Mod+Ctrl+J".action ="move-window-down-or-to-workspace-down";
-        # Mod+Ctrl+K".action ="move-window-up-or-to-workspace-up";
 
         "Mod+Home".action.focus-column-first = { };
         "Mod+End".action.focus-column-last = { };
@@ -139,38 +136,34 @@ mkIf (config.custom.wm == "niri") {
         "Mod+Shift+U".action.move-column-to-workspace-down = { };
         "Mod+Shift+I".action.move-column-to-workspace-up = { };
 
-        # TODO: classic alt tab in a workspace?
-        # "ALT, Tab, cyclenext"
-        # "ALT_SHIFT, Tab, cyclenext, prev"
+        # classic alt tab in a workspace?
+        "Alt+Tab".action.focus-column-right-or-first = { };
+        "Alt+Shift+Tab".action.focus-column-left-or-last = { };
 
-        # TODO: toggle between prev and current windows
-        # "$mod, grave, focuscurrentorlast"
-
-        # TODO: switches to the next / previous window of the same class
-        # hardcoded to SUPER so it doesn't clash on VM
-        # "CTRL_ALT_, Tab, exec, wm-same-class next"
-        # "CTRL_ALT_SHIFT, Tab, exec, wm-same-class prev"
-
-        # TODO: picture in picture mode
-        # "$mod, p, exec, wm-pip"
-
-        # Alternatively, there are commands to move just a single window:
-        # Mod+Ctrl+1".action ="move-window-to-workspace 1";
+        # toggle between prev and current windows
+        "Mod+grave".action.focus-window-previous = { };
 
         # Switches focus between the current and the previous workspace.
-        # Mod+Tab".action ="focus-workspace-previous";
+        "Mod+Tab".action.focus-workspace-previous = { };
+
+        # switches to the next / previous window of the same class
+        "Ctrl+Alt+Tab".action.spawn = [
+          "wm-same-class"
+          "next"
+        ];
+        "Ctrl+Alt+Shift+Tab".action.spawn = [
+          "wm-same-class"
+          "prev"
+        ];
+
+        # picture in picture mode
+        "Mod+P".action.spawn = "wm-pip";
 
         # The following binds move the focused window in and out of a column.
         # If the window is alone, they will consume it into the nearby column to the side.
         # If the window is already in a column, they will expel it out.
         "Mod+BracketLeft".action.consume-or-expel-window-left = { };
         "Mod+BracketRight".action.consume-or-expel-window-right = { };
-
-        # TODO: keybind clash
-        # Consume one window from the right to the bottom of the focused column.
-        # "Mod+Comma".action.consume-window-into-column = { };
-        # Expel the bottom window from the focused column to the right.
-        # "Mod+Period".action.expel-window-from-column = { };
 
         "Mod+R".action.switch-preset-column-width = { };
         "Mod+Shift+R".action.switch-preset-window-height = { };
@@ -195,14 +188,6 @@ mkIf (config.custom.wm == "niri") {
         # Windows in this column will appear as vertical tabs,
         # rather than stacked on top of each other.
         "Mod+T".action.toggle-column-tabbed-display = { };
-
-        # Actions to switch layouts.
-        # Note: if you uncomment these, make sure you do NOT have
-        # a matching layout switch hotkey configured in xkb options above.
-        # Having both at once on the same hotkey will break the switching,
-        # since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-        # Mod+Space".action ="switch-layout"next"";
-        # Mod+Shift+Space".action ="switch-layout"prev"";
 
         "Mod+Apostrophe".action.spawn = [
           "wallpaper"
@@ -249,26 +234,9 @@ mkIf (config.custom.wm == "niri") {
           action.focus-workspace-up = { };
           cooldown-ms = 150;
         };
-        "Mod+Ctrl+WheelScrollDown" = {
-          action.move-column-to-workspace-down = { };
-          cooldown-ms = 150;
-        };
-        "Mod+Ctrl+WheelScrollUp" = {
-          action.move-column-to-workspace-up = { };
-          cooldown-ms = 150;
-        };
 
-        "Mod+WheelScrollRight".action.focus-column-right = { };
-        "Mod+WheelScrollLeft".action.focus-column-left = { };
-        "Mod+Ctrl+WheelScrollRight".action.move-column-right = { };
-        "Mod+Ctrl+WheelScrollLeft".action.move-column-left = { };
-
-        # Usually scrolling up and down with Shift in applications results in
-        # horizontal scrolling; these binds replicate that.
-        "Mod+Shift+WheelScrollDown".action.focus-column-right = { };
-        "Mod+Shift+WheelScrollUp".action.focus-column-left = { };
-        "Mod+Ctrl+Shift+WheelScrollDown".action.move-column-right = { };
-        "Mod+Ctrl+Shift+WheelScrollUp".action.move-column-left = { };
+        "Mod+WheelScrollRight".action.focus-column-right-or-first = { };
+        "Mod+WheelScrollLeft".action.focus-column-left-or-last = { };
       }
       # workspace setup
       // mergeAttrsList (

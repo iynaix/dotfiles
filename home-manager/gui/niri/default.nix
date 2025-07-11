@@ -75,6 +75,7 @@ in
               # - "on-overflow", focusing a column will center it if it doesn't fit
               #   together with the previously focused column.
               center-focused-column = "never";
+              always-center-single-column = true;
 
               # widths that "switch-preset-column-width" (Mod+R) toggles between.
               preset-column-widths = [
@@ -92,7 +93,7 @@ in
 
               # default width of the new windows, empty for deciding initial width
               default-column-width = {
-                proportion = 0.5;
+                # proportion = 1.0;
               };
 
               focus-ring = {
@@ -173,6 +174,7 @@ in
                   bottom-right = radius;
                 };
               clip-to-geometry = true;
+              draw-border-with-background = false;
             }
 
             # Work around WezTerm's initial configure bug

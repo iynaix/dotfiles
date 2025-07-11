@@ -55,7 +55,7 @@ mkIf (config.custom.wm != "tty") {
       "file://${homeDir}/Documents"
       "file://${homeDir}/Pictures/Wallpapers"
     ]
-    ++ optionals config.custom.wallpaper-tools.enable [ "file://${homeDir}/Pictures/Walls In" ]
+    ++ optionals config.custom.wallpaper-tools.enable [ "file://${homeDir}/Pictures/Walls%20In" ]
     ++ [
       "file:///persist Persist"
     ];

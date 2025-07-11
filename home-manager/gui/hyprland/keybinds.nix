@@ -27,7 +27,7 @@ in
 
   config = mkIf (config.custom.wm == "hyprland") {
     custom.shell.packages = {
-      focusorrun = {
+      focus-or-run = {
         runtimeInputs = with pkgs; [
           config.wayland.windowManager.hyprland.package
           jq
@@ -84,8 +84,8 @@ in
           "$mod_SHIFT, w, ${uexec "${getExe config.programs.chromium.package} --incognito"}"
           "$mod, v, ${uexec (termExec "nvim")}"
           "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
-          ''$mod, period, exec, focusorrun "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
-          ''$mod_SHIFT, period, exec, focusorrun "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
+          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
+          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"
@@ -141,7 +141,6 @@ in
           "$mod, grave, focuscurrentorlast"
 
           # switches to the next / previous window of the same class
-          # hardcoded to SUPER so it doesn't clash on VM
           "CTRL_ALT_, Tab, exec, wm-same-class next"
           "CTRL_ALT_SHIFT, Tab, exec, wm-same-class prev"
 

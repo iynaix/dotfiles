@@ -164,8 +164,8 @@ impl Swww {
                 match wall_info.get_geometry_str(mw, mh) {
                     Some(_) => self.mon_with_crop(
                         &mon.name,
-                        u32::from(mon.width),
-                        u32::from(mon.height),
+                        mw,
+                        mh,
                         f64::from(mon.scale),
                         wall_info,
                         &transition_args,
@@ -193,10 +193,21 @@ impl Swww {
                 .for_each(|(_, mon)| match mon.logical {
                     None => self.mon_without_crop(&mon.name, &transition_args),
                     Some(logical) => {
+                        #[allow(clippy::cast_possible_truncation)]
+                        #[allow(clippy::cast_sign_loss)]
+                        let (mw, mh) = if (logical.scale - 1.0).abs() < f64::EPSILON {
+                            (logical.width, logical.height)
+                        } else {
+                            (
+                                (f64::from(logical.width) * logical.scale) as u32,
+                                (f64::from(logical.height) * logical.scale) as u32,
+                            )
+                        };
+
                         self.mon_with_crop(
                             &mon.name,
-                            logical.width,
-                            logical.height,
+                            mw,
+                            mh,
                             logical.scale,
                             wall_info,
                             &transition_args,
