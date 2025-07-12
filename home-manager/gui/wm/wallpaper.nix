@@ -49,7 +49,6 @@ in
     }
 
     # handle setting the wallpaper on startup
-
     # start swww and wallpaper via systemd to minimize reloads
     {
       services.swww.enable = true;
@@ -71,7 +70,7 @@ in
               in
               pkgs.writeShellScript "wallpaper-startup" ''
                 ${dotsExe "wallpaper"}
-                ${dotsExe "wm-monitors"}
+                ${dotsExe "hypr-monitors"}
               '';
             # possible race condition, introduce a small delay before starting
             # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832

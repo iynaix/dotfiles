@@ -20,7 +20,7 @@ assert lib.assertOneOf "dotfiles-rs wm" wm [
   "niri"
 ];
 rustPlatform.buildRustPackage {
-  pname = "dotfiles-${wm}-rs";
+  pname = "dotfiles-${wm}";
   version = "0.1.0";
 
   src = ./.;
@@ -47,9 +47,18 @@ rustPlatform.buildRustPackage {
     gexiv2 # for reading metadata
   ];
 
-  postInstall = # sh
+  postInstall =
+    let
+      progs =
+        [
+          "wm-same-class"
+          "rofi-mpv"
+        ]
+        ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
+        ++ lib.optionals (wm == "niri") [ ];
+    in
     ''
-      for prog in wm-monitors wm-same-class rofi-mpv; do
+      for prog in ${toString progs}; do
         installShellCompletion --cmd $prog \
           --bash <($out/bin/$prog --generate bash) \
           --fish <($out/bin/$prog --generate fish) \

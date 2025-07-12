@@ -96,7 +96,7 @@ in
           "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
 
           # reset monitors
-          "CTRL_SHIFT, Escape, exec, wm-monitors"
+          "CTRL_SHIFT, Escape, exec, hypr-monitors"
 
           "$mod, h, movefocus, l"
           "$mod, l, movefocus, r"

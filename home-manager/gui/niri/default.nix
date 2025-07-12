@@ -4,6 +4,7 @@
   isLaptop,
   isVm,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -22,8 +23,24 @@ in
   ];
 
   config = mkIf (config.custom.wm == "niri") {
+    home.packages = [
+      (pkgs.swaybg.overrideAttrs {
+        postInstall = with pkgs; ''
+          export GDK_PIXBUF_MODULE_FILE="${
+            gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+              extraLoaders = [
+                librsvg
+                webp-pixbuf-loader
+              ];
+            }
+          }"
+        '';
+      })
+    ];
+
     programs.niri = {
       enable = true;
+      package = pkgs.niri;
 
       settings = mkMerge [
         {
@@ -93,7 +110,7 @@ in
 
               # default width of the new windows, empty for deciding initial width
               default-column-width = {
-                # proportion = 1.0;
+                proportion = 0.5;
               };
 
               focus-ring = {
@@ -159,7 +176,14 @@ in
 
           animations = { };
 
-          # Window rules let you adjust behavior for individual windows.
+          cursor = {
+            theme = config.home.pointerCursor.name;
+            inherit (config.home.pointerCursor) size;
+          };
+
+          # match focal format
+          screenshot-path = "${config.xdg.userDirs.pictures}/Screenshots/%Y-%m-%dT%H:%M:%S%z.png";
+
           window-rules = [
             # rounded corners for all windows
             {
@@ -176,29 +200,17 @@ in
               clip-to-geometry = true;
               draw-border-with-background = false;
             }
-
-            # Work around WezTerm's initial configure bug
-            # by setting an empty default-column-width.
-            # {
-            #   matches = [
-            #     {
-            #       app-id = "^org\.wezfurlong\.wezterm$";
-            #     }
-            #   ];
-            #   default-column-width = { };
-            # }
-
-            # # Open the Firefox picture-in-picture player as floating by default.
-            # {
-            #   matches = [
-            #     {
-            #       app-id = "firefox$";
-            #       title = "^Picture-in-Picture$";
-            #     }
-            #   ];
-            #   open-floating = true;
-            # }
           ];
+
+          # TODO: set wallpaper background for overview
+          # swaybg layer is named "wallpaper"
+          # use a second wallpaper setter with blur?
+          # layer-rules = [
+          #   {
+          #     matches = [ { namespace = "^swww-daemon$"; } ];
+          #     place-within-backdrop = true;
+          #   }
+          # ];
 
           hotkey-overlay = {
             skip-at-startup = true;

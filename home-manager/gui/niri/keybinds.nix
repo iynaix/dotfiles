@@ -96,7 +96,7 @@ mkIf (config.custom.wm == "niri") {
         "Mod+Ctrl+V".action.spawn = getExe pkgs.custom.shell.rofi-clipboard-history;
 
         # TODO: reset monitors?
-        # "CTRL_SHIFT, Escape, exec, wm-monitors"
+        # "CTRL_SHIFT, Escape, exec, niri-monitors"
 
         # Open/close the Overview: a zoomed-out view of workspaces and windows.
         # You can also move the mouse into the top-left hot corner,
@@ -131,11 +131,6 @@ mkIf (config.custom.wm == "niri") {
         "Mod+Shift+Up".action.move-column-to-monitor-up = { };
         "Mod+Shift+Right".action.move-column-to-monitor-right = { };
 
-        "Mod+U".action.focus-workspace-down = { };
-        "Mod+I".action.focus-workspace-up = { };
-        "Mod+Shift+U".action.move-column-to-workspace-down = { };
-        "Mod+Shift+I".action.move-column-to-workspace-up = { };
-
         # classic alt tab in a workspace?
         "Alt+Tab".action.focus-column-right-or-first = { };
         "Alt+Shift+Tab".action.focus-column-left-or-last = { };
@@ -168,12 +163,12 @@ mkIf (config.custom.wm == "niri") {
         "Mod+R".action.switch-preset-column-width = { };
         "Mod+Shift+R".action.switch-preset-window-height = { };
         "Mod+Ctrl+R".action.reset-window-height = { };
-        "Mod+Z".action.maximize-column = { };
-        "Mod+F".action.fullscreen-window = { };
-
         # Expand the focused column to space not taken up by other fully visible columns.
         # Makes the column"fill the rest of the space".
-        "Mod+Ctrl+F".action.expand-column-to-available-width = { };
+        "Mod+Shift+Z".action.expand-column-to-available-width = { };
+        # full maximize
+        "Mod+Z".action.maximize-column = { };
+        "Mod+F".action.fullscreen-window = { };
 
         "Mod+C".action.center-column = { };
 

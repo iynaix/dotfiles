@@ -20,6 +20,7 @@ mkIf (config.hm.custom.wm == "hyprland") {
         assertMsg (versionOlder config.programs.hyprland.package.version "0.50") "hyprland updated, sync with hyprnstack / hypr-darkwindow?"
       );
       true;
+    inherit (config.hm.wayland.windowManager.hyprland) package;
 
     # needed for setting the wayland environment variables
     withUWSM = true;

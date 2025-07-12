@@ -10,6 +10,7 @@ let
     getExe
     getExe'
     mkIf
+    optionalString
     ;
 in
 mkIf (config.custom.wm == "hyprland") {
@@ -74,7 +75,7 @@ mkIf (config.custom.wm == "hyprland") {
           in
           pkgs.writeShellScript "wallpaper-startup" ''
             ${dotsExe "wallpaper"}
-            ${dotsExe "wm-monitors"}
+            ${optionalString (config.custom.wm == "hyprland") dotsExe "hypr-monitors"}
           '';
         # possible race condition, introduce a small delay before starting
         # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832

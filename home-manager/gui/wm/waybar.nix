@@ -302,6 +302,12 @@ in
                     ${baseModuleCss}
                     padding-left: 8px;
                     padding-right: 8px;
+
+                    ${lib.optionalString (config.custom.wm == "niri") ''
+                      /* niri workspaces seem to have excess padding */
+                      padding-left: 0px;
+                      padding-right: 0px;
+                    ''}
                   }
 
                   #workspaces button.active {

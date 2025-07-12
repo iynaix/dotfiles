@@ -146,6 +146,7 @@ in
               "borderangle, 1, ${toString (10 * 60 * 5)}, default, loop"
               "fade, 1, 5, smoothIn"
               "fadeDim, 1, 5, smoothIn"
+              # mimic niri workspace direction
               "workspaces, 1, 6, default, slidevert"
             ];
           };

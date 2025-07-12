@@ -189,7 +189,15 @@ pub enum WallpaperSubcommand {
 #[command(
     name = "wallpaper",
     infer_subcommands = true,
-    about = "Changes the wallpaper and updates the colorscheme"
+    about = format!("Changes the wallpaper and updates the colorscheme for {}",
+        if cfg!(feature = "hyprland") {
+            "hyprland"
+        } else if cfg!(feature = "niri") {
+            "niri"
+        } else {
+            panic!("no wm feature enabled")
+        }
+)
 )]
 #[command(group(
     ArgGroup::new("exclusive_group")
