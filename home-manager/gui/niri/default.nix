@@ -98,6 +98,15 @@ in
                 proportion = 0.5;
               };
 
+              tab-indicator = {
+                position = "top";
+                gap = 0;
+                length = {
+                  total-proportion = 1.0;
+                };
+                width = 12;
+              };
+
               focus-ring = {
                 width = 2;
 
@@ -149,8 +158,9 @@ in
 
               # outer gaps
               struts = {
-                left = gap;
-                right = gap;
+                # larger struts to be able to see the other window when maximized
+                left = gap + 8;
+                right = gap + 8;
                 top = gap;
                 bottom = gap;
               };
@@ -199,6 +209,12 @@ in
           hotkey-overlay = {
             skip-at-startup = true;
           };
+
+          overview = {
+            zoom = 0.4;
+          };
+
+          xwayland-satellite.enable = true;
         }
 
         # create monitors config

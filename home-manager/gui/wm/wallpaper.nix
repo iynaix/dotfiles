@@ -13,7 +13,7 @@ let
     mkMerge
     mkOption
     optionalAttrs
-    optionals
+    optionalString
     ;
   inherit (lib.types) package;
   tomlFormat = pkgs.formats.toml { };
@@ -47,11 +47,9 @@ in
         };
         packages = [ config.custom.dotfiles.package ];
       };
-    }
 
-    # handle setting the wallpaper on startup
-    # start swww and wallpaper via systemd to minimize reloads
-    {
+      # handle setting the wallpaper on startup
+      # start swww and wallpaper via systemd to minimize reloads
       services.swww.enable = true;
 
       systemd.user.services = {
@@ -60,8 +58,8 @@ in
           Unit = {
             Description = "Set the wallpaper and update colorscheme";
             PartOf = [ config.wayland.systemd.target ];
-            After = [ "swww.service" ] ++ optionals (config.custom.wm == "niri") [ "swww-backdrop.service" ];
-            Requires = [ "swww.service" ] ++ optionals (config.custom.wm == "niri") [ "swww-backdrop.service" ];
+            After = [ "swww.service" ];
+            Requires = [ "swww.service" ];
           };
           Service = {
             Type = "oneshot";
@@ -71,7 +69,7 @@ in
               in
               pkgs.writeShellScript "wallpaper-startup" ''
                 ${dotsExe "wallpaper"}
-                ${dotsExe "hypr-monitors"}
+                ${optionalString (config.custom.wm == "hyprland") (dotsExe "hypr-monitors")}
               '';
             # possible race condition, introduce a small delay before starting
             # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
@@ -79,6 +77,17 @@ in
           };
         };
       };
+
+      # full column width for niri
+      programs.niri.settings.window-rules = [
+        {
+          matches = [ { title = "^wallpaper-rofi$"; } ];
+          open-floating = true;
+          # 16: 9 aspect ratio
+          max-width = 889;
+          max-height = 500;
+        }
+      ];
     }
 
     (mkIf config.custom.wallfacer.enable {

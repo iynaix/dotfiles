@@ -5,53 +5,72 @@
   ...
 }:
 let
-  inherit (lib) getExe;
+  inherit (lib) getExe mkIf mkMerge;
 in
-{
-  custom = {
-    monitors = [
-      {
-        name = "eDP-1";
-        width = 2880;
-        height = 1920;
-        refreshRate = if config.specialisation == "otg" then 120 else 60;
-        scale = 1.5;
-        vrr = true;
-        workspaces = [
-          1
-          2
-          3
-          4
-          5
-          6
-          7
-          8
-          9
-          10
-        ];
-      }
-    ];
+mkMerge [
+  {
+    custom = {
+      monitors = [
+        {
+          name = "eDP-1";
+          width = 2880;
+          height = 1920;
+          refreshRate = if config.specialisation == "otg" then 120 else 60;
+          scale = 1.5;
+          vrr = true;
+          workspaces = [
+            1
+            2
+            3
+            4
+            5
+            6
+            7
+            8
+            9
+            10
+          ];
+        }
+      ];
 
-    modelling3d.enable = true;
-    printing3d.enable = true;
-    pathofbuilding.enable = true;
-    rclip.enable = true;
-    wallfacer.enable = true;
-    waybar.hidden = true;
+      modelling3d.enable = true;
+      printing3d.enable = true;
+      pathofbuilding.enable = true;
+      rclip.enable = true;
+      wallfacer.enable = true;
+      waybar.hidden = true;
 
-    persist = {
-      home.directories = [ "Downloads" ];
+      persist = {
+        home.directories = [ "Downloads" ];
+      };
     };
-  };
 
-  programs.btop.settings = {
-    custom_gpu_name0 = "AMD Radeon 780M";
-  };
+    programs.btop.settings = {
+      custom_gpu_name0 = "AMD Radeon 780M";
+    };
+  }
 
-  wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      # don't blind me on startup
-      "${getExe pkgs.brightnessctl} s 20%"
-    ];
-  };
-}
+  (mkIf (config.custom.wm == "hyprland") {
+    wayland.windowManager.hyprland.settings = {
+      exec-once = [
+        # don't blind me on startup
+        "${getExe pkgs.brightnessctl} s 20%"
+      ];
+    };
+  })
+
+  (mkIf (config.custom.wm == "niri") {
+    programs.niri.settings = {
+      spawn-at-startup = [
+        # don't blind me on startup
+        {
+          command = [
+            (getExe pkgs.brightnessctl)
+            "s"
+            "20%"
+          ];
+        }
+      ];
+    };
+  })
+]

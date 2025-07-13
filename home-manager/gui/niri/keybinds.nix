@@ -163,12 +163,12 @@ mkIf (config.custom.wm == "niri") {
         "Mod+R".action.switch-preset-column-width = { };
         "Mod+Shift+R".action.switch-preset-window-height = { };
         "Mod+Ctrl+R".action.reset-window-height = { };
-        # Expand the focused column to space not taken up by other fully visible columns.
-        # Makes the column"fill the rest of the space".
-        "Mod+Shift+Z".action.expand-column-to-available-width = { };
         # full maximize
         "Mod+Z".action.maximize-column = { };
         "Mod+F".action.fullscreen-window = { };
+        # Expand the focused column to space not taken up by other fully visible columns.
+        # Makes the column"fill the rest of the space".
+        "Mod+Shift+F".action.expand-column-to-available-width = { };
 
         "Mod+C".action.center-column = { };
 
@@ -254,14 +254,16 @@ mkIf (config.custom.wm == "niri") {
         "XF86MonBrightnessDown" = {
           action.spawn = [
             (getExe pkgs.brightnessctl)
-            "set +5%"
+            "set"
+            "+5%"
           ];
           allow-when-locked = true;
         };
         "XF86MonBrightnessUp" = {
           action.spawn = [
             (getExe pkgs.brightnessctl)
-            "set 5%-"
+            "set"
+            "5%-"
           ];
           allow-when-locked = true;
         };

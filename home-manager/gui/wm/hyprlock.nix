@@ -122,7 +122,7 @@ mkMerge [
   })
 
   # settings for hyprland
-  {
+  (mkIf (config.custom.wm == "hyprland") {
     wayland.windowManager.hyprland.settings =
       let
         lockOrDpms = if config.custom.lock.enable then "exec, ${lockCmd}" else "dpms, off";
@@ -133,23 +133,32 @@ mkMerge [
         # handle laptop lid
         bindl = mkIf isLaptop [ ",switch:Lid Switch, ${lockOrDpms}" ];
       };
-  }
+  })
 
   # settings for niri
-  {
+  (mkIf (config.custom.wm == "niri") {
     programs.niri.settings =
       let
         lockOrDpms =
-          if config.custom.lock.enable then { spawn = lockCmd; } else { power-off-monitors = { }; };
+          if config.custom.lock.enable then
+            lockCmd
+          else
+            # lid-open actions only support spawn for now
+            [
+              "niri"
+              "msg"
+              "action"
+              "power-off-monitors"
+            ];
       in
       {
         binds = {
-          "Mod+Shift+x".action = lockOrDpms;
+          "Mod+Shift+x".action.spawn = lockOrDpms;
         };
 
         switch-events = mkIf isLaptop {
-          lid-open = lockOrDpms;
+          lid-open.action.spawn = lockOrDpms;
         };
       };
-  }
+  })
 ]

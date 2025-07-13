@@ -162,7 +162,7 @@ impl Swww {
             execute::command_args!("swww", "img", "--no-resize", "--namespace", "backdrop")
                 .arg("--outputs")
                 .arg(mon_name)
-                .arg(&fname)
+                .arg(&blurred_fname)
                 .spawn()
                 .expect("failed to execute swww for backdrop")
                 .wait()

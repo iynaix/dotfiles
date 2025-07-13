@@ -123,6 +123,16 @@ in
         "suppressevent maximize,class:(mpv)"
       ];
 
+      # open full height in niri
+      # programs.niri.settings.window-rules = [
+      #   {
+      #     matches = [ { app-id = "^mpv$"; } ];
+      #     default-window-height = {
+      #       proportion = 1.0;
+      #     };
+      #   }
+      # ];
+
       home.packages = with pkgs; [ ffmpeg ];
 
       custom.persist = {

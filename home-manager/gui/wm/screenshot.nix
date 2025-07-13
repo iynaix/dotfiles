@@ -13,8 +13,7 @@ let
     optionals
     ;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
-    hyprland = config.wayland.windowManager.hyprland.package;
-    # niri = config.programs.niri.package;
+    backend = config.custom.wm;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };
@@ -88,23 +87,21 @@ mkIf config.custom.isWm {
       "Mod+Shift+backslash".action.spawn = [
         "focal"
         "image"
-        "--edit"
-        "swappy"
+        # "--edit"
+        # "swappy"
         "--rofi"
-        "--no-rounded-windows"
       ];
-      "Mod+Ctrl+backslash".action.spawn = [
-        "focal"
-        "image"
-        "--area"
-        "selection"
-        "--ocr"
-      ];
+      # "Mod+Ctrl+backslash".action.spawn = [
+      #   "focal"
+      #   "image"
+      #   "--area"
+      #   "selection"
+      #   "--ocr"
+      # ];
       "Alt+backslash".action.spawn = [
         "focal"
         "video"
         "--rofi"
-        "--no-rounded-windows"
       ];
     };
   };

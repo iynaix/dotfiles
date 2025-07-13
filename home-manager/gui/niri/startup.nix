@@ -19,19 +19,6 @@ mkIf (config.custom.wm == "niri") {
   };
 
   programs.niri.settings = {
-    # spawn-at-startup = map (
-    #   prog:
-    #   if builtins.isString prog then
-    #     prog
-    #   else
-    #     let
-    #       inherit (prog) exec packages workspace;
-    #       rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-    #       finalExec = if exec == null then concatMapStringsSep "\n" getExe packages else exec;
-    #     in
-    #     "${rules} uwsm app -- ${finalExec}"
-    # ) config.custom.startup;
-
     spawn-at-startup = [
       # browsers
       {
@@ -96,7 +83,6 @@ mkIf (config.custom.wm == "niri") {
           }
         ];
         open-on-output = mon1;
-        open-on-workspace = "1";
       }
       # {
       #   matches = [
@@ -112,22 +98,32 @@ mkIf (config.custom.wm == "niri") {
   };
 
   # start a separate swww service in a different namespace for niri backdrop
-  systemd.user.services.swww-backdrop = {
-    Install = {
-      WantedBy = [ config.wayland.systemd.target ];
+  systemd.user.services = {
+    swww-backdrop = {
+      Install = {
+        WantedBy = [ config.wayland.systemd.target ];
+      };
+
+      Unit = {
+        ConditionEnvironment = "WAYLAND_DISPLAY";
+        Description = "swww-daemon-backdrop";
+        After = [ config.wayland.systemd.target ];
+        PartOf = [ config.wayland.systemd.target ];
+      };
+
+      Service = {
+        ExecStart = "${lib.getExe' config.services.swww.package "swww-daemon"} --namespace backdrop";
+        Restart = "always";
+        RestartSec = 10;
+      };
     };
 
-    Unit = {
-      ConditionEnvironment = "WAYLAND_DISPLAY";
-      Description = "swww-daemon-backdrop";
-      After = [ config.wayland.systemd.target ];
-      PartOf = [ config.wayland.systemd.target ];
-    };
-
-    Service = {
-      ExecStart = "${lib.getExe' config.services.swww.package "swww-daemon"} --namespace backdrop";
-      Restart = "always";
-      RestartSec = 10;
+    # wallpaper needs both swww daemons running
+    wallpaper = {
+      Unit = {
+        After = [ "swww-backdrop.service" ];
+        Requires = [ "swww-backdrop.service" ];
+      };
     };
   };
 }

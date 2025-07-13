@@ -92,13 +92,11 @@ in
         if isNixOS then
           pkgs.custom.nsw.override {
             inherit dots host;
-            name = "nsw";
             specialisation = if config.specialisation == { } then "" else config.specialisation;
           }
         else
           pkgs.custom.hsw.override {
             inherit dots host;
-            name = "nsw";
             specialisation = if config.specialisation == { } then "" else config.specialisation;
           };
       # update all nvfetcher overlays and packages
@@ -446,7 +444,11 @@ in
       };
       # nixos-rebuild test
       nst = {
-        runtimeInputs = [ pkgs.custom.shell.nsw ];
+        runtimeInputs = [
+          (pkgs.custom.shell.nsw.override {
+            specialisation = if config.specialisation == { } then "" else config.specialisation;
+          })
+        ];
         text = # sh
           ''nsw test "$@"'';
       };
