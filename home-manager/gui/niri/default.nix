@@ -98,6 +98,15 @@ in
                 proportion = 0.5;
               };
 
+              tab-indicator = {
+                position = "top";
+                gap = 0;
+                length = {
+                  total-proportion = 1.0;
+                };
+                width = 12;
+              };
+
               focus-ring = {
                 width = 2;
 

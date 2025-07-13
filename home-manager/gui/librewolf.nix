@@ -82,6 +82,14 @@ mkIf (config.custom.wm != "tty") {
     ".mozilla/native-messaging-hosts".enable = lib.mkForce false;
   };
 
+  # full column width for niri
+  programs.niri.settings.window-rules = [
+    {
+      matches = [ { app-id = "^librewolf$"; } ];
+      open-maximized = true;
+    }
+  ];
+
   custom.persist = {
     home.directories = [
       ".cache/librewolf"
