@@ -78,13 +78,12 @@ mkIf config.custom.isWm {
   programs.niri.settings = {
     binds = {
       "Mod+backslash".action.spawn = [
-        "focal"
-        "image"
-        "--area"
-        "selection"
-        "--no-notify"
-        "--no-save"
-        "--no-rounded-windows"
+        "niri"
+        "msg"
+        "action"
+        "screenshot"
+        "-p"
+        "false"
       ];
       "Mod+Shift+backslash".action.spawn = [
         "focal"

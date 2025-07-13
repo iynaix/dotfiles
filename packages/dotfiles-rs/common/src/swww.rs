@@ -1,11 +1,10 @@
-use std::path::{Path, PathBuf};
-
 use crate::wallpaper::WallInfo;
 use execute::Execute;
 use fast_image_resize::{PixelType, ResizeOptions, Resizer, images::Image};
 use image::codecs::webp::WebPEncoder;
 use image::{ImageEncoder, ImageReader};
 use rayon::prelude::*;
+use std::path::{Path, PathBuf};
 
 /// chooses a random transition
 // taken from ZaneyOS: https://gitlab.com/Zaney/zaneyos/-/blob/main/config/scripts/wallsetter.nix
@@ -123,7 +122,7 @@ impl Swww {
                 mon_height,
                 image::ColorType::Rgb8.into(),
             )
-            .expect("failed to write webp for swww");
+            .expect("failed to savea webp image for swww");
 
         // HACK: get swww to update the scale, or it thinks it's still 1.0???
         if (mon_scale - 1.0).abs() > f64::EPSILON {
@@ -142,6 +141,33 @@ impl Swww {
             .expect("failed to execute swww")
             .wait()
             .expect("failed to wait for swww");
+
+        #[cfg(feature = "niri")]
+        {
+            const BLUR_STRENGTH: f32 = 10.0;
+            let blurred_fname = format!("/tmp/swww__{mon_name}_blurred.webp");
+            let img = ImageReader::open(&fname)
+                .expect("could not open image")
+                .decode()
+                .expect("could not decode image")
+                .to_rgb8();
+
+            let blurred_img = image::imageops::fast_blur(&img, BLUR_STRENGTH);
+            blurred_img
+                .save(&blurred_fname)
+                .expect("failed to save blurred webp image for backdrop");
+
+            // set overview backdrop with blurred wallpaper via swaybg
+            // runs in the background and doesn't yield control back to the user, so don't wait
+            execute::command_args!("swww", "img", "--no-resize", "--namespace", "backdrop")
+                .arg("--outputs")
+                .arg(mon_name)
+                .arg(&fname)
+                .spawn()
+                .expect("failed to execute swww for backdrop")
+                .wait()
+                .expect("failed to wait for swww for backdrop");
+        }
     }
 
     pub fn run(&self, wall_info: &WallInfo, transition: Option<&str>) {

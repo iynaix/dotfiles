@@ -57,18 +57,24 @@ in
       # use nixfmt-rfc-style as the default
       nixfmt = prev.nixfmt-rfc-style;
 
-      # swww = prev.swww.overrideAttrs (
-      #   o:
-      #   sources.swww
-      #   // {
-      #     # creating an overlay for buildRustPackage overlay
-      #     # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-      #     cargoDeps = prev.rustPlatform.importCargoLock {
-      #       lockFile = "${sources.swww.src}/Cargo.lock";
-      #       allowBuiltinFetchGit = true;
-      #     };
-      #   }
-      # );
+      # use latest for namespace functionality
+      # https://github.com/LGFae/swww/issues/419
+      swww =
+        assert (
+          pkgs.lib.assertMsg (pkgs.lib.versionOlder prev.swww.version "0.10.4") "swww updated, remove overlay"
+        );
+        prev.swww.overrideAttrs (
+          _o:
+          sources.swww
+          // {
+            # creating an overlay for buildRustPackage overlay
+            # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+            cargoDeps = prev.rustPlatform.importCargoLock {
+              lockFile = "${sources.swww.src}/Cargo.lock";
+              allowBuiltinFetchGit = true;
+            };
+          }
+        );
 
       # wallust = prev.wallust.overrideAttrs (
       #   sources.wallust

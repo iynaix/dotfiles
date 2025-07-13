@@ -110,4 +110,24 @@ mkIf (config.custom.wm == "niri") {
       # }
     ];
   };
+
+  # start a separate swww service in a different namespace for niri backdrop
+  systemd.user.services.swww-backdrop = {
+    Install = {
+      WantedBy = [ config.wayland.systemd.target ];
+    };
+
+    Unit = {
+      ConditionEnvironment = "WAYLAND_DISPLAY";
+      Description = "swww-daemon-backdrop";
+      After = [ config.wayland.systemd.target ];
+      PartOf = [ config.wayland.systemd.target ];
+    };
+
+    Service = {
+      ExecStart = "${lib.getExe' config.services.swww.package "swww-daemon"} --namespace backdrop";
+      Restart = "always";
+      RestartSec = 10;
+    };
+  };
 }

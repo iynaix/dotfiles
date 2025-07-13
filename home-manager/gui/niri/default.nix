@@ -23,21 +23,6 @@ in
   ];
 
   config = mkIf (config.custom.wm == "niri") {
-    home.packages = [
-      (pkgs.swaybg.overrideAttrs {
-        postInstall = with pkgs; ''
-          export GDK_PIXBUF_MODULE_FILE="${
-            gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-              extraLoaders = [
-                librsvg
-                webp-pixbuf-loader
-              ];
-            }
-          }"
-        '';
-      })
-    ];
-
     programs.niri = {
       enable = true;
       package = pkgs.niri;
@@ -202,15 +187,14 @@ in
             }
           ];
 
-          # TODO: set wallpaper background for overview
-          # swaybg layer is named "wallpaper"
-          # use a second wallpaper setter with blur?
-          # layer-rules = [
-          #   {
-          #     matches = [ { namespace = "^swww-daemon$"; } ];
-          #     place-within-backdrop = true;
-          #   }
-          # ];
+          # set blurred wallpaper backdrop for overview
+          layer-rules = [
+            {
+              # namespaced swww-daemon layer is named "swww-daemonbackdrop"
+              matches = [ { namespace = "^swww-daemonbackdrop$"; } ];
+              place-within-backdrop = true;
+            }
+          ];
 
           hotkey-overlay = {
             skip-at-startup = true;

@@ -13,6 +13,7 @@ let
     mkMerge
     mkOption
     optionalAttrs
+    optionals
     ;
   inherit (lib.types) package;
   tomlFormat = pkgs.formats.toml { };
@@ -59,8 +60,8 @@ in
           Unit = {
             Description = "Set the wallpaper and update colorscheme";
             PartOf = [ config.wayland.systemd.target ];
-            After = [ "swww.service" ];
-            Requires = [ "swww.service" ];
+            After = [ "swww.service" ] ++ optionals (config.custom.wm == "niri") [ "swww-backdrop.service" ];
+            Requires = [ "swww.service" ] ++ optionals (config.custom.wm == "niri") [ "swww-backdrop.service" ];
           };
           Service = {
             Type = "oneshot";
