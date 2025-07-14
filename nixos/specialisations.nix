@@ -1,27 +1,25 @@
-{
-  isLaptop,
-  lib,
-  ...
-}:
-let
-  inherit (lib) optionalAttrs;
-in
-{
-  specialisation =
-    {
-      # boot into a tty without a DE / WM
-      tty.configuration = {
-        hm.custom.wm = "tty";
+_: {
+  specialisation = {
+    # boot into a tty without a DE / WM
+    tty.configuration = {
+      hm.custom = {
+        currentSpecialisation = "tty";
+        wm = "tty";
       };
+    };
 
-      niri.configuration = {
-        hm.custom.wm = "niri";
+    niri.configuration = {
+      hm.custom = {
+        currentSpecialisation = "niri";
+        wm = "niri";
       };
+    };
 
-      hyprland.configuration = {
-        hm.custom.wm = "hyprland";
+    hyprland.configuration = {
+      hm.custom = {
+        currentSpecialisation = "hyprland";
+        wm = "hyprland";
       };
-    }
-    # create an otg specialisation for laptops
-    // optionalAttrs isLaptop { otg.configuration = { }; };
+    };
+  };
 }

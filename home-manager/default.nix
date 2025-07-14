@@ -35,6 +35,11 @@ in
       default = null;
       description = "Command to run after autologin";
     };
+    currentSpecialisation = mkOption {
+      type = str;
+      default = "";
+      description = "The current specialisation being used";
+    };
     fonts = {
       regular = mkOption {
         type = str;

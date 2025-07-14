@@ -92,12 +92,12 @@ in
         if isNixOS then
           pkgs.custom.nsw.override {
             inherit dots host;
-            specialisation = if config.specialisation == { } then "" else config.specialisation;
+            specialisation = config.custom.currentSpecialisation;
           }
         else
           pkgs.custom.hsw.override {
             inherit dots host;
-            specialisation = if config.specialisation == { } then "" else config.specialisation;
+            specialisation = config.custom.currentSpecialisation;
           };
       # update all nvfetcher overlays and packages
       nv-update = {
@@ -446,7 +446,7 @@ in
       nst = {
         runtimeInputs = [
           (pkgs.custom.shell.nsw.override {
-            specialisation = if config.specialisation == { } then "" else config.specialisation;
+            specialisation = config.custom.currentSpecialisation;
           })
         ];
         text = # sh

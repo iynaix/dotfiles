@@ -41,8 +41,8 @@ mkIf config.custom.isWm {
     };
   };
 
-  # add focal module to waybar (don't use for otg specialisation)
-  custom.waybar = mkIf (config.specialisation != "otg") {
+  # add focal module to waybar
+  custom.waybar = {
     config = {
       "custom/focal" = {
         exec = # sh
