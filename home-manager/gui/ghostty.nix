@@ -5,12 +5,10 @@
 }:
 let
   inherit (lib)
-    getExe
     mkEnableOption
     mkIf
     ;
   cfg = config.custom.ghostty;
-  isGhosttyDefault = config.custom.terminal.package == config.programs.ghostty.package;
   inherit (config.custom) terminal;
 in
 {
@@ -24,8 +22,8 @@ in
 
   config = mkIf cfg.enable {
     custom.terminal = {
+      app-id = "com.mitchellh.ghostty";
       desktop = "com.mitchellh.ghostty.desktop";
-      exec = mkIf isGhosttyDefault "${getExe config.programs.ghostty.package} -e";
     };
 
     programs.ghostty = {

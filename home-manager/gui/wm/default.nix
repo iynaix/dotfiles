@@ -1,20 +1,31 @@
 # generic functionality for all WMs
 {
   config,
+  host,
   isLaptop,
   isNixOS,
   lib,
   pkgs,
+  user,
   ...
 }:
 let
-  inherit (lib) elemAt mkEnableOption mkOption;
+  inherit (lib)
+    elemAt
+    getExe
+    length
+    mkEnableOption
+    mkOption
+    ;
   inherit (lib.types)
+    attrs
     bool
     enum
     float
     int
     nonEmptyListOf
+    listOf
+    nullOr
     oneOf
     str
     submodule
@@ -116,24 +127,166 @@ in
       );
       default = [ ];
     };
+
+    startup = mkOption {
+      description = "Programs to run on startup";
+      type = listOf (oneOf [
+        str
+        (submodule {
+          options = {
+            app-id = mkOption {
+              type = nullOr str;
+              description = "The app-id (class) of the program to start";
+              default = null;
+            };
+            enable = mkEnableOption "Rule" // {
+              default = true;
+            };
+            title = mkOption {
+              type = nullOr str;
+              description = "The window title of the program to start, for differentiating between multiple instances";
+              default = null;
+            };
+            spawn = mkOption {
+              type = listOf str;
+              description = "Command to execute";
+              default = null;
+            };
+            workspace = mkOption {
+              type = nullOr int;
+              description = "Optional workspace to start program on";
+              default = null;
+            };
+            niriArgs = mkOption {
+              type = attrs;
+              description = "Extra arguments for niri window rules";
+              default = { };
+            };
+          };
+        })
+      ]);
+      default = [ ];
+    };
   };
 
   config = {
-    custom.shell.packages = {
-      rofi-clipboard-history = {
-        runtimeInputs = [
-          config.programs.rofi.package
-          config.services.cliphist.package
-          pkgs.wl-clipboard
+    custom = {
+      startup =
+        let
+          isDesktop = host == "desktop";
+          isMultiMon = (length config.custom.monitors) > 1;
+        in
+        # ensure setting terminal title using --title or exec with -e works
+        assert config.custom.terminal.package.pname == "ghostty";
+        [
+          {
+            app-id = "brave-browser";
+            spawn = [
+              (getExe config.programs.chromium.package)
+              "--incognito"
+            ];
+            workspace = 1;
+          }
+          {
+            app-id = "brave-browser";
+            spawn = [
+              (getExe config.programs.chromium.package)
+              "--profile-directory=Default"
+            ];
+            workspace = 1;
+          }
+
+          # file manager
+          {
+            app-id = "nemo";
+            # NOTE: nemo seems ignore --class and --name flags?
+            spawn = [ (getExe pkgs.nemo-with-extensions) ];
+            workspace = 4;
+          }
+
+          # terminal
+          rec {
+            enable = isMultiMon;
+            title = "${config.custom.terminal.app-id}-vertical";
+            spawn = [
+              (getExe config.custom.terminal.package)
+              "--title=${title}"
+            ];
+            workspace = 7;
+            niriArgs = {
+              open-maximized = true;
+            };
+          }
+
+          # librewolf for discord
+          {
+            app-id = "librewolf";
+            spawn = [
+              (getExe config.programs.librewolf.package)
+            ];
+            workspace = 9;
+            niriArgs = {
+              open-maximized = true;
+            };
+          }
+
+          # download related
+          rec {
+            enable = isDesktop;
+            title = "${config.custom.terminal.app-id}-dl";
+            spawn = [
+              (getExe config.custom.terminal.package)
+              "--title=${title}"
+            ];
+            workspace = 10;
+          }
+          rec {
+            enable = isDesktop;
+            title = "${config.custom.terminal.app-id}-yt.txt";
+            spawn = [
+              (getExe config.custom.terminal.package)
+              "--title=${title}"
+              "-e"
+              "nvim"
+              "${config.xdg.userDirs.desktop}/yt.txt"
+            ];
+            workspace = 10;
+          }
+
+          # fix gparted "cannot open display: :0" error
+          {
+            spawn = [
+              (getExe pkgs.xorg.xhost)
+              "+local:${user}"
+            ];
+          }
+
+          # fix Authorization required, but no authorization protocol specified error
+          {
+            spawn = [
+              (getExe pkgs.xorg.xhost)
+              "si:localuser:root"
+            ];
+          }
         ];
-        text = # sh
-          ''
-            cliphist list | \
-            rofi  -dmenu -theme \"${config.xdg.cacheHome}/wallust/rofi-menu.rasi\" | \
-            cliphist decode | \
-            wl-copy'';
+
+      shell.packages = {
+        rofi-clipboard-history = {
+          runtimeInputs = [
+            config.programs.rofi.package
+            config.services.cliphist.package
+            pkgs.wl-clipboard
+          ];
+          text = # sh
+            ''
+              cliphist list | \
+              rofi  -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | \
+              cliphist decode | \
+              wl-copy'';
+        };
       };
     };
+
     home = {
       sessionVariables = {
         QT_QPA_PLATFORM = "wayland;xcb";

@@ -1,7 +1,7 @@
 {
   config,
   host,
-  isLaptop,
+  inputs,
   isVm,
   lib,
   pkgs,
@@ -9,7 +9,7 @@
 }:
 let
   inherit (lib)
-    forEach
+    imap0
     listToAttrs
     mkIf
     mkMerge
@@ -23,9 +23,14 @@ in
   ];
 
   config = mkIf (config.custom.wm == "niri") {
+    # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
+    # the workspaces are name W1, W2, etc as simply naming them as "1", "2", etc
+    # causes waybar to just coerce them back into numbers, so workspaces end up being a
+    # weird sequence of numbers and indexes on any monitor that isn't the first, e.g.
+    # 6 7 3
     programs.niri = {
       enable = true;
-      package = pkgs.niri;
+      package = inputs.niri.packages.${pkgs.system}.niri-unstable;
 
       settings = mkMerge [
         {
@@ -44,7 +49,6 @@ in
             };
 
             touchpad = {
-              enable = isLaptop;
               tap = true;
               dwt = true; # disable while typing
               # drag = false;
@@ -60,6 +64,11 @@ in
               enable = true;
               max-scroll-amount = "95%";
             };
+
+            workspace-auto-back-and-forth = true;
+
+            # let power button turn machine off
+            power-key-handling.enable = false;
           };
 
           # Settings that influence how windows are positioned and sized.
@@ -100,6 +109,7 @@ in
 
               tab-indicator = {
                 position = "top";
+                hide-when-single-tab = true;
                 gap = 0;
                 length = {
                   total-proportion = 1.0;
@@ -159,8 +169,8 @@ in
               # outer gaps
               struts = {
                 # larger struts to be able to see the other window when maximized
-                left = gap + 8;
-                right = gap + 8;
+                left = gap + 12;
+                right = gap + 12;
                 top = gap;
                 bottom = gap;
               };
@@ -217,15 +227,37 @@ in
           xwayland-satellite.enable = true;
         }
 
+        # create workspaces config
+        {
+          workspaces = listToAttrs (
+            lib.custom.mapWorkspaces (
+              {
+                workspace,
+                monitor,
+                ...
+              }:
+              {
+                # start from 0 instead to prevent "1" and "10" from sorting wrongly in lexigraphical order
+                name = toString ((lib.toInt workspace) - 1);
+                value = {
+                  open-on-output = monitor.name;
+                  name = "W${toString workspace}";
+                };
+              }
+            ) config.custom.monitors
+          );
+        }
+
         # create monitors config
         {
           outputs = listToAttrs (
-            forEach config.custom.monitors (d: {
+            imap0 (i: d: {
               inherit (d) name;
               value = {
+                focus-at-startup = i == 0;
                 mode = {
                   inherit (d) width height;
-                  # just use highest refresh rate by not setting it
+                  # use highest refresh rate by not setting it
                   # refresh = d.refreshRate * 1.0;
                 };
                 position = {
@@ -239,10 +271,34 @@ in
                 };
                 inherit (d) scale;
               };
-            })
+            }) config.custom.monitors
           );
         }
       ];
+    };
+
+    custom = {
+      # waybar config for niri
+      waybar.config = {
+        "niri/workspaces" = {
+          format = "{icon}";
+          format-icons = {
+            # named workspaces
+            "W1" = "1";
+            "W2" = "2";
+            "W3" = "3";
+            "W4" = "4";
+            "W5" = "5";
+            "W6" = "6";
+            "W7" = "7";
+            "W8" = "8";
+            "W9" = "9";
+            "W10" = "10";
+            # non named workspaces
+            default = "";
+          };
+        };
+      };
     };
   };
 }

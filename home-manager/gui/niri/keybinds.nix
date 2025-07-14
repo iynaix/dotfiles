@@ -8,17 +8,19 @@ let
   inherit (lib)
     flatten
     getExe
-    isList
     mergeAttrsList
     mkIf
     optionalAttrs
-    splitString
-    toInt
     ;
   inherit (config.custom) monitors;
   pamixerExe = getExe pkgs.pamixer;
   termExec =
-    cmd: (splitString " " config.custom.terminal.exec) ++ (if isList cmd then cmd else [ cmd ]);
+    cmd:
+    [
+      (getExe config.custom.terminal.package)
+      "-e"
+    ]
+    ++ (flatten cmd);
   rofiExe = getExe config.programs.rofi.package;
 in
 mkIf (config.custom.wm == "niri") {
@@ -221,11 +223,12 @@ mkIf (config.custom.wm == "niri") {
       }
       # mouse bindings
       // {
-        "Mod+WheelScrollDown" = {
+        # having Mod + Scroll up / Down is impossible to control with trackball, so require Shift for workspaces
+        "Mod+Shift+WheelScrollDown" = {
           action.focus-workspace-down = { };
           cooldown-ms = 150;
         };
-        "Mod+WheelScrollUp" = {
+        "Mod+Shift+WheelScrollUp" = {
           action.focus-workspace-up = { };
           cooldown-ms = 150;
         };
@@ -233,7 +236,7 @@ mkIf (config.custom.wm == "niri") {
         "Mod+WheelScrollRight".action.focus-column-right-or-first = { };
         "Mod+WheelScrollLeft".action.focus-column-left-or-last = { };
       }
-      # workspace setup
+      # named workspace setup, dynamic workspaces are urgh
       // mergeAttrsList (
         flatten (
           (lib.custom.mapWorkspaces (
@@ -241,9 +244,9 @@ mkIf (config.custom.wm == "niri") {
             [
               {
                 # Switch workspaces with mainMod + [0-9]
-                "Mod+${key}".action.focus-workspace = toInt workspace;
+                "Mod+${key}".action.focus-workspace = "W${workspace}";
                 # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                "Mod+Shift+${key}".action.move-column-to-workspace = toInt workspace;
+                "Mod+Shift+${key}".action.move-column-to-workspace = "W${workspace}";
               }
             ]
           ))

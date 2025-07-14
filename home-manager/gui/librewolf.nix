@@ -24,7 +24,6 @@ mkIf (config.custom.wm != "tty") {
             --append-flags "${
               concatStringsSep " " (
                 [
-                  "--name librewolf"
                   # load librewolf profile with same name as user
                   "--profile ${config.home.homeDirectory}/${configPath}/${user}"
                 ]
@@ -81,14 +80,6 @@ mkIf (config.custom.wm != "tty") {
     ".librewolf/native-messaging-hosts".enable = lib.mkForce false;
     ".mozilla/native-messaging-hosts".enable = lib.mkForce false;
   };
-
-  # full column width for niri
-  programs.niri.settings.window-rules = [
-    {
-      matches = [ { app-id = "^librewolf$"; } ];
-      open-maximized = true;
-    }
-  ];
 
   custom.persist = {
     home.directories = [

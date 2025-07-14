@@ -2,12 +2,11 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
   inherit (lib)
-    getExe
+    concatStringsSep
     getExe'
     mkIf
     optionalString
@@ -20,39 +19,27 @@ mkIf (config.custom.wm == "hyprland") {
 
   wayland.windowManager.hyprland.settings = {
     exec-once =
-      let
-        braveExe = getExe config.programs.chromium.package;
-      in
       [
         # init ipc listener
         "hypr-ipc &"
-
-        # browsers
-        "[workspace 1 silent] uwsm app -- ${braveExe} --incognito"
-        "[workspace 1 silent] uwsm app -- ${braveExe} --profile-directory=Default"
-        # file manager
-        "[workspace 4 silent] uwsm app -- nemo"
-        # terminal
-        "[workspace 7 silent] uwsm app -- ${getExe config.custom.terminal.package}"
-
-        # librewolf for discord
-        "[workspace 9 silent] uwsm app -- ${getExe config.programs.librewolf.package}"
-
-        # download related
-        "[workspace 10 silent] uwsm app -- ${config.custom.terminal.exec} nvim ${config.xdg.userDirs.desktop}/yt.txt"
-        "[workspace 10 silent] uwsm app -- ${getExe config.custom.terminal.package}"
-
-        # misc
-        # fix gparted "cannot open display: :0" error
-        "uwsm app -- ${getExe pkgs.xorg.xhost} +local:${user}"
-        # fix Authorization required, but no authorization protocol specified error
-        "uwsm app -- ${getExe pkgs.xorg.xhost} si:localuser:root"
-
         # stop fucking with my cursors
         "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
         "hyprctl dispatch workspace 1"
-
-      ];
+      ]
+      # generate from startup options
+      ++ map (
+        {
+          enable,
+          spawn,
+          workspace,
+          ...
+        }:
+        let
+          rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+          exec = concatStringsSep " " spawn;
+        in
+        if enable then "${rules} uwsm app -- ${exec}" else ""
+      ) config.custom.startup;
   };
 
   # start swww and wallpaper via systemd to minimize reloads

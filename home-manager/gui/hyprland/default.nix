@@ -225,7 +225,13 @@ in
           };
     };
 
-    # hyprland crash reports
+    # waybar config for hyprland
+    custom.waybar.config = {
+      "hyprland/workspaces" = {
+        format = "{name}";
+      };
+    };
+
     custom.persist = {
       home.cache.directories = [ ".cache/hyprland" ];
     };

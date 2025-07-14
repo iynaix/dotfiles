@@ -14,7 +14,7 @@ let
   # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
   nvidiaSoftwareRenderingWorkaround =
     bin: pkg:
-    if (config.custom.nvidia.enable && config.custom.wm == "hyprland") then
+    if config.custom.nvidia.enable then
       pkgs.symlinkJoin {
         name = bin;
         paths = [ pkg ];
@@ -101,7 +101,12 @@ in
       home.packages = [
         # freecad segfaults on starup on nvidia
         # https://github.com/NixOS/nixpkgs/issues/366299
-        (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
+        (
+          if (config.custom.wm == "hyprland") then
+            (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
+          else
+            pkgs.freecad-wayland
+        )
       ];
 
       custom.persist = {

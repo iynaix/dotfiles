@@ -5,97 +5,66 @@
 }:
 let
   inherit (lib)
-    getExe
+    forEach
+    mkAfter
     mkIf
+    mkMerge
+    optionals
+    reverseList
     ;
-  braveExe = getExe config.programs.chromium.package;
-
-  inherit (config.custom) monitors;
-  mon1 = (lib.head monitors).name;
 in
 mkIf (config.custom.wm == "niri") {
   custom = {
     autologinCommand = "niri-session";
   };
 
-  programs.niri.settings = {
-    spawn-at-startup = [
-      # browsers
-      {
-        command = [
-          braveExe
-          "--profile-directory=Default"
+  # generate startup rules, god i hate having to use rules for startup
+  programs.niri.settings = mkMerge (
+    (forEach config.custom.startup (
+      startup:
+      (mkIf startup.enable {
+        spawn-at-startup = [ { command = startup.spawn; } ];
+        window-rules = mkIf (startup.workspace != null) [
+          (
+            {
+              matches =
+                optionals (startup.app-id != null) [
+                  {
+                    app-id = "^${startup.app-id}$";
+                    at-startup = true;
+                  }
+                ]
+                ++ optionals (startup.title != null) [
+                  {
+                    title = "^${startup.title}$";
+                    at-startup = true;
+                  }
+                ];
+              open-on-workspace = "W${toString startup.workspace}";
+            }
+            # any extra args
+            // startup.niriArgs
+          )
         ];
-      }
+      })
+    ))
+    ++ [
+      # focus default workspace for each monitor
       {
-        command = [
-          braveExe
-          "--incognito"
-        ];
+        spawn-at-startup = mkAfter (
+          forEach (reverseList config.custom.monitors) (mon: {
+            command = [
+              "niri"
+              "msg"
+              "action"
+              "focus-workspace"
+              "W${toString mon.defaultWorkspace}"
+            ];
+          })
+        );
       }
-
-      # # file manager
-      # {
-      #   command = [ "nemo" ];
-      # }
-
-      # # terminal
-      # {
-      #   command = [ (getExe config.custom.terminal.package) ];
-      # }
-
-      # # librewolf for discord
-      # { command = [ (getExe config.programs.librewolf.package) ]; }
-
-      # # download related
-      # {
-      #   command = [
-      #     config.custom.terminal.exec
-      #     "nvim"
-      #     "${config.xdg.userDirs.desktop}/yt.txt"
-      #   ];
-      # }
-      # { command = [ (getExe config.custom.terminal.package) ]; }
-
-      # # misc
-      # # fix gparted "cannot open display: :0" error
-      # {
-      #   command = [
-      #     xhostExe
-      #     "+local:${user}"
-      #   ];
-      # }
-      # # fix Authorization required, but no authorization protocol specified error
-      # {
-      #   command = [
-      #     xhostExe
-      #     "si:localuser:root"
-      #   ];
-      # }
-    ];
-
-    window-rules = [
-      {
-        matches = [
-          {
-            app-id = "^brave-browser$";
-            at-startup = true;
-          }
-        ];
-        open-on-output = mon1;
-      }
-      # {
-      #   matches = [
-      #     {
-      #       app-id = "^nemo$";
-      #       at-startup = true;
-      #     }
-      #   ];
-      #   open-on-output = mon1;
-      #   open-on-workspace = "2";
-      # }
-    ];
-  };
+    ]
+  );
 
   # start a separate swww service in a different namespace for niri backdrop
   systemd.user.services = {

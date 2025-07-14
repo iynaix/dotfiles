@@ -8,7 +8,6 @@
 let
   inherit (lib)
     attrValues
-    getExe
     mkIf
     mkOption
     ;
@@ -48,16 +47,15 @@ in
         description = "Package to use for the terminal";
       };
 
+      app-id = mkOption {
+        type = str;
+        description = "app-id (wm class) for the terminal";
+      };
+
       desktop = mkOption {
         type = str;
         default = "${config.custom.terminal.package.pname}.desktop";
         description = "Name of desktop file for the terminal";
-      };
-
-      exec = mkOption {
-        type = str;
-        default = getExe config.custom.terminal.package;
-        description = "Terminal command to execute other programs.";
       };
 
       font = mkOption {

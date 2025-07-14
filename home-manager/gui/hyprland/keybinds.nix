@@ -15,7 +15,7 @@ let
   inherit (config.custom) monitors;
   pamixer = getExe pkgs.pamixer;
   rofiExe = getExe config.programs.rofi.package;
-  termExec = cmd: "${config.custom.terminal.exec} ${cmd}";
+  termExec = cmd: "${getExe config.custom.terminal.package} -e ${cmd}";
   qtile_like = config.custom.hyprland.qtile;
 in
 {

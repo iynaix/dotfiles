@@ -154,25 +154,6 @@ in
           };
         };
 
-        "hyprland/workspaces" = {
-          # TODO: pacman, remove active inverse circle
-          # format = "{icon}";
-          # format-icons = {
-          #   active = "󰮯";
-          #   default = "·";
-          #   urgent = "󰊠";
-          # };
-          format = "{name}";
-        };
-
-        # "hyprland/window" = {
-        #   rewrite = {
-        #     # strip the application name
-        #     "(.*) - (.*)" = "$1";
-        #   };
-        #   separate-outputs = true;
-        # };
-
         layer = "top";
         margin = "0";
 
@@ -201,7 +182,7 @@ in
                 format-ethernet = " ";
                 # rofi wifi script
                 on-click = getExe pkgs.custom.rofi-wifi-menu;
-                on-click-right = "${config.custom.terminal.exec} nmtui";
+                on-click-right = "${getExe config.custom.terminal} -e nmtui";
               }
             else
               {
