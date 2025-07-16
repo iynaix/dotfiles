@@ -182,7 +182,7 @@ in
                 format-ethernet = " ";
                 # rofi wifi script
                 on-click = getExe pkgs.custom.rofi-wifi-menu;
-                on-click-right = "${getExe config.custom.terminal} -e nmtui";
+                on-click-right = "${getExe config.custom.terminal.package} -e nmtui";
               }
             else
               {

@@ -278,6 +278,13 @@ in
     };
 
     custom = {
+      # wallust.templates = {
+      #   "niri-config.kdl" = {
+      #     text = config.programs.niri.finalConfig;
+      #     target = "${config.xdg.cacheHome}/wallust/niri-config.kdl";
+      #   };
+      # };
+
       # waybar config for niri
       waybar.config = {
         "niri/workspaces" = {

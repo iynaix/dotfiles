@@ -78,7 +78,7 @@ in
 
   config = {
     # clear /tmp on boot, since it's a zfs dataset
-    boot.tmp.cleanOnBoot = true;
+    boot.tmp.cleanOnBoot = config.nix.package.pname == "lix";
 
     # root and home on tmpfs
     # neededForBoot is required, so there won't be permission errors creating directories or symlinks

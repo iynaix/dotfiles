@@ -13,7 +13,6 @@ let
   inherit (lib)
     elemAt
     getExe
-    length
     mkEnableOption
     mkOption
     ;
@@ -51,7 +50,7 @@ in
         "plasma"
         "tty"
       ];
-      default = "hyprland";
+      default = "niri";
     };
 
     isWm = mkOption {
@@ -172,10 +171,6 @@ in
   config = {
     custom = {
       startup =
-        let
-          isDesktop = host == "desktop";
-          isMultiMon = (length config.custom.monitors) > 1;
-        in
         # ensure setting terminal title using --title or exec with -e works
         assert config.custom.terminal.package.pname == "ghostty";
         [
@@ -206,7 +201,6 @@ in
 
           # terminal
           rec {
-            enable = isMultiMon;
             title = "${config.custom.terminal.app-id}-vertical";
             spawn = [
               (getExe config.custom.terminal.package)
@@ -232,7 +226,7 @@ in
 
           # download related
           rec {
-            enable = isDesktop;
+            enable = host == "desktop";
             title = "${config.custom.terminal.app-id}-dl";
             spawn = [
               (getExe config.custom.terminal.package)
@@ -241,7 +235,7 @@ in
             workspace = 10;
           }
           rec {
-            enable = isDesktop;
+            enable = host == "desktop";
             title = "${config.custom.terminal.app-id}-yt.txt";
             spawn = [
               (getExe config.custom.terminal.package)

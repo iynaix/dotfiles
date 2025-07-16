@@ -32,13 +32,13 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "3f557fe3f1c596f52fadf737f772111649a40080",
-            "sha256": "sha256-tNlSRdldzAXpM3x4XGVZeidwhplYu7xR7h7qPELaasE=",
+            "rev": "424c1bddcee78b8e0486800d44119652b2d054d3",
+            "sha256": "sha256-+zGCUmvoOI3U99qCST4yWHvgEURinZDVzPtMHNqzpUM=",
             "sparseCheckout": [],
             "type": "git",
             "url": "https://codeberg.org/explosion-mental/wallust"
         },
-        "version": "3f557fe3f1c596f52fadf737f772111649a40080"
+        "version": "424c1bddcee78b8e0486800d44119652b2d054d3"
     },
     "yazi-plugins": {
         "cargoLocks": null,

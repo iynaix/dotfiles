@@ -84,8 +84,10 @@ in
           matches = [ { title = "^wallpaper-rofi$"; } ];
           open-floating = true;
           # 16: 9 aspect ratio
-          max-width = 889;
-          max-height = 500;
+          # max-width = 889;
+          # max-height = 500;
+          default-column-width.fixed = 889;
+          default-window-height.fixed = 500;
         }
       ];
     }

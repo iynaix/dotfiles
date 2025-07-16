@@ -9,7 +9,7 @@ let
     mkAfter
     mkIf
     mkMerge
-    optionals
+    optionalAttrs
     reverseList
     ;
 in
@@ -27,19 +27,15 @@ mkIf (config.custom.wm == "niri") {
         window-rules = mkIf (startup.workspace != null) [
           (
             {
-              matches =
-                optionals (startup.app-id != null) [
+              matches = [
+                (
                   {
-                    app-id = "^${startup.app-id}$";
                     at-startup = true;
                   }
-                ]
-                ++ optionals (startup.title != null) [
-                  {
-                    title = "^${startup.title}$";
-                    at-startup = true;
-                  }
-                ];
+                  // optionalAttrs (startup.app-id != null) { app-id = "^${startup.app-id}$"; }
+                  // optionalAttrs (startup.title != null) { title = "^${startup.title}$"; }
+                )
+              ];
               open-on-workspace = "W${toString startup.workspace}";
             }
             # any extra args
