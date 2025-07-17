@@ -78,18 +78,22 @@ in
         };
       };
 
-      # full column width for niri
-      programs.niri.settings.window-rules = [
+      # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
+      programs.niri.settings.window-rules = map (
+        mon:
+        let
+          targetPercent = 0.3;
+          width = builtins.floor (targetPercent * (lib.max mon.width mon.height));
+          # 16:9 ratio
+          height = builtins.floor (width / 16.0 * 9.0);
+        in
         {
-          matches = [ { title = "^wallpaper-rofi$"; } ];
+          matches = [ { title = "^wallpaper-rofi-${mon.name}$"; } ];
           open-floating = true;
-          # 16: 9 aspect ratio
-          # max-width = 889;
-          # max-height = 500;
-          default-column-width.fixed = 889;
-          default-window-height.fixed = 500;
+          default-column-width.fixed = width;
+          default-window-height.fixed = height;
         }
-      ];
+      ) config.custom.monitors;
     }
 
     (mkIf config.custom.wallfacer.enable {

@@ -1,76 +1,56 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, pkgs, ... }:
 let
-  inherit (lib) getExe mkIf mkMerge;
+  inherit (lib) getExe;
 in
-mkMerge [
-  {
-    custom = {
-      monitors = [
-        {
-          name = "eDP-1";
-          width = 2880;
-          height = 1920;
-          refreshRate = 120;
-          scale = 1.5;
-          vrr = true;
-          workspaces = [
-            1
-            2
-            3
-            4
-            5
-            6
-            7
-            8
-            9
-            10
-          ];
-        }
-      ];
+{
+  custom = {
+    monitors = [
+      {
+        name = "eDP-1";
+        width = 2880;
+        height = 1920;
+        refreshRate = 120;
+        scale = 1.5;
+        vrr = true;
+        workspaces = [
+          1
+          2
+          3
+          4
+          5
+          6
+          7
+          8
+          9
+          10
+        ];
+      }
+    ];
 
-      modelling3d.enable = true;
-      printing3d.enable = true;
-      pathofbuilding.enable = true;
-      rclip.enable = true;
-      wallfacer.enable = true;
-      waybar.hidden = true;
+    modelling3d.enable = true;
+    printing3d.enable = true;
+    pathofbuilding.enable = true;
+    rclip.enable = true;
+    wallfacer.enable = true;
+    waybar.hidden = true;
 
-      persist = {
-        home.directories = [ "Downloads" ];
-      };
+    # don't blind me on startup
+    startup = [
+      {
+        spawn = [
+          (getExe pkgs.brightnessctl)
+          "s"
+          "20%"
+        ];
+      }
+    ];
+
+    persist = {
+      home.directories = [ "Downloads" ];
     };
+  };
 
-    programs.btop.settings = {
-      custom_gpu_name0 = "AMD Radeon 780M";
-    };
-  }
-
-  (mkIf (config.custom.wm == "hyprland") {
-    wayland.windowManager.hyprland.settings = {
-      exec-once = [
-        # don't blind me on startup
-        "${getExe pkgs.brightnessctl} s 20%"
-      ];
-    };
-  })
-
-  (mkIf (config.custom.wm == "niri") {
-    programs.niri.settings = {
-      spawn-at-startup = [
-        # don't blind me on startup
-        {
-          command = [
-            (getExe pkgs.brightnessctl)
-            "s"
-            "20%"
-          ];
-        }
-      ];
-    };
-  })
-]
+  programs.btop.settings = {
+    custom_gpu_name0 = "AMD Radeon 780M";
+  };
+}

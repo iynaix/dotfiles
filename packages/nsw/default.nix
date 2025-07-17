@@ -11,7 +11,7 @@
   specialisation ? "",
 }:
 stdenvNoCC.mkDerivation {
-  inherit name;
+  name = "${name}-${specialisation}";
   version = "1.0";
 
   src = ./.;

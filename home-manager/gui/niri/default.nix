@@ -224,7 +224,10 @@ in
             zoom = 0.4;
           };
 
-          xwayland-satellite.enable = true;
+          xwayland-satellite = {
+            enable = true;
+            path = lib.getExe inputs.niri.packages.${pkgs.system}.xwayland-satellite-unstable;
+          };
         }
 
         # create workspaces config

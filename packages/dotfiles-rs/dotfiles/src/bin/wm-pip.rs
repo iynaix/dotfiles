@@ -93,8 +93,6 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
     let target_w = 0.2 * f64::from(curr_width.max(curr_height)); // use monitor width even on vertical monitors
     let target_h = target_w / 16.0 * 9.0;
 
-    println!("target_w: {target_w}, target_h: {target_h}");
-
     // toggle fake fullscreen?
 
     // toggle floating

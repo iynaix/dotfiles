@@ -1,22 +1,35 @@
 use common::wallpaper;
 use itertools::Itertools;
 
-#[allow(dead_code)]
+#[cfg_attr(not(feature = "hyprland"), allow(dead_code))]
 fn pqiv_hyprland_float_rule() -> String {
     const TARGET_PERCENT: f64 = 0.3;
 
     use hyprland::shared::HyprDataActive;
     let mon = hyprland::data::Monitor::get_active().expect("could not get active monitor");
 
-    let mut width = f64::from(mon.width) * TARGET_PERCENT;
-    let mut height = f64::from(mon.height) * TARGET_PERCENT;
-
     // handle vertical monitor
-    if height > width {
-        std::mem::swap(&mut width, &mut height);
-    }
+    let width = f64::from(mon.width.max(mon.height)) * TARGET_PERCENT;
+    // target 16: 9 aspect ratio
+    let height = width / 16.0 * 9.0;
 
     format!("[float;size {} {};center]", width.floor(), height.floor())
+}
+
+#[cfg_attr(not(feature = "niri"), allow(dead_code))]
+fn niri_window_title() -> String {
+    use niri_ipc::{Request, Response, socket::Socket};
+
+    // append monitor name to title so relevant window-rule can match it
+    let Ok(Response::FocusedOutput(Some(curr_mon))) = Socket::connect()
+        .expect("failed to connect to niri socket")
+        .send(Request::FocusedOutput)
+        .expect("failed to send FocusedOutput request to niri")
+    else {
+        panic!("Failed to get focused output from niri");
+    };
+
+    format!("wallpaper-rofi-{}", curr_mon.name)
 }
 
 #[allow(clippy::module_name_repetitions)]
@@ -43,7 +56,7 @@ pub fn show_pqiv() {
     {
         use execute::Execute;
 
-        execute::command_args!("pqiv", "--shuffle", "--window-title", "wallpaper-rofi")
+        execute::command_args!("pqiv", "--shuffle", "--window-title", niri_window_title())
             .arg(wall_dir)
             .execute()
             .expect("failed to execute pqiv");
@@ -82,7 +95,7 @@ pub fn show_history() {
             .map(|p| p.display().to_string())
             .collect_vec();
 
-        execute::command_args!("pqiv", "--window-title", "wallpaper-rofi")
+        execute::command_args!("pqiv", "--window-title", niri_window_title())
             .args(history)
             .execute()
             .expect("failed to execute pqiv");
