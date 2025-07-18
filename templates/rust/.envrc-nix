@@ -1,0 +1,3 @@
+# to use the Nix flake development shell, symlink or copy this file to `.envrc` for direnv to read it.
+
+use flake

@@ -1,3 +1,5 @@
+# to use the Nix flake development shell, symlink or copy this file to `.envrc` for direnv to read it.
+
 if ! has nix_direnv_version || ! nix_direnv_version 2.2.1; then
   source_url "https://raw.githubusercontent.com/cachix/devenv/82c0147677e510b247d8b9165c54f73d32dfd899/direnvrc" "sha256-7u4iDd1nZpxL4tCzmPG0dQgC5V+/44Ba+tHkPob1v2k="
 fi
