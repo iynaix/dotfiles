@@ -22,6 +22,19 @@ in
     ./startup.nix
   ];
 
+  /*
+    # create a copy of niri settings for wallust, loads of nix option black magic, that is
+    # waayyyyyyyyyyyyyyyy over my head, see:
+    # https://github.com/sodiboo/niri-flake/issues/1199
+    options.custom = {
+      niri.settings = lib.mkOption {
+        default = lib.modules.mkAliasAndWrapDefsWithPriority id options.programs.niri.settings;
+        description = "Niri settings to be override for wallust";
+        readOnly = true;
+      };
+    };
+  */
+
   config = mkIf (config.custom.wm == "niri") {
     # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
     # the workspaces are name W1, W2, etc as simply naming them as "1", "2", etc
@@ -120,39 +133,28 @@ in
               focus-ring = {
                 width = 2;
 
-                # ring on active / inactive monitor
                 active = {
-                  color = "#7fc8ff";
+                  gradient = {
+                    from = "#89B4FA";
+                    to = "#94E2D5";
+                    relative-to = "workspace-view";
+                    angle = 45;
+                  };
                 };
+
                 inactive = {
-                  color = "#505050";
+                  color = "#1e1e2e"; # background
                 };
-
-                # TODO: gradients?
-                # You can also use gradients. They take precedence over solid colors.
-                # active-gradient = {
-                #   from = "#80c8ff";
-                #   to = "#c7ff7f";
-                #   angle = 45;
-                # };
-
-                # inactive-gradient = {
-                #   from = "#505050";
-                #   to = "#808080";
-                #   angle = 45;
-                #   relative-to = "workspace-view";
-                # };
               };
 
               # redundant, use focus-ring instead
               border.enable = false;
 
-              # TODO: update shadow settings
               shadow = {
                 enable = !isVm;
 
                 # By default, the shadow draws only around its window, and not behind it.
-                # draw-behind-window = true;
+                draw-behind-window = true; # breaks ghostty transparency?
 
                 # You can change how shadows look. The values below are in logical
                 # pixels and match the CSS box-shadow properties.
@@ -280,13 +282,46 @@ in
       ];
     };
 
+    # allow override of modified file by the wallpaper theme changer
+    xdg.configFile.niri-config.force = true;
+
     custom = {
-      # wallust.templates = {
-      #   "niri-config.kdl" = {
-      #     text = config.programs.niri.finalConfig;
-      #     target = "${config.xdg.cacheHome}/wallust/niri-config.kdl";
-      #   };
-      # };
+      # override niri settings with placeholders for wallust
+      /*
+        wallust.templates = {
+          "niri-config.kdl" = {
+            text =
+              # override niri settings with placeholders for wallust, referenced from
+              # sodiboo's own config:
+              # https://github.com/sodiboo/system/blob/main/personal/login.mod.nix
+              # also see comment at top of file for explanation of `config.custom.niri.settings`
+              (evalModules {
+                modules = [
+                  inputs.niri.lib.internal.settings-module
+                  # overrides, currently just active and inactive focus-ring
+                  {
+                    programs.niri.settings = mkMerge [
+                      config.custom.niri.settings
+                      {
+                        layout = {
+                          focus-ring = {
+                            active.gradient = {
+                              from = mkForce "{{color4}}";
+                              to = mkForce "{{color0}}";
+                            };
+
+                            inactive.color = mkForce "{{color0}}";
+                          };
+                        };
+                      }
+                    ];
+                  }
+                ];
+              }).config.programs.niri.finalConfig;
+            target = "${config.xdg.configHome}/niri/config.kdl";
+          };
+        };
+      */
 
       # waybar config for niri
       waybar.config = {

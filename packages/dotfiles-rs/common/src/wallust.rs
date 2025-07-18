@@ -66,6 +66,7 @@ fn refresh_zathura() {
     }
 }
 
+#[cfg(feature = "hyprland")]
 fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     use hyprland::keyword::Keyword;
 
@@ -111,6 +112,41 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
         format!("bordercolor {},pinned:1", color(3).to_rgb_str()),
     )
     .expect("failed to set hyprland sticky border color");
+}
+
+#[cfg(feature = "niri")]
+fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
+    let config_path = full_path("~/.config/niri/config.kdl");
+
+    // replace symlink to nix store if needed
+    // it will replaced by the default config on startup as impermanence will remove the writable file anyway
+    if config_path.is_symlink() {
+        let contents = std::fs::read(&config_path).expect("unable to read niri config.kdl");
+        std::fs::remove_file(&config_path).expect("unable to remove niri config.kdl symlink");
+        std::fs::write(&config_path, contents).expect("unable to write niri config.kdl");
+    }
+
+    let color = |idx: usize| {
+        colors
+            .get(&format!("color{idx}"))
+            .unwrap_or_else(|| panic!("key color{idx} not found"))
+    };
+    let accent_or_color = |accent_idx: usize, color_idx: usize| {
+        accents
+            .get(accent_idx)
+            .unwrap_or_else(|| color(color_idx))
+            .to_hex_str()
+    };
+
+    let active = format!(
+        r#"active-gradient angle=45 from="{}" relative-to="workspace-view" to="{}""#,
+        accent_or_color(0, 4),
+        accent_or_color(1, 0),
+    );
+    let inactive = format!(r#"inactive-color "{}""#, &color(0).to_hex_str());
+
+    replace_in_file(&config_path, r"active-gradient .*", &active);
+    replace_in_file(&config_path, r"inactive-color .*", &inactive);
 }
 
 /// sort accents by their color usage within the wallpaper
@@ -210,9 +246,10 @@ pub fn apply_colors() {
             .collect_vec();
 
         #[cfg(feature = "hyprland")]
-        {
-            apply_hyprland_colors(&accents, &nixcolors.colors);
-        }
+        apply_hyprland_colors(&accents, &nixcolors.colors);
+
+        #[cfg(feature = "niri")]
+        apply_niri_colors(&accents, &nixcolors.colors);
 
         // set the waybar accent color to have more contrast
         set_waybar_colors(&accents[0]);
@@ -229,7 +266,11 @@ pub fn apply_colors() {
             panic!("unable to read colorscheme at {:?}", &cs_path);
         });
 
+        #[cfg(feature = "hyprland")]
         apply_hyprland_colors(&[], &cs.colors);
+
+        #[cfg(feature = "niri")]
+        apply_niri_colors(&[], &cs.colors);
     }
 
     refresh_zathura();
