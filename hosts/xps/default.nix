@@ -8,6 +8,8 @@ let
   inherit (lib) getExe mkIf;
 in
 {
+  imports = [ ./nixos-hardware.nix ];
+
   custom = { };
 
   networking.hostId = "abb4d116"; # required for zfs

@@ -4,12 +4,9 @@
 {
   config,
   lib,
-  inputs,
   ...
 }:
 {
-  imports = [ inputs.nixos-hardware.nixosModules.dell-xps-13-9343 ];
-
   boot = {
     initrd.availableKernelModules = [
       "xhci_pci"
