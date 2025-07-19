@@ -36,6 +36,10 @@ _: {
   #   };
   # };
 
+  programs.git.ignores = [
+    "node_modules"
+  ];
+
   custom.persist = {
     home = {
       cache.directories = [ ".cache/yarn" ];

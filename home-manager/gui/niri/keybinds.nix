@@ -51,7 +51,7 @@ mkIf (config.custom.wm == "niri") {
         # `niri msg action do-something`.
 
         # show hotkey overlay
-        "Mod+Shift+Slash".action.show-hotkey-overlay = { };
+        # "Mod+Shift+Slash".action.show-hotkey-overlay = { };
 
         "Mod+Return".action.spawn = getExe config.custom.terminal.package;
         "Mod+Shift+Return".action.spawn = [
@@ -113,10 +113,10 @@ mkIf (config.custom.wm == "niri") {
         "Mod+K".action.focus-window-or-workspace-up = { };
         "Mod+L".action.focus-column-or-monitor-right = { };
 
-        "Mod+Shift+H".action.move-column-left-or-to-monitor-left = { };
+        "Mod+Shift+H".action.move-column-left = { };
         "Mod+Shift+J".action.move-window-down-or-to-workspace-down = { };
         "Mod+Shift+K".action.move-window-up-or-to-workspace-up = { };
-        "Mod+Shift+L".action.move-column-right-or-to-monitor-right = { };
+        "Mod+Shift+L".action.move-column-right = { };
 
         "Mod+Home".action.focus-column-first = { };
         "Mod+End".action.focus-column-last = { };

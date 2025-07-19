@@ -66,6 +66,32 @@ fn refresh_zathura() {
     }
 }
 
+// replacements is a Vec of (regex, replacement) tuples
+fn replace_in_file<P>(path: P, replacements: Vec<(&str, &str)>)
+where
+    P: AsRef<Path> + std::fmt::Debug,
+{
+    let path = path.as_ref();
+
+    if let Ok(mut content) = std::fs::read_to_string(path) {
+        for (regexp, replacement) in replacements {
+            let re = Regex::new(regexp).expect("invalid regex");
+
+            content = re.replace_all(&content, replacement).into_owned();
+        }
+
+        // handle case where it is a symlink to nix store, replace with writable file
+        if path.is_symlink() {
+            std::fs::remove_file(path)
+                .unwrap_or_else(|_| panic!("unable to remove the {path:?} symlink"));
+        }
+
+        std::fs::write(path, content).unwrap_or_else(|_| panic!("could not write {path:?}"));
+    } else {
+        panic!("unable to read {path:?}");
+    }
+}
+
 #[cfg(feature = "hyprland")]
 fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     use hyprland::keyword::Keyword;
@@ -116,6 +142,7 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 
 #[cfg(feature = "niri")]
 fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
+    use crate::nixinfo::NixInfo;
     let config_path = full_path("~/.config/niri/config.kdl");
 
     // replace symlink to nix store if needed
@@ -145,8 +172,36 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     );
     let inactive = format!(r#"inactive-color "{}""#, &color(0).to_hex_str());
 
-    replace_in_file(&config_path, r"active-gradient .*", &active);
-    replace_in_file(&config_path, r"inactive-color .*", &inactive);
+    let mut replacements = vec![
+        // focus-ring colors
+        (r"active-gradient .*", active.as_str()),
+        (r"inactive-color .*", inactive.as_str()),
+        // increase maximum shadow spread value to workaround config validation errors during nix build
+        ("spread 1024", "spread 2048"),
+    ];
+
+    // add blur settings if enabled, has to be done here as niri-flake cannot be extended :(
+    if Some(true) == NixInfo::new().niri_blur {
+        if let Ok(content) = std::fs::read_to_string(&config_path) {
+            // add the blur settings if they're not already there
+            if !content.contains("blur {") {
+                replacements.push((
+                    "always-center-single-column",
+                    r"
+    always-center-single-column
+
+    blur {
+        on
+        passes 3
+        radius 2.0
+    }
+    ",
+                ));
+            }
+        }
+    }
+
+    replace_in_file(&config_path, replacements);
 }
 
 /// sort accents by their color usage within the wallpaper
@@ -310,18 +365,6 @@ where
         .expect("wallust: failed to set colors from wallpaper");
 }
 
-fn replace_in_file<P>(path: P, regexp: &str, replacement: &str)
-where
-    P: AsRef<Path> + std::fmt::Debug,
-{
-    if let Ok(content) = std::fs::read_to_string(&path) {
-        let re = Regex::new(regexp).expect("invalid regex");
-
-        std::fs::write(&path, re.replace_all(&content, replacement).into_owned())
-            .unwrap_or_else(|_| panic!("could not write {path:?}"));
-    }
-}
-
 pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
     let variant = nixcolors
         .theme_accents
@@ -343,8 +386,7 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
     let qt_theme = format!("catppuccin-mocha-{variant}");
     replace_in_file(
         full_path("~/.config/Kvantum/kvantum.kvconfig"),
-        r"catppuccin-mocha-.*",
-        &qt_theme,
+        vec![(r"catppuccin-mocha-.*", &qt_theme)],
     );
 
     // requires the single quotes to be GVariant compatible for dconf
@@ -360,7 +402,7 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         full_path("~/.config/qt5ct/qt5ct.conf"),
         full_path("~/.config/qt6ct/qt6ct.conf"),
     ] {
-        replace_in_file(file, r"Tela-.*-dark", &icon_theme);
+        replace_in_file(file, vec![(r"Tela-.*-dark", &icon_theme)]);
     }
 
     // restart dunst
@@ -373,19 +415,16 @@ pub fn set_waybar_colors(accent: &Rgb) {
     // get complementary color for complementary module classes
     let css_file = full_path("~/.config/waybar/style.css");
 
-    // replace old foreground color with new complementary color
-    replace_in_file(
-        &css_file,
-        r"accent .*;",
-        &format!("accent {};", accent.to_hex_str()),
-    );
+    let new_accent = format!("accent {};", accent.to_hex_str());
+    let new_complementary = format!("complementary {};", accent.complementary().to_hex_str());
 
-    // replace complementary colors
-    replace_in_file(
-        &css_file,
-        r"complementary .*;",
-        &format!("complementary {};", accent.complementary().to_hex_str()),
-    );
+    let replacements = vec![
+        // replace old foreground color with new complementary color
+        (r"accent .*;", new_accent.as_str()),
+        // replace complementary colors
+        (r"complementary .*;", new_complementary.as_str()),
+    ];
+    replace_in_file(&css_file, replacements);
 
     // write persistent workspaces config to waybar
     #[cfg(feature = "hyprland")]

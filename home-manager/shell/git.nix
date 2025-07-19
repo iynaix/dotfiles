@@ -23,6 +23,11 @@
         repositories = [ "/persist${config.home.homeDirectory}/projects/nixpkgs" ];
       };
 
+      ignores = [
+        ".direnv"
+        ".devenv"
+      ];
+
       extraConfig = {
         init = {
           defaultBranch = "main";

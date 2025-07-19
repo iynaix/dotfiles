@@ -11,7 +11,12 @@ let
     mkIf
     mkOption
     ;
-  inherit (lib.types) int package str;
+  inherit (lib.types)
+    float
+    int
+    package
+    str
+    ;
 in
 {
   imports = [
@@ -77,8 +82,8 @@ in
       };
 
       opacity = mkOption {
-        type = str;
-        default = "0.85";
+        type = float;
+        default = 0.85;
         description = "Opacity for the terminal.";
       };
     };

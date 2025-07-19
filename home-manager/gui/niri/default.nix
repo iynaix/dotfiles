@@ -14,6 +14,7 @@ let
     mkIf
     mkMerge
     mod
+    optionals
     ;
 in
 {
@@ -22,18 +23,22 @@ in
     ./startup.nix
   ];
 
-  /*
-    # create a copy of niri settings for wallust, loads of nix option black magic, that is
-    # waayyyyyyyyyyyyyyyy over my head, see:
-    # https://github.com/sodiboo/niri-flake/issues/1199
-    options.custom = {
-      niri.settings = lib.mkOption {
-        default = lib.modules.mkAliasAndWrapDefsWithPriority id options.programs.niri.settings;
-        description = "Niri settings to be override for wallust";
-        readOnly = true;
+  options.custom = {
+    niri = {
+      blur.enable = lib.mkEnableOption "blur behind windows using PR" // {
+        default = true;
       };
+
+      # create a copy of niri settings for wallust, loads of nix option black magic, that is
+      # waayyyyyyyyyyyyyyyy over my head, see:
+      # https://github.com/sodiboo/niri-flake/issues/1199
+      # settings = lib.mkOption {
+      #   default = lib.modules.mkAliasAndWrapDefsWithPriority id options.programs.niri.settings;
+      #   description = "Niri settings to be override for wallust";
+      #   readOnly = true;
+      # };
     };
-  */
+  };
 
   config = mkIf (config.custom.wm == "niri") {
     # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
@@ -43,7 +48,24 @@ in
     # 6 7 3
     programs.niri = {
       enable = true;
-      package = inputs.niri.packages.${pkgs.system}.niri-unstable;
+      package = inputs.niri.packages.${pkgs.system}.niri-unstable.overrideAttrs (o: {
+        patches =
+          (o.patches or [ ])
+          # increase maximum shadow spread to be able to fake dimaround on ultrawide
+          # see: https://github.com/YaLTeR/niri/discussions/1806
+          ++ [ ./larger-shadow-spread.patch ]
+          ++ optionals config.custom.niri.blur.enable [
+            (pkgs.fetchpatch {
+              url = "https://patch-diff.githubusercontent.com/raw/YaLTeR/niri/pull/1634.diff";
+              hash = "sha256-ucIBkohHGoALm8dyYxNDd90tyjR1Vr/F/rUWh1+6bRs=";
+              name = "blur-behind-windows";
+            })
+            # additional patch to fix blur on vertical monitors, sadly there's still an artifact on the bottom right
+            ./fix-vertical-blur.patch
+          ];
+
+        doCheck = false;
+      });
 
       settings = mkMerge [
         {
@@ -154,7 +176,7 @@ in
                 enable = !isVm;
 
                 # By default, the shadow draws only around its window, and not behind it.
-                draw-behind-window = true; # breaks ghostty transparency?
+                # draw-behind-window = true; # breaks ghostty transparency?
 
                 # You can change how shadows look. The values below are in logical
                 # pixels and match the CSS box-shadow properties.
@@ -282,6 +304,10 @@ in
       ];
     };
 
+    home.shellAliases = {
+      niri-log = ''journalctl --user -u niri --no-hostname -o cat | awk '{$1=""; print $0}' | sed 's/^ *//' | sed 's/\x1b[[0-9;]*m//g' '';
+    };
+
     # allow override of modified file by the wallpaper theme changer
     xdg.configFile.niri-config.force = true;
 
@@ -322,6 +348,10 @@ in
           };
         };
       */
+
+      wallust.nixJson = {
+        niriBlur = config.custom.niri.blur.enable;
+      };
 
       # waybar config for niri
       waybar.config = {

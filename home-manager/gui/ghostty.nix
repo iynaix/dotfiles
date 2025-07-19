@@ -32,7 +32,10 @@ in
       enableFishIntegration = true;
       settings = {
         alpha-blending = "linear-corrected";
-        background-opacity = if (config.custom.wm == "niri") then terminal.opacity else 0.95;
+        background-opacity =
+          terminal.opacity
+          # more opaque on niri as there is no blur
+          + (if (config.custom.wm == "niri" && !config.custom.niri.blur.enable) then 0.1 else 0);
         confirm-close-surface = false;
         copy-on-select = "clipboard";
         # disable clipboard copy notifications temporarily until fixed upstream

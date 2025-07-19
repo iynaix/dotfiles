@@ -21,7 +21,7 @@ assert lib.assertOneOf "dotfiles-rs wm" wm [
 ];
 rustPlatform.buildRustPackage {
   pname = "dotfiles-${wm}";
-  version = "0.1.0";
+  version = "0.9.0";
 
   src = ./.;
 

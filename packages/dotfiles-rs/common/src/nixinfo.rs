@@ -49,6 +49,7 @@ pub struct NixInfo {
     pub fallback: String,
     pub colorscheme: Option<String>,
     pub host: String,
+    pub niri_blur: Option<bool>,
     // waybar options
     pub waybar_persistent_workspaces: Option<bool>,
     pub monitors: Vec<NixMonitorInfo>,

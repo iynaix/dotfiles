@@ -1,0 +1,32 @@
+3d8f954e - Increase maximum spread for shadow rule (6 minutes ago) <Lin Xianyi>
+diff --git a/niri-config/src/lib.rs b/niri-config/src/lib.rs
+index a91a904c..c142af8d 100644
+--- a/niri-config/src/lib.rs
++++ b/niri-config/src/lib.rs
+@@ -775,7 +775,7 @@ pub struct Shadow {
+     #[knuffel(child, unwrap(argument), default = Self::default().softness)]
+     pub softness: FloatOrInt<0, 1024>,
+     #[knuffel(child, unwrap(argument), default = Self::default().spread)]
+-    pub spread: FloatOrInt<-1024, 1024>,
++    pub spread: FloatOrInt<-4096, 4096>,
+     #[knuffel(child, unwrap(argument), default = Self::default().draw_behind_window)]
+     pub draw_behind_window: bool,
+     #[knuffel(child, default = Self::default().color)]
+@@ -818,7 +818,7 @@ pub struct WorkspaceShadow {
+     #[knuffel(child, unwrap(argument), default = Self::default().softness)]
+     pub softness: FloatOrInt<0, 1024>,
+     #[knuffel(child, unwrap(argument), default = Self::default().spread)]
+-    pub spread: FloatOrInt<-1024, 1024>,
++    pub spread: FloatOrInt<-4096, 4096>,
+     #[knuffel(child, default = Self::default().color)]
+     pub color: Color,
+ }
+@@ -1602,7 +1602,7 @@ pub struct ShadowRule {
+     #[knuffel(child, unwrap(argument))]
+     pub softness: Option<FloatOrInt<0, 1024>>,
+     #[knuffel(child, unwrap(argument))]
+-    pub spread: Option<FloatOrInt<-1024, 1024>>,
++    pub spread: Option<FloatOrInt<-4096, 4096>>,
+     #[knuffel(child, unwrap(argument))]
+     pub draw_behind_window: Option<bool>,
+     #[knuffel(child)]

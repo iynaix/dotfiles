@@ -148,6 +148,22 @@ in
       ];
     };
 
+    programs.niri.settings = {
+      # fake dimaround, see:
+      # https://github.com/YaLTeR/niri/discussions/1806
+      layer-rules = [
+        {
+          matches = [ { namespace = "^rofi$"; } ];
+          shadow = {
+            enable = true;
+            spread = 1024;
+            draw-behind-window = true;
+            color = "0000009A";
+          };
+        }
+      ];
+    };
+
     custom.wallust.templates = mkIf config.programs.rofi.enable {
       # default launcher
       "rofi.rasi" = {

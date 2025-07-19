@@ -1,0 +1,219 @@
+c4f003ed - (HEAD -> feat/blur) Ideal blur 1 (2 hours ago) <Lin Xianyi>
+diff --git a/niri-visual-tests/src/cases/tile.rs b/niri-visual-tests/src/cases/tile.rs
+index 8ab67654..b0b6c0e3 100644
+--- a/niri-visual-tests/src/cases/tile.rs
++++ b/niri-visual-tests/src/cases/tile.rs
+@@ -117,7 +117,7 @@ impl TestCase for Tile {
+             Rectangle::new(Point::from((-location.x, -location.y)), size.to_logical(1.)),
+         );
+         self.tile
+-            .render(renderer, location, true, RenderTarget::Output)
++            .render(renderer, location, true, RenderTarget::Output, None)
+             .map(|elem| Box::new(elem) as _)
+             .collect()
+     }
+diff --git a/niri-visual-tests/src/test_window.rs b/niri-visual-tests/src/test_window.rs
+index 7ac9c463..0690c5e5 100644
+--- a/niri-visual-tests/src/test_window.rs
++++ b/niri-visual-tests/src/test_window.rs
+@@ -147,6 +147,10 @@ impl LayoutElement for TestWindow {
+         false
+     }
+ 
++    fn is_floating(&self) -> bool {
++        false
++    }
++
+     fn render<R: NiriRenderer>(
+         &self,
+         _renderer: &mut R,
+diff --git a/src/niri.rs b/src/niri.rs
+index 5cfe3b3a..063d8065 100644
+--- a/src/niri.rs
++++ b/src/niri.rs
+@@ -1573,7 +1573,7 @@ impl State {
+         self.niri
+             .global_space
+             .outputs()
+-            .for_each(|o| EffectsFramebuffers::set_dirty(o));
++            .for_each(EffectsFramebuffers::set_dirty);
+ 
+         self.niri.queue_redraw_all();
+     }
+@@ -2769,7 +2769,7 @@ impl Niri {
+         drop(config);
+ 
+         for Data { output, .. } in &outputs {
+-            self.global_space.unmap_output(&output);
++            self.global_space.unmap_output(output);
+         }
+ 
+         // Connectors can appear in udev in any order. If we sort by name then we get output
+diff --git a/src/render_helpers/blur/element.rs b/src/render_helpers/blur/element.rs
+index 195fbeb6..7dd588aa 100644
+--- a/src/render_helpers/blur/element.rs
++++ b/src/render_helpers/blur/element.rs
+@@ -1,7 +1,6 @@
+ // Ported from https://github.com/nferhat/fht-compositor/blob/main/src/renderer/blur/element.rs
+ 
+ use niri_config::Blur;
+-
+ use smithay::backend::renderer::element::texture::TextureRenderElement;
+ use smithay::backend::renderer::element::{Element, Id, Kind, RenderElement, UnderlyingStorage};
+ use smithay::backend::renderer::gles::{GlesError, GlesFrame, GlesRenderer, GlesTexture, Uniform};
+@@ -10,14 +9,13 @@ use smithay::backend::renderer::Renderer;
+ use smithay::output::Output;
+ use smithay::utils::{Buffer, Logical, Physical, Point, Rectangle, Scale, Size, Transform};
+ 
++use super::optimized_blur_texture_element::OptimizedBlurTextureElement;
++use super::{CurrentBuffer, EffectsFramebuffers};
+ use crate::backend::tty::{TtyFrame, TtyRenderer, TtyRendererError};
+ use crate::render_helpers::render_data::RendererData;
+ use crate::render_helpers::renderer::{AsGlesFrame, NiriRenderer};
+ use crate::render_helpers::shaders::Shaders;
+ 
+-use super::optimized_blur_texture_element::OptimizedBlurTextureElement;
+-use super::{CurrentBuffer, EffectsFramebuffers};
+-
+ #[derive(Debug)]
+ pub enum BlurRenderElement {
+     /// Use optimized blur, aka X-ray blur.
+@@ -82,7 +80,7 @@ impl BlurRenderElement {
+                 loc.to_f64(),
+                 texture,
+                 1,
+-                Transform::Normal,
++                output.current_transform(),
+                 Some(1.0),
+                 Some(scaled),
+                 Some(scaled.size.to_i32_ceil()),
+@@ -150,7 +148,7 @@ impl Element for BlurRenderElement {
+                 size,
+                 scale,
+                 ..
+-            } => src.to_buffer(*scale as f64, *transform, &size.to_f64()),
++            } => src.to_buffer(*scale, *transform, &size.to_f64()),
+         }
+     }
+ 
+@@ -242,9 +240,9 @@ fn draw_true_blur(
+     let blurred_texture = gles_frame.with_context(|gl| unsafe {
+         super::get_main_buffer_blur(
+             gl,
+-            &mut *fx_buffers,
++            &mut fx_buffers,
+             &shaders,
+-            config.clone(),
++            *config,
+             projection_matrix,
+             scale as i32,
+             &vbos,
+diff --git a/src/render_helpers/blur/mod.rs b/src/render_helpers/blur/mod.rs
+index 238b7f51..2ba585a7 100644
+--- a/src/render_helpers/blur/mod.rs
++++ b/src/render_helpers/blur/mod.rs
+@@ -4,12 +4,15 @@ pub mod element;
+ pub mod optimized_blur_texture_element;
+ pub(super) mod shader;
+ 
+-use anyhow::Context;
+ use std::cell::{RefCell, RefMut};
+ use std::rc::Rc;
++use std::sync::MutexGuard;
++use std::time::{Duration, Instant};
+ 
++use anyhow::Context;
+ use glam::{Mat3, Vec2};
+ use niri_config::Blur;
++use shader::BlurShaders;
+ use smithay::backend::renderer::element::surface::WaylandSurfaceRenderElement;
+ use smithay::backend::renderer::element::AsRenderElements;
+ use smithay::backend::renderer::gles::format::fourcc_to_gl_formats;
+@@ -21,15 +24,10 @@ use smithay::reexports::gbm::Format;
+ use smithay::utils::{Buffer, Physical, Point, Rectangle, Scale, Size, Transform};
+ use smithay::wayland::shell::wlr_layer::Layer;
+ 
+-use crate::render_helpers::renderer::NiriRenderer;
+-use shader::BlurShaders;
+-
+ use super::render_data::RendererData;
+ use super::render_elements;
+ use super::shaders::Shaders;
+-
+-use std::sync::MutexGuard;
+-use std::time::{Duration, Instant};
++use crate::render_helpers::renderer::NiriRenderer;
+ 
+ #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+ enum CurrentBuffer {
+@@ -206,7 +204,7 @@ impl EffectsFramebuffers {
+             &mut fb,
+             output_size,
+             scale,
+-            Transform::Normal,
++            output.current_transform(),
+             elements.iter(),
+         )
+         .expect("failed to render for optimized blur buffer");
+@@ -411,7 +409,7 @@ pub(super) unsafe fn get_main_buffer_blur(
+                 scale,
+                 &shaders.down,
+                 half_pixel,
+-                blur_config.clone(),
++                blur_config,
+                 damage,
+             )?;
+             fx_buffers.current_buffer.swap();
+@@ -426,7 +424,7 @@ pub(super) unsafe fn get_main_buffer_blur(
+             let damage = dst_expanded.downscale(1 << (passes - 1 - i));
+             render_blur_pass_with_gl(
+                 gl,
+-                &vbos,
++                vbos,
+                 debug,
+                 supports_instancing,
+                 projection_matrix,
+@@ -435,7 +433,7 @@ pub(super) unsafe fn get_main_buffer_blur(
+                 scale,
+                 &shaders.up,
+                 half_pixel,
+-                blur_config.clone(),
++                blur_config,
+                 damage,
+             )?;
+             fx_buffers.current_buffer.swap();
+diff --git a/src/render_helpers/blur/optimized_blur_texture_element.rs b/src/render_helpers/blur/optimized_blur_texture_element.rs
+index 6816acd9..bafe2862 100644
+--- a/src/render_helpers/blur/optimized_blur_texture_element.rs
++++ b/src/render_helpers/blur/optimized_blur_texture_element.rs
+@@ -43,7 +43,7 @@ impl<E: Texture + Clone + 'static> Element for OptimizedBlurTextureElement<E> {
+     }
+ 
+     fn transform(&self) -> Transform {
+-        Transform::Normal
++        self.0.transform()
+     }
+ 
+     fn damage_since(
+diff --git a/src/render_helpers/blur/shader.rs b/src/render_helpers/blur/shader.rs
+index 02d747e6..c98c2256 100644
+--- a/src/render_helpers/blur/shader.rs
++++ b/src/render_helpers/blur/shader.rs
+@@ -63,7 +63,7 @@ impl BlurShader {
+             let shader = src.replace(
+                 "//_DEFINES_",
+                 &defines.iter().fold(String::new(), |mut shader, define| {
+-                    let _ = writeln!(&mut shader, "#define {}", define);
++                    let _ = writeln!(&mut shader, "#define {define}");
+                     shader
+                 }),
+             );
+@@ -72,7 +72,7 @@ impl BlurShader {
+                 &defines.iter().chain(&["DEBUG_FLAGS"]).fold(
+                     String::new(),
+                     |mut shader, define| {
+-                        let _ = writeln!(shader, "#define {}", define);
++                        let _ = writeln!(shader, "#define {define}");
+                         shader
+                     },
+                 ),

@@ -69,6 +69,7 @@ _: {
     };
     lock.enable = false;
     modelling3d.enable = true;
+    niri.blur.enable = true;
     nvidia.enable = true;
     printing3d.enable = true;
     obs-studio.enable = false;
