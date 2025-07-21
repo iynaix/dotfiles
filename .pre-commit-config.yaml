@@ -35,9 +35,9 @@
           "exclude_types": [],
           "fail_fast": false,
           "files": "\\.nix$",
-          "id": "nixfmt-rfc-style",
+          "id": "nixfmt",
           "language": "system",
-          "name": "nixfmt-rfc-style",
+          "name": "nixfmt",
           "pass_filenames": true,
           "require_serial": false,
           "stages": [

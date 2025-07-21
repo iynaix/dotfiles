@@ -25,9 +25,7 @@ in
 
   options.custom = {
     niri = {
-      blur.enable = lib.mkEnableOption "blur behind windows using PR" // {
-        default = true;
-      };
+      blur.enable = lib.mkEnableOption "blur behind windows using PR";
 
       # create a copy of niri settings for wallust, loads of nix option black magic, that is
       # waayyyyyyyyyyyyyyyy over my head, see:

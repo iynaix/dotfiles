@@ -5,7 +5,6 @@
 }:
 let
   inherit (lib)
-    forEach
     mkAfter
     mkIf
     mkMerge
@@ -15,12 +14,12 @@ let
 in
 mkIf (config.custom.wm == "niri") {
   custom = {
-    autologinCommand = "niri-session";
+    autologinCommand = "niri-session > /tmp/niri-session.log 2>&1";
   };
 
   # generate startup rules, god i hate having to use rules for startup
   programs.niri.settings = mkMerge (
-    (forEach config.custom.startup (
+    (map (
       startup:
       (mkIf startup.enable {
         spawn-at-startup = [ { command = startup.spawn; } ];
@@ -43,12 +42,12 @@ mkIf (config.custom.wm == "niri") {
           )
         ];
       })
-    ))
+    ) config.custom.startup)
     ++ [
       # focus default workspace for each monitor
       {
         spawn-at-startup = mkAfter (
-          forEach (reverseList config.custom.monitors) (mon: {
+          map (mon: {
             command = [
               "niri"
               "msg"
@@ -56,7 +55,7 @@ mkIf (config.custom.wm == "niri") {
               "focus-workspace"
               "W${toString mon.defaultWorkspace}"
             ];
-          })
+          }) (reverseList config.custom.monitors)
         );
       }
     ]

@@ -21,7 +21,7 @@ extend (
         workspaceFn:
         libprev.concatMap (
           monitor:
-          libprev.forEach monitor.workspaces (
+          map (
             ws:
             let
               workspaceArg = {
@@ -31,7 +31,7 @@ extend (
               };
             in
             workspaceFn workspaceArg
-          )
+          ) monitor.workspaces
         );
 
       # writeShellApplication with support for completions

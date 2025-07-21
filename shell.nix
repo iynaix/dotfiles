@@ -10,7 +10,7 @@ pkgs.mkShell {
     deadnix
     statix
     nixd
-    nixfmt-rfc-style
+    nixfmt
     cargo-edit
     (writeShellScriptBin "crb" ''
       cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"

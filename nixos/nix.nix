@@ -70,7 +70,7 @@ in
     systemPackages = with pkgs; [
       nix-init
       nix-update
-      nixfmt-rfc-style
+      nixfmt
     ];
   };
 
@@ -81,47 +81,46 @@ in
     "D! /nix/var/nix/profiles/per-user/root 1755 root root 1d"
   ];
 
-  custom.shell.packages =
-    {
-      # build iso images
-      nbuild-iso = {
-        runtimeInputs = [ pkgs.nixos-generators ];
-        text = # sh
-          ''
-            pushd ${dots} > /dev/null
-            nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-            popd > /dev/null
-          '';
-        fishCompletion = # fish
-          ''
-            function _nbuild_iso
-              nix eval --impure --json --expr \
-                'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-                ${getExe pkgs.jq} -r '.[]' | grep iso
-              end
-              complete -c nbuild-iso -f -a '(_nbuild_iso)'
-          '';
-      };
-      # list all installed packages
-      nix-list-packages = {
-        text =
-          let
-            allPkgs = map (p: p.name) (
-              config.environment.systemPackages ++ config.users.users.${user}.packages ++ config.hm.home.packages
-            );
-          in
-          ''sort -ui <<< "${concatLines allPkgs}"'';
-      };
-    }
-    // optionalAttrs (host == "desktop") {
-      # build and push config for laptop
-      nsw-remote = # sh
+  custom.shell.packages = {
+    # build iso images
+    nbuild-iso = {
+      runtimeInputs = [ pkgs.nixos-generators ];
+      text = # sh
         ''
           pushd ${dots} > /dev/null
-          nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
+          nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
           popd > /dev/null
         '';
+      fishCompletion = # fish
+        ''
+          function _nbuild_iso
+            nix eval --impure --json --expr \
+              'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
+              ${getExe pkgs.jq} -r '.[]' | grep iso
+            end
+            complete -c nbuild-iso -f -a '(_nbuild_iso)'
+        '';
     };
+    # list all installed packages
+    nix-list-packages = {
+      text =
+        let
+          allPkgs = map (p: p.name) (
+            config.environment.systemPackages ++ config.users.users.${user}.packages ++ config.hm.home.packages
+          );
+        in
+        ''sort -ui <<< "${concatLines allPkgs}"'';
+    };
+  }
+  // optionalAttrs (host == "desktop") {
+    # build and push config for laptop
+    nsw-remote = # sh
+      ''
+        pushd ${dots} > /dev/null
+        nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
+        popd > /dev/null
+      '';
+  };
 
   # never going to read html docs locally
   documentation = {

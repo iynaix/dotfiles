@@ -40,10 +40,9 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
   inherit (c) hm;
   hmo = hm.custom;
 
-  # testing niri specialisation
-  niri = c.specialisation.niri.configuration;
-  niriHm = niri.hm;
-  niriConfig = niri.hm.programs.niri.finalConfig;
+  # testing specialisations
+  spec = c: spec_name: c.specialisation.${spec_name}.configuration;
+  specHm = c: spec_name: (spec c spec_name).hm;
 
   # your code here
 }

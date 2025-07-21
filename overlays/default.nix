@@ -54,9 +54,6 @@ in
         patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];
       });
 
-      # use nixfmt-rfc-style as the default
-      nixfmt = prev.nixfmt-rfc-style;
-
       # use latest for namespace functionality
       # https://github.com/LGFae/swww/issues/419
       swww =
