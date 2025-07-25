@@ -221,14 +221,6 @@ in
           addedAssociations = hmMime.associations.added;
           removedAssociations = hmMime.associations.removed;
         };
-
-      # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
-      terminal-exec = {
-        enable = true;
-        settings = {
-          default = [ config.hm.custom.terminal.desktop ];
-        };
-      };
     };
 
     custom.persist = {

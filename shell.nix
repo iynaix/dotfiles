@@ -11,6 +11,7 @@ pkgs.mkShell {
     statix
     nixd
     nixfmt
+    pre-commit
     cargo-edit
     (writeShellScriptBin "crb" ''
       cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"

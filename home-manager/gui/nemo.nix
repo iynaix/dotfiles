@@ -19,10 +19,17 @@ mkIf (config.custom.wm != "tty") {
     nemo-fileroller
     nemo-with-extensions
     webp-pixbuf-loader # for webp thumbnails
-    xdg-terminal-exec
   ];
 
   xdg = {
+    # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
+    terminal-exec = {
+      enable = true;
+      settings = {
+        default = [ config.custom.terminal.desktop ];
+      };
+    };
+
     # fix mimetype associations
     mimeApps.defaultApplications = {
       "inode/directory" = "nemo.desktop";
@@ -64,10 +71,10 @@ mkIf (config.custom.wm != "tty") {
   dconf.settings = {
     # fix open in terminal
     "org/gnome/desktop/applications/terminal" = {
-      exec = getExe pkgs.xdg-terminal-exec;
+      exec = getExe config.xdg.terminal-exec.package;
     };
     "org/cinnamon/desktop/applications/terminal" = {
-      exec = getExe pkgs.xdg-terminal-exec;
+      exec = getExe config.xdg.terminal-exec.package;
     };
     "org/nemo/preferences" = {
       default-folder-viewer = "list-view";

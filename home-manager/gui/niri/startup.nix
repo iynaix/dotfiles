@@ -14,12 +14,15 @@ let
 in
 mkIf (config.custom.wm == "niri") {
   custom = {
-    autologinCommand = "niri-session > /tmp/niri-session.log 2>&1";
+    autologinCommand = "niri-session";
   };
 
   # generate startup rules, god i hate having to use rules for startup
   programs.niri.settings = mkMerge (
-    (map (
+    [
+      { spawn-at-startup = [ { command = [ "niri-ipc" ]; } ]; }
+    ]
+    ++ (map (
       startup:
       (mkIf startup.enable {
         spawn-at-startup = [ { command = startup.spawn; } ];

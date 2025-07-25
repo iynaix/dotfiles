@@ -106,7 +106,7 @@ in
               export WEBKIT_DISABLE_DMABUF_RENDERER=1
             ''
             + lib.custom.direnvCargoRun {
-              dir = "${config.home.homeDirectory}/projects/wallfacer";
+              dir = "/persist${config.home.homeDirectory}/projects/wallfacer";
             };
           # bash completion isn't helpful as there are 1000s of images
           fishCompletion = # fish
@@ -172,7 +172,7 @@ in
       custom.shell.packages = {
         # fetch wallpapers from pixiv for user
         pixiv = lib.custom.direnvCargoRun {
-          dir = "${config.home.homeDirectory}/projects/pixiv";
+          dir = "/persist${config.home.homeDirectory}/projects/pixiv";
         };
       };
 

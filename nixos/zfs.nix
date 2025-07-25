@@ -96,7 +96,7 @@ in
         # when using / as a small tmpfs for impermanence, /tmp can then easily run out of space,
         # so create a dataset for /tmp to prevent this
         # /tmp is cleared on boot via `boot.tmp.cleanOnBoot = true;`
-        "/tmp" = mkIf (config.nix.package.pname == "lix") {
+        "/tmp" = {
           device = "zroot/tmp";
           fsType = "zfs";
         };
