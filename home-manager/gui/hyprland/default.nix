@@ -75,6 +75,7 @@ in
           output = d.name;
           mode = "${toString d.width}x${toString d.height}@${toString d.refreshRate}";
           position = "${toString d.position-x}x${toString d.position-y}";
+          supports_hdr = if d.supports_hdr then 1 else 0;
           inherit (d) scale transform vrr;
         }) monitors;
 

@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 #[derive(Clone, Default, Deserialize, Debug, PartialEq, Eq, Hash)]
 #[serde(rename_all = "camelCase")]
-pub struct NixMonitorInfo {
+pub struct NixMonitor {
     pub name: String,
     pub workspaces: Vec<i32>,
     pub width: u16,
@@ -11,7 +11,7 @@ pub struct NixMonitorInfo {
     pub transform: u8,
 }
 
-impl NixMonitorInfo {
+impl NixMonitor {
     pub fn layoutopts(&self, workspace: i32, is_nstack: bool) -> String {
         let mut opts = vec![workspace.to_string()];
 
@@ -26,11 +26,7 @@ impl NixMonitorInfo {
         opts.push(orientation);
 
         if is_nstack {
-            let stacks = if is_ultrawide || is_vertical {
-                "3"
-            } else {
-                "2"
-            };
+            let stacks = if is_ultrawide || is_vertical { 3 } else { 2 };
             opts.push(format!("layoutopt:nstack-stacks:{stacks}"));
         }
 
@@ -44,7 +40,7 @@ impl NixMonitorInfo {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NixInfo {
+pub struct NixJson {
     pub wallpaper: String,
     pub fallback: String,
     pub colorscheme: Option<String>,
@@ -52,16 +48,16 @@ pub struct NixInfo {
     pub niri_blur: Option<bool>,
     // waybar options
     pub waybar_persistent_workspaces: Option<bool>,
-    pub monitors: Vec<NixMonitorInfo>,
+    pub monitors: Vec<NixMonitor>,
 }
 
-impl Default for NixInfo {
+impl Default for NixJson {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl NixInfo {
+impl NixJson {
     /// get nix info from ~/.config before wallust has processed it
     pub fn new() -> Self {
         json::load("~/.config/wallust/templates/nix.json")

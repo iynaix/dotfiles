@@ -1,5 +1,5 @@
 use execute::Execute;
-use nixinfo::NixMonitorInfo;
+use nixjson::NixMonitor;
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -7,7 +7,7 @@ use std::{
 };
 
 pub mod colors;
-pub mod nixinfo;
+pub mod nixjson;
 pub mod rofi;
 pub mod swww;
 pub mod wallpaper;
@@ -154,11 +154,11 @@ pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
         .cloned()
 }
 
-pub type WorkspacesByMonitor = HashMap<NixMonitorInfo, Vec<i32>>;
+pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 
 /// assign workspaces to their rules if possible, otherwise add them to the other monitors
 pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
-    nix_monitors: &[NixMonitorInfo],
+    nix_monitors: &[NixMonitor],
     active_workspaces: &HashMap<String, i32, S>,
 ) -> WorkspacesByMonitor {
     let mut workspaces_by_mon: WorkspacesByMonitor = HashMap::new();
@@ -175,12 +175,12 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
         if active_workspaces.get(&mon.name).is_some() {
             // active, use current workspaces
             workspaces_by_mon
-                .entry(mon.clone())
+                .entry(mon.name.clone())
                 .or_default()
                 .extend(&mon.workspaces);
         } else {
             workspaces_by_mon
-                .entry(least_workspaces_mon.clone())
+                .entry(least_workspaces_mon.name.clone())
                 .or_default()
                 .extend(&mon.workspaces);
         }
@@ -202,27 +202,27 @@ mod tests {
         let by_workspace_name = |wksps_by_mon: &WorkspacesByMonitor| -> HashMap<String, Vec<i32>> {
             wksps_by_mon
                 .iter()
-                .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                .map(|(mon_name, wksps)| (mon_name.clone(), wksps.clone()))
                 .collect()
         };
 
         let nix_monitors = vec![
-            NixMonitorInfo {
+            NixMonitor {
                 name: "UW".into(),
                 workspaces: vec![1, 2, 3, 4, 5],
                 ..Default::default()
             },
-            NixMonitorInfo {
+            NixMonitor {
                 name: "VERT".into(),
                 workspaces: vec![6, 7],
                 ..Default::default()
             },
-            NixMonitorInfo {
+            NixMonitor {
                 name: "PP".into(),
                 workspaces: vec![9],
                 ..Default::default()
             },
-            NixMonitorInfo {
+            NixMonitor {
                 name: "FWVERT".into(),
                 workspaces: vec![8, 10],
                 ..Default::default()

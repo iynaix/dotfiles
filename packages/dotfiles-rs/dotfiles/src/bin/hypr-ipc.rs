@@ -1,4 +1,4 @@
-use common::{find_monitor_by_name, nixinfo::NixInfo};
+use common::{find_monitor_by_name, nixjson::NixJson};
 use dotfiles::{cli::WmMonitorArgs, monitors::wm_monitors};
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
@@ -83,7 +83,7 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 }
 
 fn main() -> hyprland::Result<()> {
-    let is_desktop = NixInfo::new().host == "desktop";
+    let is_desktop = NixJson::new().host == "desktop";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
     let mut listener = EventListener::new();
@@ -140,7 +140,7 @@ fn main() -> hyprland::Result<()> {
 
     listener.add_monitor_added_handler(|mon| {
         // single monitor in config; is laptop
-        if NixInfo::new().monitors.len() == 1 {
+        if NixJson::new().monitors.len() == 1 {
             // --rofi
             wm_monitors(WmMonitorArgs {
                 rofi: Some(mon.name),

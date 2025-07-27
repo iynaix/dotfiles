@@ -7,7 +7,7 @@ use crate::{
 use clap::CommandFactory;
 use common::{
     WorkspacesByMonitor,
-    nixinfo::{NixInfo, NixMonitorInfo},
+    nixjson::{NixJson, NixMonitor},
     rearranged_workspaces,
     rofi::Rofi,
     wallpaper,
@@ -16,7 +16,7 @@ use itertools::Itertools;
 
 /// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {
-    let nix_monitors = NixInfo::new().monitors;
+    let nix_monitors = NixJson::new().monitors;
 
     let primary = nix_monitors.first().expect("no primary monitor found");
 
@@ -36,7 +36,14 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
         .as_str()
         == "nstack";
 
-    for (mon, wksps) in workspaces {
+    let nix_info_monitors = NixJson::new().monitors;
+
+    for (mon_name, wksps) in workspaces {
+        let nix_info_mon = nix_info_monitors
+            .iter()
+            .find(|mon| mon.name == *mon_name)
+            .expect("could not find nix monitor");
+
         for wksp in wksps {
             {
                 // note it can error if the workspace is empty and hasnt been created yet
@@ -46,23 +53,26 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
                 hyprland::dispatch!(
                     MoveWorkspaceToMonitor,
                     WorkspaceIdentifier::Id(*wksp),
-                    MonitorIdentifier::Name(&mon.name)
+                    MonitorIdentifier::Name(mon_name)
                 )
                 .ok();
 
-                hyprland::keyword::Keyword::set("workspace", mon.layoutopts(*wksp, is_nstack)).ok();
+                hyprland::keyword::Keyword::set(
+                    "workspace",
+                    nix_info_mon.layoutopts(*wksp, is_nstack),
+                )
+                .ok();
             }
         }
     }
 }
 
 /// distribute the workspaces evenly across all monitors
-fn distribute_workspaces(
+pub fn distribute_workspaces(
     extend_type: &MonitorExtend,
-    nix_monitors: &[NixMonitorInfo],
+    nix_monitors: &[NixMonitor],
 ) -> WorkspacesByMonitor {
     use hyprland::shared::HyprData;
-    let workspaces: Vec<i32> = (1..=10).collect();
 
     let all_monitors = hyprland::data::Monitors::get().expect("could not get monitors");
     let all_monitors = all_monitors
@@ -80,6 +90,7 @@ fn distribute_workspaces(
         })
         .collect_vec();
 
+    let workspaces: Vec<i32> = (1..=10).collect();
     let mut start = 0;
     all_monitors
         .iter()
@@ -91,15 +102,7 @@ fn distribute_workspaces(
             let wksps = &workspaces[start..end];
             start += len;
 
-            let nixmon = NixMonitorInfo {
-                name: mon.name.to_string(),
-                width: mon.width,
-                height: mon.height,
-                transform: mon.transform as u8,
-                workspaces: wksps.to_vec(),
-            };
-
-            (nixmon, wksps.to_vec())
+            (mon.name.clone(), wksps.to_vec())
         })
         .collect()
 }
@@ -145,7 +148,7 @@ pub fn wm_monitors(args: WmMonitorArgs) {
     }
 
     // distribute workspaces per monitor
-    let nix_monitors = NixInfo::new().monitors;
+    let nix_monitors = NixJson::new().monitors;
     let workspaces = if let Some(extend) = extend_type {
         // --extend
         distribute_workspaces(&extend, &nix_monitors)

@@ -17,6 +17,7 @@ _: {
           4
           5
         ];
+        supports_hdr = true;
       }
       {
         name = "DP-1";

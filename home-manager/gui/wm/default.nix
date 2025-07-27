@@ -13,6 +13,7 @@ let
   inherit (lib)
     elemAt
     getExe
+    getExe'
     mkEnableOption
     mkOption
     ;
@@ -119,6 +120,11 @@ in
                 type = enum config.workspaces;
                 default = elemAt config.workspaces 0;
                 description = "Default workspace for this monitor";
+              };
+              supports_hdr = mkOption {
+                type = bool;
+                default = false;
+                description = "Whether the monitor supports HDR";
               };
             };
           }
@@ -268,15 +274,14 @@ in
         rofi-clipboard-history = {
           runtimeInputs = [
             config.programs.rofi.package
-            config.services.cliphist.package
-            pkgs.wl-clipboard
           ];
           text = # sh
             ''
-              cliphist list | \
-              rofi  -dmenu -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" | \
-              cliphist decode | \
-              wl-copy'';
+              rofi \
+                -modi clipboard:${getExe' config.services.cliphist.package "cliphist-rofi-img"} \
+                -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" \
+                -show clipboard -show-icons
+            '';
         };
       };
     };

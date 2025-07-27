@@ -1,8 +1,8 @@
 use crate::{
-    CommandUtf8,
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
     wallpaper::WallInfo,
+    CommandUtf8,
 };
 use core::panic;
 use execute::Execute;
@@ -142,7 +142,7 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 
 #[cfg(feature = "niri")]
 fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
-    use crate::nixinfo::NixInfo;
+    use crate::nixjson::NixJson;
     let config_path = full_path("~/.config/niri/config.kdl");
 
     // replace symlink to nix store if needed
@@ -181,7 +181,7 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     ];
 
     // add blur settings if enabled, has to be done here as niri-flake cannot be extended :(
-    if Some(true) == NixInfo::new().niri_blur {
+    if Some(true) == NixJson::new().niri_blur {
         if let Ok(content) = std::fs::read_to_string(&config_path) {
             // add the blur settings if they're not already there
             if !content.contains("blur {") {
@@ -429,7 +429,7 @@ pub fn set_waybar_colors(accent: &Rgb) {
     // write persistent workspaces config to waybar
     #[cfg(feature = "hyprland")]
     {
-        use crate::{nixinfo::NixInfo, rearranged_workspaces};
+        use crate::{nixjson::NixJson, rearranged_workspaces};
         use hyprland::{data::Monitors, shared::HyprData};
 
         // add / remove persistent workspaces to waybar before launching
@@ -438,11 +438,11 @@ pub fn set_waybar_colors(accent: &Rgb) {
         let mut cfg: serde_json::Value =
             json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
 
-        if let NixInfo {
+        if let NixJson {
             waybar_persistent_workspaces: Some(true),
             monitors,
             ..
-        } = NixInfo::new()
+        } = NixJson::new()
         {
             let active_workspaces: HashMap<_, _> = Monitors::get()
                 .expect("could not get monitors")
@@ -453,7 +453,7 @@ pub fn set_waybar_colors(accent: &Rgb) {
             let new_wksps: HashMap<String, Vec<i32>> =
                 rearranged_workspaces(&monitors, &active_workspaces)
                     .iter()
-                    .map(|(mon, wksps)| (mon.name.clone(), wksps.clone()))
+                    .map(|(mon_name, wksps)| (mon_name.clone(), wksps.clone()))
                     .collect();
             cfg["hyprland/workspaces"]["persistentWorkspaces"] = serde_json::to_value(new_wksps)
                 .expect("failed to convert rearranged workspaces to json");
