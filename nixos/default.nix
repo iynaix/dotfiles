@@ -92,16 +92,15 @@ in
     programs.dconf.enable = true;
 
     environment = {
-      etc =
-        {
-          # universal git settings
-          "gitconfig".text = config.hm.xdg.configFile."git/config".text;
-        }
-        // optionalAttrs (config.hm.custom.wm != "tty") {
-          # get gparted to use system theme
-          "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
-          "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
-        };
+      etc = {
+        # universal git settings
+        "gitconfig".text = config.hm.xdg.configFile."git/config".text;
+      }
+      // optionalAttrs (config.hm.custom.wm != "tty") {
+        # get gparted to use system theme
+        "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
+        "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
+      };
 
       # install fish completions for fish
       # https://github.com/nix-community/home-manager/pull/2408
@@ -116,22 +115,21 @@ in
       };
 
       # use some shell aliases from home manager
-      shellAliases =
-        {
-          inherit (config.hm.programs.bash.shellAliases)
-            eza
-            ls
-            ll
-            la
-            lla
-            ;
-        }
-        // {
-          inherit (config.hm.home.shellAliases)
-            t # eza related
-            y # yazi
-            ;
-        };
+      shellAliases = {
+        inherit (config.hm.programs.bash.shellAliases)
+          eza
+          ls
+          ll
+          la
+          lla
+          ;
+      }
+      // {
+        inherit (config.hm.home.shellAliases)
+          t # eza related
+          y # yazi
+          ;
+      };
 
       systemPackages =
         with pkgs;
@@ -184,7 +182,8 @@ in
     systemd.tmpfiles.rules = [
       # cleanup systemd coredumps once a week
       "D! /var/lib/systemd/coredump root root 7d"
-    ] ++ (mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
+    ]
+    ++ (mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
 
     # setup fonts
     fonts = {

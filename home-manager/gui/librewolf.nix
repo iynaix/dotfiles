@@ -16,28 +16,26 @@ mkIf (config.custom.wm != "tty") {
     enable = true;
     package = pkgs.librewolf.overrideAttrs (o: {
       # launch librewolf with user profile
-      buildCommand =
-        o.buildCommand
-        + ''
-          wrapProgram "$out/bin/librewolf" \
-            --set 'HOME' '${config.xdg.configHome}' \
-            --append-flags "${
-              concatStringsSep " " (
-                [
-                  # load librewolf profile with same name as user
-                  "--profile ${config.home.homeDirectory}/${configPath}/${user}"
-                ]
-                ++ [
-                  # launch with the following urls:
-                  "https://discordapp.com/channels/@me"
-                ]
-                ++ optionals (host == "desktop") [
-                  "https://web.whatsapp.com" # requires access via local network
-                  "http://localhost:9091" # transmission
-                ]
-              )
-            }"
-        '';
+      buildCommand = o.buildCommand + ''
+        wrapProgram "$out/bin/librewolf" \
+          --set 'HOME' '${config.xdg.configHome}' \
+          --append-flags "${
+            concatStringsSep " " (
+              [
+                # load librewolf profile with same name as user
+                "--profile ${config.home.homeDirectory}/${configPath}/${user}"
+              ]
+              ++ [
+                # launch with the following urls:
+                "https://discordapp.com/channels/@me"
+              ]
+              ++ optionals (host == "desktop") [
+                "https://web.whatsapp.com" # requires access via local network
+                "http://localhost:9091" # transmission
+              ]
+            )
+          }"
+      '';
     });
 
     inherit configPath;

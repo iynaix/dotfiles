@@ -15,29 +15,29 @@
   };
   wallust = {
     pname = "wallust";
-    version = "0a0e7c0ca83a4528f1e6e9f35ecce7a263847438";
+    version = "424c1bddcee78b8e0486800d44119652b2d054d3";
     src = fetchgit {
       url = "https://codeberg.org/explosion-mental/wallust";
-      rev = "0a0e7c0ca83a4528f1e6e9f35ecce7a263847438";
+      rev = "424c1bddcee78b8e0486800d44119652b2d054d3";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
       sparseCheckout = [ ];
-      sha256 = "sha256-2FLuAgANlLnepIcZknQB3gNE4M1U/xsr+pO9TJHHmyc=";
+      sha256 = "sha256-+zGCUmvoOI3U99qCST4yWHvgEURinZDVzPtMHNqzpUM=";
     };
-    date = "2025-07-21";
+    date = "2025-07-15";
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "de53d90cb2740f84ae595f93d0c4c23f8618a9e4";
+    version = "5d726c063d540765804f740a2d96062b633a4e89";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "de53d90cb2740f84ae595f93d0c4c23f8618a9e4";
+      rev = "5d726c063d540765804f740a2d96062b633a4e89";
       fetchSubmodules = false;
-      sha256 = "sha256-ixZKOtLOwLHLeSoEkk07TB3N57DXoVEyImR3qzGUzxQ=";
+      sha256 = "sha256-pEZV/PE5LFphfPCE/qh/INLN3ksXeOSWcEN92g3q6tQ=";
     };
-    date = "2025-07-23";
+    date = "2025-07-19";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
@@ -53,13 +53,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.07.21";
+    version = "2025.06.30";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.07.21";
+      rev = "2025.06.30";
       fetchSubmodules = false;
-      sha256 = "sha256-VNUkCdrzbOwD+iD9BZUQFJlWXRc0tWJAvLnVKNZNPhQ=";
+      sha256 = "sha256-dwBe6oXh7G67kfiI6BqiC0ZHzleR7QlfMiTVXWYW85I=";
     };
   };
 }

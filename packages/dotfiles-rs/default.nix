@@ -49,13 +49,12 @@ rustPlatform.buildRustPackage {
 
   postInstall =
     let
-      progs =
-        [
-          "wm-same-class"
-          "rofi-mpv"
-        ]
-        ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
-        ++ lib.optionals (wm == "niri") [ ];
+      progs = [
+        "wm-same-class"
+        "rofi-mpv"
+      ]
+      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
+      ++ lib.optionals (wm == "niri") [ ];
     in
     ''
       for prog in ${toString progs}; do

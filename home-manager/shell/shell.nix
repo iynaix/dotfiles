@@ -122,11 +122,13 @@ in
         nwhich = {
           text = # sh
             ''readlink -f "$(which "$1")"'';
-        } // binariesCompletion "nwhich";
+        }
+        // binariesCompletion "nwhich";
         cnwhich = {
           text = # sh
             ''cat "$(nwhich "$1")"'';
-        } // binariesCompletion "cnwhich";
+        }
+        // binariesCompletion "cnwhich";
         ynwhich = {
           runtimeInputs = with pkgs; [
             config.programs.yazi.package
@@ -134,7 +136,8 @@ in
           ];
           text = # sh
             ''yazi "$(dirname "$(dirname "$(nwhich "$1")")")"'';
-        } // binariesCompletion "ynwhich";
+        }
+        // binariesCompletion "ynwhich";
         # uniq but maintain original order
         uuniq = "awk '!x[$0]++'";
       };

@@ -107,15 +107,14 @@ in
       '';
     };
 
-    xdg.configFile =
-      {
-        # add custom themes in pywal format
-        "wallust/themes" = {
-          source = ./wallust;
-          recursive = true;
-        };
-      }
-      //
+    xdg.configFile = {
+      # add custom themes in pywal format
+      "wallust/themes" = {
+        source = ./wallust;
+        recursive = true;
+      };
+    }
+    //
       # set xdg configFile text and on change for wallust templates
       (pipe cfg.templates [
         (filterAttrs (_: template: !(isTemplatePath template.text)))

@@ -78,20 +78,19 @@ let
             networking.networkmanager.enable = true;
 
             # update greeting for iso to suggest networkmanager
-            services.getty.helpLine =
-              ''
-                The "nixos" and "root" accounts have empty passwords.
+            services.getty.helpLine = ''
+              The "nixos" and "root" accounts have empty passwords.
 
-                To log in over ssh you must set a password for either "nixos" or "root"
-                with `passwd` (prefix with `sudo` for "root"), or add your public key to
-                /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
+              To log in over ssh you must set a password for either "nixos" or "root"
+              with `passwd` (prefix with `sudo` for "root"), or add your public key to
+              /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
 
-                If you need a wireless connection, use `nmtui`.
-              ''
-              + lib.optionalString config.services.xserver.enable ''
-                Type `sudo systemctl start display-manager' to
-                start the graphical user interface.
-              '';
+              If you need a wireless connection, use `nmtui`.
+            ''
+            + lib.optionalString config.services.xserver.enable ''
+              Type `sudo systemctl start display-manager' to
+              start the graphical user interface.
+            '';
 
             programs = {
               # bye bye nano

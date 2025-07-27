@@ -129,7 +129,8 @@ in
     home.packages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       config.custom.rofi-power-menu.package
-    ] ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
+    ]
+    ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
     wayland.windowManager.hyprland.settings = {

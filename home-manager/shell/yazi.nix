@@ -130,94 +130,93 @@ mkMerge [
         in
         {
           # add keymaps for shortcuts
-          mgr.prepend_keymap =
-            [
-              # dropping to shell
+          mgr.prepend_keymap = [
+            # dropping to shell
+            {
+              on = "!";
+              run = # sh
+                ''shell "$SHELL" --block --confirm'';
+              desc = "Open shell here";
+            }
+            # close input by a single Escape press
+            {
+              on = "<Esc>";
+              run = "close";
+              desc = "Cancel input";
+            }
+            # cd back to root of current git repo
+            {
+              on = [
+                "g"
+                "r"
+              ];
+              run = # sh
+                ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
+              desc = "Cd to root of current git repo";
+            }
+          ]
+          ++ flatten (
+            mapAttrsToList (keys: loc: [
+              # cd
               {
-                on = "!";
-                run = # sh
-                  ''shell "$SHELL" --block --confirm'';
-                desc = "Open shell here";
+                on = [ "g" ] ++ stringToCharacters keys;
+                run = "cd ${loc}";
+                desc = "cd to ${loc}";
               }
-              # close input by a single Escape press
+              # new tab
               {
-                on = "<Esc>";
-                run = "close";
-                desc = "Cancel input";
+                on = [ "t" ] ++ stringToCharacters keys;
+                run = "tab_create ${loc}";
+                desc = "open new tab to ${loc}";
               }
-              # cd back to root of current git repo
+              # mv
               {
-                on = [
-                  "g"
-                  "r"
+                on = [ "m" ] ++ stringToCharacters keys;
+                run = [
+                  "yank --cut"
+                  "escape --visual --select"
+                  loc
                 ];
-                run = # sh
-                  ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
-                desc = "Cd to root of current git repo";
+                desc = "move selection to ${loc}";
               }
-            ]
-            ++ flatten (
-              mapAttrsToList (keys: loc: [
-                # cd
-                {
-                  on = [ "g" ] ++ stringToCharacters keys;
-                  run = "cd ${loc}";
-                  desc = "cd to ${loc}";
-                }
-                # new tab
-                {
-                  on = [ "t" ] ++ stringToCharacters keys;
-                  run = "tab_create ${loc}";
-                  desc = "open new tab to ${loc}";
-                }
-                # mv
-                {
-                  on = [ "m" ] ++ stringToCharacters keys;
-                  run = [
-                    "yank --cut"
-                    "escape --visual --select"
-                    loc
-                  ];
-                  desc = "move selection to ${loc}";
-                }
-                # cp
-                {
-                  on = [ "Y" ] ++ stringToCharacters keys;
-                  run = [
-                    "yank"
-                    "escape --visual --select"
-                    loc
-                  ];
-                  desc = "copy selection to ${loc}";
-                }
-              ]) shortcuts
-            )
-            ++ [
+              # cp
               {
-                on = [
-                  "z"
-                  "h"
+                on = [ "Y" ] ++ stringToCharacters keys;
+                run = [
+                  "yank"
+                  "escape --visual --select"
+                  loc
                 ];
-                run = "plugin time-travel prev";
-                desc = "Go to previous snapshot";
+                desc = "copy selection to ${loc}";
               }
-              {
-                on = [
-                  "z"
-                  "l"
-                ];
-                run = "plugin time-travel next";
-                desc = "Go to next snapshot";
-              }
-              {
-                on = [
-                  "z"
-                  "e"
-                ];
-                run = "plugin time-travel exit";
-                desc = "Exit browsing snapshots";
-              }
-            ];
+            ]) shortcuts
+          )
+          ++ [
+            {
+              on = [
+                "z"
+                "h"
+              ];
+              run = "plugin time-travel prev";
+              desc = "Go to previous snapshot";
+            }
+            {
+              on = [
+                "z"
+                "l"
+              ];
+              run = "plugin time-travel next";
+              desc = "Go to next snapshot";
+            }
+            {
+              on = [
+                "z"
+                "e"
+              ];
+              run = "plugin time-travel exit";
+              desc = "Exit browsing snapshots";
+            }
+          ];
         };
     };
 

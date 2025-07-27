@@ -309,33 +309,32 @@ in
             dscale = "mitchell";
             cscale = "spline64"; # or ewa_lanczossoft
           };
-          bindings =
-            {
-              # clear all shaders
-              "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
-            }
-            // listToAttrs (
-              imap
-                (i: v: {
-                  name = "CTRL+${toString i}";
-                  value = v;
-                })
-                [
-                  # Anime4K shaders
-                  (createShaderKeybind anime4k_shaders "Anime4K: Mode A (HQ)")
-                  # NVScaler shaders
-                  (createShaderKeybind [ "NVScaler" ] "NVScaler x2")
-                  # AMD FSR shaders
-                  (createShaderKeybind [ "FSR" ] "AMD FidelityFX Super Resolution")
-                  # AMD Contrast Adaptive Sharpening
-                  (createShaderKeybind [ "CAS-scaled" ] "AMD FidelityFX Contrast Adaptive Sharpening")
-                  # FSRCNNX shaders
-                  (createShaderKeybind [ "FSRCNNX_x2_16-0-4-1" ] "FSRCNNX High")
-                  (createShaderKeybind [ "FSRCNNX_x2_8-0-4-1" ] "FSRCNNX")
-                  # NNEDI3 shaders
-                  (createShaderKeybind [ "nnedi3-nns256-win8x6.hook" ] "NNEDI3")
-                ]
-            );
+          bindings = {
+            # clear all shaders
+            "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
+          }
+          // listToAttrs (
+            imap
+              (i: v: {
+                name = "CTRL+${toString i}";
+                value = v;
+              })
+              [
+                # Anime4K shaders
+                (createShaderKeybind anime4k_shaders "Anime4K: Mode A (HQ)")
+                # NVScaler shaders
+                (createShaderKeybind [ "NVScaler" ] "NVScaler x2")
+                # AMD FSR shaders
+                (createShaderKeybind [ "FSR" ] "AMD FidelityFX Super Resolution")
+                # AMD Contrast Adaptive Sharpening
+                (createShaderKeybind [ "CAS-scaled" ] "AMD FidelityFX Contrast Adaptive Sharpening")
+                # FSRCNNX shaders
+                (createShaderKeybind [ "FSRCNNX_x2_16-0-4-1" ] "FSRCNNX High")
+                (createShaderKeybind [ "FSRCNNX_x2_8-0-4-1" ] "FSRCNNX")
+                # NNEDI3 shaders
+                (createShaderKeybind [ "nnedi3-nns256-win8x6.hook" ] "NNEDI3")
+              ]
+          );
         };
       }
     )

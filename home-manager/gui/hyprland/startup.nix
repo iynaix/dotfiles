@@ -18,28 +18,27 @@ mkIf (config.custom.wm == "hyprland") {
   };
 
   wayland.windowManager.hyprland.settings = {
-    exec-once =
-      [
-        # init ipc listener
-        "hypr-ipc &"
-        # stop fucking with my cursors
-        "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
-        "hyprctl dispatch workspace 1"
-      ]
-      # generate from startup options
-      ++ map (
-        {
-          enable,
-          spawn,
-          workspace,
-          ...
-        }:
-        let
-          rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-          exec = concatStringsSep " " spawn;
-        in
-        if enable then "${rules} uwsm app -- ${exec}" else ""
-      ) config.custom.startup;
+    exec-once = [
+      # init ipc listener
+      "hypr-ipc &"
+      # stop fucking with my cursors
+      "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
+      "hyprctl dispatch workspace 1"
+    ]
+    # generate from startup options
+    ++ map (
+      {
+        enable,
+        spawn,
+        workspace,
+        ...
+      }:
+      let
+        rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+        exec = concatStringsSep " " spawn;
+      in
+      if enable then "${rules} uwsm app -- ${exec}" else ""
+    ) config.custom.startup;
   };
 
   # start swww and wallpaper via systemd to minimize reloads

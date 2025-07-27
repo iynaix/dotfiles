@@ -72,8 +72,7 @@ in
 
       # add btop monitoring for extra hdds
       custom.btop.disks =
-        optionals cfg.wdred6 [ "/media/6TBRED" ]
-        ++ optionals cfg.ironwolf22 [ "/media/IRONWOLF22" ];
+        optionals cfg.wdred6 [ "/media/6TBRED" ] ++ optionals cfg.ironwolf22 [ "/media/IRONWOLF22" ];
     };
 
     # dual boot windows

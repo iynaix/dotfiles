@@ -52,10 +52,8 @@ tela-icon-theme.overrideAttrs (oldAttrs: {
   '';
 
   # add nix logo for *.nix files through the use of a mimetype
-  postInstall =
-    (oldAttrs.postInstall or "")
-    + ''
-      mkdir -p $out/share/mime/packages
-      cp ${./nix.xml} $out/share/mime/packages/nix.xml
-    '';
+  postInstall = (oldAttrs.postInstall or "") + ''
+    mkdir -p $out/share/mime/packages
+    cp ${./nix.xml} $out/share/mime/packages/nix.xml
+  '';
 })

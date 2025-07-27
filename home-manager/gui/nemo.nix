@@ -34,12 +34,11 @@ mkIf (config.custom.wm != "tty") {
       "application/x-tar" = "org.gnome.FileRoller.desktop";
     };
 
-    configFile =
-      {
-        "mimeapps.list".force = true;
-      }
-      # other OSes seem to override this file
-      // optionalAttrs (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
+    configFile = {
+      "mimeapps.list".force = true;
+    }
+    # other OSes seem to override this file
+    // optionalAttrs (!isNixOS) { "gtk-3.0/bookmarks".force = true; };
   };
 
   gtk.gtk3.bookmarks =
