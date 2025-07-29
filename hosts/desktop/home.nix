@@ -17,7 +17,10 @@ _: {
           4
           5
         ];
-        supports_hdr = true;
+        extraHyprlandConfig = {
+          supports_hdr = 1;
+          bitdepth = 10;
+        };
       }
       {
         name = "DP-1";
@@ -83,7 +86,6 @@ _: {
     waybar = {
       enable = true;
       hidden = false;
-      # waybar.persistentWorkspaces = true;
     };
   };
 

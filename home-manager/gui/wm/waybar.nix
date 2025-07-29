@@ -41,7 +41,6 @@ in
         default = "";
         description = "Additional css to add to the waybar style.css";
       };
-      persistentWorkspaces = mkEnableOption "Persistent workspaces";
       hidden = mkEnableOption "Hidden waybar by default";
     };
   };
@@ -60,7 +59,7 @@ in
       ];
 
       bind = [
-        "$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 waybar"
+        "$mod, a, exec, systemctl --user kill -s SIGUSR1 waybar.service"
         "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
       ];
     };
@@ -154,7 +153,6 @@ in
           };
         };
 
-        layer = "top";
         margin = "0";
 
         modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);
@@ -212,10 +210,6 @@ in
       };
 
       wallust = {
-        nixJson = {
-          waybarPersistentWorkspaces = cfg.persistentWorkspaces;
-        };
-
         templates = {
           "waybar.jsonc" = {
             text = toJSON cfg.config;
@@ -239,6 +233,12 @@ in
               + (concatMapStringsSep "\n" (name: "@define-color ${name} {{${name}}};") colorNames);
               baseModuleCss = # css
                 ''
+                  font-family: "${config.custom.fonts.regular}";
+                  font-weight: bold;
+                  color: @accent;
+                  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                  border: none;
+                  border-radius: 0;
                   transition: none;
                   border-bottom:  2px solid transparent;
                   padding-left: ${margin};
@@ -256,15 +256,6 @@ in
               text = # css
               ''
                 ${colorDefinitions}
-
-                * {
-                  font-family: "${config.custom.fonts.regular}";
-                  font-weight: bold;
-                  color: @accent;
-                  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                  border: none;
-                  border-radius: 0;
-                }
 
                 #waybar {
                   background: rgba(0,0,0,0.5);
@@ -293,6 +284,10 @@ in
                 #workspaces button.active {
                   border-bottom:  2px solid @accent;
                   background-color: rgba(255,255,255, 0.25);
+                }
+
+                #workspaces button.empty {
+                  opacity: 0.6;
                 }
               ''
               +

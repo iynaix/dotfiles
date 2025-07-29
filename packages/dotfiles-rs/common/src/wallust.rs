@@ -1,8 +1,8 @@
 use crate::{
+    CommandUtf8,
     colors::{NixColors, Rgb},
     full_path, json, kill_wrapped_process,
     wallpaper::WallInfo,
-    CommandUtf8,
 };
 use core::panic;
 use execute::Execute;
@@ -438,36 +438,22 @@ pub fn set_waybar_colors(accent: &Rgb) {
         let mut cfg: serde_json::Value =
             json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
 
-        if let NixJson {
-            waybar_persistent_workspaces: Some(true),
-            monitors,
-            ..
-        } = NixJson::new()
-        {
-            let active_workspaces: HashMap<_, _> = Monitors::get()
-                .expect("could not get monitors")
+        let monitors = NixJson::new().monitors;
+        let active_workspaces: HashMap<_, _> = Monitors::get()
+            .expect("could not get monitors")
+            .iter()
+            .map(|mon| (mon.name.clone(), mon.active_workspace.id))
+            .collect();
+
+        let new_wksps: HashMap<String, Vec<i32>> =
+            rearranged_workspaces(&monitors, &active_workspaces)
                 .iter()
-                .map(|mon| (mon.name.clone(), mon.active_workspace.id))
+                .map(|(mon_name, wksps)| (mon_name.clone(), wksps.clone()))
                 .collect();
 
-            let new_wksps: HashMap<String, Vec<i32>> =
-                rearranged_workspaces(&monitors, &active_workspaces)
-                    .iter()
-                    .map(|(mon_name, wksps)| (mon_name.clone(), wksps.clone()))
-                    .collect();
-            cfg["hyprland/workspaces"]["persistentWorkspaces"] = serde_json::to_value(new_wksps)
-                .expect("failed to convert rearranged workspaces to json");
-        } else {
-            let hyprland_workspaces = cfg["hyprland/workspaces"]
-                .as_object_mut()
-                .expect("invalid hyprland workspaces");
-            hyprland_workspaces.remove("persistentWorkspaces");
+        cfg["hyprland/workspaces"]["persistent-workspaces"] = serde_json::to_value(new_wksps)
+            .expect("failed to convert rearranged workspaces to json");
 
-            cfg["hyprland/workspaces"] = serde_json::to_value(hyprland_workspaces)
-                .expect("failed to convert hyprland workspaces to json");
-        }
-
-        // write waybar_config back to waybar_config_file as json
         json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
     }
 }

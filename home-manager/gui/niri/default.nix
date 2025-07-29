@@ -309,6 +309,21 @@ in
     # allow override of modified file by the wallpaper theme changer
     xdg.configFile.niri-config.force = true;
 
+    xdg.portal = {
+      enable = true;
+      config = {
+        common.default = [
+          "gnome"
+        ];
+        niri = {
+          default = "gnome";
+          "org.freedesktop.impl.portal.FileChooser" = "gtk";
+        };
+        obs.default = [ "gnome" ];
+      };
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    };
+
     custom = {
       # override niri settings with placeholders for wallust
       /*

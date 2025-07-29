@@ -142,6 +142,12 @@ sudo zfs create -o mountpoint=legacy zroot/root
 sudo zfs snapshot zroot/root@blank
 sudo mount -t zfs zroot/root /mnt
 
+# uncomment to have separate /home dataset
+# echo "Creating /home"
+# sudo zfs create -o mountpoint=legacy zroot/home
+# sudo zfs snapshot zroot/home@blank
+# sudo mount --mkdir -t zfs zroot/home /mnt/home
+
 # create the boot parition after creating root
 echo "Mounting /boot (efi)"
 sudo mount --mkdir "$BOOTDISK" /mnt/boot

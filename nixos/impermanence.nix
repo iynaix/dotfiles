@@ -94,6 +94,18 @@ in
       ];
     };
 
+    # uncomment to use separate home dataset
+    # fileSystems."/home" = mkForce {
+    #   device = "tmpfs";
+    #   fsType = "tmpfs";
+    #   neededForBoot = true;
+    #   options = [
+    #     "defaults"
+    #     "size=1G"
+    #     "mode=755"
+    #   ];
+    # };
+
     # shut sudo up
     security.sudo.extraConfig = "Defaults lecture=never";
 

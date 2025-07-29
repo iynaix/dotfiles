@@ -144,7 +144,7 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
             .send(Request::Action(Action::MoveFloatingWindow {
                 id: None,
                 x: PositionChange::SetFixed(final_x),
-                y: PositionChange::SetFixed(final_y - 36.0),
+                y: PositionChange::SetFixed(final_y),
             }))
             .expect("failed to send MoveFloatingWindow")?;
     }

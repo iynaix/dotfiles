@@ -27,11 +27,6 @@ fn generate_man_pages() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() {
-    assert!(
-        !(cfg!(feature = "hyprland") && cfg!(feature = "niri")),
-        "Cannot enable both 'hyprland' and 'niri' features simultaneously"
-    );
-
     if let Err(err) = generate_man_pages() {
         println!("cargo:warning=Error generating man pages: {err}");
     }

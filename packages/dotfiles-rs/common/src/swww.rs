@@ -79,10 +79,9 @@ impl Swww {
     fn mon_with_crop(
         &self,
         mon_name: &str,
-        mon_width: u32,
-        mon_height: u32,
+        (mon_w, mon_h): (u32, u32),
+        (w, h, x, y): (f64, f64, f64, f64),
         mon_scale: f64,
-        wall_info: &WallInfo,
         transition_args: &[String],
     ) {
         let img = ImageReader::open(&self.wall)
@@ -91,17 +90,11 @@ impl Swww {
             .expect("could not decode image")
             .to_rgb8();
 
-        let Some((w, h, x, y)) = wall_info.get_geometry(mon_width, mon_height) else {
-            panic!("unable to get geometry for {mon_name}: {mon_width}x{mon_height}",);
-        };
-
         // convert to rgb8 pixel type
         let src = Image::from_vec_u8(img.width(), img.height(), img.into_raw(), PixelType::U8x3)
             .expect("Failed to create source image view");
 
-        #[allow(clippy::cast_sign_loss)]
-        let mut dest = Image::new(mon_width, mon_height, PixelType::U8x3);
-
+        let mut dest = Image::new(mon_w, mon_h, PixelType::U8x3);
         Resizer::new()
             .resize(
                 &src,
@@ -116,12 +109,7 @@ impl Swww {
 
         #[allow(clippy::cast_sign_loss)]
         WebPEncoder::new_lossless(&mut result_buf)
-            .write_image(
-                dest.buffer(),
-                mon_width,
-                mon_height,
-                image::ColorType::Rgb8.into(),
-            )
+            .write_image(dest.buffer(), mon_w, mon_h, image::ColorType::Rgb8.into())
             .expect("failed to savea webp image for swww");
 
         // HACK: get swww to update the scale, or it thinks it's still 1.0???
@@ -185,15 +173,14 @@ impl Swww {
                 .to_vec();
 
             monitors.par_iter().for_each(|mon| {
-                let (mw, mh) = vertical_dimensions(mon);
+                let (mon_w, mon_h) = vertical_dimensions(mon);
 
-                match wall_info.get_geometry_str(mw, mh) {
-                    Some(_) => self.mon_with_crop(
+                match wall_info.get_geometry(mon_w, mon_h) {
+                    Some(geom) => self.mon_with_crop(
                         &mon.name,
-                        mw,
-                        mh,
+                        (mon_w, mon_h),
+                        geom,
                         f64::from(mon.scale),
-                        wall_info,
                         &transition_args,
                     ),
                     None => self.mon_without_crop(&mon.name, &transition_args),
@@ -221,7 +208,7 @@ impl Swww {
                     Some(logical) => {
                         #[allow(clippy::cast_possible_truncation)]
                         #[allow(clippy::cast_sign_loss)]
-                        let (mw, mh) = if (logical.scale - 1.0).abs() < f64::EPSILON {
+                        let (mon_w, mon_h) = if (logical.scale - 1.0).abs() < f64::EPSILON {
                             (logical.width, logical.height)
                         } else {
                             (
@@ -230,14 +217,16 @@ impl Swww {
                             )
                         };
 
-                        self.mon_with_crop(
-                            &mon.name,
-                            mw,
-                            mh,
-                            logical.scale,
-                            wall_info,
-                            &transition_args,
-                        );
+                        match wall_info.get_geometry(mon_w, mon_h) {
+                            Some(geom) => self.mon_with_crop(
+                                &mon.name,
+                                (mon_w, mon_h),
+                                geom,
+                                logical.scale,
+                                &transition_args,
+                            ),
+                            None => self.mon_without_crop(&mon.name, &transition_args),
+                        }
                     }
                 });
         }

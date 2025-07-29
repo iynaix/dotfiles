@@ -121,10 +121,10 @@ in
                 default = elemAt config.workspaces 0;
                 description = "Default workspace for this monitor";
               };
-              supports_hdr = mkOption {
-                type = bool;
-                default = false;
-                description = "Whether the monitor supports HDR";
+              extraHyprlandConfig = mkOption {
+                type = attrs;
+                default = { };
+                description = "Extra monitor config for hyprland";
               };
             };
           }

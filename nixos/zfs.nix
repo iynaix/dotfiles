@@ -81,6 +81,13 @@ in
           neededForBoot = true;
         };
 
+        # uncomment to use separate home dataset
+        # "/home" = {
+        #   device = "zroot/home";
+        #   fsType = "zfs";
+        #   neededForBoot = true;
+        # };
+
         # boot partition
         "/boot" = {
           device = "/dev/disk/by-label/NIXBOOT";

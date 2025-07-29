@@ -145,15 +145,6 @@ pub fn vertical_dimensions(mon: &hyprland::data::Monitor) -> (u32, u32) {
     }
 }
 
-pub fn find_monitor_by_name(name: &str) -> Option<hyprland::data::Monitor> {
-    use hyprland::shared::HyprData;
-    hyprland::data::Monitors::get()
-        .expect("could not get monitors")
-        .iter()
-        .find(|mon| mon.name == name)
-        .cloned()
-}
-
 pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 
 /// assign workspaces to their rules if possible, otherwise add them to the other monitors
