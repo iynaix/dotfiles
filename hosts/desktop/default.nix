@@ -24,7 +24,47 @@ in
     virtualization.enable = true;
   };
 
-  services.displayManager.autoLogin.user = user;
+  services = {
+    displayManager.autoLogin.user = user;
+
+    pipewire = {
+      # enable soft-mixer to fix global volume control for kanto?
+      # wireplumber.extraConfig = mkIf (host == "desktop") {
+      #   "alsa-soft-mixer"."monitor.alsa.rules" = [
+      #     {
+      #       actions.update-props."api.alsa.soft-mixer" = true;
+      #       matches = [
+      #         {
+      #           "device.name" = "alsa_output.usb-Kanto_Audio_ORA_by_Kanto_20240130-00.analog-stereo";
+      #           "device.name" = "~alsa_card.*";
+      #         }
+      #       ];
+      #     }
+      #   ];
+      # };
+
+      # wireplumber.configPackages = [
+      #   # prefer DAC over speakers
+      #   (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-custom-audio-priority.conf" ''
+      #     monitor.alsa.rules = [
+      #       {
+      #         matches = [
+      #           {
+      #             node.name = "alsa_output.usb-Yoyodyne_Consulting_ODAC-revB-01.analog-stereo"
+      #           }
+      #         ]
+      #         actions = {
+      #           update-props = {
+      #             priority.driver = 2000
+      #             priority.session = 2000
+      #           }
+      #         }
+      #       }
+      #     ]
+      #   '')
+      # ];
+    };
+  };
 
   networking = mkMerge [
     { hostId = "89eaa833"; } # required for zfs

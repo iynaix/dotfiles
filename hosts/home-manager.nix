@@ -1,17 +1,21 @@
 {
   inputs,
   specialArgs,
-  user ? "iynaix",
   lib,
   ...
 }@args:
 let
   # provide an optional { pkgs } 2nd argument to override the pkgs
   mkHomeConfiguration =
-    host:
+    userWithhost:
     {
       pkgs ? args.pkgs,
     }:
+    let
+      _parts = lib.splitString "@" userWithhost;
+      user = lib.elemAt _parts 0;
+      host = lib.elemAt _parts 1;
+    in
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs lib;
 
@@ -19,7 +23,7 @@ let
         inherit host user;
         isNixOS = false;
         isLaptop = host == "xps" || host == "framework";
-        isVm = host == "vm" || host == "vm-hyprland";
+        isVm = false;
         # NOTE: don't reference /persist on legacy distros
         dots = "/home/${user}/projects/dotfiles";
       };
@@ -34,7 +38,7 @@ let
     };
 in
 {
-  desktop = mkHomeConfiguration "desktop" { };
-  framework = mkHomeConfiguration "framework" { };
+  desktop = mkHomeConfiguration "iynaix@desktop" { };
+  framework = mkHomeConfiguration "iynaix@framework" { };
   # NOTE: standalone home-manager doesn't make sense for VM config!
 }

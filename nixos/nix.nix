@@ -146,7 +146,7 @@ in
         options = "--delete-older-than 7d";
       };
       # package = pkgs.lixPackageSets.latest.lix;
-      package = pkgs.nixVersions.nix_2_30;
+      package = pkgs.nixVersions.latest;
       registry = registry // {
         n = registry.nixpkgs;
         master = {

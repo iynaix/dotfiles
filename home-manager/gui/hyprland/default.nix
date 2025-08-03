@@ -61,13 +61,6 @@ in
         })
       ];
 
-      importantPrefixes = [
-        "$"
-        "bezier"
-        "name"
-        "output"
-      ];
-
       settings = {
         monitor = [ ",preferred,auto,auto" ];
 

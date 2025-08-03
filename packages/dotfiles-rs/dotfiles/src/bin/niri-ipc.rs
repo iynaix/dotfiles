@@ -30,8 +30,6 @@ fn renumber_workspaces(by_monitor: &HashMap<String, Vec<Workspace>>) {
 
         if by_idx != by_name {
             for (wksp, target) in by_name.iter().zip(by_idx.iter()) {
-                println!("{:?} => {}", wksp.name, target.idx);
-
                 socket
                     .send(Request::Action(Action::MoveWorkspaceToIndex {
                         index: target.idx.into(),
@@ -49,8 +47,8 @@ pub fn distribute_workspaces(
     extend_type: &MonitorExtend,
     current_monitors: &[String],
     nix_monitors: &[NixMonitor],
-) {
-    let mut command_socket = Socket::connect().expect("failed to connect to niri socket");
+) -> Vec<Workspace> {
+    let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
     let all_monitors = current_monitors
         .iter()
@@ -74,7 +72,7 @@ pub fn distribute_workspaces(
         let end = start + len;
 
         for wksp in start..end {
-            command_socket
+            socket
                 .send(Request::Action(Action::MoveWorkspaceToMonitor {
                     output: (*mon_name).to_string(),
                     reference: Some(WorkspaceReferenceArg::Name(format!("W{}", wksp + 1))),
@@ -84,6 +82,15 @@ pub fn distribute_workspaces(
         }
         start += len;
     }
+
+    // return the redistributed workspaces
+    let Ok(Response::Workspaces(workspaces)) = socket
+        .send(Request::Workspaces)
+        .expect("failed to send Workspaces request")
+    else {
+        panic!("unexpected response from niri, should be Workspaces");
+    };
+    workspaces
 }
 
 fn main() {
@@ -108,7 +115,7 @@ fn main() {
                     });
 
                     // new monitor added, redistribute workspaces
-                    if has_new_monitors {
+                    let wksps = if has_new_monitors {
                         let monitor_names = workspaces
                             .iter()
                             .filter_map(|wksp| wksp.output.clone())
@@ -119,10 +126,12 @@ fn main() {
                             &MonitorExtend::Secondary,
                             &monitor_names,
                             &nix_info_monitors,
-                        );
-                    }
+                        )
+                    } else {
+                        workspaces
+                    };
 
-                    let by_monitor: HashMap<_, _> = workspaces
+                    let by_monitor: HashMap<_, _> = wksps
                         .iter()
                         .filter(|wksp| wksp.output.is_some() && wksp.name.is_some())
                         .sorted_by_key(|wksp| wksp.output.clone())

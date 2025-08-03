@@ -242,6 +242,10 @@ in
             skip-at-startup = true;
           };
 
+          clipboard = {
+            disable-primary = true;
+          };
+
           overview = {
             zoom = 0.4;
           };

@@ -76,14 +76,9 @@ mkIf config.custom.isWm {
 
   programs.niri.settings = {
     binds = {
-      "Mod+backslash".action.spawn = [
-        "niri"
-        "msg"
-        "action"
-        "screenshot"
-        "-p"
-        "false"
-      ];
+      "Mod+backslash".action.screenshot = {
+        show-pointer = false;
+      };
       "Mod+Shift+backslash".action.spawn = [
         "focal"
         "image"
