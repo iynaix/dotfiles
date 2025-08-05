@@ -9,6 +9,7 @@
 }:
 let
   inherit (lib)
+    getExe'
     imap0
     listToAttrs
     mkIf
@@ -126,6 +127,7 @@ in
                 { proportion = 0.33333; }
                 { proportion = 0.5; }
                 { proportion = 0.66667; }
+                { proportion = 1.0; }
               ];
 
               # heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
@@ -133,6 +135,7 @@ in
                 { proportion = 0.33333; }
                 { proportion = 0.5; }
                 { proportion = 0.66667; }
+                { proportion = 1.0; }
               ];
 
               # default width of the new windows, empty for deciding initial width
@@ -311,7 +314,10 @@ in
     };
 
     # allow override of modified file by the wallpaper theme changer
-    xdg.configFile.niri-config.force = true;
+    xdg.configFile.niri-config = {
+      force = true;
+      onChange = "${getExe' config.custom.dotfiles.package "wallpaper"} reload";
+    };
 
     xdg.portal = {
       enable = true;

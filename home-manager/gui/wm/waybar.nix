@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatMapStringsSep
     getExe
-    getExe'
     head
     last
     mkEnableOption
@@ -23,6 +22,19 @@ let
   inherit (lib.strings) toJSON;
   inherit (lib.types) lines submodule;
   cfg = config.custom.waybar;
+  waybar-hide-file = "/tmp/waybar_hide";
+  waybar-toggle = pkgs.writeShellApplication {
+    name = "waybar-toggle";
+    text = ''
+      if [ -f "${waybar-hide-file}" ]; then
+          rm "${waybar-hide-file}"
+      else
+          touch "${waybar-hide-file}"
+      fi
+
+      systemctl --user kill -s SIGUSR1 waybar.service
+    '';
+  };
 in
 {
   options.custom = {
@@ -51,7 +63,30 @@ in
       systemd.enable = true;
     };
 
+    systemd.user.services.waybar = {
+      # create the waybar hidden file if needed before starting waybar
+      Service.ExecStartPre = getExe (
+        pkgs.writeShellApplication {
+          name = "waybar-init";
+          runtimeInputs = with pkgs; [
+            jq
+          ];
+          text = ''
+            if jq -e '.start_hidden == true' "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1; then
+                touch "${waybar-hide-file}"
+            else
+                if [ -f "${waybar-hide-file}" ]; then
+                  rm "${waybar-hide-file}"
+                fi
+            fi
+          '';
+        }
+      );
+    };
+
     # toggle / launch waybar
+    home.packages = [ waybar-toggle ];
+
     wayland.windowManager.hyprland.settings = {
       layerrule = [
         "blur,waybar"
@@ -59,7 +94,7 @@ in
       ];
 
       bind = [
-        "$mod, a, exec, systemctl --user kill -s SIGUSR1 waybar.service"
+        "$mod, a, exec, ${getExe waybar-toggle}"
         "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
       ];
     };
@@ -67,9 +102,7 @@ in
     programs.niri.settings = {
       binds = {
         "Mod+A".action.spawn = [
-          (getExe' pkgs.procps "pkill")
-          "-SIGUSR1"
-          "waybar"
+          (getExe waybar-toggle)
         ];
         "Mod+Shift+A".action.spawn = [
           "systemctl"

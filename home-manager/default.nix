@@ -75,6 +75,7 @@ in
 
       sessionVariables = {
         __IS_NIXOS = if isNixOS then "1" else "0";
+        __SPECIALISATION = config.custom.currentSpecialisation;
         NIXPKGS_ALLOW_UNFREE = "1";
       };
 

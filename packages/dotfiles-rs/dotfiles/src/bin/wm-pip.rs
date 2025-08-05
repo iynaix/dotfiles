@@ -116,7 +116,6 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
     #[allow(clippy::cast_possible_truncation)]
     if active.is_floating {
         const PADDING: f64 = 30.0; // target distance from corner of screen
-        const WAYBAR_HEIGHT: f64 = 36.0;
 
         socket
             .send(Request::Action(Action::SetWindowWidth {
@@ -131,14 +130,12 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
             }))
             .expect("failed to send SetWindowHeight")?;
 
-        // TODO: check if waybar is hidden, niri doesn't take into account the exclusion zone
-        let is_waybar_hidden = false;
+        let is_waybar_hidden =
+            std::fs::exists("/tmp/waybar_hide").expect("failed to check waybar hidden file");
+        let waybar_offset = if is_waybar_hidden { 0.0 } else { 36.0 };
 
         let final_x = f64::from(curr_width) - PADDING - target_w;
-        let final_y = f64::from(curr_height)
-            - PADDING
-            - target_h
-            - if is_waybar_hidden { 0.0 } else { WAYBAR_HEIGHT };
+        let final_y = f64::from(curr_height) - PADDING - target_h - waybar_offset;
 
         socket
             .send(Request::Action(Action::MoveFloatingWindow {

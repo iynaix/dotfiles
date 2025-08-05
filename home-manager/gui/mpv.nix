@@ -133,12 +133,25 @@ in
       #   }
       # ];
 
-      home.packages = with pkgs; [ ffmpeg ];
+      home.packages = [ pkgs.ffmpeg ];
 
       custom.persist = {
         home.directories = [
           ".local/state/mpv" # watch later
         ];
+      };
+    }
+
+    # subliminal settings
+    {
+      home = {
+        packages = with pkgs; [
+          python3Packages.subliminal
+        ];
+
+        shellAliases = {
+          subs = "subliminal download -l 'en' -l 'eng' -s";
+        };
       };
     }
 
