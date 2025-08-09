@@ -1,4 +1,5 @@
-_: {
+{ config, ... }:
+{
   custom = {
     monitors = [
       {
@@ -17,6 +18,7 @@ _: {
           9
           10
         ];
+        refreshRate = if config.custom.wm == "hyprland" then "60" else "59.934";
       }
     ];
 

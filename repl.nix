@@ -44,5 +44,8 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
   spec = c: spec_name: c.specialisation.${spec_name}.configuration;
   specHm = c: spec_name: (spec c spec_name).hm;
 
+  mango = spec c "mango";
+  mangoHm = specHm c "mango";
+  mangoSettings = mangoHm.wayland.windowManager.mango.settings;
   # your code here
 }

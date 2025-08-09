@@ -1,4 +1,5 @@
-_: {
+{ config, ... }:
+{
   custom = {
     specialisation = {
       hyprland.enable = true;
@@ -10,8 +11,8 @@ _: {
         name = "DP-2";
         width = 3440;
         height = 1440;
-        # niri wants this to be exact down to the decimals
-        refreshRate = 144;
+        # niri / mango wants this to be exact down to the decimals
+        refreshRate = if config.custom.wm == "hyprland" then "144" else "174.963";
         vrr = false;
         positionX = 1440;
         positionY = 1080;
@@ -39,6 +40,7 @@ _: {
           7
         ];
         defaultWorkspace = 7;
+        refreshRate = "59.951";
       }
       {
         name = "HDMI-A-1";
@@ -53,6 +55,7 @@ _: {
           10
         ];
         defaultWorkspace = 9;
+        refreshRate = "59.997";
       }
       # {
       #   name = "DP-3";
