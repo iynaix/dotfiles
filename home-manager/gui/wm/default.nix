@@ -48,6 +48,7 @@ in
       type = enum [
         "hyprland"
         "niri"
+        "mango"
         "plasma"
         "tty"
       ];
@@ -57,7 +58,8 @@ in
     isWm = mkOption {
       description = "Readonly option to check if the WM is hyprland or niri";
       type = bool;
-      default = config.custom.wm == "hyprland" || config.custom.wm == "niri";
+      default =
+        config.custom.wm == "hyprland" || config.custom.wm == "niri" || config.custom.wm == "mango";
       readOnly = true;
     };
 

@@ -13,7 +13,8 @@ let
     optionals
     ;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
-    backend = config.custom.wm;
+    # TODO: add mango support for focal
+    backend = if config.custom.wm == "mango" then "hyprland" else config.custom.wm;
     rofi-wayland = config.programs.rofi.package;
     ocr = true;
   };

@@ -61,6 +61,7 @@ in
 
       hyprland.enable = mkEnableOption "hyprland specialisation";
       niri.enable = mkEnableOption "niri specialisation";
+      mango.enable = mkEnableOption "mango specialisation";
     };
     symlinks = mkOption {
       type = attrsOf str;

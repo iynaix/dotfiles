@@ -2,6 +2,7 @@ _: {
   imports = [
     ./hyprland
     ./niri
+    ./mango
     ./wm
     ./3dprinting.nix
     ./brave.nix

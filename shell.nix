@@ -41,6 +41,8 @@ let
                 FEATURES_FLAG="--features hyprland"
             elif command -v niri &>/dev/null; then
                 FEATURES_FLAG="--features niri"
+            elif command -v mmsg &>/dev/null; then
+                FEATURES_FLAG="--features mango"
             fi
         fi
 

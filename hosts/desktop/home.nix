@@ -2,6 +2,7 @@ _: {
   custom = {
     specialisation = {
       hyprland.enable = true;
+      mango.enable = false;
     };
 
     monitors = [

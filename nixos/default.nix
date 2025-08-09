@@ -37,6 +37,7 @@ in
     ./hyprland.nix
     ./impermanence.nix
     ./keyd.nix
+    ./mango.nix
     ./niri.nix
     ./nix.nix
     ./nvidia.nix

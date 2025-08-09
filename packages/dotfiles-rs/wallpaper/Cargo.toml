@@ -10,6 +10,7 @@ rclip = []
 wallfacer = []
 hyprland = []
 niri = []
+mango = []
 
 [lints]
 workspace = true

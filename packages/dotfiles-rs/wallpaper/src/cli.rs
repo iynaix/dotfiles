@@ -194,6 +194,8 @@ pub enum WallpaperSubcommand {
             "hyprland"
         } else if cfg!(feature = "niri") {
             "niri"
+        } else if cfg!(feature = "mango") {
+            "mango"
         } else {
             panic!("no wm feature enabled")
         }

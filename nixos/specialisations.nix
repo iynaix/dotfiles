@@ -3,6 +3,7 @@ let
   inherit (lib) mkIf;
   cfg = config.hm.custom.specialisation;
 in
+# NOTE: specialisation options are defined in home-manager/default.nix
 {
   specialisation = {
     # boot into a tty without a DE / WM
@@ -25,6 +26,13 @@ in
       hm.custom = {
         specialisation.current = "niri";
         wm = "niri";
+      };
+    };
+
+    mango.configuration = mkIf (config.hm.custom.wm != "mango" && cfg.mango.enable) {
+      hm.custom = {
+        specialisation.current = "mango";
+        wm = "mango";
       };
     };
   };

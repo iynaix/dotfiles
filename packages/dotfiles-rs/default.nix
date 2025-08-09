@@ -23,6 +23,7 @@
 assert lib.assertOneOf "dotfiles-rs wm" wm [
   "hyprland"
   "niri"
+  "mango"
 ];
 rustPlatform.buildRustPackage {
   pname = "dotfiles-${wm}";
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage {
   buildFeatures =
     lib.optionals (wm == "hyprland") [ "hyprland" ]
     ++ lib.optionals (wm == "niri") [ "niri" ]
+    ++ lib.optionals (wm == "mango") [ "mango" ]
     ++ lib.optionals useRclip [ "rclip" ]
     ++ lib.optionals useWallfacer [ "wallfacer" ]
     ++ lib.optionals useDedupe [ "dedupe" ];
@@ -58,8 +60,7 @@ rustPlatform.buildRustPackage {
         "wm-same-class"
         "rofi-mpv"
       ]
-      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
-      ++ lib.optionals (wm == "niri") [ ];
+      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ];
     in
     ''
       for prog in ${toString progs}; do

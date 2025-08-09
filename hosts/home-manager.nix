@@ -31,6 +31,7 @@ let
       modules = [
         inputs.nix-index-database.homeModules.nix-index
         inputs.niri.homeModules.niri
+        inputs.mango.hmModules.mango
         ./${host}/home.nix # host specific home-manager configuration
         ../home-manager
         ../overlays

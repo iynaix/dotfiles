@@ -46,6 +46,7 @@ let
               imports = [
                 inputs.nix-index-database.homeModules.nix-index
                 inputs.niri.homeModules.niri
+                inputs.mango.hmModules.mango
                 ./${host}/home.nix # host specific home-manager configuration
                 ../home-manager
               ];
@@ -54,6 +55,7 @@ let
         }
         # alias for home-manager
         (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
+        inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops
         extraConfig
