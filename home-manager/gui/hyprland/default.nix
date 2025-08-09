@@ -69,7 +69,7 @@ in
           {
             output = d.name;
             mode = "${toString d.width}x${toString d.height}@${toString d.refreshRate}";
-            position = "${toString d.position-x}x${toString d.position-y}";
+            position = "${toString d.positionX}x${toString d.positionY}";
             inherit (d) scale transform vrr;
           }
           // d.extraHyprlandConfig

@@ -9,6 +9,7 @@ pub struct NixMonitor {
     pub width: u16,
     pub height: u16,
     pub transform: u8,
+    pub default_workspace: i32,
 }
 
 impl NixMonitor {

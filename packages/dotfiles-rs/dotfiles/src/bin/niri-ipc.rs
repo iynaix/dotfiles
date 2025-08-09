@@ -8,6 +8,55 @@ use std::collections::HashMap;
 
 const TOTAL_WORKSPACES: usize = 10;
 
+fn focus_workspaces(nix_info_monitors: &[NixMonitor]) {
+    let mut socket = Socket::connect().expect("failed to connect to niri socket");
+
+    let Ok(Response::Windows(windows)) = socket
+        .send(Request::Windows)
+        .expect("failed to send Windows")
+    else {
+        panic!("unexpected response from niri, should be Windows");
+    };
+
+    let Ok(Response::Workspaces(workspaces)) = socket
+        .send(Request::Workspaces)
+        .expect("failed to send Workspaces")
+    else {
+        panic!("unexpected response from niri, should be Workspaces");
+    };
+
+    // get focused workspace for each monitor
+    workspaces
+        .iter()
+        .filter_map(|wksp| {
+            if !wksp.is_active {
+                return None;
+            }
+
+            // are there any windows on this workspace?
+            if windows.iter().any(|win| win.workspace_id == Some(wksp.id)) {
+                return None;
+            }
+
+            wksp.output.clone()
+        })
+        // go to default workspace for the monitor
+        .for_each(|mon_name| {
+            if let Some(nix_mon) = nix_info_monitors
+                .iter()
+                .find(|nix_mon| nix_mon.name == mon_name)
+            {
+                let wksp_name = format!("W{}", nix_mon.default_workspace);
+                socket
+                    .send(Request::Action(Action::FocusWorkspace {
+                        reference: WorkspaceReferenceArg::Name(wksp_name),
+                    }))
+                    .expect("failed to send FocusWorkspace")
+                    .ok();
+            }
+        });
+}
+
 fn renumber_workspaces(by_monitor: &HashMap<String, Vec<Workspace>>) {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
@@ -35,7 +84,7 @@ fn renumber_workspaces(by_monitor: &HashMap<String, Vec<Workspace>>) {
                         index: target.idx.into(),
                         reference: Some(WorkspaceReferenceArg::Id(wksp.id)),
                     }))
-                    .expect("failed to send MoveWorkspaceToIndex request")
+                    .expect("failed to send MoveWorkspaceToIndex")
                     .ok();
             }
         }
@@ -77,7 +126,7 @@ pub fn distribute_workspaces(
                     output: (*mon_name).to_string(),
                     reference: Some(WorkspaceReferenceArg::Name(format!("W{}", wksp + 1))),
                 }))
-                .expect("failed to send MoveWorkspaceToMonitor request")
+                .expect("failed to send MoveWorkspaceToMonitor")
                 .ok();
         }
         start += len;
@@ -86,7 +135,7 @@ pub fn distribute_workspaces(
     // return the redistributed workspaces
     let Ok(Response::Workspaces(workspaces)) = socket
         .send(Request::Workspaces)
-        .expect("failed to send Workspaces request")
+        .expect("failed to send Workspaces")
     else {
         panic!("unexpected response from niri, should be Workspaces");
     };
@@ -99,7 +148,7 @@ fn main() {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
     let reply = socket
         .send(Request::EventStream)
-        .expect("failed to send EventStream request");
+        .expect("failed to send EventStream");
 
     if matches!(reply, Ok(Response::Handled)) {
         let mut read_event = socket.read_events();
@@ -141,6 +190,8 @@ fn main() {
                         .collect();
 
                     renumber_workspaces(&by_monitor);
+
+                    focus_workspaces(&nix_info_monitors);
                 }
                 _ => {}
             }

@@ -92,12 +92,12 @@ in
                 default = 60;
                 description = "Refresh rate of the display";
               };
-              position-x = mkOption {
+              positionX = mkOption {
                 type = int;
                 default = 0;
                 description = "Position x coordinate of the display";
               };
-              position-y = mkOption {
+              positionY = mkOption {
                 type = int;
                 default = 0;
                 description = "Position y coordinate of the display";

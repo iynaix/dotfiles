@@ -19,6 +19,10 @@ let
         (
           { config, pkgs, ... }:
           {
+            # add memtest to the boot menu
+            boot.loader.grub.memtest86.enable = true;
+            isoImage.makeBiosBootable = true;
+
             environment = {
               systemPackages =
                 with pkgs;

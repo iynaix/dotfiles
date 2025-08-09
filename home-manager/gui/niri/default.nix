@@ -9,13 +9,16 @@
 }:
 let
   inherit (lib)
+    getExe
     getExe'
     imap0
     listToAttrs
+    mkEnableOption
     mkIf
     mkMerge
     mod
     optionals
+    toInt
     ;
 in
 {
@@ -26,7 +29,7 @@ in
 
   options.custom = {
     niri = {
-      blur.enable = lib.mkEnableOption "blur behind windows using PR";
+      blur.enable = mkEnableOption "blur behind windows using PR";
 
       # create a copy of niri settings for wallust, loads of nix option black magic, that is
       # waayyyyyyyyyyyyyyyy over my head, see:
@@ -255,7 +258,7 @@ in
 
           xwayland-satellite = {
             enable = true;
-            path = lib.getExe inputs.niri.packages.${pkgs.system}.xwayland-satellite-unstable;
+            path = getExe inputs.niri.packages.${pkgs.system}.xwayland-satellite-unstable;
           };
         }
 
@@ -270,7 +273,7 @@ in
               }:
               {
                 # start from 0 instead to prevent "1" and "10" from sorting wrongly in lexigraphical order
-                name = toString ((lib.toInt workspace) - 1);
+                name = toString ((toInt workspace) - 1);
                 value = {
                   open-on-output = monitor.name;
                   name = "W${toString workspace}";
@@ -293,8 +296,8 @@ in
                   # refresh = d.refreshRate * 1.0;
                 };
                 position = {
-                  x = d.position-x;
-                  y = d.position-y;
+                  x = d.positionX;
+                  y = d.positionY;
                 };
                 variable-refresh-rate = d.vrr;
                 transform = {

@@ -6,10 +6,10 @@ _: {
         width = 3440;
         height = 1440;
         # niri wants this to be exact down to the decimals
-        # refreshRate = if config.custom.wm == "hyprland" then 144 else "143.975";
+        refreshRate = 144;
         vrr = false;
-        position-x = 1440;
-        position-y = 1080;
+        positionX = 1440;
+        positionY = 1080;
         workspaces = [
           1
           2
@@ -26,8 +26,8 @@ _: {
         name = "DP-1";
         width = 2560;
         height = 1440;
-        position-x = 0;
-        position-y = 728;
+        positionX = 0;
+        positionY = 728;
         transform = 1;
         workspaces = [
           6
@@ -39,8 +39,8 @@ _: {
         name = "HDMI-A-1";
         width = 3840;
         height = 2160;
-        position-x = 1754;
-        position-y = 0;
+        positionX = 1754;
+        positionY = 0;
         scale = 2.0;
         workspaces = [
           8
@@ -53,8 +53,8 @@ _: {
       #   name = "DP-3";
       #   width = 2256;
       #   height = 1504;
-      #   position-x = 4880;
-      #   position-y = 1080;
+      #   positionX = 4880;
+      #   positionY = 1080;
       #   scale = 1.5666666666666666; # 47/30
       #   transform = 3;
       #   workspaces = [
