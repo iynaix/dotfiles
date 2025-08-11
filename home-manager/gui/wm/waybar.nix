@@ -87,10 +87,6 @@ in
       };
       # wait for colorscheme to be ready on boot
       Unit = {
-        AssertPathExists = [
-          "${config.xdg.configHome}/waybar/config.jsonc"
-          "${config.xdg.configHome}/waybar/style.css"
-        ];
         Requires = [ "wallpaper.service" ];
       };
     };

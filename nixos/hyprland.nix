@@ -21,9 +21,6 @@ mkIf (config.hm.custom.wm == "hyprland") {
       );
       true;
     inherit (config.hm.wayland.windowManager.hyprland) package;
-
-    # needed for setting the wayland environment variables
-    withUWSM = true;
   };
 
   environment.variables = {

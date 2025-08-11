@@ -5,6 +5,8 @@
 }:
 let
   inherit (lib)
+    escapeShellArgs
+    getExe'
     mkAfter
     mkIf
     mkMerge
@@ -79,7 +81,7 @@ mkIf (config.custom.wm == "niri") {
       };
 
       Service = {
-        ExecStart = "${lib.getExe' config.services.swww.package "swww-daemon"} --namespace backdrop";
+        ExecStart = "${getExe' config.services.swww.package "swww-daemon"} ${escapeShellArgs config.services.swww.extraArgs} --namespace backdrop";
         Restart = "always";
         RestartSec = 10;
       };

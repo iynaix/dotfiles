@@ -6,6 +6,8 @@
   glib,
   gexiv2,
   rustPlatform,
+  dconf,
+  procps,
   czkawka,
   pqiv,
   rsync,
@@ -82,6 +84,8 @@ rustPlatform.buildRustPackage {
       wrapProgram $out/bin/wallpaper --prefix PATH : ${
         lib.makeBinPath (
           [
+            dconf
+            procps
             pqiv
             rsync
             wallust

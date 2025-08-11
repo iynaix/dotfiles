@@ -1,4 +1,7 @@
-use common::nixjson::{NixJson, NixMonitor};
+use common::{
+    nixjson::{NixJson, NixMonitor},
+    wallpaper,
+};
 use dotfiles::cli::MonitorExtend;
 use itertools::Itertools;
 use niri_ipc::{
@@ -192,6 +195,8 @@ fn main() {
                     renumber_workspaces(&by_monitor);
 
                     focus_workspaces(&nix_info_monitors);
+
+                    wallpaper::reload(None);
                 }
                 _ => {}
             }

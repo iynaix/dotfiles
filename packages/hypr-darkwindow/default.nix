@@ -14,7 +14,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     owner = "micha4w";
     repo = "Hypr-DarkWindow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v7fRp9uT7qBOoVTnQaG/tu1UmnkW9C/vaj1Nzybs19I=";
+    hash = "sha256-KlyXSHZ2JVemuXOkcOEd09lrboyOJQsvueO8rfwjsIA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

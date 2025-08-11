@@ -84,6 +84,7 @@
       gcaam = "git add --all && git commit --amend";
       gcam = "git commit --amend";
       gco = "git checkout";
+      gcp = "git cherry-pick";
       gdiff = "git diff --no-ext-diff";
       gl = "git pull";
       glg = "git log";

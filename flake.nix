@@ -71,13 +71,7 @@
         let
           bootstrap-nixpkgs = importPkgs inputs.nixpkgs;
           # nixpkgs patches that have yet to be merged
-          nixpkgsPatches = [
-            # fix orca-slicer dependency on libsoup2
-            {
-              url = "https://github.com/NixOS/nixpkgs/pull/430171.diff";
-              hash = "sha256-954evTxoeaagqUQc0zKRH1DNMuVUfvfA91/DO96YCvw=";
-            }
-          ];
+          nixpkgsPatches = [ ];
         in
         bootstrap-nixpkgs.applyPatches {
           name = "nixpkgs-patched";

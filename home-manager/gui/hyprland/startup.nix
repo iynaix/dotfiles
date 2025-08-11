@@ -14,7 +14,7 @@ let
 in
 mkIf (config.custom.wm == "hyprland") {
   custom = {
-    autologinCommand = "uwsm start hyprland-uwsm.desktop";
+    autologinCommand = "Hyprland";
   };
 
   wayland.windowManager.hyprland.settings = {
@@ -39,7 +39,7 @@ mkIf (config.custom.wm == "hyprland") {
         rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
         exec = concatStringsSep " " spawn;
       in
-      if enable then "${rules} uwsm app -- ${exec}" else ""
+      if enable then "${rules} ${exec}" else ""
     ) config.custom.startup;
   };
 }

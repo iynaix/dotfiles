@@ -39,7 +39,7 @@ in
             address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
 
             if [ -z "$address" ]; then
-              eval "uwsm app -- $2"
+              eval "$2"
             else
               hyprctl dispatch focuswindow "address:$address"
             fi
@@ -50,8 +50,6 @@ in
     wayland.windowManager.hyprland.settings = {
       bind =
         let
-          # exec using uwsm
-          uexec = program: "exec, uwsm app -- ${program}";
           workspace_keybinds = flatten (
             (lib.custom.mapWorkspaces (
               { workspace, key, ... }:
@@ -75,22 +73,22 @@ in
           );
         in
         [
-          "$mod, Return, ${uexec (getExe config.custom.terminal.package)}"
-          "$mod_SHIFT, Return, ${uexec ''${rofiExe} -show drun -run-command "uwsm app -- {cmd}"''}"
+          "$mod, Return, exec, ${getExe config.custom.terminal.package}"
+          "$mod_SHIFT, Return, exec, ${rofiExe} -show drun"
           "$mod, BackSpace, killactive,"
-          "$mod, e, ${uexec "nemo ${config.xdg.userDirs.download}"}"
-          "$mod_SHIFT, e, ${uexec (termExec "yazi ${config.xdg.userDirs.download}")}"
-          "$mod, w, ${uexec (getExe config.programs.chromium.package)}"
-          "$mod_SHIFT, w, ${uexec "${getExe config.programs.chromium.package} --incognito"}"
-          "$mod, v, ${uexec (termExec "nvim")}"
-          "$mod_SHIFT, v, ${uexec (getExe pkgs.custom.shell.rofi-edit-proj)}"
+          "$mod, e, exec, nemo ${config.xdg.userDirs.download}"
+          "$mod_SHIFT, e, exec, ${termExec "yazi ${config.xdg.userDirs.download}"}"
+          "$mod, w, exec, ${getExe config.programs.chromium.package}"
+          "$mod_SHIFT, w, exec, ${getExe config.programs.chromium.package} --incognito"
+          "$mod, v, exec, ${termExec "nvim"}"
+          "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
           ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, ${uexec (getExe config.custom.rofi-power-menu.package)}"
+          "CTRL_ALT, Delete, exec, ${getExe config.custom.rofi-power-menu.package}"
 
           # clipboard history
           "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
@@ -159,9 +157,9 @@ in
           "$mod, mouse_up, workspace, e-1"
 
           # switching wallpapers or themes
-          "$mod, apostrophe, ${uexec "wallpaper rofi"}"
-          "$mod_SHIFT, apostrophe, ${uexec "rofi-wallust-theme"}"
-          "ALT, apostrophe, ${uexec "wallpaper history"}"
+          "$mod, apostrophe, exec, wallpaper rofi"
+          "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
+          "ALT, apostrophe, exec, wallpaper history"
 
           # special keys
           # "XF86AudioPlay, mpvctl playpause"

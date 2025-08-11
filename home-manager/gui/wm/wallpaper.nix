@@ -7,10 +7,8 @@
 let
   inherit (lib)
     getExe
-    getExe'
     mkAfter
     mkEnableOption
-    mkForce
     mkIf
     mkMerge
     mkOption
@@ -54,7 +52,9 @@ in
 
       # handle setting the wallpaper on startup
       # start swww and wallpaper via systemd to minimize reloads
-      services.swww.enable = true;
+      services.swww = {
+        enable = true;
+      };
 
       systemd.user.services =
         let
@@ -68,12 +68,6 @@ in
           };
         in
         {
-          swww = {
-            Service = {
-              ExecStart = mkForce "${getExe' config.services.swww.package "swww-daemon"} --no-cache";
-            };
-          };
-
           wallpaper = {
             Install.WantedBy = [ "swww.service" ];
             Unit = {
