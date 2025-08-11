@@ -82,29 +82,42 @@ in
                     rm "${waybar-hide-file}"
                   fi
               fi
+
+              sleep 1
             '';
           }
         );
       };
       # wait for colorscheme to be ready on boot
       Unit = {
-        Wants = [ "wallpaper.service" ];
+        AssertPathExists = [
+          "${config.xdg.configHome}/waybar/config.jsonc"
+          "${config.xdg.configHome}/waybar/style.css"
+        ];
+        Requires = [ "wallpaper.service" ];
       };
     };
 
     # toggle / launch waybar
     home.packages = [ waybar-toggle ];
 
-    wayland.windowManager.hyprland.settings = {
-      layerrule = [
-        "blur,waybar"
-        "ignorealpha 0,waybar"
-      ];
+    wayland.windowManager = {
+      hyprland.settings = {
+        layerrule = [
+          "blur,waybar"
+          "ignorealpha 0,waybar"
+        ];
 
-      bind = [
-        "$mod, a, exec, ${getExe waybar-toggle}"
-        "$mod_SHIFT, a, exec, systemctl --user restart waybar.service"
-      ];
+        bind = [
+          "$mod, a, exec, ${getExe waybar-toggle}"
+          "$mod_SHIFT, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
+        ];
+      };
+
+      mango.settings = ''
+        bind=SUPER, a, exec, ${getExe waybar-toggle}
+        bind=SUPER+SHIFT, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped
+      '';
     };
 
     programs.niri.settings = {
@@ -192,7 +205,8 @@ in
 
         modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);
 
-        modules-center = [ "${config.custom.wm}/workspaces" ];
+        modules-center =
+          if (config.custom.wm == "mango") then [ "dwl/tags" ] else [ "${config.custom.wm}/workspaces" ];
 
         modules-right = [
           "network"
@@ -286,6 +300,8 @@ in
                   ${mkModuleClassName mod} {
                     ${baseModuleCss}
                   }'') arr;
+              workspaceModuleName = if (config.custom.wm == "mango") then "tags" else "workspaces";
+              workspaceActiveClass = if (config.custom.wm == "mango") then "focused" else "active";
             in
             {
               text = # css
@@ -304,27 +320,31 @@ in
                   font-size: 20px;
                 }
 
-                #workspaces button {
+                #${workspaceModuleName} button {
                   ${baseModuleCss}
                   padding-left: 8px;
                   padding-right: 8px;
 
-                  ${lib.optionalString (config.custom.wm == "niri") ''
+                  ${lib.optionalString (config.custom.wm == "niri" || config.custom.wm == "mango") ''
                     /* niri workspaces seem to have excess padding */
                     padding-left: 0px;
                     padding-right: 0px;
                   ''}
                 }
 
-                #workspaces button.active {
+                #${workspaceModuleName} button.${workspaceActiveClass} {
                   border-bottom:  2px solid @accent;
                   background-color: rgba(255,255,255, 0.25);
                 }
-
-                #workspaces button.empty {
-                  opacity: 0.6;
-                }
               ''
+              # dwl (for mango) tags style on occupied instead of empty
+              +
+                optionalString (config.custom.wm != "mango") # css
+                  ''
+                    #${workspaceModuleName} button.empty {
+                      opacity: 0.6;
+                    }
+                  ''
               +
                 # remove padding for the outermost modules
                 # css

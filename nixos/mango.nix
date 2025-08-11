@@ -6,8 +6,11 @@
 let
   inherit (lib) mkIf;
 in
-{
-  programs.mango = mkIf (config.hm.custom.wm == "mango") {
-    enable = true;
+mkIf (config.hm.custom.wm == "mango") {
+  programs = {
+    mango = {
+      enable = true;
+      inherit (config.hm.wayland.windowManager.mango) package;
+    };
   };
 }

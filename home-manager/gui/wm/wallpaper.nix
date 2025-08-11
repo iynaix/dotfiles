@@ -60,9 +60,7 @@ in
 
       # handle setting the wallpaper on startup
       # start swww and wallpaper via systemd to minimize reloads
-      services.swww = {
-        enable = true;
-      };
+      services.swww.enable = true;
 
       systemd.user.services =
         let
