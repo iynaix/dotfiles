@@ -3,23 +3,28 @@
   ...
 }:
 pkgs.mkShell {
-  packages = with pkgs; [
-    age
-    sops
-    cachix
-    deadnix
-    statix
-    nixd
-    nixfmt
-    pre-commit
-    cargo-edit
-    (writeShellScriptBin "crb" ''
-      cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"
-    '')
-    (writeShellScriptBin "crrb" ''
-      cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --release --bin "$1" -- "''${@:2}"
-    '')
-  ];
+  packages =
+    with pkgs;
+    [
+      age
+      sops
+      cachix
+      deadnix
+      statix
+      nixd
+      nixfmt
+      pre-commit
+      cargo-edit
+      (writeShellScriptBin "crb" ''
+        cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --bin "$1" -- "''${@:2}"
+      '')
+      (writeShellScriptBin "crrb" ''
+        cargo run --manifest-path "packages/dotfiles-rs/Cargo.toml" --release --bin "$1" -- "''${@:2}"
+      '')
+    ]
+    ++ [
+      wlr-randr # used to get display info
+    ];
 
   env = {
     # Required by rust-analyzer

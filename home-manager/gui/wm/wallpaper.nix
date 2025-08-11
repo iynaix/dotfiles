@@ -10,6 +10,7 @@ let
     getExe'
     mkAfter
     mkEnableOption
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -31,6 +32,8 @@ in
         type = package;
         default = pkgs.custom.dotfiles-rs.override {
           inherit (config.custom) wm;
+          swww = config.services.swww.package;
+          wallust = config.programs.wallust.package;
           useDedupe = config.custom.wallpaper-tools.enable;
           useRclip = config.custom.rclip.enable;
           useWallfacer = config.custom.wallfacer.enable;
@@ -65,6 +68,12 @@ in
           };
         in
         {
+          swww = {
+            Service = {
+              ExecStart = mkForce "${getExe' config.services.swww.package "swww-daemon"} --no-cache";
+            };
+          };
+
           wallpaper = {
             Install.WantedBy = [ "swww.service" ];
             Unit = {
@@ -76,9 +85,6 @@ in
             Service = {
               Type = "oneshot";
               ExecStart = getExe wallpaper-startup;
-              # possible race condition, introduce a small delay before starting
-              # https://github.com/LGFae/swww/issues/317#issuecomment-2131282832
-              ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 1";
               ExecReload = "${getExe wallpaper-startup} reload";
             };
           };

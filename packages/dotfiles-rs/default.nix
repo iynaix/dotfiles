@@ -10,6 +10,9 @@
   pqiv,
   rsync,
   rclip,
+  swww,
+  wallust,
+  wlr-randr,
   wm ? "hyprland",
   useDedupe ? false,
   useRclip ? false,
@@ -81,6 +84,9 @@ rustPlatform.buildRustPackage {
           [
             pqiv
             rsync
+            wallust
+            swww
+            wlr-randr
           ]
           ++ lib.optionals useDedupe [ czkawka ]
           ++ lib.optionals useRclip [ rclip ]

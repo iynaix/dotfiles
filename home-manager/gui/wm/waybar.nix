@@ -65,23 +65,34 @@ in
 
     systemd.user.services.waybar = {
       # create the waybar hidden file if needed before starting waybar
-      Service.ExecStartPre = getExe (
-        pkgs.writeShellApplication {
-          name = "waybar-init";
-          runtimeInputs = with pkgs; [
-            jq
-          ];
-          text = ''
-            if jq -e '.start_hidden == true' "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1; then
-                touch "${waybar-hide-file}"
-            else
-                if [ -f "${waybar-hide-file}" ]; then
-                  rm "${waybar-hide-file}"
-                fi
-            fi
-          '';
-        }
-      );
+      Service = {
+        ExecStartPre = getExe (
+          pkgs.writeShellApplication {
+            name = "waybar-init";
+            runtimeInputs = with pkgs; [
+              jq
+              coreutils
+            ];
+            text = ''
+              if jq -e '.start_hidden == true' "${config.xdg.configHome}/wallust/templates/waybar.jsonc" >/dev/null 2>&1; then
+                  touch "${waybar-hide-file}"
+              else
+                  if [ -f "${waybar-hide-file}" ]; then
+                    rm "${waybar-hide-file}"
+                  fi
+              fi
+            '';
+          }
+        );
+      };
+      # wait for colorscheme to be ready on boot
+      Unit = {
+        AssertPathExists = [
+          "${config.xdg.configHome}/waybar/config.jsonc"
+          "${config.xdg.configHome}/waybar/style.css"
+        ];
+        Requires = [ "wallpaper.service" ];
+      };
     };
 
     # toggle / launch waybar
@@ -111,11 +122,6 @@ in
           "waybar.service"
         ];
       };
-    };
-
-    # wait for colorscheme to be ready on boot
-    systemd.user.services.waybar = {
-      Unit.AssertPathExists = [ "${config.xdg.configHome}/waybar/config.jsonc" ];
     };
 
     custom = {

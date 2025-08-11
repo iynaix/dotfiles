@@ -56,10 +56,14 @@ pub fn show_pqiv() {
     {
         use execute::Execute;
 
-        execute::command_args!("pqiv", "--shuffle", "--window-title", niri_window_title())
-            .arg(wall_dir)
-            .execute()
-            .expect("failed to execute pqiv");
+        execute::command_args!(
+            "pqiv",
+            "--shuffle",
+            format!("--window-title={}", niri_window_title())
+        )
+        .arg(wall_dir)
+        .execute()
+        .expect("failed to execute pqiv");
     }
 }
 

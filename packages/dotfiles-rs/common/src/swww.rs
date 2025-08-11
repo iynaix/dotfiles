@@ -4,7 +4,9 @@ use fast_image_resize::{PixelType, ResizeOptions, Resizer, images::Image};
 use image::codecs::webp::WebPEncoder;
 use image::{ImageEncoder, ImageReader};
 use rayon::prelude::*;
+use serde::Deserialize;
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 
 /// chooses a random transition
 // taken from ZaneyOS: https://gitlab.com/Zaney/zaneyos/-/blob/main/config/scripts/wallsetter.nix
@@ -159,76 +161,68 @@ impl Swww {
     }
 
     pub fn run(&self, wall_info: &WallInfo, transition: Option<&str>) {
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        pub struct WlrMonitor {
+            pub enabled: bool,
+            pub name: String,
+            pub modes: Vec<WlrMode>,
+            pub transform: String,
+            pub scale: f64,
+        }
+
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        pub struct WlrMode {
+            pub width: u32,
+            pub height: u32,
+            pub current: bool,
+        }
+
         let transition_args = transition.as_ref().map_or_else(get_random_transition, |t| {
             vec!["--transition-type".to_string(), (*t).to_string()]
         });
 
-        // set the wallpaper per monitor
-        #[cfg(feature = "hyprland")]
-        {
-            use crate::vertical_dimensions;
-            use hyprland::shared::{HyprData, HyprDataVec};
-            let monitors = hyprland::data::Monitors::get()
-                .expect("could not get monitors")
-                .to_vec();
+        // set the wallpaper per monitor, use wlr-randr so it is wm agnostic
+        let wlr_cmd = execute::command_args!("wlr-randr", "--json")
+            .stdout(Stdio::piped())
+            .execute_output()
+            .expect("failed to run wlr-randr");
+        let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
+        let monitors: Vec<WlrMonitor> =
+            serde_json::from_str(&wlr_json).expect("failed to parse json");
 
-            monitors.par_iter().for_each(|mon| {
-                let (mon_w, mon_h) = vertical_dimensions(mon);
+        monitors
+            .par_iter()
+            .filter_map(|mon| {
+                if !mon.enabled {
+                    return None;
+                }
+
+                // get current mode for each monitor
+                mon.modes
+                    .iter()
+                    .find(|mode| mode.current)
+                    .map(|mode| (mon, mode))
+            })
+            .for_each(|(mon, mode)| {
+                let (mon_w, mon_h) =
+                    if mon.transform.contains("90") || mon.transform.contains("270") {
+                        (mode.height, mode.width)
+                    } else {
+                        (mode.width, mode.height)
+                    };
 
                 match wall_info.get_geometry(mon_w, mon_h) {
                     Some(geom) => self.mon_with_crop(
                         &mon.name,
                         (mon_w, mon_h),
                         geom,
-                        f64::from(mon.scale),
+                        mon.scale,
                         &transition_args,
                     ),
                     None => self.mon_without_crop(&mon.name, &transition_args),
                 }
             });
-        }
-
-        #[cfg(feature = "niri")]
-        {
-            use niri_ipc::{Request, Response, socket::Socket};
-
-            let Ok(Response::Outputs(monitors)) = Socket::connect()
-                .expect("failed to connect to niri socket")
-                .send(Request::Outputs)
-                .expect("failed to send Outputs request to niri")
-            else {
-                panic!("unexpected response from niri, should be Outputs");
-            };
-
-            monitors
-                .par_iter()
-                // ignore disabled monitors
-                .for_each(|(_, mon)| match mon.logical {
-                    None => self.mon_without_crop(&mon.name, &transition_args),
-                    Some(logical) => {
-                        #[allow(clippy::cast_possible_truncation)]
-                        #[allow(clippy::cast_sign_loss)]
-                        let (mon_w, mon_h) = if (logical.scale - 1.0).abs() < f64::EPSILON {
-                            (logical.width, logical.height)
-                        } else {
-                            (
-                                (f64::from(logical.width) * logical.scale) as u32,
-                                (f64::from(logical.height) * logical.scale) as u32,
-                            )
-                        };
-
-                        match wall_info.get_geometry(mon_w, mon_h) {
-                            Some(geom) => self.mon_with_crop(
-                                &mon.name,
-                                (mon_w, mon_h),
-                                geom,
-                                logical.scale,
-                                &transition_args,
-                            ),
-                            None => self.mon_without_crop(&mon.name, &transition_args),
-                        }
-                    }
-                });
-        }
     }
 }
