@@ -61,9 +61,18 @@ in
           pkgs.lib.assertMsg (pkgs.lib.versionOlder prev.swww.version "0.10.4") "swww updated, remove overlay"
         );
         prev.swww.overrideAttrs (
-          _o:
+          o:
           sources.swww
           // {
+            nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
+
+            postFixup = ''
+              for program in $out/bin/*; do
+                wrapProgram $program \
+                  --prefix PATH : "${prev.lib.makeBinPath [ prev.procps ]}"
+              done
+            '';
+
             # creating an overlay for buildRustPackage overlay
             # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
             cargoDeps = prev.rustPlatform.importCargoLock {
