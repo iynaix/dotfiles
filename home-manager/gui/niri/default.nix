@@ -43,6 +43,11 @@ in
   };
 
   config = mkIf (config.custom.wm == "niri") {
+    home.sessionVariables = {
+      DISPLAY = ":0";
+      NIXOS_OZONE_WL = "1";
+    };
+
     # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
     # the workspaces are name W1, W2, etc as simply naming them as "1", "2", etc
     # causes waybar to just coerce them back into numbers, so workspaces end up being a
@@ -57,7 +62,7 @@ in
           # see: https://github.com/YaLTeR/niri/discussions/1806
           ++ [ ./larger-shadow-spread.patch ]
           ++ optionals config.custom.niri.blur.enable [
-            (pkgs.fetchpatch {
+            (pkgs.fetchpatch2 {
               url = "https://patch-diff.githubusercontent.com/raw/YaLTeR/niri/pull/1634.diff";
               hash = "sha256-ucIBkohHGoALm8dyYxNDd90tyjR1Vr/F/rUWh1+6bRs=";
               name = "blur-behind-windows";
@@ -71,11 +76,6 @@ in
 
       settings = mkMerge [
         {
-          environment = {
-            DISPLAY = ":0";
-            NIXOS_OZONE_WL = "1";
-          };
-
           input = {
             keyboard = {
               xkb = {

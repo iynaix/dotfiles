@@ -7,6 +7,7 @@
 let
   inherit (lib)
     getExe
+    max
     mkAfter
     mkEnableOption
     mkIf
@@ -30,6 +31,7 @@ in
         type = package;
         default = pkgs.custom.dotfiles-rs.override {
           inherit (config.custom) wm;
+          pqiv = config.programs.pqiv.package;
           swww = config.services.swww.package;
           wallust = config.programs.wallust.package;
           useDedupe = config.custom.wallpaper-tools.enable;
@@ -89,7 +91,7 @@ in
         mon:
         let
           targetPercent = 0.3;
-          width = builtins.floor (targetPercent * (lib.max mon.width mon.height));
+          width = builtins.floor (builtins.div (targetPercent * (max mon.width mon.height)) mon.scale);
           # 16:9 ratio
           height = builtins.floor (width / 16.0 * 9.0);
         in

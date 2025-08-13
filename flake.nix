@@ -76,7 +76,7 @@
         bootstrap-nixpkgs.applyPatches {
           name = "nixpkgs-patched";
           src = inputs.nixpkgs;
-          patches = map bootstrap-nixpkgs.fetchpatch nixpkgsPatches;
+          patches = map bootstrap-nixpkgs.fetchpatch2 nixpkgsPatches;
         };
       pkgs = importPkgs nixpkgs-patched;
       lib = import ./lib.nix {

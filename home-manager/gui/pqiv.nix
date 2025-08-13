@@ -1,10 +1,27 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf;
 in
 mkIf (config.custom.wm != "tty") {
   programs.pqiv = {
     enable = true;
+    # fix window resizing on the first image in niri if called in a keybind
+    package = pkgs.pqiv.overrideAttrs (o: {
+      patches = (o.patches or [ ]) ++ [
+        # use the GDK wayland module
+        (pkgs.fetchpatch2 {
+          url = "https://github.com/phillipberndt/pqiv/commit/3390155a0881ad6180e8b9ae991d1c7dc1141080.patch";
+          hash = "sha256-ZsZ7oFSAJl+MuM/ITRcU7jkkRwlPqUKZUkZOvkzhaOs=";
+          revert = true;
+        })
+      ];
+    });
+
     settings = {
       options = {
         box-colors = "#FFFFFF:#000000";

@@ -55,18 +55,18 @@ in
       }
       // optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
       // optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
-        "${wdred}/Anime" = "${ironwolf}/Anime";
+        "${ironwolf}/Anime" = "${wdred}/Anime";
+        "${ironwolf}/TV" = "${wdred}/TV";
         "${wdred}/Movies" = "${ironwolf}/Movies";
-        "${wdred}/TV" = "${ironwolf}/TV";
       };
 
     hm = {
       # add bookmarks for gtk
       gtk.gtk3.bookmarks = mkIf cfg.ironwolf22 [
-        "file://${ironwolf}/Anime Anime"
-        "file://${ironwolf}/Anime/Current Anime Current"
-        "file://${ironwolf}/TV TV"
-        "file://${ironwolf}/TV/Current TV Current"
+        "file://${wdred}/Anime Anime"
+        "file://${wdred}/Anime/Current Anime Current"
+        "file://${wdred}/TV TV"
+        "file://${wdred}/TV/Current TV Current"
         "file://${ironwolf}/Movies"
       ];
 

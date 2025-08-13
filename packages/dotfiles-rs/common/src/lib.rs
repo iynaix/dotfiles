@@ -102,12 +102,12 @@ macro_rules! log {
             let mut log_file = std::fs::OpenOptions::new()
                 .create(true)
                 .append(true)
-                .open("/tmp/hypr-ipc.log")
+                .open("/tmp/wm-ipc.log")
                 .expect("could not open log file");
 
             println!($($arg)*);
-            writeln!(log_file, $($arg)*).expect("could not write to hypr-ipc.log");
-            log_file.flush().expect("could not flush hypr-ipc.log");
+            writeln!(log_file, $($arg)*).expect("could not write to wm-ipc.log");
+            log_file.flush().expect("could not flush wm-ipc.log");
         }
     };
 }
