@@ -1,5 +1,9 @@
 _: {
   custom = {
+    specialisation = {
+      hyprland.enable = true;
+    };
+
     monitors = [
       {
         name = "DP-2";

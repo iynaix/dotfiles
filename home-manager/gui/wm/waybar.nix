@@ -87,7 +87,7 @@ in
       };
       # wait for colorscheme to be ready on boot
       Unit = {
-        Requires = [ "wallpaper.service" ];
+        Wants = [ "wallpaper.service" ];
       };
     };
 

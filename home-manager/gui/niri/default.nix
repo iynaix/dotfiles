@@ -62,7 +62,7 @@ in
           # see: https://github.com/YaLTeR/niri/discussions/1806
           ++ [ ./larger-shadow-spread.patch ]
           ++ optionals config.custom.niri.blur.enable [
-            (pkgs.fetchpatch2 {
+            (pkgs.fetchpatch {
               url = "https://patch-diff.githubusercontent.com/raw/YaLTeR/niri/pull/1634.diff";
               hash = "sha256-ucIBkohHGoALm8dyYxNDd90tyjR1Vr/F/rUWh1+6bRs=";
               name = "blur-behind-windows";

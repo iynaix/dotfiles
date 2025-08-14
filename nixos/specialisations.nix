@@ -1,24 +1,30 @@
-_: {
+{ config, lib, ... }:
+let
+  inherit (lib) mkIf;
+  cfg = config.hm.custom.specialisation;
+in
+{
   specialisation = {
     # boot into a tty without a DE / WM
     tty.configuration = {
       hm.custom = {
-        currentSpecialisation = "tty";
+        specialisation.current = "tty";
         wm = "tty";
       };
     };
 
-    niri.configuration = {
+    # NOTE: no point having a separate boot option if WM is already the default
+    hyprland.configuration = mkIf (config.hm.custom.wm != "hyprland" && cfg.hyprland.enable) {
       hm.custom = {
-        currentSpecialisation = "niri";
-        wm = "niri";
+        specialisation.current = "hyprland";
+        wm = "hyprland";
       };
     };
 
-    hyprland.configuration = {
+    niri.configuration = mkIf (config.hm.custom.wm != "niri" && cfg.niri.enable) {
       hm.custom = {
-        currentSpecialisation = "hyprland";
-        wm = "hyprland";
+        specialisation.current = "niri";
+        wm = "niri";
       };
     };
   };

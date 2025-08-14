@@ -15,6 +15,7 @@ let
     mkOption
     optionalAttrs
     optionalString
+    optionals
     ;
   inherit (lib.types) package;
   tomlFormat = pkgs.formats.toml { };
@@ -31,7 +32,12 @@ in
         type = package;
         default = pkgs.custom.dotfiles-rs.override {
           inherit (config.custom) wm;
-          pqiv = config.programs.pqiv.package;
+          pqiv = pkgs.pqiv.overrideAttrs (o: {
+            patches =
+              (o.patches or [ ])
+              # fix window resizing on the first image in niri if called in a keybind
+              ++ optionals (config.custom.wm == "niri") [ ../niri/pqiv-gdk-wayland.patch ];
+          });
           swww = config.services.swww.package;
           wallust = config.programs.wallust.package;
           useDedupe = config.custom.wallpaper-tools.enable;
@@ -82,6 +88,7 @@ in
               Type = "oneshot";
               ExecStart = getExe wallpaper-startup;
               ExecReload = "${getExe wallpaper-startup} reload";
+              X-SwitchMethod = "reload";
             };
           };
         };

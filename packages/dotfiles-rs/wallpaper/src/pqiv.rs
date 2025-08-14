@@ -56,10 +56,16 @@ pub fn show_pqiv() {
     {
         use execute::Execute;
 
+        // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
+        // so it doesn't resize on initial spawn via a keybind
         execute::command_args!(
             "pqiv",
             "--shuffle",
-            format!("--window-title={}", niri_window_title())
+            // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
+            "--bind-key",
+            "'f { nop() }",
+            "--window-title",
+            niri_window_title()
         )
         .arg(wall_dir)
         .execute()

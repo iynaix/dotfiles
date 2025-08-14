@@ -10,6 +10,7 @@ let
   inherit (lib)
     hasPrefix
     mapAttrsToList
+    mkEnableOption
     mkOption
     optionals
     ;
@@ -35,11 +36,6 @@ in
       default = null;
       description = "Command to run after autologin";
     };
-    currentSpecialisation = mkOption {
-      type = str;
-      default = "";
-      description = "The current specialisation being used";
-    };
     fonts = {
       regular = mkOption {
         type = str;
@@ -55,6 +51,16 @@ in
         type = listOf package;
         description = "The packages to install for the fonts";
       };
+    };
+    specialisation = {
+      current = mkOption {
+        type = str;
+        default = "";
+        description = "The current specialisation being used";
+      };
+
+      hyprland.enable = mkEnableOption "hyprland specialisation";
+      niri.enable = mkEnableOption "niri specialisation";
     };
     symlinks = mkOption {
       type = attrsOf str;
@@ -75,7 +81,7 @@ in
 
       sessionVariables = {
         __IS_NIXOS = if isNixOS then "1" else "0";
-        __SPECIALISATION = config.custom.currentSpecialisation;
+        __SPECIALISATION = config.custom.specialisation.current;
         NIXPKGS_ALLOW_UNFREE = "1";
       };
 
