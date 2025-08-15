@@ -114,10 +114,6 @@ in
         ];
       };
 
-      mango.settings = ''
-        bind=SUPER, a, spawn, ${getExe waybar-toggle}
-        bind=SUPER+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped
-      '';
     };
 
     programs.niri.settings = {
@@ -129,6 +125,15 @@ in
           (getExe' pkgs.procps "pkill")
           "-SIGUSR2"
           ".waybar-wrapped"
+        ];
+      };
+    };
+
+    custom = {
+      mango.settings = {
+        bind = [
+          "$mod, a, spawn, ${getExe waybar-toggle}"
+          "$mod+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
         ];
       };
     };

@@ -1,5 +1,6 @@
 use common::nixjson::{NixJson, NixMonitor};
 use dotfiles::cli::MonitorExtend;
+use execute::Execute;
 use itertools::Itertools;
 use niri_ipc::{
     Action, Event, Request, Response, Workspace, WorkspaceReferenceArg, socket::Socket,
@@ -196,6 +197,11 @@ fn main() {
                     renumber_workspaces(&by_monitor);
 
                     focus_workspaces(&nix_info_monitors);
+
+                    // reload waybar to clear multiple instances if necessary
+                    execute::command_args!("pkill", "-SIGUSR2", ".waybar-wrapped")
+                        .execute()
+                        .expect("unable to reload waybar");
                 }
                 _ => {}
             }

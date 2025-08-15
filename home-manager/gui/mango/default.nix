@@ -2,18 +2,18 @@
   config,
   dots,
   inputs,
+  isVm,
   lib,
   pkgs,
   ...
 }:
 let
   inherit (lib)
-    concatLines
-    concatStringsSep
-    mkAfter
-    mkBefore
-    mkMerge
+    concatMapStringsSep
+    flatten
     mkIf
+    range
+    replaceString
     ;
 in
 {
@@ -21,6 +21,32 @@ in
     ./keybinds.nix
     ./startup.nix
   ];
+
+  options.custom = {
+    # copied from home-manger's hypland module, since mango config is similar to hyprlang
+    mango.settings = lib.mkOption {
+      type =
+        with lib.types;
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Mango configuration value";
+            };
+        in
+        valueType;
+      default = { };
+      description = ''Mango configuration settings.'';
+    };
+  };
 
   config = mkIf (config.custom.wm == "mango") {
     home.sessionVariables = {
@@ -41,33 +67,15 @@ in
         };
       };
       systemd.enable = true;
-      settings = mkMerge [
-        (mkBefore (
-          concatLines (
-            map (
-              mon:
-              "monitorrule="
-              + (concatStringsSep "," (
-                map toString [
-                  mon.name
-                  0.5 # mfact
-                  1 # nmaster
-                  "tile" # layout
-                  mon.transform
-                  mon.scale
-                  mon.positionX
-                  mon.positionY
-                  mon.width
-                  mon.height
-                  mon.refreshRate
-                ]
-              ))
-            ) config.custom.monitors
-          )
+      settings =
+        (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
+          lib.hm.generators.toHyprconf {
+            attrs = config.custom.mango.settings;
+            importantPrefixes = [ "monitorrule" ];
+          }
         ))
         # source it directly for quick edits
-        (mkAfter "source=${dots}/home-manager/gui/mango/mango.conf")
-      ];
+        + "source=${dots}/home-manager/gui/mango/mango.conf";
       autostart_sh = # sh
         ''
           # startup script here
@@ -76,6 +84,39 @@ in
     };
 
     custom = {
+      mango.settings = {
+        monitorrule = map (
+          mon:
+          concatMapStringsSep "," toString [
+            mon.name
+            0.5 # mfact
+            1 # nmaster
+            "tile" # layout
+            mon.transform
+            mon.scale
+            mon.positionX
+            mon.positionY
+            mon.width
+            mon.height
+            mon.refreshRate
+          ]
+        ) config.custom.monitors;
+
+        tagrule = flatten (
+          map (
+            mon:
+            map (
+              wksp:
+              concatMapStringsSep "," toString [
+                "id:${toString wksp}"
+                "monitor_name:${mon.name}"
+                "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
+              ]
+            ) (range 1 10)
+          ) config.custom.monitors
+        );
+      };
+
       waybar = {
         config = {
           "dwl/tags" = {
@@ -93,7 +134,6 @@ in
             }
           '';
       };
-
     };
   };
 }

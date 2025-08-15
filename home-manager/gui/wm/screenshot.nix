@@ -74,13 +74,6 @@ mkIf config.custom.isWm {
         "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
       ];
     };
-
-    mango.settings = ''
-      bind=SUPER, backslash, spawn, focal image --area selection --no-notify --no-save --no-rounded-windows
-      bind=SUPER+SHIFT, backslash, spawn, focal image --edit swappy --rofi --no-rounded-windows
-      bind=SUPER+CTRL, backslash, spawn, focal image --area selection --ocr
-      bind=ALT, backslash, spawn, focal video --rofi --no-rounded-windows
-    '';
   };
 
   programs.niri.settings = {
@@ -108,5 +101,14 @@ mkIf config.custom.isWm {
         "--rofi"
       ];
     };
+  };
+
+  custom.mango.settings = {
+    bind = [
+      "$mod, backslash, spawn, focal image --area selection --no-notify --no-save --no-rounded-windows"
+      "$mod+SHIFT, backslash, spawn, focal image --edit swappy --rofi --no-rounded-windows"
+      "$mod+CTRL, backslash, spawn, focal image --area selection --ocr"
+      "ALT, backslash, spawn, focal video --rofi --no-rounded-windows"
+    ];
   };
 }

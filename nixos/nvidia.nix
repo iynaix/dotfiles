@@ -36,7 +36,7 @@ mkIf config.hm.custom.nvidia.enable {
           betaPkg = config.boot.kernelPackages.nvidiaPackages.beta;
         in
         assert (
-          assertMsg (versionOlder betaPkg.version "580.65.07") "nvidia updated to ${betaPkg.version}, check orca-slicer"
+          assertMsg (versionOlder betaPkg.version "580.76.06") "nvidia updated to ${betaPkg.version}, check orca-slicer"
         );
         betaPkg;
     };

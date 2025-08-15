@@ -16,6 +16,7 @@ let
     getExe'
     mkEnableOption
     mkOption
+    mod
     ;
   inherit (lib.types)
     attrs
@@ -127,6 +128,12 @@ in
                 type = attrs;
                 default = { };
                 description = "Extra monitor config for hyprland";
+              };
+              isVertical = mkOption {
+                type = bool;
+                default = mod config.transform 2 == 1;
+                description = "Whether the monitor is vertical";
+                readOnly = true;
               };
             };
           }

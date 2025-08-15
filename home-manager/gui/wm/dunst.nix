@@ -72,7 +72,6 @@ mkIf (config.custom.wm != "tty") (mkMerge [
         "$mod, n, exec, dunstctl history-pop"
       ];
 
-      mango.settings = "bind=SUPER+SHIFT, n, spawn, dunstctl history-pop";
     };
 
     programs.niri.settings.binds = {
@@ -80,6 +79,10 @@ mkIf (config.custom.wm != "tty") (mkMerge [
         "dunstctl"
         "history-pop"
       ];
+    };
+
+    custom.mango.settings = {
+      bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
     };
 
     # wait for colorscheme to be ready on boot
