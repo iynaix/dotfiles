@@ -9,6 +9,7 @@ let
   inherit (lib)
     concatMapStringsSep
     getExe
+    getExe'
     head
     last
     mkEnableOption
@@ -112,10 +113,9 @@ in
           (getExe waybar-toggle)
         ];
         "Mod+Shift+A".action.spawn = [
-          "systemctl"
-          "--user"
-          "restart"
-          "waybar.service"
+          (getExe' pkgs.procps "pkill")
+          "-SIGUSR2"
+          ".waybar-wrapped"
         ];
       };
     };

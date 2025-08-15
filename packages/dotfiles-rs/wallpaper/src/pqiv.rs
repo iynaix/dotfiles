@@ -63,7 +63,7 @@ pub fn show_pqiv() {
             "--shuffle",
             // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
             "--bind-key",
-            "'f { nop() }",
+            "f { nop() }",
             "--window-title",
             niri_window_title()
         )

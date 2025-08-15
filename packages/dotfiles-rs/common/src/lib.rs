@@ -99,15 +99,20 @@ macro_rules! log {
     ($($arg:tt)*) => {
         {
             use std::io::Write;
+            let log_fname = if cfg!(debug_assertions) {
+                "/tmp/wm-ipc-debug.log"
+            } else {
+                "/tmp/wm-ipc.log"
+            };
             let mut log_file = std::fs::OpenOptions::new()
                 .create(true)
                 .append(true)
-                .open("/tmp/wm-ipc.log")
+                .open(log_fname)
                 .expect("could not open log file");
 
             println!($($arg)*);
-            writeln!(log_file, $($arg)*).expect("could not write to wm-ipc.log");
-            log_file.flush().expect("could not flush wm-ipc.log");
+            writeln!(log_file, $($arg)*).ok();
+            log_file.flush().ok();
         }
     };
 }

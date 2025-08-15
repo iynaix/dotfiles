@@ -383,11 +383,11 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
         .expect("failed to apply gtk theme");
 
     // update qt (kvantum) theme
-    let qt_theme = format!("catppuccin-mocha-{variant}");
-    replace_in_file(
-        full_path("~/.config/Kvantum/kvantum.kvconfig"),
-        vec![(r"catppuccin-mocha-.*", &qt_theme)],
-    );
+    let kvantum = full_path("~/.config/Kvantum/kvantum.kvconfig");
+    if kvantum.exists() {
+        let qt_theme = format!("catppuccin-mocha-{variant}");
+        replace_in_file(kvantum, vec![(r"catppuccin-mocha-.*", &qt_theme)]);
+    }
 
     // requires the single quotes to be GVariant compatible for dconf
     let icon_theme = format!("Tela-{variant}-dark");

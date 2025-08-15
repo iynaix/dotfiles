@@ -1,7 +1,4 @@
-use common::{
-    nixjson::{NixJson, NixMonitor},
-    wallpaper,
-};
+use common::nixjson::{NixJson, NixMonitor};
 use dotfiles::cli::MonitorExtend;
 use itertools::Itertools;
 use niri_ipc::{
@@ -159,6 +156,8 @@ fn main() {
             #[allow(clippy::single_match)]
             match event {
                 Event::WorkspacesChanged { workspaces } => {
+                    common::log!("workspaces");
+                    common::log!("{workspaces:?}",);
                     let has_new_monitors = workspaces.iter().any(|wksp| {
                         if let Some(mon) = wksp.output.as_ref() {
                             return !nix_info_monitors.iter().any(|nix_mon| nix_mon.name == *mon);
@@ -192,11 +191,11 @@ fn main() {
                         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
                         .collect();
 
+                    common::log!("by_monitor");
+                    common::log!("{by_monitor:?}",);
                     renumber_workspaces(&by_monitor);
 
                     focus_workspaces(&nix_info_monitors);
-
-                    wallpaper::reload(None);
                 }
                 _ => {}
             }
