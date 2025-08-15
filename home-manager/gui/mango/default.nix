@@ -1,9 +1,9 @@
 {
   config,
+  dots,
   inputs,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -41,7 +41,6 @@ in
         };
       };
       systemd.enable = true;
-      # TODO: replace with actual config when almost done
       settings = mkMerge [
         (mkBefore (
           concatLines (
@@ -66,7 +65,8 @@ in
             ) config.custom.monitors
           )
         ))
-        (mkAfter "source=/persist/home/${user}/.config/mango/config.conf")
+        # source it directly for quick edits
+        (mkAfter "source=${dots}/home-manager/gui/mango/mango.conf")
       ];
       autostart_sh = # sh
         ''

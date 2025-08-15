@@ -65,13 +65,22 @@ mkIf config.custom.isWm {
       '';
   };
 
-  wayland.windowManager.hyprland.settings = {
-    bind = [
-      "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
-      "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
-      "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-      "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
-    ];
+  wayland.windowManager = {
+    hyprland.settings = {
+      bind = [
+        "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
+        "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
+        "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
+        "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
+      ];
+    };
+
+    mango.settings = ''
+      bind=SUPER, backslash, spawn, focal image --area selection --no-notify --no-save --no-rounded-windows
+      bind=SUPER+SHIFT, backslash, spawn, focal image --edit swappy --rofi --no-rounded-windows
+      bind=SUPER+CTRL, backslash, spawn, focal image --area selection --ocr
+      bind=ALT, backslash, spawn, focal video --rofi --no-rounded-windows
+    '';
   };
 
   programs.niri.settings = {

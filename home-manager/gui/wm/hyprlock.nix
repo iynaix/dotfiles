@@ -161,4 +161,20 @@ mkMerge [
         };
       };
   })
+
+  # settings for mango
+  (mkIf (config.custom.wm == "mango") {
+    wayland.windowManager.mango.settings =
+      let
+        lockOrDpms =
+          if config.custom.lock.enable then
+            "spawn, ${lockCmd}"
+          else
+            # TODO: support dpms off with wlr-dpms?
+            "spawn, ${lockCmd}";
+      in
+      "bind=SUPER+SHIFT+CTRL, x, ${lockOrDpms}";
+
+    # TODO: mango doesn't support switch events yet?
+  })
 ]

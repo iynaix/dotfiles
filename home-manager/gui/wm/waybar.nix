@@ -115,8 +115,8 @@ in
       };
 
       mango.settings = ''
-        bind=SUPER, a, exec, ${getExe waybar-toggle}
-        bind=SUPER+SHIFT, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped
+        bind=SUPER, a, spawn, ${getExe waybar-toggle}
+        bind=SUPER+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped
       '';
     };
 

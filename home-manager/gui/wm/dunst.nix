@@ -67,9 +67,13 @@ mkIf (config.custom.wm != "tty") (mkMerge [
     };
 
     # show dunst history
-    wayland.windowManager.hyprland.settings.bind = [
-      "$mod, n, exec, dunstctl history-pop"
-    ];
+    wayland.windowManager = {
+      hyprland.settings.bind = [
+        "$mod, n, exec, dunstctl history-pop"
+      ];
+
+      mango.settings = "bind=SUPER+SHIFT, n, spawn, dunstctl history-pop";
+    };
 
     programs.niri.settings.binds = {
       "Mod+n".action.spawn = [

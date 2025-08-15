@@ -86,7 +86,7 @@ in
               Type = "oneshot";
               ExecStart = getExe wallpaper-startup;
               ExecReload = "${getExe wallpaper-startup} reload";
-              X-SwitchMethod = "reload";
+              X-SwitchMethod = "keep-old";
             };
           };
         };

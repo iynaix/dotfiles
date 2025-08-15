@@ -111,8 +111,8 @@ macro_rules! log {
                 .expect("could not open log file");
 
             println!($($arg)*);
-            writeln!(log_file, $($arg)*).ok();
-            log_file.flush().ok();
+            writeln!(log_file, $($arg)*).unwrap_or_else(|_| panic!("could not write to {log_fname}"));
+            log_file.flush().unwrap_or_else(|_| panic!("could not flush {log_fname}"));
         }
     };
 }
