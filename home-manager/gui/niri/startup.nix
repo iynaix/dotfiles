@@ -21,10 +21,7 @@ mkIf (config.custom.wm == "niri") {
 
   # generate startup rules, god i hate having to use rules for startup
   programs.niri.settings = mkMerge (
-    [
-      { spawn-at-startup = [ { command = [ "niri-ipc" ]; } ]; }
-    ]
-    ++ (map (
+    (map (
       startup:
       (mkIf startup.enable {
         spawn-at-startup = [ { command = startup.spawn; } ];
@@ -66,8 +63,27 @@ mkIf (config.custom.wm == "niri") {
     ]
   );
 
-  # start a separate swww service in a different namespace for niri backdrop
   systemd.user.services = {
+    # listen to events from niri, done as a service so it will restart from nixos-rebuild
+    niri-ipc = {
+      Install = {
+        WantedBy = [ config.wayland.systemd.target ];
+      };
+
+      Unit = {
+        ConditionEnvironment = "WAYLAND_DISPLAY";
+        Description = "Custom niri-ipc from dotfiles-rs";
+        After = [ "niri.service" ];
+        PartOf = [ config.wayland.systemd.target ];
+      };
+
+      Service = {
+        ExecStart = "${getExe' config.custom.dotfiles.package "niri-ipc"}";
+        Restart = "on-failure";
+      };
+    };
+
+    # start a separate swww service in a different namespace for niri backdrop
     swww-backdrop = {
       Install = {
         WantedBy = [ config.wayland.systemd.target ];

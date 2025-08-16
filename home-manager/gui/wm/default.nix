@@ -45,7 +45,7 @@ in
 
   options.custom = {
     wm = mkOption {
-      description = "The WM to use, either hyprland, plasma or tty";
+      description = "The WM to use, either hyprland / niri / mango / plasma / tty";
       type = enum [
         "hyprland"
         "niri"
@@ -57,7 +57,7 @@ in
     };
 
     isWm = mkOption {
-      description = "Readonly option to check if the WM is hyprland or niri";
+      description = "Readonly option to check if the WM is hyprland / niri / mango";
       type = bool;
       default =
         config.custom.wm == "hyprland" || config.custom.wm == "niri" || config.custom.wm == "mango";

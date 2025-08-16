@@ -157,14 +157,15 @@ fn main() {
             #[allow(clippy::single_match)]
             match event {
                 Event::WorkspacesChanged { workspaces } => {
-                    common::log!("workspaces");
-                    common::log!("{workspaces:?}",);
                     let has_new_monitors = workspaces.iter().any(|wksp| {
                         if let Some(mon) = wksp.output.as_ref() {
                             return !nix_info_monitors.iter().any(|nix_mon| nix_mon.name == *mon);
                         }
                         false
                     });
+
+                    common::log!("has_new_monitors: {has_new_monitors}",);
+                    common::log!("workspaces: {workspaces:?}",);
 
                     // new monitor added, redistribute workspaces
                     let wksps = if has_new_monitors {
@@ -192,16 +193,18 @@ fn main() {
                         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
                         .collect();
 
-                    common::log!("by_monitor");
-                    common::log!("{by_monitor:?}",);
-                    renumber_workspaces(&by_monitor);
-
-                    focus_workspaces(&nix_info_monitors);
+                    common::log!("by_monitor: {by_monitor:?}",);
 
                     // reload waybar to clear multiple instances if necessary
-                    execute::command_args!("pkill", "-SIGUSR2", ".waybar-wrapped")
-                        .execute()
-                        .expect("unable to reload waybar");
+                    if has_new_monitors {
+                        focus_workspaces(&nix_info_monitors);
+
+                        execute::command_args!("pkill", "-SIGUSR2", ".waybar-wrapped")
+                            .execute()
+                            .expect("unable to reload waybar");
+                    } else {
+                        renumber_workspaces(&by_monitor);
+                    }
                 }
                 _ => {}
             }

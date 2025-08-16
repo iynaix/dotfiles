@@ -19,8 +19,6 @@ mkIf (config.custom.wm == "hyprland") {
 
   wayland.windowManager.hyprland.settings = {
     exec-once = [
-      # init ipc listener
-      "hypr-ipc &"
       # stop fucking with my cursors
       "hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}"
       "hyprctl dispatch workspace 1"
@@ -41,5 +39,26 @@ mkIf (config.custom.wm == "hyprland") {
       in
       if enable then "${rules} ${exec}" else ""
     ) config.custom.startup;
+  };
+
+  systemd.user.services = {
+    # listen to events from hyprland, done as a service so it will restart from nixos-rebuild
+    hypr-ipc = {
+      Install = {
+        WantedBy = [ config.wayland.systemd.target ];
+      };
+
+      Unit = {
+        ConditionEnvironment = "WAYLAND_DISPLAY";
+        Description = "Custom hypr-ipc from dotfiles-rs";
+        After = [ "hyprland-session.target" ];
+        PartOf = [ config.wayland.systemd.target ];
+      };
+
+      Service = {
+        ExecStart = "${getExe' config.custom.dotfiles.package "hypr-ipc"}";
+        Restart = "on-failure";
+      };
+    };
   };
 }
