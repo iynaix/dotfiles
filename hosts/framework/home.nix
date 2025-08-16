@@ -9,6 +9,10 @@ let
 in
 {
   custom = {
+    specialisation = {
+      hyprland.enable = true;
+    };
+
     monitors = [
       {
         name = "eDP-1";

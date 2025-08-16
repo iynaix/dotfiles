@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -15,10 +16,29 @@ let
   rofiExe = getExe config.programs.rofi.package;
 in
 mkIf (config.custom.wm == "mango") {
+  home.packages = with pkgs; [
+    (writeShellApplication {
+      name = "mango-focus-workspace";
+      runtimeInputs = [ inputs.mango.packages.${pkgs.system}.mmsg ];
+      text = ''
+        mmsg -d "focusmon,$1"
+        mmsg -d "view,$2"
+      '';
+    })
+    (writeShellApplication {
+      name = "mango-move-to-workspace";
+      runtimeInputs = [ inputs.mango.packages.${pkgs.system}.mmsg ];
+      text = ''
+        mmsg -d "tagmon,$1"
+        mmsg -d "tag,$2"
+      '';
+    })
+  ];
+
   custom.mango.settings = {
     bind = [
       "$mod, Return, spawn, ${getExe config.custom.terminal.package}"
-      "$mod+SHIFT, Return, spawn ${rofiExe} -show drun"
+      "$mod+SHIFT, Return, spawn, ${rofiExe} -show drun"
 
       "$mod, BackSpace, killclient, "
 
@@ -47,15 +67,20 @@ mkIf (config.custom.wm == "mango") {
       "$mod+CTRL, v, spawn, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
     ]
     ++
-      # workspace keybinds
+      # tag keybinds, switch to monitor first before switching tag
       flatten (
         (lib.custom.mapWorkspaces (
-          { workspace, key, ... }:
+          {
+            monitor,
+            workspace,
+            key,
+            ...
+          }:
           [
             # Switch workspaces with $mod + [0-9]
-            "$mod, ${key}, view, ${workspace}"
+            ''$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${workspace}''
             # Move active window to a workspace with $mod + SHIFT + [0-9]
-            "$mod+SHIFT, ${key}, tag, ${workspace}"
+            ''$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}''
           ]
         ))
           config.custom.monitors
