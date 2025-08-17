@@ -189,6 +189,82 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
     workspaces_by_mon
 }
 
+pub fn is_waybar_hidden() -> bool {
+    #[cfg(feature = "niri")]
+    {
+        use crate::nixjson::NixJson;
+        use niri_ipc::{Request, Response, socket::Socket};
+
+        const WAYBAR_HEIGHT: f64 = 36.0;
+
+        let mut socket = Socket::connect().expect("failed to connect to niri socket");
+
+        let Ok(Response::Windows(windows)) = socket
+            .send(Request::Windows)
+            .expect("failed to send Windows")
+        else {
+            panic!("unexpected response from niri, should be Windows");
+        };
+
+        let nix_info_monitors = NixJson::new().monitors;
+
+        for win in &windows {
+            let Some(wksp_id) = win.workspace_id else {
+                continue;
+            };
+
+            // must be top tile in column
+            let Some((_, 1)) = win.layout.pos_in_scrolling_layout else {
+                continue;
+            };
+
+            // get monitor for workspace
+            let Some(mon) = nix_info_monitors.iter().find(|nix_mon| {
+                nix_mon.workspaces.contains(
+                    #[allow(clippy::cast_possible_truncation)]
+                    &(wksp_id as i32),
+                )
+            }) else {
+                continue;
+            };
+
+            let (mon_w, mon_h) = mon.final_dimensions();
+            let mon_w = f64::from(mon_w);
+            let mon_h = f64::from(mon_h);
+
+            let (win_w, win_h) = win.layout.tile_size;
+
+            // is fullscreen!
+            if (mon_w - win_w).abs() < f64::EPSILON && (mon_h - win_h).abs() < f64::EPSILON {
+                continue;
+            }
+
+            // should be within 1 or 2 multiples of the waybar height
+            let height_diff_multiple = (mon_h - win_h) / WAYBAR_HEIGHT;
+            if height_diff_multiple > 1.0 && height_diff_multiple < 2.0 {
+                return false;
+            }
+        }
+
+        true
+    }
+
+    #[cfg(feature = "hyprland")]
+    {
+        use hyprland::{data::Monitor, shared::HyprDataActive};
+
+        let mon = Monitor::get_active().expect("failed to get active monitor");
+        let (_, height, _, _) = mon.reserved;
+
+        height == 0
+    }
+
+    #[cfg(not(any(feature = "hyprland", feature = "niri")))]
+    {
+        unimplemented!("is_waybar_hidden is not implemented outside of niri or hyprland!")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

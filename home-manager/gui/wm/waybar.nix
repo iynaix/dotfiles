@@ -23,19 +23,6 @@ let
   inherit (lib.strings) toJSON;
   inherit (lib.types) lines submodule;
   cfg = config.custom.waybar;
-  waybar-hide-file = "/tmp/waybar_hide";
-  waybar-toggle = pkgs.writeShellApplication {
-    name = "waybar-toggle";
-    text = ''
-      if [ -f "${waybar-hide-file}" ]; then
-          rm "${waybar-hide-file}"
-      else
-          touch "${waybar-hide-file}"
-      fi
-
-      systemctl --user kill -s SIGUSR1 waybar.service
-    '';
-  };
 in
 {
   options.custom = {
@@ -65,41 +52,15 @@ in
     };
 
     systemd.user.services.waybar = {
-      # create the waybar hidden file if needed before starting waybar
-      Service = {
-        ExecStartPre = getExe (
-          pkgs.writeShellApplication {
-            name = "waybar-init";
-            runtimeInputs = with pkgs; [
-              jq
-              coreutils
-            ];
-            text = ''
-              if jq -e '.start_hidden == true' "${config.xdg.configHome}/wallust/templates/waybar.jsonc" >/dev/null 2>&1; then
-                  touch "${waybar-hide-file}"
-              else
-                  if [ -f "${waybar-hide-file}" ]; then
-                    rm "${waybar-hide-file}"
-                  fi
-              fi
-
-              sleep 1
-            '';
-          }
-        );
-      };
       # wait for colorscheme to be ready on boot
       Unit = {
         AssertPathExists = [
           "${config.xdg.configHome}/waybar/config.jsonc"
           "${config.xdg.configHome}/waybar/style.css"
         ];
-        Requires = [ "wallpaper.service" ];
+        Wants = [ "wallpaper.service" ];
       };
     };
-
-    # toggle / launch waybar
-    home.packages = [ waybar-toggle ];
 
     wayland.windowManager = {
       hyprland.settings = {
@@ -109,7 +70,7 @@ in
         ];
 
         bind = [
-          "$mod, a, exec, ${getExe waybar-toggle}"
+          "$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
           "$mod_SHIFT, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
         ];
       };
@@ -119,7 +80,9 @@ in
     programs.niri.settings = {
       binds = {
         "Mod+A".action.spawn = [
-          (getExe waybar-toggle)
+          (getExe' pkgs.procps "pkill")
+          "-SIGUSR1"
+          ".waybar-wrapped"
         ];
         "Mod+Shift+A".action.spawn = [
           (getExe' pkgs.procps "pkill")
@@ -132,7 +95,7 @@ in
     custom = {
       mango.settings = {
         bind = [
-          "$mod, a, spawn, ${getExe waybar-toggle}"
+          "$mod, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
           "$mod+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
         ];
       };
@@ -268,6 +231,11 @@ in
           "waybar.jsonc" = {
             text = toJSON cfg.config;
             target = "${config.xdg.configHome}/waybar/config.jsonc";
+          };
+          # second waybar instance to be created when viewing the overview
+          "waybar-overview.jsonc" = mkIf (config.custom.wm == "niri") {
+            text = toJSON (cfg.config // { mode = "overlay"; });
+            target = "${config.xdg.configHome}/waybar/config-overview.jsonc";
           };
           "waybar.css" =
             let

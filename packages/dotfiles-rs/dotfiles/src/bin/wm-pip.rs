@@ -57,6 +57,7 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
 
 #[cfg(feature = "niri")]
 fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
+    use common::is_waybar_hidden;
     use niri_ipc::{
         Action, LogicalOutput, Output, PositionChange, Request, Response, SizeChange,
         socket::Socket,
@@ -130,9 +131,7 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
             }))
             .expect("failed to send SetWindowHeight")?;
 
-        let is_waybar_hidden =
-            std::fs::exists("/tmp/waybar_hide").expect("failed to check waybar hidden file");
-        let waybar_offset = if is_waybar_hidden { 0.0 } else { 36.0 };
+        let waybar_offset = if is_waybar_hidden() { 0.0 } else { 36.0 };
 
         let final_x = f64::from(curr_width) - PADDING - target_w;
         let final_y = f64::from(curr_height) - PADDING - target_h - waybar_offset;

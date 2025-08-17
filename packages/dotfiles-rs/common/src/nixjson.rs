@@ -1,18 +1,39 @@
 use crate::json;
 use serde::Deserialize;
 
-#[derive(Clone, Default, Deserialize, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Default, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct NixMonitor {
     pub name: String,
     pub workspaces: Vec<i32>,
-    pub width: u16,
-    pub height: u16,
+    pub width: u32,
+    pub height: u32,
     pub transform: u8,
+    pub scale: f64,
     pub default_workspace: i32,
 }
 
 impl NixMonitor {
+    /// dimensions of the monitor after scaling and transform
+    pub fn final_dimensions(&self) -> (u32, u32) {
+        let (w, h) = if self.transform % 2 == 1 {
+            (self.height, self.width)
+        } else {
+            (self.width, self.height)
+        };
+
+        if (self.scale - 1.0).abs() < f64::EPSILON {
+            (w, h)
+        } else {
+            #[allow(clippy::cast_possible_truncation)]
+            #[allow(clippy::cast_sign_loss)]
+            (
+                (f64::from(w) / self.scale) as u32,
+                (f64::from(h) / self.scale) as u32,
+            )
+        }
+    }
+
     pub fn layoutopts(&self, workspace: i32, is_nstack: bool) -> String {
         let mut opts = vec![workspace.to_string()];
 

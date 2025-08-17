@@ -46,7 +46,6 @@ in
         font-feature = "zero";
         font-size = terminal.size;
         font-style = "Medium";
-        minimum-contrast = 1.1;
         window-decoration = false;
         window-padding-x = terminal.padding;
         window-padding-y = terminal.padding;

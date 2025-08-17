@@ -31,7 +31,11 @@ rustPlatform.buildRustPackage {
 
   src = ./.;
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    # TODO: remove when new version of niri-ipc is released and git version is no longer used in Cargo.toml
+    allowBuiltinFetchGit = true;
+  };
 
   buildNoDefaultFeatures = true;
   buildFeatures =
