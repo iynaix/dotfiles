@@ -6,8 +6,11 @@ use dotfiles::cli::MonitorExtend;
 use execute::Execute;
 use itertools::Itertools;
 use niri_ipc::{
-    Action, Event, LogicalOutput, Request, Response, SizeChange::SetProportion, Transform, Window,
-    Workspace, WorkspaceReferenceArg, socket::Socket,
+    Action, Event, LogicalOutput, Request, Response,
+    SizeChange::SetProportion,
+    Transform, Window, Workspace, WorkspaceReferenceArg,
+    socket::Socket,
+    state::{EventStreamState, EventStreamStatePart},
 };
 use std::{collections::HashMap, process::Stdio};
 
@@ -155,9 +158,6 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         false
     });
 
-    common::log!("has_new_monitors: {has_new_monitors}",);
-    common::log!("workspaces: {workspaces:?}",);
-
     // new monitor added, redistribute workspaces
     let wksps = if has_new_monitors {
         let monitor_names = workspaces
@@ -180,7 +180,11 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
         .collect();
 
-    common::log!("by_monitor: {by_monitor:?}",);
+    if has_new_monitors {
+        common::log!("has_new_monitors");
+    }
+
+    // common::log!("by_monitor: {by_monitor:?}",);
 
     // reload waybar to clear multiple instances if necessary
     if has_new_monitors {
@@ -264,7 +268,7 @@ fn handle_single_window(socket: &mut Socket, win: &Window, logical: &LogicalOutp
     }
 }
 
-fn handle_vertical_monitor(socket: &mut Socket, columns: &[Vec<Window>], max_rows: usize) {
+fn handle_vertical_monitor(socket: &mut Socket, columns: &[Vec<&Window>], max_rows: usize) {
     for (i, col) in columns.iter().enumerate() {
         // do nothing for first column
         if i == 0 {
@@ -293,7 +297,7 @@ fn handle_vertical_monitor(socket: &mut Socket, columns: &[Vec<Window>], max_row
 
 fn handle_horizontal_monitor(
     socket: &mut Socket,
-    columns: &[Vec<Window>],
+    columns: &[Vec<&Window>],
     initial_window: &Window,
     mon_width: f64,
     max_cols: usize,
@@ -332,7 +336,9 @@ fn handle_horizontal_monitor(
         .expect("failed to send FocusColumnFirst")
         .ok();
 
-    // restore focus
+    // small sleep to allow first column to be focused
+    std::thread::sleep(std::time::Duration::from_millis(50));
+
     socket
         .send(Request::Action(Action::FocusWindow {
             id: initial_window.id,
@@ -341,7 +347,7 @@ fn handle_horizontal_monitor(
         .ok();
 }
 
-fn resize_windows(window: &Window) {
+fn resize_windows(window: &Window, state: &EventStreamState) {
     let Some(wksp_id) = window.workspace_id else {
         return;
     };
@@ -349,12 +355,7 @@ fn resize_windows(window: &Window) {
     // get all windows on the workspace
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
-    let Ok(Response::Windows(windows)) = socket
-        .send(Request::Windows)
-        .expect("failed to send Windows")
-    else {
-        panic!("invalid reply for Windows");
-    };
+    let windows = state.windows.windows.values();
 
     let mut wksp_windows = windows
         .into_iter()
@@ -367,13 +368,6 @@ fn resize_windows(window: &Window) {
         .collect_vec();
 
     // check if vertical monitor
-    let Ok(Response::Workspaces(workspaces)) = socket
-        .send(Request::Workspaces)
-        .expect("failed to send Workspaces")
-    else {
-        panic!("invalid reply for Workspaces");
-    };
-
     let Ok(Response::Outputs(monitors)) = socket
         .send(Request::Outputs)
         .expect("failed to send Outputs")
@@ -381,7 +375,12 @@ fn resize_windows(window: &Window) {
         panic!("invalid reply for Outputs");
     };
 
-    let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
+    let Some(wksp) = state
+        .workspaces
+        .workspaces
+        .values()
+        .find(|wksp| wksp.id == wksp_id)
+    else {
         return;
     };
 
@@ -419,7 +418,7 @@ fn resize_windows(window: &Window) {
 
     // single window should be maximized
     if wksp_windows.len() == 1 {
-        handle_single_window(&mut socket, &wksp_windows[0], &logical);
+        handle_single_window(&mut socket, wksp_windows[0], &logical);
         return;
     }
 
@@ -446,7 +445,7 @@ fn resize_windows(window: &Window) {
     }
 }
 
-fn handle_window_closed() {
+fn handle_window_closed(state: &EventStreamState) {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
     // get current focused window, rest of the logic is resizing windows
@@ -457,7 +456,7 @@ fn handle_window_closed() {
         return;
     };
 
-    resize_windows(&focused);
+    resize_windows(&focused, state);
 }
 
 fn main() {
@@ -477,38 +476,49 @@ fn main() {
     let mut waybar_overview_pid: Option<u32> = None;
 
     if matches!(reply, Ok(Response::Handled)) {
+        let mut state = EventStreamState::default();
         let mut read_event = socket.read_events();
         loop {
             match read_event() {
-                Ok(event) => match event {
-                    Event::WorkspacesChanged { workspaces } => {
-                        if !first_workspace_event_skipped {
-                            first_workspace_event_skipped = true;
-                            continue;
-                        }
+                Ok(event) => {
+                    let prev_windows = state.windows.windows.len();
 
-                        handle_workspaces_changed(&workspaces, &nix_info_monitors);
-                    }
-                    Event::OverviewOpenedOrClosed { is_open } => {
-                        if !first_overview_event_skipped {
-                            first_overview_event_skipped = true;
-                            continue;
-                        }
+                    state.apply(event.clone());
 
-                        handle_overview_changed(
-                            is_open,
-                            &mut waybar_initial_hidden,
-                            &mut waybar_overview_pid,
-                        );
+                    match event {
+                        Event::WorkspacesChanged { workspaces } => {
+                            if !first_workspace_event_skipped {
+                                first_workspace_event_skipped = true;
+                                continue;
+                            }
+
+                            handle_workspaces_changed(&workspaces, &nix_info_monitors);
+                        }
+                        Event::OverviewOpenedOrClosed { is_open } => {
+                            if !first_overview_event_skipped {
+                                first_overview_event_skipped = true;
+                                continue;
+                            }
+
+                            handle_overview_changed(
+                                is_open,
+                                &mut waybar_initial_hidden,
+                                &mut waybar_overview_pid,
+                            );
+                        }
+                        Event::WindowOpenedOrChanged { window } => {
+                            let curr_windows = state.windows.windows.len();
+                            // is a new window, ignore changes
+                            if curr_windows > prev_windows {
+                                resize_windows(&window, &state);
+                            }
+                        }
+                        Event::WindowClosed { id: _ } => {
+                            handle_window_closed(&state);
+                        }
+                        _ => {}
                     }
-                    Event::WindowOpenedOrChanged { window } => {
-                        resize_windows(&window);
-                    }
-                    Event::WindowClosed { id: _ } => {
-                        handle_window_closed();
-                    }
-                    _ => {}
-                },
+                }
                 // don't exit on unknown events or errors
                 Err(e) => {
                     println!("Event error: {e}");

@@ -32,7 +32,7 @@ in
             # begin right format
             "[](${dir_bg})"
             "[ ](${accent_style})"
-            "$time"
+            "$cmd_duration"
             # end right format
             "$line_break"
             "$character"
@@ -87,10 +87,11 @@ in
           line_break = {
             disabled = false;
           };
-          time = {
-            format = "[ $time ]($style)";
+          cmd_duration = {
+            format = "[ $duration ]($style)";
             disabled = false;
-            time_format = "%H:%M";
+            min_time = 0;
+            show_milliseconds = false;
             style = accent_style;
           };
         };
