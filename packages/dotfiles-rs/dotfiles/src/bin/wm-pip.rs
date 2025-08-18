@@ -70,11 +70,11 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
         .expect("failed to send FocusedOutput request to niri")
     {
         Ok(Response::FocusedOutput(Some(curr_mon))) => curr_mon,
-        Ok(Response::FocusedOutput(None)) => {
+        Ok(Response::FocusedOutput(_)) => {
             eprintln!("No focused output found.");
             std::process::exit(0);
         }
-        _ => panic!("unexpected response from niri, should be FocusedOutput"),
+        _ => panic!("invalid reply for FocusedOutput"),
     };
 
     let Output {
@@ -110,7 +110,7 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
             eprintln!("No active window found.");
             std::process::exit(0);
         }
-        _ => panic!("unexpected response from niri, should be FocusedWindow"),
+        _ => panic!("invalid reply for FocusedWindow"),
     };
 
     #[allow(clippy::cast_sign_loss)]

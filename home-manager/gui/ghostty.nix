@@ -5,8 +5,10 @@
 }:
 let
   inherit (lib)
+    assertMsg
     mkEnableOption
     mkIf
+    versionOlder
     ;
   cfg = config.custom.ghostty;
   inherit (config.custom) terminal;
@@ -40,7 +42,11 @@ in
         copy-on-select = "clipboard";
         # disable clipboard copy notifications temporarily until fixed upstream
         # https://github.com/ghostty-org/ghostty/issues/4800#issuecomment-2685774252
-        app-notifications = "no-clipboard-copy";
+        app-notifications =
+          assert (
+            assertMsg (versionOlder config.programs.ghostty.package.version "1.2.0") "ghostty: re-enable clipboard copy notifications"
+          );
+          "no-clipboard-copy";
         cursor-style = "bar";
         font-family = terminal.font;
         font-feature = "zero";

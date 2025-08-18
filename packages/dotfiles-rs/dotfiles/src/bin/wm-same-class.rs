@@ -76,14 +76,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 eprintln!("No active window found.");
                 std::process::exit(0);
             }
-            _ => panic!("unexpected response from niri, should be FocusedWindow"),
+            _ => panic!("invalid reply for FocusedWindow"),
         };
 
         let Ok(Response::Windows(windows)) = socket
             .send(Request::Windows)
             .expect("failed to send Windows request to niri")
         else {
-            panic!("unexpected response from niri, should be Windows");
+            panic!("invalid reply for Windows");
         };
 
         let matching_windows = windows

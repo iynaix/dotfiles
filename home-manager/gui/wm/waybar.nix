@@ -169,6 +169,8 @@ in
           };
         };
 
+        layer = "top";
+
         margin = "0";
 
         modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);

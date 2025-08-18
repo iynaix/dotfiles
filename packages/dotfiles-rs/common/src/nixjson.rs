@@ -37,8 +37,8 @@ impl NixMonitor {
     pub fn layoutopts(&self, workspace: i32, is_nstack: bool) -> String {
         let mut opts = vec![workspace.to_string()];
 
-        let is_vertical = self.transform == 1 || self.transform == 3;
-        let is_ultrawide = f64::from(self.width) / f64::from(self.height) > 16.0 / 9.0;
+        let is_vertical = self.transform % 2 == 1;
+        let is_ultrawide = f64::from(self.width) / f64::from(self.height) > 21.0 / 9.0;
 
         let orientation = format!(
             "layoutopt:{prefix}orientation:{orientation}",

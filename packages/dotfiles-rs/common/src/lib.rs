@@ -192,7 +192,6 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
 pub fn is_waybar_hidden() -> bool {
     #[cfg(feature = "niri")]
     {
-        use crate::nixjson::NixJson;
         use niri_ipc::{Request, Response, socket::Socket};
 
         const WAYBAR_HEIGHT: f64 = 36.0;
@@ -203,10 +202,22 @@ pub fn is_waybar_hidden() -> bool {
             .send(Request::Windows)
             .expect("failed to send Windows")
         else {
-            panic!("unexpected response from niri, should be Windows");
+            panic!("invalid reply for Windows");
         };
 
-        let nix_info_monitors = NixJson::new().monitors;
+        let Ok(Response::Workspaces(workspaces)) = socket
+            .send(Request::Workspaces)
+            .expect("failed to send Workspaces")
+        else {
+            panic!("invalid reply for Workspaces");
+        };
+
+        let Ok(Response::Outputs(monitors)) = socket
+            .send(Request::Outputs)
+            .expect("failed to send Outputs")
+        else {
+            panic!("invalid reply for Outputs");
+        };
 
         for win in &windows {
             let Some(wksp_id) = win.workspace_id else {
@@ -218,29 +229,34 @@ pub fn is_waybar_hidden() -> bool {
                 continue;
             };
 
-            // get monitor for workspace
-            let Some(mon) = nix_info_monitors.iter().find(|nix_mon| {
-                nix_mon.workspaces.contains(
-                    #[allow(clippy::cast_possible_truncation)]
-                    &(wksp_id as i32),
-                )
+            // get workspace for the window
+            let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
+                continue;
+            };
+
+            // get monitor for the workspace
+            let Some((mon_w, mon_h)) = monitors.values().find_map(|mon| {
+                let logical = mon.logical?;
+
+                if Some(&mon.name) != wksp.output.as_ref() {
+                    return None;
+                }
+
+                #[allow(clippy::cast_possible_wrap)]
+                Some((logical.width as i32, logical.height as i32))
             }) else {
                 continue;
             };
 
-            let (mon_w, mon_h) = mon.final_dimensions();
-            let mon_w = f64::from(mon_w);
-            let mon_h = f64::from(mon_h);
-
-            let (win_w, win_h) = win.layout.tile_size;
+            let (win_w, win_h) = win.layout.window_size;
 
             // is fullscreen!
-            if (mon_w - win_w).abs() < f64::EPSILON && (mon_h - win_h).abs() < f64::EPSILON {
+            if mon_w == win_w && mon_h == win_h {
                 continue;
             }
 
             // should be within 1 or 2 multiples of the waybar height
-            let height_diff_multiple = (mon_h - win_h) / WAYBAR_HEIGHT;
+            let height_diff_multiple = f64::from(mon_h - win_h) / WAYBAR_HEIGHT;
             if height_diff_multiple > 1.0 && height_diff_multiple < 2.0 {
                 return false;
             }
