@@ -159,14 +159,6 @@ in
     {
       hm = {
         home.packages = [ pkgs.filezilla ];
-
-        # full column width for niri
-        programs.niri.settings.window-rules = [
-          {
-            matches = [ { app-id = "^FileZilla$"; } ];
-            open-maximized = true;
-          }
-        ];
       };
 
       custom = {

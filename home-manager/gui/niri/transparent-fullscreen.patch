@@ -1,0 +1,22 @@
+diff --git a/src/layout/tile.rs b/src/layout/tile.rs
+index 1555b129..f49acd40 100644
+--- a/src/layout/tile.rs
++++ b/src/layout/tile.rs
+@@ -1049,17 +1049,6 @@ impl<W: LayoutElement> Tile<W> {
+             .chain(rounded_corner_damage)
+             .chain(window_surface.into_iter().flatten());
+ 
+-        let elem = self.is_fullscreen.then(|| {
+-            SolidColorRenderElement::from_buffer(
+-                &self.fullscreen_backdrop,
+-                location,
+-                1.,
+-                Kind::Unspecified,
+-            )
+-            .into()
+-        });
+-        let rv = rv.chain(elem);
+-
+         let elem = self.effective_border_width().map(|width| {
+             self.border
+                 .render(renderer, location + Point::from((width, width)))

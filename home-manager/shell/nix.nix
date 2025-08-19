@@ -14,7 +14,6 @@ in
 {
   home = {
     packages = with pkgs; [
-      nh
       nixd
       nix-output-monitor
       nix-tree
@@ -29,6 +28,14 @@ in
       nsh = "nix-shell --command fish -p";
       nshp = "nix-shell --pure --command fish -p";
     };
+  };
+
+  programs = {
+    nh = {
+      enable = true;
+      flake = dots;
+    };
+    nix-index.enable = true;
   };
 
   custom.shell.packages = {
@@ -452,8 +459,6 @@ in
         ''nsw test "$@"'';
     };
   };
-
-  programs.nix-index.enable = true;
 
   custom.persist = {
     home = {

@@ -8,7 +8,7 @@ use itertools::Itertools;
 use niri_ipc::{
     Action, Event, LogicalOutput, Request, Response,
     SizeChange::SetProportion,
-    Transform, Window, Workspace, WorkspaceReferenceArg,
+    Transform, Window, WindowLayout, Workspace, WorkspaceReferenceArg,
     socket::Socket,
     state::{EventStreamState, EventStreamStatePart},
 };
@@ -151,7 +151,7 @@ pub fn distribute_workspaces(
 }
 
 fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixMonitor]) {
-    let has_new_monitors = workspaces.iter().any(|wksp| {
+    let has_non_preset_monitors = workspaces.iter().any(|wksp| {
         if let Some(mon) = wksp.output.as_ref() {
             return !nix_info_monitors.iter().any(|nix_mon| nix_mon.name == *mon);
         }
@@ -159,7 +159,7 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
     });
 
     // new monitor added, redistribute workspaces
-    let wksps = if has_new_monitors {
+    let wksps = if has_non_preset_monitors {
         let monitor_names = workspaces
             .iter()
             .filter_map(|wksp| wksp.output.clone())
@@ -180,21 +180,17 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
         .collect();
 
-    if has_new_monitors {
-        common::log!("has_new_monitors");
-    }
-
     // common::log!("by_monitor: {by_monitor:?}",);
 
-    // reload waybar to clear multiple instances if necessary
-    if has_new_monitors {
+    if has_non_preset_monitors {
         focus_workspaces(nix_info_monitors);
+    } else {
+        renumber_workspaces(&by_monitor);
 
+        // reload waybar to clear multiple instances if necessary
         execute::command_args!("pkill", "-SIGUSR2", ".waybar-wrapped")
             .execute()
             .expect("unable to reload waybar");
-    } else {
-        renumber_workspaces(&by_monitor);
     }
 }
 
@@ -261,6 +257,20 @@ fn handle_overview_changed(
 fn handle_single_window(socket: &mut Socket, win: &Window, logical: &LogicalOutput) {
     let width_percent = f64::from(win.layout.window_size.0) / f64::from(logical.width);
     if width_percent < 0.9 {
+        // focus the window before resizing (necessary when moving between workspaces)
+        socket
+            .send(Request::Action(Action::FocusWindow { id: win.id }))
+            .expect("failed to send MaximizeWindowById")
+            .ok();
+
+        // maximize-column toggles width, which can cause races where it is resized back to 50%
+        // so set the width to 50% first
+        socket
+            .send(Request::Action(Action::SetColumnWidth {
+                change: SetProportion(50.0),
+            }))
+            .ok();
+
         socket
             .send(Request::Action(Action::MaximizeColumn {}))
             .expect("failed to send MaximizeWindowById")
@@ -298,7 +308,7 @@ fn handle_vertical_monitor(socket: &mut Socket, columns: &[Vec<&Window>], max_ro
 fn handle_horizontal_monitor(
     socket: &mut Socket,
     columns: &[Vec<&Window>],
-    initial_window: &Window,
+    initial_window: Option<&Window>,
     mon_width: f64,
     max_cols: usize,
 ) {
@@ -339,27 +349,22 @@ fn handle_horizontal_monitor(
     // small sleep to allow first column to be focused
     std::thread::sleep(std::time::Duration::from_millis(50));
 
-    socket
-        .send(Request::Action(Action::FocusWindow {
-            id: initial_window.id,
-        }))
-        .expect("failed to send FocusWindow")
-        .ok();
+    if let Some(initial_window) = initial_window {
+        socket
+            .send(Request::Action(Action::FocusWindow {
+                id: initial_window.id,
+            }))
+            .expect("failed to send FocusWindow")
+            .ok();
+    }
 }
 
-fn resize_windows(window: &Window, state: &EventStreamState) {
-    let Some(wksp_id) = window.workspace_id else {
-        return;
-    };
-
-    // get all windows on the workspace
-    let mut socket = Socket::connect().expect("failed to connect to niri socket");
-
+fn resize_workspace(workspace_id: u64, window: Option<&Window>, state: &EventStreamState) {
     let windows = state.windows.windows.values();
 
     let mut wksp_windows = windows
         .into_iter()
-        .filter(|win| win.workspace_id == Some(wksp_id))
+        .filter(|win| win.workspace_id == Some(workspace_id))
         // don't include floating windows
         .filter(|win| !win.is_floating)
         // the windows might not be in the correct order
@@ -368,6 +373,7 @@ fn resize_windows(window: &Window, state: &EventStreamState) {
         .collect_vec();
 
     // check if vertical monitor
+    let mut socket = Socket::connect().expect("failed to connect to niri socket");
     let Ok(Response::Outputs(monitors)) = socket
         .send(Request::Outputs)
         .expect("failed to send Outputs")
@@ -379,7 +385,7 @@ fn resize_windows(window: &Window, state: &EventStreamState) {
         .workspaces
         .workspaces
         .values()
-        .find(|wksp| wksp.id == wksp_id)
+        .find(|wksp| wksp.id == workspace_id)
     else {
         return;
     };
@@ -448,15 +454,147 @@ fn resize_windows(window: &Window, state: &EventStreamState) {
 fn handle_window_closed(state: &EventStreamState) {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
+    // get current workspace
+    let Ok(Response::FocusedOutput(Some(focused_output))) = socket
+        .send(Request::FocusedOutput)
+        .expect("failed to send FocusedOutput")
+    else {
+        return;
+    };
+
+    let Ok(Response::Workspaces(workspaces)) = socket
+        .send(Request::Workspaces)
+        .expect("failed to send Workspaces")
+    else {
+        return;
+    };
+
+    let Some(focused_workspace) = workspaces
+        .iter()
+        .find(|wksp| wksp.is_active && wksp.output == Some(focused_output.name.clone()))
+    else {
+        return;
+    };
+
     // get current focused window, rest of the logic is resizing windows
-    let Ok(Response::FocusedWindow(Some(focused))) = socket
+    let Ok(Response::FocusedWindow(Some(focused_window))) = socket
         .send(Request::FocusedWindow)
         .expect("failed to send FocusedWindow")
     else {
         return;
     };
 
-    resize_windows(&focused, state);
+    resize_workspace(focused_workspace.id, Some(&focused_window), state);
+}
+
+fn handle_window_layouts_changed(
+    changes: &[(u64, WindowLayout)],
+    state: &EventStreamState,
+    prev_windows: &HashMap<u64, Window>,
+) {
+    let workspace_changes: HashMap<_, _> = changes
+        .iter()
+        .filter_map(|(id, _)| {
+            let prev_win = prev_windows.get(id)?;
+            let curr_win = state.windows.windows.get(id)?;
+
+            // different workspace
+            if prev_win.workspace_id.is_none() || prev_win.workspace_id != curr_win.workspace_id {
+                return None;
+            }
+
+            let (prev_w, prev_h) = prev_win.layout.window_size;
+            let (curr_w, curr_h) = curr_win.layout.window_size;
+
+            if prev_w * prev_h > curr_w * curr_h {
+                // workspace_id is Some due to check above
+                Some((
+                    prev_win.workspace_id.unwrap_or_default(),
+                    (id, prev_w, prev_h),
+                ))
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    if workspace_changes.is_empty() {
+        return;
+    }
+
+    let mut socket = Socket::connect().expect("failed to connect to niri socket");
+
+    let Ok(Response::Workspaces(workspaces)) = socket
+        .send(Request::Workspaces)
+        .expect("failed to send Workspaces")
+    else {
+        return;
+    };
+
+    let Ok(Response::Outputs(monitors)) = socket
+        .send(Request::Outputs)
+        .expect("failed to send Outputs")
+    else {
+        panic!("invalid reply for Outputs");
+    };
+
+    workspace_changes
+        .iter()
+        .filter_map(|(wksp_id, (win_id, w, h))| {
+            // find the workspace
+            let wksp = workspaces.iter().find(|wksp| wksp.id == *wksp_id)?;
+
+            // find the monitor
+            let mon = monitors
+                .values()
+                .find(|mon| Some(mon.name.clone()) == wksp.output)?;
+
+            let logical = mon.logical?;
+
+            // is fullscreen
+            #[allow(clippy::cast_sign_loss)]
+            if logical.width == *w as u32 && logical.height == *h as u32 {
+                Some((*wksp_id, win_id))
+            } else {
+                None
+            }
+        })
+        .for_each(|(wksp_id, win_id)| {
+            if let Some(win) = state.windows.windows.get(win_id) {
+                resize_workspace(wksp_id, Some(win), state);
+            }
+        });
+}
+
+fn handle_window_opened_or_changed(
+    window: &Window,
+    prev_windows: &HashMap<u64, Window>,
+    state: &EventStreamState,
+) {
+    let curr_windows: HashMap<u64, _> = state.windows.windows.clone();
+
+    // is a new window, ignore changes
+    if curr_windows.len() > prev_windows.len() {
+        if let Some(wksp_id) = window.workspace_id {
+            resize_workspace(wksp_id, Some(window), state);
+        }
+    } else {
+        // check for window moving to another workspace
+        for (id, prev_win) in prev_windows {
+            if let Some(curr_win) = curr_windows.get(id) {
+                if curr_win.workspace_id != prev_win.workspace_id {
+                    if let Some(wksp_id) = prev_win.workspace_id {
+                        resize_workspace(wksp_id, None, state);
+                    }
+                    if let Some(wksp_id) = curr_win.workspace_id {
+                        println!("resizing curr workspace: {wksp_id}");
+                        resize_workspace(wksp_id, Some(window), state);
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }
 
 fn main() {
@@ -481,7 +619,7 @@ fn main() {
         loop {
             match read_event() {
                 Ok(event) => {
-                    let prev_windows = state.windows.windows.len();
+                    let prev_windows = state.windows.windows.clone();
 
                     state.apply(event.clone());
 
@@ -507,21 +645,20 @@ fn main() {
                             );
                         }
                         Event::WindowOpenedOrChanged { window } => {
-                            let curr_windows = state.windows.windows.len();
-                            // is a new window, ignore changes
-                            if curr_windows > prev_windows {
-                                resize_windows(&window, &state);
-                            }
+                            handle_window_opened_or_changed(&window, &prev_windows, &state);
                         }
                         Event::WindowClosed { id: _ } => {
                             handle_window_closed(&state);
+                        }
+                        Event::WindowLayoutsChanged { changes } => {
+                            handle_window_layouts_changed(&changes, &state, &prev_windows);
                         }
                         _ => {}
                     }
                 }
                 // don't exit on unknown events or errors
                 Err(e) => {
-                    println!("Event error: {e}");
+                    eprintln!("Event error: {e}");
                 }
             }
         }

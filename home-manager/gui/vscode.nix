@@ -44,14 +44,6 @@ mkIf (config.custom.wm != "tty") {
     ];
   };
 
-  # full column width for niri
-  programs.niri.settings.window-rules = [
-    {
-      matches = [ { app-id = "^codium$"; } ];
-      open-maximized = true;
-    }
-  ];
-
   home = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";

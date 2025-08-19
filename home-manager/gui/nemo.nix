@@ -100,14 +100,6 @@ mkIf (config.custom.wm != "tty") {
     windowrule = [ "forcergbx,floating:1,class:(nemo)" ];
   };
 
-  # full column width for niri
-  programs.niri.settings.window-rules = [
-    {
-      matches = [ { app-id = "^nemo$"; } ];
-      open-maximized = true;
-    }
-  ];
-
   custom.persist = {
     home = {
       directories = [

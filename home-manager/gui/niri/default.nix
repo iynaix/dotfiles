@@ -58,17 +58,25 @@ in
       package = inputs.niri.packages.${pkgs.system}.niri-unstable.overrideAttrs (o: {
         patches =
           (o.patches or [ ])
-          # increase maximum shadow spread to be able to fake dimaround on ultrawide
-          # see: https://github.com/YaLTeR/niri/discussions/1806
-          ++ [ ./larger-shadow-spread.patch ]
           ++ optionals config.custom.niri.blur.enable [
             (pkgs.fetchpatch {
               url = "https://patch-diff.githubusercontent.com/raw/YaLTeR/niri/pull/1634.diff";
-              hash = "sha256-ucIBkohHGoALm8dyYxNDd90tyjR1Vr/F/rUWh1+6bRs=";
+              hash = "sha256-nEyYtMOnZmYJPhu1/5p4H9RWBKHMq0/IYwvkorMgwoo=";
               name = "blur-behind-windows";
             })
             # additional patch to fix blur on vertical monitors, sadly there's still an artifact on the bottom right
             ./fix-vertical-blur.patch
+          ]
+          # not compatible with blur patch
+          ++ optionals (!config.custom.niri.blur.enable) [
+            # fix fullscreen windows have a black background
+            # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
+            ./transparent-fullscreen.patch
+          ]
+          ++ [
+            # increase maximum shadow spread to be able to fake dimaround on ultrawide
+            # see: https://github.com/YaLTeR/niri/discussions/1806
+            ./larger-shadow-spread.patch
           ];
 
         doCheck = false;
