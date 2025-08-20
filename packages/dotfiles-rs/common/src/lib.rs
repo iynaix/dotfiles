@@ -7,6 +7,7 @@ use std::{
 };
 
 pub mod colors;
+pub mod niri;
 pub mod nixjson;
 pub mod rofi;
 pub mod swww;

@@ -46,3 +46,8 @@ required-features = ["hyprland"]
 name = "niri-ipc"
 path = "src/bin/niri-ipc.rs"
 required-features = ["niri"]
+
+[[bin]]
+name = "niri-resize-workspace"
+path = "src/bin/niri-resize-workspace.rs"
+required-features = ["niri"]

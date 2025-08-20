@@ -68,6 +68,28 @@ pub struct WmSameClassArgs {
     pub generate: Option<ShellCompletion>,
 }
 
+#[derive(Parser, Debug)]
+#[command(
+    name = "niri-resize-workspace",
+    about = "Resize windows within workspace"
+)]
+pub struct NiriResizeWorkspaceArgs {
+    #[arg(
+        action,
+        help = "Optional workspace number to resize, defaults to focused workspace"
+    )]
+    pub workspace: Option<u64>,
+
+    #[arg(
+        long,
+        value_enum,
+        help = "Type of shell completion to generate",
+        hide = true,
+        exclusive = true
+    )]
+    pub generate: Option<ShellCompletion>,
+}
+
 #[derive(ValueEnum, Clone, Debug)]
 pub enum RofiMpvMedia {
     Anime,

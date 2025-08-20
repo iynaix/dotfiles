@@ -64,7 +64,8 @@ rustPlatform.buildRustPackage {
         "wm-same-class"
         "rofi-mpv"
       ]
-      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ];
+      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
+      ++ lib.optionals (wm == "niri") [ "niri-resize-workspace" ];
     in
     ''
       for prog in ${toString progs}; do
