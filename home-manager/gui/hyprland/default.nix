@@ -20,12 +20,6 @@ let
     ;
 in
 {
-  imports = [
-    ./hyprnstack.nix
-    ./keybinds.nix
-    ./startup.nix
-  ];
-
   options.custom = {
     hyprland = {
       hyprnstack = mkEnableOption "hyprnstack";

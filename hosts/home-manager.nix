@@ -33,7 +33,7 @@ let
         inputs.niri.homeModules.niri
         inputs.mango.hmModules.mango
         ./${host}/home.nix # host specific home-manager configuration
-        ../home-manager
+        (inputs.import-tree ../home-manager)
         ../overlays
       ];
     };

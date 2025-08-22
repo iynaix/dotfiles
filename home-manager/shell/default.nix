@@ -19,31 +19,6 @@ let
     ;
 in
 {
-  imports = [
-    ./bash.nix
-    ./bat.nix
-    ./btop.nix
-    ./cava.nix
-    ./direnv.nix
-    ./eza.nix
-    ./fish.nix
-    ./git.nix
-    ./helix.nix
-    ./jujutsu.nix
-    ./neovim.nix
-    ./nix.nix
-    ./rice.nix
-    ./ripgrep.nix
-    ./rust.nix
-    ./shell.nix
-    ./starship.nix
-    ./tmux.nix
-    ./typescript.nix
-    ./yazi.nix
-    ./yt-dlp.nix
-    ./zoxide.nix
-  ];
-
   options.custom = {
     terminal = {
       package = mkOption {

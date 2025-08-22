@@ -151,7 +151,7 @@ pub fn distribute_workspaces(
 }
 
 fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixMonitor]) {
-    let has_non_preset_monitors = workspaces.iter().any(|wksp| {
+    let has_unknown_monitors = workspaces.iter().any(|wksp| {
         if let Some(mon) = wksp.output.as_ref() {
             return !nix_info_monitors.iter().any(|nix_mon| nix_mon.name == *mon);
         }
@@ -159,7 +159,7 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
     });
 
     // new monitor added, redistribute workspaces
-    let wksps = if has_non_preset_monitors {
+    let wksps = if has_unknown_monitors {
         let monitor_names = workspaces
             .iter()
             .filter_map(|wksp| wksp.output.clone())
@@ -180,17 +180,10 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
         .collect();
 
-    // common::log!("by_monitor: {by_monitor:?}",);
-
-    if has_non_preset_monitors {
+    if has_unknown_monitors {
         focus_workspaces(nix_info_monitors);
     } else {
         renumber_workspaces(&by_monitor);
-
-        // reload waybar to clear multiple instances if necessary
-        // execute::command_args!("pkill", "-SIGUSR2", ".waybar-wrapped")
-        //     .execute()
-        //     .expect("unable to reload waybar");
 
         // reload the wallpaper (which also reloads waybar)
         wallpaper::reload(None);

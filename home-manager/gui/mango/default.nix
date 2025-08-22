@@ -17,11 +17,6 @@ let
     ;
 in
 {
-  imports = [
-    ./keybinds.nix
-    ./startup.nix
-  ];
-
   options.custom = {
     # copied from home-manger's hypland module, since mango config is similar to hyprlang
     mango.settings = lib.mkOption {

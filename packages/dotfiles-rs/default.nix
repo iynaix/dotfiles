@@ -86,22 +86,30 @@ rustPlatform.buildRustPackage {
     '';
 
   postFixup = # sh
+    let
+      progs = [
+        "wallpaper"
+      ]
+      ++ lib.optionals (wm == "niri") [ "niri-ipc" ];
+    in
     ''
-      wrapProgram $out/bin/wallpaper --prefix PATH : ${
-        lib.makeBinPath (
-          [
-            dconf
-            procps
-            pqiv
-            rsync
-            wallust
-            swww
-            wlr-randr
-          ]
-          ++ lib.optionals useDedupe [ czkawka ]
-          ++ lib.optionals useRclip [ rclip ]
-        )
-      }
+      for prog in ${toString progs}; do
+        wrapProgram $out/bin/$prog --prefix PATH : ${
+          lib.makeBinPath (
+            [
+              dconf
+              procps
+              pqiv
+              rsync
+              wallust
+              swww
+              wlr-randr
+            ]
+            ++ lib.optionals useDedupe [ czkawka ]
+            ++ lib.optionals useRclip [ rclip ]
+          )
+        }
+      done
     '';
 
   meta = {

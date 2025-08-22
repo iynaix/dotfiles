@@ -25,36 +25,6 @@ let
     ;
 in
 {
-  imports = [
-    ./audio.nix
-    ./auth.nix
-    ./bluetooth.nix
-    ./boot.nix
-    ./configuration.nix
-    ./docker.nix
-    ./gh.nix
-    ./hdds.nix
-    ./hyprland.nix
-    ./impermanence.nix
-    ./keyd.nix
-    ./mango.nix
-    ./niri.nix
-    ./nix.nix
-    ./nvidia.nix
-    ./plasma.nix
-    ./qmk.nix
-    ./sonarr.nix
-    ./sops.nix
-    ./specialisations.nix
-    ./syncoid.nix
-    ./transmission.nix
-    ./users.nix
-    ./vercel.nix
-    ./virt-manager.nix
-    ./vm.nix
-    ./zfs.nix
-  ];
-
   options.custom = {
     shell = {
       packages = mkOption {
@@ -169,7 +139,7 @@ in
     # add custom user created shell packages to pkgs.custom.shell
     nixpkgs.overlays = [
       (_: prev: {
-        custom = prev.custom // {
+        custom = (prev.custom or { }) // {
           shell = config.custom.shell.packages // config.hm.custom.shell.packages;
         };
       })

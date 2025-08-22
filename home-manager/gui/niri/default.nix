@@ -22,11 +22,6 @@ let
     ;
 in
 {
-  imports = [
-    ./keybinds.nix
-    ./startup.nix
-  ];
-
   options.custom = {
     niri = {
       blur.enable = mkEnableOption "blur behind windows using PR";

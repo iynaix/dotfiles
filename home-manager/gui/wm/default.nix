@@ -33,16 +33,6 @@ let
     ;
 in
 {
-  imports = [
-    ./dunst.nix
-    ./hypridle.nix
-    ./hyprlock.nix
-    ./screenshot.nix
-    ./wallpaper.nix
-    ./wallust.nix
-    ./waybar.nix
-  ];
-
   options.custom = {
     wm = mkOption {
       description = "The WM to use, either hyprland / niri / mango / plasma / tty";

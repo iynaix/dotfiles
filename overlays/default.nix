@@ -54,9 +54,6 @@ in
         patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];
       });
 
-      # use wl-clipboard-rs instead of wl-clipboard
-      wl-clipboard = prev.wl-clipboard-rs;
-
       # use latest for namespace functionality
       # https://github.com/LGFae/swww/issues/419
       swww =

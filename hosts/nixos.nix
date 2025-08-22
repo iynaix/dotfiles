@@ -27,7 +27,7 @@ let
       modules = [
         ./${host} # host specific configuration
         ./${host}/hardware.nix # host specific hardware configuration
-        ../nixos
+        (inputs.import-tree ../nixos)
         ../overlays
         inputs.home-manager.nixosModules.home-manager
         {
@@ -48,7 +48,7 @@ let
                 inputs.niri.homeModules.niri
                 inputs.mango.hmModules.mango
                 ./${host}/home.nix # host specific home-manager configuration
-                ../home-manager
+                (inputs.import-tree ../home-manager)
               ];
             };
           };

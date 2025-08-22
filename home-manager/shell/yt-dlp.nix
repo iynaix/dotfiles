@@ -10,6 +10,9 @@ let
       config.programs.yt-dlp.package
     ];
     text = # sh
+      let
+        ARCHIVE_FILE = "/tmp/ytdl-archive.txt";
+      in
       ''
         is_flag() {
             [[ "$1" == -* ]]
@@ -35,7 +38,8 @@ let
         fi
 
         pushd "${config.xdg.userDirs.download}" > /dev/null
-        yt-dlp "''${args[@]}"
+        echo > "${ARCHIVE_FILE}"
+        yt-dlp --download-archive "${ARCHIVE_FILE}"  "''${args[@]}"
         popd > /dev/null
       '';
   };
