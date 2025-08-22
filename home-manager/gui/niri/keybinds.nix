@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -239,7 +240,7 @@ mkIf (config.custom.wm == "niri") {
     # named workspace setup, dynamic workspaces are urgh
     // mergeAttrsList (
       flatten (
-        (lib.custom.mapWorkspaces (
+        (libCustom.mapWorkspaces (
           { workspace, key, ... }:
           [
             {

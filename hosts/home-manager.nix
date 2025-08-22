@@ -1,18 +1,14 @@
 {
   inputs,
   self,
-  pkgs,
 }:
-# 2nd argument is unused, maybe extraConfig in future?
-userWithhost: _:
-let
-  inherit (self) lib;
-  _parts = lib.splitString "@" userWithhost;
-  user = lib.elemAt _parts 0;
-  host = lib.elemAt _parts 1;
-in
+# last argument is unused, maybe extraConfig in future?
+system: user: host: _:
 inputs.home-manager.lib.homeManagerConfiguration {
-  inherit pkgs lib;
+  pkgs = import inputs.nixpkgs {
+    inherit system;
+    config.allowUnfree = true;
+  };
 
   extraSpecialArgs = {
     inherit
@@ -21,6 +17,7 @@ inputs.home-manager.lib.homeManagerConfiguration {
       host
       user
       ;
+    inherit (self) libCustom;
     isNixOS = false;
     isLaptop = host == "xps" || host == "framework";
     isVm = false;

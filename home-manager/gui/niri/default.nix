@@ -4,6 +4,7 @@
   inputs,
   isVm,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -268,7 +269,7 @@ in
         # create workspaces config
         {
           workspaces = listToAttrs (
-            lib.custom.mapWorkspaces (
+            libCustom.mapWorkspaces (
               {
                 workspace,
                 monitor,

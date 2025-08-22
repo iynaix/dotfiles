@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -69,7 +70,7 @@ mkIf (config.custom.wm == "mango") {
     ++
       # tag keybinds, switch to monitor first before switching tag
       flatten (
-        (lib.custom.mapWorkspaces (
+        (libCustom.mapWorkspaces (
           {
             monitor,
             workspace,

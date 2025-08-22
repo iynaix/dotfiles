@@ -2,6 +2,7 @@
   config,
   dots,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -21,7 +22,7 @@ in
             package
           ]);
         default = { };
-        apply = lib.custom.mkShellPackages;
+        apply = libCustom.mkShellPackages;
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
           Both string and attr values will be passed as arguments to writeShellApplicationCompletions

@@ -70,26 +70,15 @@
     flake-parts.lib.mkFlake { inherit inputs; } (_: {
       flake =
         let
+          inherit (inputs.nixpkgs) lib;
           pkgs = import inputs.nixpkgs {
             system = "x86_64-linux";
             config.allowUnfree = true;
           };
           user = "iynaix";
-          hostNixosModule = import ./hosts/nixos.nix {
-            inherit
-              inputs
-              self
-              pkgs
-              user
-              ;
-          };
-          inherit (hostNixosModule)
-            mkNixos
-            mkVm
-            ;
-          mkHomeManager = import ./hosts/home-manager.nix {
-            inherit inputs self pkgs;
-          };
+          hostNixosModule = import ./hosts/nixos.nix { inherit inputs self user; };
+          inherit (hostNixosModule) mkNixos mkVm;
+          mkHomeManager = import ./hosts/home-manager.nix { inherit inputs self; };
         in
         {
           nixosConfigurations = {
@@ -101,27 +90,25 @@
             # hyprland can be used within a VM on AMD
             vm-hyprland = mkVm "vm" {
               extraConfig = {
-                home-manager.users.${user}.custom.wm = self.lib.mkForce "hyprland";
+                home-manager.users.${user}.custom.wm = lib.mkForce "hyprland";
               };
             };
             # create VMs for each host configuration, build using
             # nixos-rebuild build-vm --flake .#desktop-vm
-            desktop-vm = mkVm "desktop" { isVm = true; };
-            framework-vm = mkVm "framework" { isVm = true; };
-            xps-vm = mkVm "xps" { isVm = true; };
+            desktop-vm = mkVm "x86_64-linux" "desktop" { isVm = true; };
+            framework-vm = mkVm "x86_64-linux" "framework" { isVm = true; };
+            xps-vm = mkVm "x86_64-linux" "xps" { isVm = true; };
           }
           // (import ./hosts/iso { inherit inputs self; });
 
           homeConfigurations = {
-            desktop = mkHomeManager "${user}@desktop" { };
-            framework = mkHomeManager "${user}@framework" { };
+            desktop = mkHomeManager "x86_64-linux" user "desktop" { };
+            framework = mkHomeManager "x86_64-linux" user "framework" { };
           };
 
-          lib = import ./lib.nix {
-            inherit (inputs.nixpkgs) lib;
-            inherit pkgs;
-            inherit (inputs) home-manager;
-          };
+          inherit lib;
+
+          libCustom = import ./lib.nix { inherit lib pkgs; };
 
           inherit self; # for repl debugging
 

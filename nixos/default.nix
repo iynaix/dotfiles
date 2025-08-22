@@ -2,6 +2,7 @@
   config,
   dots,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -33,7 +34,7 @@ in
           attrs
           package
         ]);
-        apply = lib.custom.mkShellPackages;
+        apply = libCustom.mkShellPackages;
         default = { };
         description = ''
           Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
@@ -136,14 +137,18 @@ in
         ++ (optionals config.hm.custom.helix.enable [ helix ]);
     };
 
-    # add custom user created shell packages to pkgs.custom.shell
-    nixpkgs.overlays = [
-      (_: prev: {
-        custom = (prev.custom or { }) // {
-          shell = config.custom.shell.packages // config.hm.custom.shell.packages;
-        };
-      })
-    ];
+    nixpkgs = {
+      config.allowUnfree = true;
+
+      # add custom user created shell packages to pkgs.custom.shell
+      overlays = [
+        (_: prev: {
+          custom = (prev.custom or { }) // {
+            shell = config.custom.shell.packages // config.hm.custom.shell.packages;
+          };
+        })
+      ];
+    };
 
     # create symlink to dotfiles from default /etc/nixos
     custom.symlinks = {

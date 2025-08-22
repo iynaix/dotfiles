@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  libCustom,
   pkgs,
   user,
   ...
@@ -148,7 +149,7 @@ in
 
         # process downloaded files
         shell.packages = {
-          renamer = lib.custom.direnvCargoRun {
+          renamer = libCustom.direnvCargoRun {
             dir = "${homeDir}/projects/renamer";
           };
         };

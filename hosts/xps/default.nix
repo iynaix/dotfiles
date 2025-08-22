@@ -12,7 +12,7 @@ in
 
   custom = { };
 
-  networking.hostId = "abb4d116"; # required for zfs
+  networking.hostId = "17521d0b"; # required for zfs
 
   # larger runtime directory size to not run out of ram while building
   # https://discourse.nixos.org/t/run-usr-id-is-too-small/4842

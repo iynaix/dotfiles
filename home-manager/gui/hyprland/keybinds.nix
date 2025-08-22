@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -51,7 +52,7 @@ in
       bind =
         let
           workspace_keybinds = flatten (
-            (lib.custom.mapWorkspaces (
+            (libCustom.mapWorkspaces (
               { workspace, key, ... }:
               if qtile_like then
                 [

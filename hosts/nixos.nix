@@ -1,19 +1,17 @@
 {
   inputs,
   self,
-  pkgs,
   user ? "iynaix",
 }:
 rec {
+  inherit (inputs.nixpkgs) lib;
   mkNixos =
     host:
     {
       isVm ? false,
       extraConfig ? { },
     }:
-    self.lib.nixosSystem {
-      inherit pkgs;
-
+    lib.nixosSystem {
       specialArgs = {
         inherit
           inputs
@@ -22,6 +20,7 @@ rec {
           isVm
           user
           ;
+        inherit (self) libCustom;
         isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
         dots = "/persist/home/${user}/projects/dotfiles";
@@ -46,6 +45,7 @@ rec {
                 user
                 isVm
                 ;
+              inherit (self) libCustom;
               isNixOS = true;
               isLaptop = host == "xps" || host == "framework";
               dots = "/persist/home/${user}/projects/dotfiles";
@@ -63,7 +63,7 @@ rec {
           };
         }
         # alias for home-manager
-        (self.lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
+        (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
         inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops

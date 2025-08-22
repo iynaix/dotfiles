@@ -4,6 +4,7 @@
   isLaptop,
   isVm,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -197,7 +198,7 @@ in
       //
         # bind workspaces to monitors, don't bother if there is only one monitor
         optionalAttrs (length config.custom.monitors > 1) {
-          workspace = lib.custom.mapWorkspaces (
+          workspace = libCustom.mapWorkspaces (
             { workspace, monitor, ... }:
             "${workspace},monitor:${monitor.name}"
             + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"

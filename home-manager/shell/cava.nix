@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  libCustom,
+  ...
+}:
 let
   inherit (lib) mkIf;
 in
@@ -6,7 +11,7 @@ in
   programs.cava.enable = true;
 
   custom.wallust.templates.cava = mkIf config.programs.cava.enable {
-    text = lib.custom.toQuotedINI {
+    text = libCustom.toQuotedINI {
       general = {
         # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.
         mode = "normal";

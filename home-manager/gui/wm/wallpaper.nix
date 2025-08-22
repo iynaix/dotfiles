@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -125,7 +126,7 @@ in
             lib.optionalString config.custom.nvidia.enable ''
               export WEBKIT_DISABLE_DMABUF_RENDERER=1
             ''
-            + lib.custom.direnvCargoRun {
+            + libCustom.direnvCargoRun {
               dir = "/persist${config.home.homeDirectory}/projects/wallfacer";
             };
           # bash completion isn't helpful as there are 1000s of images
@@ -191,7 +192,7 @@ in
     (mkIf config.custom.wallpaper-tools.enable {
       custom.shell.packages = {
         # fetch wallpapers from pixiv for user
-        pixiv = lib.custom.direnvCargoRun {
+        pixiv = libCustom.direnvCargoRun {
           dir = "/persist${config.home.homeDirectory}/projects/pixiv";
         };
       };
