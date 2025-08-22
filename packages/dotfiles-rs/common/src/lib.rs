@@ -237,14 +237,13 @@ pub fn is_waybar_hidden() -> bool {
 
             // get monitor for the workspace
             let Some((mon_w, mon_h)) = monitors.values().find_map(|mon| {
-                let logical = mon.logical?;
+                use crate::niri::MonitorExt;
 
                 if Some(&mon.name) != wksp.output.as_ref() {
                     return None;
                 }
 
-                #[allow(clippy::cast_possible_wrap)]
-                Some((logical.width as i32, logical.height as i32))
+                mon.dimensions()
             }) else {
                 continue;
             };

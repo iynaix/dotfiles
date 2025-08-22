@@ -279,7 +279,6 @@ pub fn apply_colors() {
 
         let by_contrast = accents_by_contrast(&colors);
 
-        #[allow(clippy::cast_precision_loss)]
         let accents = by_contrast
             .iter()
             // calculate score for each color
@@ -287,7 +286,6 @@ pub fn apply_colors() {
                 // how much of the score should be based on contrast
                 let contrast_pct = 0.78;
 
-                #[allow(clippy::cast_precision_loss)]
                 (
                     (*i as f64).mul_add(
                         contrast_pct,

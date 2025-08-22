@@ -109,7 +109,6 @@ impl Swww {
         let mut result_buf =
             std::io::BufWriter::new(std::fs::File::create(&fname).expect("could not create file"));
 
-        #[allow(clippy::cast_sign_loss)]
         WebPEncoder::new_lossless(&mut result_buf)
             .write_image(dest.buffer(), mon_w, mon_h, image::ColorType::Rgb8.into())
             .expect("failed to savea webp image for swww");

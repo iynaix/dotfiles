@@ -25,8 +25,6 @@ impl NixMonitor {
         if (self.scale - 1.0).abs() < f64::EPSILON {
             (w, h)
         } else {
-            #[allow(clippy::cast_possible_truncation)]
-            #[allow(clippy::cast_sign_loss)]
             (
                 (f64::from(w) / self.scale) as u32,
                 (f64::from(h) / self.scale) as u32,

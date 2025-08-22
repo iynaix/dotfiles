@@ -1,11 +1,66 @@
 use itertools::Itertools;
 use niri_ipc::{
-    Action, LogicalOutput, Request, Response, SizeChange::SetProportion, Transform, Window,
-    Workspace, socket::Socket,
+    Action, Output, Request, Response, SizeChange::SetProportion, Window, Workspace, socket::Socket,
 };
 
-fn handle_single_window(socket: &mut Socket, win: &Window, logical: &LogicalOutput) {
-    let width_percent = f64::from(win.layout.window_size.0) / f64::from(logical.width);
+pub trait WindowExt {
+    fn col(&self) -> Option<usize>;
+
+    fn row(&self) -> Option<usize>;
+}
+
+impl WindowExt for Window {
+    fn col(&self) -> Option<usize> {
+        self.layout.pos_in_scrolling_layout.map(|(col, _)| col)
+    }
+
+    fn row(&self) -> Option<usize> {
+        self.layout.pos_in_scrolling_layout.map(|(_, row)| row)
+    }
+}
+
+pub trait MonitorExt {
+    fn dimensions(&self) -> Option<(i32, i32)>;
+
+    fn aspect_ratio(&self) -> Option<f64> {
+        self.dimensions().map(|(w, h)| f64::from(w) / f64::from(h))
+    }
+
+    fn is_vertical(&self) -> bool {
+        self.aspect_ratio().is_some_and(|ratio| ratio < 1.0)
+    }
+
+    fn is_ultrawide(&self) -> bool {
+        self.aspect_ratio().is_some_and(|ratio| ratio >= 21.0 / 9.0)
+    }
+
+    fn is_fullscreen_window(&self, win: &Window) -> bool {
+        self.dimensions().map(|(w, h)| {
+            let (win_w, win_h) = win.layout.window_size;
+            w == win_w && h == win_h
+        }) == Some(true)
+    }
+
+    fn window_ratio(&self, win: &Window) -> Option<f64> {
+        self.dimensions().map(|(w, _)| {
+            let win_w = win.layout.window_size.0;
+            f64::from(win_w) / f64::from(w)
+        })
+    }
+}
+
+impl MonitorExt for Output {
+    fn dimensions(&self) -> Option<(i32, i32)> {
+        self.logical
+            .map(|logical| (logical.width as i32, logical.height as i32))
+    }
+}
+
+fn handle_single_window(socket: &mut Socket, win: &Window, mon: &Output) {
+    let Some(width_percent) = mon.window_ratio(win) else {
+        return;
+    };
+
     if width_percent < 0.9 {
         // focus the window before resizing (necessary when moving between workspaces)
         socket
@@ -59,19 +114,22 @@ fn handle_horizontal_monitor(
     socket: &mut Socket,
     columns: &[Vec<Window>],
     initial_window: Option<&Window>,
-    mon_width: f64,
-    max_cols: usize,
+    mon: &Output,
 ) {
+    let max_cols = if mon.is_ultrawide() { 3 } else { 2 };
+
     if columns.len() > max_cols {
         return;
     }
 
-    #[allow(clippy::cast_precision_loss)]
     let target_ratio = 1.0 / columns.len().min(max_cols) as f64;
 
     for col in columns {
         // it's already the correct size
-        let col_ratio = f64::from(col[0].layout.window_size.0) / mon_width;
+        let Some(col_ratio) = mon.window_ratio(&col[0]) else {
+            return;
+        };
+
         if (target_ratio - col_ratio).abs() < 0.01 {
             continue;
         }
@@ -141,26 +199,16 @@ pub fn resize_workspace<Windows, Workspaces>(
         return;
     };
 
-    let Some(logical) = monitors.values().find_map(|mon| {
-        if Some(&mon.name) != wksp.output.as_ref() {
-            return None;
-        }
-
-        mon.logical
-    }) else {
+    let Some(mon) = monitors
+        .values()
+        .find(|mon| Some(&mon.name) == wksp.output.as_ref())
+    else {
         return;
     };
 
-    let is_vertical = matches!(
-        logical.transform,
-        Transform::_90 | Transform::_270 | Transform::Flipped90 | Transform::Flipped270
-    );
-
     let mut has_fullscreen_window = false;
-    #[allow(clippy::cast_sign_loss)]
     wksp_windows.retain(|win| {
-        let (win_w, win_h) = win.layout.window_size;
-        let is_fullscreen = win_w as u32 == logical.width && win_h as u32 == logical.height;
+        let is_fullscreen = mon.is_fullscreen_window(win);
 
         if is_fullscreen {
             has_fullscreen_window = true;
@@ -175,29 +223,21 @@ pub fn resize_workspace<Windows, Workspaces>(
 
     // single window should be maximized
     if wksp_windows.len() == 1 {
-        handle_single_window(&mut socket, &wksp_windows[0], &logical);
+        handle_single_window(&mut socket, &wksp_windows[0], mon);
         return;
     }
 
     let columns = wksp_windows
         .into_iter()
-        .chunk_by(|win| win.layout.pos_in_scrolling_layout.map(|(col, _)| col))
+        .chunk_by(WindowExt::col)
         .into_iter()
         .map(|(_, chunk)| chunk.collect_vec())
         .collect_vec();
 
-    if is_vertical {
+    if mon.is_vertical() {
         // NOTE: hardcoded to 3 rows for now
         handle_vertical_monitor(&mut socket, &columns, 3);
     } else {
-        let aspect_ratio = f64::from(logical.width) / f64::from(logical.height);
-        let max_cols = if aspect_ratio >= 21.0 / 9.0 { 3 } else { 2 };
-        handle_horizontal_monitor(
-            &mut socket,
-            &columns,
-            window,
-            f64::from(logical.width),
-            max_cols,
-        );
+        handle_horizontal_monitor(&mut socket, &columns, window, mon);
     }
 }

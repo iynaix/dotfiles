@@ -1,6 +1,6 @@
 use common::{
     CommandUtf8, full_path, is_waybar_hidden,
-    niri::resize_workspace,
+    niri::{MonitorExt, WindowExt, resize_workspace},
     nixjson::{NixJson, NixMonitor},
     wallpaper,
 };
@@ -304,7 +304,7 @@ fn handle_window_layouts_changed(
     state: &EventStreamState,
     prev_windows: &HashMap<u64, Window>,
 ) {
-    let workspace_changes: HashMap<_, _> = changes
+    let same_workspace_changes = changes
         .iter()
         .filter_map(|(id, _)| {
             let prev_win = prev_windows.get(id)?;
@@ -315,22 +315,16 @@ fn handle_window_layouts_changed(
                 return None;
             }
 
-            let (prev_w, prev_h) = prev_win.layout.window_size;
-            let (curr_w, curr_h) = curr_win.layout.window_size;
-
-            if prev_w * prev_h > curr_w * curr_h {
-                // workspace_id is Some due to check above
-                Some((
-                    prev_win.workspace_id.unwrap_or_default(),
-                    (id, prev_w, prev_h),
-                ))
-            } else {
-                None
-            }
+            // workspace_id is Some due to check above
+            Some((
+                prev_win.workspace_id.unwrap_or_default(),
+                prev_win,
+                curr_win,
+            ))
         })
-        .collect();
+        .collect_vec();
 
-    if workspace_changes.is_empty() {
+    if same_workspace_changes.is_empty() {
         return;
     }
 
@@ -350,32 +344,51 @@ fn handle_window_layouts_changed(
         panic!("invalid reply for Outputs");
     };
 
-    workspace_changes
-        .iter()
-        .filter_map(|(wksp_id, (win_id, w, h))| {
+    for (wksp_id, prev_win, curr_win) in same_workspace_changes {
+        let prev_cols = prev_windows
+            .values()
+            .filter(|win| win.workspace_id == Some(wksp_id))
+            .filter_map(WindowExt::col)
+            .max()
+            .unwrap_or_default();
+
+        let curr_cols = state
+            .windows
+            .windows
+            .values()
+            .filter(|win| win.workspace_id == Some(wksp_id))
+            .filter_map(WindowExt::col)
+            .max()
+            .unwrap_or_default();
+
+        // check for coming out of fullscreen
+        if prev_cols == curr_cols {
             // find the workspace
-            let wksp = workspaces.iter().find(|wksp| wksp.id == *wksp_id)?;
+            let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
+                continue;
+            };
 
-            // find the monitor
-            let mon = monitors
+            let Some(mon) = monitors
                 .values()
-                .find(|mon| Some(mon.name.clone()) == wksp.output)?;
+                .find(|mon| Some(mon.name.clone()) == wksp.output)
+            else {
+                continue;
+            };
 
-            let logical = mon.logical?;
+            if let Some((mon_w, mon_h)) = mon.dimensions() {
+                let (prev_w, prev_h) = prev_win.layout.window_size;
+                let (curr_w, curr_h) = curr_win.layout.window_size;
 
-            // is fullscreen
-            #[allow(clippy::cast_sign_loss)]
-            if logical.width == *w as u32 && logical.height == *h as u32 {
-                Some((*wksp_id, win_id))
-            } else {
-                None
+                if prev_w * prev_h == mon_w * mon_h && (curr_w != prev_w || curr_h != prev_h) {
+                    resize_workspace_from_state(wksp_id, Some(curr_win), state);
+                }
             }
-        })
-        .for_each(|(wksp_id, win_id)| {
-            if let Some(win) = state.windows.windows.get(win_id) {
-                resize_workspace_from_state(wksp_id, Some(win), state);
-            }
-        });
+        }
+        // adding or removing a column
+        else {
+            resize_workspace_from_state(wksp_id, Some(curr_win), state);
+        }
+    }
 }
 
 fn handle_window_opened_or_changed(

@@ -21,6 +21,10 @@ must_use_candidate = { level = "allow", priority = 1 }
 nursery = "deny"
 option_if_let_else = { level = "allow", priority = 1 }
 unwrap_used = "deny"
+cast_possible_truncation = { level = "allow", priority = 1 }
+cast_possible_wrap = { level = "allow", priority = 1 }
+cast_precision_loss = { level = "allow", priority = 1 }
+cast_sign_loss = { level = "allow", priority = 1 }
 
 # faster image operations in dev
 [profile.dev.package.image]

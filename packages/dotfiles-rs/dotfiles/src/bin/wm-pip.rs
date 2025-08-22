@@ -27,12 +27,9 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     // if activewindow.floating {
     //     dispatch!(ToggleFullscreen(FullscreenType::Real))?;
     // } else {
-    #[allow(clippy::cast_sign_loss)]
-    #[allow(clippy::cast_possible_truncation)]
     if !active.floating {
         const PADDING: u32 = 30; // target distance from corner of screen
 
-        #[allow(clippy::cast_possible_truncation)]
         dispatch!(
             ResizeActive,
             Position::Exact(target_w as i16, target_h as i16,)
@@ -47,7 +44,6 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
         let delta_x = mon_right - PADDING - target_w as u32 - activewindow.at.0 as u32;
         let delta_y = mon_bottom - PADDING - target_h as u32 - activewindow.at.1 as u32;
 
-        #[allow(clippy::cast_possible_truncation)]
         dispatch!(MoveActive, Position::Delta(delta_x as i16, delta_y as i16))
             .expect("failed to move active window");
     }
@@ -113,8 +109,6 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
         _ => panic!("invalid reply for FocusedWindow"),
     };
 
-    #[allow(clippy::cast_sign_loss)]
-    #[allow(clippy::cast_possible_truncation)]
     if active.is_floating {
         const PADDING: f64 = 30.0; // target distance from corner of screen
 

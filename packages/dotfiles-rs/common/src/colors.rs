@@ -80,8 +80,6 @@ impl Rgb {
             (c, 0.0, x)
         };
 
-        #[allow(clippy::cast_possible_truncation)]
-        #[allow(clippy::cast_sign_loss)]
         Self {
             r: ((r1 + m) * 255.0).round() as u8,
             g: ((g1 + m) * 255.0).round() as u8,
