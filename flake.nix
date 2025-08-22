@@ -17,6 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
 
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5";
@@ -65,70 +66,79 @@
   };
 
   outputs =
-    inputs@{ self, ... }:
-    let
-      system = "x86_64-linux";
-      importPkgs =
-        nixpkgs':
-        import nixpkgs' {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      nixpkgs-patched =
+    inputs@{ flake-parts, self, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } (_: {
+      flake =
         let
-          bootstrap-nixpkgs = importPkgs inputs.nixpkgs;
-          # nixpkgs patches that have yet to be merged
-          nixpkgsPatches = [ ];
+          pkgs = import inputs.nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+          user = "iynaix";
+          hostNixosModule = import ./hosts/nixos.nix {
+            inherit
+              inputs
+              self
+              pkgs
+              user
+              ;
+          };
+          inherit (hostNixosModule)
+            mkNixos
+            mkVm
+            ;
+          mkHomeManager = import ./hosts/home-manager.nix {
+            inherit inputs self pkgs;
+          };
         in
-        bootstrap-nixpkgs.applyPatches {
-          name = "nixpkgs-patched";
-          src = inputs.nixpkgs;
-          patches = map bootstrap-nixpkgs.fetchpatch nixpkgsPatches;
+        {
+          nixosConfigurations = {
+            desktop = mkNixos "desktop" { };
+            framework = mkNixos "framework" { };
+            xps = mkNixos "xps" { };
+            # VMs from config
+            vm = mkVm "vm" { };
+            # hyprland can be used within a VM on AMD
+            vm-hyprland = mkVm "vm" {
+              extraConfig = {
+                home-manager.users.${user}.custom.wm = self.lib.mkForce "hyprland";
+              };
+            };
+            # create VMs for each host configuration, build using
+            # nixos-rebuild build-vm --flake .#desktop-vm
+            desktop-vm = mkVm "desktop" { isVm = true; };
+            framework-vm = mkVm "framework" { isVm = true; };
+            xps-vm = mkVm "xps" { isVm = true; };
+          }
+          // (import ./hosts/iso { inherit inputs self; });
+
+          homeConfigurations = {
+            desktop = mkHomeManager "${user}@desktop" { };
+            framework = mkHomeManager "${user}@framework" { };
+          };
+
+          lib = import ./lib.nix {
+            inherit (inputs.nixpkgs) lib;
+            inherit pkgs;
+            inherit (inputs) home-manager;
+          };
+
+          inherit self; # for repl debugging
+
+          templates = import ./templates;
         };
-      pkgs = importPkgs nixpkgs-patched;
-      lib = import ./lib.nix {
-        inherit (inputs.nixpkgs) lib;
-        inherit pkgs;
-        inherit (inputs) home-manager;
-      };
-      commonArgsForSystem = system: {
-        inherit
-          self
-          inputs
-          lib
-          pkgs
-          system
-          ;
-        specialArgs = {
-          inherit self inputs;
+      systems = [
+        # systems for which you want to build the `perSystem` attributes
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      perSystem =
+        { pkgs, ... }:
+        {
+          devShells.default = import ./shell.nix { inherit pkgs; };
+          packages = (import ./packages) { inherit inputs pkgs; };
         };
-      };
-      commonArgs = commonArgsForSystem system;
-      # call with forAllSystems (commonArgs: function body)
-      forAllSystems =
-        fn:
-        lib.genAttrs [
-          "x86_64-linux"
-          "aarch64-linux"
-          "x86_64-darwin"
-          "aarch64-darwin"
-        ] (system: fn (commonArgsForSystem system));
-    in
-    {
-      nixosConfigurations = (import ./hosts/nixos.nix commonArgs) // (import ./hosts/iso commonArgs);
-
-      homeConfigurations = import ./hosts/home-manager.nix commonArgs;
-
-      # devenv for working on dotfiles, provides rust environment
-      devShells = forAllSystems (_: {
-        default = import ./shell.nix { inherit pkgs; };
-      });
-
-      inherit lib self;
-
-      packages = forAllSystems (import ./packages);
-
-      # templates for devenvs
-      templates = import ./templates;
-    };
+    });
 }

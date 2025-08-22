@@ -1,11 +1,11 @@
 {
   inputs,
-  lib,
   self,
   system ? "x86_64-linux",
   ...
 }:
 let
+  inherit (self) lib;
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   user = "nixos";
   mkIso =
