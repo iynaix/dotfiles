@@ -21,10 +21,10 @@ in
         runtimeInputs = [ pkgs.postgresql_15 ];
         text = # sh
           ''
-            mkdir -p "/media/6TBRED/Vercel"
+            mkdir -p "/media/HGST10/Vercel"
 
             VERCEL_POSTGRES="$(cat ${config.sops.secrets.vercel_postgres.path})"
-            pg_dump "$VERCEL_POSTGRES" --file="/media/6TBRED/Vercel/vercel-coinfc-$(date +%F).sql"
+            pg_dump "$VERCEL_POSTGRES" --file="/media/HGST10/Vercel/vercel-coinfc-$(date +%F).sql"
           '';
       };
     };

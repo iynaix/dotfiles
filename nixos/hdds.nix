@@ -4,22 +4,21 @@ let
     concatLines
     mkEnableOption
     mkIf
+    optional
     optionals
     optionalAttrs
     ;
   inherit (config.hm.custom) mswindows;
   cfg = config.custom.hdds;
-  wdred = "/media/6TBRED";
-  wdred-dataset = "zfs-wdred6-1/media";
-  ironwolf = "/media/IRONWOLF22";
-  ironwolf-dataset = "zfs-ironwolf22-1/media";
+  hgst10 = "/media/HGST10";
+  ironwolf22 = "/media/IRONWOLF22";
   inherit (config.hm.home) homeDirectory;
 in
 {
   options.custom = {
     hdds = {
       enable = mkEnableOption "Desktop HDDs";
-      wdred6 = mkEnableOption "WD Red 6TB" // {
+      hgst10 = mkEnableOption "HGST 10TB" // {
         default = config.custom.hdds.enable;
       };
       ironwolf22 = mkEnableOption "Ironwolf Pro 22TB" // {
@@ -33,13 +32,13 @@ in
       enable = true;
 
       datasets = {
-        ${ironwolf-dataset} = mkIf cfg.ironwolf22 {
+        "zfs-hgst10-1/media" = mkIf cfg.hgst10 {
           hourly = 3;
           daily = 10;
           weekly = 2;
           monthly = 0;
         };
-        ${wdred-dataset} = mkIf cfg.wdred6 {
+        "zfs-ironwolf22-1/media" = mkIf cfg.ironwolf22 {
           hourly = 3;
           daily = 10;
           weekly = 2;
@@ -51,28 +50,22 @@ in
     # symlinks from hdds
     custom.symlinks =
       optionalAttrs cfg.ironwolf22 {
-        "${homeDirectory}/Downloads" = "${ironwolf}/Downloads";
+        "${homeDirectory}/Downloads" = "${ironwolf22}/Downloads";
       }
-      // optionalAttrs cfg.wdred6 { "${homeDirectory}/Videos" = wdred; }
-      // optionalAttrs (cfg.ironwolf22 && cfg.wdred6) {
-        "${ironwolf}/Anime" = "${wdred}/Anime";
-        "${ironwolf}/TV" = "${wdred}/TV";
-        "${wdred}/Movies" = "${ironwolf}/Movies";
-      };
+      // optionalAttrs cfg.hgst10 { "${homeDirectory}/Videos" = hgst10; };
 
     hm = {
       # add bookmarks for gtk
       gtk.gtk3.bookmarks = mkIf cfg.ironwolf22 [
-        "file://${wdred}/Anime Anime"
-        "file://${wdred}/Anime/Current Anime Current"
-        "file://${wdred}/TV TV"
-        "file://${wdred}/TV/Current TV Current"
-        "file://${ironwolf}/Movies"
+        "file://${hgst10}/Anime Anime"
+        "file://${hgst10}/Anime/Current Anime Current"
+        "file://${hgst10}/TV TV"
+        "file://${hgst10}/TV/Current TV Current"
+        "file://${hgst10}/Movies"
       ];
 
       # add btop monitoring for extra hdds
-      custom.btop.disks =
-        optionals cfg.wdred6 [ "/media/6TBRED" ] ++ optionals cfg.ironwolf22 [ "/media/IRONWOLF22" ];
+      custom.btop.disks = optional cfg.hgst10 hgst10 ++ optional cfg.ironwolf22 ironwolf22;
     };
 
     # dual boot windows
@@ -113,8 +106,8 @@ in
       #   options = ["nofail" "x-gvfs-hide" "subvol=/@"];
       # };
 
-      "/media/6TBRED" = mkIf cfg.wdred6 {
-        device = "zfs-wdred6-1/media";
+      "/media/HGST10" = mkIf cfg.hgst10 {
+        device = "zfs-hgst10-1/media";
         fsType = "zfs";
       };
 

@@ -1,4 +1,4 @@
-use crate::json;
+use crate::{MIN_ULTRAWIDE_RATIO, json};
 use serde::Deserialize;
 
 #[derive(Clone, Default, Deserialize, Debug, PartialEq)]
@@ -36,7 +36,7 @@ impl NixMonitor {
         let mut opts = vec![workspace.to_string()];
 
         let is_vertical = self.transform % 2 == 1;
-        let is_ultrawide = f64::from(self.width) / f64::from(self.height) > 21.0 / 9.0;
+        let is_ultrawide = f64::from(self.width) / f64::from(self.height) > MIN_ULTRAWIDE_RATIO;
 
         let orientation = format!(
             "layoutopt:{prefix}orientation:{orientation}",

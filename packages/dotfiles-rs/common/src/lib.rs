@@ -14,6 +14,8 @@ pub mod swww;
 pub mod wallpaper;
 pub mod wallust;
 
+pub const MIN_ULTRAWIDE_RATIO: f64 = (21.0_f64 / 9.0).min(3440.0 / 1440.0).min(3840.0 / 1600.0);
+
 pub fn full_path<P>(p: P) -> PathBuf
 where
     P: AsRef<Path> + std::fmt::Debug,

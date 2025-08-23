@@ -70,6 +70,8 @@ fn main() -> std::io::Result<()> {
 
     // write yt.txt, removing already downloaded files
     if use_yt_txt {
+        // re-read the archive file to remove any files that were just downloaded
+        let already_downloaded = downloaded_files(&archive_path);
         lines.retain(|line| !already_downloaded.iter().any(|yt_id| line.contains(yt_id)));
 
         // trim trailing lines
@@ -77,7 +79,6 @@ fn main() -> std::io::Result<()> {
             lines.pop();
         }
 
-        // write to yt.txt
         let mut file = File::create(full_path("~/Desktop/yt.txt"))?;
         for line in lines {
             writeln!(file, "{line}")?;

@@ -3,6 +3,8 @@ use niri_ipc::{
     Action, Output, Request, Response, SizeChange::SetProportion, Window, Workspace, socket::Socket,
 };
 
+use crate::MIN_ULTRAWIDE_RATIO;
+
 pub trait WindowExt {
     fn col(&self) -> Option<usize>;
 
@@ -31,7 +33,8 @@ pub trait MonitorExt {
     }
 
     fn is_ultrawide(&self) -> bool {
-        self.aspect_ratio().is_some_and(|ratio| ratio >= 21.0 / 9.0)
+        self.aspect_ratio()
+            .is_some_and(|ratio| ratio >= MIN_ULTRAWIDE_RATIO)
     }
 
     fn is_fullscreen_window(&self, win: &Window) -> bool {
@@ -176,15 +179,26 @@ pub fn resize_workspace<Windows, Workspaces>(
     Windows: IntoIterator<Item = Window>,
     Workspaces: IntoIterator<Item = Workspace>,
 {
+    let mut has_floating = false;
     let mut wksp_windows = windows
         .into_iter()
         .filter(|win| win.workspace_id == Some(workspace_id))
         // don't include floating windows
-        .filter(|win| !win.is_floating)
+        .filter(|win| {
+            if win.is_floating {
+                has_floating = true;
+            }
+            !win.is_floating
+        })
         // the windows might not be in the correct order
         .sorted_by_key(|win| win.layout.pos_in_scrolling_layout)
         .filter(|win| win.layout.pos_in_scrolling_layout.is_some())
         .collect_vec();
+
+    // don't do anything if there are floating windows (e.g. save dialogs etc)
+    if has_floating {
+        return;
+    }
 
     // check if vertical monitor
     let mut socket = Socket::connect().expect("failed to connect to niri socket");

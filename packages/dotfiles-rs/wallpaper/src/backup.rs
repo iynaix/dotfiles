@@ -4,7 +4,7 @@ use execute::Execute;
 use std::{path::Path, process::Stdio};
 
 pub fn backup(args: BackupArgs) {
-    let target = args.target.unwrap_or_else(|| full_path("/media/6TBRED"));
+    let target = args.target.unwrap_or_else(|| full_path("/media/HGST10"));
 
     execute::command_args!(
         "rsync",
