@@ -21,6 +21,7 @@ pub fn metadata(args: MetadataArgs) {
     let meta = Metadata::new_from_path(&image).expect("could not init new metadata");
 
     let mut crops = Vec::new();
+    let mut scale = 1;
     let mut wallust = String::new();
     let mut faces = String::new();
 
@@ -30,6 +31,13 @@ pub fn metadata(args: MetadataArgs) {
                 wallust = meta
                     .get_tag_string(&tag)
                     .expect("could not get wallust tag");
+            }
+            "Xmp.wallfacer.scale" => {
+                scale = meta
+                    .get_tag_string(&tag)
+                    .expect("could not get scale tag")
+                    .parse()
+                    .unwrap_or_default();
             }
             "Xmp.wallfacer.faces" => {
                 faces = meta
@@ -68,5 +76,6 @@ pub fn metadata(args: MetadataArgs) {
     for (aspect, geom) in crops {
         print_kv(&format!("    {aspect}"), &geom);
     }
+    println!("Scale: {scale}");
     print_kv("Wallust", &wallust);
 }

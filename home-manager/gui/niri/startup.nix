@@ -49,16 +49,7 @@ mkIf (config.custom.wm == "niri") {
       # focus default workspace for each monitor
       {
         spawn-at-startup = mkAfter (
-          [
-            # resize the browsers to be correctly sized
-            {
-              command = [
-                (getExe' config.custom.dotfiles.package "niri-resize-workspace")
-                "1"
-              ];
-            }
-          ]
-          ++ map (mon: {
+          map (mon: {
             command = [
               "niri"
               "msg"

@@ -17,6 +17,7 @@ let
     mkEnableOption
     mkOption
     mod
+    optionalString
     ;
   inherit (lib.types)
     attrs
@@ -182,16 +183,20 @@ in
           {
             app-id = "brave-browser";
             spawn = [
-              (getExe config.programs.chromium.package)
-              "--incognito"
-            ];
-            workspace = 1;
-          }
-          {
-            app-id = "brave-browser";
-            spawn = [
-              (getExe config.programs.chromium.package)
-              "--profile-directory=Default"
+              (getExe (
+                pkgs.writeShellApplication {
+                  name = "init-brave";
+                  runtimeInputs = [
+                    config.programs.chromium.package
+                    config.custom.dotfiles.package
+                  ];
+                  text = ''
+                    brave --profile-directory=Default &
+                    sleep 1; brave --incognito &
+                    ${optionalString (config.custom.wm == "niri") "sleep 5; niri-resize-workspace 1"}
+                  '';
+                }
+              ))
             ];
             workspace = 1;
           }
