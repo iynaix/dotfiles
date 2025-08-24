@@ -234,11 +234,6 @@ in
             text = toJSON cfg.config;
             target = "${config.xdg.configHome}/waybar/config.jsonc";
           };
-          # second waybar instance to be created when viewing the overview
-          "waybar-overview.jsonc" = mkIf (config.custom.wm == "niri") {
-            text = toJSON (cfg.config // { mode = "overlay"; });
-            target = "${config.xdg.configHome}/waybar/config-overview.jsonc";
-          };
           "waybar.css" =
             let
               margin = "12px";

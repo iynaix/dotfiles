@@ -105,9 +105,16 @@ pub fn show_history() {
             .map(|p| p.display().to_string())
             .collect_vec();
 
-        execute::command_args!("pqiv", "--window-title", niri_window_title())
-            .args(history)
-            .execute()
-            .expect("failed to execute pqiv");
+        execute::command_args!(
+            "pqiv",
+            // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
+            "--bind-key",
+            "f { nop() }",
+            "--window-title",
+            niri_window_title()
+        )
+        .args(history)
+        .execute()
+        .expect("failed to execute pqiv");
     }
 }

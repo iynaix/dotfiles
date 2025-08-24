@@ -1,5 +1,5 @@
 use common::{
-    CommandUtf8, full_path, is_waybar_hidden,
+    CommandUtf8, is_waybar_hidden,
     niri::{MonitorExt, WindowExt, resize_workspace},
     nixjson::{NixJson, NixMonitor},
     wallpaper,
@@ -12,7 +12,7 @@ use niri_ipc::{
     socket::Socket,
     state::{EventStreamState, EventStreamStatePart},
 };
-use std::{collections::HashMap, process::Stdio};
+use std::collections::{HashMap, HashSet};
 
 const TOTAL_WORKSPACES: usize = 10;
 
@@ -198,11 +198,7 @@ fn waybar_main_pid() -> Option<String> {
         .cloned()
 }
 
-fn handle_overview_changed(
-    is_open: bool,
-    waybar_initial_hidden: &mut bool,
-    waybar_overview_pid: &mut Option<u32>,
-) {
+fn handle_overview_changed(is_open: bool, waybar_initial_hidden: &mut bool) {
     let waybar_hidden = is_waybar_hidden();
 
     // get the PID of the main waybar instance via systemd
@@ -218,29 +214,7 @@ fn handle_overview_changed(
                     .expect("unable to toggle waybar");
             }
         }
-
-        // launch new waybar for the overview
-        #[allow(clippy::zombie_processes)]
-        let waybar_pid = execute::command_args!(
-            "waybar",
-            "--config",
-            full_path("~/.config/waybar/config-overview.jsonc")
-        )
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .spawn()
-        .expect("unable to launch waybar overview");
-
-        *waybar_overview_pid = Some(waybar_pid.id());
     } else {
-        // kill the overview waybar
-        if let Some(pid) = waybar_overview_pid {
-            execute::command_args!("kill", pid.to_string())
-                .execute()
-                .expect("unable to kill waybar-overview");
-        }
-        *waybar_overview_pid = None;
-
         // show waybar if needed
         if !*waybar_initial_hidden {
             execute::command_args!("pkill", "-SIGUSR1", ".waybar-wrapped")
@@ -263,8 +237,21 @@ fn resize_workspace_from_state(
     );
 }
 
-fn handle_window_closed(state: &EventStreamState) {
+fn handle_window_closed(state: &EventStreamState, prev_windows: &HashMap<u64, Window>) {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
+
+    // figure out which window was closed
+    let prev_ids: HashSet<_> = prev_windows.keys().collect();
+    let curr_ids: HashSet<_> = state.windows.windows.keys().collect();
+    let prev_win = prev_ids
+        .difference(&curr_ids)
+        .next()
+        .and_then(|id| prev_windows.get(id));
+
+    // closing a floating window, ignore
+    if prev_win.is_some_and(|win| win.is_floating) {
+        return;
+    }
 
     // get current workspace
     let Ok(Response::FocusedOutput(Some(focused_output))) = socket
@@ -435,7 +422,6 @@ fn main() {
 
     // track overview waybar pid and initial hidden state when opened
     let mut waybar_initial_hidden = false;
-    let mut waybar_overview_pid: Option<u32> = None;
 
     if matches!(reply, Ok(Response::Handled)) {
         let mut state = EventStreamState::default();
@@ -462,17 +448,13 @@ fn main() {
                                 continue;
                             }
 
-                            handle_overview_changed(
-                                is_open,
-                                &mut waybar_initial_hidden,
-                                &mut waybar_overview_pid,
-                            );
+                            handle_overview_changed(is_open, &mut waybar_initial_hidden);
                         }
                         Event::WindowOpenedOrChanged { window } => {
                             handle_window_opened_or_changed(&window, &prev_windows, &state);
                         }
                         Event::WindowClosed { id: _ } => {
-                            handle_window_closed(&state);
+                            handle_window_closed(&state, &prev_windows);
                         }
                         Event::WindowLayoutsChanged { changes } => {
                             handle_window_layouts_changed(&changes, &state, &prev_windows);
