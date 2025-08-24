@@ -1,7 +1,10 @@
 {
+  callPackage,
   path-of-building,
-  source,
 }:
+let
+  source = (callPackage ./generated.nix { }).path-of-building;
+in
 path-of-building.overrideAttrs {
   inherit (source) version;
   __intentionallyOverridingVersion = true;

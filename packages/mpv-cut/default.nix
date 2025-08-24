@@ -1,9 +1,12 @@
 {
   lib,
-  buildLua,
-  source,
+  callPackage,
+  mpvScripts,
 }:
-buildLua (
+let
+  source = (callPackage ./generated.nix { }).mpv-cut;
+in
+mpvScripts.buildLua (
   source
   // {
     version = "0-unstable-${source.date}";

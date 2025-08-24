@@ -1,8 +1,11 @@
 {
   lib,
+  callPackage,
   stdenvNoCC,
-  source,
 }:
+let
+  source = (callPackage ./generated.nix { }).rofi-themes;
+in
 stdenvNoCC.mkDerivation (
   source
   // {

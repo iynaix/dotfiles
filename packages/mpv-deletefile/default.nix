@@ -1,9 +1,13 @@
 {
   lib,
-  buildLua,
-  source,
+  callPackage,
+  mpvScripts,
 }:
-buildLua (
+
+let
+  source = (callPackage ./generated.nix { }).mpv-deletefile;
+in
+mpvScripts.buildLua (
   source
   // {
     version = "0-unstable-${source.date}";
