@@ -15,13 +15,13 @@ workspace = true
 [dependencies]
 niri-ipc = { git = "https://github.com/YaLTeR/niri.git" }
 rayon = "1.11.0"
-regex = "1.11.1"
+regex = "1.11.2"
 rexiv2 = "0.10.0"
 serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.142"
+serde_json = "1.0.143"
 chrono = "0.4.41"
 csv = "1.3.1"
-clap = { version = "4.5.45", features = ["derive", "string"] }
+clap = { version = "4.5.46", features = ["derive", "string"] }
 clap_complete = { version = "4.5.57", features = ["unstable-dynamic"] }
 dirs = "6.0.0"
 execute = "0.2.13"

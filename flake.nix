@@ -95,9 +95,9 @@
             };
             # create VMs for each host configuration, build using
             # nixos-rebuild build-vm --flake .#desktop-vm
-            desktop-vm = mkVm "x86_64-linux" "desktop" { isVm = true; };
-            framework-vm = mkVm "x86_64-linux" "framework" { isVm = true; };
-            xps-vm = mkVm "x86_64-linux" "xps" { isVm = true; };
+            desktop-vm = mkVm "desktop" { isVm = true; };
+            framework-vm = mkVm "framework" { isVm = true; };
+            xps-vm = mkVm "xps" { isVm = true; };
           }
           // (import ./hosts/iso { inherit inputs self; });
 

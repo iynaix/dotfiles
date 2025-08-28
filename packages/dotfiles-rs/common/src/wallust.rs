@@ -181,13 +181,14 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     ];
 
     // add blur settings if enabled, has to be done here as niri-flake cannot be extended :(
-    if Some(true) == NixJson::new().niri_blur {
-        if let Ok(content) = std::fs::read_to_string(&config_path) {
-            // add the blur settings if they're not already there
-            if !content.contains("blur {") {
-                replacements.push((
-                    "always-center-single-column",
-                    r"
+    if Some(true) == NixJson::new().niri_blur
+        && let Ok(content) = std::fs::read_to_string(&config_path)
+    {
+        // add the blur settings if they're not already there
+        if !content.contains("blur {") {
+            replacements.push((
+                "always-center-single-column",
+                r"
     always-center-single-column
 
     blur {
@@ -196,8 +197,7 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
         radius 2.0
     }
     ",
-                ));
-            }
+            ));
         }
     }
 

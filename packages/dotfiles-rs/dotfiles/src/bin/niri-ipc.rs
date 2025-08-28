@@ -12,9 +12,43 @@ use niri_ipc::{
     socket::Socket,
     state::{EventStreamState, EventStreamStatePart},
 };
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    time::{Duration, SystemTime},
+};
 
 const TOTAL_WORKSPACES: usize = 10;
+
+fn debounce(interval: Duration, debounce_fn: impl FnOnce()) {
+    let lock_file = dirs::runtime_dir()
+        .expect("unable to get runtime dir")
+        .join("wallpaper.lock");
+
+    if lock_file.exists() {
+        let metadata =
+            std::fs::metadata(&lock_file).expect("unable to get wallpaper.lock metadata");
+        let last_run_time = metadata
+            .modified()
+            .expect("unable to get wallpaper.lock mtime");
+        let current_time = SystemTime::now();
+
+        if let Ok(elapsed) = current_time.duration_since(last_run_time)
+            && elapsed < interval
+        {
+            let wait_time = interval.saturating_sub(elapsed);
+            eprintln!(
+                "Script was run too recently. Please wait {} seconds.",
+                wait_time.as_secs_f64()
+            );
+            std::process::exit(1);
+        }
+    }
+
+    // update lock file with current time
+    std::fs::File::create(lock_file).expect("unable to create wallpaper.lock");
+
+    debounce_fn();
+}
 
 fn focus_workspaces(nix_info_monitors: &[NixMonitor]) {
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
@@ -186,7 +220,8 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         renumber_workspaces(&by_monitor);
 
         // reload the wallpaper (which also reloads waybar)
-        wallpaper::reload(None);
+        // only run at most once per 3s
+        debounce(Duration::from_secs(3), || wallpaper::reload(None));
     }
 }
 
@@ -207,12 +242,10 @@ fn handle_overview_changed(is_open: bool, waybar_initial_hidden: &mut bool) {
         *waybar_initial_hidden = waybar_hidden;
 
         // hide main waybar if needed
-        if !waybar_hidden {
-            if let Some(waybar_pid) = waybar_main_pid() {
-                execute::command_args!("kill", "-SIGUSR1", waybar_pid)
-                    .execute()
-                    .expect("unable to toggle waybar");
-            }
+        if !waybar_hidden && let Some(waybar_pid) = waybar_main_pid() {
+            execute::command_args!("kill", "-SIGUSR1", waybar_pid)
+                .execute()
+                .expect("unable to toggle waybar");
         }
     } else {
         // show waybar if needed
@@ -393,16 +426,16 @@ fn handle_window_opened_or_changed(
     } else {
         // check for window moving to another workspace
         for (id, prev_win) in prev_windows {
-            if let Some(curr_win) = curr_windows.get(id) {
-                if curr_win.workspace_id != prev_win.workspace_id {
-                    if let Some(wksp_id) = prev_win.workspace_id {
-                        resize_workspace_from_state(wksp_id, None, state);
-                    }
-                    if let Some(wksp_id) = curr_win.workspace_id {
-                        resize_workspace_from_state(wksp_id, Some(window), state);
-                    }
-                    break;
+            if let Some(curr_win) = curr_windows.get(id)
+                && curr_win.workspace_id != prev_win.workspace_id
+            {
+                if let Some(wksp_id) = prev_win.workspace_id {
+                    resize_workspace_from_state(wksp_id, None, state);
                 }
+                if let Some(wksp_id) = curr_win.workspace_id {
+                    resize_workspace_from_state(wksp_id, Some(window), state);
+                }
+                break;
             }
         }
     }

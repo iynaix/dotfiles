@@ -27,16 +27,14 @@ where
         .flatten()
         .filter_map(|entry| {
             let path = entry.path();
-            if path.is_file() {
-                if let Some(ext) = path.extension() {
-                    return matches!(ext.to_str(), Some("jpg" | "jpeg" | "png" | "webp")).then(
-                        || {
-                            path.to_str()
-                                .expect("could not convert path to str")
-                                .to_string()
-                        },
-                    );
-                }
+            if path.is_file()
+                && let Some(ext) = path.extension()
+            {
+                return matches!(ext.to_str(), Some("jpg" | "jpeg" | "png" | "webp")).then(|| {
+                    path.to_str()
+                        .expect("could not convert path to str")
+                        .to_string()
+                });
             }
 
             None

@@ -22,6 +22,7 @@ let
 in
 {
   options.custom = {
+    subliminal.enable = mkEnableOption "subliminal";
     mpv-anime.enable = mkEnableOption "mpv-anime" // {
       default = true;
     };
@@ -143,7 +144,7 @@ in
     }
 
     # subliminal settings
-    {
+    (mkIf config.custom.subliminal.enable {
       home = {
         packages = with pkgs; [
           python3Packages.subliminal
@@ -153,7 +154,7 @@ in
           subs = "subliminal download -l 'en' -l 'eng' -s";
         };
       };
-    }
+    })
 
     # modernz settings
     {

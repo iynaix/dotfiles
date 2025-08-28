@@ -6,7 +6,6 @@
   isNixOS,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -256,22 +255,23 @@ in
             ];
             workspace = 10;
           }
+          /*
+            # fix gparted "cannot open display: :0" error
+            {
+              spawn = [
+                (getExe pkgs.xorg.xhost)
+                "+local:${user}"
+              ];
+            }
 
-          # fix gparted "cannot open display: :0" error
-          {
-            spawn = [
-              (getExe pkgs.xorg.xhost)
-              "+local:${user}"
-            ];
-          }
-
-          # fix Authorization required, but no authorization protocol specified error
-          {
-            spawn = [
-              (getExe pkgs.xorg.xhost)
-              "si:localuser:root"
-            ];
-          }
+            # fix Authorization required, but no authorization protocol specified error
+            {
+              spawn = [
+                (getExe pkgs.xorg.xhost)
+                "si:localuser:root"
+              ];
+            }
+          */
         ];
 
       shell.packages = {

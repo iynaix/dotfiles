@@ -1,9 +1,8 @@
-3d8f954e - Increase maximum spread for shadow rule (6 minutes ago) <Lin Xianyi>
-diff --git a/niri-config/src/lib.rs b/niri-config/src/lib.rs
-index a91a904c..c142af8d 100644
---- a/niri-config/src/lib.rs
-+++ b/niri-config/src/lib.rs
-@@ -775,7 +775,7 @@ pub struct Shadow {
+diff --git a/niri-config/src/appearance.rs b/niri-config/src/appearance.rs
+index a50e6a55..05124214 100644
+--- a/niri-config/src/appearance.rs
++++ b/niri-config/src/appearance.rs
+@@ -330,7 +330,7 @@ pub struct Shadow {
      #[knuffel(child, unwrap(argument), default = Self::default().softness)]
      pub softness: FloatOrInt<0, 1024>,
      #[knuffel(child, unwrap(argument), default = Self::default().spread)]
@@ -12,7 +11,7 @@ index a91a904c..c142af8d 100644
      #[knuffel(child, unwrap(argument), default = Self::default().draw_behind_window)]
      pub draw_behind_window: bool,
      #[knuffel(child, default = Self::default().color)]
-@@ -818,7 +818,7 @@ pub struct WorkspaceShadow {
+@@ -373,7 +373,7 @@ pub struct WorkspaceShadow {
      #[knuffel(child, unwrap(argument), default = Self::default().softness)]
      pub softness: FloatOrInt<0, 1024>,
      #[knuffel(child, unwrap(argument), default = Self::default().spread)]
@@ -21,7 +20,7 @@ index a91a904c..c142af8d 100644
      #[knuffel(child, default = Self::default().color)]
      pub color: Color,
  }
-@@ -1602,7 +1602,7 @@ pub struct ShadowRule {
+@@ -538,7 +538,7 @@ pub struct ShadowRule {
      #[knuffel(child, unwrap(argument))]
      pub softness: Option<FloatOrInt<0, 1024>>,
      #[knuffel(child, unwrap(argument))]

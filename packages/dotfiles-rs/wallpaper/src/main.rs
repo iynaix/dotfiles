@@ -133,54 +133,52 @@ fn main() {
     let is_reload = args.reload || args.command == Some(WallpaperSubcommand::Reload);
 
     // handle subcommand
-    if !is_reload {
-        if let Some(command) = args.command {
-            match command {
-                WallpaperSubcommand::Generate(args) => {
-                    let mut cmd = WallpaperArgs::command();
-                    match &args.shell {
-                        ShellCompletion::Bash => {
-                            generate(Shell::Bash, &mut cmd, "wallpaper", &mut std::io::stdout());
-                        }
-                        ShellCompletion::Zsh => {
-                            generate(Shell::Zsh, &mut cmd, "wallpaper", &mut std::io::stdout());
-                        }
-                        ShellCompletion::Fish => {
-                            generate(Shell::Fish, &mut cmd, "wallpaper", &mut std::io::stdout());
-                        }
+    if !is_reload && let Some(command) = args.command {
+        match command {
+            WallpaperSubcommand::Generate(args) => {
+                let mut cmd = WallpaperArgs::command();
+                match &args.shell {
+                    ShellCompletion::Bash => {
+                        generate(Shell::Bash, &mut cmd, "wallpaper", &mut std::io::stdout());
+                    }
+                    ShellCompletion::Zsh => {
+                        generate(Shell::Zsh, &mut cmd, "wallpaper", &mut std::io::stdout());
+                    }
+                    ShellCompletion::Fish => {
+                        generate(Shell::Fish, &mut cmd, "wallpaper", &mut std::io::stdout());
                     }
                 }
-                WallpaperSubcommand::Current => println!(
-                    "{}",
-                    wallpaper::current().unwrap_or_else(|| {
-                        eprintln!("Failed to get current wallpaper");
-                        std::process::exit(1)
-                    })
-                ),
-                WallpaperSubcommand::Rm => {
-                    wallpaper_rm(
-                        &get_random_wallpaper(args.image_or_dir.as_ref()),
-                        args.transition.as_deref(),
-                    );
-                }
-                WallpaperSubcommand::History => pqiv::show_history(),
-                WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
-                #[cfg(feature = "dedupe")]
-                WallpaperSubcommand::Dedupe => dedupe::dedupe(),
-                #[cfg(feature = "wallfacer")]
-                WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
-                #[cfg(feature = "wallfacer")]
-                WallpaperSubcommand::Add(args) => wallfacer::add(args),
-                #[cfg(feature = "rclip")]
-                WallpaperSubcommand::Search(args) => search::search(args),
-                WallpaperSubcommand::Backup(args) => backup::backup(args),
-                WallpaperSubcommand::Remote(args) => backup::remote(args),
-                WallpaperSubcommand::Colorspace(args) => colorspace::toggle(args),
-                WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
-                WallpaperSubcommand::Reload => {} // handled later
             }
-            return;
+            WallpaperSubcommand::Current => println!(
+                "{}",
+                wallpaper::current().unwrap_or_else(|| {
+                    eprintln!("Failed to get current wallpaper");
+                    std::process::exit(1)
+                })
+            ),
+            WallpaperSubcommand::Rm => {
+                wallpaper_rm(
+                    &get_random_wallpaper(args.image_or_dir.as_ref()),
+                    args.transition.as_deref(),
+                );
+            }
+            WallpaperSubcommand::History => pqiv::show_history(),
+            WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
+            #[cfg(feature = "dedupe")]
+            WallpaperSubcommand::Dedupe => dedupe::dedupe(),
+            #[cfg(feature = "wallfacer")]
+            WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
+            #[cfg(feature = "wallfacer")]
+            WallpaperSubcommand::Add(args) => wallfacer::add(args),
+            #[cfg(feature = "rclip")]
+            WallpaperSubcommand::Search(args) => search::search(args),
+            WallpaperSubcommand::Backup(args) => backup::backup(args),
+            WallpaperSubcommand::Remote(args) => backup::remote(args),
+            WallpaperSubcommand::Colorspace(args) => colorspace::toggle(args),
+            WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
+            WallpaperSubcommand::Reload => {} // handled later
         }
+        return;
     }
 
     let wallpaper = if is_reload {

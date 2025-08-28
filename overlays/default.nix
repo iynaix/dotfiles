@@ -87,6 +87,14 @@ in
 
       # nsig keeps breaking, so use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
+
+      # TODO: remove once rclip is updated
+      rclip = prev.rclip.overrideAttrs (o: {
+        postPatch = (o.postPatch or "") + ''
+          substituteInPlace pyproject.toml \
+            --replace-fail "^2.24.0" "^3.0.0"
+        '';
+      });
     })
   ];
 }
