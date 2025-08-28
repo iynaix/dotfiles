@@ -9,7 +9,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkIf;
   qtctConf = {
     Appearance = {
       custom_palette = false;
@@ -21,13 +21,7 @@ let
   defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
 in
 {
-  options.custom = {
-    qtStyleFix = mkEnableOption "fix styling for qt applications" // {
-      default = config.custom.wm != "tty";
-    };
-  };
-
-  config = mkIf (config.custom.qtStyleFix && config.custom.wm != "tty") {
+  config = mkIf (config.custom.wm != "tty") {
     qt = {
       enable = true;
       platformTheme.name = "qtct";

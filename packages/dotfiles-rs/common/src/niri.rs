@@ -158,7 +158,7 @@ fn handle_horizontal_monitor(
         .ok();
 
     // small sleep to allow first column to be focused
-    std::thread::sleep(std::time::Duration::from_millis(50));
+    std::thread::sleep(std::time::Duration::from_millis(100));
 
     if let Some(initial_window) = initial_window {
         socket

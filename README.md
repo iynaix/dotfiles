@@ -62,3 +62,14 @@ From the custom iso built via `nbuild-iso ISO_HOST`,
 ```sh
 iynaixos-recover
 ```
+
+## Adding a New Host
+NOTE: This can be done all within the live iso with a git clone but it's easier to do it on a system with a development environment already setup.
+
+Create a new directory in `hosts/` with the new hostname, in the same format as the other hosts.
+
+Boot into the live iso on the new system and run `nixos-generate-config --no-filesystems --show-hardware-config`.
+
+Copy the output onto a pastebin or similar, replacing `hosts/NEW_HOSTNAME/hardware.nix` with the pastebin contents, preferably on the other system.
+
+Push the updated config to git, then proceed with installation using the instructions from [How to Install](#how-to-install) above.

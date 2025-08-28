@@ -213,6 +213,10 @@ in
 
           animations = { };
 
+          gestures = {
+            hot-corners.enable = false;
+          };
+
           cursor = {
             theme = config.home.pointerCursor.name;
             inherit (config.home.pointerCursor) size;

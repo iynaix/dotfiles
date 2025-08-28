@@ -21,7 +21,6 @@ _: {
     ];
 
     pathofbuilding.enable = false;
-    qtStyleFix = false;
     wm = "plasma";
   };
 }

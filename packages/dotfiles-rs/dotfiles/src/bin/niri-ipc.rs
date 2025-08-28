@@ -220,8 +220,8 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         renumber_workspaces(&by_monitor);
 
         // reload the wallpaper (which also reloads waybar)
-        // only run at most once per 3s
-        debounce(Duration::from_secs(3), || wallpaper::reload(None));
+        // only run at most once per 5s
+        debounce(Duration::from_secs(5), || wallpaper::reload(None));
     }
 }
 
