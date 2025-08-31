@@ -151,7 +151,7 @@ mkMerge [
                 "r"
               ];
               run = # sh
-                ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
+                ''shell -- ya emit cd "$(git rev-parse --show-toplevel)"'';
               desc = "Cd to root of current git repo";
             }
           ]

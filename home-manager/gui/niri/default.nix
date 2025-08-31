@@ -1,7 +1,6 @@
 {
   config,
   host,
-  inputs,
   isVm,
   lib,
   libCustom,
@@ -51,7 +50,8 @@ in
     # 6 7 3
     programs.niri = {
       enable = true;
-      package = inputs.niri.packages.${pkgs.system}.niri-unstable.overrideAttrs (o: {
+      # package = inputs.niri.packages.${pkgs.system}.niri-unstable.overrideAttrs (o: {
+      package = pkgs.niri.overrideAttrs (o: {
         patches =
           (o.patches or [ ])
           ++ optionals config.custom.niri.blur.enable [
@@ -266,7 +266,7 @@ in
 
           xwayland-satellite = {
             enable = true;
-            path = getExe inputs.niri.packages.${pkgs.system}.xwayland-satellite-unstable;
+            path = getExe pkgs.xwayland-satellite;
           };
         }
 

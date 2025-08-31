@@ -214,15 +214,15 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
         .map(|(mon, wksps)| (mon, wksps.cloned().collect_vec()))
         .collect();
 
-    if has_unknown_monitors {
-        focus_workspaces(nix_info_monitors);
-    } else {
+    if !has_unknown_monitors {
         renumber_workspaces(&by_monitor);
 
         // reload the wallpaper (which also reloads waybar)
         // only run at most once per 5s
         debounce(Duration::from_secs(5), || wallpaper::reload(None));
     }
+
+    focus_workspaces(nix_info_monitors);
 }
 
 fn waybar_main_pid() -> Option<String> {
@@ -434,6 +434,14 @@ fn handle_window_opened_or_changed(
                 }
                 if let Some(wksp_id) = curr_win.workspace_id {
                     resize_workspace_from_state(wksp_id, Some(window), state);
+
+                    std::thread::sleep(std::time::Duration::from_millis(100));
+
+                    let mut socket = Socket::connect().expect("failed to connect to niri socket");
+                    socket
+                        .send(Request::Action(Action::FocusWindow { id: window.id }))
+                        .expect("failed to send FocusWindow")
+                        .ok();
                 }
                 break;
             }

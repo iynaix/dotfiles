@@ -172,7 +172,7 @@ pub enum WallpaperSubcommand {
 
     #[command(
         name = "colorspace",
-        visible_aliases = ["toggle", "cycle"],
+        visible_aliases = ["cs", "toggle", "cycle"],
         about = "Toggles and saves the colorspace for wallust"
     )]
     Colorspace(ColorspaceArgs),
