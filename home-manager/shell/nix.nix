@@ -37,6 +37,13 @@ in
       flake = dots;
     };
     nix-index.enable = true;
+
+    nix-init = {
+      enable = true;
+      settings = {
+        maintainers = [ "iynaix" ];
+      };
+    };
   };
 
   custom.shell.packages = {

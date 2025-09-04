@@ -429,6 +429,9 @@ fn handle_window_opened_or_changed(
             if let Some(curr_win) = curr_windows.get(id)
                 && curr_win.workspace_id != prev_win.workspace_id
             {
+                let mut socket = Socket::connect().expect("failed to connect to niri socket");
+
+                // less screen flickering
                 if let Some(wksp_id) = prev_win.workspace_id {
                     resize_workspace_from_state(wksp_id, None, state);
                 }
@@ -437,7 +440,6 @@ fn handle_window_opened_or_changed(
 
                     std::thread::sleep(std::time::Duration::from_millis(100));
 
-                    let mut socket = Socket::connect().expect("failed to connect to niri socket");
                     socket
                         .send(Request::Action(Action::FocusWindow { id: window.id }))
                         .expect("failed to send FocusWindow")

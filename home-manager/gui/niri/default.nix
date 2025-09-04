@@ -225,6 +225,11 @@ in
           # match focal format
           screenshot-path = "${config.xdg.userDirs.pictures}/Screenshots/%Y-%m-%dT%H:%M:%S%z.png";
 
+          # allows jumping to a window when clicking on notifications
+          debug = {
+            honor-xdg-activation-with-invalid-serial = { };
+          };
+
           window-rules = [
             # rounded corners for all windows
             {
@@ -333,9 +338,7 @@ in
     xdg.portal = {
       enable = true;
       config = {
-        common.default = [
-          "gnome"
-        ];
+        common.default = [ "gnome" ];
         niri = {
           default = "gnome";
           "org.freedesktop.impl.portal.FileChooser" = "gtk";

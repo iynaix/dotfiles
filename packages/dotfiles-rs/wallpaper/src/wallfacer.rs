@@ -1,6 +1,5 @@
 use crate::cli::{AddArgs, EditArgs};
 use common::{full_path, wallpaper};
-use execute::Execute;
 use std::{
     path::PathBuf,
     process::{Command, Stdio},
@@ -49,12 +48,12 @@ impl Wallfacer {
         self
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> std::process::Child {
         self.command
             .stdout(Stdio::inherit())
             .stderr(Stdio::inherit())
-            .execute()
-            .expect("failed to run wallfacer");
+            .spawn()
+            .expect("could not spawn wallfacer")
     }
 }
 
@@ -66,7 +65,12 @@ pub fn edit(args: EditArgs) {
     });
 
     let wallfacer = Wallfacer::new();
-    wallfacer.arg(&image).run();
+    wallfacer
+        .arg("gui")
+        .arg(&image)
+        .run()
+        .wait()
+        .expect("wallfacer gui failed");
 
     // reload the wallpaper
     wallpaper::set(&image, None);
@@ -92,5 +96,7 @@ pub fn add(args: AddArgs) {
         .arg("webp")
         .args(rest_args)
         .arg(image_or_dir)
-        .run();
+        .run()
+        .wait()
+        .expect("wallfacer add failed");
 }

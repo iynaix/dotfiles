@@ -24,27 +24,23 @@ fn downloaded_files(archive_path: &PathBuf) -> Vec<String> {
         .collect()
 }
 
+fn read_yt_txt() -> Vec<String> {
+    let yt_txt = full_path("~/Desktop/yt.txt");
+
+    let file = File::open(&yt_txt).expect("unable to open yt.txt");
+    BufReader::new(file).lines().map_while(Result::ok).collect()
+}
+
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().skip(1).collect(); // skip program name
     // has positional arguments, urls / file is provided
     let use_yt_txt = args.iter().all(|arg| arg.starts_with('-'));
 
-    let mut urls = HashSet::new();
-    let mut lines = Vec::new();
-
-    if use_yt_txt {
-        let yt_txt = full_path("~/Desktop/yt.txt");
-
-        let file = File::open(&yt_txt)?;
-        let reader = BufReader::new(file);
-
-        for line in reader.lines().map_while(Result::ok) {
-            lines.push(line.clone());
-            if line.starts_with("http") {
-                urls.insert(line);
-            }
-        }
-    }
+    let lines = read_yt_txt();
+    let mut urls: HashSet<_> = lines
+        .iter()
+        .filter(|line| line.starts_with("http"))
+        .collect();
 
     // construct yt-dlp command
     let mut cmd = Command::new("yt-dlp");
@@ -70,6 +66,9 @@ fn main() -> std::io::Result<()> {
 
     // write yt.txt, removing already downloaded files
     if use_yt_txt {
+        // re-read yt.txt in case it was modified while downloading
+        let mut lines = read_yt_txt();
+
         // re-read the archive file to remove any files that were just downloaded
         let already_downloaded = downloaded_files(&archive_path);
         lines.retain(|line| !already_downloaded.iter().any(|yt_id| line.contains(yt_id)));

@@ -129,13 +129,13 @@ in
             + libCustom.direnvCargoRun {
               dir = "/persist${config.home.homeDirectory}/projects/wallfacer";
             };
-          # bash completion isn't helpful as there are 1000s of images
+          # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
           fishCompletion = # fish
             ''
-              function _wallfacer
+              function _wallfacer_gui
                 find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
               end
-              complete -c wallfacer -f -a '(_wallfacer)'
+              complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
             '';
         };
       };
@@ -197,7 +197,7 @@ in
         };
       };
 
-      home.packages = [ (pkgs.nomacs.override { libsForQt5 = pkgs.kdePackages; }) ];
+      home.packages = [ pkgs.nomacs ];
 
       programs.pqiv.extraConfig = mkAfter ''
         c { command(nomacs $1) }

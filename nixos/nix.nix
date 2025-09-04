@@ -68,7 +68,6 @@ in
   environment = {
     # for nixlang / nixpkgs
     systemPackages = with pkgs; [
-      nix-init
       nix-update
       nixfmt
     ];

@@ -145,7 +145,10 @@ in
       };
 
       custom = {
-        persist.home.directories = [ ".config/transmission-daemon" ];
+        persist.home.directories = [
+          ".config/transmission-daemon"
+          ".config/transmission-remote-gtk"
+        ];
 
         # process downloaded files
         shell.packages = {
