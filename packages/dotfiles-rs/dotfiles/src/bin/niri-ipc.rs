@@ -381,20 +381,19 @@ fn handle_window_layouts_changed(
             .max()
             .unwrap_or_default();
 
+        let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
+            continue;
+        };
+
+        let Some(mon) = monitors
+            .values()
+            .find(|mon| Some(mon.name.clone()) == wksp.output)
+        else {
+            continue;
+        };
+
         // check for coming out of fullscreen
         if prev_cols == curr_cols {
-            // find the workspace
-            let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
-                continue;
-            };
-
-            let Some(mon) = monitors
-                .values()
-                .find(|mon| Some(mon.name.clone()) == wksp.output)
-            else {
-                continue;
-            };
-
             if let Some((mon_w, mon_h)) = mon.dimensions() {
                 let (prev_w, prev_h) = prev_win.layout.window_size;
                 let (curr_w, curr_h) = curr_win.layout.window_size;
@@ -406,6 +405,11 @@ fn handle_window_layouts_changed(
         }
         // adding or removing a column
         else {
+            // adding a column, probably going into fullscreen or manually expelling a column
+            if curr_cols > prev_cols && mon.is_vertical() {
+                continue;
+            }
+
             resize_workspace_from_state(wksp_id, Some(curr_win), state);
         }
     }
@@ -431,14 +435,11 @@ fn handle_window_opened_or_changed(
             {
                 let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
-                // less screen flickering
                 if let Some(wksp_id) = prev_win.workspace_id {
                     resize_workspace_from_state(wksp_id, None, state);
                 }
                 if let Some(wksp_id) = curr_win.workspace_id {
                     resize_workspace_from_state(wksp_id, Some(window), state);
-
-                    std::thread::sleep(std::time::Duration::from_millis(100));
 
                     socket
                         .send(Request::Action(Action::FocusWindow { id: window.id }))

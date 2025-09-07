@@ -74,7 +74,8 @@ fn handle_single_window(socket: &mut Socket, win: &Window, mon: &Output) {
         // maximize-column toggles width, which can cause races where it is resized back to 50%
         // so set the width to 50% first
         socket
-            .send(Request::Action(Action::SetColumnWidth {
+            .send(Request::Action(Action::SetWindowWidth {
+                id: Some(win.id),
                 change: SetProportion(50.0),
             }))
             .ok();
@@ -137,15 +138,10 @@ fn handle_horizontal_monitor(
             continue;
         }
 
-        // focus first window in column
-        socket
-            .send(Request::Action(Action::FocusWindow { id: col[0].id }))
-            .expect("failed to send FocusWindow")
-            .ok();
-
         // set column ratio as percentage
         socket
-            .send(Request::Action(Action::SetColumnWidth {
+            .send(Request::Action(Action::SetWindowWidth {
+                id: Some(col[0].id),
                 change: SetProportion(target_ratio * 100.0),
             }))
             .ok();
@@ -158,7 +154,7 @@ fn handle_horizontal_monitor(
         .ok();
 
     // small sleep to allow first column to be focused
-    std::thread::sleep(std::time::Duration::from_millis(100));
+    std::thread::sleep(std::time::Duration::from_millis(50));
 
     if let Some(initial_window) = initial_window {
         socket

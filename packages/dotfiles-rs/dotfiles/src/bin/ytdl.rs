@@ -45,8 +45,20 @@ fn main() -> std::io::Result<()> {
     // construct yt-dlp command
     let mut cmd = Command::new("yt-dlp");
 
+    // write downloaded files to archive file
     let archive_path = full_path("/tmp/ytdl-archive.txt");
     cmd.arg("--download-archive").arg(&archive_path);
+
+    // download with embedded subs
+    cmd.args(&[
+        "--write-auto-sub",
+        "--embed-subs",
+        "--sub-lang",
+        "en,eng",
+        "--convert-subs",
+        "srt",
+    ]);
+
     for arg in &args {
         cmd.arg(arg);
     }

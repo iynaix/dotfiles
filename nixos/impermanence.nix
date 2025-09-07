@@ -129,7 +129,7 @@ in
               --exclude "/etc/{ssh,passwd,shadow}" \
               --exclude "*.timer" \
               --exclude "/var/lib/NetworkManager" \
-              --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
+              --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim,pre-commit,swww,wallust,fish,nvf}" \
               ${wallustExcludes}  --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
           '';
       };

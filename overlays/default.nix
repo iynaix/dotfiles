@@ -64,7 +64,7 @@ in
           _o:
           sources.swww
           // {
-            # creating an overlay for buildRustPackage overlay
+            # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
             # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
             cargoDeps = prev.rustPlatform.importCargoLock {
               lockFile = "${sources.swww.src}/Cargo.lock";

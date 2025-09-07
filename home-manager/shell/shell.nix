@@ -49,6 +49,7 @@ in
         c = "clear";
         cat = "bat";
         ccat = "command cat";
+        cp = "cp -ri";
         crate = "cargo";
         dots = "cd ${dots}";
         isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
