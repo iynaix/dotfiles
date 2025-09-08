@@ -1,7 +1,7 @@
 use crate::{
     CommandUtf8,
     colors::{NixColors, Rgb},
-    full_path, json, kill_wrapped_process,
+    full_path, kill_wrapped_process,
     wallpaper::WallInfo,
 };
 use core::panic;
@@ -11,32 +11,10 @@ use itertools::Itertools;
 use regex::Regex;
 use std::{collections::HashMap, path::Path};
 
-pub const CUSTOM_THEMES: [&str; 6] = [
-    "catppuccin-frappe",
-    "catppuccin-macchiato",
-    "catppuccin-mocha",
-    "decay-dark",
-    "night-owl",
-    "tokyo-night",
-];
-
 pub fn apply_theme(theme: &str) {
-    if CUSTOM_THEMES.contains(&theme) {
-        let colorscheme_file = full_path(format!("~/.config/wallust/themes/{theme}.json"));
-        execute::command_args!(
-            "wallust",
-            "cs",
-            colorscheme_file
-                .to_str()
-                .unwrap_or_else(|| panic!("invalid colorscheme file: {colorscheme_file:?}")),
-        )
+    execute::command_args!("wallust", "theme", &theme)
         .execute()
-        .unwrap_or_else(|_| panic!("failed to apply colorscheme {theme}"));
-    } else {
-        execute::command_args!("wallust", "theme", &theme)
-            .execute()
-            .unwrap_or_else(|_| panic!("failed to apply wallust theme {theme}"));
-    }
+        .unwrap_or_else(|_| panic!("failed to apply wallust theme {theme}"));
 }
 
 fn refresh_zathura() {
@@ -309,21 +287,23 @@ pub fn apply_colors() {
 
         set_gtk_and_icon_theme(&nixcolors, &accents[0]);
     } else {
-        #[derive(serde::Deserialize)]
-        struct Colorscheme {
-            colors: HashMap<String, Rgb>,
-        }
+        let idx = wallust_themes::COLS_KEY
+            .into_iter()
+            .position(|k| k == "Tokyo-Night")
+            .expect("failed to find Tokyo-Night");
 
-        let cs_path = full_path("~/.config/wallust/themes/catppuccin-mocha.json");
-        let cs: Colorscheme = json::load(&cs_path).unwrap_or_else(|_| {
-            panic!("unable to read colorscheme at {:?}", &cs_path);
-        });
+        let colors = wallust_themes::COLS_VALUE[idx]
+            .into_iter()
+            .enumerate()
+            .map(|(i, c)| (format!("color{i}"), Rgb::from_wallust_theme_color(c)))
+            .take(16)
+            .collect();
 
         #[cfg(feature = "hyprland")]
-        apply_hyprland_colors(&[], &cs.colors);
+        apply_hyprland_colors(&[], &colors);
 
         #[cfg(feature = "niri")]
-        apply_niri_colors(&[], &cs.colors);
+        apply_niri_colors(&[], &colors);
     }
 
     refresh_zathura();
@@ -373,19 +353,16 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
 
     // requires the single quotes to be GVariant compatible for dconf
     let gvariant = |v: &str| format!("'{v}'");
+    let gtk_theme = if variant == "Default" {
+        "Tokyonight-Dark-Compact".to_string()
+    } else {
+        format!("Tokyonight-{variant}-Dark-Compact")
+    };
 
-    let gtk_theme = format!("catppuccin-mocha-{variant}-compact");
     execute::command_args!("dconf", "write", "/org/gnome/desktop/interface/gtk-theme")
         .arg(gvariant(&gtk_theme))
         .execute()
         .expect("failed to apply gtk theme");
-
-    // update qt (kvantum) theme
-    let kvantum = full_path("~/.config/Kvantum/kvantum.kvconfig");
-    if kvantum.exists() {
-        let qt_theme = format!("catppuccin-mocha-{variant}");
-        replace_in_file(kvantum, vec![(r"catppuccin-mocha-.*", &qt_theme)]);
-    }
 
     // requires the single quotes to be GVariant compatible for dconf
     let icon_theme = format!("Tela-{variant}-dark");
@@ -434,7 +411,7 @@ pub fn set_waybar_colors(accent: &Rgb) {
         let cfg_file = full_path("~/.config/waybar/config.jsonc");
 
         let mut cfg: serde_json::Value =
-            json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
+            crate::json::load(&cfg_file).unwrap_or_else(|_| panic!("unable to read waybar config"));
 
         let monitors = NixJson::new().monitors;
         let active_workspaces: HashMap<_, _> = Monitors::get()
@@ -452,6 +429,6 @@ pub fn set_waybar_colors(accent: &Rgb) {
         cfg["hyprland/workspaces"]["persistent-workspaces"] = serde_json::to_value(new_wksps)
             .expect("failed to convert rearranged workspaces to json");
 
-        json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
+        crate::json::write(&cfg_file, &cfg).expect("failed to write updated waybar config");
     }
 }

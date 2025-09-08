@@ -85,7 +85,12 @@ in
       #   }
       # );
 
-      # nsig keeps breaking, so use updated version from github
+      # fix some ugly styling for nemo in tokyonight
+      tokyo-night-gtk = prev.tokyo-night-gtk.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [ ./tokyonight-style.patch ];
+      });
+
+      # youtube breaks yt-dlp frequently, use updated version from github
       yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
     })
   ];

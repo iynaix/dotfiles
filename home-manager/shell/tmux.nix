@@ -14,7 +14,7 @@
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
       yank
-      catppuccin
+      tokyo-night-tmux
     ];
 
     extraConfig = # tmux
@@ -44,14 +44,6 @@
         # Transparent tmux background
         set -g window-style "bg=terminal"
         set -g window-active-style "bg=terminal"
-
-        # Customize tmux catppuccin, needs to be done after plugin is loaded
-        set -g @catppuccin_status_background "none"
-        set -g status-right-length 100
-        set -g status-left-length 100
-        set -g status-left ""
-        set -g status-right "#{E:@catppuccin_status_application}"
-        set -ag status-right "#{E:@catppuccin_status_session}"
       '';
   };
 }

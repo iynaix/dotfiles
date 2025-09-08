@@ -1,0 +1,26 @@
+diff --git a/themes/src/sass/gtk/_common-3.0.scss b/themes/src/sass/gtk/_common-3.0.scss
+index e129fc18..7f9503fb 100644
+--- a/themes/src/sass/gtk/_common-3.0.scss
++++ b/themes/src/sass/gtk/_common-3.0.scss
+@@ -44,7 +44,7 @@
+
+ %selected_items_indicator {
+ 	color: on($indicator);
+-	background-color: $indicator;
++	background-color: $primary;
+ }
+
+ %linked {
+diff --git a/themes/src/sass/gtk/apps/_nemo.scss b/themes/src/sass/gtk/apps/_nemo.scss
+index 307c2eae..ee8ed0d8 100644
+--- a/themes/src/sass/gtk/apps/_nemo.scss
++++ b/themes/src/sass/gtk/apps/_nemo.scss
+@@ -93,7 +93,7 @@
+
+ 	// Inactive F3 pane shading
+ 	.nemo-inactive-pane .view:not(:selected) {
+-		background-color: $base-alt;
++		background-color: $grey-750; // better inactive pane color
+ 	}
+
+ 	// Rename box styling in the icon view.

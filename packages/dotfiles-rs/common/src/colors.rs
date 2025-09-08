@@ -20,6 +20,15 @@ pub struct Rgb {
 }
 
 impl Rgb {
+    /// from wallust theme colors
+    pub const fn from_wallust_theme_color(c: u32) -> Self {
+        Self {
+            r: ((c >> 16) & 0xFF) as u8,
+            g: ((c >> 8) & 0xFF) as u8,
+            b: (c & 0xFF) as u8,
+        }
+    }
+
     /// to i32 RGB tuple
     pub fn to_i64(&self) -> (i64, i64, i64) {
         (i64::from(self.r), i64::from(self.g), i64::from(self.b))

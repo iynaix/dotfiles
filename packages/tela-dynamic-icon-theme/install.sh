@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # modified install script for Tela icon theme
-# - colors have been replaced with catppuccin accents
+# - colors have been replaced with tokyo-night accents
 # - light icon themes have been removed
 # - elementary and xfce themes have been removed
 

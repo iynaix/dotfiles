@@ -15,12 +15,12 @@ mkIf (config.custom.wm != "tty") {
       aaron-bond.better-comments
       bbenoist.nix
       bradlc.vscode-tailwindcss
-      catppuccin.catppuccin-vsc
       christian-kohler.npm-intellisense
       dbaeumer.vscode-eslint
       denoland.vscode-deno
       donjayamanne.githistory
       eamodio.gitlens
+      enkia.tokyo-night
       esbenp.prettier-vscode
       formulahendry.auto-rename-tag
       graphql.vscode-graphql-syntax

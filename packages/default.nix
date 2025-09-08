@@ -42,23 +42,18 @@ rec {
   dotfiles-hyprland = callPackage ./dotfiles-rs { wm = "hyprland"; };
   dotfiles-niri = callPackage ./dotfiles-rs { wm = "niri"; };
 
-  # custom tela built with catppucin variant colors
+  # custom tela built with tokyo-night variant colors
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme {
     colors = {
-      blue = "#89b4fa";
-      flamingo = "#f2cdcd";
-      green = "#a6e3a1";
-      lavender = "#b4befe";
-      maroon = "#eba0ac";
-      mauve = "#cba6f7";
-      peach = "#fab387";
-      pink = "#f5c2e7";
-      red = "#f38ba8";
-      rosewater = "#f5e0dc";
-      sapphire = "#74c7ec";
-      sky = "#89dceb";
-      teal = "#94e2d5";
-      yellow = "#f9e2af";
+      default = "#2e7de9";
+      green = "#387068";
+      grey = "#414868";
+      orange = "#b15c00";
+      pink = "#d20065";
+      purple = "#7847bd";
+      red = "#f52a65";
+      teal = "#118c74";
+      yellow = "#8c6c3e";
     };
   };
 
@@ -83,4 +78,6 @@ rec {
   rofi-themes = callPackage ./rofi-themes { };
   rofi-power-menu = callPackage ./rofi-power-menu { };
   rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
+
+  tokyo-night-kvantum = callPackage ./tokyo-night-kvantum { };
 }

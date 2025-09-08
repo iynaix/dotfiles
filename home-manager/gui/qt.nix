@@ -10,15 +10,6 @@
 }:
 let
   inherit (lib) mkIf;
-  qtctConf = {
-    Appearance = {
-      custom_palette = false;
-      icon_theme = config.gtk.iconTheme.name;
-      standard_dialogs = "xdgdesktopportal";
-      style = "kvantum";
-    };
-  };
-  defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
 in
 {
   config = mkIf (config.custom.wm != "tty") {
@@ -45,54 +36,45 @@ in
 
     xdg.configFile = {
       # Kvantum looks for themes here
-      "Kvantum" = {
-        source = "${pkgs.catppuccin-kvantum.src}/themes";
+      "Kvantum/Kvantum-Tokyo-Night" = {
+        source = "${pkgs.custom.tokyo-night-kvantum}/share/Kvantum/Kvantum-Tokyo-Night";
         recursive = true;
+      };
+
+      "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } {
+        General.theme = "Kvantum-Tokyo-Night";
       };
     };
 
     # qtct config
-    custom.wallust.templates = {
-      "kvantum.kvconfig" = {
-        text = lib.generators.toINI { } {
-          General.theme = "catppuccin-mocha-${config.custom.gtk.defaultAccent}";
+    custom.wallust.templates =
+      let
+        defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
+        createQtctConf =
+          font:
+          lib.generators.toINI { } {
+            Appearance = {
+              custom_palette = false;
+              icon_theme = config.gtk.iconTheme.name;
+              standard_dialogs = "xdgdesktopportal";
+              style = "kvantum";
+            };
+            Fonts = {
+              fixed = font;
+              general = font;
+            };
+          };
+      in
+      {
+        "qt5ct.conf" = {
+          text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+          target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
         };
-        target = "${config.xdg.configHome}/Kvantum/kvantum.kvconfig";
-      };
 
-      "qt5ct.conf" = {
-        text =
-          let
-            default = ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
-          in
-          lib.generators.toINI { } (
-            qtctConf
-            // {
-              Fonts = {
-                fixed = default;
-                general = default;
-              };
-            }
-          );
-        target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
+        "qt6ct.conf" = {
+          text = createQtctConf ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
+          target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
+        };
       };
-
-      "qt6ct.conf" = {
-        text =
-          let
-            default = ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
-          in
-          lib.generators.toINI { } (
-            qtctConf
-            // {
-              Fonts = {
-                fixed = default;
-                general = default;
-              };
-            }
-          );
-        target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
-      };
-    };
   };
 }

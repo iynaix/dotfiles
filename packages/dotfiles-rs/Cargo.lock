@@ -398,6 +398,7 @@ dependencies = [
  "rexiv2",
  "serde",
  "serde_json",
+ "wallust_themes",
 ]
 
 [[package]]

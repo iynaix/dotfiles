@@ -40,9 +40,9 @@ impl ThemeEntry {
     }
 }
 
-fn preset_themes() -> Vec<ThemeEntry> {
-    wallust_themes::COLS_KEY
-        .into_iter()
+fn main() {
+    let all_themes = wallust_themes::COLS_KEY
+        .iter()
         .zip(wallust_themes::COLS_VALUE)
         .map(|(name, colors)| {
             let swatches: Vec<String> = (0..8)
@@ -51,45 +51,8 @@ fn preset_themes() -> Vec<ThemeEntry> {
 
             ThemeEntry::new(name, &swatches)
         })
-        .collect()
-}
-
-fn custom_themes() -> Vec<ThemeEntry> {
-    wallust::CUSTOM_THEMES
-        .into_iter()
-        .map(|name| {
-            let theme_file = full_path(format!("~/.config/wallust/themes/{name}.json"));
-
-            // read theme as json
-            let theme: serde_json::Value = serde_json::from_str(
-                &std::fs::read_to_string(theme_file)
-                    .unwrap_or_else(|_| panic!("failed to read custom theme: {name}")),
-            )
-            .unwrap_or_else(|_| panic!("failed to parse custom theme: {name}"));
-
-            let swatches: Vec<String> = (0..8)
-                .map(|i| {
-                    if let Some(serde_json::Value::String(color)) = theme
-                        .get("colors")
-                        .and_then(|colors| colors.get(format!("color{i}")))
-                    {
-                        color.to_string()
-                    } else {
-                        panic!("failed to get color{i} for {name}");
-                    }
-                })
-                .collect();
-
-            ThemeEntry::new(name, &swatches)
-        })
-        .collect()
-}
-
-fn main() {
-    let mut all_themes = preset_themes();
-    all_themes.extend(custom_themes());
-
-    all_themes.sort_by_key(|theme| theme.display_name.to_string());
+        .sorted_by_key(|theme| theme.display_name.to_string())
+        .collect_vec();
 
     // display with rofi
     let rofi = Rofi::new(

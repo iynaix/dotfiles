@@ -107,21 +107,13 @@ in
       '';
     };
 
-    xdg.configFile = {
-      # add custom themes in pywal format
-      "wallust/themes" = {
-        source = ./wallust;
-        recursive = true;
-      };
-    }
-    //
-      # set xdg configFile text and on change for wallust templates
-      (pipe cfg.templates [
-        (filterAttrs (_: template: !(isTemplatePath template.text)))
-        (mapAttrs' (
-          template: { text, ... }: nameValuePair "wallust/templates/${template}" { inherit text; }
-        ))
-      ]);
+    # set xdg configFile text and on change for wallust templates
+    xdg.configFile = pipe cfg.templates [
+      (filterAttrs (_: template: !(isTemplatePath template.text)))
+      (mapAttrs' (
+        template: { text, ... }: nameValuePair "wallust/templates/${template}" { inherit text; }
+      ))
+    ];
 
     custom.wallust.templates = {
       # misc information for nix
@@ -130,7 +122,7 @@ in
           # use pywal template syntax here
           {
             wallpaper = "{{wallpaper}}";
-            fallback = "${../../gits-catppuccin.jpg}";
+            fallback = "${../../wallpaper-default.jpg}";
             inherit (config.custom) monitors;
             inherit (config.custom.wallust) colorscheme;
             inherit host;

@@ -11,7 +11,7 @@ in
     programs.helix = {
       enable = true;
       settings = {
-        theme = "catppuccin_mocha";
+        theme = "tokyonight";
       };
     };
   };

@@ -14,27 +14,22 @@ in
       accents = mkOption {
         type = attrsOf str;
         default = {
-          blue = "#89b4fa";
-          flamingo = "#f2cdcd";
-          green = "#a6e3a1";
-          lavender = "#b4befe";
-          maroon = "#eba0ac";
-          mauve = "#cba6f7";
-          peach = "#fab387";
-          pink = "#f5c2e7";
-          red = "#f38ba8";
-          rosewater = "#f5e0dc";
-          sapphire = "#74c7ec";
-          sky = "#89dceb";
-          teal = "#94e2d5";
-          yellow = "#f9e2af";
+          Default = "#2e7de9";
+          Green = "#387068";
+          Grey = "#414868";
+          Orange = "#b15c00";
+          Pink = "#d20065";
+          Purple = "#7847bd";
+          Red = "#f52a65";
+          Teal = "#118c74";
+          Yellow = "#8c6c3e";
         };
         description = "GTK theme accents";
       };
 
       defaultAccent = mkOption {
         type = enum (attrNames config.custom.gtk.accents);
-        default = "blue";
+        default = "Default";
         description = "Default GTK theme accent";
       };
     };
@@ -48,7 +43,7 @@ in
       home = {
         pointerCursor = {
           package = pkgs.simp1e-cursors;
-          name = "Simp1e-Catppuccin-Frappe";
+          name = "Simp1e-Tokyo-Night";
           size = 28;
           gtk.enable = true;
           x11.enable = true;
@@ -71,16 +66,11 @@ in
       gtk = {
         enable = true;
         theme = {
-          name = "catppuccin-mocha-${defaultAccent}-compact";
-          package = pkgs.catppuccin-gtk.override {
-            # allow all accents so the closest matching color can be selected by dotfiles-rs
-            accents = attrNames accents;
-            variant = "mocha";
-            tweaks = [
-              # "black" # black tweak for oled
-              # "rimless"
-            ];
-            size = "compact";
+          name = "Tokyonight-Dark-Compact";
+          package = pkgs.tokyo-night-gtk.override {
+            colorVariants = [ "dark" ];
+            sizeVariants = [ "compact" ];
+            themeVariants = [ "all" ];
           };
         };
         iconTheme = {
