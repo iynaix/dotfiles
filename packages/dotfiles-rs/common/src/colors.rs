@@ -3,15 +3,6 @@ use std::collections::HashMap;
 use crate::json;
 use serde::{Deserialize, Deserializer};
 
-fn normalize_channel(channel: u8) -> f64 {
-    let channel = f64::from(channel) / 255.0;
-    if channel <= 0.03928 {
-        channel / 12.92
-    } else {
-        ((channel + 0.055) / 1.055).powf(2.4)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Rgb {
     pub r: u8,
@@ -120,27 +111,6 @@ impl Rgb {
             r: 255 - self.r,
             g: 255 - self.g,
             b: 255 - self.b,
-        }
-    }
-
-    /// relative luminance, as defined by WCAG
-    /// <https://www.w3.org/TR/WCAG20/#relativeluminancedef>
-    pub fn relative_luminance(&self) -> f64 {
-        let r = normalize_channel(self.r);
-        let g = normalize_channel(self.g);
-        let b = normalize_channel(self.b);
-
-        0.0722_f64.mul_add(b, 0.2126_f64.mul_add(r, 0.7152 * g))
-    }
-
-    pub fn contrast_ratio(&self, other: &Self) -> f64 {
-        let l1 = self.relative_luminance();
-        let l2 = other.relative_luminance();
-
-        if l1 > l2 {
-            (l1 + 0.05) / (l2 + 0.05)
-        } else {
-            (l2 + 0.05) / (l1 + 0.05)
         }
     }
 

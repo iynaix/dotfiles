@@ -50,7 +50,7 @@ fn main() -> std::io::Result<()> {
     cmd.arg("--download-archive").arg(&archive_path);
 
     // download with embedded subs
-    cmd.args(&[
+    cmd.args([
         "--write-auto-sub",
         "--embed-subs",
         "--sub-lang",

@@ -279,7 +279,7 @@ in
                 ${colorDefinitions}
 
                 #waybar {
-                  background: rgba(0,0,0,0.5);
+                  background: rgba(0,0,0,0.75);
                 }
 
                 ${mkModulesCss cfg.config.modules-left}

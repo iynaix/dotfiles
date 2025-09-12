@@ -10,7 +10,6 @@
 let
   inherit (lib)
     getExe
-    getExe'
     imap0
     listToAttrs
     mkEnableOption
@@ -332,7 +331,6 @@ in
     # allow override of modified file by the wallpaper theme changer
     xdg.configFile.niri-config = {
       force = true;
-      onChange = "${getExe' config.custom.dotfiles.package "wallpaper"} reload";
     };
 
     xdg.portal = {

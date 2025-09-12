@@ -183,7 +183,7 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 }
 
 /// sort accents by their color usage within the wallpaper
-fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
+pub fn wallust_colors_by_usage(wallpaper: &str, wallust_colors: &[Rgb]) -> (Rgb, Vec<Rgb>) {
     // open wallpaper and read colors
     let img = ImageReader::open(wallpaper)
         .expect("could not open image")
@@ -192,17 +192,17 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
         .to_rgb8();
 
     // initialize with each accent as a color might not be used
-    let mut color_counts: HashMap<_, _> = accents.iter().map(|a| (a.clone(), 0)).collect();
+    let mut color_counts: HashMap<Rgb, i32> =
+        wallust_colors.iter().map(|a| (a.clone(), 0)).collect();
 
-    // sample middle of every 9x9 pixel block
-    for x in (4..img.width()).step_by(5) {
-        for y in (4..img.height()).step_by(5) {
+    // sample middle of every 15x15 pixel block
+    for x in (7..img.width()).step_by(15) {
+        for y in (7..img.height()).step_by(15) {
             let px = img.get_pixel(x, y);
 
-            let closest_color = accents
+            let closest_color = wallust_colors
                 .iter()
-                .enumerate()
-                .min_by_key(|(_, color)| {
+                .min_by_key(|color| {
                     color.distance_sq(&Rgb {
                         r: px[0],
                         g: px[1],
@@ -212,36 +212,19 @@ fn accents_by_usage(wallpaper: &str, accents: &[Rgb]) -> HashMap<Rgb, usize> {
                 .expect("could not find closest color");
 
             // store the closest color
-            *color_counts.entry(closest_color.1.clone()).or_default() += 1;
+            *color_counts.entry(closest_color.clone()).or_default() += 1;
         }
     }
 
-    color_counts
-        .iter()
-        .sorted_by(|a, b| b.1.cmp(a.1))
-        .enumerate()
-        .map(|(n, (color, _count))| (color.clone(), n))
-        .collect()
-}
+    let colors = color_counts
+        .into_iter()
+        .sorted_by(|a, b| b.1.cmp(&a.1))
+        .map(|(color, _)| color)
+        .collect_vec();
 
-/// sort accents by how contrasting they are to the background and foreground
-fn accents_by_contrast(accents: &[Rgb]) -> HashMap<Rgb, usize> {
-    let nixcolors = NixColors::new().expect("unable to parse nix.json");
+    let waybar_color = colors.last().expect("color_counts is empty");
 
-    // sort by contrast to background
-    accents
-        .iter()
-        .sorted_by(|c1, c2| {
-            let contrast1 = c1.contrast_ratio(&nixcolors.special.background);
-            let contrast2 = c2.contrast_ratio(&nixcolors.special.background);
-
-            contrast2
-                .partial_cmp(&contrast1)
-                .unwrap_or(std::cmp::Ordering::Equal)
-        })
-        .enumerate()
-        .map(|(n, color)| (color.clone(), n))
-        .collect()
+    (waybar_color.clone(), colors)
 }
 
 /// applies the wallust colors to various applications
@@ -253,46 +236,28 @@ pub fn apply_colors() {
             .into_values()
             .collect_vec();
 
-        let by_usage = accents_by_usage(&nixcolors.wallpaper, &colors);
-
-        let by_contrast = accents_by_contrast(&colors);
-
-        let accents = by_contrast
-            .iter()
-            // calculate score for each color
-            .map(|(color, i)| {
-                // how much of the score should be based on contrast
-                let contrast_pct = 0.78;
-
-                (
-                    (*i as f64).mul_add(
-                        contrast_pct,
-                        (by_usage[color] as f64) * (1.0 - contrast_pct),
-                    ),
-                    color.clone(),
-                )
-            })
-            .sorted_by(|a, b| a.0.partial_cmp(&b.0).expect("could not compare floats"))
-            .map(|(_, color)| color)
-            .collect_vec();
+        let (waybar_accent, colors_by_usage) =
+            wallust_colors_by_usage(&nixcolors.wallpaper, &colors);
 
         #[cfg(feature = "hyprland")]
-        apply_hyprland_colors(&accents, &nixcolors.colors);
+        apply_hyprland_colors(&colors_by_usage, &nixcolors.colors);
 
         #[cfg(feature = "niri")]
-        apply_niri_colors(&accents, &nixcolors.colors);
+        apply_niri_colors(&colors_by_usage, &nixcolors.colors);
 
         // set the waybar accent color to have more contrast
-        set_waybar_colors(&accents[0]);
+        set_waybar_colors(&waybar_accent);
 
-        set_gtk_and_icon_theme(&nixcolors, &accents[0]);
+        set_gtk_and_icon_theme(&nixcolors, &colors_by_usage[0]);
     } else {
         let idx = wallust_themes::COLS_KEY
             .into_iter()
             .position(|k| k == "Tokyo-Night")
             .expect("failed to find Tokyo-Night");
 
-        let colors = wallust_themes::COLS_VALUE[idx]
+        // rust-analyzer keeps warning about this until file is saved?
+        #[allow(unused_variables)]
+        let colors: HashMap<String, Rgb> = wallust_themes::COLS_VALUE[idx]
             .into_iter()
             .enumerate()
             .map(|(i, c)| (format!("color{i}"), Rgb::from_wallust_theme_color(c)))

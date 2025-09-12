@@ -228,6 +228,7 @@ in
           directories = [
             ".cache/clip"
             ".cache/huggingface"
+            ".config/Ultralytics"
           ];
           cache.directories = [ ".local/share/rclip" ];
         };

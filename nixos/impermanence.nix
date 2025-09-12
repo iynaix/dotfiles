@@ -89,6 +89,7 @@ in
       neededForBoot = true;
       options = [
         "defaults"
+        # whatever size feels comfortable, smaller is better
         "size=1G"
         "mode=755"
       ];
@@ -101,6 +102,7 @@ in
     #   neededForBoot = true;
     #   options = [
     #     "defaults"
+    #      # whatever size feels comfortable, smaller is better
     #     "size=1G"
     #     "mode=755"
     #   ];
