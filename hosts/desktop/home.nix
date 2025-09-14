@@ -84,7 +84,7 @@
     niri.blur.enable = false;
     nvidia.enable = true;
     printing3d.enable = true;
-    obs-studio.enable = false;
+    obs-studio.enable = true;
     pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = true;

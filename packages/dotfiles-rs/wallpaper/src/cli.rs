@@ -165,7 +165,7 @@ pub enum WallpaperSubcommand {
 
     #[command(
         name = "remote",
-        visible_alias = "sync",
+        visible_aliases = ["sync", "rsync"],
         about = "Sync wallpapers to another machine"
     )]
     Remote(RemoteArgs),

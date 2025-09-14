@@ -98,6 +98,11 @@ fn handle_vertical_monitor(socket: &mut Socket, columns: &[Vec<Window>], max_row
         for win in col {
             // previous column is full
             if prev_column_cnt >= max_rows {
+                // maximize subsequent columns
+                socket
+                    .send(Request::Action(Action::MaximizeColumn {}))
+                    .expect("failed to send MaximizeColumn")
+                    .expect("invalid reply for MaximizeColumn");
                 continue;
             }
 

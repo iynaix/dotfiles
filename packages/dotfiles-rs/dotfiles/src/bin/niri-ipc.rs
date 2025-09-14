@@ -438,7 +438,9 @@ fn handle_window_opened_or_changed(
                 if let Some(wksp_id) = prev_win.workspace_id {
                     resize_workspace_from_state(wksp_id, None, state);
                 }
+
                 if let Some(wksp_id) = curr_win.workspace_id {
+                    std::thread::sleep(Duration::from_millis(100));
                     resize_workspace_from_state(wksp_id, Some(window), state);
 
                     socket
