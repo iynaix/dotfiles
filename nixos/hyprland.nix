@@ -17,7 +17,7 @@ mkIf (config.hm.custom.wm == "hyprland") {
   programs.hyprland = {
     enable =
       assert (
-        assertMsg (versionOlder config.programs.hyprland.package.version "0.51") "hyprland updated, sync with hyprnstack / hypr-darkwindow?"
+        assertMsg (versionOlder config.programs.hyprland.package.version "0.52") "hyprland updated, sync with hyprnstack / hypr-darkwindow?"
       );
       true;
     inherit (config.hm.wayland.windowManager.hyprland) package;

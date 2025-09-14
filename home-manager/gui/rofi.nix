@@ -120,7 +120,7 @@ in
   config = mkIf (config.custom.wm != "tty") {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland.override {
+      package = pkgs.rofi.override {
         plugins = [ rofiThemes ];
       };
       theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";

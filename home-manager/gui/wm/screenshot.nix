@@ -14,7 +14,7 @@ let
     ;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
     backend = config.custom.wm;
-    rofi-wayland = config.programs.rofi.package;
+    rofi = config.programs.rofi.package;
     ocr = true;
   };
 in
