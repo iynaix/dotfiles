@@ -1,6 +1,6 @@
 # Iynaix's NixOS Config
 
-This config is intended to be used with NixOS. There is *experimental* support for running the dotfiles on [legacy operating systems](https://github.com/iynaix/dotfiles/blob/main/home-manager.md).
+This config is intended to be used with NixOS.
 
 ## Features
 

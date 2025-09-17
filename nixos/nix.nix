@@ -175,7 +175,7 @@ in
         experimental-features = [
           "nix-command"
           "flakes"
-          # "pipe-operators"
+          "pipe-operators"
         ];
         substituters = [
           "https://hyprland.cachix.org"

@@ -188,6 +188,7 @@
   custom.persist = {
     home.directories = [
       ".config/lazygit"
+      ".config/gitbutler"
     ];
   };
 }

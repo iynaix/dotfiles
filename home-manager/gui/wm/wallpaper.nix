@@ -8,7 +8,6 @@
 let
   inherit (lib)
     getExe
-    makeBinPath
     max
     mkAfter
     mkEnableOption
@@ -76,12 +75,6 @@ in
           };
         in
         {
-          # swww has a runtime dependency on "pidof", needed for mangowc
-          # remove when https://github.com/NixOS/nixpkgs/pull/433265 is merged
-          swww = {
-            Service.Environment = "PATH=${makeBinPath [ pkgs.procps ]}";
-          };
-
           wallpaper = {
             Install.WantedBy = [ "swww.service" ];
             Unit = {

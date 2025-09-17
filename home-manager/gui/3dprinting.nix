@@ -101,12 +101,7 @@ in
       home.packages = [
         # freecad segfaults on starup on nvidia
         # https://github.com/NixOS/nixpkgs/issues/366299
-        (
-          if (config.custom.wm == "hyprland") then
-            (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
-          else
-            pkgs.freecad-wayland
-        )
+        (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
       ];
 
       custom.persist = {
