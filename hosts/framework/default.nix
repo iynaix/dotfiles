@@ -4,6 +4,8 @@ _: {
       custom_gpu_name0 = "AMD Radeon 780M";
     };
 
+    modelling3d.enable = true;
+    printing3d.enable = true;
     qmk.enable = true;
     virtualization.enable = true;
   };

@@ -19,6 +19,8 @@ in
     # software
     bittorrent.enable = true;
     distrobox.enable = true;
+    modelling3d.enable = true;
+    printing3d.enable = true;
     syncoid.enable = true;
     vercel.enable = true;
     virtualization.enable = true;

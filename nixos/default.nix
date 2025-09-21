@@ -56,10 +56,6 @@ in
       default = { };
       description = "Symlinks to create in the format { dest = src;}";
     };
-
-    nvidia.enable = lib.mkEnableOption "Nvidia GPU" // {
-      default = false;
-    };
   };
 
   config = {

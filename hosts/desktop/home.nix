@@ -80,12 +80,8 @@
       qtile = false;
     };
     lock.enable = false;
-    modelling3d.enable = true;
     niri.blur.enable = false;
     nvidia.enable = true;
-    printing3d.enable = true;
-    obs-studio.enable = true;
-    pathofbuilding.enable = true;
     rclip.enable = true;
     vlc.enable = true;
     wallfacer.enable = true;
