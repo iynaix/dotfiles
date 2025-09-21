@@ -1,5 +1,9 @@
 _: {
   custom = {
+    programs.btop.settings = {
+      custom_gpu_name0 = "AMD Radeon 780M";
+    };
+
     qmk.enable = true;
     virtualization.enable = true;
   };

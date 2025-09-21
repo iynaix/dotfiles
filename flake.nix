@@ -17,6 +17,8 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    wrapper-manager.url = "github:viperML/wrapper-manager";
+
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
 

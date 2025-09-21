@@ -559,7 +559,8 @@
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nvf": "nvf",
         "sops-nix": "sops-nix",
-        "wfetch": "wfetch"
+        "wfetch": "wfetch",
+        "wrapper-manager": "wrapper-manager"
       }
     },
     "scenefx": {
@@ -667,6 +668,21 @@
       "original": {
         "owner": "iynaix",
         "repo": "wfetch",
+        "type": "github"
+      }
+    },
+    "wrapper-manager": {
+      "locked": {
+        "lastModified": 1757156862,
+        "narHash": "sha256-OGXsTE5jWhGiFfK6OwMvjksrYSobsIFUSUzKsexCDxY=",
+        "owner": "viperML",
+        "repo": "wrapper-manager",
+        "rev": "801dd9c876fcada046af45543e8c7e0bbccf20ea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "viperML",
+        "repo": "wrapper-manager",
         "type": "github"
       }
     },

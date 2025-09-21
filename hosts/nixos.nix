@@ -30,6 +30,7 @@ rec {
         ./${host} # host specific configuration
         ./${host}/hardware.nix # host specific hardware configuration
         (inputs.import-tree ../nixos)
+        (inputs.import-tree ../modules)
         ../overlays
         inputs.home-manager.nixosModules.home-manager
         {

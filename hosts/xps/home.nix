@@ -26,8 +26,4 @@
       home.directories = [ "Downloads" ];
     };
   };
-
-  programs.btop.settings = {
-    custom_gpu_name0 = "Intel HD Graphics 5500";
-  };
 }

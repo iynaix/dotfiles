@@ -5,8 +5,8 @@ let
     mkEnableOption
     mkIf
     optional
-    optionals
     optionalAttrs
+    optionals
     ;
   inherit (config.hm.custom) mswindows;
   cfg = config.custom.hdds;
@@ -29,8 +29,6 @@ in
 
   config = mkIf cfg.enable {
     services.sanoid = {
-      enable = true;
-
       datasets = {
         "zfs-hgst10-1/media" = mkIf cfg.hgst10 {
           hourly = 3;
@@ -47,12 +45,17 @@ in
       };
     };
 
-    # symlinks from hdds
-    custom.symlinks =
-      optionalAttrs cfg.ironwolf22 {
-        "${homeDirectory}/Downloads" = "${ironwolf22}/Downloads";
-      }
-      // optionalAttrs cfg.hgst10 { "${homeDirectory}/Videos" = hgst10; };
+    custom = {
+      # symlinks from hdds
+      symlinks =
+        optionalAttrs cfg.ironwolf22 {
+          "${homeDirectory}/Downloads" = "${ironwolf22}/Downloads";
+        }
+        // optionalAttrs cfg.hgst10 { "${homeDirectory}/Videos" = hgst10; };
+
+      # add btop monitoring for extra hdds
+      programs.btop.disks = (optional cfg.hgst10 hgst10) ++ (optional cfg.ironwolf22 ironwolf22);
+    };
 
     hm = {
       # add bookmarks for gtk
@@ -63,9 +66,6 @@ in
         "file://${hgst10}/TV/Current TV Current"
         "file://${hgst10}/Movies"
       ];
-
-      # add btop monitoring for extra hdds
-      custom.btop.disks = optional cfg.hgst10 hgst10 ++ optional cfg.ironwolf22 ironwolf22;
     };
 
     # dual boot windows

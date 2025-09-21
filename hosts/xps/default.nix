@@ -10,7 +10,11 @@ in
 {
   imports = [ ./nixos-hardware.nix ];
 
-  custom = { };
+  custom = {
+    programs.btop.settings = {
+      custom_gpu_name0 = "Intel HD Graphics 5500";
+    };
+  };
 
   networking.hostId = "17521d0b"; # required for zfs
 
@@ -21,7 +25,7 @@ in
   # touchpad support
   services.libinput.enable = true;
 
-  security.wrappers = mkIf config.hm.programs.btop.enable {
+  security.wrappers = mkIf config.custom.programs.btop.enable {
     btop = {
       capabilities = "cap_perfmon=+ep";
       group = "wheel";
