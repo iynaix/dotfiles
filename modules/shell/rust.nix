@@ -1,19 +1,18 @@
-{ config, ... }:
+{ user, ... }:
+let
+  xdgDataHome = "/home/${user}/.local/share";
+in
 {
   # use centralized cargo cache
-  home.sessionVariables = rec {
-    CARGO_HOME = "/cache${config.xdg.dataHome}/.cargo";
+  environment.sessionVariables = rec {
+    CARGO_HOME = "/cache${xdgDataHome}/.cargo";
     CARGO_TARGET_DIR = "${CARGO_HOME}/target";
-    RUSTUP_HOME = "/cache${config.xdg.dataHome}/.rustup";
+    RUSTUP_HOME = "/cache${xdgDataHome}/.rustup";
   };
 
-  # add the custom completions for both fish and fish
+  # add the custom cargo bin completions for both bash and fish
   programs = {
-    fish.functions = {
-      __cargo_bins = # fish
-        ''cargo run --bin 2>&1 | string replace -rf '^\s+' ""'';
-    };
-    bash.initExtra = # sh
+    bash.shellInit = # sh
       ''
         __cargo_bins() {
           local bins
@@ -21,6 +20,13 @@
           COMPREPLY=("''${bins}")
         }
       '';
+    fish.shellInit = # fish
+      ''
+        function __cargo_bins
+            cargo run --bin 2>&1 | string replace -rf '^\s+' ""
+        end
+      '';
+
   };
 
   custom.shell.packages = {

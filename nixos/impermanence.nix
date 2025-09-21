@@ -72,6 +72,18 @@ in
           default = [ ];
           description = "Files to persist in home directory";
         };
+        cache = {
+          directories = mkOption {
+            type = listOf str;
+            default = [ ];
+            description = "Directories to persist, but not to snapshot";
+          };
+          files = mkOption {
+            type = listOf str;
+            default = [ ];
+            description = "Files to persist, but not to snapshot";
+          };
+        };
       };
     };
   };
@@ -172,8 +184,8 @@ in
         directories = unique cfg.root.cache.directories;
 
         users.${user} = {
-          files = unique hmPersistCfg.home.cache.files;
-          directories = unique hmPersistCfg.home.cache.directories;
+          files = unique (cfg.root.cache.files ++ hmPersistCfg.home.cache.files);
+          directories = unique (cfg.root.cache.directories ++ hmPersistCfg.home.cache.directories);
         };
       };
     };
