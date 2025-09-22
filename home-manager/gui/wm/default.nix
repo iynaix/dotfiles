@@ -186,7 +186,7 @@ in
                 pkgs.writeShellApplication {
                   name = "init-brave";
                   runtimeInputs = [
-                    config.programs.chromium.package
+                    pkgs.brave
                     config.custom.dotfiles.package
                   ];
                   text = ''

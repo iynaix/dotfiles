@@ -73,9 +73,9 @@ mkIf (config.custom.wm == "niri") {
         "yazi"
         config.xdg.userDirs.download
       ];
-      "Mod+W".action.spawn = getExe config.programs.chromium.package;
+      "Mod+W".action.spawn = getExe pkgs.brave;
       "Mod+Shift+W".action.spawn = [
-        (getExe config.programs.chromium.package)
+        (getExe pkgs.brave)
         "--incognito"
       ];
       "Mod+V".action.spawn = termExec [ "nvim" ];

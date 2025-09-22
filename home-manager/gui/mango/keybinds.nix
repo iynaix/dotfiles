@@ -50,8 +50,8 @@ mkIf (config.custom.wm == "mango") {
           "${config.xdg.userDirs.download}"
         ]
       }"
-      "$mod, w, spawn, ${getExe config.programs.chromium.package}"
-      "$mod+Shift, w, spawn, ${getExe config.programs.chromium.package} --incognito"
+      "$mod, w, spawn, ${getExe pkgs.brave}"
+      "$mod+Shift, w, spawn, ${getExe pkgs.brave} --incognito"
 
       "$mod, v, spawn, ${termExec [ "nvim" ]}"
       "$mod+Shift, v, spawn, ${getExe pkgs.custom.shell.rofi-edit-proj}"

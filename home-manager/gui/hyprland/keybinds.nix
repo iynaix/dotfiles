@@ -79,8 +79,8 @@ in
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.xdg.userDirs.download}"
           "$mod_SHIFT, e, exec, ${termExec "yazi ${config.xdg.userDirs.download}"}"
-          "$mod, w, exec, ${getExe config.programs.chromium.package}"
-          "$mod_SHIFT, w, exec, ${getExe config.programs.chromium.package} --incognito"
+          "$mod, w, exec, ${getExe pkgs.brave}"
+          "$mod_SHIFT, w, exec, ${getExe pkgs.brave} --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
           ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''

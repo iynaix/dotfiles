@@ -1,68 +1,73 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
-  inherit (lib) getExe mkIf;
+  inherit (lib) getExe;
 in
-mkIf (config.custom.wm != "tty") {
+# mkIf (config.hm.custom.wm != "tty") {
+{
   programs.chromium = {
     enable = true;
-    package = pkgs.brave;
 
     extensions = [
       # AutoPagerize
-      { id = "igiofjhpmpihnifddepnpngfjhkfenbp"; }
+      "igiofjhpmpihnifddepnpngfjhkfenbp"
       # Awesome Screen Recorder & Screenshot
-      { id = "nlipoenfbbikpbjkfpfillcgkoblgpmj"; }
+      "nlipoenfbbikpbjkfpfillcgkoblgpmj"
       # Better PathOfExile Trading
-      { id = "fhlinfpmdlijegjlpgedcmglkakaghnk"; }
+      "fhlinfpmdlijegjlpgedcmglkakaghnk"
       # Bitwarden
-      { id = "nngceckbapebfimnlniiiahkandclblb"; }
+      "nngceckbapebfimnlniiiahkandclblb"
       # Dark Reader
-      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; }
+      "eimadpbcbfnmbkopoojfekhnkhdbieeh"
       # Honey
-      { id = "bmnlcjabgnpnenekpadlanbbkooimhnj"; }
+      "bmnlcjabgnpnenekpadlanbbkooimhnj"
       # JSON Viewer
-      { id = "gbmdgpbipfallnflgajpaliibnhdgobh"; }
+      "gbmdgpbipfallnflgajpaliibnhdgobh"
       # Looty
-      # {id = "ajfbflclpnpbjkfibijekgcombcgehbi";}
+      # {id = "ajfbflclpnpbjkfibijekgcombcgehbi"
       # Old Reddit Redirect
-      { id = "dneaehbmnbhcippjikoajpoabadpodje"; }
+      "dneaehbmnbhcippjikoajpoabadpodje"
       # PoE Wiki Search
-      { id = "nalpbalegehinpooppmmgjidgiebblad"; }
+      "nalpbalegehinpooppmmgjidgiebblad"
       # React Dev Tools
-      { id = "fmkadmapgofadopljbjfkapdkoienihi"; }
+      "fmkadmapgofadopljbjfkapdkoienihi"
       # Reddit Enhancement Suite
-      { id = "kbmfpngjjgdllneeigpgjifpgocmfgmb"; }
+      "kbmfpngjjgdllneeigpgjifpgocmfgmb"
       # Return YouTube Dislike
-      { id = "gebbhagfogifgggkldgodflihgfeippi"; }
+      "gebbhagfogifgggkldgodflihgfeippi"
       # Session Manager
-      { id = "mghenlmbmjcpehccoangkdpagbcbkdpc"; }
+      "mghenlmbmjcpehccoangkdpagbcbkdpc"
       # SponsorBlock for YouTube - Skip Sponsorships
-      { id = "mnjggcdmjocbbbhaepdhchncahnbgone"; }
+      "mnjggcdmjocbbbhaepdhchncahnbgone"
       # Surfingkeys
-      { id = "gfbliohnnapiefjpjlpjnehglfpaknnc"; }
+      "gfbliohnnapiefjpjlpjnehglfpaknnc"
+      # Tokyo Night Storm
+      "pgbjifpikialeahbdendkjioeafbmfkn"
       # uBlock Origin
-      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; }
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm"
       # Video Speed Controller
-      { id = "nffaoalbilbmmfgbnbgppjihopabppdk"; }
+      "nffaoalbilbmmfgbnbgppjihopabppdk"
       # YouTube Auto HD + FPS
-      { id = "fcphghnknhkimeagdglkljinmpbagone"; }
+      "fcphghnknhkimeagdglkljinmpbagone"
       # Youtube-shorts block
-      { id = "jiaopdjbehhjgokpphdfgmapkobbnmjp"; }
+      "jiaopdjbehhjgokpphdfgmapkobbnmjp"
     ];
   };
 
   # set default browser
-  home.sessionVariables = {
-    DEFAULT_BROWSER = getExe config.programs.chromium.package;
-    BROWSER = getExe config.programs.chromium.package;
+  environment = {
+    sessionVariables = {
+      DEFAULT_BROWSER = getExe pkgs.brave;
+      BROWSER = getExe pkgs.brave;
+    };
+
+    systemPackages = [ pkgs.brave ];
   };
 
-  xdg.mimeApps.defaultApplications = {
+  xdg.mime.defaultApplications = {
     "text/html" = "brave-browser.desktop";
     "x-scheme-handler/http" = "brave-browser.desktop";
     "x-scheme-handler/https" = "brave-browser.desktop";
@@ -70,7 +75,7 @@ mkIf (config.custom.wm != "tty") {
     "x-scheme-handler/unknown" = "brave-browser.desktop";
   };
 
-  wayland.windowManager.hyprland.settings.windowrule = [
+  hm.wayland.windowManager.hyprland.settings.windowrule = [
     # do not idle while watching videos
     "idleinhibit fullscreen,class:^(brave)$"
     "idleinhibit focus,class:^(brave)$,title:(.*)(YouTube)(.*)"
