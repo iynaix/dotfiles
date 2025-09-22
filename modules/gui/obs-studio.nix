@@ -4,10 +4,10 @@ let
 in
 {
   options.custom = {
-    obs-studio.enable = mkEnableOption "obs-studio";
+    programs.obs-studio.enable = mkEnableOption "obs-studio";
   };
 
-  config = mkIf config.custom.obs-studio.enable {
+  config = mkIf config.custom.programs.obs-studio.enable {
     programs.obs-studio.enable = true;
 
     custom.persist = {

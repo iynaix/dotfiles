@@ -21,7 +21,7 @@ in
     terminal = {
       package = mkOption {
         type = package;
-        default = config.programs.ghostty.package;
+        default = pkgs.ghostty;
         description = "Package to use for the terminal";
       };
 

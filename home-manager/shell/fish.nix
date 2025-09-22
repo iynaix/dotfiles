@@ -1,13 +1,8 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
-let
-  inherit (lib) getExe mkForce;
-  fishPath = getExe config.programs.fish.package;
-in
 {
   programs = {
     fish = {
@@ -62,11 +57,6 @@ in
         }
       ];
     };
-  };
-
-  # set as default interactive shell, also set $SHELL for nix shell to pick up
-  programs.ghostty.settings = {
-    command = mkForce "SHELL=${fishPath} ${fishPath}";
   };
 
   custom.persist = {

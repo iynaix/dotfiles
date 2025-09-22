@@ -16,7 +16,10 @@ in
     qmk.enable = true;
     zfs.encryption = false;
 
-    # software
+    programs = {
+      deadbeef.enable = true;
+      obs-studio.enable = true;
+    };
     bittorrent.enable = true;
     distrobox.enable = true;
     modelling3d.enable = true;
