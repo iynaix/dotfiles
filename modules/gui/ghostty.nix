@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -45,20 +44,27 @@ let
     window-padding-x = padding;
     window-padding-y = padding;
   };
-
-  ghostty-wrapped = inputs.wrapper-manager.lib.wrapWith pkgs {
-    basePackage = pkgs.ghostty;
-    prependFlags = [
-      "--config-file"
-      (toGhosttyConf ghosttyConf)
-    ];
-  };
 in
 {
+  custom.wrappers = [
+    (
+      { pkgs, ... }:
+      {
+        wrappers.ghostty = {
+          basePackage = pkgs.ghostty;
+          prependFlags = [
+            "--config-default-files=false"
+            "--config-file=${toGhosttyConf ghosttyConf}"
+          ];
+        };
+      }
+    )
+  ];
+
+  environment.systemPackages = [ pkgs.ghostty ];
+
   hm.custom.terminal = {
     app-id = "com.mitchellh.ghostty";
     desktop = "com.mitchellh.ghostty.desktop";
   };
-
-  environment.systemPackages = [ ghostty-wrapped ];
 }

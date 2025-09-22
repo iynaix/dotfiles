@@ -40,6 +40,13 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
   inherit (c) hm;
   hmo = hm.custom;
 
+  # inspecting wrappers
+  wrappers =
+    (inputs.wrapper-manager.lib {
+      inherit pkgs;
+      modules = c.custom.wrappers;
+    }).config.wrappers;
+
   # testing specialisations
   spec = c: spec_name: c.specialisation.${spec_name}.configuration;
   specHm = c: spec_name: (spec c spec_name).hm;

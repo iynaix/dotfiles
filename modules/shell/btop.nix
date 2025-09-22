@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -68,40 +67,50 @@ in
     let
       cfg = config.custom.programs.btop;
       btop-config = pkgs.writeText "btop.conf" (toBtopConf cfg.settings);
-      btop-wrapped = inputs.wrapper-manager.lib.wrapWith pkgs {
-        basePackage = pkgs.btop.override {
-          cudaSupport = config.hm.custom.nvidia.enable;
-          rocmSupport = config.hm.custom.radeon.enable;
-        };
-        prependFlags = [
-          "--config"
-          btop-config
-        ];
-      };
     in
     mkIf cfg.enable {
-      custom.programs.btop.settings = {
-        color_theme = "TTY";
-        theme_background = false;
-        cpu_single_graph = true;
-        # base_10_sizes = true;
-        show_disks = true;
-        show_swap = true;
-        swap_disk = false;
-        use_fstab = false;
-        only_physical = false;
-        disks_filter = concatStringsSep " " (
-          [
-            "/"
-            "/boot"
-            "/persist"
-          ]
-          ++ cfg.disks
-        );
-        shown_boxes = "cpu mem net proc gpu0";
-        gpu_mirror_graph = false;
+      custom = {
+        programs.btop.settings = {
+          color_theme = "TTY";
+          theme_background = false;
+          cpu_single_graph = true;
+          # base_10_sizes = true;
+          show_disks = true;
+          show_swap = true;
+          swap_disk = false;
+          use_fstab = false;
+          only_physical = false;
+          disks_filter = concatStringsSep " " (
+            [
+              "/"
+              "/boot"
+              "/persist"
+            ]
+            ++ cfg.disks
+          );
+          shown_boxes = "cpu mem net proc gpu0";
+          gpu_mirror_graph = false;
+        };
+
+        wrappers = [
+          (
+            { pkgs, ... }:
+            {
+              wrappers.btop = {
+                basePackage = pkgs.btop.override {
+                  cudaSupport = config.hm.custom.nvidia.enable;
+                  rocmSupport = config.hm.custom.radeon.enable;
+                };
+                prependFlags = [
+                  "--config"
+                  btop-config
+                ];
+              };
+            }
+          )
+        ];
       };
 
-      environment.systemPackages = [ btop-wrapped ];
+      environment.systemPackages = [ pkgs.btop ];
     };
 }
