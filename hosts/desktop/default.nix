@@ -19,7 +19,10 @@ in
     programs = {
       deadbeef.enable = true;
       obs-studio.enable = true;
+      pathofbuilding.enable = true;
+      vlc.enable = true;
     };
+
     bittorrent.enable = true;
     distrobox.enable = true;
     modelling3d.enable = true;

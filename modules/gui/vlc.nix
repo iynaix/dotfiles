@@ -9,11 +9,11 @@ let
 in
 {
   options.custom = {
-    vlc.enable = mkEnableOption "vlc";
+    programs.vlc.enable = mkEnableOption "vlc";
   };
 
-  config = mkIf config.custom.vlc.enable {
-    home.packages = [ pkgs.vlc ];
+  config = mkIf config.custom.programs.vlc.enable {
+    environment.systemPackages = [ pkgs.vlc ];
 
     custom.persist = {
       home.directories = [ ".config/vlc" ];

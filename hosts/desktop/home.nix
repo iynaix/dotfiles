@@ -81,7 +81,6 @@
     niri.blur.enable = false;
     nvidia.enable = true;
     rclip.enable = true;
-    vlc.enable = true;
     wallfacer.enable = true;
     wallpaper-tools.enable = true;
     # wallust.colorscheme = "tokyo-night";

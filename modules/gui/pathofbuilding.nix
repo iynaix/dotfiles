@@ -10,15 +10,15 @@ let
 in
 {
   options.custom = {
-    pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
-      default = isNixOS && config.custom.wm != "tty";
+    programs.pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
+      default = isNixOS && config.hm.custom.wm != "tty";
     };
   };
 
-  config = mkIf config.custom.pathofbuilding.enable {
-    home.packages = [ pkgs.custom.path-of-building ];
+  config = mkIf config.custom.programs.pathofbuilding.enable {
+    environment.systemPackages = [ pkgs.custom.path-of-building ];
 
-    wayland.windowManager.hyprland.settings = {
+    hm.wayland.windowManager.hyprland.settings = {
       # starts floating for some reason?
       windowrule = [ "tile,class:(pobfrontend)" ];
     };
