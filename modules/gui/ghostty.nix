@@ -1,11 +1,13 @@
 {
   config,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
 let
   inherit (lib) assertMsg getExe versionOlder;
+  inherit (libCustom) fallbackPath wrapperWithRuntimeConfig;
   # adapted from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/programs/ghostty.nix
   toGhosttyConf =
@@ -50,13 +52,20 @@ in
     (
       { pkgs, ... }:
       {
-        wrappers.ghostty = {
-          basePackage = pkgs.ghostty;
-          prependFlags = [
-            "--config-default-files=false"
-            "--config-file=${toGhosttyConf ghosttyConf}"
-          ];
-        };
+        wrappers.ghostty =
+          wrapperWithRuntimeConfig
+            {
+              # entire arg is used as the = is required for ghostty to parse it properly
+              "@GHOSTTY_CONFIG_ARG@" =
+                "--config-file=${fallbackPath "/home/iynaix/.config/ghostty/config" (toGhosttyConf ghosttyConf)}";
+            }
+            {
+              basePackage = pkgs.ghostty;
+              prependFlags = [
+                "--config-default-files=false"
+                "@GHOSTTY_CONFIG_ARG@"
+              ];
+            };
       }
     )
   ];
