@@ -1,5 +1,5 @@
 _: {
-  home.shellAliases = {
+  environment.shellAliases = {
     z = "zoxide query -i";
   };
 
@@ -7,6 +7,6 @@ _: {
     enable = true;
     enableBashIntegration = true;
     enableFishIntegration = true;
-    options = [ "--cmd cd" ];
+    flags = [ "--cmd cd" ];
   };
 }

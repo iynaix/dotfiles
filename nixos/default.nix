@@ -133,8 +133,7 @@ in
             config.hm.gtk.iconTheme.package
           ])
         # add custom user created shell packages
-        ++ (attrValues config.custom.shell.packages)
-        ++ (optionals config.hm.custom.helix.enable [ helix ]);
+        ++ (attrValues config.custom.shell.packages);
     };
 
     nixpkgs = {

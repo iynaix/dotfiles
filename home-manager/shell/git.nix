@@ -26,6 +26,7 @@
       ignores = [
         ".direnv"
         ".devenv"
+        ".jj"
       ];
 
       extraConfig = {
