@@ -7,9 +7,9 @@
 let
   inherit (lib) mkIf;
 in
-mkIf (config.custom.wm == "plasma") {
+mkIf (config.hm.custom.wm == "plasma") {
   # set dark theme, adapted from plasma-manager
-  xdg.configFile."autostart/plasma-dark-mode.desktop".text = ''
+  environment.etc."xdg/autostart/plasma-dark-mode.desktop".text = ''
     [Desktop Entry]
     Type=Application
     Name=Plasma Dark Mode
