@@ -1,13 +1,11 @@
 {
   config,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
 let
-  inherit (lib) assertMsg getExe versionOlder;
-  inherit (libCustom) fallbackPath wrapperWithRuntimeConfig;
+  inherit (lib) getExe;
   # adapted from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/programs/ghostty.nix
   toGhosttyConf =
@@ -22,6 +20,7 @@ let
 
   ghosttyConf = {
     alpha-blending = "linear-corrected";
+    app-notifications = "no-clipboard-copy";
     background-opacity =
       0.85
       # more opaque on niri as there is no blur
@@ -30,13 +29,6 @@ let
     command = "SHELL=${fishPath} ${fishPath}";
     confirm-close-surface = false;
     copy-on-select = "clipboard";
-    # disable clipboard copy notifications temporarily until fixed upstream
-    # https://github.com/ghostty-org/ghostty/issues/4800#issuecomment-2685774252
-    app-notifications =
-      assert (
-        assertMsg (versionOlder pkgs.ghostty.version "1.2.0") "ghostty: re-enable clipboard copy notifications"
-      );
-      "no-clipboard-copy";
     cursor-style = "bar";
     font-family = config.hm.custom.fonts.monospace;
     font-feature = "zero";
@@ -52,20 +44,15 @@ in
     (
       { pkgs, ... }:
       {
-        wrappers.ghostty =
-          wrapperWithRuntimeConfig
-            {
-              # entire arg is used as the = is required for ghostty to parse it properly
-              "@GHOSTTY_CONFIG_ARG@" =
-                "--config-file=${fallbackPath "/home/iynaix/.config/ghostty/config" (toGhosttyConf ghosttyConf)}";
-            }
-            {
-              basePackage = pkgs.ghostty;
-              prependFlags = [
-                "--config-default-files=false"
-                "@GHOSTTY_CONFIG_ARG@"
-              ];
-            };
+        wrappers.ghostty = {
+          basePackage = pkgs.ghostty;
+          prependFlags = [
+            "--config-default-files=false"
+            # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+            # default location
+            "--config-file=${toGhosttyConf ghosttyConf}"
+          ];
+        };
       }
     )
   ];

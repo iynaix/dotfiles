@@ -3,15 +3,15 @@
 {
   swww = {
     pname = "swww";
-    version = "19ce5d5ac8008f764e4aa74b9d32de61d31fd7c1";
+    version = "776e3ff26c261a08da991c90624268c51b169afb";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "19ce5d5ac8008f764e4aa74b9d32de61d31fd7c1";
+      rev = "776e3ff26c261a08da991c90624268c51b169afb";
       fetchSubmodules = false;
-      sha256 = "sha256-J6TnU1opkqDdNKZCMW/FJW9gL+4hov7InSJUWw6vibQ=";
+      sha256 = "sha256-lzBALCS1PI96pBcY1Nj1qfIRAKhhSaDVJY2HEKCeHRM=";
     };
-    date = "2025-09-11";
+    date = "2025-09-20";
   };
   wallust = {
     pname = "wallust";
@@ -53,13 +53,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.09.05";
+    version = "2025.09.23";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.09.05";
+      rev = "2025.09.23";
       fetchSubmodules = false;
-      sha256 = "sha256-9y6OUVm6hNTTi5FFmd9DHcmAMrvSmDD+4kDe00aMTDI=";
+      sha256 = "sha256-pqdR1JfiqvBs5vSKF7bBBKqq0DRAi3kXCN1zDvaW3nQ=";
     };
   };
 }
