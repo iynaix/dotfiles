@@ -27,6 +27,7 @@
         ".direnv"
         ".devenv"
         ".jj"
+        "node_modules"
       ];
 
       extraConfig = {

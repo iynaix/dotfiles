@@ -9,7 +9,16 @@ in
       { pkgs, ... }:
       {
         wrappers.yt-dlp = {
-          basePackage = pkgs.yt-dlp;
+          basePackage =
+            pkgs.yt-dlp.overrideAttrs
+              (import ../../overlays/generated.nix {
+                inherit (pkgs)
+                  fetchFromGitHub
+                  fetchurl
+                  fetchgit
+                  dockerTools
+                  ;
+              }).yt-dlp;
           prependFlags = [
             "--add-metadata"
             "--format"

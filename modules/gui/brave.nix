@@ -6,7 +6,7 @@
 let
   inherit (lib) getExe;
 in
-# mkIf (config.hm.custom.wm != "tty") {
+# mkIf (config.custom.wm != "tty") {
 {
   programs.chromium = {
     enable = true;
