@@ -12,7 +12,7 @@ in
 {
   custom = {
     # hardware
-    hdds.enable = true;
+    hardware.hdds.enable = true;
     qmk.enable = true;
     zfs.encryption = false;
 

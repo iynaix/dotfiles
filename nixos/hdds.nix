@@ -9,20 +9,20 @@ let
     optionals
     ;
   inherit (config.hm.custom) mswindows;
-  cfg = config.custom.hdds;
+  cfg = config.custom.hardware.hdds;
   hgst10 = "/media/HGST10";
   ironwolf22 = "/media/IRONWOLF22";
   inherit (config.hm.home) homeDirectory;
 in
 {
   options.custom = {
-    hdds = {
+    hardware.hdds = {
       enable = mkEnableOption "Desktop HDDs";
       hgst10 = mkEnableOption "HGST 10TB" // {
-        default = config.custom.hdds.enable;
+        default = cfg.enable;
       };
       ironwolf22 = mkEnableOption "Ironwolf Pro 22TB" // {
-        default = config.custom.hdds.enable;
+        default = cfg.enable;
       };
     };
   };
@@ -55,16 +55,13 @@ in
 
       # add btop monitoring for extra hdds
       programs.btop.disks = (optional cfg.hgst10 hgst10) ++ (optional cfg.ironwolf22 ironwolf22);
-    };
 
-    hm = {
-      # add bookmarks for gtk
-      gtk.gtk3.bookmarks = mkIf cfg.ironwolf22 [
-        "file://${hgst10}/Anime Anime"
-        "file://${hgst10}/Anime/Current Anime Current"
-        "file://${hgst10}/TV TV"
-        "file://${hgst10}/TV/Current TV Current"
-        "file://${hgst10}/Movies"
+      gtk.bookmarks = mkIf cfg.ironwolf22 [
+        "${hgst10}/Anime Anime"
+        "${hgst10}/Anime/Current Anime Current"
+        "${hgst10}/TV TV"
+        "${hgst10}/TV/Current TV Current"
+        "${hgst10}/Movies"
       ];
     };
 

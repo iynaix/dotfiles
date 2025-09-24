@@ -109,4 +109,8 @@ in
       };
     };
   };
+
+  config = {
+    xdg.configFile."gtk-3.0/bookmarks".enable = false;
+  };
 }
