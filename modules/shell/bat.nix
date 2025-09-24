@@ -43,10 +43,7 @@
   programs = {
     # use bat for colored help
     fish.shellAbbrs = {
-      "--help" = {
-        position = "anywhere";
-        expansion = "--help | bat --plain --language=help";
-      };
+      "--position anywhere -- --help" = "--help | bat --plain --language=help";
     };
   };
 }

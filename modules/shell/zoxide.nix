@@ -9,4 +9,10 @@ _: {
     enableFishIntegration = true;
     flags = [ "--cmd cd" ];
   };
+
+  custom.persist = {
+    home = {
+      cache.directories = [ ".local/share/zoxide" ];
+    };
+  };
 }

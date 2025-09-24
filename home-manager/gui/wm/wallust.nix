@@ -14,7 +14,6 @@ let
     mapAttrs
     mapAttrs'
     mkEnableOption
-    mkIf
     mkOption
     nameValuePair
     pipe
@@ -90,21 +89,6 @@ in
           ) cfg.templates;
         };
       };
-
-      # setup wallust colorschemes for shells
-      bash.initExtra = mkIf config.custom.wallust.enable ''
-        wallust_colors="${config.xdg.cacheHome}/wallust/sequences"
-        if [ -e "$wallust_colors" ]; then
-          command cat "$wallust_colors"
-        fi
-      '';
-
-      fish.shellInit = mkIf config.custom.wallust.enable ''
-        set wallust_colors "${config.xdg.cacheHome}/wallust/sequences"
-        if test -e "$wallust_colors"
-            command cat "$wallust_colors"
-        end
-      '';
     };
 
     # set xdg configFile text and on change for wallust templates

@@ -1,6 +1,6 @@
 { libCustom, ... }:
 let
-  histFile = libCustom.persistPath (libCustom.xdgConfigPath "bash/.bash_history");
+  histFile = libCustom.persistPath (libCustom.xdgDataHomePath "bash/.bash_history");
 in
 {
   # NOTE: see shell.nix for shared aliases and initExtra
@@ -39,6 +39,6 @@ in
   };
 
   custom.persist = {
-    home.directories = [ ".config/bash" ];
+    home.directories = [ ".local/share/bash" ];
   };
 }

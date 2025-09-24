@@ -1,14 +1,12 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
-  inherit (lib) concatStrings mkAfter;
+  inherit (lib) concatStrings getExe mkAfter;
 in
 {
   programs = {
     starship = {
       enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      enableTransience = true;
+      transientPrompt.enable = true;
       settings =
         let
           dir_bg = "blue";
@@ -110,7 +108,7 @@ in
         # fish
         mkAfter ''
           function starship_transient_prompt_func
-            starship module character
+            ${getExe pkgs.starship} module character
           end
         '';
     };

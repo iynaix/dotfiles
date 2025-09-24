@@ -184,8 +184,8 @@ in
         directories = unique cfg.root.cache.directories;
 
         users.${user} = {
-          files = unique (cfg.root.cache.files ++ hmPersistCfg.home.cache.files);
-          directories = unique (cfg.root.cache.directories ++ hmPersistCfg.home.cache.directories);
+          files = unique cfg.home.cache.files ++ hmPersistCfg.home.cache.files;
+          directories = unique cfg.home.cache.directories ++ hmPersistCfg.home.cache.directories;
         };
       };
     };

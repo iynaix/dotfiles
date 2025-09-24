@@ -92,20 +92,17 @@ in
         [
           bonk # mkdir and touch in one
           curl
-          eza
+          # dysk # better disk info
+          ets # add timestamp to beginning of each line
+          fd # better find
+          fx # terminal json viewer and processor
+          htop
+          jq
           killall
+          procs # better ps
           (hiPrio procps) # for uptime
-          ripgrep
-          zoxide
-          # use same config as home-manager
-          (pkgs.symlinkJoin {
-            name = "yazi";
-            paths = [ pkgs.yazi ];
-            buildInputs = [ pkgs.makeWrapper ];
-            postBuild = # sh
-              ''wrapProgram $out/bin/yazi --set YAZI_CONFIG_HOME "${config.hm.xdg.configHome}/yazi"'';
-            meta.mainProgram = "yazi";
-          })
+          sd # better sed
+          ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
           # use the package configured by nvf
           (custom.neovim-iynaix.override { inherit dots host; })
         ]
@@ -116,7 +113,7 @@ in
             config.hm.gtk.iconTheme.package
           ])
         # add custom user created shell packages
-        ++ (attrValues config.custom.shell.packages);
+        ++ (attrValues (config.custom.shell.packages // config.hm.custom.shell.packages));
     };
 
     nixpkgs = {
