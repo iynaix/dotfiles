@@ -64,16 +64,6 @@ in
     programs.dconf.enable = true;
 
     environment = {
-      etc = mkIf (config.hm.custom.wm != "tty") {
-        # get gparted to use system theme
-        "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
-        "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
-      };
-
-      # install fish completions for fish
-      # https://github.com/nix-community/home-manager/pull/2408
-      pathsToLink = [ "/share/fish" ];
-
       variables = {
         TERMINAL = getExe config.hm.custom.terminal.package;
         EDITOR = "nvim";
@@ -100,12 +90,6 @@ in
           # use the package configured by nvf
           (custom.neovim-iynaix.override { inherit dots host; })
         ]
-        ++
-          # install gtk theme for root, some apps like gparted only run as root
-          (optionals (config.hm.custom.wm != "tty") [
-            config.hm.gtk.theme.package
-            config.hm.gtk.iconTheme.package
-          ])
         # add custom user created shell packages
         ++ (attrValues (config.custom.shell.packages // config.hm.custom.shell.packages));
     };

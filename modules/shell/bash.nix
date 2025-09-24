@@ -1,6 +1,6 @@
 { libCustom, ... }:
 let
-  histFile = libCustom.persistPath (libCustom.xdgDataHomePath "bash/.bash_history");
+  histFile = libCustom.persistPath (libCustom.xdgDataPath "bash/.bash_history");
 in
 {
   # NOTE: see shell.nix for shared aliases and initExtra

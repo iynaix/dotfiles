@@ -21,7 +21,7 @@ in
 
     home = {
       sessionVariables = {
-        XCURSOR_SIZE = builtins.div config.home.pointerCursor.size 2;
+        XCURSOR_SIZE = builtins.div 28 2;
       };
 
       packages = with pkgs; [
@@ -49,13 +49,17 @@ in
     # qtct config
     custom.wallust.templates =
       let
-        defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
+        # TODO: use font option
+        # defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
+        defaultFont = "Geist,10";
         createQtctConf =
           font:
           lib.generators.toINI { } {
             Appearance = {
               custom_palette = false;
-              icon_theme = config.gtk.iconTheme.name;
+              # TODO: use iconTheme option
+              # icon_theme = config.gtk.iconTheme.name;
+              icon_theme = "Tela-Default-dark";
               standard_dialogs = "xdgdesktopportal";
               style = "kvantum";
             };

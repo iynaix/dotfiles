@@ -216,9 +216,10 @@ in
             hot-corners.enable = false;
           };
 
+          # TODO: change to use options
           cursor = {
-            theme = config.home.pointerCursor.name;
-            inherit (config.home.pointerCursor) size;
+            theme = "Simp1e-Tokyo-Night";
+            size = 28;
           };
 
           # match focal format

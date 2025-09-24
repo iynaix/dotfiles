@@ -23,7 +23,7 @@ in
         config.environment.shellAliases
         // config.hm.home.shellAliases
         // {
-          ehistory = "nvim ${libCustom.xdgDataHomePath "fish/fish_history"}";
+          ehistory = "nvim ${libCustom.xdgDataPath "fish/fish_history"}";
         };
       shellInit = # fish
       ''
@@ -53,11 +53,17 @@ in
   };
 
   # fish plugins
-  environment.systemPackages = [
-    # do not add failed commands to history
-    pkgs.fishPlugins.sponge
-    fish-completion-sync
-  ];
+  environment = {
+    # install fish completions for fish
+    # https://github.com/nix-community/home-manager/pull/2408
+    pathsToLink = [ "/share/fish" ];
+
+    systemPackages = [
+      # do not add failed commands to history
+      pkgs.fishPlugins.sponge
+      fish-completion-sync
+    ];
+  };
 
   custom.persist = {
     home = {

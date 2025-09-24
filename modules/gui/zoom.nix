@@ -13,7 +13,7 @@
   config = lib.mkIf config.custom.programs.zoom.enable {
     environment.systemPackages = [ pkgs.zoom-us ];
 
-    hm.xdg.configFile."zoomus.conf" = {
+    hj.".config/zoomus.conf" = {
       text = ''
         [General]
         xwayland=false

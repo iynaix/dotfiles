@@ -117,7 +117,7 @@ rec {
   homePath = path: replaceStrings [ "//" ] [ "/" ] "/home/${user}/${path}";
   xdgCachePath = path: replaceStrings [ "//" ] [ "/" ] (homePath ".cache/${path}");
   xdgConfigPath = path: replaceStrings [ "//" ] [ "/" ] (homePath ".config/${path}");
-  xdgDataHomePath = path: replaceStrings [ "//" ] [ "/" ] (homePath ".local/share/${path}");
+  xdgDataPath = path: replaceStrings [ "//" ] [ "/" ] (homePath ".local/share/${path}");
 
   # checks if a file exists and returns the path to it, otherwise returns the fallback, in a format
   # suitable for passing into sed
