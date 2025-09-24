@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  user,
+  ...
+}:
 let
   inherit (lib)
     functionArgs
@@ -8,6 +13,7 @@ let
     length
     mapAttrs
     optional
+    replaceStrings
     ;
 in
 rec {
@@ -105,6 +111,11 @@ rec {
       ${lib.getExe pkgs.direnv} exec "${dir}" cargo run --release --bin "${bin}" --manifest-path "${dir}/Cargo.toml" -- ${args} "$@"
       popd > /dev/null
     '';
+
+  # utilies for referencing paths
+  persistPath = path: replaceStrings [ "//" ] [ "/" ] "/persist/${path}";
+  homePath = path: replaceStrings [ "//" ] [ "/" ] "/home/${user}/${path}";
+  xdgConfigPath = path: replaceStrings [ "//" ] [ "/" ] (homePath ".config/${path}");
 
   # checks if a file exists and returns the path to it, otherwise returns the fallback, in a format
   # suitable for passing into sed

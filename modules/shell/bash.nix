@@ -1,19 +1,21 @@
-{ config, ... }:
+{ libCustom, ... }:
 let
-  histFile = "/persist/${config.xdg.configHome}/bash/.bash_history";
+  histFile = libCustom.persistPath (libCustom.xdgConfigPath "bash/.bash_history");
 in
 {
   # NOTE: see shell.nix for shared aliases and initExtra
   programs.bash = {
     enable = true;
-    enableCompletion = true;
-    historyFile = histFile;
+    completion.enable = true;
     shellAliases = {
       ehistory = "nvim ${histFile}";
     };
 
-    initExtra = # sh
+    interactiveShellInit = # sh
       ''
+        HISTFILE=${histFile}
+        mkdir -p "$(dirname "$HISTFILE")"
+
         # Change cursor with support for inside/outside tmux
         function _set_cursor() {
             if [[ $TMUX = "" ]]; then

@@ -110,7 +110,7 @@
 
           inherit lib;
 
-          libCustom = import ./lib.nix { inherit lib pkgs; };
+          libCustom = import ./lib.nix { inherit lib pkgs user; };
 
           inherit self; # for repl debugging
 
