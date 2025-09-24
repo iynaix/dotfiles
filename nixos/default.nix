@@ -87,23 +87,6 @@ in
         STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };
 
-      # use some shell aliases from home manager
-      shellAliases = {
-        inherit (config.hm.programs.bash.shellAliases)
-          eza
-          ls
-          ll
-          la
-          lla
-          ;
-      }
-      // {
-        inherit (config.hm.home.shellAliases)
-          t # eza related
-          y # yazi
-          ;
-      };
-
       systemPackages =
         with pkgs;
         [
