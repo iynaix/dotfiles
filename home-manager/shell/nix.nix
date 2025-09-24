@@ -383,9 +383,9 @@ in
     # nixpkgs activity summary
     # from https://github.com/NixOS/nixpkgs/issues/321665
     nixpkgs-commits = {
-      runtimeInputs = [
-        config.programs.gh.package
-        pkgs.jq
+      runtimeInputs = with pkgs; [
+        gh
+        jq
       ];
       # See <https://gist.github.com/lorenzleutgeb/239214f1d60b1cf8c79e7b0dc0483deb>.
       text = ''

@@ -14,7 +14,6 @@ let
     mkForce
     mkIf
     mkOption
-    optionalAttrs
     optionals
     ;
   inherit (lib.types)
@@ -65,11 +64,7 @@ in
     programs.dconf.enable = true;
 
     environment = {
-      etc = {
-        # universal git settings
-        "gitconfig".text = config.hm.xdg.configFile."git/config".text;
-      }
-      // optionalAttrs (config.hm.custom.wm != "tty") {
+      etc = mkIf (config.hm.custom.wm != "tty") {
         # get gparted to use system theme
         "xdg/gtk-3.0/settings.ini".text = config.hm.xdg.configFile."gtk-3.0/settings.ini".text;
         "xdg/gtk-4.0/settings.ini".text = config.hm.xdg.configFile."gtk-4.0/settings.ini".text;
@@ -84,7 +79,6 @@ in
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
-        STARSHIP_CONFIG = "${config.hm.xdg.configHome}/starship.toml";
       };
 
       systemPackages =
@@ -148,9 +142,6 @@ in
     };
 
     programs = {
-      # use same config as home-manager
-      bash.interactiveShellInit = config.hm.programs.bash.initExtra;
-
       file-roller.enable = true;
       git.enable = true;
 

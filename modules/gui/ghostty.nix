@@ -16,7 +16,7 @@ let
       "ghostty-config";
 
   padding = 12;
-  fishPath = getExe config.hm.programs.fish.package;
+  fishPath = getExe pkgs.fish;
 
   ghosttyConf = {
     alpha-blending = "linear-corrected";
