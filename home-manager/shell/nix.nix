@@ -102,17 +102,10 @@ in
         '';
     };
     # nixos-rebuild switch, use different package for home-manager standalone
-    nsw =
-      if isNixOS then
-        pkgs.custom.nsw.override {
-          inherit dots host;
-          specialisation = config.custom.specialisation.current;
-        }
-      else
-        pkgs.custom.hsw.override {
-          inherit dots host;
-          specialisation = config.custom.specialisation.current;
-        };
+    nsw = pkgs.custom.nsw.override {
+      inherit dots host;
+      specialisation = config.custom.specialisation.current;
+    };
     # update all nvfetcher overlays and packages
     nv-update = {
       runtimeInputs = with pkgs; [

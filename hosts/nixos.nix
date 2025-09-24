@@ -32,6 +32,7 @@ rec {
         (inputs.import-tree ../nixos)
         (inputs.import-tree ../modules)
         ../overlays
+        inputs.hjem.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -65,6 +66,7 @@ rec {
         }
         # alias for home-manager
         (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
+        (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops

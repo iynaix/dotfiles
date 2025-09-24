@@ -17,6 +17,11 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    hjem = {
+      url = "github:feel-co/hjem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     wrapper-manager.url = "github:viperML/wrapper-manager";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -80,7 +85,6 @@
           user = "iynaix";
           hostNixosModule = import ./hosts/nixos.nix { inherit inputs self user; };
           inherit (hostNixosModule) mkNixos mkVm;
-          mkHomeManager = import ./hosts/home-manager.nix { inherit inputs self; };
         in
         {
           nixosConfigurations = {
@@ -102,11 +106,6 @@
             xps-vm = mkVm "xps" { isVm = true; };
           }
           // (import ./hosts/iso { inherit inputs self; });
-
-          homeConfigurations = {
-            desktop = mkHomeManager "x86_64-linux" user "desktop" { };
-            framework = mkHomeManager "x86_64-linux" user "framework" { };
-          };
 
           inherit lib;
 

@@ -71,8 +71,6 @@ rec {
   mpv-sub-select = callPackage ./mpv-sub-select { };
   mpv-subsearch = callPackage ./mpv-subsearch { };
 
-  # for nixos-rebuild
-  hsw = callPackage ./hsw { };
   nsw = callPackage ./nsw { };
 
   rofi-themes = callPackage ./rofi-themes { };
