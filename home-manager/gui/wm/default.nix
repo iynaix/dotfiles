@@ -43,7 +43,7 @@ in
         "plasma"
         "tty"
       ];
-      default = "niri";
+      default = "hyprland";
     };
 
     isWm = mkOption {

@@ -75,7 +75,7 @@ in
     "x-scheme-handler/unknown" = "brave-browser.desktop";
   };
 
-  hm.wayland.windowManager.hyprland.settings.windowrule = [
+  custom.programs.hyprland.settings.windowrule = [
     # do not idle while watching videos
     "idleinhibit fullscreen,class:^(brave)$"
     "idleinhibit focus,class:^(brave)$,title:(.*)(YouTube)(.*)"

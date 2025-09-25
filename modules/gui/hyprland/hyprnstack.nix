@@ -13,13 +13,10 @@ let
     ;
 in
 {
-  wayland.windowManager.hyprland =
-    if config.custom.hyprland.hyprnstack then
+  custom.programs.hyprland =
+    if config.custom.programs.hyprnstack then
       {
-        plugins = [
-          # always build with actual hyprland to keep versions in sync
-          (pkgs.custom.hyprnstack.override { hyprland = config.wayland.windowManager.hyprland.package; })
-        ];
+        plugins = [ pkgs.custom.hyprnstack ];
 
         settings = {
           general.layout = "nstack";
@@ -49,7 +46,7 @@ in
                 ]
                 ++ optionals (!isUltrawide) [ "layoutopt:nstack-mfact:0.0" ]
               )
-            ) config.custom.monitors
+            ) config.hm.custom.monitors
           );
         };
       }
@@ -61,7 +58,7 @@ in
           libCustom.mapWorkspaces (
             { monitor, workspace, ... }:
             "${workspace},layoutopt:orientation:${if (monitor.isVertical != 0) then "top" else "left"}"
-          ) config.custom.monitors
+          ) config.hm.custom.monitors
         );
       };
 }

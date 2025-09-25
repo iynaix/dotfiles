@@ -18,6 +18,10 @@ in
 
     programs = {
       deadbeef.enable = true;
+      hyprland = {
+        qtile = false;
+      };
+      hyprnstack = true;
       obs-studio.enable = true;
       pathofbuilding.enable = true;
       vlc.enable = true;

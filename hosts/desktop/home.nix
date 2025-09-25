@@ -73,10 +73,6 @@
       # }
     ];
 
-    hyprland = {
-      hyprnstack = true;
-      qtile = false;
-    };
     lock.enable = false;
     niri.blur.enable = false;
     nvidia.enable = true;

@@ -203,4 +203,52 @@ rec {
         + mkFields fields;
     in
     toHyprconf' initialIndent attrs;
+
+  # hyprland settings type, copied from home-manager:
+  # https://github.com/nix-community/home-manager/blob/39d26c16866260eee6d0487fe9c102ba1c1bf7b2/modules/services/window-managers/hyprland.nix#L169C5-L218C1
+  types = {
+    hyprlandSettingsType = lib.mkOption {
+      type =
+        with lib.types;
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Hyprland configuration value";
+            };
+        in
+        valueType;
+      default = { };
+      description = ''
+        Hyprland configuration written in Nix. Entries with the same key
+        should be written as lists. Variables' and colors' names should be
+        quoted. See <https://wiki.hypr.land> for more examples.
+      '';
+      example = lib.literalExpression ''
+        {
+          decoration = {
+            shadow_offset = "0 5";
+            "col.shadow" = "rgba(00000099)";
+          };
+
+          "$mod" = "SUPER";
+
+          bindm = [
+            # mouse movements
+            "$mod, mouse:272, movewindow"
+            "$mod, mouse:273, resizewindow"
+            "$mod ALT, mouse:272, resizewindow"
+          ];
+        }
+      '';
+    };
+  };
 }

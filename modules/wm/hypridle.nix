@@ -1,14 +1,12 @@
 {
   config,
-  inputs,
   lib,
   libCustom,
-  pkgs,
   ...
 }:
 let
   inherit (lib) mkIf;
-  inherit (config.hm.custom) wm;
+  inherit (config.custom) wm;
   dpmsOff =
     if wm == "hyprland" then
       "hyprctl dispatch dpms off"
@@ -37,23 +35,29 @@ let
     ];
   };
 in
-mkIf config.hm.custom.isWm {
-  services.hypridle = {
-    enable = true;
+mkIf config.custom.isWm {
+  # wrap the config into the hypridle executable
+  custom.wrappers = [
+    (
+      { pkgs, ... }:
+      {
+        wrappers.hypridle = {
+          basePackage = pkgs.hypridle;
+          prependFlags = [
+            "--config"
+            (pkgs.writeText "hypridle.conf" (
+              libCustom.toHyprconf {
+                attrs = hypridleConf;
+                importantPrefixes = [ "$" ];
+              }
+            ))
+          ];
+        };
+      }
+    )
+  ];
 
-    package = inputs.wrapper-manager.lib.wrapWith pkgs {
-      basePackage = pkgs.hypridle;
-      prependFlags = [
-        "--config"
-        (pkgs.writeText "hypridle.conf" (
-          libCustom.toHyprconf {
-            attrs = hypridleConf;
-            importantPrefixes = [ "$" ];
-          }
-        ))
-      ];
-    };
+  services.hypridle.enable = true;
 
-    # NOTE: screen lock on idle is handled in lock.nix
-  };
+  # NOTE: screen lock on idle is handled in lock.nix
 }

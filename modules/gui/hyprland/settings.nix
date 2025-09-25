@@ -1,19 +1,17 @@
 {
   config,
   host,
-  isLaptop,
-  isVm,
   lib,
   libCustom,
   pkgs,
+  isLaptop,
+  isVm,
   ...
 }:
 let
   inherit (lib)
     length
-    listToAttrs
     mkDefault
-    mkEnableOption
     mkIf
     optionalAttrs
     optionalString
@@ -21,35 +19,27 @@ let
     ;
 in
 {
-  options.custom = {
-    hyprland = {
-      hyprnstack = mkEnableOption "hyprnstack";
-      hypr-darkwindow = mkEnableOption "hypr-darkwindow" // {
-        default = true;
-      };
-    };
-  };
+  # wrap the config into the Hyprland executable
+  custom = {
+    # wrappers = [
+    #   (
+    #     { pkgs, ... }:
+    #     {
+    #       wrappers.hyprland = {
+    #         basePackage = pkgs.hyprland;
+    #         prependFlags = [
+    #           "--config"
+    #           (pkgs.writeText "hyprland.conf" hyprlandText)
+    #         ];
+    #       };
+    #     }
+    #   )
+    # ];
 
-  config = mkIf (config.custom.wm == "hyprland") {
-    home = {
-      shellAliases = {
-        hyprland = "Hyprland";
-        hypr-log = "hyprctl rollinglog --follow";
-      };
-    };
-
-    wayland.windowManager.hyprland = {
-      enable = true;
-      # package = pkgs.hyprland;
-      # package =
-      #   assert (assertMsg (versionOlder config.programs.hyprland.package.version "0.42") "hyprland: use version from nixpkgs?");
-      #   inputs.hyprland.packages.${pkgs.system}.hyprland;
-
-      plugins = optionals config.custom.hyprland.hypr-darkwindow [
+    programs.hyprland = {
+      plugins = optionals config.custom.programs.hypr-darkwindow [
         # always build with actual hyprland to keep versions in sync
-        (pkgs.custom.hypr-darkwindow.override {
-          hyprland = config.wayland.windowManager.hyprland.package;
-        })
+        pkgs.custom.hypr-darkwindow
       ];
 
       settings = {
@@ -64,7 +54,7 @@ in
             inherit (d) scale transform vrr;
           }
           // d.extraHyprlandConfig
-        ) config.custom.monitors;
+        ) config.hm.custom.monitors;
 
         input = {
           kb_layout = "us";
@@ -73,7 +63,6 @@ in
           touchpad = mkIf isLaptop {
             natural_scroll = false;
             disable_while_typing = true;
-            clickfinger_behavior = true;
           };
         };
 
@@ -193,42 +182,27 @@ in
         ];
 
         # handle trackpad settings
-        gestures = mkIf isLaptop { workspace_swipe = true; };
+        gestures = mkIf isLaptop {
+          gesture = [ "3, horizontal, workspace" ];
+        };
       }
       //
         # bind workspaces to monitors, don't bother if there is only one monitor
-        optionalAttrs (length config.custom.monitors > 1) {
+        optionalAttrs (length config.hm.custom.monitors > 1) {
           workspace = libCustom.mapWorkspaces (
             { workspace, monitor, ... }:
             "${workspace},monitor:${monitor.name}"
             + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
-          ) config.custom.monitors;
+          ) config.hm.custom.monitors;
         }
       //
         # nvidia specific settings
-        optionalAttrs config.custom.nvidia.enable {
+        optionalAttrs config.hm.custom.nvidia.enable {
           cursor = {
             # no_hardware_cursors = true;
             use_cpu_buffer = 1;
           };
         };
-    };
-
-    # waybar config for hyprland
-    custom.waybar.config = {
-      "hyprland/workspaces" = {
-        format = "{name}";
-        persistent-workspaces = listToAttrs (
-          map (mon: {
-            inherit (mon) name;
-            value = mon.workspaces;
-          }) config.custom.monitors
-        );
-      };
-    };
-
-    custom.persist = {
-      home.cache.directories = [ ".cache/hyprland" ];
     };
   };
 }

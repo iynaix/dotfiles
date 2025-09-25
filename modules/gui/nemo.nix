@@ -91,10 +91,10 @@ mkIf (config.custom.wm != "tty") {
       ];
   };
 
-  # wayland.windowManager.hyprland.settings = {
-  #   # disable transparency for file delete dialog
-  #   windowrule = [ "forcergbx,floating:1,class:(nemo)" ];
-  # };
+  custom.programs.hyprland.settings = {
+    # disable transparency for file delete dialog
+    windowrule = [ "forcergbx,floating:1,class:(nemo)" ];
+  };
 
   custom.persist = {
     home = {

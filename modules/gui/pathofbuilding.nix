@@ -18,7 +18,7 @@ in
   config = mkIf config.custom.programs.pathofbuilding.enable {
     environment.systemPackages = [ pkgs.custom.path-of-building ];
 
-    hm.wayland.windowManager.hyprland.settings = {
+    custom.programs.hyprland.settings = {
       # starts floating for some reason?
       windowrule = [ "tile,class:(pobfrontend)" ];
     };

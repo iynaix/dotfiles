@@ -13,11 +13,11 @@ let
     ;
 in
 mkIf (config.custom.wm == "hyprland") {
-  custom = {
+  hm.custom = {
     autologinCommand = "Hyprland";
   };
 
-  wayland.windowManager.hyprland.settings = {
+  custom.programs.hyprland.settings = {
     exec-once = [
       # stop fucking with my cursors
       "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"

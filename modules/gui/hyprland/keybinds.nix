@@ -13,15 +13,15 @@ let
     mkIf
     optionals
     ;
-  inherit (config.custom) monitors;
+  inherit (config.hm.custom) monitors;
   pamixer = getExe pkgs.pamixer;
   rofiExe = getExe config.programs.rofi.package;
   termExec = cmd: "${getExe config.custom.terminal.package} -e ${cmd}";
-  qtile_like = config.custom.hyprland.qtile;
+  qtile_like = config.custom.programs.hyprland.qtile;
 in
 {
   options.custom = {
-    hyprland = {
+    programs.hyprland = {
       qtile = mkEnableOption "qtile like behavior for workspaces";
     };
   };
@@ -30,7 +30,7 @@ in
     custom.shell.packages = {
       focus-or-run = {
         runtimeInputs = with pkgs; [
-          config.wayland.windowManager.hyprland.package
+          hyprland
           jq
         ];
         # $1 is string to search for in window title
@@ -48,7 +48,7 @@ in
       };
     };
 
-    wayland.windowManager.hyprland.settings = {
+    custom.programs.hyprland.settings = {
       bind =
         let
           workspace_keybinds = flatten (
@@ -171,7 +171,7 @@ in
           ",XF86AudioMute, exec, ${pamixer} -t"
         ]
         # invert windows
-        ++ optionals config.custom.hyprland.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
+        ++ optionals config.custom.programs.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
         ++ optionals config.custom.backlight.enable [
           ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"

@@ -9,6 +9,7 @@ in
     # boot into a tty without a DE / WM
     tty = {
       configuration = {
+        custom.wm = "tty";
         hm.custom = {
           specialisation.current = "tty";
           wm = "tty";
@@ -16,9 +17,10 @@ in
       };
     };
 
-    # NOTE: no point having a separate boot option if WM is already the default
-    hyprland = mkIf (config.hm.custom.wm != "hyprland" && cfg.hyprland.enable) {
+    # NOTE: no point having a separate boot option if that WM is already the default
+    hyprland = mkIf (config.custom.wm != "hyprland" && cfg.hyprland.enable) {
       configuration = {
+        custom.wm = "hyprland";
         hm.custom = {
           specialisation.current = "hyprland";
           wm = "hyprland";
@@ -26,8 +28,9 @@ in
       };
     };
 
-    niri = mkIf (config.hm.custom.wm != "niri" && cfg.niri.enable) {
+    niri = mkIf (config.custom.wm != "niri" && cfg.niri.enable) {
       configuration = {
+        custom.wm = "niri";
         hm.custom = {
           specialisation.current = "niri";
           wm = "niri";
@@ -35,8 +38,9 @@ in
       };
     };
 
-    mango = mkIf (config.hm.custom.wm != "mango" && cfg.mango.enable) {
+    mango = mkIf (config.custom.wm != "mango" && cfg.mango.enable) {
       configuration = {
+        custom.wm = "mango";
         hm.custom = {
           specialisation.current = "mango";
           wm = "mango";
