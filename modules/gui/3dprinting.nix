@@ -37,14 +37,15 @@ let
 in
 {
   options.custom = {
-    # option not called 3dprinting because of attribute name restrictions
-    printing3d.enable = mkEnableOption "3d printing";
-    modelling3d.enable = mkEnableOption "3d modelling";
+    programs = {
+      freecad.enable = mkEnableOption "freecad";
+      orca-slicer.enable = mkEnableOption "orca-slicer";
+    };
   };
 
   config = mkIf (config.custom.wm != "tty") (mkMerge [
     # slicers
-    (mkIf config.custom.printing3d.enable {
+    (mkIf config.custom.programs.orca-slicer.enable {
       environment.systemPackages = [
         (pkgs.symlinkJoin {
           name = "orca-slicer";
@@ -97,7 +98,7 @@ in
     })
 
     # CAD
-    (mkIf config.custom.modelling3d.enable {
+    (mkIf config.custom.programs.freecad.enable {
       environment.systemPackages = [
         # freecad segfaults on starup on nvidia
         # https://github.com/NixOS/nixpkgs/issues/366299

@@ -1,11 +1,15 @@
 _: {
   custom = {
-    programs.btop.settings = {
-      custom_gpu_name0 = "AMD Radeon 780M";
+    programs = {
+      btop.settings = {
+        custom_gpu_name0 = "AMD Radeon 780M";
+      };
+      freecad.enable = true;
+      orca-slicer.enable = true;
+      rclip.enable = true;
+      wallfacer.enable = true;
     };
 
-    modelling3d.enable = true;
-    printing3d.enable = true;
     qmk.enable = true;
     virtualization.enable = true;
   };

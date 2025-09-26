@@ -44,17 +44,17 @@ mkIf (config.custom.wm == "hyprland") {
   systemd.user.services = {
     # listen to events from hyprland, done as a service so it will restart from nixos-rebuild
     hypr-ipc = {
-      wantedBy = [ config.hm.wayland.systemd.target ];
+      wantedBy = [ "graphical-session.target" ];
 
       unitConfig = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "Custom hypr-ipc from dotfiles-rs";
         After = [ "hyprland-session.target" ];
-        PartOf = [ config.hm.wayland.systemd.target ];
+        PartOf = [ "graphical-session.target" ];
       };
 
       serviceConfig = {
-        ExecStart = "${getExe' config.hm.custom.dotfiles.package "hypr-ipc"}";
+        ExecStart = "${getExe' config.custom.programs.dotfiles.package "hypr-ipc"}";
         Restart = "on-failure";
       };
     };

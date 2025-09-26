@@ -8,6 +8,7 @@
 let
   inherit (lib)
     getExe
+    getExe'
     max
     mkAfter
     mkEnableOption
@@ -20,54 +21,52 @@ let
     ;
   inherit (lib.types) package;
   tomlFormat = pkgs.formats.toml { };
-  wallpapers_dir = "${config.xdg.userDirs.pictures}/Wallpapers";
-  walls_in_dir = "${config.xdg.userDirs.pictures}/wallpapers_in";
+  wallpapers_dir = libCustom.homePath "Pictures/Wallpapers";
+  walls_in_dir = libCustom.homePath "Pictures/wallpapers_in";
 in
 {
   options.custom = {
-    rclip.enable = mkEnableOption "rclip";
-    wallfacer.enable = mkEnableOption "wallfacer";
-    wallpaper-tools.enable = mkEnableOption "additional tools for wallpapers, e.g. fetching and editing";
-    dotfiles = {
-      package = mkOption {
-        type = package;
-        default = pkgs.custom.dotfiles-rs.override {
-          inherit (config.custom) wm;
-          pqiv = pkgs.pqiv.overrideAttrs (o: {
-            patches =
-              (o.patches or [ ])
-              # fix window resizing on the first image in niri if called in a keybind
-              ++ optionals (config.custom.wm == "niri") [ ../niri/pqiv-gdk-wayland.patch ];
-          });
-          swww = config.services.swww.package;
-          wallust = config.programs.wallust.package;
-          useDedupe = config.custom.wallpaper-tools.enable;
-          useRclip = config.custom.rclip.enable;
-          useWallfacer = config.custom.wallfacer.enable;
+    programs = {
+      rclip.enable = mkEnableOption "rclip";
+      wallfacer.enable = mkEnableOption "wallfacer";
+      wallpaper-tools.enable = mkEnableOption "additional tools for wallpapers, e.g. fetching and editing";
+      dotfiles = {
+        package = mkOption {
+          type = package;
+          default = pkgs.custom.dotfiles-rs.override {
+            inherit (config.custom) wm;
+            pqiv = pkgs.pqiv.overrideAttrs (o: {
+              patches =
+                (o.patches or [ ])
+                # fix window resizing on the first image in niri if called in a keybind
+                ++ optionals (config.custom.wm == "niri") [ ../../home-manager/gui/niri/pqiv-gdk-wayland.patch ];
+            });
+            useDedupe = config.custom.programs.wallpaper-tools.enable;
+            useRclip = config.custom.programs.rclip.enable;
+            useWallfacer = config.custom.programs.wallfacer.enable;
+          };
+          description = "Package to use for dotfiles-rs";
         };
-        description = "Package to use for dotfiles-rs";
       };
     };
   };
 
   config = mkIf config.custom.isWm (mkMerge [
     {
-      home = {
+      environment = {
         shellAliases = {
           wall = "wallpaper";
         };
-        packages = [ config.custom.dotfiles.package ];
+        systemPackages = [ config.custom.programs.dotfiles.package ];
       };
 
       # handle setting the wallpaper on startup
       # start swww and wallpaper via systemd to minimize reloads
-      services.swww.enable = true;
-
       systemd.user.services =
         let
           wallpaper-startup = pkgs.writeShellApplication {
             name = "wallpaper-startup";
-            runtimeInputs = [ config.custom.dotfiles.package ];
+            runtimeInputs = [ config.custom.programs.dotfiles.package ];
             text = ''
               wallpaper "$@"
               ${optionalString (config.custom.wm == "hyprland") "hypr-monitors"}
@@ -75,25 +74,42 @@ in
           };
         in
         {
+          # adapted from home-manager:
+          # https://github.com/nix-community/home-manager/blob/master/modules/services/swww.nix
+          swww = {
+            wantedBy = [ "graphical-session.target" ];
+
+            unitConfig = {
+              ConditionEnvironment = "WAYLAND_DISPLAY";
+              Description = "swww-daemon";
+              After = [ "graphical-session.target" ];
+              PartOf = [ "graphical-session.target" ];
+            };
+
+            serviceConfig = {
+              ExecStart = getExe' pkgs.swww "swww-daemon";
+              Restart = "always";
+              RestartSec = 10;
+            };
+          };
           wallpaper = {
-            Install.WantedBy = [ "swww.service" ];
-            Unit = {
+            wantedBy = [ "swww.service" ];
+            unitConfig = {
               Description = "Set the wallpaper and update colorscheme";
-              PartOf = [ config.wayland.systemd.target ];
+              PartOf = [ "graphical-session.target" ];
               After = [ "swww.service" ];
               Requires = [ "swww.service" ];
             };
-            Service = {
+            serviceConfig = {
               Type = "oneshot";
               ExecStart = getExe wallpaper-startup;
               ExecReload = "${getExe wallpaper-startup} reload";
-              X-SwitchMethod = "keep-old";
             };
           };
         };
 
       # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
-      programs.niri.settings.window-rules = map (
+      hm.programs.niri.settings.window-rules = map (
         mon:
         let
           targetPercent = 0.3;
@@ -107,20 +123,20 @@ in
           default-column-width.fixed = width;
           default-window-height.fixed = height;
         }
-      ) config.custom.monitors;
+      ) config.hm.custom.monitors;
     }
 
-    (mkIf config.custom.wallfacer.enable {
+    (mkIf config.custom.programs.wallfacer.enable {
       custom.shell.packages = {
         wallfacer = {
           text =
             # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
             # https://github.com/tauri-apps/tauri/issues/10702
-            lib.optionalString config.custom.nvidia.enable ''
+            lib.optionalString config.hm.custom.nvidia.enable ''
               export WEBKIT_DISABLE_DMABUF_RENDERER=1
             ''
             + libCustom.direnvCargoRun {
-              dir = "/persist${config.home.homeDirectory}/projects/wallfacer";
+              dir = libCustom.persistPath (libCustom.homePath "projects/wallfacer");
             };
           # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
           fishCompletion = # fish
@@ -133,9 +149,9 @@ in
         };
       };
 
-      # config file for wallfacer
-      xdg.configFile = {
-        "wallfacer/wallfacer.toml".source = tomlFormat.generate "wallfacer.toml" (
+      # TODO: add --config option to wallfacer
+      hj.files = {
+        ".config/wallfacer/wallfacer.toml".source = tomlFormat.generate "wallfacer.toml" (
           {
             wallpapers_path = wallpapers_dir;
             min_width = 3840; # 4k width
@@ -182,20 +198,22 @@ in
       };
     })
 
-    (mkIf config.custom.wallpaper-tools.enable {
-      custom.shell.packages = {
-        # fetch wallpapers from pixiv for user
-        pixiv = libCustom.direnvCargoRun {
-          dir = "/persist${config.home.homeDirectory}/projects/pixiv";
+    (mkIf config.custom.programs.wallpaper-tools.enable {
+      custom = {
+        shell.packages = {
+          # fetch wallpapers from pixiv for user
+          pixiv = libCustom.direnvCargoRun {
+            dir = libCustom.persistPath (libCustom.homePath "projects/pixiv");
+          };
         };
+
+        programs.pqiv.settings = mkAfter ''
+          c { command(nomacs $1) }
+          m { command(mv $1 ${walls_in_dir}) }
+        '';
       };
 
-      home.packages = [ pkgs.nomacs ];
-
-      programs.pqiv.extraConfig = mkAfter ''
-        c { command(nomacs $1) }
-        m { command(mv $1 ${walls_in_dir}) }
-      '';
+      environment.systemPackages = [ pkgs.nomacs ];
 
       custom.persist = {
         home = {
@@ -207,9 +225,9 @@ in
       };
     })
 
-    (mkIf config.custom.rclip.enable {
-      home = {
-        packages = [ pkgs.rclip ];
+    (mkIf config.custom.programs.rclip.enable {
+      environment = {
+        systemPackages = [ pkgs.rclip ];
 
         shellAliases = {
           wallrg = "wallpaper search -t 50";

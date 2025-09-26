@@ -67,14 +67,14 @@ mkIf (config.custom.wm == "niri") {
     # listen to events from niri, done as a service so it will restart from nixos-rebuild
     niri-ipc = {
       Install = {
-        WantedBy = [ config.wayland.systemd.target ];
+        WantedBy = [ "graphical-session.target" ];
       };
 
       Unit = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "Custom niri-ipc from dotfiles-rs";
         After = [ "niri.service" ];
-        PartOf = [ config.wayland.systemd.target ];
+        PartOf = [ "graphical-session.target" ];
       };
 
       Service = {
@@ -86,14 +86,14 @@ mkIf (config.custom.wm == "niri") {
     # start a separate swww service in a different namespace for niri backdrop
     swww-backdrop = {
       Install = {
-        WantedBy = [ config.wayland.systemd.target ];
+        WantedBy = [ "graphical-session.target" ];
       };
 
       Unit = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "swww-daemon-backdrop";
-        After = [ config.wayland.systemd.target ];
-        PartOf = [ config.wayland.systemd.target ];
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
       };
 
       Service = {

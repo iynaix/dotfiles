@@ -22,16 +22,19 @@ in
       hyprland = {
         qtile = false;
       };
+      freecad.enable = true;
       hyprnstack = true;
       obs-studio.enable = true;
+      orca-slicer.enable = true;
       pathofbuilding.enable = true;
+      rclip.enable = true;
       vlc.enable = true;
+      wallfacer.enable = true;
+      wallpaper-tools.enable = true;
     };
 
     bittorrent.enable = true;
     distrobox.enable = true;
-    modelling3d.enable = true;
-    printing3d.enable = true;
     syncoid.enable = true;
     vercel.enable = true;
     virtualization.enable = true;

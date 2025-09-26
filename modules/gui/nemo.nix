@@ -83,7 +83,7 @@ mkIf (config.custom.wm != "tty") {
         (homePath "Documents")
         (homePath "Pictures/Wallpapers")
       ]
-      ++ optionals config.hm.custom.wallpaper-tools.enable [
+      ++ optionals config.custom.programs.wallpaper-tools.enable [
         (homePath "Pictures/wallpapers_in Walls In")
       ]
       ++ [
