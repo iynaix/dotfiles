@@ -2,8 +2,6 @@
 {
   config,
   host,
-  isLaptop,
-  isNixOS,
   lib,
   pkgs,
   ...
@@ -52,10 +50,6 @@ in
       default =
         config.custom.wm == "hyprland" || config.custom.wm == "niri" || config.custom.wm == "mango";
       readOnly = true;
-    };
-
-    lock.enable = mkEnableOption "screen locking of host" // {
-      default = config.custom.isWm && isLaptop && isNixOS;
     };
 
     monitors = mkOption {

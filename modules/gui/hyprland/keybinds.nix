@@ -15,8 +15,8 @@ let
     ;
   inherit (config.hm.custom) monitors;
   pamixer = getExe pkgs.pamixer;
-  rofiExe = getExe config.programs.rofi.package;
-  termExec = cmd: "${getExe config.custom.terminal.package} -e ${cmd}";
+  rofiExe = getExe config.hm.programs.rofi.package;
+  termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${cmd}";
   qtile_like = config.custom.programs.hyprland.qtile;
 in
 {
@@ -74,22 +74,22 @@ in
           );
         in
         [
-          "$mod, Return, exec, ${getExe config.custom.terminal.package}"
+          "$mod, Return, exec, ${getExe config.hm.custom.terminal.package}"
           "$mod_SHIFT, Return, exec, ${rofiExe} -show drun"
           "$mod, BackSpace, killactive,"
-          "$mod, e, exec, nemo ${config.xdg.userDirs.download}"
-          "$mod_SHIFT, e, exec, ${termExec "yazi ${config.xdg.userDirs.download}"}"
+          "$mod, e, exec, nemo ${libCustom.homePath "Downloads"}"
+          "$mod_SHIFT, e, exec, ${termExec "yazi ${libCustom.homePath "Downloads"}"}"
           "$mod, w, exec, ${getExe pkgs.brave}"
           "$mod_SHIFT, w, exec, ${getExe pkgs.brave} --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
-          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.home.homeDirectory}/projects/dotfiles"''
-          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.home.homeDirectory}/projects/nixpkgs"''
+          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${libCustom.homePath "/projects/dotfiles"}"''
+          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${libCustom.homePath "/projects/nixpkgs"}"''
 
           # exit hyprland
           "ALT, F4, exit,"
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, exec, ${getExe config.custom.rofi-power-menu.package}"
+          "CTRL_ALT, Delete, exec, ${getExe config.hm.custom.rofi-power-menu.package}"
 
           # clipboard history
           "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
@@ -173,7 +173,7 @@ in
         # invert windows
         ++ optionals config.custom.programs.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
-        ++ optionals config.custom.backlight.enable [
+        ++ optionals config.hm.custom.backlight.enable [
           ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"
           ",XF86MonBrightnessUp, exec, ${getExe pkgs.brightnessctl} set +5%"
         ];

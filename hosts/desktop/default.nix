@@ -13,6 +13,7 @@ in
   custom = {
     # hardware
     hardware.hdds.enable = true;
+    lock.enable = false;
     qmk.enable = true;
     zfs.encryption = false;
 

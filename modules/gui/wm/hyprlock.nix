@@ -1,0 +1,197 @@
+{
+  config,
+  isLaptop,
+  isNixOS,
+  lib,
+  libCustom,
+  pkgs,
+  ...
+}:
+let
+  inherit (lib)
+    getExe
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
+  lockPkg = pkgs.writeShellApplication {
+    name = "lock";
+    runtimeInputs = [
+      pkgs.procps
+      config.programs.hyprlock.package
+    ];
+    text = # sh
+      "pidof hyprlock || hyprlock";
+  };
+  lockCmd = getExe lockPkg;
+in
+{
+  options.custom = {
+    lock.enable = mkEnableOption "screen locking of host" // {
+      default = config.custom.isWm && isLaptop && isNixOS;
+    };
+  };
+
+  config = mkMerge [
+    (mkIf config.custom.lock.enable {
+      programs.hyprlock.enable = true;
+
+      custom.shell.packages = {
+        lock = lockPkg;
+      };
+
+      environment.systemPackages = [ config.custom.shell.packages.lock ];
+
+      # lock on idle
+      custom.programs.hypridle = {
+        settings = {
+          general = {
+            lock_cmd = lockCmd;
+          };
+
+          listener = [
+            {
+              timeout = 5 * 60;
+              on-timeout = lockCmd;
+            }
+          ];
+        };
+      };
+
+      hm.custom.wallust.templates."hyprlock.conf" = {
+        text =
+          let
+            rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }},${toString alpha})";
+          in
+          libCustom.toHyprconf {
+            attrs = {
+              general = {
+                disable_loading_bar = false;
+                grace = 0;
+                hide_cursor = false;
+              };
+
+              background = map (mon: {
+                monitor = "${mon.name}";
+                # add trailing comment with monitor name for wallpaper to replace later
+                path = "/tmp/swww__${mon.name}.webp";
+                color = "${rgba "background" 1}";
+              }) config.hm.custom.monitors;
+
+              input-field = {
+                monitor = "";
+                size = "300, 50";
+                outline_thickness = 2;
+                dots_size = 0.33;
+                dots_spacing = 0.15;
+                dots_center = true;
+                outer_color = "${rgba "background" 0.8}";
+                inner_color = "${rgba "foreground" 0.9}";
+                font_color = "${rgba "background" 0.8}";
+                fade_on_empty = false;
+                placeholder_text = "";
+                hide_input = false;
+
+                position = "0, -20";
+                halign = "center";
+                valign = "center";
+              };
+
+              label = [
+                {
+                  monitor = "";
+                  text = ''cmd[update:1000] echo "<b><big>$(date +"%H:%M")</big></b>"'';
+                  color = "${rgba "foreground" 1}";
+                  font_size = 150;
+                  font_family = "${config.hm.custom.fonts.regular}";
+
+                  # shadow makes it more readable on light backgrounds
+                  shadow_passes = 1;
+                  shadow_size = 4;
+
+                  position = "0, 190";
+                  halign = "center";
+                  valign = "center";
+                }
+                {
+                  monitor = "";
+                  text = ''cmd[update:1000] echo "<b><big>$(date +"%A, %B %-d")</big></b>"'';
+                  color = "${rgba "foreground" 1}";
+                  font_size = 40;
+                  font_family = "${config.hm.custom.fonts.regular}";
+
+                  # shadow makes it more readable on light backgrounds
+                  shadow_passes = 1;
+                  shadow_size = 2;
+
+                  position = "0, 60";
+                  halign = "center";
+                  valign = "center";
+                }
+              ];
+            };
+          };
+        target = libCustom.xdgConfigPath "/hypr/hyprlock.conf";
+      };
+    })
+
+    # settings for hyprland
+    (mkIf (config.custom.wm == "hyprland") {
+      custom.programs.hyprland.settings =
+        let
+          lockOrDpms = if config.custom.lock.enable then "exec, ${lockCmd}" else "dpms, off";
+        in
+        {
+          bind = [ "$mod_SHIFT_CTRL, x, ${lockOrDpms}" ];
+
+          # handle laptop lid
+          bindl = mkIf isLaptop [ ",switch:Lid Switch, ${lockOrDpms}" ];
+        };
+    })
+
+    # settings for niri
+    (mkIf (config.custom.wm == "niri") {
+      hm.programs.niri.settings =
+        let
+          lockOrDpms =
+            if config.custom.lock.enable then
+              lockCmd
+            else
+              # lid-open actions only support spawn for now
+              [
+                "niri"
+                "msg"
+                "action"
+                "power-off-monitors"
+              ];
+        in
+        {
+          binds = {
+            "Mod+Shift+x".action.spawn = lockOrDpms;
+          };
+
+          switch-events = mkIf isLaptop {
+            lid-open.action.spawn = lockOrDpms;
+          };
+        };
+    })
+
+    # settings for mango
+    (mkIf (config.custom.wm == "mango") {
+      hm.custom.mango.settings =
+        let
+          lockOrDpms =
+            if config.custom.lock.enable then
+              "spawn, ${lockCmd}"
+            else
+              # TODO: support dpms off with wlr-dpms?
+              "spawn, ${lockCmd}";
+        in
+        {
+          bind = [ "$mod+SHIFT+CTRL, x, ${lockOrDpms}" ];
+        };
+
+      # TODO: mango doesn't support switch events yet?
+    })
+  ];
+}

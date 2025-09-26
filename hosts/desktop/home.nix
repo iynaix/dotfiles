@@ -73,7 +73,6 @@
       # }
     ];
 
-    lock.enable = false;
     niri.blur.enable = false;
     nvidia.enable = true;
     rclip.enable = true;

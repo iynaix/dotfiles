@@ -38,25 +38,23 @@ mkIf (config.custom.wm == "hyprland") {
         exec = concatStringsSep " " spawn;
       in
       if enable then "${rules} ${exec}" else ""
-    ) config.custom.startup;
+    ) config.hm.custom.startup;
   };
 
   systemd.user.services = {
     # listen to events from hyprland, done as a service so it will restart from nixos-rebuild
     hypr-ipc = {
-      Install = {
-        WantedBy = [ config.wayland.systemd.target ];
-      };
+      wantedBy = [ config.hm.wayland.systemd.target ];
 
-      Unit = {
+      unitConfig = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "Custom hypr-ipc from dotfiles-rs";
         After = [ "hyprland-session.target" ];
-        PartOf = [ config.wayland.systemd.target ];
+        PartOf = [ config.hm.wayland.systemd.target ];
       };
 
-      Service = {
-        ExecStart = "${getExe' config.custom.dotfiles.package "hypr-ipc"}";
+      serviceConfig = {
+        ExecStart = "${getExe' config.hm.custom.dotfiles.package "hypr-ipc"}";
         Restart = "on-failure";
       };
     };

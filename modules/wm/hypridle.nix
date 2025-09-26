@@ -21,43 +21,53 @@ let
       "niri msg action power-on-monitors"
     else
       "";
-  hypridleConf = {
-    general = {
-      ignore_dbus_inhibit = false;
-    };
-
-    listener = [
-      {
-        timeout = 5 * 60;
-        on-timeout = dpmsOff;
-        on-resume = dpmsOn;
-      }
-    ];
+  hypridleConfText = libCustom.toHyprconf {
+    attrs = config.custom.programs.hypridle.settings;
+    importantPrefixes = [ "$" ];
   };
 in
-mkIf config.custom.isWm {
-  # wrap the config into the hypridle executable
-  custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.hypridle = {
-          basePackage = pkgs.hypridle;
-          prependFlags = [
-            "--config"
-            (pkgs.writeText "hypridle.conf" (
-              libCustom.toHyprconf {
-                attrs = hypridleConf;
-                importantPrefixes = [ "$" ];
-              }
-            ))
-          ];
+{
+  options.custom = {
+    programs.hypridle = {
+      settings = libCustom.types.hyprlandSettingsType;
+    };
+  };
+
+  config = mkIf config.custom.isWm {
+    custom = {
+      programs.hypridle.settings = {
+        general = {
+          ignore_dbus_inhibit = false;
         };
-      }
-    )
-  ];
 
-  services.hypridle.enable = true;
+        listener = [
+          {
+            timeout = 5 * 60;
+            on-timeout = dpmsOff;
+            on-resume = dpmsOn;
+          }
+        ];
+      };
 
-  # NOTE: screen lock on idle is handled in lock.nix
+      # wrap the config into the hypridle executable
+      wrappers = [
+        (
+          { pkgs, ... }:
+          {
+            wrappers.hypridle = {
+              basePackage = pkgs.hypridle;
+              prependFlags = [
+                "--config"
+                (pkgs.writeText "hypridle.conf" hypridleConfText)
+              ];
+            };
+          }
+        )
+      ];
+    };
+
+    services.hypridle.enable = true;
+
+    # NOTE: screen lock on idle is handled in lock.nix
+  };
 }
