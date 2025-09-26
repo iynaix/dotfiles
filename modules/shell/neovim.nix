@@ -1,5 +1,4 @@
 {
-  config,
   dots,
   host,
   lib,
@@ -7,12 +6,12 @@
   ...
 }:
 let
-  inherit (lib) getExe;
+  inherit (lib) getExe hiPrio;
   customNeovim = pkgs.custom.neovim-iynaix.override { inherit dots host; };
   nvim-direnv = pkgs.writeShellApplication {
     name = "nvim-direnv";
     runtimeInputs = [
-      config.programs.direnv.package
+      pkgs.direnv
       customNeovim
     ];
     text = # sh
@@ -22,32 +21,34 @@ let
         fi
       '';
   };
+  nvim-desktop-entry = pkgs.makeDesktopItem {
+    name = "Neovim";
+    desktopName = "Neovim";
+    genericName = "Text Editor";
+    icon = "nvim";
+    terminal = true;
+    # load direnv before opening nvim
+    exec = ''${getExe nvim-direnv} "%F"'';
+  };
 in
 {
-  home = {
-    packages = [
-      customNeovim
-      nvim-direnv
-    ];
-
+  environment = {
     shellAliases = {
       nano = "nvim";
       neovim = "nvim";
       v = "nvim";
     };
+
+    systemPackages = [
+      customNeovim
+      nvim-direnv
+      # add the new desktop entry
+      (hiPrio nvim-desktop-entry)
+    ];
   };
 
   xdg = {
-    desktopEntries.nvim = {
-      name = "Neovim";
-      genericName = "Text Editor";
-      icon = "nvim";
-      terminal = true;
-      # load direnv before opening nvim
-      exec = ''${getExe nvim-direnv} "%F"'';
-    };
-
-    mimeApps = {
+    mime = {
       defaultApplications = {
         "text/plain" = "nvim.desktop";
         "text/markdown" = "nvim.desktop";
@@ -55,7 +56,7 @@ in
         "application/x-shellscript" = "nvim.desktop";
         "application/xml" = "nvim.desktop";
       };
-      associations.added = {
+      addedAssociations = {
         "text/csv" = "nvim.desktop";
       };
     };
