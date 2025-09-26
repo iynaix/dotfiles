@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf mkEnableOption;
-  toHelixConf = pkgs.formats.toml { };
+  tomlFormat = pkgs.formats.toml { };
   helixConf = {
     theme = "tokyonight";
   };
@@ -25,7 +25,7 @@ in
             basePackage = pkgs.helix;
             prependFlags = [
               "--config"
-              (toHelixConf.generate "helix-config" helixConf)
+              (tomlFormat.generate "helix-config" helixConf)
             ];
           };
         }

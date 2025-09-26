@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  toJujutsuConf = pkgs.formats.toml { };
+  tomlFormat = pkgs.formats.toml { };
   jujutsuConf = {
     user = {
       name = "iynaix";
@@ -20,7 +20,7 @@ in
           basePackage = pkgs.jujutsu;
           prependFlags = [
             "--config-file"
-            (toJujutsuConf.generate "helix-config" jujutsuConf)
+            (tomlFormat.generate "helix-config" jujutsuConf)
           ];
         };
       }
