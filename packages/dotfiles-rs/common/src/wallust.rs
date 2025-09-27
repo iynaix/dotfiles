@@ -1,5 +1,4 @@
 use crate::{
-    CommandUtf8,
     colors::{NixColors, Rgb},
     full_path, kill_wrapped_process,
     wallpaper::WallInfo,
@@ -15,33 +14,6 @@ pub fn apply_theme(theme: &str) {
     execute::command_args!("wallust", "theme", &theme)
         .execute()
         .unwrap_or_else(|_| panic!("failed to apply wallust theme {theme}"));
-}
-
-fn refresh_zathura() {
-    if let Some(zathura_pid) = execute::command_args!(
-        "dbus-send",
-        "--print-reply",
-        "--dest=org.freedesktop.DBus",
-        "/org/freedesktop/DBus",
-        "org.freedesktop.DBus.ListNames",
-    )
-    .execute_stdout_lines()
-    .unwrap_or_default()
-    .iter()
-    .find(|line| line.contains("org.pwmt.zathura"))
-    .and_then(|zathura_pid_raw| zathura_pid_raw.split('"').max_by_key(|s| s.len()))
-    {
-        execute::command_args!(
-            "dbus-send",
-            "--type=method_call",
-            &format!("--dest={zathura_pid}"),
-            "/org/pwmt/zathura",
-            "org.pwmt.zathura.ExecuteCommand",
-            "string:source",
-        )
-        .execute()
-        .ok();
-    }
 }
 
 // replacements is a Vec of (regex, replacement) tuples
@@ -270,8 +242,6 @@ pub fn apply_colors() {
         #[cfg(feature = "niri")]
         apply_niri_colors(&[], &colors);
     }
-
-    refresh_zathura();
 
     // refresh cava
     kill_wrapped_process("cava", "SIGUSR2");

@@ -37,6 +37,7 @@ fn main() -> std::io::Result<()> {
     let use_yt_txt = !args.iter().any(|arg| arg.starts_with("http"));
 
     let lines = read_yt_txt();
+    // use BTreeSet to dedupe while preserving order
     let mut urls: BTreeSet<_> = lines
         .iter()
         .filter(|line| line.starts_with("http"))
