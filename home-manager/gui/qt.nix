@@ -47,38 +47,40 @@ in
     };
 
     # qtct config
-    custom.wallust.templates =
-      let
-        # TODO: use font option
-        # defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
-        defaultFont = "Geist,10";
-        createQtctConf =
-          font:
-          lib.generators.toINI { } {
-            Appearance = {
-              custom_palette = false;
-              # TODO: use iconTheme option
-              # icon_theme = config.gtk.iconTheme.name;
-              icon_theme = "Tela-Default-dark";
-              standard_dialogs = "xdgdesktopportal";
-              style = "kvantum";
+    /*
+      custom.programs.wallust.templates =
+        let
+          # TODO: use font option
+          # defaultFont = "${config.gtk.font.name},${builtins.toString config.gtk.font.size}";
+          defaultFont = "Geist,10";
+          createQtctConf =
+            font:
+            lib.generators.toINI { } {
+              Appearance = {
+                custom_palette = false;
+                # TODO: use iconTheme option
+                # icon_theme = config.gtk.iconTheme.name;
+                icon_theme = "Tela-Default-dark";
+                standard_dialogs = "xdgdesktopportal";
+                style = "kvantum";
+              };
+              Fonts = {
+                fixed = font;
+                general = font;
+              };
             };
-            Fonts = {
-              fixed = font;
-              general = font;
-            };
+        in
+        {
+          "qt5ct.conf" = {
+            text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+            target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
           };
-      in
-      {
-        "qt5ct.conf" = {
-          text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
-          target = "${config.xdg.configHome}/qt5ct/qt5ct.conf";
-        };
 
-        "qt6ct.conf" = {
-          text = createQtctConf ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
-          target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
+          "qt6ct.conf" = {
+            text = createQtctConf ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
+            target = "${config.xdg.configHome}/qt6ct/qt6ct.conf";
+          };
         };
-      };
+    */
   };
 }

@@ -10,9 +10,11 @@ let
   flake = builtins.getFlake (toString ./.);
   inherit (flake) lib;
 in
-lib.pipe (lib.attrNames flake.nixosConfigurations) [
-  (lib.filter (n: !(lib.hasInfix "-" n)))
-  (map (
+(
+  flake.nixosConfigurations
+  |> lib.attrNames
+  |> lib.filter (n: !(lib.hasInfix "-" n))
+  |> map (
     name:
     let
       cfg = flake.nixosConfigurations.${name}.config;
@@ -24,9 +26,9 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
       "${name}Hm" = cfg.hm;
       "${name}Hmo" = cfg.hm.custom;
     }
-  ))
-  lib.mergeAttrsList
-]
+  )
+  |> lib.mergeAttrsList
+)
 // rec {
   inherit lib;
   inherit (flake) inputs self;

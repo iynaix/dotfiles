@@ -57,7 +57,10 @@ in
         shellAliases = {
           wall = "wallpaper";
         };
-        systemPackages = [ config.custom.programs.dotfiles.package ];
+        systemPackages = [
+          config.custom.programs.dotfiles.package
+          pkgs.swww
+        ];
       };
 
       # handle setting the wallpaper on startup

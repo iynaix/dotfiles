@@ -308,9 +308,8 @@ pub fn set_gtk_and_icon_theme(nixcolors: &NixColors, accent: &Rgb) {
 
     // update the icon theme for dunst and qt
     for file in [
-        full_path("~/.cache/wallust/dunstrc"),
-        full_path("~/.config/qt5ct/qt5ct.conf"),
-        full_path("~/.config/qt6ct/qt6ct.conf"),
+        full_path("~/.config/dunst/dunstrc"),
+        // full_path("~/.config/qt6ct/qt6ct.conf"),
     ] {
         replace_in_file(file, vec![(r"Tela-.*-dark", &icon_theme)]);
     }

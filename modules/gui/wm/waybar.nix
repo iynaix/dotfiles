@@ -219,7 +219,7 @@ in
       };
     };
 
-    hm.custom.wallust = {
+    custom.programs.wallust = {
       templates = {
         "waybar.jsonc" = {
           text = toJSON cfg.config;

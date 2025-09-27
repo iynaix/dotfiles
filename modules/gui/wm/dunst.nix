@@ -81,11 +81,6 @@ let
 in
 mkIf (config.custom.wm != "tty") (mkMerge [
   {
-    # keybind to show dunst history
-    custom.programs.hyprland.settings.bind = [
-      "$mod, n, exec, dunstctl history-pop"
-    ];
-
     hm.programs.niri.settings.binds = {
       "Mod+n".action.spawn = [
         "dunstctl"
@@ -93,8 +88,15 @@ mkIf (config.custom.wm != "tty") (mkMerge [
       ];
     };
 
-    custom.programs.mango.settings = {
-      bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
+    # keybind to show dunst history
+    custom.programs = {
+      hyprland.settings.bind = [
+        "$mod, n, exec, dunstctl history-pop"
+      ];
+
+      mango.settings = {
+        bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
+      };
     };
 
     # dunst user service referenced from home-manager:
@@ -129,7 +131,7 @@ mkIf (config.custom.wm != "tty") (mkMerge [
       }
     ) config.custom.gtk.accents;
 
-    hm.custom.wallust.templates.dunstrc = {
+    custom.programs.wallust.templates.dunstrc = {
       text = toDunstIni dunstConf;
       target = dunstConfigpath;
     };

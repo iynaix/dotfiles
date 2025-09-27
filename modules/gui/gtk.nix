@@ -273,7 +273,7 @@ in
       };
 
       # write theme accents into nix.json for rust to read
-      hm.custom.wallust.nixJson = {
+      custom.programs.wallust.nixJson = {
         themeAccents = gtkCfg.accents;
       };
     };

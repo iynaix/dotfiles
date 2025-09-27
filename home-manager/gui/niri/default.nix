@@ -385,9 +385,11 @@ in
         };
       */
 
-      wallust.nixJson = {
-        niriBlur = config.custom.niri.blur.enable;
-      };
+      /*
+        wallust.nixJson = {
+          niriBlur = config.custom.niri.blur.enable;
+        };
+      */
 
       # waybar config for niri
       /*

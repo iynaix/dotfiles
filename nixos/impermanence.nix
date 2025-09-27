@@ -17,7 +17,6 @@ let
     lessThan
     mkForce
     mkOption
-    pipe
     sort
     unique
     ;
@@ -129,13 +128,13 @@ in
         runtimeInputs = [ pkgs.fd ];
         text =
           let
-            wallustExcludes = pipe config.hm.custom.wallust.templates [
-              attrValues
-              (map (a: a.target))
-              (filter (t: !(hasInfix "wallust" t)))
-              (map (t: ''--exclude "${t}" \''))
-              concatLines
-            ];
+            wallustExcludes =
+              config.custom.programs.wallust.templates
+              |> attrValues
+              |> map (a: a.target)
+              |> filter (t: !(hasInfix "wallust" t))
+              |> map (t: ''--exclude "${t}" \'')
+              |> concatLines;
           in
           # sh
           ''

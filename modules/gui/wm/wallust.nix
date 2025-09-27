@@ -2,6 +2,7 @@
   config,
   host,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -16,7 +17,6 @@ let
     mkEnableOption
     mkOption
     nameValuePair
-    pipe
     range
     ;
   inherit (lib.strings) toJSON;
@@ -26,13 +26,29 @@ let
     str
     submodule
     ;
-  cfg = config.custom.wallust;
+  cfg = config.custom.programs.wallust;
+  tomlFormat = pkgs.formats.toml { };
   # checks if text is a path, assumes no spaces in path
   isTemplatePath = s: (hasPrefix "/" s) && !(hasInfix " " s);
+  wallustConf = {
+    backend = "fastresize";
+    color_space = "lab";
+    check_contrast = true;
+    fallback_generator = "interpolate";
+    palette = "dark16";
+    templates = mapAttrs (
+      filename:
+      { target, text, ... }:
+      {
+        inherit target;
+        template = if isTemplatePath text then text else filename;
+      }
+    ) cfg.templates;
+  };
 in
 {
   options.custom = {
-    wallust = {
+    programs.wallust = {
       enable = mkEnableOption "wallust" // {
         default = config.custom.wm != "tty";
       };
@@ -68,38 +84,22 @@ in
     };
   };
 
+  # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
   config = {
-    # wallust is always enabled, as programs assume the generated colorschemes are in wallust cache
-    programs = {
-      wallust = {
-        enable = true;
-        settings = {
-          backend = "fastresize";
-          color_space = "lab";
-          check_contrast = true;
-          fallback_generator = "interpolate";
-          palette = "dark16";
-          templates = mapAttrs (
-            filename:
-            { target, text, ... }:
-            {
-              inherit target;
-              template = if isTemplatePath text then text else filename;
-            }
-          ) cfg.templates;
-        };
-      };
-    };
+    environment.systemPackages = [ pkgs.wallust ];
 
-    # set xdg configFile text and on change for wallust templates
-    xdg.configFile = pipe cfg.templates [
-      (filterAttrs (_: template: !(isTemplatePath template.text)))
-      (mapAttrs' (
-        template: { text, ... }: nameValuePair "wallust/templates/${template}" { inherit text; }
-      ))
-    ];
+    hj.files = {
+      ".config/wallust/wallust.toml".source = tomlFormat.generate "wallust.toml" wallustConf;
+    }
+    // (
+      cfg.templates
+      |> filterAttrs (_: template: !(isTemplatePath template.text))
+      |> mapAttrs' (
+        template: { text, ... }: nameValuePair ".config/wallust/templates/${template}" { inherit text; }
+      )
+    );
 
-    custom.wallust.templates = {
+    custom.programs.wallust.templates = {
       # misc information for nix
       "nix.json" = {
         text = toJSON (
@@ -107,8 +107,8 @@ in
           {
             wallpaper = "{{wallpaper}}";
             fallback = "${../../wallpaper-default.jpg}";
-            inherit (config.custom) monitors;
-            inherit (config.custom.wallust) colorscheme;
+            inherit (config.hm.custom) monitors;
+            inherit (config.custom.programs.wallust) colorscheme;
             inherit host;
             special = {
               background = "{{background}}";
@@ -124,7 +124,7 @@ in
           }
           // cfg.nixJson
         );
-        target = "${config.xdg.cacheHome}/wallust/nix.json";
+        target = libCustom.xdgCachePath "wallust/nix.json";
       };
     };
   };

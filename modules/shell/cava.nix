@@ -18,7 +18,7 @@ in
   config = {
     environment.systemPackages = [ pkgs.cava ];
 
-    hm.custom.wallust.templates.cava = mkIf config.custom.programs.cava.enable {
+    custom.programs.wallust.templates.cava = mkIf config.custom.programs.cava.enable {
       text = libCustom.toQuotedINI {
         general = {
           # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.

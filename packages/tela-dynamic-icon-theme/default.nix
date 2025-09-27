@@ -10,24 +10,27 @@ tela-icon-theme.overrideAttrs (oldAttrs: {
 
   postPatch =
     let
-      themeColors = lib.pipe colors [
-        lib.attrNames
-        (map (name: ''"${name}"''))
-        (lib.concatStringsSep " ")
-      ];
+      themeColors = colors |> lib.attrNames |> map (name: ''"${name}"'') |> lib.concatStringsSep " ";
       themeHelp =
-        lib.concatLines (lib.mapAttrsToList (name: _: "${name}\t\t\t\t${name} color folder version") colors)
+        (
+          colors
+          |> lib.mapAttrsToList (name: _: "${name}\t\t\t\t${name} color folder version")
+          |> lib.concatLines
+        )
         + ''
           \nBy default, only the ${lib.head (lib.attrNames colors)} one is selected.
         '';
-      themeIf = lib.concatLines (
-        lib.mapAttrsToList (name: color: ''
-          ${name})
-            local -r theme_color='${color}';
-            local -r theme_back_color='#ffffff';
-            ;;
-        '') colors
-      );
+      themeIf =
+        colors
+        |> lib.mapAttrsToList (
+          name: color: ''
+            ${name})
+              local -r theme_color='${color}';
+              local -r theme_back_color='#ffffff';
+              ;;
+          ''
+        )
+        |> lib.concatLines;
     in
     (oldAttrs.postPatch or "")
     + ''

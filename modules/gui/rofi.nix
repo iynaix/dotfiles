@@ -150,23 +150,6 @@ in
     ]
     ++ (optionals config.hm.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
-    # add blur for rofi shutdown
-    custom.programs.hyprland.settings = {
-      layerrule = [
-        "blur,rofi"
-        "dimaround,rofi"
-        "ignorealpha 0,rofi"
-      ];
-
-      # force center rofi on monitor
-      windowrule = [
-        "float,class:(Rofi)"
-        "center,class:(Rofi)"
-        "rounding 12,class:(Rofi)"
-        "dimaround,class:(Rofi)"
-      ];
-    };
-
     hm.programs.niri.settings = {
       # fake dimaround, see:
       # https://github.com/YaLTeR/niri/discussions/1806
@@ -183,71 +166,90 @@ in
       ];
     };
 
-    hm.custom.wallust.templates = mkIf config.custom.isWm {
-      # default launcher
-      "rofi.rasi" = {
-        text = patchRasi "rofi.rasi" launcherPath ''
-          inputbar { background-color: transparent; }
-          element normal.normal { background-color: transparent; }
-        '';
-        target = libCustom.xdgCachePath "wallust/rofi.rasi";
+    # add blur for rofi shutdown
+    custom.programs = {
+      hyprland.settings = {
+        layerrule = [
+          "blur,rofi"
+          "dimaround,rofi"
+          "ignorealpha 0,rofi"
+        ];
+
+        # force center rofi on monitor
+        windowrule = [
+          "float,class:(Rofi)"
+          "center,class:(Rofi)"
+          "rounding 12,class:(Rofi)"
+          "dimaround,class:(Rofi)"
+        ];
       };
 
-      # generic single column rofi menu
-      "rofi-menu.rasi" = {
-        text = patchRasi "rofi-menu.rasi" launcherPath ''
-          listview { columns: 1; }
-          prompt { enabled: false; }
-          textbox-prompt-colon { enabled: false; }
-        '';
-        target = libCustom.xdgCachePath "wallust/rofi-menu.rasi";
-      };
-
-      "rofi-menu-noinput.rasi" = {
-        text = patchRasi "rofi-menu-noinput.rasi" launcherPath ''
-          listview { columns: 1; }
-          * { width: 1000; }
-          window { height: 625; }
-          mainbox {
-              children: [listview,message];
-          }
-          message {
-            padding:                     15px;
-            border:                      0px solid;
-            border-radius:               0px;
-            border-color:                @selected;
-            /* background-color is set in style overrides */
-            text-color:                  @foreground;
-          }
-        '';
-        target = libCustom.xdgCachePath "wallust/rofi-menu-noinput.rasi";
-      };
-
-      "rofi-power-menu.rasi" =
-        let
-          columns = if config.hm.custom.mswindows then 6 else 5;
-        in
-        {
-          text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
-            * { background-window: @background; } // darken background
-            window {
-              width: ${toString (columns * 200)}px;
-              border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-            }
-            element normal.normal { background-color: var(background-normal); }
-            element selected.normal { background-color: @selected; }
-            element-text { vertical-align: 0; }
-            listview { columns: ${toString columns}; }
+      wallust.templates = mkIf config.custom.isWm {
+        # default launcher
+        "rofi.rasi" = {
+          text = patchRasi "rofi.rasi" launcherPath ''
+            inputbar { background-color: transparent; }
+            element normal.normal { background-color: transparent; }
           '';
-          target = libCustom.xdgCachePath "wallust/rofi-power-menu.rasi";
+          target = libCustom.xdgCachePath "wallust/rofi.rasi";
         };
 
-      "rofi-power-menu-confirm.rasi" = {
-        text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''
-          element { background-color: transparent; }
-          element normal.normal { background-color: transparent; }
-        '';
-        target = libCustom.xdgCachePath "wallust/rofi-power-menu-confirm.rasi";
+        # generic single column rofi menu
+        "rofi-menu.rasi" = {
+          text = patchRasi "rofi-menu.rasi" launcherPath ''
+            listview { columns: 1; }
+            prompt { enabled: false; }
+            textbox-prompt-colon { enabled: false; }
+          '';
+          target = libCustom.xdgCachePath "wallust/rofi-menu.rasi";
+        };
+
+        "rofi-menu-noinput.rasi" = {
+          text = patchRasi "rofi-menu-noinput.rasi" launcherPath ''
+            listview { columns: 1; }
+            * { width: 1000; }
+            window { height: 625; }
+            mainbox {
+                children: [listview,message];
+            }
+            message {
+              padding:                     15px;
+              border:                      0px solid;
+              border-radius:               0px;
+              border-color:                @selected;
+              /* background-color is set in style overrides */
+              text-color:                  @foreground;
+            }
+          '';
+          target = libCustom.xdgCachePath "wallust/rofi-menu-noinput.rasi";
+        };
+
+        "rofi-power-menu.rasi" =
+          let
+            columns = if config.hm.custom.mswindows then 6 else 5;
+          in
+          {
+            text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
+              * { background-window: @background; } // darken background
+              window {
+                width: ${toString (columns * 200)}px;
+                border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
+              }
+              element normal.normal { background-color: var(background-normal); }
+              element selected.normal { background-color: @selected; }
+              element-text { vertical-align: 0; }
+              listview { columns: ${toString columns}; }
+            '';
+            target = libCustom.xdgCachePath "wallust/rofi-power-menu.rasi";
+          };
+
+        "rofi-power-menu-confirm.rasi" = {
+          text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''
+            element { background-color: transparent; }
+            element normal.normal { background-color: transparent; }
+          '';
+          target = libCustom.xdgCachePath "wallust/rofi-power-menu-confirm.rasi";
+        };
       };
     };
   };
