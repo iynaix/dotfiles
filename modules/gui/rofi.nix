@@ -2,6 +2,7 @@
   config,
   isNixOS,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -17,7 +18,7 @@ let
     nullOr
     package
     ;
-  cfg = config.custom.rofi;
+  cfg = config.custom.programs.rofi;
   rofiThemes = pkgs.custom.rofi-themes;
   patchRasi =
     name: rasiPath: overrideStyles:
@@ -74,66 +75,83 @@ let
 in
 {
   options.custom = {
-    rofi = {
-      theme = mkOption {
-        type = nullOr (enum [
-          "adapta"
-          "arc"
-          "black"
-          "catppuccin"
-          "cyberpunk"
-          "dracula"
-          "everforest"
-          "gruvbox"
-          "lovelace"
-          "navy"
-          "nord"
-          "onedark"
-          "paper"
-          "solarized"
-          "tokyonight"
-          "yousai"
-        ]);
-        default = null;
-        description = "Rofi launcher theme";
-      };
-      width = mkOption {
-        type = int;
-        default = 800;
-        description = "Rofi launcher width";
-      };
-    };
-
-    # allow setting a custom rofi-power-menu package to add the reboot to windows option
-    rofi-power-menu = {
-      package = mkOption {
-        type = package;
-        default = pkgs.custom.rofi-power-menu.override {
-          reboot-to-windows =
-            if (config.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+    programs = {
+      rofi = {
+        theme = mkOption {
+          type = nullOr (enum [
+            "adapta"
+            "arc"
+            "black"
+            "catppuccin"
+            "cyberpunk"
+            "dracula"
+            "everforest"
+            "gruvbox"
+            "lovelace"
+            "navy"
+            "nord"
+            "onedark"
+            "paper"
+            "solarized"
+            "tokyonight"
+            "yousai"
+          ]);
+          default = null;
+          description = "Rofi launcher theme";
         };
-        description = "Package to use for rofi-wifi-menu";
+        width = mkOption {
+          type = int;
+          default = 800;
+          description = "Rofi launcher width";
+        };
+      };
+
+      # allow setting a custom rofi-power-menu package to add the reboot to windows option
+      rofi-power-menu = {
+        package = mkOption {
+          type = package;
+          default = pkgs.custom.rofi-power-menu.override {
+            reboot-to-windows =
+              if (config.hm.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+          };
+          description = "Package to use for rofi-wifi-menu";
+        };
       };
     };
   };
 
   config = mkIf (config.custom.wm != "tty") {
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi.override {
-        plugins = [ rofiThemes ];
-      };
-      theme = "${config.xdg.cacheHome}/wallust/rofi.rasi";
-    };
+    custom.wrappers = [
+      (
+        { pkgs, ... }:
+        {
+          wrappers.rofi = {
+            basePackage = pkgs.rofi.override {
+              plugins = [ rofiThemes ];
+            };
+            # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
+          };
+        }
+      )
+    ];
 
-    home.packages = [
+    hj.files.".config/rofi/config.rasi".text = ''
+      configuration {
+        location: 0;
+        xoffset: 0;
+        yoffset: 0;
+      }
+      @theme ${libCustom.xdgCachePath "wallust/rofi.rasi"}
+    '';
+
+    environment.systemPackages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      config.custom.rofi-power-menu.package
+      config.custom.programs.rofi-power-menu.package
     ]
-    ++ (optionals config.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
+    ++ (optionals config.hm.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
-    wayland.windowManager.hyprland.settings = {
+    custom.programs.hyprland.settings = {
       layerrule = [
         "blur,rofi"
         "dimaround,rofi"
@@ -149,7 +167,7 @@ in
       ];
     };
 
-    programs.niri.settings = {
+    hm.programs.niri.settings = {
       # fake dimaround, see:
       # https://github.com/YaLTeR/niri/discussions/1806
       layer-rules = [
@@ -165,14 +183,14 @@ in
       ];
     };
 
-    custom.wallust.templates = mkIf config.programs.rofi.enable {
+    hm.custom.wallust.templates = mkIf config.custom.isWm {
       # default launcher
       "rofi.rasi" = {
         text = patchRasi "rofi.rasi" launcherPath ''
           inputbar { background-color: transparent; }
           element normal.normal { background-color: transparent; }
         '';
-        target = "${config.xdg.cacheHome}/wallust/rofi.rasi";
+        target = libCustom.xdgCachePath "wallust/rofi.rasi";
       };
 
       # generic single column rofi menu
@@ -182,7 +200,7 @@ in
           prompt { enabled: false; }
           textbox-prompt-colon { enabled: false; }
         '';
-        target = "${config.xdg.cacheHome}/wallust/rofi-menu.rasi";
+        target = libCustom.xdgCachePath "wallust/rofi-menu.rasi";
       };
 
       "rofi-menu-noinput.rasi" = {
@@ -202,12 +220,12 @@ in
             text-color:                  @foreground;
           }
         '';
-        target = "${config.xdg.cacheHome}/wallust/rofi-menu-noinput.rasi";
+        target = libCustom.xdgCachePath "wallust/rofi-menu-noinput.rasi";
       };
 
       "rofi-power-menu.rasi" =
         let
-          columns = if config.custom.mswindows then 6 else 5;
+          columns = if config.hm.custom.mswindows then 6 else 5;
         in
         {
           text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
@@ -221,7 +239,7 @@ in
             element-text { vertical-align: 0; }
             listview { columns: ${toString columns}; }
           '';
-          target = "${config.xdg.cacheHome}/wallust/rofi-power-menu.rasi";
+          target = libCustom.xdgCachePath "wallust/rofi-power-menu.rasi";
         };
 
       "rofi-power-menu-confirm.rasi" = {
@@ -229,7 +247,7 @@ in
           element { background-color: transparent; }
           element normal.normal { background-color: transparent; }
         '';
-        target = "${config.xdg.cacheHome}/wallust/rofi-power-menu-confirm.rasi";
+        target = libCustom.xdgCachePath "wallust/rofi-power-menu-confirm.rasi";
       };
     };
   };

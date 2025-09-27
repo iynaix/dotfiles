@@ -271,7 +271,7 @@ in
       shell.packages = {
         rofi-clipboard-history = {
           runtimeInputs = [
-            config.programs.rofi.package
+            pkgs.rofi
           ];
           text = # sh
             ''

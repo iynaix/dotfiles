@@ -15,7 +15,6 @@ let
     ;
   focal = inputs.focal.packages.${pkgs.system}.default.override {
     backend = config.custom.wm;
-    rofi = config.hm.programs.rofi.package;
     ocr = true;
   };
 in

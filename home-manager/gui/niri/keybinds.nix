@@ -23,7 +23,7 @@ let
       "-e"
     ]
     ++ (flatten cmd);
-  rofiExe = getExe config.programs.rofi.package;
+  rofiExe = getExe pkgs.rofi;
 in
 mkIf (config.custom.wm == "niri") {
   custom.shell.packages = {
@@ -93,7 +93,7 @@ mkIf (config.custom.wm == "niri") {
 
       # exit niri
       "Alt+F4".action.quit = { };
-      "Ctrl+Alt+Delete".action.spawn = getExe config.custom.rofi-power-menu.package;
+      # TODO: "Ctrl+Alt+Delete".action.spawn = getExe config.custom.programs.rofi-power-menu.package;
 
       # clipboard history
       "Mod+Ctrl+V".action.spawn = getExe pkgs.custom.shell.rofi-clipboard-history;

@@ -15,7 +15,7 @@ let
     ;
   inherit (config.hm.custom) monitors;
   pamixer = getExe pkgs.pamixer;
-  rofiExe = getExe config.hm.programs.rofi.package;
+  rofiExe = getExe pkgs.rofi;
   termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${cmd}";
   qtile_like = config.custom.programs.hyprland.qtile;
 in
@@ -83,13 +83,13 @@ in
           "$mod_SHIFT, w, exec, ${getExe pkgs.brave} --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
-          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${libCustom.homePath "/projects/dotfiles"}"''
-          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${libCustom.homePath "/projects/nixpkgs"}"''
+          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${libCustom.homePath "projects/dotfiles"}"''
+          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${libCustom.homePath "projects/nixpkgs"}"''
 
           # exit hyprland
           "ALT, F4, exit,"
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, exec, ${getExe config.hm.custom.rofi-power-menu.package}"
+          "CTRL_ALT, Delete, exec, ${getExe config.custom.programs.rofi-power-menu.package}"
 
           # clipboard history
           "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"

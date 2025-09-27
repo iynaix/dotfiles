@@ -50,8 +50,8 @@ in
       # wait for colorscheme to be ready on boot
       unitConfig = {
         AssertPathExists = [
-          (libCustom.xdgConfigPath "/waybar/config.jsonc")
-          (libCustom.xdgConfigPath "/waybar/style.css")
+          (libCustom.xdgConfigPath "waybar/config.jsonc")
+          (libCustom.xdgConfigPath "waybar/style.css")
         ];
         Wants = [ "wallpaper.service" ];
       };
@@ -147,7 +147,7 @@ in
 
         "custom/nix" = {
           format = "󱄅";
-          on-click = getExe config.hm.custom.rofi-power-menu.package;
+          on-click = getExe config.custom.programs.rofi-power-menu.package;
           tooltip = false;
         };
 
@@ -223,7 +223,7 @@ in
       templates = {
         "waybar.jsonc" = {
           text = toJSON cfg.config;
-          target = libCustom.xdgConfigPath "/waybar/config.jsonc";
+          target = libCustom.xdgConfigPath "waybar/config.jsonc";
         };
         "waybar.css" =
           let
@@ -347,7 +347,7 @@ in
             ''
             + cfg.extraCss;
 
-            target = libCustom.xdgConfigPath "/waybar/style.css";
+            target = libCustom.xdgConfigPath "waybar/style.css";
           };
       };
     };

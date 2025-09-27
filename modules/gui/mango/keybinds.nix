@@ -14,7 +14,7 @@ let
     mkIf
     ;
   termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${concatStringsSep " " cmd}";
-  rofiExe = getExe config.hm.programs.rofi.package;
+  rofiExe = getExe pkgs.rofi;
 in
 mkIf (config.custom.wm == "mango") {
   environment.systemPackages = with pkgs; [
@@ -57,12 +57,12 @@ mkIf (config.custom.wm == "mango") {
       "$mod+Shift, v, spawn, ${getExe pkgs.custom.shell.rofi-edit-proj}"
 
       # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
-      "$mod, period, spawn, codium ${libCustom.homePath "/projects/dotfiles"}"
-      "$mod+SHIFT, period, spawn, codium ${libCustom.homePath "/projects/nixpkgs"}"
+      "$mod, period, spawn, codium ${libCustom.homePath "projects/dotfiles"}"
+      "$mod+SHIFT, period, spawn, codium ${libCustom.homePath "projects/nixpkgs"}"
 
       # exit mango
       "ALT, F4, quit,"
-      "CTRL+ALT, Delete, spawn, ${getExe config.hm.custom.rofi-power-menu.package}"
+      "CTRL+ALT, Delete, spawn, ${getExe config.custom.programs.rofi-power-menu.package}"
 
       # clipboard history
       "$mod+CTRL, v, spawn, ${getExe pkgs.custom.shell.rofi-clipboard-history}"

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  proj_dir = libCustom.persistPath (libCustom.homePath "/projects");
+  proj_dir = libCustom.persistPath (libCustom.homePath "projects");
 in
 {
   environment.shellAliases = {
