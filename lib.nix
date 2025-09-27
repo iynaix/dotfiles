@@ -205,7 +205,7 @@ rec {
     toHyprconf' initialIndent attrs;
 
   # hyprland settings type, copied from home-manager:
-  # https://github.com/nix-community/home-manager/blob/39d26c16866260eee6d0487fe9c102ba1c1bf7b2/modules/services/window-managers/hyprland.nix#L169C5-L218C1
+  # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
   types = {
     hyprlandSettingsType = lib.mkOption {
       type =

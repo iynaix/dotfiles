@@ -36,7 +36,7 @@ let
           ];
         }
         # handle the plugins, loaded before the settings, implementation from home-manager:
-        # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix#L374
+        # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
         {
           "exec-once" =
             let

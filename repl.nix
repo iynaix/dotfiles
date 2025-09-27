@@ -53,7 +53,8 @@ lib.pipe (lib.attrNames flake.nixosConfigurations) [
 
   tty = spec c "tty";
   niri = spec c "niri";
-  hyperland = spec c "hyprland";
+  hyprland = spec c "hyprland";
   mango = spec c "mango";
+
   # your code here
 }
