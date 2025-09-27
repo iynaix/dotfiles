@@ -37,9 +37,6 @@ in
       }
     ];
 
-    pathofbuilding.enable = true;
-    waybar.hidden = true;
-
     # don't blind me on startup
     startup = [
       {

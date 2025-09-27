@@ -52,30 +52,30 @@ mkIf config.custom.isWm {
   };
 
   # add focal module to waybar
-  hm = {
-    custom.waybar = {
-      config = {
-        "custom/focal" = {
-          exec = # sh
-            ''focal-waybar --recording "󰑋"'';
-          format = "{}";
-          # hide-empty-text = true;
-          # return-type = "json";
-          on-click = "focal video --stop";
-          interval = 2; # poll every 2s
-        };
-
-        modules-left = mkAfter [ "custom/focal" ];
+  custom.programs.waybar = {
+    config = {
+      "custom/focal" = {
+        exec = # sh
+          ''focal-waybar --recording "󰑋"'';
+        format = "{}";
+        # hide-empty-text = true;
+        # return-type = "json";
+        on-click = "focal video --stop";
+        interval = 2; # poll every 2s
       };
 
-      extraCss = # css
-        ''
-          #custom-focal {
-            font-size: 24px;
-          }
-        '';
+      modules-left = mkAfter [ "custom/focal" ];
     };
 
+    extraCss = # css
+      ''
+        #custom-focal {
+          font-size: 24px;
+        }
+      '';
+  };
+
+  hm = {
     programs.niri.settings = {
       binds = {
         "Mod+backslash".action.screenshot = {

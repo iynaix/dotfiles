@@ -121,7 +121,7 @@ in
     };
 
     # waybar config for hyprland
-    hm.custom.waybar.config = {
+    custom.programs.waybar.config = {
       "hyprland/workspaces" = {
         format = "{name}";
         persistent-workspaces = listToAttrs (

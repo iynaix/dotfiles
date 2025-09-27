@@ -6,8 +6,10 @@ _: {
       };
       freecad.enable = true;
       orca-slicer.enable = true;
+      pathofbuilding.enable = true;
       rclip.enable = true;
       wallfacer.enable = true;
+      waybar.hidden = true;
     };
 
     qmk.enable = true;
