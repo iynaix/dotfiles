@@ -3,8 +3,6 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, ... }:
 {
-  imports = [ ];
-
   boot = {
     initrd.availableKernelModules = [
       "xhci_pci"

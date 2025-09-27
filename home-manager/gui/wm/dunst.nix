@@ -80,9 +80,9 @@ mkIf (config.custom.wm != "tty") (mkMerge [
       ];
     };
 
-    custom.mango.settings = {
-      bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
-    };
+    # custom.mango.settings = {
+    #   bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
+    # };
 
     # wait for colorscheme to be ready on boot
     systemd.user.services.dunst = {

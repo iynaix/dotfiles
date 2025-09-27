@@ -57,26 +57,17 @@ in
       };
     };
 
-    hm = {
-      programs.niri.settings = {
-        binds = {
-          "Mod+A".action.spawn = [
-            (getExe' pkgs.procps "pkill")
-            "-SIGUSR1"
-            ".waybar-wrapped"
-          ];
-          "Mod+Shift+A".action.spawn = [
-            (getExe' pkgs.procps "pkill")
-            "-SIGUSR2"
-            ".waybar-wrapped"
-          ];
-        };
-      };
-
-      custom.mango.settings = {
-        bind = [
-          "$mod, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
-          "$mod+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
+    hm.programs.niri.settings = {
+      binds = {
+        "Mod+A".action.spawn = [
+          (getExe' pkgs.procps "pkill")
+          "-SIGUSR1"
+          ".waybar-wrapped"
+        ];
+        "Mod+Shift+A".action.spawn = [
+          (getExe' pkgs.procps "pkill")
+          "-SIGUSR2"
+          ".waybar-wrapped"
         ];
       };
     };
@@ -91,6 +82,13 @@ in
         bind = [
           "$mod, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
           "$mod_SHIFT, a, exec, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
+        ];
+      };
+
+      mango.settings = {
+        bind = [
+          "$mod, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
+          "$mod+SHIFT, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR2 .waybar-wrapped"
         ];
       };
 

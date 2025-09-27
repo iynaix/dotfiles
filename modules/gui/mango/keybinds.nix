@@ -13,11 +13,11 @@ let
     getExe
     mkIf
     ;
-  termExec = cmd: "${getExe config.custom.terminal.package} -e ${concatStringsSep " " cmd}";
-  rofiExe = getExe config.programs.rofi.package;
+  termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${concatStringsSep " " cmd}";
+  rofiExe = getExe config.hm.programs.rofi.package;
 in
 mkIf (config.custom.wm == "mango") {
-  home.packages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     (writeShellApplication {
       name = "mango-focus-workspace";
       runtimeInputs = [ inputs.mango.packages.${pkgs.system}.mmsg ];
@@ -36,18 +36,18 @@ mkIf (config.custom.wm == "mango") {
     })
   ];
 
-  custom.mango.settings = {
+  custom.programs.mango.settings = {
     bind = [
-      "$mod, Return, spawn, ${getExe config.custom.terminal.package}"
+      "$mod, Return, spawn, ${getExe config.hm.custom.terminal.package}"
       "$mod+SHIFT, Return, spawn, ${rofiExe} -show drun"
 
       "$mod, BackSpace, killclient, "
 
-      "$mod, e, spawn, nemo ${config.xdg.userDirs.download}"
+      "$mod, e, spawn, nemo ${libCustom.homePath "Downloads"}"
       "$mod+Shift, e, spawn, ${
         termExec [
           "yazi"
-          "${config.xdg.userDirs.download}"
+          "${libCustom.homePath "Downloads"}"
         ]
       }"
       "$mod, w, spawn, ${getExe pkgs.brave}"
@@ -57,12 +57,12 @@ mkIf (config.custom.wm == "mango") {
       "$mod+Shift, v, spawn, ${getExe pkgs.custom.shell.rofi-edit-proj}"
 
       # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
-      "$mod, period, spawn, codium ${config.home.homeDirectory}/projects/dotfiles"
-      "$mod+SHIFT, period, spawn, codium ${config.home.homeDirectory}/projects/nixpkgs"
+      "$mod, period, spawn, codium ${libCustom.homePath "/projects/dotfiles"}"
+      "$mod+SHIFT, period, spawn, codium ${libCustom.homePath "/projects/nixpkgs"}"
 
       # exit mango
       "ALT, F4, quit,"
-      "CTRL+ALT, Delete, spawn, ${getExe config.custom.rofi-power-menu.package}"
+      "CTRL+ALT, Delete, spawn, ${getExe config.hm.custom.rofi-power-menu.package}"
 
       # clipboard history
       "$mod+CTRL, v, spawn, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
@@ -84,7 +84,7 @@ mkIf (config.custom.wm == "mango") {
             ''$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}''
           ]
         ))
-          config.custom.monitors
+          config.hm.custom.monitors
       );
   };
 }

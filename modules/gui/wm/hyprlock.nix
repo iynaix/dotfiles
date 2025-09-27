@@ -178,7 +178,7 @@ in
 
     # settings for mango
     (mkIf (config.custom.wm == "mango") {
-      hm.custom.mango.settings =
+      custom.programs.mango.settings =
         let
           lockOrDpms =
             if config.custom.lock.enable then

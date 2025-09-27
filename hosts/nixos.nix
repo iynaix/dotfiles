@@ -34,6 +34,7 @@ rec {
         ../overlays
         inputs.hjem.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
+        inputs.nix-index-database.nixosModules.nix-index
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -55,9 +56,7 @@ rec {
 
             users.${user} = {
               imports = [
-                inputs.nix-index-database.homeModules.nix-index
                 inputs.niri.homeModules.niri
-                inputs.mango.hmModules.mango
                 ./${host}/home.nix # host specific home-manager configuration
                 (inputs.import-tree ../home-manager)
               ];

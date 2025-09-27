@@ -4,6 +4,7 @@
   inputs,
   isVm,
   lib,
+  libCustom,
   pkgs,
   ...
 }:
@@ -19,7 +20,7 @@ in
 {
   options.custom = {
     # copied from home-manger's hypland module, since mango config is similar to hyprlang
-    mango.settings = lib.mkOption {
+    programs.mango.settings = lib.mkOption {
       type =
         with lib.types;
         let
@@ -44,41 +45,44 @@ in
   };
 
   config = mkIf (config.custom.wm == "mango") {
-    home.sessionVariables = {
+    environment.sessionVariables = {
       # DISPLAY = ":0";
       NIXOS_OZONE_WL = "1";
     };
 
-    wayland.windowManager.mango = {
+    programs.mango = {
       enable = true;
-      package = inputs.mango.packages.${pkgs.system}.mango.override {
-        mmsg = inputs.mango.packages.${pkgs.system}.mmsg.overrideAttrs {
-          src = pkgs.fetchFromGitHub {
-            owner = "DreamMaoMao";
-            repo = "mmsg";
-            rev = "6066d37d810bb16575c0b60e25852d1f6d50de60";
-            hash = "sha256-xiQGpk987dCmeF29mClveaGJNIvljmJJ9FRHVPp92HU=";
-          };
-        };
-      };
-      systemd.enable = true;
-      settings =
-        (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
-          lib.hm.generators.toHyprconf {
-            attrs = config.custom.mango.settings;
-            importantPrefixes = [ "monitorrule" ];
-          }
-        ))
-        # source it directly for quick edits
-        + "source=${dots}/home-manager/gui/mango/mango.conf";
-      autostart_sh = # sh
-        ''
-          # startup script here
-        '';
-
+      package = inputs.mango.packages.${pkgs.system}.mango;
     };
 
-    custom = {
+    # write the settings to home directory
+    hj.files.".config/mango/config.conf".text =
+      (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
+        libCustom.toHyprconf {
+          attrs = config.custom.programs.mango.settings;
+          importantPrefixes = [ "monitorrule" ];
+        }
+      ))
+      # temporarily source raw config directly for quick edits
+      + "source=${dots}/modules/gui/mango/mango.conf";
+
+    # TODO: startup script?
+
+    systemd.user.targets.mango-session = {
+      unitConfig = {
+        Description = "mango compositor session";
+        Documentation = [ "man:systemd.special(7)" ];
+        BindsTo = [ "graphical-session.target" ];
+        Wants = [
+          "graphical-session-pre.target"
+        ];
+        # ++ lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+        After = [ "graphical-session-pre.target" ];
+        # Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+      };
+    };
+
+    custom.programs = {
       mango.settings = {
         monitorrule = map (
           mon:
@@ -95,7 +99,7 @@ in
             mon.height
             mon.refreshRate
           ]
-        ) config.custom.monitors;
+        ) config.hm.custom.monitors;
 
         tagrule = flatten (
           map (
@@ -108,29 +112,27 @@ in
                 "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
               ]
             ) (range 1 10)
-          ) config.custom.monitors
+          ) config.hm.custom.monitors
         );
       };
 
-      /*
-        programs.waybar = {
-          config = {
-            "dwl/tags" = {
-              "num-tags" = 10;
-            };
+      waybar = {
+        config = {
+          "dwl/tags" = {
+            "num-tags" = 10;
           };
-          extraCss = # css
-            ''
-              #tags button {
-                opacity: 0.6;
-              }
-
-              #tags button.occupied {
-                opacity: 1;
-              }
-            '';
         };
-      */
+        extraCss = # css
+          ''
+            #tags button {
+              opacity: 0.6;
+            }
+
+            #tags button.occupied {
+              opacity: 1;
+            }
+          '';
+      };
     };
   };
 }
