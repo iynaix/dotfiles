@@ -121,12 +121,12 @@ mkIf (config.custom.wm != "tty") (mkMerge [
 
     # create symlink in $XDG_DATA_HOME/.icons for each icon accent variant
     # allows dunst to be able to refer to icons by name
-    hj.files = mapAttrs' (
+    hj.xdg.data.files = mapAttrs' (
       accent: _:
       let
         iconTheme = "Tela-${accent}-dark";
       in
-      nameValuePair ".local/share/icons/${iconTheme}" {
+      nameValuePair "icons/${iconTheme}" {
         source = "${config.custom.gtk.iconTheme.package}/share/icons/${iconTheme}";
       }
     ) config.custom.gtk.accents;

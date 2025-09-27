@@ -88,14 +88,14 @@ in
   config = {
     environment.systemPackages = [ pkgs.wallust ];
 
-    hj.files = {
-      ".config/wallust/wallust.toml".source = tomlFormat.generate "wallust.toml" wallustConf;
+    hj.xdg.config.files = {
+      "wallust/wallust.toml".source = tomlFormat.generate "wallust.toml" wallustConf;
     }
     // (
       cfg.templates
       |> filterAttrs (_: template: !(isTemplatePath template.text))
       |> mapAttrs' (
-        template: { text, ... }: nameValuePair ".config/wallust/templates/${template}" { inherit text; }
+        template: { text, ... }: nameValuePair "wallust/templates/${template}" { inherit text; }
       )
     );
 

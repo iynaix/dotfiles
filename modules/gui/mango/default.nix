@@ -56,7 +56,7 @@ in
     };
 
     # write the settings to home directory
-    hj.files.".config/mango/config.conf".text =
+    hj.xdg.config.files."mango/config.conf".text =
       (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
         libCustom.toHyprconf {
           attrs = config.custom.programs.mango.settings;

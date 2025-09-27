@@ -27,7 +27,7 @@ mkIf config.custom.isWm {
     ++ optionals isNixOS [ focal ];
 
   # swappy conf
-  hj.files.".config/swappy/config".text = lib.generators.toINI { } {
+  hj.xdg.config.files."swappy/config".text = lib.generators.toINI { } {
     default = {
       save_dir = libCustom.homePath "Pictures/Screenshots";
       save_filename_format = "%Y-%m-%dT%H:%M:%S%z.png";

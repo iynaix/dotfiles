@@ -153,8 +153,8 @@ in
       };
 
       # TODO: add --config option to wallfacer
-      hj.files = {
-        ".config/wallfacer/wallfacer.toml".source = tomlFormat.generate "wallfacer.toml" (
+      hj.xdg.config.files = {
+        "wallfacer/wallfacer.toml".source = tomlFormat.generate "wallfacer.toml" (
           {
             wallpapers_path = wallpapers_dir;
             min_width = 3840; # 4k width

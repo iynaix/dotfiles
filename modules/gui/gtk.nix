@@ -262,13 +262,15 @@ in
       # qt.enable = true;
 
       # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
-      hj.files = {
+      hj.xdg = {
         # use per user settings
-        ".config/gtk-3.0/bookmarks".text = concatMapStringsSep "\n" (b: "file://${b}") gtkCfg.bookmarks;
+        config.files."gtk-3.0/bookmarks".text = concatMapStringsSep "\n" (
+          b: "file://${b}"
+        ) gtkCfg.bookmarks;
 
-        ".local/share/icons/default/index.theme".source =
+        data.files."icons/default/index.theme".source =
           "${defaultIndexThemePackage}/share/icons/default/index.theme";
-        ".local/share/icons/${gtkCfg.cursor.name}".source =
+        data.files."icons/${gtkCfg.cursor.name}".source =
           "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
       };
 

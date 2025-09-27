@@ -91,7 +91,7 @@ in
 
     # use the config file in home as wrapping the package produces as an error
     # when nixos tries to call it
-    hj.files.".config/hypr/hyprland.conf".text = hyprlandConfText;
+    hj.xdg.config.files."hypr/hyprland.conf".text = hyprlandConfText;
 
     programs.hyprland = {
       enable =
