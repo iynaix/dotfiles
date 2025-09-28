@@ -7,15 +7,13 @@
 let
   inherit (self) lib;
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
-  user = "nixos";
   mkIso =
-    nixpkgs: home-manager: isoPath:
+    nixpkgs: isoPath:
     # use the lib from the nixpkgs passed in, so the nixos version will be correct
     nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
-        home-manager.nixosModules.home-manager
         (
           { config, pkgs, ... }:
           {
@@ -48,9 +46,7 @@ let
                   bat
                   btop
                   eza
-                  home-manager
                   tree
-                  yazi
                   # custom neovim
                   self.packages.${system}.neovim-iynaix
                 ]
@@ -74,6 +70,20 @@ let
                 nano = "nvim";
                 neovim = "nvim";
                 v = "nvim";
+              };
+
+              # set dark theme for kde, adapted from plasma-manager
+              etc."xdg/autostart/plasma-dark-mode.desktop" = lib.mkIf (lib.hasInfix "plasma" isoPath) {
+                text = ''
+                  [Desktop Entry]
+                  Type=Application
+                  Name=Plasma Dark Mode
+                  Exec=${pkgs.writeShellScript "plasma-dark-mode" ''
+                    plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+                    plasma-apply-desktoptheme breeze-dark
+                  ''}
+                  X-KDE-autostart-condition=ksmserver
+                '';
               };
             };
 
@@ -99,6 +109,48 @@ let
             programs = {
               # bye bye nano
               nano.enable = false;
+
+              # better defaults for yazi
+              yazi = {
+                enable = true;
+
+                settings = {
+                  yazi = {
+                    mgr = {
+                      ratio = [
+                        0
+                        1
+                        1
+                      ];
+                      sort_by = "alphabetical";
+                      sort_sensitive = false;
+                      sort_reverse = false;
+                      linemode = "size";
+                      show_hidden = true;
+                    };
+                  };
+
+                  theme = {
+                    mgr = {
+                      preview_hovered = {
+                        underline = false;
+                      };
+                      folder_offset = [
+                        1
+                        0
+                        1
+                        0
+                      ];
+                      preview_offset = [
+                        1
+                        1
+                        1
+                        1
+                      ];
+                    };
+                  };
+                };
+              };
             };
 
             # enable SSH in the boot process.
@@ -149,30 +201,12 @@ let
             };
           }
         )
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-
-            extraSpecialArgs = {
-              inherit user isoPath;
-            };
-
-            users.${user} = {
-              imports = [ ./home.nix ];
-            };
-          };
-        }
       ];
     };
 in
 {
-  kde-iso =
-    mkIso inputs.nixpkgs-stable inputs.home-manager-stable
-      "installation-cd-graphical-calamares-plasma6";
-  minimal-iso = mkIso inputs.nixpkgs-stable inputs.home-manager-stable "installation-cd-minimal";
-  kde-iso-unstable =
-    mkIso inputs.nixpkgs inputs.home-manager
-      "installation-cd-graphical-calamares-plasma6";
-  minimal-iso-unstable = mkIso inputs.nixpkgs inputs.home-manager "installation-cd-minimal";
+  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
+  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
+  kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma6";
+  minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
 }
