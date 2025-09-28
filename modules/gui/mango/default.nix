@@ -99,7 +99,7 @@ in
             mon.height
             mon.refreshRate
           ]
-        ) config.hm.custom.monitors;
+        ) config.custom.hardware.monitors;
 
         tagrule = flatten (
           map (
@@ -112,7 +112,7 @@ in
                 "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
               ]
             ) (range 1 10)
-          ) config.hm.custom.monitors
+          ) config.custom.hardware.monitors
         );
       };
 

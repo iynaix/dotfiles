@@ -52,7 +52,7 @@ in
       readOnly = true;
     };
 
-    monitors = mkOption {
+    hardware.monitors = mkOption {
       description = "Config for monitors";
       type = nonEmptyListOf (
         submodule (
@@ -171,7 +171,7 @@ in
     custom = {
       startup =
         # ensure setting terminal title using --title or exec with -e works
-        assert config.custom.terminal.package.pname == "ghostty";
+        assert config.hm.custom.terminal.package.pname == "ghostty";
         [
           {
             app-id = "brave-browser";
@@ -204,9 +204,9 @@ in
 
           # terminal
           rec {
-            title = "${config.custom.terminal.app-id}-vertical";
+            title = "${config.hm.custom.terminal.app-id}-vertical";
             spawn = [
-              (getExe config.custom.terminal.package)
+              (getExe config.hm.custom.terminal.package)
               "--title=${title}"
             ];
             workspace = 7;
@@ -219,7 +219,7 @@ in
           {
             app-id = "librewolf";
             spawn = [
-              (getExe config.programs.librewolf.package)
+              (getExe config.hm.programs.librewolf.package)
             ];
             workspace = 9;
             niriArgs = {
@@ -230,22 +230,22 @@ in
           # download related
           rec {
             enable = host == "desktop";
-            title = "${config.custom.terminal.app-id}-dl";
+            title = "${config.hm.custom.terminal.app-id}-dl";
             spawn = [
-              (getExe config.custom.terminal.package)
+              (getExe config.hm.custom.terminal.package)
               "--title=${title}"
             ];
             workspace = 10;
           }
           rec {
             enable = host == "desktop";
-            title = "${config.custom.terminal.app-id}-yt.txt";
+            title = "${config.hm.custom.terminal.app-id}-yt.txt";
             spawn = [
-              (getExe config.custom.terminal.package)
+              (getExe config.hm.custom.terminal.package)
               "--title=${title}"
               "-e"
               "nvim"
-              "${config.xdg.userDirs.desktop}/yt.txt"
+              "${config.hj.directory}/Downloads/yt.txt"
             ];
             workspace = 10;
           }
@@ -276,21 +276,21 @@ in
           text = # sh
             ''
               rofi \
-                -modi clipboard:${getExe' config.services.cliphist.package "cliphist-rofi-img"} \
-                -theme "${config.xdg.cacheHome}/wallust/rofi-menu.rasi" \
+                -modi clipboard:${getExe' pkgs.cliphist "cliphist-rofi-img"} \
+                -theme "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi" \
                 -show clipboard -show-icons
             '';
         };
       };
     };
 
-    home = {
+    environment = {
       sessionVariables = {
         QT_QPA_PLATFORM = "wayland;xcb";
         # GDK_BACKEND = "wayland,x11,*";
       };
 
-      packages = with pkgs; [
+      systemPackages = with pkgs; [
         # clipboard history
         cliphist
         wl-clipboard
@@ -298,13 +298,15 @@ in
     };
 
     # WM agnostic polkit authentication agent
-    services = {
-      cliphist = {
-        enable = true;
-        allowImages = true;
-      };
+    /*
+      services = {
+        cliphist = {
+          enable = true;
+          allowImages = true;
+        };
 
-      polkit-gnome.enable = true;
-    };
+        polkit-gnome.enable = true;
+      };
+    */
   };
 }

@@ -24,7 +24,7 @@ let
     background-opacity =
       0.85
       # more opaque on niri as there is no blur
-      + (if (config.custom.wm == "niri" && !config.hm.custom.niri.blur.enable) then 0.1 else 0);
+      + (if (config.custom.wm == "niri" && !config.custom.programs.niri.blur.enable) then 0.1 else 0);
     # set as default interactive shell, also set $SHELL for nix shell to pick up
     command = "SHELL=${fishPath} ${fishPath}";
     confirm-close-surface = false;

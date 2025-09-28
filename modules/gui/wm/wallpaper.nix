@@ -39,7 +39,7 @@ in
               patches =
                 (o.patches or [ ])
                 # fix window resizing on the first image in niri if called in a keybind
-                ++ optionals (config.custom.wm == "niri") [ ../../home-manager/gui/niri/pqiv-gdk-wayland.patch ];
+                ++ optionals (config.custom.wm == "niri") [ ../niri/pqiv-gdk-wayland.patch ];
             });
             useDedupe = config.custom.programs.wallpaper-tools.enable;
             useRclip = config.custom.programs.rclip.enable;
@@ -112,21 +112,23 @@ in
         };
 
       # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
-      hm.programs.niri.settings.window-rules = map (
-        mon:
-        let
-          targetPercent = 0.3;
-          width = builtins.floor (builtins.div (targetPercent * (max mon.width mon.height)) mon.scale);
-          # 16:9 ratio
-          height = builtins.floor (width / 16.0 * 9.0);
-        in
-        {
-          matches = [ { title = "^wallpaper-rofi-${mon.name}$"; } ];
-          open-floating = true;
-          default-column-width.fixed = width;
-          default-window-height.fixed = height;
-        }
-      ) config.hm.custom.monitors;
+      custom.programs.niri = {
+        settings.window-rules = map (
+          mon:
+          let
+            targetPercent = 0.3;
+            width = builtins.floor (builtins.div (targetPercent * (max mon.width mon.height)) mon.scale);
+            # 16:9 ratio
+            height = builtins.floor (width / 16.0 * 9.0);
+          in
+          {
+            matches = [ { title = "^wallpaper-rofi-${mon.name}$"; } ];
+            open-floating = true;
+            default-column-width.fixed = width;
+            default-window-height.fixed = height;
+          }
+        ) config.custom.hardware.monitors;
+      };
     }
 
     (mkIf config.custom.programs.wallfacer.enable {
@@ -135,7 +137,7 @@ in
           text =
             # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
             # https://github.com/tauri-apps/tauri/issues/10702
-            lib.optionalString config.hm.custom.nvidia.enable ''
+            lib.optionalString config.custom.hardware.nvidia.enable ''
               export WEBKIT_DISABLE_DMABUF_RENDERER=1
             ''
             + libCustom.direnvCargoRun {

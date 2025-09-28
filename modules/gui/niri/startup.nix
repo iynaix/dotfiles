@@ -1,11 +1,11 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   inherit (lib)
-    escapeShellArgs
     getExe'
     mkAfter
     mkIf
@@ -15,12 +15,12 @@ let
     ;
 in
 mkIf (config.custom.wm == "niri") {
-  custom = {
+  hm.custom = {
     autologinCommand = "niri-session";
   };
 
   # generate startup rules, god i hate having to use rules for startup
-  programs.niri.settings = mkMerge (
+  custom.programs.niri.settings = mkMerge (
     (map (
       startup:
       (mkIf startup.enable {
@@ -57,7 +57,7 @@ mkIf (config.custom.wm == "niri") {
               "focus-workspace"
               "W${toString mon.defaultWorkspace}"
             ];
-          }) (reverseList config.custom.monitors)
+          }) (reverseList config.custom.hardware.monitors)
         );
       }
     ]
@@ -66,38 +66,34 @@ mkIf (config.custom.wm == "niri") {
   systemd.user.services = {
     # listen to events from niri, done as a service so it will restart from nixos-rebuild
     niri-ipc = {
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
+      wantedBy = [ "graphical-session.target" ];
 
-      Unit = {
+      unitConfig = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "Custom niri-ipc from dotfiles-rs";
         After = [ "niri.service" ];
         PartOf = [ "graphical-session.target" ];
       };
 
-      Service = {
-        ExecStart = "${getExe' config.custom.dotfiles.package "niri-ipc"}";
+      serviceConfig = {
+        ExecStart = getExe' config.custom.programs.dotfiles.package "niri-ipc";
         Restart = "on-failure";
       };
     };
 
     # start a separate swww service in a different namespace for niri backdrop
     swww-backdrop = {
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
+      wantedBy = [ "graphical-session.target" ];
 
-      Unit = {
+      unitConfig = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "swww-daemon-backdrop";
         After = [ "graphical-session.target" ];
         PartOf = [ "graphical-session.target" ];
       };
 
-      Service = {
-        ExecStart = "${getExe' config.services.swww.package "swww-daemon"} ${escapeShellArgs config.services.swww.extraArgs} --namespace backdrop";
+      serviceConfig = {
+        ExecStart = "${getExe' pkgs.swww "swww-daemon"} --namespace backdrop";
         Restart = "always";
         RestartSec = 10;
       };
@@ -105,7 +101,7 @@ mkIf (config.custom.wm == "niri") {
 
     # wallpaper needs both swww daemons running
     wallpaper = {
-      Unit = {
+      unitConfig = {
         After = [ "swww-backdrop.service" ];
         Requires = [ "swww-backdrop.service" ];
       };

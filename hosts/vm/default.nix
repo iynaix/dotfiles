@@ -4,6 +4,31 @@ let
 in
 {
   custom = {
+    hardware = {
+      monitors = [
+        {
+          name = "Virtual-1";
+          width = 1920;
+          height = 1080;
+          workspaces = [
+            1
+            2
+            3
+            4
+            5
+            6
+            7
+            8
+            9
+            10
+          ];
+        }
+      ];
+    };
+    programs = {
+      pathofbuilding.enable = false;
+    };
+    wm = "plasma";
     zfs = {
       encryption = false;
       zed = true;

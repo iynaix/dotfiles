@@ -54,7 +54,7 @@ in
             inherit (d) scale transform vrr;
           }
           // d.extraHyprlandConfig
-        ) config.hm.custom.monitors;
+        ) config.custom.hardware.monitors;
 
         input = {
           kb_layout = "us";
@@ -188,16 +188,16 @@ in
       }
       //
         # bind workspaces to monitors, don't bother if there is only one monitor
-        optionalAttrs (length config.hm.custom.monitors > 1) {
+        optionalAttrs (length config.custom.hardware.monitors > 1) {
           workspace = libCustom.mapWorkspaces (
             { workspace, monitor, ... }:
             "${workspace},monitor:${monitor.name}"
             + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
-          ) config.hm.custom.monitors;
+          ) config.custom.hardware.monitors;
         }
       //
         # nvidia specific settings
-        optionalAttrs config.hm.custom.nvidia.enable {
+        optionalAttrs config.custom.hardware.nvidia.enable {
           cursor = {
             # no_hardware_cursors = true;
             use_cpu_buffer = 1;

@@ -84,7 +84,7 @@ mkIf (config.custom.wm == "mango") {
             ''$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}''
           ]
         ))
-          config.hm.custom.monitors
+          config.custom.hardware.monitors
       );
   };
 }

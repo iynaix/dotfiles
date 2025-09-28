@@ -98,8 +98,8 @@ in
             {
               wrappers.btop = {
                 basePackage = pkgs.btop.override {
-                  cudaSupport = config.hm.custom.nvidia.enable;
-                  rocmSupport = config.hm.custom.radeon.enable;
+                  cudaSupport = config.custom.hardware.nvidia.enable;
+                  rocmSupport = config.custom.hardware.radeon.enable;
                 };
                 prependFlags = [
                   "--config"

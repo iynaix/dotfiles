@@ -8,7 +8,7 @@ let
     optionalAttrs
     optionals
     ;
-  inherit (config.hm.custom) mswindows;
+  inherit (config.custom.hardware) mswindows;
   cfg = config.custom.hardware.hdds;
   hgst10 = "/media/HGST10";
   ironwolf22 = "/media/IRONWOLF22";

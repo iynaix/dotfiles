@@ -1,14 +1,12 @@
 {
   config,
-  host,
-  isLaptop,
   lib,
   libCustom,
   pkgs,
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkOption types;
+  inherit (lib) mkOption types;
   inherit (lib.types) listOf package str;
 in
 {
@@ -68,27 +66,6 @@ in
       };
     };
 
-    # hardware options
-    backlight.enable = mkEnableOption "Backlight" // {
-      default = isLaptop;
-    };
-    battery.enable = mkEnableOption "Battery" // {
-      default = isLaptop;
-    };
-    nvidia.enable = mkEnableOption "Nvidia GPU" // {
-      default = host == "desktop";
-    };
-    radeon.enable = mkEnableOption "AMD GPU" // {
-      default = host == "framework";
-    };
-    wifi.enable = mkEnableOption "Wifi" // {
-      default = isLaptop;
-    };
-    # dual boot windows
-    mswindows = mkEnableOption "Windows" // {
-      default = host == "desktop";
-    };
-
     # terminal options
     terminal = {
       package = mkOption {
@@ -112,5 +89,7 @@ in
 
   config = {
     xdg.configFile."gtk-3.0/bookmarks".enable = false;
+
+    programs.niri.settings = lib.mkForce { };
   };
 }

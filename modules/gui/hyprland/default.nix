@@ -128,7 +128,7 @@ in
           map (mon: {
             inherit (mon) name;
             value = mon.workspaces;
-          }) config.hm.custom.monitors
+          }) config.custom.hardware.monitors
         );
       };
     };

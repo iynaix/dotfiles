@@ -51,7 +51,7 @@ in
   };
 
   # allow rebooting directly into windows which requires sudo, see above
-  security.sudo.extraRules = mkIf config.hm.custom.mswindows [
+  security.sudo.extraRules = mkIf config.custom.hardware.mswindows [
     {
       users = [ user ];
       commands = [

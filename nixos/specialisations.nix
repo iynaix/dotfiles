@@ -12,7 +12,6 @@ in
         custom.wm = "tty";
         hm.custom = {
           specialisation.current = "tty";
-          wm = "tty";
         };
       };
     };
@@ -23,7 +22,6 @@ in
         custom.wm = "hyprland";
         hm.custom = {
           specialisation.current = "hyprland";
-          wm = "hyprland";
         };
       };
     };
@@ -33,7 +31,6 @@ in
         custom.wm = "niri";
         hm.custom = {
           specialisation.current = "niri";
-          wm = "niri";
         };
       };
     };
@@ -43,7 +40,6 @@ in
         custom.wm = "mango";
         hm.custom = {
           specialisation.current = "mango";
-          wm = "mango";
         };
       };
     };

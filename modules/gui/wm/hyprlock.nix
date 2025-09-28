@@ -77,7 +77,7 @@ in
                   # add trailing comment with monitor name for wallpaper to replace later
                   path = "/tmp/swww__${mon.name}.webp";
                   color = "${rgba "background" 1}";
-                }) config.hm.custom.monitors;
+                }) config.custom.hardware.monitors;
 
                 input-field = {
                   monitor = "";
@@ -153,7 +153,7 @@ in
 
     # settings for niri
     (mkIf (config.custom.wm == "niri") {
-      hm.programs.niri.settings =
+      custom.programs.niri.settings =
         let
           lockOrDpms =
             if config.custom.lock.enable then

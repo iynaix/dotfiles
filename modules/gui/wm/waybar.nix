@@ -56,21 +56,6 @@ in
       };
     };
 
-    hm.programs.niri.settings = {
-      binds = {
-        "Mod+A".action.spawn = [
-          (getExe' pkgs.procps "pkill")
-          "-SIGUSR1"
-          ".waybar-wrapped"
-        ];
-        "Mod+Shift+A".action.spawn = [
-          (getExe' pkgs.procps "pkill")
-          "-SIGUSR2"
-          ".waybar-wrapped"
-        ];
-      };
-    };
-
     custom.programs = {
       hyprland.settings = {
         layerrule = [
@@ -84,6 +69,21 @@ in
         ];
       };
 
+      niri.settings = {
+        binds = {
+          "Mod+A".action.spawn = [
+            (getExe' pkgs.procps "pkill")
+            "-SIGUSR1"
+            ".waybar-wrapped"
+          ];
+          "Mod+Shift+A".action.spawn = [
+            (getExe' pkgs.procps "pkill")
+            "-SIGUSR2"
+            ".waybar-wrapped"
+          ];
+        };
+      };
+
       mango.settings = {
         bind = [
           "$mod, a, spawn, ${getExe' pkgs.procps "pkill"} -SIGUSR1 .waybar-wrapped"
@@ -92,7 +92,7 @@ in
       };
 
       waybar.config = {
-        backlight = mkIf config.hm.custom.backlight.enable {
+        backlight = mkIf config.custom.hardware.backlight.enable {
           format = "{icon}   {percent}%";
           format-icons = [
             "󰃞"
@@ -104,7 +104,7 @@ in
           on-scroll-up = "${getExe pkgs.brightnessctl} s +1%";
         };
 
-        battery = mkIf config.hm.custom.battery.enable {
+        battery = mkIf config.custom.hardware.battery.enable {
           format = "{icon}    {capacity}%";
           format-charging = "     {capacity}%";
           format-icons = [
@@ -171,8 +171,8 @@ in
           "network"
           "pulseaudio"
         ]
-        ++ (optionals config.hm.custom.backlight.enable [ "backlight" ])
-        ++ (optionals config.hm.custom.battery.enable [ "battery" ])
+        ++ (optionals config.custom.hardware.backlight.enable [ "backlight" ])
+        ++ (optionals config.custom.hardware.battery.enable [ "battery" ])
         ++ [ "clock" ];
 
         network = {
@@ -180,7 +180,7 @@ in
           tooltip = false;
         }
         // (
-          if config.hm.custom.wifi.enable then
+          if config.custom.hardware.wifi.enable then
             {
               format = "    {essid}";
               format-ethernet = " ";

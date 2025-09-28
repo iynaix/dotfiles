@@ -46,7 +46,7 @@ in
                 ]
                 ++ optionals (!isUltrawide) [ "layoutopt:nstack-mfact:0.0" ]
               )
-            ) config.hm.custom.monitors
+            ) config.custom.hardware.monitors
           );
         };
       }
@@ -58,7 +58,7 @@ in
           libCustom.mapWorkspaces (
             { monitor, workspace, ... }:
             "${workspace},layoutopt:orientation:${if (monitor.isVertical != 0) then "top" else "left"}"
-          ) config.hm.custom.monitors
+          ) config.custom.hardware.monitors
         );
       };
 }

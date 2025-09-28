@@ -14,6 +14,7 @@ let
     mapAttrs
     mapAttrs'
     mkEnableOption
+    mkIf
     mkOption
     nameValuePair
     range
@@ -98,6 +99,23 @@ in
       )
     );
 
+    # setup wallust colorschemes for shells
+    programs = {
+      bash.shellInit = mkIf config.custom.programs.wallust.enable ''
+        wallust_colors="${config.hj.xdg.cache.directory}/wallust/sequences"
+        if [ -e "$wallust_colors" ]; then
+          command cat "$wallust_colors"
+        fi
+      '';
+
+      fish.shellInit = mkIf config.custom.programs.wallust.enable ''
+        set wallust_colors "${config.hj.xdg.cache.directory}/wallust/sequences"
+        if test -e "$wallust_colors"
+            command cat "$wallust_colors"
+        end
+      '';
+    };
+
     custom.programs.wallust.templates = {
       # misc information for nix
       "nix.json" = {
@@ -106,7 +124,7 @@ in
           {
             wallpaper = "{{wallpaper}}";
             fallback = "${../../wallpaper-default.jpg}";
-            inherit (config.hm.custom) monitors;
+            inherit (config.custom.hardware) monitors;
             inherit (config.custom.programs.wallust) colorscheme;
             inherit host;
             special = {

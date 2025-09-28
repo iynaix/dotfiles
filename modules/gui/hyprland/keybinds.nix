@@ -13,7 +13,7 @@ let
     mkIf
     optionals
     ;
-  inherit (config.hm.custom) monitors;
+  inherit (config.custom.hardware) monitors;
   pamixer = getExe pkgs.pamixer;
   rofiExe = getExe pkgs.rofi;
   termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${cmd}";
@@ -173,7 +173,7 @@ in
         # invert windows
         ++ optionals config.custom.programs.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
-        ++ optionals config.hm.custom.backlight.enable [
+        ++ optionals config.custom.hardware.backlight.enable [
           ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"
           ",XF86MonBrightnessUp, exec, ${getExe pkgs.brightnessctl} set +5%"
         ];

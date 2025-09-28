@@ -35,6 +35,7 @@ rec {
         inputs.hjem.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-index-database.nixosModules.nix-index
+        inputs.niri.nixosModules.niri
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -56,7 +57,6 @@ rec {
 
             users.${user} = {
               imports = [
-                inputs.niri.homeModules.niri
                 ./${host}/home.nix # host specific home-manager configuration
                 (inputs.import-tree ../home-manager)
               ];

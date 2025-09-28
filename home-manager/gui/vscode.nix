@@ -7,7 +7,9 @@
 let
   inherit (lib) mkIf;
 in
-mkIf (config.custom.wm != "tty") {
+# mkIf (config.custom.wm != "tty") {
+# TODO: re-enable check above
+mkIf true {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;

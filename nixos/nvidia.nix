@@ -13,7 +13,7 @@ let
     ;
   # NOTE: nvidia.enable is a home-manager option so it can be referenced within home-manager as well
 in
-mkIf config.hm.custom.nvidia.enable {
+mkIf config.custom.hardware.nvidia.enable {
   # enable nvidia support
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -47,7 +47,7 @@ mkIf config.hm.custom.nvidia.enable {
     ];
   };
 
-  environment.variables = optionalAttrs config.hm.custom.isWm {
+  environment.variables = optionalAttrs config.custom.isWm {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";

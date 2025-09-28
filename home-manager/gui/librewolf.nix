@@ -11,7 +11,9 @@ let
   inherit (lib) concatStringsSep mkIf optionals;
   configPath = ".config/.librewolf";
 in
-mkIf (config.custom.wm != "tty") {
+# mkIf (config.custom.wm != "tty") {
+# TODO: re-enable check above
+mkIf true {
   programs.librewolf = {
     enable = true;
     package = pkgs.librewolf.overrideAttrs (o: {

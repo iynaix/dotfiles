@@ -111,7 +111,7 @@ in
           type = package;
           default = pkgs.custom.rofi-power-menu.override {
             reboot-to-windows =
-              if (config.hm.custom.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+              if (config.custom.hardware.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
           };
           description = "Package to use for rofi-wifi-menu";
         };
@@ -147,23 +147,7 @@ in
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       config.custom.programs.rofi-power-menu.package
     ]
-    ++ (optionals config.hm.custom.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
-
-    hm.programs.niri.settings = {
-      # fake dimaround, see:
-      # https://github.com/YaLTeR/niri/discussions/1806
-      layer-rules = [
-        {
-          matches = [ { namespace = "^rofi$"; } ];
-          shadow = {
-            enable = true;
-            spread = 1024;
-            draw-behind-window = true;
-            color = "0000009A";
-          };
-        }
-      ];
-    };
+    ++ (optionals config.custom.hardware.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
     # add blur for rofi shutdown
     custom.programs = {
@@ -180,6 +164,22 @@ in
           "center,class:(Rofi)"
           "rounding 12,class:(Rofi)"
           "dimaround,class:(Rofi)"
+        ];
+      };
+
+      niri.settings = {
+        # fake dimaround, see:
+        # https://github.com/YaLTeR/niri/discussions/1806
+        layer-rules = [
+          {
+            matches = [ { namespace = "^rofi$"; } ];
+            shadow = {
+              enable = true;
+              spread = 1024;
+              draw-behind-window = true;
+              color = "0000009A";
+            };
+          }
         ];
       };
 
@@ -225,7 +225,7 @@ in
 
         "rofi-power-menu.rasi" =
           let
-            columns = if config.hm.custom.mswindows then 6 else 5;
+            columns = if config.custom.hardware.mswindows then 6 else 5;
           in
           {
             text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''

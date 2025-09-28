@@ -14,7 +14,7 @@ let
   # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
   nvidiaSoftwareRenderingWorkaround =
     bin: pkg:
-    if config.hm.custom.nvidia.enable then
+    if config.custom.hardware.nvidia.enable then
       pkgs.symlinkJoin {
         name = bin;
         paths = [ pkg ];

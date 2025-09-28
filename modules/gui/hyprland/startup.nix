@@ -38,7 +38,7 @@ mkIf (config.custom.wm == "hyprland") {
         exec = concatStringsSep " " spawn;
       in
       if enable then "${rules} ${exec}" else ""
-    ) config.hm.custom.startup;
+    ) config.custom.startup;
   };
 
   systemd.user.services = {

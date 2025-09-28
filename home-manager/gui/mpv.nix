@@ -28,7 +28,8 @@ in
     };
   };
 
-  config = mkIf (config.custom.wm != "tty") (mkMerge [
+  # config = mkIf (config.custom.wm != "tty")
+  config = mkIf true (mkMerge [
     {
       programs.mpv = {
         enable = isNixOS;

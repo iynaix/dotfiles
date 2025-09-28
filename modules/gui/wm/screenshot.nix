@@ -50,6 +50,33 @@ mkIf config.custom.isWm {
       ];
     };
 
+    niri.settings = {
+      binds = {
+        "Mod+backslash".action.screenshot = {
+          show-pointer = false;
+        };
+        "Mod+Shift+backslash".action.spawn = [
+          "focal"
+          "image"
+          # "--edit"
+          # "swappy"
+          "--rofi"
+        ];
+        # "Mod+Ctrl+backslash".action.spawn = [
+        #   "focal"
+        #   "image"
+        #   "--area"
+        #   "selection"
+        #   "--ocr"
+        # ];
+        "Alt+backslash".action.spawn = [
+          "focal"
+          "video"
+          "--rofi"
+        ];
+      };
+    };
+
     mango.settings = {
       bind = [
         "$mod, backslash, spawn, focal image --area selection --no-notify --no-save --no-rounded-windows"
@@ -81,33 +108,6 @@ mkIf config.custom.isWm {
             font-size: 24px;
           }
         '';
-    };
-  };
-
-  hm.programs.niri.settings = {
-    binds = {
-      "Mod+backslash".action.screenshot = {
-        show-pointer = false;
-      };
-      "Mod+Shift+backslash".action.spawn = [
-        "focal"
-        "image"
-        # "--edit"
-        # "swappy"
-        "--rofi"
-      ];
-      # "Mod+Ctrl+backslash".action.spawn = [
-      #   "focal"
-      #   "image"
-      #   "--area"
-      #   "selection"
-      #   "--ocr"
-      # ];
-      "Alt+backslash".action.spawn = [
-        "focal"
-        "video"
-        "--rofi"
-      ];
     };
   };
 }

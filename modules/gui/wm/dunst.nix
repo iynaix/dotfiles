@@ -80,18 +80,18 @@ let
 in
 mkIf (config.custom.wm != "tty") (mkMerge [
   {
-    hm.programs.niri.settings.binds = {
-      "Mod+n".action.spawn = [
-        "dunstctl"
-        "history-pop"
-      ];
-    };
-
     # keybind to show dunst history
     custom.programs = {
       hyprland.settings.bind = [
         "$mod, n, exec, dunstctl history-pop"
       ];
+
+      niri.settings.binds = {
+        "Mod+n".action.spawn = [
+          "dunstctl"
+          "history-pop"
+        ];
+      };
 
       mango.settings = {
         bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];

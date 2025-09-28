@@ -163,7 +163,7 @@ in
     };
 
     custom.persist = {
-      root.directories = optionals config.hm.custom.wifi.enable [ "/etc/NetworkManager" ];
+      root.directories = optionals config.custom.hardware.wifi.enable [ "/etc/NetworkManager" ];
       root.cache.directories = [ "/var/lib/systemd/coredump" ];
 
       home.directories = [ ".local/state/wireplumber" ];
