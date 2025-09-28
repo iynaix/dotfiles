@@ -21,8 +21,8 @@ let
     ;
   inherit (lib.types) package;
   tomlFormat = pkgs.formats.toml { };
-  wallpapers_dir = libCustom.homePath "Pictures/Wallpapers";
-  walls_in_dir = libCustom.homePath "Pictures/wallpapers_in";
+  wallpapers_dir = "${config.hj.directory}/Pictures/Wallpapers";
+  walls_in_dir = "${config.hj.directory}/Pictures/wallpapers_in";
 in
 {
   options.custom = {
@@ -139,7 +139,7 @@ in
               export WEBKIT_DISABLE_DMABUF_RENDERER=1
             ''
             + libCustom.direnvCargoRun {
-              dir = libCustom.persistPath (libCustom.homePath "projects/wallfacer");
+              dir = "/persist${config.hj.directory}/projects/wallfacer";
             };
           # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
           fishCompletion = # fish
@@ -206,7 +206,7 @@ in
         shell.packages = {
           # fetch wallpapers from pixiv for user
           pixiv = libCustom.direnvCargoRun {
-            dir = libCustom.persistPath (libCustom.homePath "projects/pixiv");
+            dir = "/persist${config.hj.directory}/projects/pixiv";
           };
         };
 

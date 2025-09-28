@@ -2,7 +2,6 @@
   config,
   isNixOS,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -50,8 +49,8 @@ in
       # wait for colorscheme to be ready on boot
       unitConfig = {
         AssertPathExists = [
-          (libCustom.xdgConfigPath "waybar/config.jsonc")
-          (libCustom.xdgConfigPath "waybar/style.css")
+          "${config.hj.xdg.config.directory}/waybar/config.jsonc"
+          "${config.hj.xdg.config.directory}/waybar/style.css"
         ];
         Wants = [ "wallpaper.service" ];
       };
@@ -223,7 +222,7 @@ in
       templates = {
         "waybar.jsonc" = {
           text = toJSON cfg.config;
-          target = libCustom.xdgConfigPath "waybar/config.jsonc";
+          target = "${config.hj.xdg.config.directory}/waybar/config.jsonc";
         };
         "waybar.css" =
           let
@@ -347,7 +346,7 @@ in
             ''
             + cfg.extraCss;
 
-            target = libCustom.xdgConfigPath "waybar/style.css";
+            target = "${config.hj.xdg.config.directory}/waybar/style.css";
           };
       };
     };

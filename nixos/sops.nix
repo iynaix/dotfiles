@@ -7,7 +7,6 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  homeDir = config.hm.home.homeDirectory;
 in
 {
   options.custom = {
@@ -25,8 +24,8 @@ in
       # of stage 2 boot before impermanence
       gnupg.sshKeyPaths = [ ];
       age = {
-        sshKeyPaths = [ "/persist${homeDir}/.ssh/id_ed25519" ];
-        keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";
+        sshKeyPaths = [ "/persist${config.hj.directory}/.ssh/id_ed25519" ];
+        keyFile = "/persist${config.hj.directory}/.config/sops/age/keys.txt";
         # This will generate a new key if the key specified above does not exist
         generateKey = false;
       };
@@ -40,7 +39,7 @@ in
         runtimeInputs = [ pkgs.rsync ];
         text =
           let
-            persistHome = "/persist${homeDir}";
+            persistHome = "/persist${config.hj.directory}";
             copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
           in
           # sh

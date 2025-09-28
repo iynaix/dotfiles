@@ -132,7 +132,7 @@ in
                 ];
               };
             };
-          target = libCustom.xdgConfigPath "hypr/hyprlock.conf";
+          target = "${config.hj.xdg.config.directory}/hypr/hyprlock.conf";
         };
       };
     })

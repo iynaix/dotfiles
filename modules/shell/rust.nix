@@ -1,6 +1,6 @@
-{ user, ... }:
+{ config, ... }:
 let
-  xdgDataHome = "/home/${user}/.local/share";
+  xdgDataHome = config.hj.xdg.data.directory;
 in
 {
   # use centralized cargo cache

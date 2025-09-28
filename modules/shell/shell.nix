@@ -1,12 +1,11 @@
 {
   config,
   dots,
-  libCustom,
   pkgs,
   ...
 }:
 let
-  proj_dir = libCustom.persistPath (libCustom.homePath "projects");
+  proj_dir = "/persist${config.hj.directory}/projects";
 in
 {
   environment.shellAliases = {

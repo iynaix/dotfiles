@@ -8,6 +8,11 @@ let
   inherit (lib) mkIf;
 in
 mkIf (config.custom.wm == "plasma") {
+  services = {
+    xserver.enable = true;
+    xserver.desktopManager.plasma6.enable = true;
+  };
+
   # set dark theme, adapted from plasma-manager
   environment.etc."xdg/autostart/plasma-dark-mode.desktop".text = ''
     [Desktop Entry]

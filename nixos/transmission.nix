@@ -8,7 +8,7 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
-  homeDir = "/persist${config.hm.home.homeDirectory}";
+  persistHome = "/persist${config.hj.directory}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
 in
@@ -24,7 +24,7 @@ in
         package = pkgs.transmission_4;
         webHome = pkgs.flood-for-transmission;
         inherit user;
-        home = homeDir;
+        home = persistHome;
         group = "users";
         settings = {
           alt-speed-down = 50;
@@ -53,7 +53,7 @@ in
           inhibit-desktop-hibernation = false;
           lpd-enabled = false;
           message-level = 1;
-          open-dialog-dir = homeDir;
+          open-dialog-dir = persistHome;
           peer-congestion-algorithm = "";
           peer-id-ttl-hours = 6;
           peer-limit-global = 200;
@@ -153,7 +153,7 @@ in
         # process downloaded files
         shell.packages = {
           renamer = libCustom.direnvCargoRun {
-            dir = "${homeDir}/projects/renamer";
+            dir = "${persistHome}/projects/renamer";
           };
         };
       };

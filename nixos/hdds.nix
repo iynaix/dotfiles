@@ -12,7 +12,6 @@ let
   cfg = config.custom.hardware.hdds;
   hgst10 = "/media/HGST10";
   ironwolf22 = "/media/IRONWOLF22";
-  inherit (config.hm.home) homeDirectory;
 in
 {
   options.custom = {
@@ -49,9 +48,9 @@ in
       # symlinks from hdds
       symlinks =
         optionalAttrs cfg.ironwolf22 {
-          "${homeDirectory}/Downloads" = "${ironwolf22}/Downloads";
+          "${config.hj.directory}/Downloads" = "${ironwolf22}/Downloads";
         }
-        // optionalAttrs cfg.hgst10 { "${homeDirectory}/Videos" = hgst10; };
+        // optionalAttrs cfg.hgst10 { "${config.hj.directory}/Videos" = hgst10; };
 
       # add btop monitoring for extra hdds
       programs.btop.disks = (optional cfg.hgst10 hgst10) ++ (optional cfg.ironwolf22 ironwolf22);

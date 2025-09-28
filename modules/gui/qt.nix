@@ -5,7 +5,6 @@
 {
   config,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -63,12 +62,12 @@ in
       {
         "qt5ct.conf" = {
           text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
-          target = libCustom.xdgConfigPath "qt5ct/qt5ct.conf";
+          target = "${config.hj.xdg.config.directory}/qt5ct/qt5ct.conf";
         };
 
         "qt6ct.conf" = {
           text = createQtctConf ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
-          target = libCustom.xdgConfigPath "qt6ct/qt6ct.conf";
+          target = "${config.hj.xdg.config.directory}/qt6ct/qt6ct.conf";
         };
       };
   };

@@ -69,6 +69,11 @@ in
         EDITOR = "nvim";
         VISUAL = "nvim";
         NIXPKGS_ALLOW_UNFREE = "1";
+        # xdg
+        XDG_CACHE_HOME = config.hj.xdg.cache.directory;
+        XDG_CONFIG_HOME = config.hj.xdg.config.directory;
+        XDG_DATA_HOME = config.hj.xdg.data.directory;
+        XDG_STATE_HOME = config.hj.xdg.state.directory;
       };
 
       systemPackages =
@@ -107,9 +112,12 @@ in
       ];
     };
 
+    # thanks for not fucking wasting my time
+    hjem.clobberByDefault = true;
+
     # create symlink to dotfiles from default /etc/nixos
     custom.symlinks = {
-      "/etc/nixos" = "/persist${config.hm.home.homeDirectory}/projects/dotfiles";
+      "/etc/nixos" = "/persist${config.hj.directory}/projects/dotfiles";
     };
 
     # create symlinks
@@ -134,7 +142,7 @@ in
     };
 
     # use gtk theme on qt apps
-    qt = mkIf (config.hm.custom.wm != "tty") {
+    qt = mkIf (config.custom.wm != "tty") {
       enable = true;
       platformTheme = "qt5ct";
       style = "kvantum";

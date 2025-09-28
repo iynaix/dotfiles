@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -77,7 +76,7 @@ let
     };
   };
   # NOTE: real dunst config is read from here
-  dunstConfigpath = libCustom.xdgConfigPath "dunst/dunstrc";
+  dunstConfigpath = "${config.hj.xdg.config.directory}/dunst/dunstrc";
 in
 mkIf (config.custom.wm != "tty") (mkMerge [
   {

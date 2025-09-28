@@ -43,11 +43,11 @@ mkIf (config.custom.wm == "mango") {
 
       "$mod, BackSpace, killclient, "
 
-      "$mod, e, spawn, nemo ${libCustom.homePath "Downloads"}"
+      "$mod, e, spawn, nemo ${config.hj.directory}/Downloads"
       "$mod+Shift, e, spawn, ${
         termExec [
           "yazi"
-          "${libCustom.homePath "Downloads"}"
+          "${config.hj.directory}/Downloads"
         ]
       }"
       "$mod, w, spawn, ${getExe pkgs.brave}"
@@ -57,8 +57,8 @@ mkIf (config.custom.wm == "mango") {
       "$mod+Shift, v, spawn, ${getExe pkgs.custom.shell.rofi-edit-proj}"
 
       # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
-      "$mod, period, spawn, codium ${libCustom.homePath "projects/dotfiles"}"
-      "$mod+SHIFT, period, spawn, codium ${libCustom.homePath "projects/nixpkgs"}"
+      "$mod, period, spawn, codium ${config.hj.directory}/projects/dotfiles"
+      "$mod+SHIFT, period, spawn, codium ${config.hj.directory}/projects/nixpkgs"
 
       # exit mango
       "ALT, F4, quit,"

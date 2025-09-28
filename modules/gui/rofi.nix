@@ -2,7 +2,6 @@
   config,
   isNixOS,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -141,7 +140,7 @@ in
         xoffset: 0;
         yoffset: 0;
       }
-      @theme ${libCustom.xdgCachePath "wallust/rofi.rasi"}
+      @theme "${config.hj.xdg.cache.directory}/wallust/rofi.rasi"
     '';
 
     environment.systemPackages = [
@@ -191,7 +190,7 @@ in
             inputbar { background-color: transparent; }
             element normal.normal { background-color: transparent; }
           '';
-          target = libCustom.xdgCachePath "wallust/rofi.rasi";
+          target = "${config.hj.xdg.cache.directory}/wallust/rofi.rasi";
         };
 
         # generic single column rofi menu
@@ -201,7 +200,7 @@ in
             prompt { enabled: false; }
             textbox-prompt-colon { enabled: false; }
           '';
-          target = libCustom.xdgCachePath "wallust/rofi-menu.rasi";
+          target = "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi";
         };
 
         "rofi-menu-noinput.rasi" = {
@@ -221,7 +220,7 @@ in
               text-color:                  @foreground;
             }
           '';
-          target = libCustom.xdgCachePath "wallust/rofi-menu-noinput.rasi";
+          target = "${config.hj.xdg.cache.directory}/wallust/rofi-menu-noinput.rasi";
         };
 
         "rofi-power-menu.rasi" =
@@ -240,7 +239,7 @@ in
               element-text { vertical-align: 0; }
               listview { columns: ${toString columns}; }
             '';
-            target = libCustom.xdgCachePath "wallust/rofi-power-menu.rasi";
+            target = "${config.hj.xdg.cache.directory}/wallust/rofi-power-menu.rasi";
           };
 
         "rofi-power-menu-confirm.rasi" = {
@@ -248,7 +247,7 @@ in
             element { background-color: transparent; }
             element normal.normal { background-color: transparent; }
           '';
-          target = libCustom.xdgCachePath "wallust/rofi-power-menu-confirm.rasi";
+          target = "${config.hj.xdg.cache.directory}/wallust/rofi-power-menu-confirm.rasi";
         };
       };
     };

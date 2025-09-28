@@ -1,6 +1,5 @@
 {
   config,
-  libCustom,
   pkgs,
   ...
 }:
@@ -23,7 +22,7 @@ in
         config.environment.shellAliases
         // config.hm.home.shellAliases
         // {
-          ehistory = "nvim ${libCustom.xdgDataPath "fish/fish_history"}";
+          ehistory = ''nvim "${config.hj.xdg.data.directory}/fish/fish_history"'';
         };
       shellInit = # fish
       ''

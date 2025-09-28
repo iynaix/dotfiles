@@ -1,7 +1,7 @@
 {
+  config,
   host,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -226,7 +226,7 @@ mkMerge [
   (mkIf (host == "desktop" || host == "framework") {
     programs.git.config = {
       maintenance = {
-        repo = libCustom.persistPath (libCustom.homePath "projects/nixpkgs");
+        repo = "/persist${config.hj.directory}/projects/nixpkgs";
       };
     };
   })

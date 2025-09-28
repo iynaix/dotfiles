@@ -2,7 +2,6 @@
   config,
   host,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -124,7 +123,7 @@ in
           }
           // cfg.nixJson
         );
-        target = libCustom.xdgCachePath "wallust/nix.json";
+        target = "${config.hj.xdg.cache.directory}/wallust/nix.json";
       };
     };
   };

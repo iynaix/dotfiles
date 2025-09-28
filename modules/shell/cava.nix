@@ -132,7 +132,7 @@ in
           gradient_color_6 = "{{color7}}";
         };
       };
-      target = libCustom.xdgConfigPath "cava/config";
+      target = "${config.hj.xdg.config.directory}/cava/config";
     };
   };
 }

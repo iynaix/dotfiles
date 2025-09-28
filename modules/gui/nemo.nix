@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -70,25 +69,21 @@ mkIf (config.custom.wm != "tty") {
       };
     };
 
-    gtk.bookmarks =
-      let
-        inherit (libCustom) homePath;
-      in
-      [
-        (homePath "Downloads")
-        (homePath "projects")
-        (homePath "projects/dotfiles")
-        (homePath "projects/nixpkgs")
-        (homePath "projects/coinfc Work")
-        (homePath "Documents")
-        (homePath "Pictures/Wallpapers")
-      ]
-      ++ optionals config.custom.programs.wallpaper-tools.enable [
-        (homePath "Pictures/wallpapers_in Walls In")
-      ]
-      ++ [
-        "/persist Persist"
-      ];
+    gtk.bookmarks = [
+      "${config.hj.directory}/Downloads"
+      "${config.hj.directory}/projects"
+      "${config.hj.directory}/projects/dotfiles"
+      "${config.hj.directory}/projects/nixpkgs"
+      "${config.hj.directory}/projects/coinfc Work"
+      "${config.hj.directory}/Documents"
+      "${config.hj.directory}/Pictures/Wallpapers"
+    ]
+    ++ optionals config.custom.programs.wallpaper-tools.enable [
+      "${config.hj.directory}/Pictures/wallpapers_in Walls In"
+    ]
+    ++ [
+      "/persist Persist"
+    ];
   };
 
   custom.programs.hyprland.settings = {

@@ -77,14 +77,14 @@ in
           "$mod, Return, exec, ${getExe config.hm.custom.terminal.package}"
           "$mod_SHIFT, Return, exec, ${rofiExe} -show drun"
           "$mod, BackSpace, killactive,"
-          "$mod, e, exec, nemo ${libCustom.homePath "Downloads"}"
-          "$mod_SHIFT, e, exec, ${termExec "yazi ${libCustom.homePath "Downloads"}"}"
+          "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
+          "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
           "$mod, w, exec, ${getExe pkgs.brave}"
           "$mod_SHIFT, w, exec, ${getExe pkgs.brave} --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
-          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${libCustom.homePath "projects/dotfiles"}"''
-          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${libCustom.homePath "projects/nixpkgs"}"''
+          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.hj.directory}/projects/dotfiles"''
+          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.hj.directory}/projects/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"
