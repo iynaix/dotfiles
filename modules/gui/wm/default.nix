@@ -10,7 +10,6 @@ let
   inherit (lib)
     elemAt
     getExe
-    getExe'
     mkEnableOption
     mkOption
     mod
@@ -267,21 +266,6 @@ in
             }
           */
         ];
-
-      shell.packages = {
-        rofi-clipboard-history = {
-          runtimeInputs = [
-            pkgs.rofi
-          ];
-          text = # sh
-            ''
-              rofi \
-                -modi clipboard:${getExe' pkgs.cliphist "cliphist-rofi-img"} \
-                -theme "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi" \
-                -show clipboard -show-icons
-            '';
-        };
-      };
     };
 
     environment = {
@@ -289,24 +273,21 @@ in
         QT_QPA_PLATFORM = "wayland;xcb";
         # GDK_BACKEND = "wayland,x11,*";
       };
-
-      systemPackages = with pkgs; [
-        # clipboard history
-        cliphist
-        wl-clipboard
-      ];
     };
 
     # WM agnostic polkit authentication agent
-    /*
-      services = {
-        cliphist = {
-          enable = true;
-          allowImages = true;
-        };
+    systemd.user.services.polkit-gnome = {
+      wantedBy = [ "graphical-session.target" ];
 
-        polkit-gnome.enable = true;
+      unitConfig = {
+        Description = "GNOME PolicyKit Agent";
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
       };
-    */
+
+      serviceConfig = {
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      };
+    };
   };
 }
