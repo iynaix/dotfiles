@@ -161,9 +161,7 @@ in
 
     # filezilla
     {
-      hm = {
-        home.packages = [ pkgs.filezilla ];
-      };
+      environment.systemPackages = [ pkgs.filezilla ];
 
       custom = {
         persist.home.directories = [ ".config/filezilla" ];

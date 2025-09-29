@@ -5,7 +5,8 @@
   ...
 }:
 let
-  inherit (lib) getExe;
+  inherit (lib) getExe mkOption types;
+  inherit (types) package str;
   # adapted from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/programs/ghostty.nix
   toGhosttyConf =
@@ -40,27 +41,51 @@ let
   };
 in
 {
-  custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.ghostty = {
-          basePackage = pkgs.ghostty;
-          prependFlags = [
-            "--config-default-files=false"
-            # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-            # default location
-            "--config-file=${toGhosttyConf ghosttyConf}"
-          ];
-        };
-      }
-    )
-  ];
+  options.custom = {
+    # terminal options
+    terminal = {
+      package = mkOption {
+        type = package;
+        default = pkgs.ghostty;
+        description = "Package to use for the terminal";
+      };
 
-  environment.systemPackages = [ pkgs.ghostty ];
+      app-id = mkOption {
+        type = str;
+        description = "app-id (wm class) for the terminal";
+      };
 
-  hm.custom.terminal = {
-    app-id = "com.mitchellh.ghostty";
-    desktop = "com.mitchellh.ghostty.desktop";
+      desktop = mkOption {
+        type = str;
+        default = "${config.custom.terminal.package.pname}.desktop";
+        description = "Name of desktop file for the terminal";
+      };
+    };
+  };
+
+  config = {
+    custom.wrappers = [
+      (
+        { pkgs, ... }:
+        {
+          wrappers.ghostty = {
+            basePackage = pkgs.ghostty;
+            prependFlags = [
+              "--config-default-files=false"
+              # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+              # default location
+              "--config-file=${toGhosttyConf ghosttyConf}"
+            ];
+          };
+        }
+      )
+    ];
+
+    environment.systemPackages = [ pkgs.ghostty ];
+
+    custom.terminal = {
+      app-id = "com.mitchellh.ghostty";
+      desktop = "com.mitchellh.ghostty.desktop";
+    };
   };
 }

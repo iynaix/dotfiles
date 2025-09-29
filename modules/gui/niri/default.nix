@@ -53,8 +53,6 @@ in
 
     environment = {
       sessionVariables = {
-        DISPLAY = ":0";
-        NIXOS_OZONE_WL = "1";
       };
 
       shellAliases = {

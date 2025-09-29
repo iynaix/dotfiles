@@ -11,6 +11,12 @@ let
 in
 {
   custom = {
+    specialisation = {
+      niri.enable = true;
+      hyprland.enable = true;
+      mango.enable = false;
+    };
+
     hardware = {
       hdds.enable = true;
       nvidia.enable = true;

@@ -23,8 +23,6 @@ in
       # utility variables for each host
       "${name}" = cfg;
       "${name}o" = cfg.custom;
-      "${name}Hm" = cfg.hm;
-      "${name}Hmo" = cfg.hm.custom;
     }
   )
   |> lib.mergeAttrsList
@@ -39,8 +37,6 @@ in
   c = flake.nixosConfigurations.${host}.config;
   config = c;
   o = c.custom;
-  inherit (c) hm;
-  hmo = hm.custom;
 
   # inspecting wrappers
   wrappers =
@@ -51,12 +47,11 @@ in
 
   # testing specialisations
   spec = c: spec_name: c.specialisation.${spec_name}.configuration;
-  specHm = c: spec_name: (spec c spec_name).hm;
 
-  tty = spec c "tty";
-  niri = spec c "niri";
-  hyprland = spec c "hyprland";
-  mango = spec c "mango";
+  tty = c.specialisation.tty.configuration;
+  niri = c.specialisation.niri.configuration;
+  hyprland = c.specialisation.hyprland.configuration;
+  mango = c.specialisation.mango.configuration;
 
   # your code here
 }

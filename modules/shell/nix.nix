@@ -119,7 +119,7 @@ in
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw = pkgs.custom.nsw.override {
         inherit dots host;
-        specialisation = config.hm.custom.specialisation.current;
+        specialisation = config.custom.specialisation.current;
       };
       # update all nvfetcher overlays and packages
       nv-update = {
@@ -491,7 +491,7 @@ in
       nst = {
         runtimeInputs = [
           (pkgs.custom.shell.nsw.override {
-            specialisation = config.hm.custom.specialisation.current;
+            specialisation = config.custom.specialisation.current;
           })
         ];
         text = # sh

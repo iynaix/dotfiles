@@ -13,7 +13,7 @@ let
     getExe
     mkIf
     ;
-  termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${concatStringsSep " " cmd}";
+  termExec = cmd: "${getExe config.custom.terminal.package} -e ${concatStringsSep " " cmd}";
   rofiExe = getExe pkgs.rofi;
 in
 mkIf (config.custom.wm == "mango") {
@@ -38,7 +38,7 @@ mkIf (config.custom.wm == "mango") {
 
   custom.programs.mango.settings = {
     bind = [
-      "$mod, Return, spawn, ${getExe config.hm.custom.terminal.package}"
+      "$mod, Return, spawn, ${getExe config.custom.terminal.package}"
       "$mod+SHIFT, Return, spawn, ${rofiExe} -show drun"
 
       "$mod, BackSpace, killclient, "

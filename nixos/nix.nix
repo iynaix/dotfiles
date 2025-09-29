@@ -105,7 +105,7 @@ in
       text =
         let
           allPkgs = map (p: p.name) (
-            config.environment.systemPackages ++ config.users.users.${user}.packages ++ config.hm.home.packages
+            config.environment.systemPackages ++ config.users.users.${user}.packages
           );
         in
         ''sort -ui <<< "${concatLines allPkgs}"'';
@@ -206,7 +206,7 @@ in
   # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
   documentation.man.generateCaches = true;
 
-  hm.custom.persist = {
+  custom.persist = {
     home = {
       cache.directories = [
         ".cache/nix"

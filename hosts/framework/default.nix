@@ -1,6 +1,20 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  inherit (lib) getExe;
+in
 {
   custom = {
+    specialisation = {
+      niri.enable = true;
+      hyprland.enable = true;
+      mango.enable = false;
+    };
+
     hardware = {
       monitors = [
         {
@@ -41,6 +55,21 @@
 
     qmk.enable = true;
     virtualization.enable = true;
+
+    # don't blind me on startup
+    startup = [
+      {
+        spawn = [
+          (getExe pkgs.brightnessctl)
+          "s"
+          "20%"
+        ];
+      }
+    ];
+
+    persist = {
+      home.directories = [ "Downloads" ];
+    };
   };
 
   networking.hostId = "abb4d116"; # required for zfs

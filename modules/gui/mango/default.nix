@@ -45,11 +45,6 @@ in
   };
 
   config = mkIf (config.custom.wm == "mango") {
-    environment.sessionVariables = {
-      # DISPLAY = ":0";
-      NIXOS_OZONE_WL = "1";
-    };
-
     programs.mango = {
       enable = true;
       package = inputs.mango.packages.${pkgs.system}.mango;

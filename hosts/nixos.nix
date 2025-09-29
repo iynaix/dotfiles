@@ -27,8 +27,7 @@ rec {
       };
 
       modules = [
-        ./${host} # host specific configuration
-        ./${host}/hardware.nix # host specific hardware configuration
+        (inputs.import-tree ./${host}) # host specific configuration
         (inputs.import-tree ../nixos)
         (inputs.import-tree ../modules)
         ../overlays
@@ -57,7 +56,6 @@ rec {
 
             users.${user} = {
               imports = [
-                ./${host}/home.nix # host specific home-manager configuration
                 (inputs.import-tree ../home-manager)
               ];
             };

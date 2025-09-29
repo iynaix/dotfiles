@@ -13,7 +13,7 @@ let
     ;
 in
 mkIf (config.custom.wm == "hyprland") {
-  hm.custom = {
+  custom = {
     autologinCommand = "Hyprland";
   };
 

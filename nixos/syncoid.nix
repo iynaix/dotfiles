@@ -16,8 +16,8 @@ in
     # allow syncoid to ssh into NAS
     users.users = {
       syncoid.openssh.authorizedKeys.keyFiles = [
-        ../home-manager/id_rsa.pub
-        ../home-manager/id_ed25519.pub
+        ../modules/id_rsa.pub
+        ../modules/id_ed25519.pub
       ];
     };
 

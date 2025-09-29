@@ -5,78 +5,120 @@
   ...
 }:
 let
-  inherit (lib) mkMerge optionalAttrs;
+  inherit (lib)
+    mkMerge
+    mkOption
+    optionalAttrs
+    types
+    ;
+  inherit (types) nullOr str;
 in
-mkMerge [
-  # ssh settings
-  {
-    services.openssh = {
-      enable = true;
-      # disable password auth
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
+{
+  options.custom = {
+    autologinCommand = mkOption {
+      type = nullOr str;
+      default = null;
+      description = "Command to run after autologin";
     };
+  };
 
-    users.users =
-      let
-        keyFiles = [
-          ../home-manager/id_rsa.pub
-          ../home-manager/id_ed25519.pub
-        ];
-      in
-      {
-        root.openssh.authorizedKeys.keyFiles = keyFiles;
-        ${user}.openssh.authorizedKeys.keyFiles = keyFiles;
+  config = mkMerge [
+    # ssh settings
+    {
+      services.openssh = {
+        enable = true;
+        # disable password auth
+        settings = {
+          PasswordAuthentication = false;
+          KbdInteractiveAuthentication = false;
+        };
       };
-  }
 
-  # keyring settings
-  {
-    services.gnome.gnome-keyring.enable = true;
-    security.pam.services.login.enableGnomeKeyring = true;
-  }
-
-  # misc
-  {
-    security = {
-      polkit.enable = true;
-
-      # i can't type
-      sudo.extraConfig = "Defaults passwd_tries=10";
+      users.users =
+        let
+          keyFiles = [
+            ../modules/id_rsa.pub
+            ../modules/id_ed25519.pub
+          ];
+        in
+        {
+          root.openssh.authorizedKeys.keyFiles = keyFiles;
+          ${user}.openssh.authorizedKeys.keyFiles = keyFiles;
+        };
     }
-    // optionalAttrs config.hm.programs.hyprlock.enable { pam.services.hyprlock = { }; };
 
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    environment.variables = {
-      GNUPGHOME = "${config.hj.xdg.data.directory}/.gnupg";
-    };
+    # keyring settings
+    {
+      services.gnome.gnome-keyring.enable = true;
+      security.pam.services.login.enableGnomeKeyring = true;
+    }
 
-    programs.gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
+    # autologin
+    {
+      services = {
+        greetd =
+          let
+            inherit (config.custom) autologinCommand;
+          in
+          {
+            enable = autologinCommand != null;
 
-    # persist keyring and misc other secrets
-    custom.persist = {
-      root = {
-        files = [
-          "/etc/ssh/ssh_host_rsa_key"
-          "/etc/ssh/ssh_host_rsa_key.pub"
-          "/etc/ssh/ssh_host_ed25519_key"
-          "/etc/ssh/ssh_host_ed25519_key.pub"
-        ];
+            settings = {
+              default_session = {
+                command = autologinCommand;
+              };
+
+              initial_session = {
+                inherit user;
+                command = autologinCommand;
+              };
+            };
+          };
+
+        getty.autologinUser = config.services.displayManager.autoLogin.user;
       };
-      home = {
-        directories = [
-          ".pki"
-          ".ssh"
-          ".local/share/.gnupg"
-          ".local/share/keyrings"
-        ];
+    }
+
+    # misc
+    {
+      security = {
+        polkit.enable = true;
+
+        # i can't type
+        sudo.extraConfig = "Defaults passwd_tries=10";
+      }
+      // optionalAttrs config.custom.lock.enable { pam.services.hyprlock = { }; };
+
+      # Some programs need SUID wrappers, can be configured further or are
+      # started in user sessions.
+      environment.variables = {
+        GNUPGHOME = "${config.hj.xdg.data.directory}/.gnupg";
       };
-    };
-  }
-]
+
+      programs.gnupg.agent = {
+        enable = true;
+        enableSSHSupport = true;
+      };
+
+      # persist keyring and misc other secrets
+      custom.persist = {
+        root = {
+          files = [
+            "/etc/ssh/ssh_host_rsa_key"
+            "/etc/ssh/ssh_host_rsa_key.pub"
+            "/etc/ssh/ssh_host_ed25519_key"
+            "/etc/ssh/ssh_host_ed25519_key.pub"
+          ];
+        };
+        home = {
+          directories = [
+            ".pki"
+            ".ssh"
+            ".local/share/.gnupg"
+            ".local/share/keyrings"
+          ];
+        };
+      };
+    }
+  ];
+}

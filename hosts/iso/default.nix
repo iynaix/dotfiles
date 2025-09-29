@@ -164,8 +164,8 @@ let
             };
             systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
             users.users.root.openssh.authorizedKeys.keyFiles = [
-              ../../home-manager/id_rsa.pub
-              ../../home-manager/id_ed25519.pub
+              ../../modules/id_rsa.pub
+              ../../modules/id_ed25519.pub
             ];
 
             # quality of life

@@ -189,7 +189,7 @@ in
       };
     };
 
-    hm.xdg.stateFile."impermanence.json".text =
+    hj.xdg.state.files."impermanence.json".text =
       let
         getDirPath = prefix: d: "${prefix}${d.dirPath}";
         getFilePath = prefix: f: "${prefix}${f.filePath}";

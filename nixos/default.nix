@@ -1,6 +1,7 @@
 {
   config,
   dots,
+  isNixOS,
   lib,
   libCustom,
   pkgs,
@@ -64,17 +65,31 @@ in
     programs.dconf.enable = true;
 
     environment = {
-      variables = {
-        TERMINAL = getExe config.hm.custom.terminal.package;
-        EDITOR = "nvim";
-        VISUAL = "nvim";
-        NIXPKGS_ALLOW_UNFREE = "1";
-        # xdg
-        XDG_CACHE_HOME = config.hj.xdg.cache.directory;
-        XDG_CONFIG_HOME = config.hj.xdg.config.directory;
-        XDG_DATA_HOME = config.hj.xdg.data.directory;
-        XDG_STATE_HOME = config.hj.xdg.state.directory;
-      };
+      variables =
+        let
+          homeDir = config.hj.directory;
+        in
+        {
+          TERMINAL = getExe config.custom.terminal.package;
+          EDITOR = "nvim";
+          VISUAL = "nvim";
+          __IS_NIXOS = if isNixOS then "1" else "0";
+          NIXPKGS_ALLOW_UNFREE = "1";
+          # xdg
+          XDG_CACHE_HOME = config.hj.xdg.cache.directory;
+          XDG_CONFIG_HOME = config.hj.xdg.config.directory;
+          XDG_DATA_HOME = config.hj.xdg.data.directory;
+          XDG_STATE_HOME = config.hj.xdg.state.directory;
+          # xdg user dirs
+          XDG_DESKTOP_DIR = "${homeDir}/Desktop";
+          XDG_DOCUMENTS_DIR = "${homeDir}/Documents";
+          XDG_DOWNLOAD_DIR = "${homeDir}/Downloads";
+          XDG_MUSIC_DIR = "${homeDir}/Music";
+          XDG_PICTURES_DIR = "${homeDir}/Pictures";
+          XDG_PUBLICSHARE_DIR = "${homeDir}/Public";
+          XDG_TEMPLATES_DIR = "${homeDir}/Templates";
+          XDG_VIDEOS_DIR = "${homeDir}/Videos";
+        };
 
       systemPackages =
         with pkgs;
@@ -85,18 +100,22 @@ in
           ets # add timestamp to beginning of each line
           fd # better find
           fx # terminal json viewer and processor
+          gzip
           htop
           jq
           killall
           procs # better ps
           (hiPrio procps) # for uptime
           sd # better sed
+          trash-cli
           ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
+          xdg-utils
           # use the package configured by nvf
           (custom.neovim-iynaix.override { inherit dots host; })
         ]
         # add custom user created shell packages
         ++ (attrValues (config.custom.shell.packages // config.hm.custom.shell.packages));
+
     };
 
     nixpkgs = {
@@ -142,25 +161,18 @@ in
       style = "kvantum";
     };
 
-    xdg = {
-      # use mimetypes defined from home-manager
-      mime =
-        let
-          hmMime = config.hm.xdg.mimeApps;
-        in
-        {
-          enable = true;
-          inherit (hmMime) defaultApplications;
-          addedAssociations = hmMime.associations.added;
-          removedAssociations = hmMime.associations.removed;
-        };
-    };
+    xdg.mime.enable = true;
 
     custom.persist = {
       root.directories = optionals config.custom.hardware.wifi.enable [ "/etc/NetworkManager" ];
       root.cache.directories = [ "/var/lib/systemd/coredump" ];
 
-      home.directories = [ ".local/state/wireplumber" ];
+      home.directories = [
+        "Desktop"
+        "Documents"
+        "Pictures"
+        ".local/state/wireplumber"
+      ];
     };
   };
 }

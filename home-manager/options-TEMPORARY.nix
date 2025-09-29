@@ -1,13 +1,17 @@
 {
-  config,
   lib,
   libCustom,
   pkgs,
+  user,
   ...
 }:
 let
   inherit (lib) mkOption types;
-  inherit (lib.types) listOf package str;
+  inherit (lib.types)
+    listOf
+    package
+    str
+    ;
 in
 {
   options.custom = {
@@ -65,31 +69,25 @@ in
         '';
       };
     };
-
-    # terminal options
-    terminal = {
-      package = mkOption {
-        type = package;
-        default = pkgs.ghostty;
-        description = "Package to use for the terminal";
-      };
-
-      app-id = mkOption {
-        type = str;
-        description = "app-id (wm class) for the terminal";
-      };
-
-      desktop = mkOption {
-        type = str;
-        default = "${config.custom.terminal.package.pname}.desktop";
-        description = "Name of desktop file for the terminal";
-      };
-    };
   };
 
   config = {
+    home = {
+      username = user;
+      homeDirectory = "/home/${user}";
+      # do not change this value
+      stateVersion = "23.05";
+
+      # home-manager executable only on nixos
+      packages = [ pkgs.home-manager ];
+    };
+
+    # Let Home Manager install and manage itself.
+    programs.home-manager.enable = true;
+
     xdg.configFile."gtk-3.0/bookmarks".enable = false;
 
     programs.niri.settings = lib.mkForce { };
+
   };
 }

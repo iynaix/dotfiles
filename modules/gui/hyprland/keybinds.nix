@@ -16,7 +16,7 @@ let
   inherit (config.custom.hardware) monitors;
   pamixer = getExe pkgs.pamixer;
   rofiExe = getExe pkgs.rofi;
-  termExec = cmd: "${getExe config.hm.custom.terminal.package} -e ${cmd}";
+  termExec = cmd: "${getExe config.custom.terminal.package} -e ${cmd}";
   qtile_like = config.custom.programs.hyprland.qtile;
 in
 {
@@ -74,7 +74,7 @@ in
           );
         in
         [
-          "$mod, Return, exec, ${getExe config.hm.custom.terminal.package}"
+          "$mod, Return, exec, ${getExe config.custom.terminal.package}"
           "$mod_SHIFT, Return, exec, ${rofiExe} -show drun"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.hj.directory}/Downloads"

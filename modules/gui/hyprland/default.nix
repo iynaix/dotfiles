@@ -15,7 +15,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    optionalAttrs
     versionOlder
     ;
 
@@ -76,10 +75,7 @@ in
         hypr-log = "hyprctl rollinglog --follow";
       };
 
-      variables = {
-        NIXOS_OZONE_WL = "1";
-      }
-      // optionalAttrs (host == "vm" || host == "vm-hyprland") {
+      variables = mkIf (host == "vm" || host == "vm-hyprland") {
         WLR_RENDERER_ALLOW_SOFTWARE = "1";
       };
     };

@@ -25,30 +25,6 @@ in
 
   config = mkMerge [
     {
-      # autologin
-      services = {
-        greetd =
-          let
-            inherit (config.hm.custom) autologinCommand;
-          in
-          {
-            enable = autologinCommand != null;
-
-            settings = {
-              default_session = {
-                command = autologinCommand;
-              };
-
-              initial_session = {
-                inherit user;
-                command = autologinCommand;
-              };
-            };
-          };
-
-        getty.autologinUser = config.services.displayManager.autoLogin.user;
-      };
-
       users = {
         mutableUsers = false;
         # setup users with persistent passwords

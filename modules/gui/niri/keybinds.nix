@@ -19,7 +19,7 @@ let
   termExec =
     cmd:
     [
-      (getExe config.hm.custom.terminal.package)
+      (getExe config.custom.terminal.package)
       "-e"
     ]
     ++ (flatten cmd);
@@ -55,7 +55,7 @@ mkIf (config.custom.wm == "niri") {
         # show hotkey overlay
         # "Mod+Shift+Slash".action.show-hotkey-overlay = { };
 
-        "Mod+Return".action.spawn = getExe config.hm.custom.terminal.package;
+        "Mod+Return".action.spawn = getExe config.custom.terminal.package;
         "Mod+Shift+Return".action.spawn = [
           rofiExe
           "-show"

@@ -11,6 +11,7 @@ let
     elemAt
     getExe
     mkEnableOption
+    mkIf
     mkOption
     mod
     optionalString
@@ -166,11 +167,11 @@ in
     };
   };
 
-  config = {
+  config = mkIf config.custom.isWm {
     custom = {
       startup =
         # ensure setting terminal title using --title or exec with -e works
-        assert config.hm.custom.terminal.package.pname == "ghostty";
+        assert config.custom.terminal.package.pname == "ghostty";
         [
           {
             app-id = "brave-browser";
@@ -203,9 +204,9 @@ in
 
           # terminal
           rec {
-            title = "${config.hm.custom.terminal.app-id}-vertical";
+            title = "${config.custom.terminal.app-id}-vertical";
             spawn = [
-              (getExe config.hm.custom.terminal.package)
+              (getExe config.custom.terminal.package)
               "--title=${title}"
             ];
             workspace = 7;
@@ -229,18 +230,18 @@ in
           # download related
           rec {
             enable = host == "desktop";
-            title = "${config.hm.custom.terminal.app-id}-dl";
+            title = "${config.custom.terminal.app-id}-dl";
             spawn = [
-              (getExe config.hm.custom.terminal.package)
+              (getExe config.custom.terminal.package)
               "--title=${title}"
             ];
             workspace = 10;
           }
           rec {
             enable = host == "desktop";
-            title = "${config.hm.custom.terminal.app-id}-yt.txt";
+            title = "${config.custom.terminal.app-id}-yt.txt";
             spawn = [
-              (getExe config.hm.custom.terminal.package)
+              (getExe config.custom.terminal.package)
               "--title=${title}"
               "-e"
               "nvim"
@@ -270,6 +271,8 @@ in
 
     environment = {
       sessionVariables = {
+        DISPLAY = ":0";
+        NIXOS_OZONE_WL = "1";
         QT_QPA_PLATFORM = "wayland;xcb";
         # GDK_BACKEND = "wayland,x11,*";
       };

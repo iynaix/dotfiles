@@ -15,7 +15,7 @@ let
     ;
 in
 mkIf (config.custom.wm == "niri") {
-  hm.custom = {
+  custom = {
     autologinCommand = "niri-session";
   };
 
