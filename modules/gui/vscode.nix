@@ -57,9 +57,9 @@ mkIf (config.custom.wm != "tty") {
 
     shell.packages = {
       rofi-edit-proj = {
-        runtimeInputs = [
-          pkgs.rofi
-          config.programs.vscode.package
+        runtimeInputs = with pkgs; [
+          rofi
+          vscodium
         ];
         text = # sh
           ''
