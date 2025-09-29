@@ -65,7 +65,11 @@ rec {
   path-of-building = callPackage ./path-of-building { };
 
   # mpv plugins
-  mpv-cut = callPackage ./mpv-cut { };
+  mpv-cut = callPackage ./mpv-cut {
+    configLua = ''
+      KEY_BOOKMARK_ADD = ""
+    '';
+  };
   mpv-deletefile = callPackage ./mpv-deletefile { };
   mpv-nextfile = callPackage ./mpv-nextfile { };
   mpv-sub-select = callPackage ./mpv-sub-select { };

@@ -2,6 +2,7 @@
   lib,
   callPackage,
   mpvScripts,
+  configLua ? "",
 }:
 let
   source = (callPackage ./generated.nix { }).mpv-cut;
@@ -14,6 +15,13 @@ mpvScripts.buildLua (
     dontBuild = true;
 
     scriptPath = "main.lua";
+
+    postInstall = lib.optionalString (configLua != "") ''
+      mkdir -p $out/share/mpv/scripts
+      cat << 'EOF' > $out/share/mpv/scripts/config.lua
+      ${configLua}
+      EOF
+    '';
 
     meta = {
       description = "An mpv plugin for cutting videos incredibly quickly.";
