@@ -40,7 +40,7 @@ let
       enable_recursive_icon_lookup = true;
       ellipsize = "end";
       follow = "mouse";
-      font = "${config.hm.custom.fonts.regular} 12";
+      font = "${config.custom.fonts.regular} 12";
       frame_color = "{{background}}";
       frame_width = 0;
       horizontal_padding = 10;

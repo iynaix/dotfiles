@@ -30,7 +30,7 @@ let
     confirm-close-surface = false;
     copy-on-select = "clipboard";
     cursor-style = "bar";
-    font-family = config.hm.custom.fonts.monospace;
+    font-family = config.custom.fonts.monospace;
     font-feature = "zero";
     font-size = 10;
     font-style = "Medium";

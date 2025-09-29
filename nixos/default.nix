@@ -127,12 +127,6 @@ in
     ]
     ++ (mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
 
-    # setup fonts
-    fonts = {
-      enableDefaultPackages = true;
-      inherit (config.hm.custom.fonts) packages;
-    };
-
     programs = {
       file-roller.enable = true;
       git.enable = true;

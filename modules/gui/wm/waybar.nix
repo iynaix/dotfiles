@@ -242,7 +242,7 @@ in
             + (concatMapStringsSep "\n" (name: "@define-color ${name} {{${name}}};") colorNames);
             baseModuleCss = # css
               ''
-                font-family: "${config.hm.custom.fonts.regular}";
+                font-family: "${config.custom.fonts.regular}";
                 font-weight: bold;
                 color: @accent;
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.8);

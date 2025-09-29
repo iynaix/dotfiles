@@ -104,7 +104,7 @@ in
                     text = ''cmd[update:1000] echo "<b><big>$(date +"%H:%M")</big></b>"'';
                     color = "${rgba "foreground" 1}";
                     font_size = 150;
-                    font_family = "${config.hm.custom.fonts.regular}";
+                    font_family = "${config.custom.fonts.regular}";
 
                     # shadow makes it more readable on light backgrounds
                     shadow_passes = 1;
@@ -119,7 +119,7 @@ in
                     text = ''cmd[update:1000] echo "<b><big>$(date +"%A, %B %-d")</big></b>"'';
                     color = "${rgba "foreground" 1}";
                     font_size = 40;
-                    font_family = "${config.hm.custom.fonts.regular}";
+                    font_family = "${config.custom.fonts.regular}";
 
                     # shadow makes it more readable on light backgrounds
                     shadow_passes = 1;

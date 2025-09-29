@@ -96,7 +96,7 @@ in
 
         name = mkOption {
           type = str;
-          default = config.hm.custom.fonts.regular;
+          default = config.custom.fonts.regular;
           description = "The family name of the font within the package.";
         };
 

@@ -8,17 +8,13 @@
 }:
 let
   inherit (lib)
-    hasPrefix
-    mapAttrsToList
     mkEnableOption
     mkOption
     optionals
     ;
   inherit (lib.types)
     attrsOf
-    listOf
     nullOr
-    package
     str
     ;
 in
@@ -28,22 +24,6 @@ in
       type = nullOr str;
       default = null;
       description = "Command to run after autologin";
-    };
-    fonts = {
-      regular = mkOption {
-        type = str;
-        default = "Geist";
-        description = "The font to use for regular text";
-      };
-      monospace = mkOption {
-        type = str;
-        default = "JetBrainsMono Nerd Font";
-        description = "The font to use for monospace text";
-      };
-      packages = mkOption {
-        type = listOf package;
-        description = "The packages to install for the fonts";
-      };
     };
     specialisation = {
       current = mkOption {
@@ -64,9 +44,6 @@ in
   };
 
   config = {
-    # setup fonts for other distros, run "fc-cache -f" to refresh fonts
-    fonts.fontconfig.enable = true;
-
     home = {
       username = user;
       homeDirectory = "/home/${user}";
@@ -89,20 +66,11 @@ in
           xdg-utils
         ]
         # home-manager executable only on nixos
-        ++ (optionals isNixOS [ home-manager ])
-        # handle fonts
-        ++ (optionals (!isNixOS) config.custom.fonts.packages);
+        ++ (optionals isNixOS [ home-manager ]);
     };
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
-
-    # create symlinks
-    systemd.user.tmpfiles.rules =
-      let
-        normalizeHome = p: if (hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
-      in
-      mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.custom.symlinks;
 
     xdg = {
       enable = true;
@@ -111,13 +79,6 @@ in
     };
 
     custom = {
-      fonts.packages = with pkgs; [
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-emoji
-        nerd-fonts.jetbrains-mono
-      ];
-
       persist = {
         home.directories = [
           "Desktop"
