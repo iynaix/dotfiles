@@ -23,7 +23,6 @@ let
   inherit (lib.strings) toJSON;
   inherit (lib.types) listOf str;
   cfg = config.custom.persist;
-  hmPersistCfg = config.hm.custom.persist;
   assertNoHomeDirs =
     paths:
     assert (assertMsg (!any (hasPrefix "/home") paths) "/home used in a root persist!");
@@ -162,7 +161,7 @@ in
         );
 
         users.${user} = {
-          files = unique (cfg.home.files ++ hmPersistCfg.home.files);
+          files = unique cfg.home.files;
           directories = unique (
             [
               "projects"
@@ -170,7 +169,6 @@ in
               ".config/dconf"
             ]
             ++ cfg.home.directories
-            ++ hmPersistCfg.home.directories
           );
         };
       };
@@ -183,8 +181,8 @@ in
         directories = unique cfg.root.cache.directories;
 
         users.${user} = {
-          files = unique cfg.home.cache.files ++ hmPersistCfg.home.cache.files;
-          directories = unique cfg.home.cache.directories ++ hmPersistCfg.home.cache.directories;
+          files = unique cfg.home.cache.files;
+          directories = unique cfg.home.cache.directories;
         };
       };
     };

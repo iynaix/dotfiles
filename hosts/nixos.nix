@@ -32,37 +32,9 @@ rec {
         (inputs.import-tree ../modules)
         ../overlays
         inputs.hjem.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
         inputs.nix-index-database.nixosModules.nix-index
         inputs.niri.nixosModules.niri
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-
-            extraSpecialArgs = {
-              inherit
-                inputs
-                host
-                self
-                user
-                isVm
-                ;
-              inherit (self) libCustom;
-              isNixOS = true;
-              isLaptop = host == "xps" || host == "framework";
-              dots = "/persist/home/${user}/projects/dotfiles";
-            };
-
-            users.${user} = {
-              imports = [
-                (inputs.import-tree ../home-manager)
-              ];
-            };
-          };
-        }
-        # alias for home-manager
-        (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" user ])
+        # alias for hjem
         (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence

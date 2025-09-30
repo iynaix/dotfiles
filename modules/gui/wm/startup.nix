@@ -244,7 +244,7 @@ in
             "--title=${title}"
             "-e"
             "nvim"
-            "${config.hj.directory}/Downloads/yt.txt"
+            "${config.hj.directory}/Desktop/yt.txt"
           ];
           workspace = 10;
         }
