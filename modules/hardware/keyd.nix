@@ -9,12 +9,14 @@ let
 in
 {
   options.custom = {
-    keyd.enable = mkEnableOption "keyd" // {
-      default = isLaptop;
+    hardware = {
+      keyd.enable = mkEnableOption "keyd" // {
+        default = isLaptop;
+      };
     };
   };
 
-  config = mkIf config.custom.keyd.enable {
+  config = mkIf config.custom.hardware.keyd.enable {
     services.keyd = {
       enable = true;
       keyboards.default = {

@@ -45,8 +45,7 @@ let
       frame_width = 0;
       horizontal_padding = 10;
       # icon_theme will be read from $XDG_DATA_HOME/icons, these are symlinked in gtk.nix
-      # TODO: use iconTheme option
-      icon_theme = "Tela-Default-dark";
+      icon_theme = config.custom.gtk.iconTheme.name;
       icon_path = "";
       max_icon_size = 72;
       mouse_left_click = "do_action";

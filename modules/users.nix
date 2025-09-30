@@ -9,7 +9,6 @@ let
     filter
     hasInfix
     mkForce
-    mkIf
     mkMerge
     mkOption
     ;
@@ -50,24 +49,19 @@ in
     }
 
     # use sops for user passwords if enabled
-    (mkIf config.custom.sops.enable (
-      let
-        inherit (config.sops) secrets;
-      in
-      {
-        # https://github.com/Mic92/sops-nix?tab=readme-ov-file#setting-a-users-password
-        sops.secrets = {
-          rp.neededForUsers = true;
-          up.neededForUsers = true;
-        };
+    {
+      # https://github.com/Mic92/sops-nix?tab=readme-ov-file#setting-a-users-password
+      sops.secrets = {
+        rp.neededForUsers = true;
+        up.neededForUsers = true;
+      };
 
-        # create a password with for root and $user with:
-        # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
-        users.users = {
-          root.hashedPasswordFile = mkForce secrets.rp.path;
-          ${user}.hashedPasswordFile = mkForce secrets.up.path;
-        };
-      }
-    ))
+      # create a password with for root and $user with:
+      # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
+      users.users = {
+        root.hashedPasswordFile = mkForce config.sops.secrets.rp.path;
+        ${user}.hashedPasswordFile = mkForce config.sops.secrets.up.path;
+      };
+    }
   ];
 }

@@ -28,7 +28,6 @@ rec {
 
       modules = [
         (inputs.import-tree ./${host}) # host specific configuration
-        (inputs.import-tree ../nixos)
         (inputs.import-tree ../modules)
         ../overlays
         inputs.hjem.nixosModules.default

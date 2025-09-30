@@ -1,4 +1,13 @@
-{ pkgs, host, ... }:
+# leftovers from initial configuration.nix
+{
+  host,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  inherit (lib) mkForce;
+in
 {
   networking.hostName = host;
 
@@ -39,6 +48,9 @@
     # bye bye xterm
     excludePackages = [ pkgs.xterm ];
   };
+
+  # bye bye nano
+  programs.nano.enable = mkForce false;
 
   # enable sysrq in case for kernel panic
   # boot.kernel.sysctl."kernel.sysrq" = 1;

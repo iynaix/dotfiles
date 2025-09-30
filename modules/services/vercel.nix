@@ -10,10 +10,12 @@ let
 in
 {
   options.custom = {
-    vercel.enable = mkEnableOption "Vercel Backups";
+    services = {
+      vercel.enable = mkEnableOption "Vercel Backups";
+    };
   };
 
-  config = mkIf (config.custom.vercel.enable && config.custom.sops.enable) {
+  config = mkIf config.custom.services.vercel.enable {
     sops.secrets.vercel_postgres.owner = user;
 
     custom.shell.packages = {

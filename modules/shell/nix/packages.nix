@@ -5,41 +5,14 @@
   isNixOS,
   lib,
   pkgs,
+  user,
   ...
 }:
 let
-  inherit (lib) optionalAttrs;
+  inherit (lib) concatLines getExe optionalAttrs;
   tomlFormat = pkgs.formats.toml { };
 in
 {
-  environment = {
-    systemPackages = with pkgs; [
-      comma
-      nixd
-      nix-init
-      nix-output-monitor
-      nix-tree
-      nixfmt
-      nixpkgs-review
-      nvfetcher
-    ];
-
-    shellAliases = {
-      nfl = "nix flake lock";
-      nfu = "nix flake update";
-      nsh = "nix-shell --command fish -p";
-      nshp = "nix-shell --pure --command fish -p";
-    };
-  };
-
-  programs = {
-    nh = {
-      enable = true;
-      flake = dots;
-    };
-    nix-index.enable = true;
-  };
-
   custom = {
     wrappers = [
       (
@@ -473,6 +446,35 @@ in
             nix eval --expr "fromJSON '''$yaml'''" | nixfmt -q
           '';
       };
+      # build iso images
+      nbuild-iso = {
+        runtimeInputs = [ pkgs.nixos-generators ];
+        text = # sh
+          ''
+            pushd ${dots} > /dev/null
+            nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
+            popd > /dev/null
+          '';
+        fishCompletion = # fish
+          ''
+            function _nbuild_iso
+              nix eval --impure --json --expr \
+                'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
+                ${getExe pkgs.jq} -r '.[]' | grep iso
+              end
+              complete -c nbuild-iso -f -a '(_nbuild_iso)'
+          '';
+      };
+      # list all installed packages
+      nix-list-packages = {
+        text =
+          let
+            allPkgs = map (p: p.name) (
+              config.environment.systemPackages ++ config.users.users.${user}.packages
+            );
+          in
+          ''sort -ui <<< "${concatLines allPkgs}"'';
+      };
     }
     // optionalAttrs isNixOS {
       # nixos-rebuild boot
@@ -497,14 +499,23 @@ in
         text = # sh
           ''nsw test "$@"'';
       };
+    }
+    // optionalAttrs (host == "desktop") {
+      # build and push config for laptop
+      nsw-remote = # sh
+        ''
+          pushd ${dots} > /dev/null
+          nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
+          popd > /dev/null
+        '';
     };
   };
 
   custom.persist = {
     home = {
       cache.directories = [
-        ".cache/nix-index"
         ".cache/nix-search-tv"
+        ".cache/nixpkgs-review"
       ];
     };
   };

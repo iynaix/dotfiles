@@ -7,7 +7,7 @@ This config is intended to be used with NixOS.
 - Multiple NixOS configurations, including desktop, laptops and VM
 - Persistence via impermanence (both `/` and `/home`)
 - Automatic ZFS snapshots with rotation
-- Flexible NixOS / Home Manager config via feature flags
+- Flexible NixOS config via feature flags
 - sops-nix for managing secrets
 - Hyprland / niri with waybar setup, with screen capture
 - Dynamic colorschemes using wallust (pywal, but maintained)

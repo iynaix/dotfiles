@@ -17,6 +17,7 @@ let
     lessThan
     mkForce
     mkOption
+    optionals
     sort
     unique
     ;
@@ -157,6 +158,7 @@ in
             "/var/log" # systemd journal is stored in /var/log/journal
             "/var/lib/nixos" # for persisting user uids and gids
           ]
+          ++ optionals config.custom.hardware.wifi.enable [ "/etc/NetworkManager" ]
           ++ cfg.root.directories
         );
 
@@ -164,9 +166,12 @@ in
           files = unique cfg.home.files;
           directories = unique (
             [
-              "projects"
               ".cache/dconf"
               ".config/dconf"
+              "Desktop"
+              "Documents"
+              "Pictures"
+              "projects"
             ]
             ++ cfg.home.directories
           );
@@ -178,7 +183,7 @@ in
       "/cache" = {
         hideMounts = true;
         files = unique cfg.root.cache.files;
-        directories = unique cfg.root.cache.directories;
+        directories = [ "/var/lib/systemd/coredump" ] ++ unique cfg.root.cache.directories;
 
         users.${user} = {
           files = unique cfg.home.cache.files;

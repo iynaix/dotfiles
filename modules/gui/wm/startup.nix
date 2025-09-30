@@ -182,7 +182,7 @@ in
                 name = "init-brave";
                 runtimeInputs = [
                   pkgs.brave
-                  # TODO: config.custom.dotfiles.package
+                  config.custom.programs.dotfiles.package
                 ];
                 text = ''
                   brave --profile-directory=Default &

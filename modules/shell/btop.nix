@@ -7,6 +7,8 @@
 let
   inherit (lib)
     concatStringsSep
+    isBool
+    isString
     mkEnableOption
     mkIf
     mkOption
@@ -17,7 +19,6 @@ let
     mkKeyValue = lib.generators.mkKeyValueDefault {
       mkValueString =
         v:
-        with builtins;
         if isBool v then
           (if v then "True" else "False")
         else if isString v then

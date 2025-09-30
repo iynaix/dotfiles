@@ -61,7 +61,7 @@ in
       # temporarily source raw config directly for quick edits
       + "source=${dots}/modules/gui/mango/mango.conf";
 
-    # TODO: startup script?
+    # TODO: startup scripts?
 
     systemd.user.targets.mango-session = {
       unitConfig = {

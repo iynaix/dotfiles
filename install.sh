@@ -37,13 +37,13 @@ proceeding or your install WILL NOT BOOT.
 
 Introduction
 
-# ZFS "fileSystems" declarations can be referenced from zfs.nix
+# ZFS "fileSystems" declarations can be referenced from modules/zfs.nix
 # ZFS also requires the following options to be set within host config:
 #   networking.hostId (can be generated using: head -c 8 /etc/machine-id)
 #   zfs.devNodes
 #       "/dev/disk/by-id" for Intel CPUs
 #       "/dev/disk/by-partuuid" for AMD CPUs / within VMs
-# impermanence setup can be referenced from nixos/impermanence.nix
+# impermanence setup can be referenced from modules/impermanence.nix
 
 # It is highly recommended to setup an initialPassword for root and your user(s)
 # as a fallback so you will always be able to login / sudo using that initialPassword, e.g.
@@ -60,7 +60,7 @@ Introduction
 
 # NOTE: during rebuild, there will be warnings about setting multiple password options, this is expected :(
 # (https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990)
-# see nixos/users.nix for a fix to silence the warnings
+# see modules/users.nix for a fix to silence the warnings
 
 # in a vm, special case
 if [[ -b "/dev/vda" ]]; then

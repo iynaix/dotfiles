@@ -8,7 +8,7 @@
 let
   inherit (lib) getExe mkIf mkMerge;
 in
-mkIf config.custom.bittorrent.enable (mkMerge [
+mkIf config.custom.services.bittorrent.enable (mkMerge [
   {
     services = {
       sonarr = {
@@ -29,8 +29,8 @@ mkIf config.custom.bittorrent.enable (mkMerge [
     };
   }
 
-  # only setup sonarr-ical-sync if sops is enabled
-  (mkIf config.custom.sops.enable {
+  # setup sonarr-ical-sync
+  {
     # allow sonarr to read secret keys
     sops.secrets = {
       sonarr_api_key.owner = user;
@@ -80,5 +80,5 @@ mkIf config.custom.bittorrent.enable (mkMerge [
         };
       };
     };
-  })
+  }
 ])

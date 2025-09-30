@@ -253,10 +253,9 @@ in
               hot-corners.enable = false;
             };
 
-            # TODO: change to use options
             cursor = {
-              theme = "Simp1e-Tokyo-Night";
-              size = 28;
+              theme = config.custom.gtk.cursor.name;
+              size = config.custom.gtk.cursor.size;
             };
 
             # match focal format

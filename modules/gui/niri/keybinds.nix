@@ -94,7 +94,7 @@ mkIf (config.custom.wm == "niri") {
 
         # exit niri
         "Alt+F4".action.quit = { };
-        # TODO: "Ctrl+Alt+Delete".action.spawn = getExe config.custom.programs.rofi-power-menu.package;
+        "Ctrl+Alt+Delete".action.spawn = getExe config.custom.programs.rofi-power-menu.package;
 
         # clipboard history
         "Mod+Ctrl+V".action.spawn = getExe pkgs.custom.shell.rofi-clipboard-history;

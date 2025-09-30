@@ -19,10 +19,10 @@ let
 in
 {
   options.custom = {
-    bittorrent.enable = mkEnableOption "Torrenting Applications";
+    services.bittorrent.enable = mkEnableOption "Torrenting Applications";
   };
 
-  config = mkIf config.custom.bittorrent.enable (mkMerge [
+  config = mkIf config.custom.services.bittorrent.enable (mkMerge [
     {
       services.transmission = {
         enable = true;
@@ -176,10 +176,10 @@ in
     }
 
     # only setup rpc password if sops is enabled
-    (mkIf config.custom.sops.enable {
+    {
       sops.secrets.transmission_rpc.owner = user;
 
       services.transmission.credentialsFile = config.sops.secrets.transmission_rpc.path;
-    })
+    }
   ]);
 }

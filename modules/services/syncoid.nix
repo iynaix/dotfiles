@@ -9,15 +9,17 @@ let
 in
 {
   options.custom = {
-    syncoid.enable = mkEnableOption "syncoid";
+    services = {
+      syncoid.enable = mkEnableOption "syncoid";
+    };
   };
 
-  config = mkIf config.custom.syncoid.enable {
+  config = mkIf config.custom.services.syncoid.enable {
     # allow syncoid to ssh into NAS
     users.users = {
       syncoid.openssh.authorizedKeys.keyFiles = [
-        ../modules/id_rsa.pub
-        ../modules/id_ed25519.pub
+        ../id_rsa.pub
+        ../id_ed25519.pub
       ];
     };
 

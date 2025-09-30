@@ -29,6 +29,13 @@ in
       ];
     };
 
+    # use gtk theme on qt apps
+    qt = {
+      enable = true;
+      platformTheme = "qt5ct";
+      style = "kvantum";
+    };
+
     # Kvantum looks for themes here
     hj.xdg.config.files = {
       "Kvantum/Kvantum-Tokyo-Night".source =
@@ -42,7 +49,6 @@ in
     # qtct config
     custom.programs.wallust.templates =
       let
-        # TODO: use font option
         defaultFont = "${config.custom.gtk.font.name},${builtins.toString config.custom.gtk.font.size}";
         createQtctConf =
           font:

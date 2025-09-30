@@ -15,13 +15,15 @@ let
 in
 {
   options.custom = {
-    hardware.hdds = {
-      enable = mkEnableOption "Desktop HDDs";
-      hgst10 = mkEnableOption "HGST 10TB" // {
-        default = cfg.enable;
-      };
-      ironwolf22 = mkEnableOption "Ironwolf Pro 22TB" // {
-        default = cfg.enable;
+    hardware = {
+      hdds = {
+        enable = mkEnableOption "Desktop HDDs";
+        hgst10 = mkEnableOption "HGST 10TB" // {
+          default = cfg.enable;
+        };
+        ironwolf22 = mkEnableOption "Ironwolf Pro 22TB" // {
+          default = cfg.enable;
+        };
       };
     };
   };

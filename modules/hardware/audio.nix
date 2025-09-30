@@ -25,4 +25,10 @@
   };
 
   environment.systemPackages = with pkgs; [ pwvucontrol ];
+
+  custom.persist = {
+    home.directories = [
+      ".local/state/wireplumber"
+    ];
+  };
 }

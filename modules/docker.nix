@@ -9,14 +9,16 @@ let
 in
 {
   options.custom = {
-    distrobox.enable = mkEnableOption "distrobox";
-    docker.enable = mkEnableOption "docker" // {
-      default = config.custom.distrobox.enable;
+    programs = {
+      distrobox.enable = mkEnableOption "distrobox";
+      docker.enable = mkEnableOption "docker" // {
+        default = config.custom.programs.distrobox.enable;
+      };
     };
   };
 
-  config = mkIf (config.custom.docker.enable || config.custom.distrobox.enable) {
-    environment.systemPackages = mkIf config.custom.distrobox.enable [ pkgs.distrobox ];
+  config = mkIf (config.custom.programs.docker.enable || config.custom.programs.distrobox.enable) {
+    environment.systemPackages = mkIf config.custom.programs.distrobox.enable [ pkgs.distrobox ];
 
     virtualisation = {
       podman = {

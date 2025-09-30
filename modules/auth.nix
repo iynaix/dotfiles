@@ -37,8 +37,8 @@ in
       users.users =
         let
           keyFiles = [
-            ../modules/id_rsa.pub
-            ../modules/id_ed25519.pub
+            ./id_rsa.pub
+            ./id_ed25519.pub
           ];
         in
         {

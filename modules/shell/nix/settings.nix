@@ -1,7 +1,6 @@
 {
   config,
   dots,
-  host,
   inputs,
   lib,
   pkgs,
@@ -11,42 +10,48 @@
 }:
 let
   inherit (lib)
-    concatLines
     concatStringsSep
-    getExe
     mapAttrs
     mapAttrsToList
     mkOverride
-    optionalAttrs
     sort
     ;
 in
-# create an fhs environment to run downloaded binaries
-# https://nixos-and-flakes.thiscute.world/best-practices/run-downloaded-binaries-on-nixos
-# fhs = let
-#   base = pkgs.appimageTools.defaultFhsEnvArgs;
-# in
-#   pkgs.buildFHSUserEnv (base
-#     // {
-#       name = "fhs";
-#       targetPkgs = pkgs: (
-#         # pkgs.buildFHSUserEnv provides only a minimal FHS environment,
-#         # lacking many basic packages needed by most software.
-#         # Therefore, we need to add them manually.
-#         #
-#         # pkgs.appimageTools provides basic packages required by most software.
-#         (base.targetPkgs pkgs)
-#         ++ [
-#           pkgs.pkg-config
-#           pkgs.ncurses
-#           # Feel free to add more packages here if needed.
-#         ]
-#       );
-#       profile = "export FHS=1";
-#       runScript = "bash";
-#       extraOutputsToInstall = ["dev"];
-#     });
 {
+  environment = {
+    systemPackages = with pkgs; [
+      comma
+      nix-init
+      nix-output-monitor
+      nix-tree
+      nix-update
+      nixd
+      nixfmt
+      nixfmt
+      nixpkgs-review
+      nvfetcher
+    ];
+
+    shellAliases = {
+      nfl = "nix flake lock";
+      nfu = "nix flake update";
+      nsh = "nix-shell --command fish -p";
+      nshp = "nix-shell --pure --command fish -p";
+    };
+  };
+
+  programs = {
+    nh = {
+      enable = true;
+      flake = dots;
+    };
+
+    nix-index.enable = true;
+
+    # run unpatched binaries on nixos
+    nix-ld.enable = true;
+  };
+
   # execute shebangs that assume hardcoded shell paths
   services.envfs.enable = true;
   system = {
@@ -62,72 +67,8 @@ in
     extraSystemBuilderCmds = "ln -s ${self.sourceInfo.outPath} $out/src";
   };
 
-  # run unpatched binaries on nixos
-  programs.nix-ld.enable = true;
-
-  environment = {
-    # for nixlang / nixpkgs
-    systemPackages = with pkgs; [
-      nix-update
-      nixfmt
-    ];
-  };
-
-  systemd.tmpfiles.rules = [
-    # cleanup nixpkgs-review cache on boot
-    "D! ${config.hj.xdg.cache.directory}/nixpkgs-review 1755 ${user} users 5d"
-    # cleanup channels so nix stops complaining
-    "D! /nix/var/nix/profiles/per-user/root 1755 root root 1d"
-  ];
-
-  custom.shell.packages = {
-    # build iso images
-    nbuild-iso = {
-      runtimeInputs = [ pkgs.nixos-generators ];
-      text = # sh
-        ''
-          pushd ${dots} > /dev/null
-          nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-          popd > /dev/null
-        '';
-      fishCompletion = # fish
-        ''
-          function _nbuild_iso
-            nix eval --impure --json --expr \
-              'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-              ${getExe pkgs.jq} -r '.[]' | grep iso
-            end
-            complete -c nbuild-iso -f -a '(_nbuild_iso)'
-        '';
-    };
-    # list all installed packages
-    nix-list-packages = {
-      text =
-        let
-          allPkgs = map (p: p.name) (
-            config.environment.systemPackages ++ config.users.users.${user}.packages
-          );
-        in
-        ''sort -ui <<< "${concatLines allPkgs}"'';
-    };
-  }
-  // optionalAttrs (host == "desktop") {
-    # build and push config for laptop
-    nsw-remote = # sh
-      ''
-        pushd ${dots} > /dev/null
-        nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
-        popd > /dev/null
-      '';
-  };
-
-  # never going to read html docs locally
-  documentation = {
-    enable = true;
-    doc.enable = true;
-    man.enable = true;
-    dev.enable = false;
-  };
+  # i dgaf
+  nixpkgs.config.allowUnfree = true;
 
   nix =
     let
@@ -190,6 +131,18 @@ in
       };
     };
 
+  # never going to read html docs locally
+  documentation = {
+    enable = true;
+    doc.enable = true;
+    man.enable = true;
+    dev.enable = false;
+  };
+
+  # enable man-db cache for fish to be able to find manpages
+  # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
+  documentation.man.generateCaches = true;
+
   system = {
     # use nixos-rebuild-ng to rebuild the system
     rebuild.enableNg = true;
@@ -202,15 +155,18 @@ in
     );
   };
 
-  # enable man-db cache for fish to be able to find manpages
-  # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
-  documentation.man.generateCaches = true;
+  systemd.tmpfiles.rules = [
+    # cleanup nixpkgs-review cache on boot
+    "D! ${config.hj.xdg.cache.directory}/nixpkgs-review 1755 ${user} users 5d"
+    # cleanup channels so nix stops complaining
+    "D! /nix/var/nix/profiles/per-user/root 1755 root root 1d"
+  ];
 
   custom.persist = {
     home = {
       cache.directories = [
         ".cache/nix"
-        ".cache/nixpkgs-review"
+        ".cache/nix-index"
       ];
     };
   };

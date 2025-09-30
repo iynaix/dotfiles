@@ -86,13 +86,14 @@ in
         #   defaultWorkspace = 10;
         # }
       ];
+      qmk.enable = true;
     };
     lock.enable = false;
-    qmk.enable = true;
     zfs.encryption = false;
 
     programs = {
       deadbeef.enable = true;
+      distrobox.enable = true;
       hyprland = {
         qtile = false;
       };
@@ -122,11 +123,12 @@ in
       };
     };
 
-    bittorrent.enable = true;
-    distrobox.enable = true;
-    syncoid.enable = true;
-    vercel.enable = true;
-    virtualization.enable = true;
+    services = {
+      bittorrent.enable = true;
+      syncoid.enable = true;
+      vercel.enable = true;
+      virtualization.enable = true;
+    };
   };
 
   services = {

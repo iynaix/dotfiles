@@ -39,7 +39,7 @@ in
           ];
         }
       ];
-
+      qmk.enable = true;
     };
     programs = {
       btop.settings = {
@@ -53,7 +53,6 @@ in
       waybar.hidden = true;
     };
 
-    qmk.enable = true;
     virtualization.enable = true;
 
     # don't blind me on startup

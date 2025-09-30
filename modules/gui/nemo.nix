@@ -20,6 +20,8 @@ mkIf (config.custom.wm != "tty") {
     webp-pixbuf-loader # for webp thumbnails
   ];
 
+  programs.file-roller.enable = true;
+
   xdg = {
     # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec
     terminal-exec = {
