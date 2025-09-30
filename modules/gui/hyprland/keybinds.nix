@@ -8,15 +8,12 @@
 let
   inherit (lib)
     flatten
-    getExe
     mkEnableOption
     mkIf
     optionals
     ;
   inherit (config.custom.hardware) monitors;
-  pamixer = getExe pkgs.pamixer;
-  rofiExe = getExe pkgs.rofi;
-  termExec = cmd: "${getExe config.custom.terminal.package} -e ${cmd}";
+  termExec = cmd: "ghostty -e ${cmd}";
   qtile_like = config.custom.programs.hyprland.qtile;
 in
 {
@@ -74,25 +71,25 @@ in
           );
         in
         [
-          "$mod, Return, exec, ${getExe config.custom.terminal.package}"
-          "$mod_SHIFT, Return, exec, ${rofiExe} -show drun"
+          "$mod, Return, exec, ghostty"
+          "$mod_SHIFT, Return, exec, rofi -show drun"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
           "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
-          "$mod, w, exec, ${getExe pkgs.brave}"
-          "$mod_SHIFT, w, exec, ${getExe pkgs.brave} --incognito"
+          "$mod, w, exec, brave"
+          "$mod_SHIFT, w, exec, brave --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
-          "$mod_SHIFT, v, exec, ${getExe pkgs.custom.shell.rofi-edit-proj}"
+          "$mod_SHIFT, v, exec, rofi-edit-proj"
           ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.hj.directory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.hj.directory}/projects/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"
           # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, exec, ${getExe config.custom.programs.rofi-power-menu.package}"
+          "CTRL_ALT, Delete, exec, rofi-power-menu"
 
           # clipboard history
-          "$mod_CTRL, v, exec, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
+          "$mod_CTRL, v, exec, rofi-clipboard-history"
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, hypr-monitors"
@@ -166,16 +163,16 @@ in
           # "XF86AudioPlay, mpvctl playpause"
 
           # audio
-          ",XF86AudioLowerVolume, exec, ${pamixer} -d 5"
-          ",XF86AudioRaiseVolume, exec, ${pamixer} -i 5"
-          ",XF86AudioMute, exec, ${pamixer} -t"
+          ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"
+          ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"
+          ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         ]
         # invert windows
         ++ optionals config.custom.programs.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]
         ++ workspace_keybinds
         ++ optionals config.custom.hardware.backlight.enable [
-          ",XF86MonBrightnessDown, exec, ${getExe pkgs.brightnessctl} set 5%-"
-          ",XF86MonBrightnessUp, exec, ${getExe pkgs.brightnessctl} set +5%"
+          ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+          ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
         ];
 
       # Move/resize windows with mainMod + LMB/RMB and dragging

@@ -1,11 +1,13 @@
 {
+  config,
   host,
   isLaptop,
   lib,
+  pkgs,
   ...
 }:
 let
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption optionals;
 in
 {
   options.custom = {
@@ -27,5 +29,11 @@ in
         default = host == "desktop";
       };
     };
+  };
+
+  config = {
+    environment.systemPackages = optionals config.custom.hardware.backlight.enable [
+      pkgs.brightnessctl
+    ];
   };
 }

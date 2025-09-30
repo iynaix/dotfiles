@@ -8,22 +8,19 @@
 let
   inherit (lib)
     flatten
-    getExe
     getExe'
     mergeAttrsList
     mkIf
     optionalAttrs
     ;
   inherit (config.custom.hardware) monitors;
-  pamixerExe = getExe pkgs.pamixer;
   termExec =
     cmd:
     [
-      (getExe config.custom.terminal.package)
+      "ghostty"
       "-e"
     ]
     ++ (flatten cmd);
-  rofiExe = getExe pkgs.rofi;
 in
 mkIf (config.custom.wm == "niri") {
   custom = {
@@ -55,9 +52,9 @@ mkIf (config.custom.wm == "niri") {
         # show hotkey overlay
         # "Mod+Shift+Slash".action.show-hotkey-overlay = { };
 
-        "Mod+Return".action.spawn = getExe config.custom.terminal.package;
+        "Mod+Return".action.spawn = "ghostty";
         "Mod+Shift+Return".action.spawn = [
-          rofiExe
+          "rofi"
           "-show"
           "drun"
         ];
@@ -74,13 +71,13 @@ mkIf (config.custom.wm == "niri") {
           "yazi"
           "${config.hj.directory}/Downloads"
         ];
-        "Mod+W".action.spawn = getExe pkgs.brave;
+        "Mod+W".action.spawn = "brave";
         "Mod+Shift+W".action.spawn = [
-          (getExe pkgs.brave)
+          "brave"
           "--incognito"
         ];
         "Mod+V".action.spawn = termExec [ "nvim" ];
-        "Mod+Shift+V".action.spawn = getExe pkgs.custom.shell.rofi-edit-proj;
+        "Mod+Shift+V".action.spawn = "rofi-edit-proj";
         "Mod+period".action.spawn = [
           "focus-or-run"
           "dotfiles - VSCodium"
@@ -94,10 +91,10 @@ mkIf (config.custom.wm == "niri") {
 
         # exit niri
         "Alt+F4".action.quit = { };
-        "Ctrl+Alt+Delete".action.spawn = getExe config.custom.programs.rofi-power-menu.package;
+        "Ctrl+Alt+Delete".action.spawn = "rofi-power-menu";
 
         # clipboard history
-        "Mod+Ctrl+V".action.spawn = getExe pkgs.custom.shell.rofi-clipboard-history;
+        "Mod+Ctrl+V".action.spawn = "rofi-clipboard-history";
 
         # TODO: reset monitors?
         # "CTRL_SHIFT, Escape, exec, niri-monitors"
@@ -201,24 +198,28 @@ mkIf (config.custom.wm == "niri") {
         # audio
         "XF86AudioLowerVolume" = {
           action.spawn = [
-            pamixerExe
-            "-d"
-            "5"
+            "wpctl"
+            "set-volume"
+            "@DEFAULT_AUDIO_SINK@"
+            "0.05-"
           ];
           allow-when-locked = true;
         };
         "XF86AudioRaiseVolume" = {
           action.spawn = [
-            pamixerExe
-            "-i"
-            "5"
+            "wpctl"
+            "set-volume"
+            "@DEFAULT_AUDIO_SINK@"
+            "0.05+"
           ];
           allow-when-locked = true;
         };
         "XF86AudioMute" = {
           action.spawn = [
-            pamixerExe
-            "-t"
+            "wpctl"
+            "set-mute"
+            "@DEFAULT_AUDIO_SINK@"
+            "toggle"
           ];
           allow-when-locked = true;
         };
@@ -258,7 +259,7 @@ mkIf (config.custom.wm == "niri") {
       // optionalAttrs config.custom.hardware.backlight.enable {
         "XF86MonBrightnessDown" = {
           action.spawn = [
-            (getExe pkgs.brightnessctl)
+            "brightnessctl"
             "set"
             "5%-"
           ];
@@ -266,7 +267,7 @@ mkIf (config.custom.wm == "niri") {
         };
         "XF86MonBrightnessUp" = {
           action.spawn = [
-            (getExe pkgs.brightnessctl)
+            "brightnessctl"
             "set"
             "+5%"
           ];

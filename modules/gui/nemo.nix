@@ -27,7 +27,7 @@ mkIf (config.custom.wm != "tty") {
     terminal-exec = {
       enable = true;
       settings = {
-        default = [ config.custom.terminal.desktop ];
+        default = [ config.custom.programs.terminal.desktop ];
       };
     };
 

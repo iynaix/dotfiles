@@ -10,7 +10,6 @@ let
   inherit (lib)
     attrValues
     functionArgs
-    getExe
     intersectAttrs
     isDerivation
     isString
@@ -168,7 +167,7 @@ in
           homeDir = config.hj.directory;
         in
         {
-          TERMINAL = getExe config.custom.terminal.package;
+          TERMINAL = "ghostty";
           EDITOR = "nvim";
           VISUAL = "nvim";
           __IS_NIXOS = if isNixOS then "1" else "0";

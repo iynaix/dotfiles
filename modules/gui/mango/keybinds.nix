@@ -10,11 +10,9 @@ let
   inherit (lib)
     concatStringsSep
     flatten
-    getExe
     mkIf
     ;
-  termExec = cmd: "${getExe config.custom.terminal.package} -e ${concatStringsSep " " cmd}";
-  rofiExe = getExe pkgs.rofi;
+  termExec = cmd: "ghostty -e ${concatStringsSep " " cmd}";
 in
 mkIf (config.custom.wm == "mango") {
   environment.systemPackages = with pkgs; [
@@ -38,8 +36,8 @@ mkIf (config.custom.wm == "mango") {
 
   custom.programs.mango.settings = {
     bind = [
-      "$mod, Return, spawn, ${getExe config.custom.terminal.package}"
-      "$mod+SHIFT, Return, spawn, ${rofiExe} -show drun"
+      "$mod, Return, spawn, ghostty"
+      "$mod+SHIFT, Return, spawn, rofi -show drun"
 
       "$mod, BackSpace, killclient, "
 
@@ -50,11 +48,11 @@ mkIf (config.custom.wm == "mango") {
           "${config.hj.directory}/Downloads"
         ]
       }"
-      "$mod, w, spawn, ${getExe pkgs.brave}"
-      "$mod+Shift, w, spawn, ${getExe pkgs.brave} --incognito"
+      "$mod, w, spawn, brave"
+      "$mod+Shift, w, spawn, brave --incognito"
 
       "$mod, v, spawn, ${termExec [ "nvim" ]}"
-      "$mod+Shift, v, spawn, ${getExe pkgs.custom.shell.rofi-edit-proj}"
+      "$mod+Shift, v, spawn, rofi-edit-proj"
 
       # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
       "$mod, period, spawn, codium ${config.hj.directory}/projects/dotfiles"
@@ -62,10 +60,10 @@ mkIf (config.custom.wm == "mango") {
 
       # exit mango
       "ALT, F4, quit,"
-      "CTRL+ALT, Delete, spawn, ${getExe config.custom.programs.rofi-power-menu.package}"
+      "CTRL+ALT, Delete, spawn, rofi-power-menu"
 
       # clipboard history
-      "$mod+CTRL, v, spawn, ${getExe pkgs.custom.shell.rofi-clipboard-history}"
+      "$mod+CTRL, v, spawn, rofi-clipboard-history"
     ]
     ++
       # tag keybinds, switch to monitor first before switching tag

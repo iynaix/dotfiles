@@ -43,7 +43,7 @@ in
 {
   options.custom = {
     # terminal options
-    terminal = {
+    programs.terminal = {
       package = mkOption {
         type = package;
         default = pkgs.ghostty;
@@ -57,7 +57,7 @@ in
 
       desktop = mkOption {
         type = str;
-        default = "${config.custom.terminal.package.pname}.desktop";
+        default = "${config.custom.programs.terminal.package.pname}.desktop";
         description = "Name of desktop file for the terminal";
       };
     };
@@ -83,7 +83,7 @@ in
 
     environment.systemPackages = [ pkgs.ghostty ];
 
-    custom.terminal = {
+    custom.programs.terminal = {
       app-id = "com.mitchellh.ghostty";
       desktop = "com.mitchellh.ghostty.desktop";
     };

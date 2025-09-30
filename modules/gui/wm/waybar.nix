@@ -146,7 +146,7 @@ in
 
         "custom/nix" = {
           format = "󱄅";
-          on-click = getExe config.custom.programs.rofi-power-menu.package;
+          on-click = "rofi-power-menu";
           tooltip = false;
         };
 
@@ -186,7 +186,7 @@ in
               format-ethernet = " ";
               # rofi wifi script
               on-click = getExe pkgs.custom.rofi-wifi-menu;
-              on-click-right = "${getExe config.custom.terminal.package} -e nmtui";
+              on-click-right = "ghostty -e nmtui";
             }
           else
             {
@@ -208,7 +208,7 @@ in
             headphone-muted = "󰟎";
           };
           format-muted = "󰖁  Muted";
-          on-click = "${getExe pkgs.pamixer} -t";
+          on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           on-click-right = getExe pkgs.pwvucontrol;
           scroll-step = 1;
           tooltip = false;

@@ -31,7 +31,7 @@ let
     ;
   # ensure setting terminal title using --title or exec with -e works
   termExe =
-    assert config.custom.terminal.package.pname == "ghostty";
+    assert config.custom.programs.terminal.package.pname == "ghostty";
     "ghostty";
 in
 {
@@ -205,7 +205,7 @@ in
 
         # terminal
         rec {
-          title = "${config.custom.terminal.app-id}-vertical";
+          title = "${config.custom.programs.terminal.app-id}-vertical";
           spawn = [
             termExe
             "--title=${title}"
@@ -229,7 +229,7 @@ in
         # download related
         rec {
           enable = host == "desktop";
-          title = "${config.custom.terminal.app-id}-dl";
+          title = "${config.custom.programs.terminal.app-id}-dl";
           spawn = [
             termExe
             "--title=${title}"
@@ -238,7 +238,7 @@ in
         }
         rec {
           enable = host == "desktop";
-          title = "${config.custom.terminal.app-id}-yt.txt";
+          title = "${config.custom.programs.terminal.app-id}-yt.txt";
           spawn = [
             termExe
             "--title=${title}"

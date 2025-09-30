@@ -15,7 +15,6 @@ let
     enum
     int
     nullOr
-    package
     ;
   cfg = config.custom.programs.rofi;
   rofiThemes = pkgs.custom.rofi-themes;
@@ -104,18 +103,6 @@ in
           description = "Rofi launcher width";
         };
       };
-
-      # allow setting a custom rofi-power-menu package to add the reboot to windows option
-      rofi-power-menu = {
-        package = mkOption {
-          type = package;
-          default = pkgs.custom.rofi-power-menu.override {
-            reboot-to-windows =
-              if (config.custom.hardware.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
-          };
-          description = "Package to use for rofi-wifi-menu";
-        };
-      };
     };
   };
 
@@ -145,7 +132,10 @@ in
 
     environment.systemPackages = [
       # NOTE: rofi-power-menu only works for powermenuType = 4!
-      config.custom.programs.rofi-power-menu.package
+      (pkgs.custom.rofi-power-menu.override {
+        reboot-to-windows =
+          if (config.custom.hardware.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+      })
     ]
     ++ (optionals config.custom.hardware.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
 
