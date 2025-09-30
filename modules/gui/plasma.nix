@@ -14,14 +14,15 @@ mkIf (config.custom.wm == "plasma") {
   };
 
   # set dark theme, adapted from plasma-manager
-  environment.etc."xdg/autostart/plasma-dark-mode.desktop".text = ''
-    [Desktop Entry]
-    Type=Application
-    Name=Plasma Dark Mode
-    Exec=${pkgs.writeShellScript "plasma-dark-mode" ''
+  environment.etc."xdg/autostart/plasma-dark-mode.desktop".source = pkgs.makeDesktopItem {
+    name = "plasma-dark-mode";
+    desktopName = "Plasma Dark Mode";
+    exec = pkgs.writeShellScript "plasma-dark-mode" ''
       plasma-apply-lookandfeel -a org.kde.breezedark.desktop
       plasma-apply-desktoptheme breeze-dark
-    ''}
-    X-KDE-autostart-condition=ksmserver
-  '';
+    '';
+    extraConfig = {
+      "X-KDE-autostart-condition" = "ksmserver";
+    };
+  };
 }

@@ -218,9 +218,7 @@ in
           # librewolf for discord
           {
             app-id = "librewolf";
-            spawn = [
-              (getExe config.hm.programs.librewolf.package)
-            ];
+            spawn = [ (getExe pkgs.librewolf) ];
             workspace = 9;
             niriArgs = {
               open-maximized = true;

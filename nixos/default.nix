@@ -3,7 +3,6 @@
   dots,
   isNixOS,
   lib,
-  libCustom,
   pkgs,
   ...
 }:
@@ -18,39 +17,12 @@ let
     optionals
     ;
   inherit (lib.types)
-    attrs
     attrsOf
-    oneOf
-    package
     str
     ;
 in
 {
   options.custom = {
-    shell = {
-      packages = mkOption {
-        type = attrsOf (oneOf [
-          str
-          attrs
-          package
-        ]);
-        apply = libCustom.mkShellPackages;
-        default = { };
-        description = ''
-          Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
-          Both string and attr values will be passed as arguments to writeShellApplicationCompletions
-        '';
-        example = ''
-          shell.packages = {
-            myPackage1 = "echo 'Hello, World!'";
-            myPackage2 = {
-              runtimeInputs = [ pkgs.hello ];
-              text = "hello --greeting 'Hi'";
-            };
-          }
-        '';
-      };
-    };
     symlinks = mkOption {
       type = attrsOf str;
       default = { };
@@ -114,7 +86,7 @@ in
           (custom.neovim-iynaix.override { inherit dots host; })
         ]
         # add custom user created shell packages
-        ++ (attrValues (config.custom.shell.packages // config.hm.custom.shell.packages));
+        ++ (attrValues config.custom.shell.packages);
 
     };
 
@@ -125,7 +97,7 @@ in
       overlays = [
         (_: prev: {
           custom = (prev.custom or { }) // {
-            shell = config.custom.shell.packages // config.hm.custom.shell.packages;
+            shell = config.custom.shell.packages;
           };
         })
       ];

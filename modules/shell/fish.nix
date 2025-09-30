@@ -18,12 +18,9 @@ in
     fish = {
       enable = true;
       # seems like shell abbreviations take precedence over aliases
-      shellAbbrs =
-        config.environment.shellAliases
-        // config.hm.home.shellAliases
-        // {
-          ehistory = ''nvim "${config.hj.xdg.data.directory}/fish/fish_history"'';
-        };
+      shellAbbrs = config.environment.shellAliases // {
+        ehistory = ''nvim "${config.hj.xdg.data.directory}/fish/fish_history"'';
+      };
       shellInit = # fish
       ''
         # shut up welcome message

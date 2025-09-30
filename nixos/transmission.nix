@@ -7,7 +7,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf mkMerge;
+  inherit (lib)
+    hiPrio
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
   persistHome = "/persist${config.hj.directory}";
   downloadDir = "/media/IRONWOLF22/Downloads";
   pendingDir = "${downloadDir}/pending";
@@ -121,27 +126,29 @@ in
       # setup port forwarding
       networking.firewall.allowedTCPPorts = [ 51413 ];
 
-      # xdg handler for magnet links
-      hm = {
-        xdg = {
-          desktopEntries.transmission = {
-            name = "Transmission Remote";
+      # create new desktop entries for transmission
+      environment.systemPackages = [
+        (hiPrio (
+          pkgs.makeDesktopItem {
+            name = "transmission";
+            desktopName = "Transmission Remote";
             genericName = "BitTorrent Client";
             icon = "transmission";
             exec = ''transmission-remote -a "%U"'';
-          };
+          }
+        ))
+        (hiPrio pkgs.makeDesktopItem {
+          name = "transmission-web";
+          desktopName = "Transmission Web";
+          genericName = "BitTorrent Client";
+          icon = "transmission";
+          exec = "xdg-open http://localhost:9091/transmission/web/";
+        })
+      ];
 
-          desktopEntries.transmission-web = {
-            name = "Transmission Web";
-            genericName = "BitTorrent Client";
-            icon = "transmission";
-            exec = "xdg-open http://localhost:9091/transmission/web/";
-          };
-
-          mimeApps.defaultApplications = {
-            "x-scheme-handler/magnet" = "transmission.desktop";
-          };
-        };
+      # xdg handler for magnet links
+      xdg.mime.defaultApplications = {
+        "x-scheme-handler/magnet" = "transmission.desktop";
       };
 
       custom = {

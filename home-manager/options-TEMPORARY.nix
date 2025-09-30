@@ -1,6 +1,5 @@
 {
   lib,
-  libCustom,
   pkgs,
   user,
   ...
@@ -53,20 +52,6 @@ in
             package
           ]);
         default = { };
-        apply = libCustom.mkShellPackages;
-        description = ''
-          Attrset of shell packages to install and add to pkgs.custom overlay (for compatibility across multiple shells).
-          Both string and attr values will be passed as arguments to writeShellApplicationCompletions
-        '';
-        example = ''
-          shell.packages = {
-            myPackage1 = "echo 'Hello, World!'";
-            myPackage2 = {
-              runtimeInputs = [ pkgs.hello ];
-              text = "hello --greeting 'Hi'";
-            };
-          }
-        '';
       };
     };
   };
