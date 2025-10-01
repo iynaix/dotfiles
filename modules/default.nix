@@ -6,12 +6,17 @@
 }:
 let
   inherit (lib)
+    hasAttr
+    isDerivation
     isFunction
     literalExpression
+    mapAttrs
     mapAttrsToList
+    mkAfter
     mkOption
     mkOptionType
     mergeOneOption
+    optionalAttrs
     ;
   inherit (lib.types) attrsOf listOf str;
   overlayType = mkOptionType {
@@ -33,19 +38,21 @@ in
       default = [ ];
       example = literalExpression ''
         [
-          ({pkgs, ...}: {
-            wrappers.helix = {
-              basePackage = pkgs.helix;
-              prependFlags = [ "-c" ./config.toml ];
+          (_: prev: {
+            helix = {
+              package = prev
+              flags = { "-c" = ./config.toml; };
             };
           })
         ]
       '';
       type = listOf overlayType;
       description = ''
-        List of wrappers to apply to Nixpkgs.
+        List of overlay functions producing wrapper arguments that will be passed to wrappers.lib.wrapPackage.
+        If the `package` argument is omitted, it will be assumed to have the same name as the key.
       '';
     };
+
   };
 
   config = {
@@ -57,18 +64,33 @@ in
     hjem.clobberByDefault = true;
 
     # apply all the packages as overlays, so they can be easily referenced by other modules
-    nixpkgs.overlays = [
-      (
-        _: prev:
-        let
-          evald = inputs.wrapper-manager.lib {
-            pkgs = prev;
-            modules = config.custom.wrappers;
-          };
-        in
-        builtins.mapAttrs (_: value: value.wrapped) evald.config.wrappers
-      )
-    ];
+    # mkAfter is used so wrappers will be applied after the source overlays in overlays/default.nix
+    nixpkgs.overlays = mkAfter (
+      map (
+        wrapper:
+        (
+          final: prev:
+          let
+            packagesToWrap = wrapper final prev;
+          in
+          mapAttrs (
+            pkgName: wrapperArgs:
+            if isDerivation wrapperArgs then
+              wrapperArgs
+            else
+              inputs.wrappers.lib.wrapPackage (
+                {
+                  pkgs = prev;
+                }
+                // (optionalAttrs (hasAttr pkgName prev) {
+                  package = prev.${pkgName}; # default to the package of the same name
+                })
+                // wrapperArgs
+              )
+          ) packagesToWrap
+        )
+      ) config.custom.wrappers
+    );
 
     # create symlink to dotfiles from /etc/nixos
     custom.symlinks = {

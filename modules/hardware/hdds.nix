@@ -2,6 +2,7 @@
 let
   inherit (lib)
     concatLines
+    mkAfter
     mkEnableOption
     mkIf
     optional
@@ -57,13 +58,13 @@ in
       # add btop monitoring for extra hdds
       programs.btop.disks = (optional cfg.hgst10 hgst10) ++ (optional cfg.ironwolf22 ironwolf22);
 
-      gtk.bookmarks = mkIf cfg.ironwolf22 [
+      gtk.bookmarks = mkIf cfg.ironwolf22 (mkAfter [
         "${hgst10}/Anime Anime"
         "${hgst10}/Anime/Current Anime Current"
         "${hgst10}/TV TV"
         "${hgst10}/TV/Current TV Current"
         "${hgst10}/Movies"
-      ];
+      ]);
     };
 
     # dual boot windows

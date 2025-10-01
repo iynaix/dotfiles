@@ -82,4 +82,15 @@ rec {
   rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
 
   tokyo-night-kvantum = callPackage ./tokyo-night-kvantum { };
+
+  ghDir = pkgs.writeTextDir "/config.yml" (pkgs.lib.strings.toJSON { version = 1; });
+  g1 = inputs.wrappers.lib.wrapPackage {
+    inherit pkgs;
+    package = pkgs.gh;
+    env.GH_CONFIG_DIR = ghDir;
+    preHook = ''
+      GITHUB_TOKEN=$(echo -n \"/run/secrets/github_token\")
+      export GITHUB_TOKEN
+    '';
+  };
 }

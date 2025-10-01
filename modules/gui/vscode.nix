@@ -12,47 +12,44 @@ mkIf (config.custom.wm != "tty") {
 
   custom = {
     wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.vscodium = {
-            basePackage = pkgs.vscode-with-extensions.override {
-              vscode = pkgs.vscodium;
-              vscodeExtensions = with pkgs.vscode-extensions; [
-                aaron-bond.better-comments
-                bbenoist.nix
-                bradlc.vscode-tailwindcss
-                christian-kohler.npm-intellisense
-                dbaeumer.vscode-eslint
-                denoland.vscode-deno
-                donjayamanne.githistory
-                eamodio.gitlens
-                enkia.tokyo-night
-                esbenp.prettier-vscode
-                formulahendry.auto-rename-tag
-                graphql.vscode-graphql-syntax
-                gruntfuggly.todo-tree
-                jnoortheen.nix-ide
-                mhutchie.git-graph
-                mkhl.direnv
-                ms-python.black-formatter
-                ms-python.flake8
-                ms-python.vscode-pylance
-                pkief.material-icon-theme
-                prisma.prisma
-                rust-lang.rust-analyzer
-                sumneko.lua
-                supermaven.supermaven
-                tamasfe.even-better-toml
-                usernamehw.errorlens
-                vscodevim.vim
-                xadillax.viml
-                yzhang.markdown-all-in-one
-              ];
-            };
+      (_: prev: {
+        vscodium = {
+          package = prev.vscode-with-extensions.override {
+            vscode = prev.vscodium;
+            vscodeExtensions = with prev.vscode-extensions; [
+              aaron-bond.better-comments
+              bbenoist.nix
+              bradlc.vscode-tailwindcss
+              christian-kohler.npm-intellisense
+              dbaeumer.vscode-eslint
+              denoland.vscode-deno
+              donjayamanne.githistory
+              eamodio.gitlens
+              enkia.tokyo-night
+              esbenp.prettier-vscode
+              formulahendry.auto-rename-tag
+              graphql.vscode-graphql-syntax
+              gruntfuggly.todo-tree
+              jnoortheen.nix-ide
+              mhutchie.git-graph
+              mkhl.direnv
+              ms-python.black-formatter
+              ms-python.flake8
+              ms-python.vscode-pylance
+              pkief.material-icon-theme
+              prisma.prisma
+              rust-lang.rust-analyzer
+              sumneko.lua
+              supermaven.supermaven
+              tamasfe.even-better-toml
+              usernamehw.errorlens
+              vscodevim.vim
+              xadillax.viml
+              yzhang.markdown-all-in-one
+            ];
           };
-        }
-      )
+        };
+      })
     ];
 
     shell.packages = {

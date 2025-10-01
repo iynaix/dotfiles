@@ -193,18 +193,13 @@ mkMerge [
   # difftastic
   {
     custom.wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.difftastic = {
-            basePackage = pkgs.difftastic;
-            prependFlags = [
-              "--background"
-              "dark"
-            ];
+      (_: _prev: {
+        difftastic = {
+          flags = {
+            "--background" = "dark";
           };
-        }
-      )
+        };
+      })
     ];
 
     environment.systemPackages = [ pkgs.difftastic ];

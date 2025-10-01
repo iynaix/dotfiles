@@ -18,15 +18,11 @@ in
 
   config = mkIf (config.custom.wm != "tty") {
     custom.wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.pqiv = {
-            basePackage = pkgs.pqiv;
-            env.PQIVRC_PATH.value = pkgs.writeText "pqivrc" config.custom.programs.pqiv.settings;
-          };
-        }
-      )
+      (_: _prev: {
+        pqiv = {
+          env.PQIVRC_PATH = pkgs.writeText "pqivrc" config.custom.programs.pqiv.settings;
+        };
+      })
     ];
 
     custom.programs.pqiv.settings = ''

@@ -5,34 +5,18 @@ let
 in
 {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.yt-dlp = {
-          basePackage =
-            pkgs.yt-dlp.overrideAttrs
-              (import ../../overlays/generated.nix {
-                inherit (pkgs)
-                  fetchFromGitHub
-                  fetchurl
-                  fetchgit
-                  dockerTools
-                  ;
-              }).yt-dlp;
-          prependFlags = [
-            "--add-metadata"
-            "--format"
-            (mkFormat 720)
-            "--no-mtime"
-            "--output"
-            "%(title)s.%(ext)s"
-            "--sponsorblock-mark"
-            "all"
-            "--windows-filenames"
-          ];
+    (_: _prev: {
+      yt-dlp = {
+        flags = {
+          "--add-metadata" = { };
+          "--format" = mkFormat 720;
+          "--no-mtime" = { };
+          "--output" = "%(title)s.%(ext)s";
+          "--sponsorblock-mark" = "all";
+          "--windows-filenames" = { };
         };
-      }
-    )
+      };
+    })
   ];
 
   environment = {

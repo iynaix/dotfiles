@@ -10,19 +10,14 @@ let
 in
 {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.ripgrep = {
-          basePackage = pkgs.ripgrep;
-          prependFlags = [
-            "--smart-case"
-            "--ignore-file"
-            ignoreFile
-          ];
+    (_: _prev: {
+      ripgrep = {
+        flags = {
+          "--smart-case" = { };
+          "--ignore-file" = ignoreFile;
         };
-      }
-    )
+      };
+    })
   ];
 
   environment.systemPackages = [ pkgs.ripgrep ];

@@ -7,43 +7,24 @@
 }:
 let
   inherit (lib) getExe nameValuePair listToAttrs;
-  ghConf = pkgs.writeText "config.yml" (lib.strings.toJSON { version = 1; });
-  ghHosts = pkgs.writeText "hosts.yml" (
-    lib.strings.toJSON {
-      github.com = {
-        git_protocol = "ssh";
-        users.iynaix = { };
-        user = "iynaix";
-      };
-    }
-  );
-  ghDir = pkgs.runCommand "gh" { } ''
-    mkdir -p $out
-    cp ${ghConf} $out/config.yml
-    cp ${ghHosts} $out/hosts.yml
-  '';
+  ghDir = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
 in
 {
   # setup auth token for gh
   sops.secrets.github_token.owner = user;
 
   # wrap gh to set GITHUB_TOKEN
-  # custom.wrappers = [
-  #   (
-  #     { pkgs, ... }:
-  #     {
-  #       wrappers.gh = {
-  #         basePackage = pkgs.gh;
-  #         env.GH_CONFIG_DIR.value = "${ghConf}";
-  #         wrapperType = "shell";
-  #         wrapFlags = [
-  #           "--run"
-  #           ''export GITHUB_TOKEN="$(cat ${config.sops.secrets.github_token.path})"''
-  #         ];
-  #       };
-  #     }
-  #   )
-  # ];
+  custom.wrappers = [
+    (_: _prev: {
+      gh = {
+        env.GH_CONFIG_DIR = ghDir;
+        preHook = ''
+          GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
+          export GITHUB_TOKEN
+        '';
+      };
+    })
+  ];
 
   # needed for github authentication for private repos
   # adapted from home-manager:
@@ -65,25 +46,6 @@ in
       )
       |> listToAttrs;
   };
-
-  # wait for https://github.com/viperML/wrapper-manager/issues/33 to be fixed
-  nixpkgs.overlays = [
-    (_: prev: {
-      gh = prev.symlinkJoin {
-        name = "gh";
-        paths = [ prev.gh ];
-        buildInputs = [ prev.makeWrapper ];
-        postBuild = # sh
-          ''
-            wrapProgram $out/bin/gh \
-              --set-default GH_CONFIG_DIR "${ghDir}" \
-              --run 'export GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")'
-          '';
-        meta.mainProgram = "gh";
-      };
-    })
-
-  ];
 
   environment.systemPackages = [ pkgs.gh ];
 }

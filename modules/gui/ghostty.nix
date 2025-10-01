@@ -65,20 +65,17 @@ in
 
   config = {
     custom.wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.ghostty = {
-            basePackage = pkgs.ghostty;
-            prependFlags = [
-              "--config-default-files=false"
-              # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-              # default location
-              "--config-file=${toGhosttyConf ghosttyConf}"
-            ];
+      (_: _prev: {
+        ghostty = {
+          flags = {
+            "--config-default-files" = false;
+            # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+            # default location
+            "--config-file" = toGhosttyConf ghosttyConf;
           };
-        }
-      )
+          flagSeparator = "=";
+        };
+      })
     ];
 
     environment.systemPackages = [ pkgs.ghostty ];

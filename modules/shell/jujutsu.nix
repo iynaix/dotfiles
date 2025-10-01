@@ -13,18 +13,13 @@ let
 in
 {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.jujutsu = {
-          basePackage = pkgs.jujutsu;
-          prependFlags = [
-            "--config-file"
-            (tomlFormat.generate "helix-config" jujutsuConf)
-          ];
+    (_: _prev: {
+      jujutsu = {
+        flags = {
+          "--config-file" = tomlFormat.generate "helix-config" jujutsuConf;
         };
-      }
-    )
+      };
+    })
   ];
 
   environment.systemPackages = [ pkgs.jujutsu ];

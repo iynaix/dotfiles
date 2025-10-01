@@ -108,17 +108,14 @@ in
 
   config = mkIf (config.custom.wm != "tty") {
     custom.wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.rofi = {
-            basePackage = pkgs.rofi.override {
-              plugins = [ rofiThemes ];
-            };
-            # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
+      (_: prev: {
+        rofi = {
+          package = prev.rofi.override {
+            plugins = [ rofiThemes ];
           };
-        }
-      )
+          # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
+        };
+      })
     ];
 
     hj.xdg.config.files."rofi/config.rasi".text = ''

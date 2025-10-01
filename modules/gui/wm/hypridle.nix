@@ -48,25 +48,13 @@ in
           }
         ];
       };
-
-      # wrap the config into the hypridle executable
-      wrappers = [
-        (
-          { pkgs, ... }:
-          {
-            wrappers.hypridle = {
-              basePackage = pkgs.hypridle;
-              prependFlags = [
-                "--config"
-                (pkgs.writeText "hypridle.conf" hypridleConfText)
-              ];
-            };
-          }
-        )
-      ];
     };
 
     services.hypridle.enable = true;
+
+    # by default, the service uses the systemd package from the hypridle derivation,
+    # so using a config file is necessary
+    hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
 
     # NOTE: screen lock on idle is handled in lock.nix
   };

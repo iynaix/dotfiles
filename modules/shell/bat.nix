@@ -1,23 +1,20 @@
 { pkgs, ... }:
 {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.bat = {
-          basePackage = pkgs.bat;
-          prependFlags = [
-            "--theme"
-            "base16"
-            "--style"
-            "grid"
-          ];
+    (_: prev: {
+      bat = {
+        flags = {
+          "--theme" = "base16";
+          "--style" = "grid";
         };
-        # batman with completions
-        wrappers.batman = {
-          basePackage = pkgs.bat-extras.batman;
-          postBuild = # sh
-            ''
+      };
+      # batman with completions
+      batman = {
+        package = prev.bat-extras.batman.overrideAttrs (o: {
+          postInstall =
+            (o.postInstall or "")
+            # sh
+            + ''
               mkdir -p $out/share/bash-completion/completions
               echo 'complete -F _comp_cmd_man batman' > $out/share/bash-completion/completions/batman
 
@@ -30,9 +27,9 @@
               _man "$@"
               EOF
             '';
-        };
-      }
-    )
+        });
+      };
+    })
   ];
 
   environment.systemPackages = with pkgs; [

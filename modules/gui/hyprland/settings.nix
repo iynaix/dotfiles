@@ -19,23 +19,7 @@ let
     ;
 in
 {
-  # wrap the config into the Hyprland executable
   custom = {
-    # wrappers = [
-    #   (
-    #     { pkgs, ... }:
-    #     {
-    #       wrappers.hyprland = {
-    #         basePackage = pkgs.hyprland;
-    #         prependFlags = [
-    #           "--config"
-    #           (pkgs.writeText "hyprland.conf" hyprlandText)
-    #         ];
-    #       };
-    #     }
-    #   )
-    # ];
-
     programs.hyprland = {
       plugins = optionals config.custom.programs.hypr-darkwindow [
         # always build with actual hyprland to keep versions in sync

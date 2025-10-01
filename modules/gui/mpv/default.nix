@@ -319,17 +319,15 @@ in
           );
         in
         [
-          (
-            { pkgs, ... }:
-            {
-              wrappers.mpv = {
-                basePackage = pkgs.mpv.override { inherit (cfg) scripts; };
-                prependFlags = [
-                  ''--config-dir=${mpvDir}''
-                ];
+          (_: prev: {
+            mpv = {
+              package = prev.mpv.override { inherit (cfg) scripts; };
+              flags = {
+                "--config-dir" = mpvDir;
               };
-            }
-          )
+              flagSeparator = "=";
+            };
+          })
         ];
     }
   ]);

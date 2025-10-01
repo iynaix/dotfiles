@@ -63,18 +63,13 @@ let
 in
 mkIf (config.custom.wm != "tty") {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.zathura = {
-          basePackage = pkgs.zathura;
-          prependFlags = [
-            "--config-dir"
-            zathuraConf
-          ];
+    (_: _prev: {
+      zathura = {
+        flags = {
+          "--config-dir" = zathuraConf;
         };
-      }
-    )
+      };
+    })
   ];
 
   environment.systemPackages = [ pkgs.zathura ];

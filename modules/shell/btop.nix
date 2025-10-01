@@ -94,21 +94,17 @@ in
         };
 
         wrappers = [
-          (
-            { pkgs, ... }:
-            {
-              wrappers.btop = {
-                basePackage = pkgs.btop.override {
-                  cudaSupport = config.custom.hardware.nvidia.enable;
-                  rocmSupport = config.custom.hardware.radeon.enable;
-                };
-                prependFlags = [
-                  "--config"
-                  btop-config
-                ];
+          (_: prev: {
+            btop = {
+              package = prev.btop.override {
+                cudaSupport = config.custom.hardware.nvidia.enable;
+                rocmSupport = config.custom.hardware.radeon.enable;
               };
-            }
-          )
+              flags = {
+                "--config" = btop-config;
+              };
+            };
+          })
         ];
       };
 

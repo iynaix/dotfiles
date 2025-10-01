@@ -30,21 +30,17 @@
   };
 
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.eza = {
-          basePackage = pkgs.eza;
-          prependFlags = [
-            "--icons"
-            "--group-directories-first"
-            "--header"
-            "--octal-permissions"
-            "--hyperlink"
-          ];
+    (_: _prev: {
+      eza = {
+        flags = {
+          "--icons" = { };
+          "--group-directories-first" = { };
+          "--header" = { };
+          "--octal-permissions" = { };
+          "--hyperlink" = { };
         };
-      }
-    )
+      };
+    })
   ];
 
   environment = {

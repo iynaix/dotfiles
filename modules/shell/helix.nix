@@ -18,18 +18,13 @@ in
 
   config = mkIf config.custom.programs.helix.enable {
     custom.wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.helix = {
-            basePackage = pkgs.helix;
-            prependFlags = [
-              "--config"
-              (tomlFormat.generate "helix-config" helixConf)
-            ];
+      (_: _prev: {
+        helix = {
+          flags = {
+            "--config" = tomlFormat.generate "helix-config" helixConf;
           };
-        }
-      )
+        };
+      })
     ];
 
     environment.systemPackages = [ pkgs.helix ];

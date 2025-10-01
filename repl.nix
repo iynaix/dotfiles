@@ -38,13 +38,6 @@ in
   config = c;
   o = c.custom;
 
-  # inspecting wrappers
-  wrappers =
-    (inputs.wrapper-manager.lib {
-      inherit pkgs;
-      modules = c.custom.wrappers;
-    }).config.wrappers;
-
   # testing specialisations
   spec = c: spec_name: c.specialisation.${spec_name}.configuration;
 

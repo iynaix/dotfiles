@@ -44,30 +44,6 @@
       popd > /dev/null
     '';
 
-  # checks if a file exists and returns the path to it, otherwise returns the fallback, in a format
-  # suitable for passing into sed
-  fallbackPath =
-    runtime: fallback:
-    # NOTE: | is the character used for sed separator, & is a metacharacter for matched string
-    ''\$( [ -e \"${runtime}\" ] \&\& echo \"${runtime}\" \|\| echo \"${fallback}\" )'';
-
-  # create a shell wrapper that checks for a config file at runtime and uses that if it exists
-  # falling back to the default config in the nix store otherwise
-  wrapperWithRuntimeConfig =
-    substitutions: wrapperArgs:
-    wrapperArgs
-    // {
-      wrapperType = "shell";
-      postBuild =
-        (wrapperArgs.postBuild or "")
-        + (
-          substitutions
-          |> lib.mapAttrsToList (name: value: ''"s|'*${name}'*|${value}|g"'')
-          |> lib.concatStringsSep "; "
-          |> (s: "sed -i ${s} $out/bin/${wrapperArgs.basePackage.meta.mainProgram}")
-        );
-    };
-
   # copied from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
   toHyprconf =

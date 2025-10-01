@@ -15,23 +15,16 @@ in
 {
   custom = {
     wrappers = [
-      (
-        { pkgs, ... }:
-        {
-          wrappers.nix-init = {
-            basePackage = pkgs.nix-init;
-            prependFlags = [
-              "--config"
-              (tomlFormat.generate "config.toml" {
-                maintainers = [ "iynaix" ];
-              })
-            ];
+      (_: prev: {
+        nix-init = {
+          flags = {
+            "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
           };
-          wrappers.nixpkgs-review = {
-            basePackage = pkgs.nixpkgs-review.override { withNom = true; };
-          };
-        }
-      )
+        };
+        nixpkgs-review = {
+          package = prev.nixpkgs-review.override { withNom = true; };
+        };
+      })
     ];
 
     shell.packages = {

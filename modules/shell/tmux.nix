@@ -82,18 +82,13 @@ let
 in
 {
   custom.wrappers = [
-    (
-      { pkgs, ... }:
-      {
-        wrappers.tmux = {
-          basePackage = pkgs.tmux;
-          prependFlags = [
-            "-f"
-            (pkgs.writeText "tmux.conf" tmuxConf)
-          ];
+    (_: _prev: {
+      wrappers.tmux = {
+        flags = {
+          "-f" = pkgs.writeText "tmux.conf" tmuxConf;
         };
-      }
-    )
+      };
+    })
   ];
 
   environment.systemPackages = [ pkgs.tmux ];
