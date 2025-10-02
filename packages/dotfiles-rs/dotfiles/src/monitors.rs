@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 
 use crate::{
     cli::{MonitorExtend, WmMonitorArgs},
@@ -6,7 +6,7 @@ use crate::{
 };
 use clap::CommandFactory;
 use common::{
-    WorkspacesByMonitor,
+    WorkspacesByMonitor, debounce,
     nixjson::{NixJson, NixMonitor},
     rearranged_workspaces,
     rofi::Rofi,
@@ -47,9 +47,7 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
         for wksp in wksps {
             {
                 // note it can error if the workspace is empty and hasnt been created yet
-                use hyprland::dispatch::{
-                    Dispatch, DispatchType, MonitorIdentifier, WorkspaceIdentifier,
-                };
+                use hyprland::dispatch::{MonitorIdentifier, WorkspaceIdentifier};
                 hyprland::dispatch!(
                     MoveWorkspaceToMonitor,
                     WorkspaceIdentifier::Id(*wksp),
@@ -108,6 +106,7 @@ pub fn distribute_workspaces(
 }
 
 pub fn wm_monitors(args: WmMonitorArgs) {
+    println!("wm_monitors");
     // print shell completions
     if let Some(shell) = args.generate {
         return generate_completions("wm-monitors", &mut WmMonitorArgs::command(), &shell);
@@ -166,5 +165,5 @@ pub fn wm_monitors(args: WmMonitorArgs) {
     move_workspaces_to_monitors(&workspaces);
 
     // reload wallpaper
-    wallpaper::reload(None);
+    debounce(Duration::from_secs(5), || wallpaper::reload(None));
 }

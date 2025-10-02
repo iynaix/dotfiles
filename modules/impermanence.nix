@@ -21,7 +21,6 @@ let
     sort
     unique
     ;
-  inherit (lib.strings) toJSON;
   inherit (lib.types) listOf str;
   cfg = config.custom.persist;
   assertNoHomeDirs =
@@ -192,9 +191,9 @@ in
       };
     };
 
-    hj.xdg.state.files."impermanence.json".text =
+    hj.xdg.state.files."impermanence.txt".text =
       let
-        getDirPath = prefix: d: "${prefix}${d.dirPath}";
+        getDirPath = prefix: d: "${prefix}${d.dirPath}/";
         getFilePath = prefix: f: "${prefix}${f.filePath}";
         persistCfg = config.environment.persistence."/persist";
         persistCacheCfg = config.environment.persistence."/cache";
@@ -206,11 +205,7 @@ in
         allFiles =
           map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
           ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
-        sort-uniq = arr: sort lessThan (unique arr);
       in
-      toJSON {
-        directories = sort-uniq allDirectories;
-        files = sort-uniq allFiles;
-      };
+      (allDirectories ++ allFiles) |> unique |> sort lessThan |> concatLines;
   };
 }

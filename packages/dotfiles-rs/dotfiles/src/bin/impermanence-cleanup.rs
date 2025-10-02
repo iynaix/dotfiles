@@ -1,17 +1,10 @@
-use serde::Deserialize;
 use std::{
-    fs,
+    io::{BufRead, BufReader},
     path::{Path, PathBuf},
 };
 
-#[derive(Debug, Deserialize)]
-pub struct ImpermanencePaths {
-    pub directories: Vec<String>,
-    pub files: Vec<String>,
-}
-
 fn walk_persist(dir: &Path, persist_paths: &[String]) -> std::io::Result<()> {
-    for entry in fs::read_dir(dir)? {
+    for entry in std::fs::read_dir(dir)? {
         let path = entry?.path();
         let path_str = path.display().to_string();
 
@@ -40,16 +33,13 @@ fn walk_persist(dir: &Path, persist_paths: &[String]) -> std::io::Result<()> {
 }
 
 fn main() {
-    let impermanence_json = dirs::state_dir()
+    let impermanence_txt = dirs::state_dir()
         .expect("unable to get $XDG_STATE_HOME")
-        .join("impermanence.json");
+        .join("impermanence.txt");
 
-    let impermenance = serde_json::from_str::<ImpermanencePaths>(
-        &std::fs::read_to_string(impermanence_json).expect("unable to read impermanence.json"),
-    )
-    .expect("unable to parse impermanence.json");
+    let fp = std::fs::File::open(impermanence_txt).expect("unable to open impermanence.txt");
+    let persist_paths: Vec<_> = BufReader::new(fp).lines().map_while(Result::ok).collect();
 
-    let persist_paths = [impermenance.directories, impermenance.files].concat();
     for root in ["/persist", "/cache"] {
         walk_persist(&PathBuf::from(root), &persist_paths).unwrap_or_else(|e| {
             eprintln!("An error has occured: {e}");

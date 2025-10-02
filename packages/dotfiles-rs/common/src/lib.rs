@@ -4,6 +4,7 @@ use std::{
     collections::HashMap,
     path::{Path, PathBuf},
     process::{Command, Stdio},
+    time::{Duration, SystemTime},
 };
 
 pub mod colors;
@@ -118,6 +119,37 @@ macro_rules! log {
             log_file.flush().unwrap_or_else(|_| panic!("could not flush {log_fname}"));
         }
     };
+}
+
+pub fn debounce(interval: Duration, debounce_fn: impl FnOnce()) {
+    let lock_file = dirs::runtime_dir()
+        .expect("unable to get runtime dir")
+        .join("wallpaper.lock");
+
+    if lock_file.exists() {
+        let metadata =
+            std::fs::metadata(&lock_file).expect("unable to get wallpaper.lock metadata");
+        let last_run_time = metadata
+            .modified()
+            .expect("unable to get wallpaper.lock mtime");
+        let current_time = SystemTime::now();
+
+        if let Ok(elapsed) = current_time.duration_since(last_run_time)
+            && elapsed < interval
+        {
+            let wait_time = interval.saturating_sub(elapsed);
+            eprintln!(
+                "Script was run too recently. Please wait {} seconds.",
+                wait_time.as_secs_f64()
+            );
+            std::process::exit(1);
+        }
+    }
+
+    // update lock file with current time
+    std::fs::File::create(lock_file).expect("unable to create wallpaper.lock");
+
+    debounce_fn();
 }
 
 pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
