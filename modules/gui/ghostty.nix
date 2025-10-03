@@ -64,21 +64,40 @@ in
   };
 
   config = {
-    custom.wrappers = [
-      (_: _prev: {
-        ghostty = {
-          flags = {
-            "--config-default-files" = false;
-            # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-            # default location
-            "--config-file" = toGhosttyConf ghosttyConf;
-          };
-          flagSeparator = "=";
-        };
-      })
-    ];
+    # re-enable the wrapper when desktop files are patched
+    # https://github.com/Lassulus/wrappers/issues/3
+    # custom.wrappers = [
+    #   (_: _prev: {
+    #     ghostty = {
+    #       flags = {
+    #         "--config-default-files" = false;
+    #         # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+    #         # default location
+    #         "--config-file" = toGhosttyConf ghosttyConf;
+    #       };
+    #       flagSeparator = "=";
+    #     };
+    #   })
+    # ];
 
     environment.systemPackages = [ pkgs.ghostty ];
+
+    hj.xdg.config.files."ghostty/config".source = toGhosttyConf ghosttyConf;
+
+    # shell integrations
+    programs = {
+      bash.interactiveShellInit = ''
+        if [[ -n "''${GHOSTTY_RESOURCES_DIR}" ]]; then
+          builtin source "''${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+        fi
+      '';
+
+      fish.interactiveShellInit = ''
+        if set -q GHOSTTY_RESOURCES_DIR
+          source "$GHOSTTY_RESOURCES_DIR/shell-integration/fish/vendor_conf.d/ghostty-shell-integration.fish"
+        end
+      '';
+    };
 
     custom.programs.terminal = {
       app-id = "com.mitchellh.ghostty";

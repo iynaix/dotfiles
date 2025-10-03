@@ -165,5 +165,8 @@ pub fn wm_monitors(args: WmMonitorArgs) {
     move_workspaces_to_monitors(&workspaces);
 
     // reload wallpaper
-    debounce(Duration::from_secs(5), || wallpaper::reload(None));
+    debounce(Duration::from_secs(5), || {
+        std::thread::sleep(Duration::from_secs(3));
+        wallpaper::reload(None);
+    });
 }

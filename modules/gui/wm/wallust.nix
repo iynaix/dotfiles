@@ -101,14 +101,14 @@ in
 
     # setup wallust colorschemes for shells
     programs = {
-      bash.shellInit = mkIf config.custom.programs.wallust.enable ''
+      bash.interactiveShellInit = mkIf config.custom.programs.wallust.enable ''
         wallust_colors="${config.hj.xdg.cache.directory}/wallust/sequences"
         if [ -e "$wallust_colors" ]; then
           command cat "$wallust_colors"
         fi
       '';
 
-      fish.shellInit = mkIf config.custom.programs.wallust.enable ''
+      fish.interactiveShellInit = mkIf config.custom.programs.wallust.enable ''
         set wallust_colors "${config.hj.xdg.cache.directory}/wallust/sequences"
         if test -e "$wallust_colors"
             command cat "$wallust_colors"

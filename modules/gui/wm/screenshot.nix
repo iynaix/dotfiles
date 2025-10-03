@@ -8,6 +8,7 @@
 }:
 let
   inherit (lib)
+    getExe'
     mkAfter
     mkIf
     optionals
@@ -91,7 +92,7 @@ mkIf config.custom.isWm {
       config = {
         "custom/focal" = {
           exec = # sh
-            ''focal-waybar --recording "󰑋"'';
+            ''${getExe' focal "focal-waybar"} --recording "󰑋"'';
           format = "{}";
           # hide-empty-text = true;
           # return-type = "json";

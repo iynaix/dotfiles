@@ -163,9 +163,9 @@ in
           # "XF86AudioPlay, mpvctl playpause"
 
           # audio
-          ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"
-          ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"
-          ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          ",XF86AudioLowerVolume, exec, pamixer -d 5"
+          ",XF86AudioRaiseVolume, exec, pamixer -i 5"
+          ",XF86AudioMute, exec, pamixer -t"
         ]
         # invert windows
         ++ optionals config.custom.programs.hypr-darkwindow [ "$mod_shift, i ,invertactivewindow" ]

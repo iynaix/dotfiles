@@ -208,7 +208,7 @@ in
             headphone-muted = "󰟎";
           };
           format-muted = "󰖁  Muted";
-          on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          on-click = "${getExe pkgs.pamixer} -t";
           on-click-right = getExe pkgs.pwvucontrol;
           scroll-step = 1;
           tooltip = false;

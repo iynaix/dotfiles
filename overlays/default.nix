@@ -55,22 +55,22 @@ let
 
     # use latest for namespace functionality
     # https://github.com/LGFae/swww/issues/419
-    swww =
-      assert (
-        pkgs.lib.assertMsg (pkgs.lib.versionOlder prev.swww.version "0.10.4") "swww updated, remove overlay"
-      );
-      prev.swww.overrideAttrs (
-        _o:
-        sources.swww
-        // {
-          # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
-          # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-          cargoDeps = prev.rustPlatform.importCargoLock {
-            lockFile = "${sources.swww.src}/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-        }
-      );
+    # swww =
+    #   assert (
+    #     pkgs.lib.assertMsg (pkgs.lib.versionOlder prev.swww.version "0.10.4") "swww updated, remove overlay"
+    #   );
+    #   prev.swww.overrideAttrs (
+    #     _o:
+    #     sources.swww
+    #     // {
+    #       # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
+    #       # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+    #       cargoDeps = prev.rustPlatform.importCargoLock {
+    #         lockFile = "${sources.swww.src}/Cargo.lock";
+    #         allowBuiltinFetchGit = true;
+    #       };
+    #     }
+    #   );
 
     # wallust = prev.wallust.overrideAttrs (
     #   sources.wallust

@@ -198,28 +198,24 @@ mkIf (config.custom.wm == "niri") {
         # audio
         "XF86AudioLowerVolume" = {
           action.spawn = [
-            "wpctl"
-            "set-volume"
-            "@DEFAULT_AUDIO_SINK@"
-            "0.05-"
+            "pamixer"
+            "-d"
+            "5"
           ];
           allow-when-locked = true;
         };
         "XF86AudioRaiseVolume" = {
           action.spawn = [
-            "wpctl"
-            "set-volume"
-            "@DEFAULT_AUDIO_SINK@"
-            "0.05+"
+            "pamixer"
+            "-i"
+            "5"
           ];
           allow-when-locked = true;
         };
         "XF86AudioMute" = {
           action.spawn = [
-            "wpctl"
-            "set-mute"
-            "@DEFAULT_AUDIO_SINK@"
-            "toggle"
+            "pamixer"
+            "-t"
           ];
           allow-when-locked = true;
         };

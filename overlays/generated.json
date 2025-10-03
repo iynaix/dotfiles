@@ -1,7 +1,7 @@
 {
     "swww": {
         "cargoLocks": null,
-        "date": "2025-09-23",
+        "date": "2025-10-01",
         "extract": null,
         "name": "swww",
         "passthru": null,
@@ -13,12 +13,12 @@
             "name": null,
             "owner": "LGFae",
             "repo": "swww",
-            "rev": "3fc6dd696bb4f6bbe20df76dbdb2fdc70bf6025a",
-            "sha256": "sha256-B0900YOZMKkoJiwT78hqWA+Oc0hh2PInOp+FM0CcvLk=",
+            "rev": "98e61fc9ca4e9a2d30ab8387fc797d37f3d62e1c",
+            "sha256": "sha256-h8TwX5vzBUXvcX8Z0rfkflNDKCUWNlkyv+s8A/j70cM=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "3fc6dd696bb4f6bbe20df76dbdb2fdc70bf6025a"
+        "version": "98e61fc9ca4e9a2d30ab8387fc797d37f3d62e1c"
     },
     "wallust": {
         "cargoLocks": null,

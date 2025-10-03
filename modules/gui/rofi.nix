@@ -128,6 +128,7 @@ in
     '';
 
     environment.systemPackages = [
+      pkgs.rofi
       # NOTE: rofi-power-menu only works for powermenuType = 4!
       (pkgs.custom.rofi-power-menu.override {
         reboot-to-windows =

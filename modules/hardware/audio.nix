@@ -24,7 +24,10 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [ pwvucontrol ];
+  environment.systemPackages = with pkgs; [
+    pamixer
+    pwvucontrol
+  ];
 
   custom.persist = {
     home.directories = [

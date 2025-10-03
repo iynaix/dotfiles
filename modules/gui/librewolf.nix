@@ -95,12 +95,6 @@ mkIf (config.custom.wm != "tty") {
     # };
   };
 
-  # remove the leftover native messaging hosts directory
-  hj.files = {
-    ".librewolf/native-messaging-hosts".enable = lib.mkForce false;
-    ".mozilla/native-messaging-hosts".enable = lib.mkForce false;
-  };
-
   custom.persist = {
     home.directories = [
       ".cache/librewolf"
