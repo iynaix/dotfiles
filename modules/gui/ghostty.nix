@@ -84,21 +84,6 @@ in
 
     hj.xdg.config.files."ghostty/config".source = toGhosttyConf ghosttyConf;
 
-    # shell integrations
-    programs = {
-      bash.interactiveShellInit = ''
-        if [[ -n "''${GHOSTTY_RESOURCES_DIR}" ]]; then
-          builtin source "''${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
-        fi
-      '';
-
-      fish.interactiveShellInit = ''
-        if set -q GHOSTTY_RESOURCES_DIR
-          source "$GHOSTTY_RESOURCES_DIR/shell-integration/fish/vendor_conf.d/ghostty-shell-integration.fish"
-        end
-      '';
-    };
-
     custom.programs.terminal = {
       app-id = "com.mitchellh.ghostty";
       desktop = "com.mitchellh.ghostty.desktop";

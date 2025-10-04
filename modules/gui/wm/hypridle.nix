@@ -2,10 +2,11 @@
   config,
   lib,
   libCustom,
+  pkgs,
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) assertMsg mkIf versionOlder;
   inherit (config.custom) wm;
   dpmsOff =
     if wm == "hyprland" then
@@ -48,13 +49,51 @@ in
           }
         ];
       };
+
+      # wrappers = [
+      #   (_: _prev: {
+      #     hypridle = {
+      #       flags = {
+      #         "--config" = pkgs.writeText "hypridle.conf" hypridleConfText;
+      #       };
+      #     };
+      #   })
+      # ];
     };
 
-    services.hypridle.enable = true;
+    services.hypridle.enable =
+      assert (
+        assertMsg (versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper and custom service"
+      );
+      true;
 
     # by default, the service uses the systemd package from the hypridle derivation,
     # so using a config file is necessary
     hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
+
+    /*
+      # don't use services.hyprland.enable as it uses the systemd service
+      # from the derivation and is not overrideable
+      systemd.user.services = {
+        hypridle = {
+          unitConfig = {
+            Description = "Hyprland's idle daemon";
+            Documentation = "https://wiki.hyprland.org/Hypr-Ecosystem/hypridle";
+            PartOf = "graphical-session.target";
+            After = "graphical-session.target";
+            ConditionEnvironment = "WAYLAND_DISPLAY";
+          };
+
+          serviceConfig = {
+            Type = "simple";
+            ExecStart = getExe pkgs.hypridle;
+            Restart = "on-failure";
+          };
+
+          wantedBy = [ "graphical-session.target" ];
+        };
+      };
+    */
 
     # NOTE: screen lock on idle is handled in lock.nix
   };

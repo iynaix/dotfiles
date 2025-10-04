@@ -17,13 +17,16 @@ in
   };
 
   config = mkIf (config.custom.wm != "tty") {
-    custom.wrappers = [
-      (_: _prev: {
-        pqiv = {
-          env.PQIVRC_PATH = pkgs.writeText "pqivrc" config.custom.programs.pqiv.settings;
-        };
-      })
-    ];
+    # custom.wrappers = [
+    #   (_: _prev: {
+    #     pqiv = {
+    #       env.PQIVRC_PATH = pkgs.writeText "pqivrc" config.custom.programs.pqiv.settings;
+    #     };
+    #   })
+    # ];
+
+    # TODO: remove when wrappers patches desktop files
+    environment.etc."xdg/pqivrc".text = config.custom.programs.pqiv.settings;
 
     custom.programs.pqiv.settings = ''
       [options]

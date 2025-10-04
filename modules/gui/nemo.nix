@@ -6,7 +6,6 @@
 }:
 let
   inherit (lib)
-    getExe
     gvariant
     mkIf
     optionals
@@ -47,10 +46,10 @@ mkIf (config.custom.wm != "tty") {
     dconf.settings = {
       # fix open in terminal
       "org/gnome/desktop/applications/terminal" = {
-        exec = getExe config.xdg.terminal-exec.package;
+        exec = "xdg-terminal-exec";
       };
       "org/cinnamon/desktop/applications/terminal" = {
-        exec = getExe config.xdg.terminal-exec.package;
+        exec = "xdg-terminal-exec";
       };
       "org/nemo/preferences" = {
         default-folder-viewer = "list-view";

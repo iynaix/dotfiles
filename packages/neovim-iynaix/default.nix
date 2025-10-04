@@ -136,13 +136,6 @@
       nix = {
         enable = true;
         format.type = "nixfmt";
-        lsp = {
-          server = "nixd";
-          options = lib.mkIf (dots != null) {
-            nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
-            home-manager.expr = "(builtins.getFlake \"${dots}\").homeConfigurations.${host}.options";
-          };
-        };
       };
       python.enable = true;
       rust = {
@@ -169,6 +162,12 @@
       trouble.enable = true;
       # lspSignature?
       # mappings?
+      servers.nixd = {
+        init_options = lib.mkIf (dots != null) {
+          nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
+          home-manager.expr = "(builtins.getFlake \"${dots}\").homeConfigurations.${host}.options";
+        };
+      };
     };
 
     autocomplete.nvim-cmp.enable = true;
