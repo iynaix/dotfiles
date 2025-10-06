@@ -1,0 +1,7 @@
+[helium-x86_64]
+src.github_tag = "imputnet/helium-linux"
+fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/helium-$ver-x86_64.AppImage"
+
+[helium-arm64]
+src.github_tag = "imputnet/helium-linux"
+fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/helium-$ver-arm64.AppImage"

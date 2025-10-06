@@ -59,6 +59,8 @@ rec {
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
+  helium = callPackage ./helium { };
+
   hyprnstack = callPackage ./hyprnstack { };
   hypr-darkwindow = callPackage ./hypr-darkwindow { };
 

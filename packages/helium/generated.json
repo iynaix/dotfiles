@@ -1,0 +1,32 @@
+{
+    "helium-arm64": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "helium-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-gWJ6xuHeP+tmduspPeRG6sbeQpihFWW6TSr/2zPJGjM=",
+            "type": "url",
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.5.2.1/helium-0.5.2.1-arm64.AppImage"
+        },
+        "version": "0.5.2.1"
+    },
+    "helium-x86_64": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "helium-x86_64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-3h0GMMl58NX+PuZRwmksOvlwPuZZwiQJdM5YXkaxlDk=",
+            "type": "url",
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.5.2.1/helium-0.5.2.1-x86_64.AppImage"
+        },
+        "version": "0.5.2.1"
+    }
+}
