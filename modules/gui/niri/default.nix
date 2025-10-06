@@ -41,7 +41,8 @@ in
       blur.enable = mkEnableOption "blur behind windows using PR";
 
       settings = mkOption {
-        type = types.attrs;
+        # it's KDL not JSON, but the JSON type gives the wanted recursive merging properties
+        type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
         default = { };
         description = "Niri settings, will be passed directly to niri-flake and validated";
       };
@@ -97,7 +98,7 @@ in
     };
 
     # write validated niri config with hjem
-    hj.xdg.config.files."niri/config".source = niriConf;
+    hj.xdg.config.files."niri/config.kdl".source = niriConf;
 
     xdg.portal = {
       enable = true;

@@ -12,7 +12,6 @@ let
     isString
     mapAttrs'
     mkIf
-    mkMerge
     nameValuePair
     ;
   opacity = "E5"; # 90%
@@ -77,62 +76,60 @@ let
   # NOTE: real dunst config is read from here
   dunstConfigpath = "${config.hj.xdg.config.directory}/dunst/dunstrc";
 in
-mkIf (config.custom.wm != "tty") (mkMerge [
-  {
-    # keybind to show dunst history
-    custom.programs = {
-      hyprland.settings.bind = [
-        "$mod, n, exec, dunstctl history-pop"
+mkIf (config.custom.wm != "tty") {
+  # keybind to show dunst history
+  custom.programs = {
+    hyprland.settings.bind = [
+      "$mod, n, exec, dunstctl history-pop"
+    ];
+
+    niri.settings.binds = {
+      "Mod+N".action.spawn = [
+        "dunstctl"
+        "history-pop"
       ];
-
-      niri.settings.binds = {
-        "Mod+n".action.spawn = [
-          "dunstctl"
-          "history-pop"
-        ];
-      };
-
-      mango.settings = {
-        bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
-      };
     };
 
-    # dunst user service referenced from home-manager:
-    # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
-    systemd.user.services.dunst = {
-      unitConfig = {
-        Description = "Dunst notification daemon";
-        # ensure colorscheme is ready on boot
-        AssertPathExists = [ dunstConfigpath ];
-        After = [ "graphical-session.target" ];
-        PartOf = [ "graphical-session.target" ];
-        X-Reload-Triggers = [ dunstConfigpath ];
-      };
+    mango.settings = {
+      bind = [ "$mod+SHIFT, n, spawn, dunstctl history-pop" ];
+    };
+  };
 
-      serviceConfig = {
-        Type = "dbus";
-        BusName = "org.freedesktop.Notifications";
-        ExecStart = getExe pkgs.dunst;
-        ExecReload = "${getExe' pkgs.dunst "dunstctl"} reload";
-      };
+  # dunst user service referenced from home-manager:
+  # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
+  systemd.user.services.dunst = {
+    unitConfig = {
+      Description = "Dunst notification daemon";
+      # ensure colorscheme is ready on boot
+      AssertPathExists = [ dunstConfigpath ];
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+      X-Reload-Triggers = [ dunstConfigpath ];
     };
 
-    # create symlink in $XDG_DATA_HOME/.icons for each icon accent variant
-    # allows dunst to be able to refer to icons by name, $XDG_DATA_HOME is used as
-    # /usr/share/icons does not exist on nixos
-    hj.xdg.data.files = mapAttrs' (
-      accent: _:
-      let
-        iconTheme = "Tela-${accent}-dark";
-      in
-      nameValuePair "icons/${iconTheme}" {
-        source = "${config.custom.gtk.iconTheme.package}/share/icons/${iconTheme}";
-      }
-    ) config.custom.gtk.accents;
-
-    custom.programs.wallust.templates.dunstrc = {
-      text = toDunstIni dunstConf;
-      target = dunstConfigpath;
+    serviceConfig = {
+      Type = "dbus";
+      BusName = "org.freedesktop.Notifications";
+      ExecStart = getExe pkgs.dunst;
+      ExecReload = "${getExe' pkgs.dunst "dunstctl"} reload";
     };
-  }
-])
+  };
+
+  # create symlink in $XDG_DATA_HOME/.icons for each icon accent variant
+  # allows dunst to be able to refer to icons by name, $XDG_DATA_HOME is used as
+  # /usr/share/icons does not exist on nixos
+  hj.xdg.data.files = mapAttrs' (
+    accent: _:
+    let
+      iconTheme = "Tela-${accent}-dark";
+    in
+    nameValuePair "icons/${iconTheme}" {
+      source = "${config.custom.gtk.iconTheme.package}/share/icons/${iconTheme}";
+    }
+  ) config.custom.gtk.accents;
+
+  custom.programs.wallust.templates.dunstrc = {
+    text = toDunstIni dunstConf;
+    target = dunstConfigpath;
+  };
+}

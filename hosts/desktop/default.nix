@@ -14,7 +14,7 @@ in
     specialisation = {
       niri.enable = true;
       hyprland.enable = true;
-      mango.enable = true;
+      mango.enable = false;
     };
 
     hardware = {
