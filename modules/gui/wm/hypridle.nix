@@ -6,20 +6,25 @@
   ...
 }:
 let
-  inherit (lib) assertMsg mkIf versionOlder;
+  inherit (lib)
+    assertMsg
+    getExe
+    mkIf
+    versionOlder
+    ;
   inherit (config.custom) wm;
   dpmsOff =
     if wm == "hyprland" then
       "hyprctl dispatch dpms off"
     else if wm == "niri" then
-      "niri msg action power-off-monitors"
+      "${getExe config.programs.niri.package} msg action power-off-monitors"
     else
       "";
   dpmsOn =
     if wm == "hyprland" then
       "hyprctl dispatch dpms on"
     else if wm == "niri" then
-      "niri msg action power-on-monitors"
+      "${getExe config.programs.niri.package} msg action power-on-monitors"
     else
       "";
   hypridleConfText = libCustom.toHyprconf {

@@ -9,12 +9,13 @@ let
   inherit (lib)
     concatStringsSep
     mkAfter
+    mkIf
     optionals
     ;
 in
-{
+mkIf (config.custom.wm == "hyprland") {
   custom.programs.hyprland =
-    if config.custom.programs.hyprnstack then
+    if config.custom.programs.hyprnstack.enable then
       {
         plugins = [ pkgs.custom.hyprnstack ];
 

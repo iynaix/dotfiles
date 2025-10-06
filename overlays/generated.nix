@@ -3,15 +3,15 @@
 {
   swww = {
     pname = "swww";
-    version = "98e61fc9ca4e9a2d30ab8387fc797d37f3d62e1c";
+    version = "b9aaba38c79e9915c62328861def7353f53dcdbd";
     src = fetchFromGitHub {
       owner = "LGFae";
       repo = "swww";
-      rev = "98e61fc9ca4e9a2d30ab8387fc797d37f3d62e1c";
+      rev = "b9aaba38c79e9915c62328861def7353f53dcdbd";
       fetchSubmodules = false;
-      sha256 = "sha256-h8TwX5vzBUXvcX8Z0rfkflNDKCUWNlkyv+s8A/j70cM=";
+      sha256 = "sha256-vn3/hpRTI330+yJOoow7wBWMUk2LbnYgyR0v4/LX08o=";
     };
-    date = "2025-10-01";
+    date = "2025-10-02";
   };
   wallust = {
     pname = "wallust";

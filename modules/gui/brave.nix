@@ -22,16 +22,12 @@ in
       "nngceckbapebfimnlniiiahkandclblb"
       # Dark Reader
       "eimadpbcbfnmbkopoojfekhnkhdbieeh"
-      # Honey
-      "bmnlcjabgnpnenekpadlanbbkooimhnj"
       # JSON Viewer
       "gbmdgpbipfallnflgajpaliibnhdgobh"
       # Looty
       # {id = "ajfbflclpnpbjkfibijekgcombcgehbi"
       # Old Reddit Redirect
       "dneaehbmnbhcippjikoajpoabadpodje"
-      # PoE Wiki Search
-      "nalpbalegehinpooppmmgjidgiebblad"
       # React Dev Tools
       "fmkadmapgofadopljbjfkapdkoienihi"
       # Reddit Enhancement Suite
@@ -42,8 +38,6 @@ in
       "mghenlmbmjcpehccoangkdpagbcbkdpc"
       # SponsorBlock for YouTube - Skip Sponsorships
       "mnjggcdmjocbbbhaepdhchncahnbgone"
-      # Surfingkeys
-      "gfbliohnnapiefjpjlpjnehglfpaknnc"
       # Tokyo Night Storm
       "pgbjifpikialeahbdendkjioeafbmfkn"
       # uBlock Origin
@@ -94,4 +88,6 @@ in
       ".config/BraveSoftware"
     ];
   };
+
+  nixpkgs.config.allowUnfree = true;
 }

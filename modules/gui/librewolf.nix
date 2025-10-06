@@ -76,6 +76,8 @@ mkIf (config.custom.wm != "tty") {
     # search.engines = [ ];
 
     preferences = {
+      "browser.download.dir" = "${config.hj.directory}/Downloads";
+      "browser.download.useDownloadDir" = false;
       "privacy.clearOnShutdown_v2.cache" = false;
       "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

@@ -209,7 +209,7 @@ in
           };
           format-muted = "󰖁  Muted";
           on-click = "${getExe pkgs.pamixer} -t";
-          on-click-right = getExe pkgs.pwvucontrol;
+          on-click-right = getExe pkgs.pavucontrol;
           scroll-step = 1;
           tooltip = false;
         };

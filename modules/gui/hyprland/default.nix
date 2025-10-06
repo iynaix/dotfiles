@@ -61,8 +61,8 @@ in
         };
         settings = libCustom.types.hyprlandSettingsType;
       };
-      hyprnstack = mkEnableOption "hyprnstack";
-      hypr-darkwindow = mkEnableOption "hypr-darkwindow" // {
+      hyprnstack.enable = mkEnableOption "hyprnstack";
+      hypr-darkwindow.enable = mkEnableOption "hypr-darkwindow" // {
         default = true;
       };
     };

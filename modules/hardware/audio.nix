@@ -9,24 +9,24 @@
       alsa.support32Bit = true;
       pulse.enable = true;
 
-      extraConfig = {
-        pipewire = {
-          switch-on-connect = {
-            "pulse.cmd" = [
-              {
-                cmd = "load-module";
-                args = [ "module-switch-on-connect" ];
-              }
-            ];
-          };
-        };
-      };
+      # extraConfig = {
+      #   pipewire = {
+      #     switch-on-connect = {
+      #       "pulse.cmd" = [
+      #         {
+      #           cmd = "load-module";
+      #           args = [ "module-switch-on-connect" ];
+      #         }
+      #       ];
+      #     };
+      #   };
+      # };
     };
   };
 
   environment.systemPackages = with pkgs; [
     pamixer
-    pwvucontrol
+    pavucontrol
   ];
 
   custom.persist = {

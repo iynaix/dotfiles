@@ -16,7 +16,7 @@ in
     (_: _prev: {
       jujutsu = {
         flags = {
-          "--config-file" = tomlFormat.generate "helix-config" jujutsuConf;
+          "--config-file" = tomlFormat.generate "config.toml" jujutsuConf;
         };
       };
     })

@@ -18,10 +18,10 @@ let
     optionals
     ;
 in
-{
+mkIf (config.custom.wm == "hyprland") {
   custom = {
     programs.hyprland = {
-      plugins = optionals config.custom.programs.hypr-darkwindow [
+      plugins = optionals config.custom.programs.hypr-darkwindow.enable [
         # always build with actual hyprland to keep versions in sync
         pkgs.custom.hypr-darkwindow
       ];

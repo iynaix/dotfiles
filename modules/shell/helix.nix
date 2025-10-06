@@ -21,7 +21,7 @@ in
       (_: _prev: {
         helix = {
           flags = {
-            "--config" = tomlFormat.generate "helix-config" helixConf;
+            "--config" = tomlFormat.generate "config.toml" helixConf;
           };
         };
       })

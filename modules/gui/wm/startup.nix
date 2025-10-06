@@ -45,7 +45,7 @@ in
         "plasma"
         "tty"
       ];
-      default = "niri";
+      default = "hyprland";
     };
 
     isWm = mkOption {
@@ -204,11 +204,13 @@ in
         }
 
         # terminal
+        # NOTE: use --class instead of --title to fix ghostty not properly setting initialTitle:
+        # https://github.com/ghostty-org/ghostty/discussions/8804
         rec {
-          title = "${config.custom.programs.terminal.app-id}-vertical";
+          app-id = "${config.custom.programs.terminal.app-id}-vertical";
           spawn = [
             termExe
-            "--title=${title}"
+            "--class=${app-id}"
           ];
           workspace = 7;
           niriArgs = {
@@ -229,19 +231,19 @@ in
         # download related
         rec {
           enable = host == "desktop";
-          title = "${config.custom.programs.terminal.app-id}-dl";
+          app-id = "${config.custom.programs.terminal.app-id}-dl";
           spawn = [
             termExe
-            "--title=${title}"
+            "--class=${app-id}"
           ];
           workspace = 10;
         }
         rec {
           enable = host == "desktop";
-          title = "${config.custom.programs.terminal.app-id}-yt.txt";
+          app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
           spawn = [
             termExe
-            "--title=${title}"
+            "--class=${app-id}"
             "-e"
             "nvim"
             "${config.hj.directory}/Desktop/yt.txt"

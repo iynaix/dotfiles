@@ -98,7 +98,7 @@ in
         qtile = false;
       };
       freecad.enable = true;
-      hyprnstack = true;
+      hyprnstack.enable = true;
       niri.blur.enable = false;
       obs-studio.enable = true;
       orca-slicer.enable = true;
