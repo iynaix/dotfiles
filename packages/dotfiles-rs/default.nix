@@ -90,6 +90,10 @@ rustPlatform.buildRustPackage {
       progs = [
         "wallpaper"
       ]
+      ++ lib.optionals (wm == "hyprland") [
+        "hypr-ipc"
+        "hypr-monitors"
+      ]
       ++ lib.optionals (wm == "niri") [ "niri-ipc" ];
     in
     ''
