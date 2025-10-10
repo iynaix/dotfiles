@@ -33,7 +33,7 @@ let
   };
   dunstConf = {
     global = {
-      browser = "brave -new-tab";
+      browser = "helium -new-tab";
       corner_radius = 8;
       dmenu = "rofi -p dunst:";
       enable_recursive_icon_lookup = true;

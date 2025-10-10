@@ -71,9 +71,9 @@ mkIf (config.custom.wm == "niri") {
           "yazi"
           "${config.hj.directory}/Downloads"
         ];
-        "Mod+W".action.spawn = "brave";
+        "Mod+W".action.spawn = "helium";
         "Mod+Shift+W".action.spawn = [
-          "brave"
+          "helium"
           "--incognito"
         ];
         "Mod+V".action.spawn = termExec [ "nvim" ];

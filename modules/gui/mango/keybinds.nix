@@ -48,8 +48,8 @@ mkIf (config.custom.wm == "mango") {
           "${config.hj.directory}/Downloads"
         ]
       }"
-      "$mod, w, spawn, brave"
-      "$mod+Shift, w, spawn, brave --incognito"
+      "$mod, w, spawn, helium"
+      "$mod+Shift, w, spawn, helium --incognito"
 
       "$mod, v, spawn, ${termExec [ "nvim" ]}"
       "$mod+Shift, v, spawn, rofi-edit-proj"

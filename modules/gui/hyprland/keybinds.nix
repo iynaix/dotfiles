@@ -76,8 +76,8 @@ in
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
           "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
-          "$mod, w, exec, brave"
-          "$mod_SHIFT, w, exec, brave --incognito"
+          "$mod, w, exec, helium"
+          "$mod_SHIFT, w, exec, helium --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, rofi-edit-proj"
           ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.hj.directory}/projects/dotfiles"''

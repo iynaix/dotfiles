@@ -1,25 +1,12 @@
 {
   callPackage,
-  stdenv,
   lib,
   appimageTools,
   makeWrapper,
 }:
 let
   pname = "helium";
-  sources = callPackage ./generated.nix { };
-  source =
-    (
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        sources.helium-x86_64
-      else if stdenv.hostPlatform.system == "aarch64-linux" then
-        sources.helium-arm64
-      else
-        throw "unsupported system"
-    )
-    // {
-      inherit pname;
-    };
+  source = (callPackage ./generated.nix { }).helium;
   appimageContents = appimageTools.extract source;
 in
 appimageTools.wrapType2 (
@@ -35,6 +22,14 @@ appimageTools.wrapType2 (
         --replace 'Exec=AppRun' 'Exec=${pname}'
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
+
+    # pass through files from the root fs
+    extraBwrapArgs = [
+      # chromium policies
+      "--ro-bind-try /etc/chromium/policies/managed/default.json /etc/chromium/policies/managed/default.json"
+      # xdg scheme-handlers
+      "--ro-bind-try /etc/xdg/ /etc/xdg/"
+    ];
 
     meta = {
       description = "Private, fast, and honest web browser";

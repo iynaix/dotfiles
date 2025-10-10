@@ -175,18 +175,18 @@ in
     custom = {
       startup = [
         {
-          app-id = "brave-browser";
+          app-id = "helium";
           spawn = [
             (getExe (
               pkgs.writeShellApplication {
-                name = "init-brave";
+                name = "init-helium";
                 runtimeInputs = [
-                  pkgs.brave
+                  pkgs.custom.helium
                   config.custom.programs.dotfiles.package
                 ];
                 text = ''
-                  brave --profile-directory=Default &
-                  sleep 1; brave --incognito &
+                  helium --profile-directory=Default &
+                  sleep 1; helium --incognito &
                   ${optionalString (config.custom.wm == "niri") "sleep 5; niri-resize-workspace 1"}
                 '';
               }
