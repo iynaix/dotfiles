@@ -106,7 +106,16 @@ in
           assertMsg (versionOlder config.programs.hyprland.package.version "0.52") "hyprland updated, sync with hyprnstack / hypr-darkwindow?"
         );
         true;
-      # package = pkgs.hyprland;
+      # fix chromium based browsers crashing on monitor change:
+      # https://github.com/brave/brave-browser/issues/49862
+      package = pkgs.hyprland.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [
+          (pkgs.fetchpatch {
+            url = "https://patch-diff.githubusercontent.com/raw/hyprwm/Hyprland/pull/11877.diff";
+            hash = "sha256-OQid5g3qBgkhRWPCrpFAshMCsk0Ell4qdTRhFVDbBR0=";
+          })
+        ];
+      });
       # package =
       #   assert (assertMsg (versionOlder config.programs.hyprland.package.version "0.42") "hyprland: use version from nixpkgs?");
       #   inputs.hyprland.packages.${pkgs.system}.hyprland;

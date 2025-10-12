@@ -1,7 +1,21 @@
-{ lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) getExe;
-  heliumPkg = pkgs.custom.helium;
+  # fix chromium based browsers crashing on monitor change:
+  # https://github.com/brave/brave-browser/issues/49862
+  heliumPkg = inputs.wrappers.lib.wrapPackage {
+    inherit pkgs;
+    package = pkgs.custom.helium;
+    flags = {
+      "--disable-features" = "WaylandWpColorManagerV1";
+    };
+    flagSeparator = "=";
+  };
 in
 {
   programs.chromium = {

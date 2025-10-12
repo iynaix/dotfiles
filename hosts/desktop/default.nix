@@ -92,7 +92,7 @@ in
     zfs.encryption = false;
 
     programs = {
-      deadbeef.enable = true;
+      deadbeef.enable = false;
       distrobox.enable = true;
       hyprland = {
         qtile = false;
