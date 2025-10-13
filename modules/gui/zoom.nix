@@ -1,24 +1,27 @@
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+  flake.modules.nixos.core =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
 
-{
-  options.custom = {
-    programs.zoom.enable = lib.mkEnableOption "Zoom";
-  };
+    {
+      options.custom = {
+        programs.zoom.enable = lib.mkEnableOption "Zoom";
+      };
 
-  config = lib.mkIf config.custom.programs.zoom.enable {
-    environment.systemPackages = [ pkgs.zoom-us ];
+      config = lib.mkIf config.custom.programs.zoom.enable {
+        environment.systemPackages = [ pkgs.zoom-us ];
 
-    hj.".config/zoomus.conf" = {
-      text = ''
-        [General]
-        xwayland=false
-        enableWaylandShare=true
-      '';
+        hj.".config/zoomus.conf" = {
+          text = ''
+            [General]
+            xwayland=false
+            enableWaylandShare=true
+          '';
+        };
+      };
     };
-  };
 }

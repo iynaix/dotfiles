@@ -1,25 +1,28 @@
 {
-  lib,
-  pkgs,
-  ...
-}:
-let
-  inherit (lib) getExe;
-in
-{
-  environment.systemPackages = [ pkgs.fzf ];
+  flake.modules.nixos.core =
+    {
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      inherit (lib) getExe;
+    in
+    {
+      environment.systemPackages = [ pkgs.fzf ];
 
-  programs = {
-    bash.interactiveShellInit = # sh
-      ''
-        if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
-          eval "$(${getExe pkgs.fzf} --bash)"
-        fi
-      '';
+      programs = {
+        bash.interactiveShellInit = # sh
+          ''
+            if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
+              eval "$(${getExe pkgs.fzf} --bash)"
+            fi
+          '';
 
-    fish.interactiveShellInit = # fish
-      ''
-        ${getExe pkgs.fzf} --fish | source
-      '';
-  };
+        fish.interactiveShellInit = # fish
+          ''
+            ${getExe pkgs.fzf} --fish | source
+          '';
+      };
+    };
 }

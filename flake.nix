@@ -61,60 +61,6 @@
   };
 
   outputs =
-    inputs@{ flake-parts, self, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } (_: {
-      flake =
-        let
-          inherit (inputs.nixpkgs) lib;
-          pkgs = import inputs.nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-          };
-          user = "iynaix";
-          hostNixosModule = import ./hosts/nixos.nix { inherit inputs self user; };
-          inherit (hostNixosModule) mkNixos mkVm;
-        in
-        {
-          nixosConfigurations = {
-            desktop = mkNixos "desktop" { };
-            framework = mkNixos "framework" { };
-            xps = mkNixos "xps" { };
-            # VMs from config
-            vm = mkVm "vm" { };
-            # hyprland can be used within a VM on AMD
-            vm-hyprland = mkVm "vm" {
-              extraConfig = {
-                home-manager.users.${user}.custom.wm = lib.mkForce "hyprland";
-              };
-            };
-            # create VMs for each host configuration, build using
-            # nixos-rebuild build-vm --flake .#desktop-vm
-            desktop-vm = mkVm "desktop" { isVm = true; };
-            framework-vm = mkVm "framework" { isVm = true; };
-            xps-vm = mkVm "xps" { isVm = true; };
-          }
-          // (import ./hosts/iso { inherit inputs self; });
-
-          inherit lib;
-
-          libCustom = import ./lib.nix { inherit lib pkgs user; };
-
-          inherit self; # for repl debugging
-
-          templates = import ./templates;
-        };
-      systems = [
-        # systems for which you want to build the `perSystem` attributes
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-      perSystem =
-        { pkgs, ... }:
-        {
-          devShells.default = import ./shell.nix { inherit pkgs; };
-          packages = (import ./packages) { inherit inputs pkgs; };
-        };
-    });
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } (_: (inputs.import-tree ./modules));
 }
