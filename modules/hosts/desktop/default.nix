@@ -94,7 +94,7 @@
         zfs.encryption = false;
 
         programs = {
-          deadbeef.enable = false;
+          deadbeef.enable = true;
           distrobox.enable = true;
           hyprland = {
             qtile = false;

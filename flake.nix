@@ -62,5 +62,7 @@
 
   outputs =
     inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } (_: (inputs.import-tree ./modules));
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      _: (inputs.import-tree ./modules) // { flake.templates = import ./templates; }
+    );
 }
