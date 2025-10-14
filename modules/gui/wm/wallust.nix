@@ -7,7 +7,6 @@ let
     listToAttrs
     mapAttrs
     mapAttrs'
-    mkEnableOption
     mkIf
     mkOption
     nameValuePair
@@ -22,13 +21,10 @@ let
 in
 {
   flake.modules.nixos.core =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       options.custom = {
         programs.wallust = {
-          enable = mkEnableOption "wallust" // {
-            default = config.custom.wm != "tty";
-          };
           colorscheme = mkOption {
             type = nullOr str;
             default = null;
@@ -62,7 +58,7 @@ in
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       host,
@@ -90,7 +86,7 @@ in
         ) cfg.templates;
       };
     in
-    {
+    mkIf config.custom.isWm {
       environment.systemPackages = [ pkgs.wallust ];
 
       hj.xdg.config.files = {
@@ -106,14 +102,14 @@ in
 
       # setup wallust colorschemes for shells
       programs = {
-        bash.interactiveShellInit = mkIf config.custom.programs.wallust.enable ''
+        bash.interactiveShellInit = ''
           wallust_colors="${config.hj.xdg.cache.directory}/wallust/sequences"
           if [ -e "$wallust_colors" ]; then
             command cat "$wallust_colors"
           fi
         '';
 
-        fish.interactiveShellInit = mkIf config.custom.programs.wallust.enable ''
+        fish.interactiveShellInit = ''
           set wallust_colors "${config.hj.xdg.cache.directory}/wallust/sequences"
           if test -e "$wallust_colors"
               command cat "$wallust_colors"

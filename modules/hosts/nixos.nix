@@ -59,11 +59,7 @@ in
     # VMs from config
     vm = mkVm "vm" { };
     # hyprland can be used within a VM on AMD
-    vm-hyprland = mkVm "vm" {
-      extraConfig = {
-        home-manager.users.${user}.custom.wm = lib.mkForce "hyprland";
-      };
-    };
+    vm-hyprland = mkVm "vm" { };
     # create VMs for each host configuration, build using
     # nixos-rebuild build-vm --flake .#desktop-vm
     desktop-vm = mkVm "desktop" { isVm = true; };

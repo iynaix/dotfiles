@@ -4,7 +4,6 @@ let
     elemAt
     getExe
     mkEnableOption
-    mkIf
     mkOption
     mod
     optionalString
@@ -165,7 +164,7 @@ in
 
     };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     # generic functionality for all WMs
     {
       config,
@@ -180,105 +179,102 @@ in
         "ghostty";
     in
     {
-      config = mkIf config.custom.isWm {
-        custom = {
-          startup = [
+      custom = {
+        startup = [
+          {
+            app-id = "helium";
+            spawn = [
+              (getExe (
+                pkgs.writeShellApplication {
+                  name = "init-helium";
+                  runtimeInputs = [
+                    pkgs.custom.helium
+                    config.custom.programs.dotfiles.package
+                  ];
+                  text = ''
+                    helium --profile-directory=Default &
+                    sleep 1; helium --incognito &
+                    ${optionalString (config.custom.wm == "niri") "sleep 5; niri-resize-workspace 1"}
+                  '';
+                }
+              ))
+            ];
+            workspace = 1;
+          }
+
+          # file manager
+          {
+            app-id = "nemo";
+            # NOTE: nemo seems ignore --class and --name flags?
+            spawn = [ "nemo" ];
+            workspace = 4;
+          }
+
+          # terminal
+          # NOTE: use --class instead of --title to fix ghostty not properly setting initialTitle:
+          # https://github.com/ghostty-org/ghostty/discussions/8804
+          rec {
+            app-id = "${config.custom.programs.terminal.app-id}-vertical";
+            spawn = [
+              termExe
+              "--class=${app-id}"
+            ];
+            workspace = 7;
+            niriArgs = {
+              open-maximized = true;
+            };
+          }
+
+          # librewolf for discord
+          {
+            app-id = "librewolf";
+            spawn = [ "librewolf" ];
+            workspace = 9;
+            niriArgs = {
+              open-maximized = true;
+            };
+          }
+
+          # download related
+          rec {
+            enable = host == "desktop";
+            app-id = "${config.custom.programs.terminal.app-id}-dl";
+            spawn = [
+              termExe
+              "--class=${app-id}"
+            ];
+            workspace = 10;
+          }
+          rec {
+            enable = host == "desktop";
+            app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
+            spawn = [
+              termExe
+              "--class=${app-id}"
+              "-e"
+              "nvim"
+              "${config.hj.directory}/Desktop/yt.txt"
+            ];
+            workspace = 10;
+          }
+          /*
+            # fix gparted "cannot open display: :0" error
             {
-              app-id = "helium";
               spawn = [
-                (getExe (
-                  pkgs.writeShellApplication {
-                    name = "init-helium";
-                    runtimeInputs = [
-                      pkgs.custom.helium
-                      config.custom.programs.dotfiles.package
-                    ];
-                    text = ''
-                      helium --profile-directory=Default &
-                      sleep 1; helium --incognito &
-                      ${optionalString (config.custom.wm == "niri") "sleep 5; niri-resize-workspace 1"}
-                    '';
-                  }
-                ))
+                (getExe pkgs.xorg.xhost)
+                "+local:${user}"
               ];
-              workspace = 1;
             }
 
-            # file manager
+            # fix Authorization required, but no authorization protocol specified error
             {
-              app-id = "nemo";
-              # NOTE: nemo seems ignore --class and --name flags?
-              spawn = [ "nemo" ];
-              workspace = 4;
-            }
-
-            # terminal
-            # NOTE: use --class instead of --title to fix ghostty not properly setting initialTitle:
-            # https://github.com/ghostty-org/ghostty/discussions/8804
-            rec {
-              app-id = "${config.custom.programs.terminal.app-id}-vertical";
               spawn = [
-                termExe
-                "--class=${app-id}"
+                (getExe pkgs.xorg.xhost)
+                "si:localuser:root"
               ];
-              workspace = 7;
-              niriArgs = {
-                open-maximized = true;
-              };
             }
-
-            # librewolf for discord
-            {
-              app-id = "librewolf";
-              spawn = [ "librewolf" ];
-              workspace = 9;
-              niriArgs = {
-                open-maximized = true;
-              };
-            }
-
-            # download related
-            rec {
-              enable = host == "desktop";
-              app-id = "${config.custom.programs.terminal.app-id}-dl";
-              spawn = [
-                termExe
-                "--class=${app-id}"
-              ];
-              workspace = 10;
-            }
-            rec {
-              enable = host == "desktop";
-              app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
-              spawn = [
-                termExe
-                "--class=${app-id}"
-                "-e"
-                "nvim"
-                "${config.hj.directory}/Desktop/yt.txt"
-              ];
-              workspace = 10;
-            }
-            /*
-              # fix gparted "cannot open display: :0" error
-              {
-                spawn = [
-                  (getExe pkgs.xorg.xhost)
-                  "+local:${user}"
-                ];
-              }
-
-              # fix Authorization required, but no authorization protocol specified error
-              {
-                spawn = [
-                  (getExe pkgs.xorg.xhost)
-                  "si:localuser:root"
-                ];
-              }
-            */
-          ];
-        };
-
+          */
+        ];
       };
     };
 }

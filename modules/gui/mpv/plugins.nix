@@ -4,27 +4,15 @@ let
     concatStringsSep
     mapAttrsToList
     mkAfter
-    mkIf
     mkMerge
-    mkEnableOption
     ;
 in
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs = {
-        subliminal.enable = mkEnableOption "subliminal" // {
-          default = true;
-        };
-      };
-    };
-  };
-
   flake.modules.nixos.gui =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     mkMerge [
       # subliminal
-      (mkIf config.custom.programs.subliminal.enable {
+      {
         environment = {
           systemPackages = with pkgs; [
             python3Packages.subliminal
@@ -34,7 +22,7 @@ in
             subs = "subliminal download -l 'en' -l 'eng' -s";
           };
         };
-      })
+      }
 
       # modernz settings
       {

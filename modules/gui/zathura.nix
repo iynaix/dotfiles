@@ -1,13 +1,7 @@
 {
   flake.modules.nixos.gui =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { pkgs, ... }:
     let
-      inherit (lib) mkIf;
       # generated using `wallust theme Tokyo-Night`
       zathuraColors = ''
         set default-bg                  "#414868"
@@ -63,7 +57,7 @@
         destination = "/zathurarc";
       };
     in
-    mkIf (config.custom.wm != "tty") {
+    {
       custom.wrappers = [
         (_: _prev: {
           zathura = {

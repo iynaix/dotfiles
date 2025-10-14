@@ -9,16 +9,16 @@ let
 in
 {
   flake.modules.nixos.core =
-    { config, isLaptop, ... }:
+    { isLaptop, ... }:
     {
       options.custom = {
         lock.enable = mkEnableOption "screen locking of host" // {
-          default = config.custom.isWm && isLaptop;
+          default = isLaptop;
         };
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       isLaptop,
@@ -38,7 +38,7 @@ in
       };
       lockCmd = getExe lockPkg;
     in
-    mkMerge [
+    mkIf config.custom.isWm (mkMerge [
       (mkIf config.custom.lock.enable {
         programs.hyprlock.enable = true;
 
@@ -201,5 +201,5 @@ in
 
         # TODO: mango doesn't support switch events yet?
       })
-    ];
+    ]);
 }

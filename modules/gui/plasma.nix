@@ -1,15 +1,7 @@
 {
-  flake.modules.nixos.gui =
+  flake.modules.nixos.plasma =
+    { pkgs, ... }:
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) mkIf;
-    in
-    mkIf (config.custom.wm == "plasma") {
       services = {
         xserver.enable = true;
         xserver.desktopManager.plasma6.enable = true;

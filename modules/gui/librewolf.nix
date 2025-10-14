@@ -9,14 +9,10 @@
       ...
     }:
     let
-      inherit (lib)
-        concatStringsSep
-        mkIf
-        optionals
-        ;
+      inherit (lib) concatStringsSep optionals;
       configPath = ".config/.librewolf";
     in
-    mkIf (config.custom.wm != "tty") {
+    {
       programs.firefox = {
         enable = true;
         package = pkgs.librewolf.overrideAttrs (o: {

@@ -1,39 +1,33 @@
 {
   flake.modules.nixos.core =
-    {
-      config,
-      inputs,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) optionals;
-    in
+    { inputs, pkgs, ... }:
     {
       environment = {
-        systemPackages =
-          with pkgs;
-          [
-            asciiquarium
-            cbonsai
-            cmatrix
-            fastfetch
-            nitch
-            pipes-rs
-            scope-tui
-            tenki
-            terminal-colors
-            (inputs.wfetch.packages.${pkgs.system}.default.override { iynaixos = true; })
-          ]
-          ++ optionals (config.custom.wm != "tty") [
-            imagemagick
-          ];
+        systemPackages = with pkgs; [
+          asciiquarium
+          cbonsai
+          cmatrix
+          fastfetch
+          nitch
+          pipes-rs
+          scope-tui
+          tenki
+          terminal-colors
+          (inputs.wfetch.packages.${pkgs.system}.default.override { iynaixos = true; })
+        ];
 
         shellAliases = {
           neofetch = "fastfetch --config neofetch";
           wwfetch = "wfetch --wallpaper";
         };
       };
+    };
+
+  flake.modules.nixos.gui =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [
+        pkgs.imagemagick
+      ];
     };
 }

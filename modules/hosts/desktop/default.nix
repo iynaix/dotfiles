@@ -14,6 +14,22 @@ topLevel: {
     {
       imports = with topLevel.config.flake.modules.nixos; [
         gui
+
+        # WM / DE
+        wm
+        # hyprland
+        # niri
+        # mango
+        # plasma
+
+        # programs
+        deadbeef
+        freecad
+        orca-slicer
+        obs-studio
+        path-of-building
+        vlc
+        # zoom
       ];
 
       custom = {
@@ -98,19 +114,13 @@ topLevel: {
         zfs.encryption = false;
 
         programs = {
-          deadbeef.enable = true;
           distrobox.enable = true;
           hyprland = {
             qtile = false;
           };
-          freecad.enable = true;
           hyprnstack.enable = true;
           niri.blur.enable = false;
-          obs-studio.enable = true;
-          orca-slicer.enable = true;
-          pathofbuilding.enable = true;
           rclip.enable = true;
-          vlc.enable = true;
           wallfacer.enable = true;
           wallpaper-tools.enable = true;
 

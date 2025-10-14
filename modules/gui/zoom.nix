@@ -1,15 +1,7 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs.zoom.enable = lib.mkEnableOption "Zoom";
-    };
-
-  };
-
-  flake.modules.nixos.gui =
-    { config, pkgs, ... }:
-    lib.mkIf config.custom.programs.zoom.enable {
+  flake.modules.nixos.zoom =
+    { pkgs, ... }:
+    {
       environment.systemPackages = [ pkgs.zoom-us ];
 
       hj.".config/zoomus.conf" = {

@@ -1,21 +1,7 @@
-{ lib, ... }:
-let
-  inherit (lib) mkEnableOption mkIf;
-in
 {
-  flake.modules.nixos.core =
-    { config, ... }:
+  flake.modules.nixos.path-of-building =
+    { pkgs, ... }:
     {
-      options.custom = {
-        programs.pathofbuilding.enable = mkEnableOption "pathofbuilding" // {
-          default = config.custom.wm != "tty";
-        };
-      };
-    };
-
-  flake.modules.nixos.gui =
-    { config, pkgs, ... }:
-    mkIf config.custom.programs.pathofbuilding.enable {
       environment.systemPackages = [ pkgs.custom.path-of-building ];
 
       custom.programs.hyprland.settings = {

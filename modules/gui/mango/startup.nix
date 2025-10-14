@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     { config, lib, ... }:
     let
       inherit (lib) mkIf;

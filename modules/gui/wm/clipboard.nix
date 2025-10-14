@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       lib,
@@ -7,7 +7,12 @@
       ...
     }:
     let
-      inherit (lib) escapeShellArgs getExe getExe';
+      inherit (lib)
+        escapeShellArgs
+        getExe
+        getExe'
+        mkIf
+        ;
       extraOptionsStr = escapeShellArgs [
         "-max-dedupe-search"
         "10"
@@ -15,7 +20,7 @@
         "500"
       ];
     in
-    {
+    mkIf config.custom.isWm {
       environment.systemPackages = with pkgs; [
         # clipboard history
         cliphist

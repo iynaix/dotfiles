@@ -12,10 +12,8 @@
         assertMsg
         mkEnableOption
         mkIf
-        optionalAttrs
         versionOlder
         ;
-      # NOTE: nvidia.enable is a home-manager option so it can be referenced within home-manager as well
     in
     {
       options.custom = {
@@ -60,7 +58,7 @@
           ];
         };
 
-        environment.variables = optionalAttrs config.custom.isWm {
+        environment.variables = {
           LIBVA_DRIVER_NAME = "nvidia";
           GBM_BACKEND = "nvidia-drm";
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";

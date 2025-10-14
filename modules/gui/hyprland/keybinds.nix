@@ -16,7 +16,7 @@ in
     };
   };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       libCustom,

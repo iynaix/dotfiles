@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       lib,
@@ -78,7 +78,7 @@
       # NOTE: real dunst config is read from here
       dunstConfigpath = "${config.hj.xdg.config.directory}/dunst/dunstrc";
     in
-    mkIf (config.custom.wm != "tty") {
+    mkIf config.custom.isWm {
       # keybind to show dunst history
       custom.programs = {
         hyprland.settings.bind = [

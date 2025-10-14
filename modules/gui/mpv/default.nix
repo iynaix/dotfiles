@@ -5,7 +5,6 @@ let
     generators
     literalExpression
     mapAttrsToList
-    mkIf
     mkMerge
     mkOption
     optionalString
@@ -158,7 +157,7 @@ in
         listsAsDuplicateKeys = true;
       };
     in
-    mkIf (config.custom.wm != "tty") (mkMerge [
+    mkMerge [
       {
         custom.programs = {
           mpv = {
@@ -334,5 +333,5 @@ in
             })
           ];
       }
-    ]);
+    ];
 }

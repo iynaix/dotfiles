@@ -7,13 +7,9 @@
       ...
     }:
     let
-      inherit (lib)
-        gvariant
-        mkIf
-        optionals
-        ;
+      inherit (lib) gvariant optionals;
     in
-    mkIf (config.custom.wm != "tty") {
+    {
       environment.systemPackages = with pkgs; [
         p7zip-rar # support for encrypted archives
         nemo-fileroller

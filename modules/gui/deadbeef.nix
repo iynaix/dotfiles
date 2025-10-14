@@ -1,17 +1,7 @@
-{ lib, ... }:
-let
-  inherit (lib) mkEnableOption mkIf;
-in
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs.deadbeef.enable = mkEnableOption "deadbeef";
-    };
-  };
-
-  flake.modules.nixos.gui =
-    { config, pkgs, ... }:
-    mkIf config.custom.programs.deadbeef.enable {
+  flake.modules.nixos.deadbeef =
+    { pkgs, ... }:
+    {
       environment.systemPackages = [ pkgs.deadbeef ];
 
       custom.persist = {

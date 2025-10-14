@@ -9,7 +9,6 @@ let
     mkIf
     mkMerge
     mkOption
-    optionalAttrs
     optionalString
     optionals
     ;
@@ -46,7 +45,7 @@ in
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       libCustom,
@@ -180,8 +179,6 @@ in
                     resolution = "1504x2256";
                   }
                 ];
-              }
-              // optionalAttrs config.custom.isWm {
                 wallpaper_command = "wallpaper $1";
               };
             in

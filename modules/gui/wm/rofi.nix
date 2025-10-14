@@ -1,15 +1,7 @@
 { lib, ... }:
 let
-  inherit (lib)
-    mkIf
-    mkOption
-    optionals
-    ;
-  inherit (lib.types)
-    enum
-    int
-    nullOr
-    ;
+  inherit (lib) mkIf mkOption optionals;
+  inherit (lib.types) enum int nullOr;
 in
 {
   flake.modules.nixos.core = {
@@ -48,7 +40,7 @@ in
     };
   };
 
-  flake.modules.nixos.gui =
+  flake.modules.nixos.wm =
     {
       config,
       isNixOS,
@@ -111,7 +103,7 @@ in
       launcherPath = "${rofiThemes}/launchers/type-2/style-2.rasi";
       powermenuDir = "${rofiThemes}/powermenu/type-4";
     in
-    mkIf (config.custom.wm != "tty") {
+    mkIf config.custom.isWm {
       custom.wrappers = [
         (_: prev: {
           rofi = {
@@ -176,7 +168,7 @@ in
           ];
         };
 
-        wallust.templates = mkIf config.custom.isWm {
+        wallust.templates = {
           # default launcher
           "rofi.rasi" = {
             text = patchRasi "rofi.rasi" launcherPath ''

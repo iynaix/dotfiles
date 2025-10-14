@@ -8,7 +8,7 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  inherit (flake) lib;
+  inherit (flake.inputs.nixpkgs) lib;
 in
 (
   flake.nixosConfigurations

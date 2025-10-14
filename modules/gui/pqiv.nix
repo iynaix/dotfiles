@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib) mkOption types;
 in
 {
   flake.modules.nixos.core = {
@@ -14,12 +14,8 @@ in
   };
 
   flake.modules.nixos.gui =
+    { config, pkgs, ... }:
     {
-      config,
-      pkgs,
-      ...
-    }:
-    mkIf (config.custom.wm != "tty") {
       # custom.wrappers = [
       #   (_: _prev: {
       #     pqiv = {
