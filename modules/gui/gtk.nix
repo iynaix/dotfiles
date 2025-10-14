@@ -1,44 +1,34 @@
+{ lib, ... }:
+let
+  inherit (lib)
+    attrNames
+    concatLines
+    concatMapStringsSep
+    gvariant
+    isBool
+    isString
+    literalExpression
+    mapAttrsToList
+    mkMerge
+    mkOption
+    optionalAttrs
+    ;
+  inherit (lib.types)
+    attrs
+    attrsOf
+    enum
+    int
+    package
+    number
+    listOf
+    str
+    ;
+in
 {
   flake.modules.nixos.core =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib)
-        attrNames
-        concatLines
-        concatMapStringsSep
-        gvariant
-        isBool
-        isString
-        literalExpression
-        mapAttrsToList
-        mkMerge
-        mkOption
-        optionalAttrs
-        ;
-      inherit (lib.types)
-        attrs
-        attrsOf
-        enum
-        int
-        package
-        number
-        listOf
-        str
-        ;
       gtkCfg = config.custom.gtk;
-      toIni = lib.generators.toINI {
-        mkKeyValue =
-          key: value:
-          let
-            value' = if lib.isBool value then lib.boolToString value else toString value;
-          in
-          "${lib.escape [ "=" ] key}=${value'}";
-      };
     in
     {
       options.custom = {
@@ -58,7 +48,6 @@
             }
           '';
         };
-
         gtk = {
           accents = mkOption {
             type = attrsOf str;
@@ -162,124 +151,134 @@
           };
         };
       };
+    };
 
-      config =
+  flake.modules.nixos.gui =
+    { config, pkgs, ... }:
+    let
+      gtkCfg = config.custom.gtk;
+      toIni = lib.generators.toINI {
+        mkKeyValue =
+          key: value:
+          let
+            value' = if lib.isBool value then lib.boolToString value else toString value;
+          in
+          "${lib.escape [ "=" ] key}=${value'}";
+      };
+      defaultIndexThemePackage = pkgs.writeTextFile {
+        name = "index.theme";
+        destination = "/share/icons/default/index.theme";
+        # Set name in icons theme, for compatibility with AwesomeWM etc. See:
+        # https://github.com/nix-community/home-manager/issues/2081
+        # https://wiki.archlinux.org/title/Cursor_themes#XDG_specification
+        text = ''
+          [Icon Theme]
+          Name=Default
+          Comment=Default Cursor Theme
+          Inherits=${gtkCfg.cursor.name}
+        '';
+      };
+      gtkSharedSettings = {
+        gtk-theme-name = gtkCfg.theme.name;
+        gtk-icon-theme-name = gtkCfg.iconTheme.name;
+        gtk-font-name = "${gtkCfg.font.name} 10";
+      };
+      toGtk2File =
+        key: value:
         let
-          defaultIndexThemePackage = pkgs.writeTextFile {
-            name = "index.theme";
-            destination = "/share/icons/default/index.theme";
-            # Set name in icons theme, for compatibility with AwesomeWM etc. See:
-            # https://github.com/nix-community/home-manager/issues/2081
-            # https://wiki.archlinux.org/title/Cursor_themes#XDG_specification
-            text = ''
-              [Icon Theme]
-              Name=Default
-              Comment=Default Cursor Theme
-              Inherits=${gtkCfg.cursor.name}
-            '';
-          };
-          gtkSharedSettings = {
-            gtk-theme-name = gtkCfg.theme.name;
-            gtk-icon-theme-name = gtkCfg.iconTheme.name;
-            gtk-font-name = "${gtkCfg.font.name} 10";
-          };
-          toGtk2File =
-            key: value:
-            let
-              value' =
-                if isBool value then
-                  (if value then "true" else "false")
-                else if isString value then
-                  "\"${value}\""
-                else
-                  toString value;
-            in
-            "${key} = ${value'}";
-          gtkIni = toIni {
-            Settings = gtkSharedSettings // {
-              gtk-application-prefer-dark-theme = 1;
-              gtk-error-bell = 0;
-            };
-          };
+          value' =
+            if isBool value then
+              (if value then "true" else "false")
+            else if isString value then
+              "\"${value}\""
+            else
+              toString value;
         in
-        {
-          environment = {
-            etc = {
-              "xdg/gtk-3.0/settings.ini".text = gtkIni;
-              "xdg/gtk-4.0/settings.ini".text = gtkIni;
-              "xdg/gtk-2.0/gtkrc".text = concatLines (mapAttrsToList toGtk2File gtkSharedSettings);
-            };
-
-            sessionVariables = {
-              GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
-              XCURSOR_SIZE = gtkCfg.cursor.size;
-              XCURSOR_THEME = gtkCfg.cursor.name;
-            }
-            // optionalAttrs (config.custom.wm == "hyprland") {
-              HYPRCURSOR_SIZE = gtkCfg.cursor.size;
-              HYPRCURSOR_THEME = gtkCfg.cursor.name;
-            };
-
-            systemPackages = with gtkCfg; [
-              theme.package
-              iconTheme.package
-              cursor.package
-            ];
-          };
-
-          fonts.packages = [
-            gtkCfg.font.package
-          ];
-
-          programs.dconf = {
-            enable = true;
-
-            # custom option, the default nesting is horrendous
-            profiles.user.databases = [
-              {
-                settings = mkMerge [
-                  {
-                    # disable dconf first use warning
-                    "ca/desrt/dconf-editor" = {
-                      show-warning = false;
-                    };
-                    # gtk related settings
-                    "org/gnome/desktop/interface" = {
-                      # set dark theme for gtk 4
-                      color-scheme = "prefer-dark";
-                      cursor-theme = gtkCfg.cursor.name;
-                      cursor-size = gvariant.mkUint32 gtkCfg.cursor.size;
-                      font-name = "${gtkCfg.font.name} 10";
-                      gtk-theme = "Tokyonight-Dark-Compact";
-                      icon-theme = "Tela-${gtkCfg.defaultAccent}-dark";
-                    };
-                  }
-                  config.custom.dconf.settings
-                ];
-              }
-            ];
-          };
-
-          # TODO: port home-manager option:
-          # qt.enable = true;
-
-          # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
-          hj.xdg = {
-            # use per user settings
-            config.files."gtk-3.0/bookmarks".text = concatMapStringsSep "\n" (
-              b: "file://${b}"
-            ) gtkCfg.bookmarks;
-
-            data.files."icons/default/index.theme".source =
-              "${defaultIndexThemePackage}/share/icons/default/index.theme";
-            data.files."icons/${gtkCfg.cursor.name}".source =
-              "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
-          };
-
-          # write theme accents into nix.json for rust to read
-          custom.programs.wallust.nixJson = {
-            themeAccents = gtkCfg.accents;
-          };
+        "${key} = ${value'}";
+      gtkIni = toIni {
+        Settings = gtkSharedSettings // {
+          gtk-application-prefer-dark-theme = 1;
+          gtk-error-bell = 0;
         };
+      };
+    in
+    {
+      environment = {
+        etc = {
+          "xdg/gtk-3.0/settings.ini".text = gtkIni;
+          "xdg/gtk-4.0/settings.ini".text = gtkIni;
+          "xdg/gtk-2.0/gtkrc".text = concatLines (mapAttrsToList toGtk2File gtkSharedSettings);
+        };
+
+        sessionVariables = {
+          GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
+          XCURSOR_SIZE = gtkCfg.cursor.size;
+          XCURSOR_THEME = gtkCfg.cursor.name;
+        }
+        // optionalAttrs (config.custom.wm == "hyprland") {
+          HYPRCURSOR_SIZE = gtkCfg.cursor.size;
+          HYPRCURSOR_THEME = gtkCfg.cursor.name;
+        };
+
+        systemPackages = with gtkCfg; [
+          theme.package
+          iconTheme.package
+          cursor.package
+        ];
+      };
+
+      fonts.packages = [
+        gtkCfg.font.package
+      ];
+
+      programs.dconf = {
+        enable = true;
+
+        # custom option, the default nesting is horrendous
+        profiles.user.databases = [
+          {
+            settings = mkMerge [
+              {
+                # disable dconf first use warning
+                "ca/desrt/dconf-editor" = {
+                  show-warning = false;
+                };
+                # gtk related settings
+                "org/gnome/desktop/interface" = {
+                  # set dark theme for gtk 4
+                  color-scheme = "prefer-dark";
+                  cursor-theme = gtkCfg.cursor.name;
+                  cursor-size = gvariant.mkUint32 gtkCfg.cursor.size;
+                  font-name = "${gtkCfg.font.name} 10";
+                  gtk-theme = "Tokyonight-Dark-Compact";
+                  icon-theme = "Tela-${gtkCfg.defaultAccent}-dark";
+                };
+              }
+              config.custom.dconf.settings
+            ];
+          }
+        ];
+      };
+
+      # TODO: port home-manager option:
+      # qt.enable = true;
+
+      # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
+      hj.xdg = {
+        # use per user settings
+        config.files."gtk-3.0/bookmarks".text = concatMapStringsSep "\n" (
+          b: "file://${b}"
+        ) gtkCfg.bookmarks;
+
+        data.files."icons/default/index.theme".source =
+          "${defaultIndexThemePackage}/share/icons/default/index.theme";
+        data.files."icons/${gtkCfg.cursor.name}".source =
+          "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
+      };
+
+      # write theme accents into nix.json for rust to read
+      custom.programs.wallust.nixJson = {
+        themeAccents = gtkCfg.accents;
+      };
     };
 }

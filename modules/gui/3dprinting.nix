@@ -1,17 +1,24 @@
+{ lib, ... }:
+let
+  inherit (lib) mkEnableOption mkIf mkMerge;
+in
 {
-  flake.modules.nixos.core =
+  flake.modules.nixos.core = {
+    options.custom = {
+      programs = {
+        freecad.enable = mkEnableOption "freecad";
+        orca-slicer.enable = mkEnableOption "orca-slicer";
+      };
+    };
+  };
+
+  flake.modules.nixos.gui =
     {
       config,
-      lib,
       pkgs,
       ...
     }:
     let
-      inherit (lib)
-        mkEnableOption
-        mkIf
-        mkMerge
-        ;
       # software rendering workaround for nvidia, see:
       # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
       nvidiaSoftwareRenderingWorkaround =
@@ -37,85 +44,76 @@
         else
           pkg;
     in
-    {
-      options.custom = {
-        programs = {
-          freecad.enable = mkEnableOption "freecad";
-          orca-slicer.enable = mkEnableOption "orca-slicer";
+    mkIf (config.custom.wm != "tty") (mkMerge [
+      # slicers
+      (mkIf config.custom.programs.orca-slicer.enable {
+        environment.systemPackages = [
+          (pkgs.symlinkJoin {
+            name = "orca-slicer";
+            paths = [
+              # software rendering workaround for nvidia, see:
+              # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
+              (nvidiaSoftwareRenderingWorkaround "orca-slicer" pkgs.orca-slicer)
+              # associate step files with orca-slicer
+              (pkgs.writeTextFile {
+                name = "model-step.xml";
+                text = # xml
+                  ''
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+                        <mime-type type="model/step">
+                            <glob pattern="*.step"/>
+                            <glob pattern="*.stp"/>
+                            <comment>STEP CAD File</comment>
+                        </mime-type>
+                    </mime-info>
+                  '';
+                executable = true;
+                destination = "/share/mime/packages/model-step.xml";
+              })
+            ];
+            meta.mainProgram = "orca-slicer";
+          })
+        ];
+
+        xdg = {
+          mime = {
+            addedAssociations."model/step" = "OrcaSlicer.desktop";
+            # allow orca-slicer to be open bambu studio links
+            defaultApplications = {
+              "model/step" = "OrcaSlicer.desktop";
+              "x-scheme-handler/orcaslicer" = "OrcaSlicer.desktop";
+              "x-scheme-handler/bambustudio" = "OrcaSlicer.desktop"; # makerworld
+              "x-scheme-handler/prusaslicer" = "OrcaSlicer.desktop"; # printables
+            };
+          };
         };
-      };
 
-      config = mkIf (config.custom.wm != "tty") (mkMerge [
-        # slicers
-        (mkIf config.custom.programs.orca-slicer.enable {
-          environment.systemPackages = [
-            (pkgs.symlinkJoin {
-              name = "orca-slicer";
-              paths = [
-                # software rendering workaround for nvidia, see:
-                # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
-                (nvidiaSoftwareRenderingWorkaround "orca-slicer" pkgs.orca-slicer)
-                # associate step files with orca-slicer
-                (pkgs.writeTextFile {
-                  name = "model-step.xml";
-                  text = # xml
-                    ''
-                      <?xml version="1.0" encoding="UTF-8"?>
-                      <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-                          <mime-type type="model/step">
-                              <glob pattern="*.step"/>
-                              <glob pattern="*.stp"/>
-                              <comment>STEP CAD File</comment>
-                          </mime-type>
-                      </mime-info>
-                    '';
-                  executable = true;
-                  destination = "/share/mime/packages/model-step.xml";
-                })
-              ];
-              meta.mainProgram = "orca-slicer";
-            })
-          ];
-
-          xdg = {
-            mime = {
-              addedAssociations."model/step" = "OrcaSlicer.desktop";
-              # allow orca-slicer to be open bambu studio links
-              defaultApplications = {
-                "model/step" = "OrcaSlicer.desktop";
-                "x-scheme-handler/orcaslicer" = "OrcaSlicer.desktop";
-                "x-scheme-handler/bambustudio" = "OrcaSlicer.desktop"; # makerworld
-                "x-scheme-handler/prusaslicer" = "OrcaSlicer.desktop"; # printables
-              };
-            };
+        custom.persist = {
+          home = {
+            directories = [
+              ".config/OrcaSlicer"
+            ];
           };
+        };
+      })
 
-          custom.persist = {
-            home = {
-              directories = [
-                ".config/OrcaSlicer"
-              ];
-            };
+      # CAD
+      (mkIf config.custom.programs.freecad.enable {
+        environment.systemPackages = [
+          # freecad segfaults on starup on nvidia
+          # https://github.com/NixOS/nixpkgs/issues/366299
+          (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
+        ];
+
+        custom.persist = {
+          home = {
+            directories = [
+              ".config/FreeCAD"
+              ".local/share/FreeCAD"
+            ];
           };
-        })
-
-        # CAD
-        (mkIf config.custom.programs.freecad.enable {
-          environment.systemPackages = [
-            # freecad segfaults on starup on nvidia
-            # https://github.com/NixOS/nixpkgs/issues/366299
-            (nvidiaSoftwareRenderingWorkaround "FreeCAD" pkgs.freecad-wayland)
-          ];
-
-          custom.persist = {
-            home = {
-              directories = [
-                ".config/FreeCAD"
-                ".local/share/FreeCAD"
-              ];
-            };
-          };
-        })
-      ]);
-    };
+        };
+      })
+    ]);
 }

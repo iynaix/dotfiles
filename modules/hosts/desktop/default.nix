@@ -1,4 +1,4 @@
-{
+topLevel: {
   flake.modules.nixos.host_desktop =
     {
       config,
@@ -12,6 +12,10 @@
       inherit (lib) mkIf mkMerge;
     in
     {
+      imports = with topLevel.config.flake.modules.nixos; [
+        gui
+      ];
+
       custom = {
         specialisation = {
           niri.enable = true;

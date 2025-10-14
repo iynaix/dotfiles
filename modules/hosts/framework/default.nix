@@ -1,4 +1,4 @@
-{
+topLevel: {
   flake.modules.nixos.host_framework =
     {
       config,
@@ -10,6 +10,10 @@
       inherit (lib) getExe;
     in
     {
+      imports = with topLevel.config.flake.modules.nixos; [
+        gui
+      ];
+
       custom = {
         specialisation = {
           niri.enable = true;

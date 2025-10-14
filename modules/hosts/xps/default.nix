@@ -1,4 +1,4 @@
-{
+topLevel: {
   flake.modules.nixos.host_xps =
     {
       config,
@@ -10,7 +10,9 @@
       inherit (lib) getExe mkIf;
     in
     {
-      imports = [ ./nixos-hardware.nix ];
+      imports = with topLevel.config.flake.modules.nixos; [
+        gui
+      ];
 
       custom = {
         hardware = {

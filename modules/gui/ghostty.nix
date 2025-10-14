@@ -1,14 +1,38 @@
+{ lib, ... }:
+let
+  inherit (lib) getExe mkOption types;
+  inherit (types) package str;
+in
 {
   flake.modules.nixos.core =
+    { config, pkgs, ... }:
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+      options.custom = {
+        # terminal options
+        programs.terminal = {
+          package = mkOption {
+            type = package;
+            default = pkgs.ghostty;
+            description = "Package to use for the terminal";
+          };
+
+          app-id = mkOption {
+            type = str;
+            description = "app-id (wm class) for the terminal";
+          };
+
+          desktop = mkOption {
+            type = str;
+            default = "${config.custom.programs.terminal.package.pname}.desktop";
+            description = "Name of desktop file for the terminal";
+          };
+        };
+      };
+    };
+
+  flake.modules.nixos.gui =
+    { config, pkgs, ... }:
     let
-      inherit (lib) getExe mkOption types;
-      inherit (types) package str;
       ghosttyConf = {
         alpha-blending = "linear-corrected";
         app-notifications = "no-clipboard-copy";
@@ -42,53 +66,29 @@
       fishPath = getExe pkgs.fish;
     in
     {
-      options.custom = {
-        # terminal options
-        programs.terminal = {
-          package = mkOption {
-            type = package;
-            default = pkgs.ghostty;
-            description = "Package to use for the terminal";
-          };
+      # re-enable the wrapper when desktop files are patched
+      # https://github.com/Lassulus/wrappers/issues/3
+      # custom.wrappers = [
+      #   (_: _prev: {
+      #     ghostty = {
+      #       flags = {
+      #         "--config-default-files" = false;
+      #         # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+      #         # default location
+      #         "--config-file" = toGhosttyConf ghosttyConf;
+      #       };
+      #       flagSeparator = "=";
+      #     };
+      #   })
+      # ];
 
-          app-id = mkOption {
-            type = str;
-            description = "app-id (wm class) for the terminal";
-          };
+      environment.systemPackages = [ pkgs.ghostty ];
 
-          desktop = mkOption {
-            type = str;
-            default = "${config.custom.programs.terminal.package.pname}.desktop";
-            description = "Name of desktop file for the terminal";
-          };
-        };
-      };
+      hj.xdg.config.files."ghostty/config".source = toGhosttyConf ghosttyConf;
 
-      config = {
-        # re-enable the wrapper when desktop files are patched
-        # https://github.com/Lassulus/wrappers/issues/3
-        # custom.wrappers = [
-        #   (_: _prev: {
-        #     ghostty = {
-        #       flags = {
-        #         "--config-default-files" = false;
-        #         # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-        #         # default location
-        #         "--config-file" = toGhosttyConf ghosttyConf;
-        #       };
-        #       flagSeparator = "=";
-        #     };
-        #   })
-        # ];
-
-        environment.systemPackages = [ pkgs.ghostty ];
-
-        hj.xdg.config.files."ghostty/config".source = toGhosttyConf ghosttyConf;
-
-        custom.programs.terminal = {
-          app-id = "com.mitchellh.ghostty";
-          desktop = "com.mitchellh.ghostty.desktop";
-        };
+      custom.programs.terminal = {
+        app-id = "com.mitchellh.ghostty";
+        desktop = "com.mitchellh.ghostty.desktop";
       };
     };
 }

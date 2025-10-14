@@ -1,41 +1,31 @@
+{ lib, ... }:
+let
+  inherit (lib)
+    elemAt
+    getExe
+    mkEnableOption
+    mkIf
+    mkOption
+    mod
+    optionalString
+    ;
+  inherit (lib.types)
+    attrs
+    bool
+    enum
+    float
+    int
+    nonEmptyListOf
+    listOf
+    nullOr
+    oneOf
+    str
+    submodule
+    ;
+in
 {
   flake.modules.nixos.core =
-    # generic functionality for all WMs
-    {
-      config,
-      host,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib)
-        elemAt
-        getExe
-        mkEnableOption
-        mkIf
-        mkOption
-        mod
-        optionalString
-        ;
-      inherit (lib.types)
-        attrs
-        bool
-        enum
-        float
-        int
-        nonEmptyListOf
-        listOf
-        nullOr
-        oneOf
-        str
-        submodule
-        ;
-      # ensure setting terminal title using --title or exec with -e works
-      termExe =
-        assert config.custom.programs.terminal.package.pname == "ghostty";
-        "ghostty";
-    in
+    { config, ... }:
     {
       options.custom = {
         wm = mkOption {
@@ -173,6 +163,23 @@
         };
       };
 
+    };
+
+  flake.modules.nixos.gui =
+    # generic functionality for all WMs
+    {
+      config,
+      host,
+      pkgs,
+      ...
+    }:
+    let
+      # ensure setting terminal title using --title or exec with -e works
+      termExe =
+        assert config.custom.programs.terminal.package.pname == "ghostty";
+        "ghostty";
+    in
+    {
       config = mkIf config.custom.isWm {
         custom = {
           startup = [

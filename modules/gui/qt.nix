@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.modules.nixos.gui =
     # make qt use a dark theme, adapted from:
     # https://github.com/fufexan/dotfiles/blob/main/home/programs/qt.nix
     # also see:

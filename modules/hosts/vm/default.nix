@@ -1,10 +1,14 @@
-{
+topLevel: {
   flake.modules.nixos.host_vm =
     { lib, pkgs, ... }:
     let
       inherit (lib) getExe';
     in
     {
+      imports = with topLevel.config.flake.modules.nixos; [
+        gui
+      ];
+
       custom = {
         hardware = {
           monitors = [

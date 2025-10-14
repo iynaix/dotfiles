@@ -1,31 +1,24 @@
+{ lib, ... }:
+let
+  inherit (lib)
+    concatMapStringsSep
+    getExe
+    getExe'
+    head
+    last
+    mkEnableOption
+    mkIf
+    mkOption
+    optionals
+    optionalString
+    range
+    replaceStrings
+    ;
+  inherit (lib.types) lines submodule;
+in
 {
   flake.modules.nixos.core =
-    {
-      config,
-      isNixOS,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib)
-        concatMapStringsSep
-        getExe
-        getExe'
-        head
-        last
-        mkEnableOption
-        mkIf
-        mkOption
-        optionals
-        optionalString
-        range
-        replaceStrings
-        ;
-      inherit (lib.strings) toJSON;
-      inherit (lib.types) lines submodule;
-      cfg = config.custom.programs.waybar;
-    in
+    { pkgs, ... }:
     {
       options.custom = {
         programs.waybar = {
@@ -43,7 +36,21 @@
           hidden = mkEnableOption "Hidden waybar by default";
         };
       };
+    };
 
+  flake.modules.nixos.gui =
+    {
+      config,
+      isNixOS,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      inherit (lib.strings) toJSON;
+      cfg = config.custom.programs.waybar;
+    in
+    {
       config = mkIf config.custom.isWm {
         programs.waybar.enable = isNixOS;
 
