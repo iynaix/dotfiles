@@ -7,8 +7,6 @@
       ...
     }:
     {
-      custom.hardware.nvidia.enable = true;
-
       # enable nvidia support
       services.xserver.videoDrivers = [ "nvidia" ];
 

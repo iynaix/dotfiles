@@ -164,13 +164,9 @@ fn main() {
             }
             WallpaperSubcommand::History => pqiv::show_history(),
             WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
-            #[cfg(feature = "dedupe")]
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
-            #[cfg(feature = "wallfacer")]
             WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
-            #[cfg(feature = "wallfacer")]
             WallpaperSubcommand::Add(args) => wallfacer::add(args),
-            #[cfg(feature = "rclip")]
             WallpaperSubcommand::Search(args) => search::search(args),
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),

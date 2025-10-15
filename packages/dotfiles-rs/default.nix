@@ -16,9 +16,6 @@
   wallust,
   wlr-randr,
   wm ? "hyprland",
-  useDedupe ? false,
-  useRclip ? false,
-  useWallfacer ? false,
 }:
 assert lib.assertOneOf "dotfiles-rs wm" wm [
   "hyprland"
@@ -41,10 +38,7 @@ rustPlatform.buildRustPackage {
   buildFeatures =
     lib.optionals (wm == "hyprland") [ "hyprland" ]
     ++ lib.optionals (wm == "niri") [ "niri" ]
-    ++ lib.optionals (wm == "mango") [ "mango" ]
-    ++ lib.optionals useRclip [ "rclip" ]
-    ++ lib.optionals useWallfacer [ "wallfacer" ]
-    ++ lib.optionals useDedupe [ "dedupe" ];
+    ++ lib.optionals (wm == "mango") [ "mango" ];
 
   # create files for shell autocomplete
   nativeBuildInputs = [
@@ -99,19 +93,25 @@ rustPlatform.buildRustPackage {
     ''
       for prog in ${toString progs}; do
         wrapProgram $out/bin/$prog --prefix PATH : ${
-          lib.makeBinPath (
-            [
-              dconf
-              procps
-              pqiv
-              rsync
-              wallust
-              swww
-              wlr-randr
-            ]
-            ++ lib.optionals useDedupe [ czkawka ]
-            ++ lib.optionals useRclip [ rclip ]
-          )
+          lib.makeBinPath [
+            czkawka
+            dconf
+            procps
+            rclip
+            rsync
+            wallust
+            swww
+            wlr-randr
+            # fix window resizing on the first image in niri if called in a keybind
+            (
+              if wm == "niri" then
+                pqiv.overrideAttrs (o: {
+                  patches = (o.patches or [ ]) ++ [ ./pqiv-gdk-wayland.patch ];
+                })
+              else
+                pqiv
+            )
+          ]
         }
       done
     '';

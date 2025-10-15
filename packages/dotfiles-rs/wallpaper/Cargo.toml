@@ -4,10 +4,7 @@ version.workspace = true
 edition.workspace = true
 
 [features]
-default = ["rclip", "wallfacer", "dedupe"]
-dedupe = []
-rclip = []
-wallfacer = []
+default = []
 hyprland = []
 niri = []
 mango = []

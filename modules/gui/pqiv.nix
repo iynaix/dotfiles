@@ -25,9 +25,7 @@ in
       # ];
 
       # TODO: remove when wrappers patches desktop files
-      environment.etc."xdg/pqivrc".text = config.custom.programs.pqiv.settings;
-
-      custom.programs.pqiv.settings = ''
+      environment.etc."xdg/pqivrc".text = ''
         [options]
         box-colors = #FFFFFF:#000000
         disable-backends = archive,archive_cbx,libav,poppler,spectre,wand
@@ -42,6 +40,8 @@ in
         toggle_scale_mode(5)
 
         [keybindings]
+        c { command(nomacs $1) }
+        m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in" }
         t { montage_mode_enter() }
         w { command(wallpaper $1) }
         x { command(rm $1) }
@@ -58,13 +58,24 @@ in
         }
       '';
 
-      environment.systemPackages = [ pkgs.pqiv ];
+      environment.systemPackages = with pkgs; [
+        pqiv
+        nomacs
+      ];
 
       xdg.mime.defaultApplications = {
         "image/jpeg" = "pqiv.desktop";
         "image/gif" = "pqiv.desktop";
         "image/webp" = "pqiv.desktop";
         "image/png" = "pqiv.desktop";
+      };
+
+      custom.persist = {
+        home = {
+          directories = [
+            ".config/nomacs"
+          ];
+        };
       };
     };
 }

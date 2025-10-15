@@ -20,7 +20,6 @@ pub fn backup(args: BackupArgs) {
     .expect("failed to backup wallpapers");
 
     // update rclip database
-    #[cfg(feature = "rclip")]
     execute::command_args!("rclip", "--filepath-only", "cat")
         .current_dir(wallpaper::dir())
         .stdout(Stdio::null())

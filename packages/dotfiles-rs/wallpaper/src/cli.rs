@@ -129,7 +129,6 @@ pub enum WallpaperSubcommand {
     )]
     Rofi,
 
-    #[cfg(feature = "dedupe")]
     #[command(
         name = "dedupe",
         visible_aliases = ["czkawka", "unique", "uniq"],
@@ -137,7 +136,6 @@ pub enum WallpaperSubcommand {
     )]
     Dedupe,
 
-    #[cfg(feature = "wallfacer")]
     #[command(
         name = "edit",
         visible_alias = "recrop",
@@ -145,14 +143,12 @@ pub enum WallpaperSubcommand {
     )]
     Edit(EditArgs),
 
-    #[cfg(feature = "wallfacer")]
     #[command(
         name = "add",
         about = "Processes wallpapers with upscaling and vertical crop"
     )]
     Add(AddArgs),
 
-    #[cfg(feature = "rclip")]
     #[command(
         name = "search",
         visible_aliases = ["rg", "grep", "find", "rclip"],

@@ -2,6 +2,7 @@
   flake.modules.nixos.gui =
     {
       config,
+      host,
       lib,
       pkgs,
       ...
@@ -77,7 +78,7 @@
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]
-        ++ optionals config.custom.programs.wallpaper-tools.enable [
+        ++ optionals (host == "desktop") [
           "${config.hj.directory}/Pictures/wallpapers_in Walls In"
         ]
         ++ [

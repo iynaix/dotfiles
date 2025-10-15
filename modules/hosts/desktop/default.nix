@@ -30,6 +30,7 @@ topLevel: {
         obs-studio
         path-of-building
         vlc
+        wallfacer
         # zoom
 
         # hardware
@@ -126,9 +127,6 @@ topLevel: {
           };
           hyprnstack.enable = true;
           niri.blur.enable = false;
-          rclip.enable = true;
-          wallfacer.enable = true;
-          wallpaper-tools.enable = true;
 
           # wallust.colorscheme = "tokyo-night";
 
@@ -143,6 +141,13 @@ topLevel: {
               };
             };
           };
+        };
+
+        shell.packages = {
+          # fetch wallpapers from pixiv for user
+          pixiv = /* sh */ ''
+            direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
+          '';
         };
 
         services = {

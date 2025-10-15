@@ -4,13 +4,10 @@ let
     getExe
     getExe'
     max
-    mkAfter
-    mkEnableOption
     mkIf
     mkMerge
     mkOption
     optionalString
-    optionals
     ;
   inherit (lib.types) package;
 in
@@ -20,23 +17,11 @@ in
     {
       options.custom = {
         programs = {
-          rclip.enable = mkEnableOption "rclip";
-          wallfacer.enable = mkEnableOption "wallfacer";
-          wallpaper-tools.enable = mkEnableOption "additional tools for wallpapers, e.g. fetching and editing";
           dotfiles = {
             package = mkOption {
               type = package;
               default = pkgs.custom.dotfiles-rs.override {
                 inherit (config.custom) wm;
-                pqiv = pkgs.pqiv.overrideAttrs (o: {
-                  patches =
-                    (o.patches or [ ])
-                    # fix window resizing on the first image in niri if called in a keybind
-                    ++ optionals (config.custom.wm == "niri") [ ../niri/pqiv-gdk-wayland.patch ];
-                });
-                useDedupe = config.custom.programs.wallpaper-tools.enable;
-                useRclip = config.custom.programs.rclip.enable;
-                useWallfacer = config.custom.programs.wallfacer.enable;
               };
               description = "Package to use for dotfiles-rs";
             };
@@ -51,21 +36,22 @@ in
       pkgs,
       ...
     }:
-    let
-      tomlFormat = pkgs.formats.toml { };
-      wallpapers_dir = "${config.hj.directory}/Pictures/Wallpapers";
-      walls_in_dir = "${config.hj.directory}/Pictures/wallpapers_in";
-    in
     mkIf config.custom.isWm (mkMerge [
       {
         environment = {
-          shellAliases = {
-            wall = "wallpaper";
-          };
-          systemPackages = [
+          systemPackages = with pkgs; [
             config.custom.programs.dotfiles.package
-            pkgs.swww
+            swww
+            nomacs
           ];
+        };
+
+        custom.persist = {
+          home = {
+            directories = [
+              ".cache/czkawka"
+            ];
+          };
         };
 
         # handle setting the wallpaper on startup
@@ -136,102 +122,8 @@ in
         };
       }
 
-      (mkIf config.custom.programs.wallfacer.enable {
-        custom.shell.packages = {
-          wallfacer =
-            let
-              wallfacerConf = {
-                wallpapers_path = wallpapers_dir;
-                min_width = 3840; # 4k width
-                min_height = 2880; # lg dualup height
-                show_faces = false;
-
-                resolutions = [
-                  {
-                    name = "FW";
-                    description = "Framework";
-                    resolution = "2880x1920";
-                  }
-                  {
-                    name = "HD";
-                    description = "Full HD (1920x1080)";
-                    resolution = "1920x1080";
-                  }
-                  {
-                    name = "Thumb";
-                    description = "Square";
-                    resolution = "1x1";
-                  }
-                  {
-                    name = "UW";
-                    description = "Ultrawide 34 inch";
-                    resolution = "3440x1440";
-                  }
-                  {
-                    name = "Vert";
-                    description = "Vertical 1440p";
-                    resolution = "1440x2560";
-                  }
-                  {
-                    name = "FW Vert";
-                    description = "Framework Vertical";
-                    resolution = "1504x2256";
-                  }
-                ];
-                wallpaper_command = "wallpaper $1";
-              };
-            in
-            {
-              text =
-                # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
-                # https://github.com/tauri-apps/tauri/issues/10702
-                /* sh */ ''
-                  if command -v nvidia-smi &> /dev/null; then
-                    export WEBKIT_DISABLE_DMABUF_RENDERER=1
-                  fi
-
-                  direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" --config "${tomlFormat.generate "wallfacer.toml" wallfacerConf}" "$@"
-                '';
-              # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
-              fishCompletion = # fish
-                ''
-                  function _wallfacer_gui
-                    find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
-                  end
-                  complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
-                '';
-            };
-        };
-      })
-
-      (mkIf config.custom.programs.wallpaper-tools.enable {
-        custom = {
-          shell.packages = {
-            # fetch wallpapers from pixiv for user
-            pixiv = /* sh */ ''
-              direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
-            '';
-          };
-
-          programs.pqiv.settings = mkAfter ''
-            c { command(nomacs $1) }
-            m { command(mv $1 ${walls_in_dir}) }
-          '';
-        };
-
-        environment.systemPackages = [ pkgs.nomacs ];
-
-        custom.persist = {
-          home = {
-            directories = [
-              ".cache/czkawka"
-              ".config/nomacs"
-            ];
-          };
-        };
-      })
-
-      (mkIf config.custom.programs.rclip.enable {
+      # rclip
+      {
         environment = {
           systemPackages = [ pkgs.rclip ];
 
@@ -250,6 +142,6 @@ in
             cache.directories = [ ".local/share/rclip" ];
           };
         };
-      })
+      }
     ]);
 }
