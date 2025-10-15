@@ -5,7 +5,7 @@
   configLua ? "",
 }:
 let
-  source = (callPackage ./generated.nix { }).mpv-cut;
+  source = (callPackage ../../_sources/generated.nix { }).mpv-cut;
 in
 mpvScripts.buildLua (
   source

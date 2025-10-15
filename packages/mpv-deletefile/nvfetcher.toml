@@ -1,3 +1,0 @@
-[mpv-deletefile]
-src.git = "https://github.com/zenyd/mpv-scripts"
-fetch.github = "zenyd/mpv-scripts"

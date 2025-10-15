@@ -5,7 +5,7 @@
 }:
 
 let
-  source = (callPackage ./generated.nix { }).mpv-deletefile;
+  source = (callPackage ../../_sources/generated.nix { }).mpv-deletefile;
 in
 mpvScripts.buildLua (
   source

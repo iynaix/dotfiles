@@ -3,7 +3,7 @@
   path-of-building,
 }:
 let
-  source = (callPackage ./generated.nix { }).path-of-building;
+  source = (callPackage ../../_sources/generated.nix { }).path-of-building;
 in
 path-of-building.overrideAttrs {
   inherit (source) version;

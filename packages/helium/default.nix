@@ -6,7 +6,7 @@
 }:
 let
   pname = "helium";
-  source = (callPackage ./generated.nix { }).helium;
+  source = (callPackage ../../_sources/generated.nix { }).helium;
   appimageContents = appimageTools.extract source;
 in
 appimageTools.wrapType2 (

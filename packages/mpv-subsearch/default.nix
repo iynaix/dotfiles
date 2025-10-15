@@ -4,7 +4,7 @@
   mpvScripts,
 }:
 let
-  source = (callPackage ./generated.nix { }).mpv-subsearch;
+  source = (callPackage ../../_sources/generated.nix { }).mpv-subsearch;
 in
 mpvScripts.buildLua (
   source

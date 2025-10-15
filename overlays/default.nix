@@ -5,14 +5,7 @@
 }:
 let
   # include generated sources from nvfetcher
-  sources = import ./generated.nix {
-    inherit (pkgs)
-      fetchFromGitHub
-      fetchurl
-      fetchgit
-      dockerTools
-      ;
-  };
+  sources = pkgs.callPackage ../_sources/generated.nix { };
   # include nixpkgs stable
   overlayStable = _: prev: {
     stable = import inputs.nixpkgs-stable {

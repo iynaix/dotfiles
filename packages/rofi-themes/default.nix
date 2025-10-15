@@ -4,7 +4,7 @@
   stdenvNoCC,
 }:
 let
-  source = (callPackage ./generated.nix { }).rofi-themes;
+  source = (callPackage ../../_sources/generated.nix { }).rofi-themes;
 in
 stdenvNoCC.mkDerivation (
   source

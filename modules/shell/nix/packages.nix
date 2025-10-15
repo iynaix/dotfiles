@@ -91,72 +91,16 @@
           };
           # update all nvfetcher overlays and packages
           nv-update = {
-            runtimeInputs = with pkgs; [
-              fd
-              nvfetcher
-            ];
+            runtimeInputs = [ pkgs.nvfetcher ];
             text = # sh
               ''
                 pushd ${dots} > /dev/null
-
                 if [ "$#" -eq 0 ]; then
-                  # run nvfetcher for overlays
-                  nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
-
-                  # run nvfetcher for packages
-                  mapfile -t pkg_tomls < <(fd nvfetcher.toml packages)
-
-                  for pkg_toml in "''${pkg_tomls[@]}"; do
-                      pkg_dir=$(dirname "$pkg_toml")
-                      nvfetcher --keep-old --config "$pkg_toml" --build-dir "$pkg_dir"
-                  done
+                  nvfetcher --keep-old
                 else
-                  # special case
-                  if [ "$1" = "main" ]; then
-                    nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
-                  elif  [[ -d "./packages/$1" ]]; then
-                    # run nvfetcher for just the package
-                    nvfetcher --keep-old --config "./packages/$1/nvfetcher.toml" --build-dir "./packages/$1"
-                  else
-                    # run nvfetcher for overlays
-                    nvfetcher --keep-old --config overlays/nvfetcher.toml --build-dir overlays
-                  fi
-                  exit
+                  nvfetcher --keep-old --filter "$1"
                 fi
                 popd > /dev/null
-              '';
-            bashCompletion = # sh
-              ''
-                _nv_update() {
-                    local cur="''${COMP_WORDS[COMP_CWORD]}"
-                    local options=("main")
-
-                    while IFS= read -r -d ''' dir; do
-                        if [[ -f "$dir/generated.nix" ]]; then
-                            options+=("$(basename "$dir")")
-                        fi
-                    done < <(find "${dots}/packages" -mindepth 1 -maxdepth 1 -type d -print0)
-
-                    COMPREPLY=($(compgen -W "''${options[*]}" -- "$cur"))
-                }
-
-                complete -F _nv_update nv-update
-              '';
-            fishCompletion = # fish
-              ''
-                function _nv_update
-                    # "root" special case
-                    echo "main"
-
-                    for dir in "${dots}/packages/*/"
-                        set -l dir (string trim -r -c / $dir)
-                        if test -f "$dir/generated.nix"
-                            echo (basename $dir)
-                        end
-                    end
-                end
-
-                complete -c nv-update -f -a '(_nv_update)'
               '';
           };
           # update via nix flake
