@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.modules.nixos.bittorrent =
     {
       config,
       lib,
@@ -8,9 +8,9 @@
       ...
     }:
     let
-      inherit (lib) getExe mkIf mkMerge;
+      inherit (lib) getExe mkMerge;
     in
-    mkIf config.custom.services.bittorrent.enable (mkMerge [
+    mkMerge [
       {
         services = {
           sonarr = {
@@ -83,5 +83,5 @@
           };
         };
       }
-    ]);
+    ];
 }

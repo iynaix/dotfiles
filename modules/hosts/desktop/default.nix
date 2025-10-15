@@ -25,6 +25,7 @@ topLevel: {
         # programs
         deadbeef
         freecad
+        # helix
         orca-slicer
         obs-studio
         path-of-building
@@ -32,6 +33,7 @@ topLevel: {
         # zoom
 
         # services
+        bittorrent
         syncoid
       ];
 
@@ -141,9 +143,6 @@ topLevel: {
         };
 
         services = {
-          bittorrent.enable = true;
-          syncoid.enable = true;
-          vercel.enable = true;
           virtualization.enable = true;
         };
       };
