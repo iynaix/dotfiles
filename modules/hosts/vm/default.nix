@@ -41,6 +41,8 @@ topLevel: {
         };
       };
 
+      boot.zfs.requestEncryptionCredentials = lib.mkForce false;
+
       networking.hostId = "5f43c101"; # required for zfs
 
       # enable clipboard and file sharing

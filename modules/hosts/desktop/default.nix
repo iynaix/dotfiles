@@ -30,6 +30,9 @@ topLevel: {
         path-of-building
         vlc
         # zoom
+
+        # services
+        syncoid
       ];
 
       custom = {
@@ -110,7 +113,6 @@ topLevel: {
           qmk.enable = true;
         };
         lock.enable = false;
-        zfs.encryption = false;
 
         programs = {
           distrobox.enable = true;
@@ -145,6 +147,8 @@ topLevel: {
           virtualization.enable = true;
         };
       };
+
+      boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
         displayManager.autoLogin.user = user;
