@@ -4,8 +4,8 @@
       config,
       host,
       lib,
-      libCustom,
       pkgs,
+      self,
       isLaptop,
       isVm,
       ...
@@ -46,7 +46,7 @@
               kb_layout = "us";
               follow_mouse = 1;
 
-              touchpad = mkIf isLaptop {
+              touchpad = {
                 natural_scroll = false;
                 disable_while_typing = true;
               };
@@ -175,7 +175,7 @@
           //
             # bind workspaces to monitors, don't bother if there is only one monitor
             optionalAttrs (length config.custom.hardware.monitors > 1) {
-              workspace = libCustom.mapWorkspaces (
+              workspace = self.lib.mapWorkspaces (
                 { workspace, monitor, ... }:
                 "${workspace},monitor:${monitor.name}"
                 + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"

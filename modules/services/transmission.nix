@@ -3,7 +3,6 @@
     {
       config,
       lib,
-      libCustom,
       pkgs,
       user,
       ...
@@ -151,9 +150,9 @@
 
           # process downloaded files
           shell.packages = {
-            renamer = libCustom.direnvCargoRun {
-              dir = "${persistHome}/projects/renamer";
-            };
+            renamer = /* sh */ ''
+              direnv-cargo-run "${persistHome}/projects/renamer" "$@"
+            '';
           };
         };
       }

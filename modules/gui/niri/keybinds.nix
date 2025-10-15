@@ -3,8 +3,8 @@
     {
       config,
       lib,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -240,7 +240,7 @@
           # named workspace setup, dynamic workspaces are urgh
           // mergeAttrsList (
             flatten (
-              (libCustom.mapWorkspaces (
+              (self.lib.mapWorkspaces (
                 { workspace, key, ... }:
                 [
                   {

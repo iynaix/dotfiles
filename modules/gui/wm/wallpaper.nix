@@ -48,7 +48,6 @@ in
   flake.modules.nixos.wm =
     {
       config,
-      libCustom,
       pkgs,
       ...
     }:
@@ -186,13 +185,13 @@ in
               text =
                 # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
                 # https://github.com/tauri-apps/tauri/issues/10702
-                lib.optionalString config.custom.hardware.nvidia.enable ''
-                  export WEBKIT_DISABLE_DMABUF_RENDERER=1
-                ''
-                + libCustom.direnvCargoRun {
-                  dir = "/persist${config.hj.directory}/projects/wallfacer";
-                  args = "--config ${tomlFormat.generate "wallfacer.toml" wallfacerConf}";
-                };
+                /* sh */ ''
+                  if command -v nvidia-smi &> /dev/null; then
+                    export WEBKIT_DISABLE_DMABUF_RENDERER=1
+                  fi
+
+                  direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" --config "${tomlFormat.generate "wallfacer.toml" wallfacerConf}" "$@"
+                '';
               # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
               fishCompletion = # fish
                 ''
@@ -209,9 +208,9 @@ in
         custom = {
           shell.packages = {
             # fetch wallpapers from pixiv for user
-            pixiv = libCustom.direnvCargoRun {
-              dir = "/persist${config.hj.directory}/projects/pixiv";
-            };
+            pixiv = /* sh */ ''
+              direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
+            '';
           };
 
           programs.pqiv.settings = mkAfter ''

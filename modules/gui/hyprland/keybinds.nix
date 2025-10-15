@@ -19,8 +19,8 @@ in
   flake.modules.nixos.wm =
     {
       config,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -54,7 +54,7 @@ in
         bind =
           let
             workspace_keybinds = flatten (
-              (libCustom.mapWorkspaces (
+              (self.lib.mapWorkspaces (
                 { workspace, key, ... }:
                 if qtile_like then
                   [

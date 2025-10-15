@@ -13,7 +13,7 @@ let
 in
 {
   flake.modules.nixos.core =
-    { libCustom, ... }:
+    { self, ... }:
     {
       options.custom = {
         programs = {
@@ -26,7 +26,7 @@ in
                 absolute plugin paths.
               '';
             };
-            settings = libCustom.types.hyprlandSettingsType;
+            settings = self.lib.types.hyprlandSettingsType;
           };
           hyprnstack.enable = mkEnableOption "hyprnstack";
           hypr-darkwindow.enable = mkEnableOption "hypr-darkwindow" // {
@@ -40,8 +40,8 @@ in
     {
       config,
       host,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -53,7 +53,7 @@ in
       ];
       # don't use mkMerge as the order is important
       hyprlandConfText =
-        concatMapStrings (attrs: libCustom.toHyprconf { inherit attrs importantPrefixes; })
+        concatMapStrings (attrs: self.lib.generators.toHyprconf { inherit attrs importantPrefixes; })
           [
             # systemd activation blurb
             {

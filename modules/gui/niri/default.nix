@@ -39,8 +39,8 @@ in
       host,
       inputs,
       isVm,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -323,7 +323,7 @@ in
             # create workspaces config
             {
               workspaces = listToAttrs (
-                libCustom.mapWorkspaces (
+                self.lib.mapWorkspaces (
                   {
                     workspace,
                     monitor,

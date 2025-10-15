@@ -3,8 +3,8 @@
     {
       config,
       lib,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -35,7 +35,7 @@
 
               # add rules for vertical displays and number of stacks
               workspace = mkAfter (
-                libCustom.mapWorkspaces (
+                self.lib.mapWorkspaces (
                   { monitor, workspace, ... }:
                   let
                     isUltrawide = builtins.div (monitor.width * 1.0) monitor.height > builtins.div 16.0 9;
@@ -58,7 +58,7 @@
         else
           {
             settings.workspace = mkAfter (
-              libCustom.mapWorkspaces (
+              self.lib.mapWorkspaces (
                 { monitor, workspace, ... }:
                 "${workspace},layoutopt:orientation:${if (monitor.isVertical != 0) then "top" else "left"}"
               ) config.custom.hardware.monitors

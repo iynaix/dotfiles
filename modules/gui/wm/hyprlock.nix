@@ -1,13 +1,26 @@
 { lib, ... }:
 let
   inherit (lib)
-    getExe
     mkEnableOption
     mkIf
     mkMerge
     ;
 in
 {
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages.lock = pkgs.writeShellApplication {
+        name = "lock";
+        runtimeInputs = with pkgs; [
+          procps
+          hyprlock
+        ];
+        text = # sh
+          "pidof hyprlock || hyprlock";
+      };
+    };
+
   flake.modules.nixos.core =
     { isLaptop, ... }:
     {
@@ -22,44 +35,28 @@ in
     {
       config,
       isLaptop,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
-    let
-      lockPkg = pkgs.writeShellApplication {
-        name = "lock";
-        runtimeInputs = [
-          pkgs.procps
-          config.programs.hyprlock.package
-        ];
-        text = # sh
-          "pidof hyprlock || hyprlock";
-      };
-      lockCmd = getExe lockPkg;
-    in
-    mkIf config.custom.isWm (mkMerge [
+    mkMerge [
       (mkIf config.custom.lock.enable {
         programs.hyprlock.enable = true;
 
-        custom.shell.packages = {
-          lock = lockPkg;
-        };
-
-        environment.systemPackages = [ config.custom.shell.lock ];
+        environment.systemPackages = [ self.packages.${pkgs.system}.lock ];
 
         # lock on idle
         custom.programs = {
           hypridle = {
             settings = {
               general = {
-                lock_cmd = lockCmd;
+                lock_cmd = "lock";
               };
 
               listener = [
                 {
                   timeout = 5 * 60;
-                  on-timeout = lockCmd;
+                  on-timeout = "lock";
                 }
               ];
             };
@@ -70,7 +67,7 @@ in
               let
                 rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }},${toString alpha})";
               in
-              libCustom.toHyprconf {
+              self.lib.generators.toHyprconf {
                 attrs = {
                   general = {
                     disable_loading_bar = false;
@@ -147,7 +144,7 @@ in
       (mkIf (config.custom.wm == "hyprland") {
         custom.programs.hyprland.settings =
           let
-            lockOrDpms = if config.custom.lock.enable then "exec, ${lockCmd}" else "dpms, off";
+            lockOrDpms = if config.custom.lock.enable then "exec, lock" else "dpms, off";
           in
           {
             bind = [ "$mod_SHIFT_CTRL, x, ${lockOrDpms}" ];
@@ -163,7 +160,7 @@ in
           let
             lockOrDpms =
               if config.custom.lock.enable then
-                lockCmd
+                "lock"
               else
                 # lid-open actions only support spawn for now
                 [
@@ -190,10 +187,10 @@ in
           let
             lockOrDpms =
               if config.custom.lock.enable then
-                "spawn, ${lockCmd}"
+                "spawn, lock"
               else
                 # TODO: support dpms off with wlr-dpms?
-                "spawn, ${lockCmd}";
+                "spawn, lock";
           in
           {
             bind = [ "$mod+SHIFT+CTRL, x, ${lockOrDpms}" ];
@@ -201,5 +198,5 @@ in
 
         # TODO: mango doesn't support switch events yet?
       })
-    ]);
+    ];
 }

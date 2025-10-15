@@ -43,8 +43,8 @@ in
       dots,
       inputs,
       isVm,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     mkIf (config.custom.wm == "mango") {
@@ -56,7 +56,7 @@ in
       # write the settings to home directory
       hj.xdg.config.files."mango/config.conf".text =
         (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
-          libCustom.toHyprconf {
+          self.lib.generators.toHyprconf {
             attrs = config.custom.programs.mango.settings;
             importantPrefixes = [ "monitorrule" ];
           }

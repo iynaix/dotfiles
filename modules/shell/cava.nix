@@ -2,15 +2,15 @@
   flake.modules.nixos.gui =
     {
       config,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     {
       environment.systemPackages = [ pkgs.cava ];
 
       custom.programs.wallust.templates.cava = {
-        text = libCustom.toQuotedINI {
+        text = self.lib.generators.toQuotedINI {
           general = {
             # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.
             mode = "normal";

@@ -4,8 +4,8 @@
       config,
       inputs,
       lib,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -70,7 +70,7 @@
         ++
           # tag keybinds, switch to monitor first before switching tag
           flatten (
-            (libCustom.mapWorkspaces (
+            (self.lib.mapWorkspaces (
               {
                 monitor,
                 workspace,

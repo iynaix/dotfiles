@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.core =
-    { config, ... }:
+    { config, pkgs, ... }:
     let
       xdgDataHome = config.hj.xdg.data.directory;
     in
@@ -56,6 +56,26 @@
             '';
           fishCompletion = "complete -c crrb -f -a '(__cargo_bins)'";
           bashCompletion = "complete -F __cargo_bins crrb";
+        };
+        # runs rust using the direnv of specified directory
+        direnv-cargo-run = pkgs.writeShellApplication {
+          name = "direnv-cargo-run";
+          runtimeInputs = [ pkgs.direnv ];
+          text = ''
+            if [ $# -lt 1 ]; then
+              echo "Usage: direnv-cargo-run <dir> [args...]" >&2
+              exit 1
+            fi
+
+            dir="$1"
+            shift
+
+            bin="$(basename "$dir")"
+
+            pushd "$dir" > /dev/null
+            direnv exec "$dir" cargo run --release --bin "$bin" --manifest-path "$dir/Cargo.toml" -- "$@"
+            popd > /dev/null
+          '';
         };
       };
 

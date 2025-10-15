@@ -1,10 +1,10 @@
 {
   flake.modules.nixos.core =
-    { libCustom, ... }:
+    { self, ... }:
     {
       options.custom = {
         programs.hypridle = {
-          settings = libCustom.types.hyprlandSettingsType;
+          settings = self.lib.types.hyprlandSettingsType;
         };
       };
     };
@@ -13,8 +13,8 @@
     {
       config,
       lib,
-      libCustom,
       pkgs,
+      self,
       ...
     }:
     let
@@ -39,7 +39,7 @@
           "${getExe config.programs.niri.package} msg action power-on-monitors"
         else
           "";
-      hypridleConfText = libCustom.toHyprconf {
+      hypridleConfText = self.lib.generators.toHyprconf {
         attrs = config.custom.programs.hypridle.settings;
         importantPrefixes = [ "$" ];
       };

@@ -22,13 +22,6 @@ let
           isVm
           user
           ;
-        libCustom = import ../../lib.nix {
-          inherit lib user;
-          # TODO: clean up hardcoded pkgs
-          pkgs = import inputs.nixpkgs {
-            system = "x86_64-linux";
-          };
-        };
         isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
         dots = "/persist/home/${user}/projects/dotfiles";
