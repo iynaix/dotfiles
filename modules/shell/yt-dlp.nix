@@ -2,13 +2,15 @@
   flake.modules.nixos.core =
     { pkgs, ... }:
     let
+      source = (pkgs.callPackage ../../_sources/generated.nix { }).yt-dlp;
       mkFormat =
         height: ''bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'';
     in
     {
       custom.wrappers = [
-        (_: _prev: {
+        (_: prev: {
           yt-dlp = {
+            package = prev.yt-dlp.overrideAttrs source;
             flags = {
               "--add-metadata" = { };
               "--format" = mkFormat 720;

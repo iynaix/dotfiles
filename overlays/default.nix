@@ -81,9 +81,6 @@ let
     tokyo-night-gtk = prev.tokyo-night-gtk.overrideAttrs (o: {
       patches = (o.patches or [ ]) ++ [ ./tokyonight-style.patch ];
     });
-
-    # youtube breaks yt-dlp frequently, use updated version from github
-    yt-dlp = prev.yt-dlp.overrideAttrs sources.yt-dlp;
   };
 in
 {
