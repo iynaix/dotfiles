@@ -2,6 +2,7 @@
   flake.modules.nixos.core =
     {
       config,
+      host,
       lib,
       pkgs,
       ...
@@ -99,8 +100,8 @@
               (_: prev: {
                 btop = {
                   package = prev.btop.override {
-                    cudaSupport = config.custom.hardware.nvidia.enable;
-                    rocmSupport = config.custom.hardware.radeon.enable;
+                    cudaSupport = host == "desktop";
+                    rocmSupport = host == "laptop";
                   };
                   flags = {
                     "--config" = btop-config;

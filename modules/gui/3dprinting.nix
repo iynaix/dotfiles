@@ -2,8 +2,8 @@ let
   # software rendering workaround for nvidia, see:
   # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
   nvidiaSoftwareRenderingWorkaround =
-    config: pkgs: bin: pkg:
-    if config.custom.hardware.nvidia.enable then
+    host: pkgs: bin: pkg:
+    if host == "desktop" then
       pkgs.symlinkJoin {
         name = bin;
         paths = [ pkg ];
@@ -26,7 +26,7 @@ let
 in
 {
   flake.modules.nixos.orca-slicer =
-    { config, pkgs, ... }:
+    { host, pkgs, ... }:
     {
       environment.systemPackages = [
         (pkgs.symlinkJoin {
@@ -34,7 +34,7 @@ in
           paths = [
             # software rendering workaround for nvidia, see:
             # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
-            (nvidiaSoftwareRenderingWorkaround config pkgs "orca-slicer" pkgs.orca-slicer)
+            (nvidiaSoftwareRenderingWorkaround host pkgs "orca-slicer" pkgs.orca-slicer)
             # associate step files with orca-slicer
             (pkgs.writeTextFile {
               name = "model-step.xml";
@@ -80,12 +80,12 @@ in
     };
 
   flake.modules.nixos.freecad =
-    { config, pkgs, ... }:
+    { host, pkgs, ... }:
     {
       environment.systemPackages = [
         # freecad segfaults on starup on nvidia
         # https://github.com/NixOS/nixpkgs/issues/366299
-        (nvidiaSoftwareRenderingWorkaround config pkgs "FreeCAD" pkgs.freecad-wayland)
+        (nvidiaSoftwareRenderingWorkaround host pkgs "FreeCAD" pkgs.freecad-wayland)
       ];
 
       custom.persist = {

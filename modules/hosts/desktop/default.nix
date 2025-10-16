@@ -32,6 +32,10 @@ topLevel: {
         vlc
         # zoom
 
+        # hardware
+        # bluetooth
+        # keyd
+
         # services
         bittorrent
         syncoid
@@ -45,7 +49,6 @@ topLevel: {
         };
 
         hardware = {
-          nvidia.enable = true;
           monitors = [
             {
               name = "DP-2";

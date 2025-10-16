@@ -6,7 +6,6 @@
       lib,
       pkgs,
       self,
-      isLaptop,
       isVm,
       ...
     }:
@@ -168,7 +167,7 @@
             ];
 
             # handle trackpad settings
-            gestures = mkIf isLaptop {
+            gestures = {
               gesture = [ "3, horizontal, workspace" ];
             };
           }
@@ -180,14 +179,6 @@
                 "${workspace},monitor:${monitor.name}"
                 + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
               ) config.custom.hardware.monitors;
-            }
-          //
-            # nvidia specific settings
-            optionalAttrs config.custom.hardware.nvidia.enable {
-              cursor = {
-                # no_hardware_cursors = true;
-                use_cpu_buffer = 1;
-              };
             };
         };
       };

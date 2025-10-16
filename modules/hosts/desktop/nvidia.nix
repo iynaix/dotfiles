@@ -48,11 +48,12 @@
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       };
 
-      nix.settings = {
-        substituters = [ "https://cuda-maintainers.cachix.org" ];
-        trusted-public-keys = [
-          "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-        ];
+      # nvidia specific settings for hyprland
+      custom.programs.hyprland.settings = {
+        cursor = {
+          # no_hardware_cursors = true;
+          use_cpu_buffer = 1;
+        };
       };
     };
 }
