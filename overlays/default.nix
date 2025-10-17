@@ -1,11 +1,5 @@
-{
-  inputs,
-  pkgs,
-  ...
-}:
+{ inputs, ... }:
 let
-  # include generated sources from nvfetcher
-  sources = pkgs.callPackage ../_sources/generated.nix { };
   # include nixpkgs stable
   overlayStable = _: prev: {
     stable = import inputs.nixpkgs-stable {
@@ -17,9 +11,6 @@ let
   overlayCustom = _: prev: {
     custom =
       (prev.custom or { })
-      // {
-        inherit (sources) yazi-plugins yazi-time-travel;
-      }
       // (import ../packages {
         inherit (prev) pkgs;
         inherit inputs;

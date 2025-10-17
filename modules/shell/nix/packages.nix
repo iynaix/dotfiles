@@ -263,7 +263,6 @@
             '';
           ynattr = {
             runtimeInputs = with pkgs; [
-              config.programs.yazi.package
               custom.shell.nattr
             ];
             text = # sh

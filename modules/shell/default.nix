@@ -265,7 +265,6 @@
             // binariesCompletion "cnwhich";
             ynwhich = {
               runtimeInputs = with pkgs; [
-                config.programs.yazi.package
                 custom.shell.nwhich
               ];
               text = # sh
