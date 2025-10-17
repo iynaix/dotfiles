@@ -6,6 +6,13 @@ in
 {
   flake.modules.nixos.core =
     { config, pkgs, ... }:
+    let
+      keyValueSettings = {
+        listsAsDuplicateKeys = true;
+        mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+      };
+      keyValue = pkgs.formats.keyValue keyValueSettings;
+    in
     {
       options.custom = {
         # terminal options
@@ -27,32 +34,31 @@ in
             description = "Name of desktop file for the terminal";
           };
         };
+        programs.ghostty.settings = lib.mkOption {
+          inherit (keyValue) type;
+          default = { };
+          example = lib.literalExpression ''
+            {
+              theme = "catppuccin-mocha";
+              font-size = 10;
+              keybind = [
+                "ctrl+h=goto_split:left"
+                "ctrl+l=goto_split:right"
+              ];
+            }
+          '';
+          description = ''
+            Configuration written to {file}`$XDG_CONFIG_HOME/ghostty/config`.
+
+            See <https://ghostty.org/docs/config/reference> for more information.
+          '';
+        };
       };
     };
 
   flake.modules.nixos.gui =
     { config, pkgs, ... }:
     let
-      ghosttyConf = {
-        alpha-blending = "linear-corrected";
-        app-notifications = "no-clipboard-copy";
-        background-opacity =
-          0.85
-          # more opaque on niri as there is no blur
-          + (if (config.custom.wm == "niri" && !config.custom.programs.niri.blur.enable) then 0.1 else 0);
-        # set as default interactive shell, also set $SHELL for nix shell to pick up
-        command = "SHELL=${fishPath} ${fishPath}";
-        confirm-close-surface = false;
-        copy-on-select = "clipboard";
-        cursor-style = "bar";
-        font-family = config.custom.fonts.monospace;
-        font-feature = "zero";
-        font-size = 10;
-        font-style = "Medium";
-        window-decoration = false;
-        window-padding-x = padding;
-        window-padding-y = padding;
-      };
       # adapted from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/programs/ghostty.nix
       toGhosttyConf =
@@ -82,9 +88,27 @@ in
       #   })
       # ];
 
+      custom.programs.ghostty.settings = {
+        alpha-blending = "linear-corrected";
+        app-notifications = "no-clipboard-copy";
+        background-opacity = 0.85;
+        # set as default interactive shell, also set $SHELL for nix shell to pick up
+        command = "SHELL=${fishPath} ${fishPath}";
+        confirm-close-surface = false;
+        copy-on-select = "clipboard";
+        cursor-style = "bar";
+        font-family = config.custom.fonts.monospace;
+        font-feature = "zero";
+        font-size = 10;
+        font-style = "Medium";
+        window-decoration = false;
+        window-padding-x = padding;
+        window-padding-y = padding;
+      };
+
       environment.systemPackages = [ pkgs.ghostty ];
 
-      hj.xdg.config.files."ghostty/config".source = toGhosttyConf ghosttyConf;
+      hj.xdg.config.files."ghostty/config".source = toGhosttyConf config.custom.programs.ghostty.settings;
 
       custom.programs.terminal = {
         app-id = "com.mitchellh.ghostty";

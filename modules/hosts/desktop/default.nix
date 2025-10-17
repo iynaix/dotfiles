@@ -1,5 +1,5 @@
 topLevel: {
-  flake.modules.nixos.host_desktop =
+  flake.modules.nixos.host-desktop =
     {
       config,
       isVm,
@@ -40,7 +40,6 @@ topLevel: {
         };
 
         hardware = {
-          hdds.enable = true;
           nvidia.enable = true;
           monitors = [
             {

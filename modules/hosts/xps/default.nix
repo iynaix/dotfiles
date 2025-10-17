@@ -1,5 +1,5 @@
 topLevel: {
-  flake.modules.nixos.host_xps =
+  flake.modules.nixos.host-xps =
     {
       config,
       lib,

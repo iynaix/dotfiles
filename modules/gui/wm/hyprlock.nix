@@ -46,7 +46,7 @@ in
           lock = lockPkg;
         };
 
-        environment.systemPackages = [ config.custom.shell.packages.lock ];
+        environment.systemPackages = [ config.custom.shell.lock ];
 
         # lock on idle
         custom.programs = {

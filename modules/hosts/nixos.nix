@@ -35,7 +35,7 @@ let
       };
 
       modules = [
-        config.flake.modules.nixos."host_${host}"
+        config.flake.modules.nixos."host-${host}"
         config.flake.modules.nixos.core
         ../../overlays
         inputs.hjem.nixosModules.default

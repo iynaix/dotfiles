@@ -45,6 +45,7 @@ in
       config,
       isNixOS,
       pkgs,
+      self,
       ...
     }:
     let
@@ -129,7 +130,10 @@ in
         # NOTE: rofi-power-menu only works for powermenuType = 4!
         (pkgs.custom.rofi-power-menu.override {
           reboot-to-windows =
-            if (config.custom.hardware.mswindows && isNixOS) then pkgs.custom.shell.reboot-to-windows else null;
+            if (config.custom.hardware.mswindows && isNixOS) then
+              self.packages.${pkgs.system}.reboot-to-windows
+            else
+              null;
         })
       ]
       ++ (optionals config.custom.hardware.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);

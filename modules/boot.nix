@@ -1,14 +1,12 @@
 {
   flake.modules.nixos.core =
     {
-      config,
       lib,
       pkgs,
-      user,
       ...
     }:
     let
-      inherit (lib) getExe mkForce mkIf;
+      inherit (lib) mkForce;
     in
     {
       # Bootloader.
@@ -40,29 +38,5 @@
 
       # reduce journald logs
       services.journald.extraConfig = ''SystemMaxUse=50M'';
-
-      custom.shell.packages = {
-        reboot-to-windows = {
-          runtimeInputs = [ pkgs.grub2 ];
-          text = # sh
-            ''
-              grub-reboot "Windows 11"
-              reboot
-            '';
-        };
-      };
-
-      # allow rebooting directly into windows which requires sudo, see above
-      security.sudo.extraRules = mkIf config.custom.hardware.mswindows [
-        {
-          users = [ user ];
-          commands = [
-            {
-              command = getExe pkgs.custom.shell.reboot-to-windows;
-              options = [ "NOPASSWD" ];
-            }
-          ];
-        }
-      ];
     };
 }

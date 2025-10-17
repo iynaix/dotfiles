@@ -1,5 +1,5 @@
 topLevel: {
-  flake.modules.nixos.host_vm =
+  flake.modules.nixos.host-vm =
     { lib, pkgs, ... }:
     let
       inherit (lib) getExe';

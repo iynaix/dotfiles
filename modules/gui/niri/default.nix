@@ -5,6 +5,7 @@ let
     imap0
     listToAttrs
     mkEnableOption
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -367,6 +368,10 @@ in
               );
             }
           ];
+
+          ghostty.settings = {
+            background-opacity = mkForce 0.95;
+          };
 
           wallust.nixJson = {
             niriBlur = config.custom.programs.niri.blur.enable;

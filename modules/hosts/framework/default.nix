@@ -1,5 +1,5 @@
 topLevel: {
-  flake.modules.nixos.host_framework =
+  flake.modules.nixos.host-framework =
     {
       config,
       lib,

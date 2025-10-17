@@ -2,7 +2,7 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-  flake.modules.nixos.host_desktop =
+  flake.modules.nixos.host-desktop =
     { config, lib, ... }:
     {
       boot = {

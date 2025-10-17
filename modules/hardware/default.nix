@@ -20,6 +20,9 @@
           battery.enable = mkEnableOption "Battery" // {
             default = isLaptop;
           };
+          nvidia.enable = mkEnableOption "Nvidia GPU" // {
+            default = host == "desktop";
+          };
           radeon.enable = mkEnableOption "AMD GPU" // {
             default = host == "framework";
           };
