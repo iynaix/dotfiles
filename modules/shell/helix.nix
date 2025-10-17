@@ -1,5 +1,6 @@
+{ inputs, ... }:
 {
-  flake.modules.nixos.helix =
+  perSystem =
     { pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };
@@ -8,16 +9,18 @@
       };
     in
     {
-      custom.wrappers = [
-        (_: _prev: {
-          helix = {
-            flags = {
-              "--config" = tomlFormat.generate "config.toml" helixConf;
-            };
-          };
-        })
-      ];
+      packages.helix' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.helix;
+        flags = {
+          "--config" = tomlFormat.generate "config.toml" helixConf;
+        };
+      };
+    };
 
-      environment.systemPackages = [ pkgs.helix ];
+  flake.modules.nixos.helix =
+    { pkgs, self, ... }:
+    {
+      environment.systemPackages = [ self.packages.${pkgs.system}.helix' ];
     };
 }

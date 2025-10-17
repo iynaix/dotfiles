@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 let
   inherit (lib)
     concatLines
@@ -156,6 +156,52 @@ in
         mkKeyValue = generators.mkKeyValueDefault { mkValueString = renderOption; } "=";
         listsAsDuplicateKeys = true;
       };
+      mpvDir = pkgs.runCommand "mpv-config" { } (
+        ''
+          mkdir -p $out/script-opts
+
+          cat > $out/input.conf << 'EOF'
+          ${renderBindings cfg.bindings}
+          EOF
+
+          cat > $out/mpv.conf << 'EOF'
+          ${renderOptions cfg.config}
+          ${optionalString (cfg.profiles != { }) (renderProfiles cfg.profiles)}
+          EOF
+        ''
+        # write scriptOpts
+        + (
+          cfg.scriptOpts
+          |> mapAttrsToList (
+            name: opts: ''
+              cat > $out/script-opts/${name}.conf << 'EOF'
+              ${renderScriptOptions opts}
+              EOF
+            ''
+          )
+          |> concatLines
+        )
+        # write scriptOptsFiles
+        + (
+          cfg.scriptOptsFiles
+          |> mapAttrsToList (
+            name: content: ''
+              cat > $out/script-opts/${name} << 'EOF'
+              ${content}
+              EOF
+            ''
+          )
+          |> concatLines
+        )
+      );
+      mpv' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.mpv.override { inherit (cfg) scripts; };
+        flags = {
+          "--config-dir" = mpvDir;
+        };
+        flagSeparator = "=";
+      };
     in
     mkMerge [
       {
@@ -267,8 +313,7 @@ in
 
         environment.systemPackages = with pkgs; [
           ffmpeg
-          # (mpv.override { inherit (cfg) scripts; })
-          mpv
+          mpv'
         ];
 
         custom.persist = {
@@ -276,62 +321,6 @@ in
             ".local/state/mpv" # watch later
           ];
         };
-      }
-
-      # wrapper implementation
-      {
-        custom.wrappers =
-          let
-            mpvDir = pkgs.runCommand "mpv-config" { } (
-              ''
-                mkdir -p $out/script-opts
-
-                cat > $out/input.conf << 'EOF'
-                ${renderBindings cfg.bindings}
-                EOF
-
-                cat > $out/mpv.conf << 'EOF'
-                ${renderOptions cfg.config}
-                ${optionalString (cfg.profiles != { }) (renderProfiles cfg.profiles)}
-                EOF
-              ''
-              # write scriptOpts
-              + (
-                cfg.scriptOpts
-                |> mapAttrsToList (
-                  name: opts: ''
-                    cat > $out/script-opts/${name}.conf << 'EOF'
-                    ${renderScriptOptions opts}
-                    EOF
-                  ''
-                )
-                |> concatLines
-              )
-              # write scriptOptsFiles
-              + (
-                cfg.scriptOptsFiles
-                |> mapAttrsToList (
-                  name: content: ''
-                    cat > $out/script-opts/${name} << 'EOF'
-                    ${content}
-                    EOF
-                  ''
-                )
-                |> concatLines
-              )
-            );
-          in
-          [
-            (_: prev: {
-              mpv = {
-                package = prev.mpv.override { inherit (cfg) scripts; };
-                flags = {
-                  "--config-dir" = mpvDir;
-                };
-                flagSeparator = "=";
-              };
-            })
-          ];
       }
     ];
 }

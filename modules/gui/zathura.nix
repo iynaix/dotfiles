@@ -1,5 +1,6 @@
+{ inputs, ... }:
 {
-  flake.modules.nixos.gui =
+  perSystem =
     { pkgs, ... }:
     let
       # generated using `wallust theme Tokyo-Night`
@@ -58,17 +59,19 @@
       };
     in
     {
-      custom.wrappers = [
-        (_: _prev: {
-          zathura = {
-            flags = {
-              "--config-dir" = zathuraConf;
-            };
-          };
-        })
-      ];
+      packages.zathura' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.zathura;
+        flags = {
+          "--config-dir" = zathuraConf;
+        };
+      };
+    };
 
-      environment.systemPackages = [ pkgs.zathura ];
+  flake.modules.nixos.gui =
+    { pkgs, self, ... }:
+    {
+      environment.systemPackages = [ self.packages.${pkgs.system}.zathura' ];
 
       xdg.mime.defaultApplications = {
         "application/pdf" = "org.pwmt.zathura.desktop";

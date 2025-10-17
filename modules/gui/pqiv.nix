@@ -1,31 +1,9 @@
-{ lib, ... }:
-let
-  inherit (lib) mkOption types;
-in
+{ inputs, ... }:
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs.pqiv.settings = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Settings for pqiv";
-      };
-    };
-  };
-
   flake.modules.nixos.gui =
     { config, pkgs, ... }:
-    {
-      # custom.wrappers = [
-      #   (_: _prev: {
-      #     pqiv = {
-      #       env.PQIVRC_PATH = pkgs.writeText "pqivrc" config.custom.programs.pqiv.settings;
-      #     };
-      #   })
-      # ];
-
-      # TODO: remove when wrappers patches desktop files
-      environment.etc."xdg/pqivrc".text = ''
+    let
+      pqivConf = ''
         [options]
         box-colors = #FFFFFF:#000000
         disable-backends = archive,archive_cbx,libav,poppler,spectre,wand
@@ -41,7 +19,7 @@ in
 
         [keybindings]
         c { command(nomacs $1) }
-        m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in" }
+        m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in") }
         t { montage_mode_enter() }
         w { command(wallpaper $1) }
         x { command(rm $1) }
@@ -57,9 +35,21 @@ in
           t { montage_mode_return_cancel() }
         }
       '';
+    in
+    {
+      nixpkgs.overlays = [
+        (_: prev: {
+          # overlay so that dotfiles-rs can pick up wrapped package
+          pqiv = inputs.wrappers.lib.wrapPackage {
+            pkgs = prev;
+            package = prev.pqiv;
+            env.PQIVRC_PATH = pkgs.writeText "pqivrc" pqivConf;
+          };
+        })
+      ];
 
       environment.systemPackages = with pkgs; [
-        pqiv
+        pqiv # overlay-ed above
         nomacs
       ];
 

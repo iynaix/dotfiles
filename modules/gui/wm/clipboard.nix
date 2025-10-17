@@ -29,18 +29,12 @@
 
       custom = {
         shell.packages = {
-          rofi-clipboard-history = {
-            runtimeInputs = [
-              pkgs.rofi
-            ];
-            text = # sh
-              ''
-                rofi \
-                  -modi clipboard:${getExe' pkgs.cliphist "cliphist-rofi-img"} \
-                  -theme "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi" \
-                  -show clipboard -show-icons
-              '';
-          };
+          rofi-clipboard-history = /* sh */ ''
+            rofi \
+              -modi clipboard:${getExe' pkgs.cliphist "cliphist-rofi-img"} \
+              -theme "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi" \
+              -show clipboard -show-icons
+          '';
         };
       };
 

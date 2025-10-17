@@ -15,7 +15,8 @@
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
 
     wrappers = {
-      url = "github:Lassulus/wrappers";
+      # automatic desktop file patching
+      url = "github:Lassulus/wrappers/9c1bcebce4fe139a8b1ca71d817ae69290620243";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

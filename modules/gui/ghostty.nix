@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 let
-  inherit (lib) getExe mkOption types;
+  inherit (lib) mkOption types;
   inherit (types) package str;
 in
 {
@@ -67,33 +67,26 @@ in
           mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
         }).generate
           "ghostty-config";
-
       padding = 12;
-      fishPath = getExe pkgs.fish;
+      ghostty' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.ghostty;
+        flags = {
+          "--config-default-files" = false;
+          # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
+          # default location
+          "--config-file" = toGhosttyConf config.custom.programs.ghostty.settings;
+        };
+        flagSeparator = "=";
+      };
     in
     {
-      # re-enable the wrapper when desktop files are patched
-      # https://github.com/Lassulus/wrappers/issues/3
-      # custom.wrappers = [
-      #   (_: _prev: {
-      #     ghostty = {
-      #       flags = {
-      #         "--config-default-files" = false;
-      #         # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-      #         # default location
-      #         "--config-file" = toGhosttyConf ghosttyConf;
-      #       };
-      #       flagSeparator = "=";
-      #     };
-      #   })
-      # ];
-
       custom.programs.ghostty.settings = {
         alpha-blending = "linear-corrected";
         app-notifications = "no-clipboard-copy";
         background-opacity = 0.85;
         # set as default interactive shell, also set $SHELL for nix shell to pick up
-        command = "SHELL=${fishPath} ${fishPath}";
+        command = "SHELL=${lib.getExe pkgs.fish} ${lib.getExe pkgs.fish}";
         confirm-close-surface = false;
         copy-on-select = "clipboard";
         cursor-style = "bar";
@@ -106,9 +99,7 @@ in
         window-padding-y = padding;
       };
 
-      environment.systemPackages = [ pkgs.ghostty ];
-
-      hj.xdg.config.files."ghostty/config".source = toGhosttyConf config.custom.programs.ghostty.settings;
+      environment.systemPackages = [ ghostty' ];
 
       custom.programs.terminal = {
         app-id = "com.mitchellh.ghostty";

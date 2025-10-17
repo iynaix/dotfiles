@@ -95,17 +95,6 @@ in
       # when nixos tries to call it
       hj.xdg.config.files."hypr/hyprland.conf".text = hyprlandConfText;
 
-      # TODO: wrap the config into the Hyprland executable, can't override the package atm
-      # custom.wrappers = [
-      #   (_: _prev: {
-      #     hyprland = {
-      #       flags = {
-      #         "--config" = pkgs.writeText "hyprland.conf" hyprlandConfText;
-      #       };
-      #     };
-      #   })
-      # ];
-
       programs.hyprland = {
         enable =
           assert (

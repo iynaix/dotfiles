@@ -7,7 +7,7 @@ topLevel: {
       ...
     }:
     let
-      inherit (lib) getExe mkIf;
+      inherit (lib) getExe;
     in
     {
       imports = with topLevel.config.flake.modules.nixos; [
@@ -56,7 +56,7 @@ topLevel: {
       # touchpad support
       services.libinput.enable = true;
 
-      security.wrappers = mkIf config.custom.programs.btop.enable {
+      security.wrappers = {
         btop = {
           capabilities = "cap_perfmon=+ep";
           group = "wheel";

@@ -105,13 +105,11 @@ in
       powermenuDir = "${rofiThemes}/powermenu/type-4";
     in
     mkIf config.custom.isWm {
-      custom.wrappers = [
+      nixpkgs.overlays = [
         (_: prev: {
-          rofi = {
-            package = prev.rofi.override {
-              plugins = [ rofiThemes ];
-            };
-            # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
+          # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
+          rofi = prev.rofi.override {
+            plugins = [ rofiThemes ];
           };
         })
       ];
@@ -127,6 +125,7 @@ in
 
       environment.systemPackages = [
         pkgs.rofi
+        self.packages.${pkgs.system}.reboot-to-windows
         # NOTE: rofi-power-menu only works for powermenuType = 4!
         (pkgs.custom.rofi-power-menu.override {
           reboot-to-windows =

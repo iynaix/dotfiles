@@ -1,5 +1,6 @@
+{ inputs, ... }:
 {
-  flake.modules.nixos.core =
+  perSystem =
     { pkgs, ... }:
     let
       ignoreFile = pkgs.writeText "ripgrep-ignore" ''
@@ -11,17 +12,19 @@
       '';
     in
     {
-      custom.wrappers = [
-        (_: _prev: {
-          ripgrep = {
-            flags = {
-              "--smart-case" = { };
-              "--ignore-file" = ignoreFile;
-            };
-          };
-        })
-      ];
+      packages.ripgrep' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.ripgrep;
+        flags = {
+          "--smart-case" = { };
+          "--ignore-file" = ignoreFile;
+        };
+      };
+    };
 
-      environment.systemPackages = [ pkgs.ripgrep ];
+  flake.modules.nixos.core =
+    { pkgs, self, ... }:
+    {
+      environment.systemPackages = [ self.packages.${pkgs.system}.ripgrep' ];
     };
 }

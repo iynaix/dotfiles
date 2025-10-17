@@ -1,8 +1,9 @@
+{ inputs, lib, ... }:
 {
-  flake.modules.nixos.core =
-    { lib, pkgs, ... }:
+  perSystem =
+    { pkgs, ... }:
     let
-      inherit (lib) types;
+      inherit (lib) concatMapStringsSep types;
       # implementation for loading plugins from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
       tmuxPlugin = p: ''run-shell ${if types.package.check p then p.rtp else p.plugin.rtp}'';
@@ -46,7 +47,7 @@
           set  -g history-limit     2000
 
           # load plugins
-          ${lib.concatMapStringsSep "\n" tmuxPlugin (
+          ${concatMapStringsSep "\n" tmuxPlugin (
             with pkgs.tmuxPlugins;
             [
               vim-tmux-navigator
@@ -83,16 +84,18 @@
         '';
     in
     {
-      custom.wrappers = [
-        (_: _prev: {
-          wrappers.tmux = {
-            flags = {
-              "-f" = pkgs.writeText "tmux.conf" tmuxConf;
-            };
-          };
-        })
-      ];
+      packages.tmux' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.tmux;
+        flags = {
+          "-f" = pkgs.writeText "tmux.conf" tmuxConf;
+        };
+      };
+    };
 
-      environment.systemPackages = [ pkgs.tmux ];
+  flake.modules.nixos.core =
+    { pkgs, self, ... }:
+    {
+      environment.systemPackages = [ self.packages.${pkgs.system}.tmux' ];
     };
 }

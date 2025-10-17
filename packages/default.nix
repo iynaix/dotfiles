@@ -35,8 +35,6 @@ in
   hyprnstack = callPackage ./hyprnstack { };
   hypr-darkwindow = callPackage ./hypr-darkwindow { };
 
-  path-of-building = callPackage ./path-of-building { };
-
   # mpv plugins
   mpv-cut = callPackage ./mpv-cut { };
   mpv-deletefile = callPackage ./mpv-deletefile { };

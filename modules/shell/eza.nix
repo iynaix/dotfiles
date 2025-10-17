@@ -1,9 +1,22 @@
+{ inputs, ... }:
 {
-  flake.modules.nixos.core =
+  perSystem =
     { pkgs, ... }:
     {
-      custom.shell.packages = {
-        tree = {
+      packages = {
+        eza' = inputs.wrappers.lib.wrapPackage {
+          inherit pkgs;
+          package = pkgs.eza;
+          flags = {
+            "--icons" = { };
+            "--group-directories-first" = { };
+            "--header" = { };
+            "--octal-permissions" = { };
+            "--hyperlink" = { };
+          };
+        };
+        eza-tree = pkgs.writeShellApplication {
+          name = "tree";
           runtimeInputs = [ pkgs.eza ];
           text = # sh
             ''
@@ -30,21 +43,11 @@
             '';
         };
       };
+    };
 
-      custom.wrappers = [
-        (_: _prev: {
-          eza = {
-            flags = {
-              "--icons" = { };
-              "--group-directories-first" = { };
-              "--header" = { };
-              "--octal-permissions" = { };
-              "--hyperlink" = { };
-            };
-          };
-        })
-      ];
-
+  flake.modules.nixos.core =
+    { pkgs, self, ... }:
+    {
       environment = {
         shellAliases = {
           t = "tree";
@@ -55,7 +58,10 @@
           lla = "eza -la";
         };
 
-        systemPackages = [ pkgs.eza ];
+        systemPackages = with self.packages.${pkgs.system}; [
+          eza'
+          eza-tree
+        ];
       };
     };
 }

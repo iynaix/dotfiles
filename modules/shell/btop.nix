@@ -1,9 +1,9 @@
+{ inputs, lib, ... }:
 {
   flake.modules.nixos.core =
     {
       config,
       host,
-      lib,
       pkgs,
       ...
     }:
@@ -12,8 +12,6 @@
         concatStringsSep
         isBool
         isString
-        mkEnableOption
-        mkIf
         mkOption
         ;
       # btop options and settings config from:
@@ -34,10 +32,6 @@
     {
       options.custom = {
         programs.btop = {
-          enable = mkEnableOption "btop" // {
-            default = true;
-          };
-
           disks = mkOption {
             type = with lib.types; listOf str;
             default = [ ];
@@ -70,9 +64,19 @@
       config =
         let
           cfg = config.custom.programs.btop;
-          btop-config = pkgs.writeText "btop.conf" (toBtopConf cfg.settings);
+          btopConf = pkgs.writeText "btop.conf" (toBtopConf cfg.settings);
+          btop' = inputs.wrappers.lib.wrapPackage {
+            inherit pkgs;
+            package = pkgs.btop.override {
+              cudaSupport = host == "desktop";
+              rocmSupport = host == "laptop";
+            };
+            flags = {
+              "--config" = btopConf;
+            };
+          };
         in
-        mkIf cfg.enable {
+        {
           custom = {
             programs.btop.settings = {
               color_theme = "TTY";
@@ -95,23 +99,9 @@
               shown_boxes = "cpu mem net proc gpu0";
               gpu_mirror_graph = false;
             };
-
-            wrappers = [
-              (_: prev: {
-                btop = {
-                  package = prev.btop.override {
-                    cudaSupport = host == "desktop";
-                    rocmSupport = host == "laptop";
-                  };
-                  flags = {
-                    "--config" = btop-config;
-                  };
-                };
-              })
-            ];
           };
 
-          environment.systemPackages = [ pkgs.btop ];
+          environment.systemPackages = [ btop' ];
         };
     };
 }

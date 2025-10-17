@@ -1,21 +1,26 @@
+{ inputs, lib, ... }:
 {
   flake.modules.nixos.core =
     {
       config,
-      host,
-      lib,
       pkgs,
       ...
     }:
     let
-      inherit (lib) concatStringsSep mkIf mkMerge;
+      inherit (lib) concatStringsSep mkMerge;
       gitignores = [
-
         ".direnv"
         ".devenv"
         ".jj"
         "node_modules"
       ];
+      difftastic' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.difftastic;
+        flags = {
+          "--background" = "dark";
+        };
+      };
     in
     mkMerge [
       {
@@ -194,17 +199,7 @@
 
       # difftastic
       {
-        custom.wrappers = [
-          (_: _prev: {
-            difftastic = {
-              flags = {
-                "--background" = "dark";
-              };
-            };
-          })
-        ];
-
-        environment.systemPackages = [ pkgs.difftastic ];
+        environment.systemPackages = [ difftastic' ];
 
         programs.git.config = {
           diff = {
@@ -220,12 +215,12 @@
 
       # git maintenance for large repos
       # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
-      (mkIf (host == "desktop" || host == "framework") {
+      {
         programs.git.config = {
           maintenance = {
             repo = "/persist${config.hj.directory}/projects/nixpkgs";
           };
         };
-      })
+      }
     ];
 }

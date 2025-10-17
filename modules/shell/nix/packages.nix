@@ -1,3 +1,4 @@
+{ inputs, lib, ... }:
 {
   flake.modules.nixos.core =
     {
@@ -5,7 +6,6 @@
       dots,
       host,
       isNixOS,
-      lib,
       pkgs,
       user,
       ...
@@ -13,22 +13,22 @@
     let
       inherit (lib) concatLines getExe optionalAttrs;
       tomlFormat = pkgs.formats.toml { };
+      nix-init' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.nix-init;
+        flags = {
+          "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
+        };
+      };
+      nixpkgs-review' = pkgs.nixpkgs-review.override { withNom = true; };
     in
     {
-      custom = {
-        wrappers = [
-          (_: prev: {
-            nix-init = {
-              flags = {
-                "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
-              };
-            };
-            nixpkgs-review = {
-              package = prev.nixpkgs-review.override { withNom = true; };
-            };
-          })
-        ];
+      environment.systemPackages = [
+        nix-init'
+        nixpkgs-review'
+      ];
 
+      custom = {
         shell.packages = {
           # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
           ngeneration = {

@@ -14,5 +14,6 @@
     { pkgs, ... }:
     {
       formatter = pkgs.nixfmt;
+      packages = (import ../packages) { inherit inputs pkgs; };
     };
 }

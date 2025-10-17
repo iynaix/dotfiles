@@ -59,51 +59,36 @@
             }
           ];
         };
-
-        # wrappers = [
-        #   (_: _prev: {
-        #     hypridle = {
-        #       flags = {
-        #         "--config" = pkgs.writeText "hypridle.conf" hypridleConfText;
-        #       };
-        #     };
-        #   })
-        # ];
       };
 
-      services.hypridle.enable =
-        assert (
-          assertMsg (versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper and custom service"
-        );
-        true;
+      services.hypridle = {
+        enable =
+          assert (assertMsg (versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper");
+          true;
+
+        # package =
+        #   inputs.wrappers.lib.wrapPackage {
+        #     inherit pkgs;
+        #     package = pkgs.hypridle.overrideAttrs {
+        #       src = pkgs.fetchFromGitHub {
+        #         owner = "hyprwm";
+        #         repo = "hypridle";
+        #         rev = "f158b2fe9293f9b25f681b8e46d84674e7bc7f01";
+        #         hash = "sha256-jVkY2ax7e+V+M4RwLZTJnOVTdjR5Bj10VstJuK60tl4=";
+        #       };
+        #     };
+        #     flags = {
+        #       "--config" = pkgs.writeText "hypridle.conf" hypridleConfText;
+        #     };
+        #     flagSeparator = "=";
+        #     # patch the service file to use the wrapper
+        #     filesToPatch = [ "share/systemd/user/*.service" ];
+        #   };
+      };
 
       # by default, the service uses the systemd package from the hypridle derivation,
       # so using a config file is necessary
       hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
-
-      /*
-        # don't use services.hyprland.enable as it uses the systemd service
-        # from the derivation and is not overrideable
-        systemd.user.services = {
-          hypridle = {
-            unitConfig = {
-              Description = "Hyprland's idle daemon";
-              Documentation = "https://wiki.hyprland.org/Hypr-Ecosystem/hypridle";
-              PartOf = "graphical-session.target";
-              After = "graphical-session.target";
-              ConditionEnvironment = "WAYLAND_DISPLAY";
-            };
-
-            serviceConfig = {
-              Type = "simple";
-              ExecStart = getExe pkgs.hypridle;
-              Restart = "on-failure";
-            };
-
-            wantedBy = [ "graphical-session.target" ];
-          };
-        };
-      */
 
       # NOTE: screen lock on idle is handled in lock.nix
     };
