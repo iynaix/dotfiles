@@ -36,6 +36,7 @@ topLevel: {
         # hardware
         # bluetooth
         # keyd
+        # qmk
 
         # services
         bittorrent
@@ -126,7 +127,6 @@ topLevel: {
             qtile = false;
           };
           hyprnstack.enable = true;
-          niri.blur.enable = false;
 
           # wallust.colorscheme = "tokyo-night";
 

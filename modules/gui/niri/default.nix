@@ -4,13 +4,11 @@ let
     getExe
     imap0
     listToAttrs
-    mkEnableOption
     mkForce
     mkIf
     mkMerge
     mkOption
     mod
-    optionals
     toInt
     types
     ;
@@ -21,8 +19,6 @@ in
     {
       options.custom = {
         programs.niri = {
-          blur.enable = mkEnableOption "blur behind windows using PR";
-
           settings = mkOption {
             # it's KDL not JSON, but the JSON type gives the wanted recursive merging properties
             type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
@@ -80,22 +76,11 @@ in
         package = pkgs.niri.overrideAttrs (o: {
           patches =
             (o.patches or [ ])
-            ++ optionals config.custom.programs.niri.blur.enable [
-              (pkgs.fetchpatch {
-                url = "https://patch-diff.githubusercontent.com/raw/YaLTeR/niri/pull/1634.diff";
-                hash = "sha256-nEyYtMOnZmYJPhu1/5p4H9RWBKHMq0/IYwvkorMgwoo=";
-                name = "blur-behind-windows";
-              })
-              # additional patch to fix blur on vertical monitors, sadly there's still an artifact on the bottom right
-              ./fix-vertical-blur.patch
-            ]
             # not compatible with blur patch
-            ++ optionals (!config.custom.programs.niri.blur.enable) [
+            ++ [
               # fix fullscreen windows have a black background
               # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
               ./transparent-fullscreen.patch
-            ]
-            ++ [
               # increase maximum shadow spread to be able to fake dimaround on ultrawide
               # see: https://github.com/YaLTeR/niri/discussions/1806
               ./larger-shadow-spread.patch

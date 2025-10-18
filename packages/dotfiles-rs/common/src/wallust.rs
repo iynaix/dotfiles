@@ -122,34 +122,13 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     );
     let inactive = format!(r#"inactive-color "{}""#, &color(0).to_hex_str());
 
-    let mut replacements = vec![
+    let replacements = vec![
         // focus-ring colors
         (r"active-gradient .*", active.as_str()),
         (r"inactive-color .*", inactive.as_str()),
         // increase maximum shadow spread value to workaround config validation errors during nix build
         ("spread 1024", "spread 2048"),
     ];
-
-    // add blur settings if enabled, has to be done here as niri-flake cannot be extended :(
-    if Some(true) == NixJson::new().niri_blur
-        && let Ok(content) = std::fs::read_to_string(&config_path)
-    {
-        // add the blur settings if they're not already there
-        if !content.contains("blur {") {
-            replacements.push((
-                "always-center-single-column",
-                r"
-    always-center-single-column
-
-    blur {
-        on
-        passes 3
-        radius 2.0
-    }
-    ",
-            ));
-        }
-    }
 
     replace_in_file(&config_path, replacements);
 }
