@@ -29,9 +29,6 @@ in
             settings = self.lib.types.hyprlandSettingsType;
           };
           hyprnstack.enable = mkEnableOption "hyprnstack";
-          hypr-darkwindow.enable = mkEnableOption "hypr-darkwindow" // {
-            default = true;
-          };
         };
       };
     };
@@ -98,7 +95,7 @@ in
       programs.hyprland = {
         enable =
           assert (
-            assertMsg (versionOlder config.programs.hyprland.package.version "0.52") "hyprland updated, sync with hyprnstack / hypr-darkwindow?"
+            assertMsg (versionOlder config.programs.hyprland.package.version "0.52") "hyprland updated, sync with hyprnstack?"
           );
           true;
         # fix chromium based browsers crashing on monitor change:

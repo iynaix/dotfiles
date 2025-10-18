@@ -33,7 +33,6 @@ in
   helium = callPackage ./helium { };
 
   hyprnstack = callPackage ./hyprnstack { };
-  hypr-darkwindow = callPackage ./hypr-darkwindow { };
 
   # mpv plugins
   mpv-cut = callPackage ./mpv-cut { };

@@ -173,7 +173,6 @@ in
             ",XF86AudioMute, exec, pamixer -t"
           ]
           # invert windows
-          ++ optionals config.custom.programs.hypr-darkwindow.enable [ "$mod_shift, i ,invertactivewindow" ]
           ++ workspace_keybinds
           ++ optionals config.custom.hardware.backlight.enable [
             ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
