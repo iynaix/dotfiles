@@ -16,7 +16,7 @@
 
     wrappers = {
       # automatic desktop file patching
-      url = "github:Lassulus/wrappers/9c1bcebce4fe139a8b1ca71d817ae69290620243";
+      url = "github:Lassulus/wrappers";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

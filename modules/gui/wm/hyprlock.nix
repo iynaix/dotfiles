@@ -175,7 +175,7 @@ in
               "Mod+Shift+Ctrl+x".action.spawn = lockOrDpms;
             };
 
-            switch-events = mkIf isLaptop {
+            switch-events = {
               lid-open.action.spawn = lockOrDpms;
             };
           };

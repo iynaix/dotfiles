@@ -61,6 +61,7 @@
         };
       };
 
+      # NOTE: screen lock on idle is handled in lock.nix
       services.hypridle = {
         enable =
           assert (assertMsg (versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper");
@@ -89,7 +90,5 @@
       # by default, the service uses the systemd package from the hypridle derivation,
       # so using a config file is necessary
       hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
-
-      # NOTE: screen lock on idle is handled in lock.nix
     };
 }

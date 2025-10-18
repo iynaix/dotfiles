@@ -55,8 +55,8 @@ in
     vm-hyprland = mkVm "vm" { };
     # create VMs for each host configuration, build using
     # nixos-rebuild build-vm --flake .#desktop-vm
-    desktop-vm = mkVm "desktop" { isVm = true; };
-    framework-vm = mkVm "framework" { isVm = true; };
-    xps-vm = mkVm "xps" { isVm = true; };
+    desktop-vm = mkVm "desktop" { };
+    framework-vm = mkVm "framework" { };
+    xps-vm = mkVm "xps" { };
   };
 }

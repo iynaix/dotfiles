@@ -358,10 +358,6 @@ in
             background-opacity = mkForce 0.95;
           };
 
-          wallust.nixJson = {
-            niriBlur = config.custom.programs.niri.blur.enable;
-          };
-
           # waybar config for niri
           waybar.config = {
             "niri/workspaces" = {

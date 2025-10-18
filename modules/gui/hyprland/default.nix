@@ -26,6 +26,7 @@ in
                 absolute plugin paths.
               '';
             };
+            qtile = mkEnableOption "qtile like behavior for workspaces";
             settings = self.lib.types.hyprlandSettingsType;
           };
           hyprnstack.enable = mkEnableOption "hyprnstack";

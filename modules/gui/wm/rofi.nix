@@ -1,45 +1,8 @@
 { lib, ... }:
 let
-  inherit (lib) mkIf mkOption optionals;
-  inherit (lib.types) enum int nullOr;
+  inherit (lib) mkIf optionals;
 in
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs = {
-        rofi = {
-          theme = mkOption {
-            type = nullOr (enum [
-              "adapta"
-              "arc"
-              "black"
-              "catppuccin"
-              "cyberpunk"
-              "dracula"
-              "everforest"
-              "gruvbox"
-              "lovelace"
-              "navy"
-              "nord"
-              "onedark"
-              "paper"
-              "solarized"
-              "tokyonight"
-              "yousai"
-            ]);
-            default = null;
-            description = "Rofi launcher theme";
-          };
-          width = mkOption {
-            type = int;
-            default = 800;
-            description = "Rofi launcher width";
-          };
-        };
-      };
-    };
-  };
-
   flake.modules.nixos.wm =
     {
       config,
@@ -49,14 +12,14 @@ in
       ...
     }:
     let
-      cfg = config.custom.programs.rofi;
-      rofiThemes = pkgs.custom.rofi-themes;
+      rofiTheme = null;
+      rofiThemesPkg = pkgs.custom.rofi-themes;
       patchRasi =
         name: rasiPath: overrideStyles:
         let
           themeStyles =
-            if cfg.theme != null then
-              ''@import "${rofiThemes}/colors/${cfg.theme}.rasi"''
+            if rofiTheme != null then
+              ''@import "${rofiThemesPkg}/colors/${rofiTheme}.rasi"''
             else
               # css
               ''
@@ -88,7 +51,7 @@ in
             # append
             cat <<EOF >> $output
               window {
-                width: ${toString cfg.width}px;
+                width: 800px;
               }
 
               element normal.normal { background-color: transparent; }
@@ -101,15 +64,15 @@ in
           '';
         in
         "${toString out}/${name}";
-      launcherPath = "${rofiThemes}/launchers/type-2/style-2.rasi";
-      powermenuDir = "${rofiThemes}/powermenu/type-4";
+      launcherPath = "${rofiThemesPkg}/launchers/type-2/style-2.rasi";
+      powermenuDir = "${rofiThemesPkg}/powermenu/type-4";
     in
     mkIf config.custom.isWm {
       nixpkgs.overlays = [
         (_: prev: {
           # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
           rofi = prev.rofi.override {
-            plugins = [ rofiThemes ];
+            plugins = [ rofiThemesPkg ];
           };
         })
       ];

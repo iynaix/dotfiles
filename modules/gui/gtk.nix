@@ -1,35 +1,43 @@
 { lib, ... }:
 let
   inherit (lib)
-    attrNames
     concatLines
     concatMapStringsSep
     gvariant
     isBool
     isString
     literalExpression
+    mapAttrs'
     mapAttrsToList
     mkMerge
     mkOption
+    nameValuePair
     optionalAttrs
     ;
   inherit (lib.types)
     attrs
-    attrsOf
-    enum
     int
     package
     number
     listOf
     str
     ;
+  accents = {
+    Default = "#2e7de9";
+    Green = "#387068";
+    Grey = "#414868";
+    Orange = "#b15c00";
+    Pink = "#d20065";
+    Purple = "#7847bd";
+    Red = "#f52a65";
+    Teal = "#118c74";
+    Yellow = "#8c6c3e";
+  };
+  defaultAccent = "Default";
 in
 {
   flake.modules.nixos.core =
     { config, pkgs, ... }:
-    let
-      gtkCfg = config.custom.gtk;
-    in
     {
       options.custom = {
         # type referenced from nixpkgs:
@@ -49,28 +57,6 @@ in
           '';
         };
         gtk = {
-          accents = mkOption {
-            type = attrsOf str;
-            default = {
-              Default = "#2e7de9";
-              Green = "#387068";
-              Grey = "#414868";
-              Orange = "#b15c00";
-              Pink = "#d20065";
-              Purple = "#7847bd";
-              Red = "#f52a65";
-              Teal = "#118c74";
-              Yellow = "#8c6c3e";
-            };
-            description = "GTK theme accents";
-          };
-
-          defaultAccent = mkOption {
-            type = enum (attrNames config.custom.gtk.accents);
-            default = "Default";
-            description = "Default GTK theme accent";
-          };
-
           bookmarks = mkOption {
             type = listOf str;
             default = [ ];
@@ -101,7 +87,7 @@ in
           theme = {
             package = mkOption {
               type = package;
-              default = pkgs.custom.tela-dynamic-icon-theme.override { colors = gtkCfg.accents; };
+              default = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
               description = "Package providing the theme.";
             };
 
@@ -125,7 +111,7 @@ in
 
             name = mkOption {
               type = str;
-              default = "Tela-${gtkCfg.defaultAccent}-dark";
+              default = "Tela-${defaultAccent}-dark";
               description = "The name of the icon theme within the package.";
             };
           };
@@ -251,7 +237,7 @@ in
                   cursor-size = gvariant.mkUint32 gtkCfg.cursor.size;
                   font-name = "${gtkCfg.font.name} 10";
                   gtk-theme = "Tokyonight-Dark-Compact";
-                  icon-theme = "Tela-${gtkCfg.defaultAccent}-dark";
+                  icon-theme = "Tela-${defaultAccent}-dark";
                 };
               }
               config.custom.dconf.settings
@@ -270,15 +256,28 @@ in
           b: "file://${b}"
         ) gtkCfg.bookmarks;
 
-        data.files."icons/default/index.theme".source =
-          "${defaultIndexThemePackage}/share/icons/default/index.theme";
-        data.files."icons/${gtkCfg.cursor.name}".source =
-          "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
+        data.files = {
+          "icons/default/index.theme".source = "${defaultIndexThemePackage}/share/icons/default/index.theme";
+          "icons/${gtkCfg.cursor.name}".source = "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
+        }
+        //
+          # create symlink in $XDG_DATA_HOME/.icons for each icon accent variant
+          # allows dunst to be able to refer to icons by name, $XDG_DATA_HOME is used as
+          # /usr/share/icons does not exist on nixos
+          mapAttrs' (
+            accent: _:
+            let
+              iconTheme = "Tela-${accent}-dark";
+            in
+            nameValuePair "icons/${iconTheme}" {
+              source = "${config.custom.gtk.iconTheme.package}/share/icons/${iconTheme}";
+            }
+          ) accents;
       };
 
       # write theme accents into nix.json for rust to read
       custom.programs.wallust.nixJson = {
-        themeAccents = gtkCfg.accents;
+        themeAccents = accents;
       };
     };
 }

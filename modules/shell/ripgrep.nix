@@ -5,6 +5,8 @@
     let
       ignoreFile = pkgs.writeText "ripgrep-ignore" ''
         .envrc
+        .direnv
+        .devenv
         .ignore
         *.lock
         generated.nix

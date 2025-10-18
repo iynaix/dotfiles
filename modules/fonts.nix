@@ -3,24 +3,19 @@
     { lib, pkgs, ... }:
     let
       inherit (lib) mkOption types;
-      inherit (types) listOf package str;
     in
     {
       options.custom = {
         fonts = {
           regular = mkOption {
-            type = str;
+            type = types.str;
             default = "Geist";
             description = "The font to use for regular text";
           };
           monospace = mkOption {
-            type = str;
+            type = types.str;
             default = "JetBrainsMono Nerd Font";
             description = "The font to use for monospace text";
-          };
-          packages = mkOption {
-            type = listOf package;
-            description = "The packages to install for the fonts";
           };
         };
       };

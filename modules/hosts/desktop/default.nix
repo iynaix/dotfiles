@@ -40,7 +40,9 @@ topLevel: {
 
         # services
         bittorrent
+        docker
         syncoid
+        virtualisation
       ];
 
       custom = {
@@ -117,15 +119,10 @@ topLevel: {
             #   defaultWorkspace = 10;
             # }
           ];
-          qmk.enable = true;
         };
         lock.enable = false;
 
         programs = {
-          distrobox.enable = true;
-          hyprland = {
-            qtile = false;
-          };
           hyprnstack.enable = true;
 
           # wallust.colorscheme = "tokyo-night";
@@ -148,10 +145,6 @@ topLevel: {
           pixiv = /* sh */ ''
             direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
           '';
-        };
-
-        services = {
-          virtualization.enable = true;
         };
       };
 

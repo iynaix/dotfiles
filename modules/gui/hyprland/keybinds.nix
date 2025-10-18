@@ -1,21 +1,8 @@
 { lib, ... }:
 let
-  inherit (lib)
-    flatten
-    mkEnableOption
-    mkIf
-    optionals
-    ;
+  inherit (lib) flatten mkIf optionals;
 in
 {
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs.hyprland = {
-        qtile = mkEnableOption "qtile like behavior for workspaces";
-      };
-    };
-  };
-
   flake.modules.nixos.wm =
     {
       config,
