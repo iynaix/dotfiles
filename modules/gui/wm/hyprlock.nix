@@ -21,7 +21,7 @@ in
       };
     };
 
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { isLaptop, ... }:
     {
       options.custom = {
@@ -31,7 +31,7 @@ in
       };
     };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       isLaptop,

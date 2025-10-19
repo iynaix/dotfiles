@@ -18,7 +18,7 @@
       };
     };
 
-  flake.modules.nixos.helix =
+  flake.nixosModules.helix =
     { pkgs, self, ... }:
     {
       environment.systemPackages = [ self.packages.${pkgs.system}.helix' ];

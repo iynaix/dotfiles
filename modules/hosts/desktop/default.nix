@@ -1,5 +1,5 @@
 topLevel: {
-  flake.modules.nixos.host-desktop =
+  flake.nixosModules.host-desktop =
     {
       config,
       isVm,
@@ -12,7 +12,7 @@ topLevel: {
       inherit (lib) mkIf mkMerge;
     in
     {
-      imports = with topLevel.config.flake.modules.nixos; [
+      imports = with topLevel.config.flake.nixosModules; [
         gui
 
         # WM / DE

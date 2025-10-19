@@ -93,7 +93,7 @@
       };
     };
 
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, self, ... }:
     {
       environment.systemPackages = [ self.packages.${pkgs.system}.tmux' ];

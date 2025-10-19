@@ -9,7 +9,7 @@ let
     ;
 in
 {
-  flake.modules.nixos.core = {
+  flake.nixosModules.core = {
     options.custom = {
       # copied from home-manger's hypland module, since mango config is similar to hyprlang
       programs.mango.settings = lib.mkOption {
@@ -37,7 +37,7 @@ in
     };
   };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       dots,

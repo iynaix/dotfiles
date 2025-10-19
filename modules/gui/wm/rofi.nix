@@ -3,7 +3,7 @@ let
   inherit (lib) mkIf optionals;
 in
 {
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       isNixOS,

@@ -17,7 +17,7 @@ let
   inherit (lib.types) lines submodule;
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, ... }:
     {
       options.custom = {
@@ -38,7 +38,7 @@ in
       };
     };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       isNixOS,

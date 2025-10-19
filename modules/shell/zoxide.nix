@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core = _: {
+  flake.nixosModules.core = _: {
     environment.shellAliases = {
       z = "zoxide query -i";
     };

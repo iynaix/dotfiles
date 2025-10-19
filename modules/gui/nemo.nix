@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     {
       config,
       host,

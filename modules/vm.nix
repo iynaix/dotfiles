@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.virtualisation =
+  flake.nixosModules.virtualisation =
     { pkgs, user, ... }:
     {
       config = {

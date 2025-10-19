@@ -4,7 +4,7 @@ let
   inherit (types) package str;
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { config, pkgs, ... }:
     let
       keyValueSettings = {
@@ -56,7 +56,7 @@ in
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { config, pkgs, ... }:
     let
       # adapted from home-manager:

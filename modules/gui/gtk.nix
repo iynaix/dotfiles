@@ -36,7 +36,7 @@ let
   defaultAccent = "Default";
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { config, pkgs, ... }:
     {
       options.custom = {
@@ -139,7 +139,7 @@ in
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { config, pkgs, ... }:
     let
       gtkCfg = config.custom.gtk;

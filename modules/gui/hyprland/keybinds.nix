@@ -3,7 +3,7 @@ let
   inherit (lib) flatten mkIf optionals;
 in
 {
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       pkgs,

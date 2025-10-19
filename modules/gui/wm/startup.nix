@@ -23,7 +23,7 @@ let
     ;
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { config, ... }:
     {
       options.custom = {
@@ -164,7 +164,7 @@ in
 
     };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     # generic functionality for all WMs
     {
       config,

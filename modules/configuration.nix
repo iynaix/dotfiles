@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     # leftovers from initial configuration.nix
     {
       host,

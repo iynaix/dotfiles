@@ -28,8 +28,8 @@ let
       };
 
       modules = [
-        config.flake.modules.nixos."host-${host}"
-        config.flake.modules.nixos.core
+        config.flake.nixosModules."host-${host}"
+        config.flake.nixosModules.core
         ../../overlays
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index

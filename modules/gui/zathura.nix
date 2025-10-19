@@ -68,7 +68,7 @@
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { pkgs, self, ... }:
     {
       environment.systemPackages = [ self.packages.${pkgs.system}.zathura' ];

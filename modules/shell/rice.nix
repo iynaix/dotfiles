@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { inputs, pkgs, ... }:
     {
       environment = {
@@ -23,7 +23,7 @@
       };
     };
 
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { pkgs, ... }:
     {
       environment.systemPackages = [

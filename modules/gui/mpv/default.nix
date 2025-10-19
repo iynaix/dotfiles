@@ -17,7 +17,7 @@ let
   mpvProfiles = with types; attrsOf mpvOptions;
 in
 {
-  flake.modules.nixos.core = {
+  flake.nixosModules.core = {
     options.custom = {
       programs.mpv = {
         config = mkOption {
@@ -115,7 +115,7 @@ in
     };
   };
 
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     {
       config,
       pkgs,

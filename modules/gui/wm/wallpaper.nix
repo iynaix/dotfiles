@@ -12,7 +12,7 @@ let
   inherit (lib.types) package;
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { config, pkgs, ... }:
     {
       options.custom = {
@@ -30,7 +30,7 @@ in
       };
     };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       pkgs,

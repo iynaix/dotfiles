@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, ... }:
     {
       # setup pipewire for audio

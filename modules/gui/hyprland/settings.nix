@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       host,

@@ -34,7 +34,7 @@
       };
     };
 
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, self, ... }:
     {
       environment.systemPackages = with self.packages.${pkgs.system}; [

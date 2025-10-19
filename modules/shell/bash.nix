@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { config, ... }:
     let
       histFile = "/persist${config.hj.xdg.data.directory}/bash/.bash_history";

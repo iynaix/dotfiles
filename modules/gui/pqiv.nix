@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { config, pkgs, ... }:
     let
       pqivConf = ''

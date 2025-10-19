@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { lib, pkgs, ... }:
     let
       inherit (lib) mkOption types;

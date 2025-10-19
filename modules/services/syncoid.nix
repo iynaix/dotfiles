@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.syncoid =
+  flake.nixosModules.syncoid =
     { config, user, ... }:
     {
       # allow syncoid to ssh into NAS

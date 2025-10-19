@@ -20,7 +20,7 @@ let
     ;
 in
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, ... }:
     {
       options.custom = {
@@ -58,7 +58,7 @@ in
       };
     };
 
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     {
       config,
       host,

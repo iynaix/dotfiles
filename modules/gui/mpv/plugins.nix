@@ -8,7 +8,7 @@ let
     ;
 in
 {
-  flake.modules.nixos.gui =
+  flake.nixosModules.gui =
     { pkgs, ... }:
     mkMerge [
       # subliminal

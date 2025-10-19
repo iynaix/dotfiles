@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     {
       config,
       isVm,
@@ -127,7 +127,7 @@
     };
 
   # setup zfs event daemon for email notifications
-  flake.modules.nixos.zfs-zed =
+  flake.nixosModules.zfs-zed =
     {
       config,
       lib,

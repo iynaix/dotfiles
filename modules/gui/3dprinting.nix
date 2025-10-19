@@ -25,7 +25,7 @@ let
       pkg;
 in
 {
-  flake.modules.nixos.orca-slicer =
+  flake.nixosModules.orca-slicer =
     { host, pkgs, ... }:
     {
       environment.systemPackages = [
@@ -79,7 +79,7 @@ in
       };
     };
 
-  flake.modules.nixos.freecad =
+  flake.nixosModules.freecad =
     { host, pkgs, ... }:
     {
       environment.systemPackages = [

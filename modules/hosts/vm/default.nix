@@ -1,11 +1,11 @@
 topLevel: {
-  flake.modules.nixos.host-vm =
+  flake.nixosModules.host-vm =
     { lib, pkgs, ... }:
     let
       inherit (lib) getExe';
     in
     {
-      imports = with topLevel.config.flake.modules.nixos; [
+      imports = with topLevel.config.flake.nixosModules; [
         gui
       ];
 

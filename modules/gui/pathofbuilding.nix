@@ -24,7 +24,7 @@
       };
     };
 
-  flake.modules.nixos.path-of-building =
+  flake.nixosModules.path-of-building =
     { self, pkgs, ... }:
     {
       environment.systemPackages = [ self.packages.${pkgs.system}.path-of-building ];

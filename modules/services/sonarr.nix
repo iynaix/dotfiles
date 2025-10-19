@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.bittorrent =
+  flake.nixosModules.bittorrent =
     {
       config,
       lib,

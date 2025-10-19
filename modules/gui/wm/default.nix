@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.wm =
+  flake.nixosModules.wm =
     { config, lib, ... }:
     lib.mkIf config.custom.isWm {
       environment = {

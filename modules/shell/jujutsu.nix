@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.core =
+  flake.nixosModules.core =
     { pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };

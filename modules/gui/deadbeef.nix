@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.deadbeef =
+  flake.nixosModules.deadbeef =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.deadbeef ];
