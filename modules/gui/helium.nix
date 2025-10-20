@@ -21,6 +21,7 @@
     in
     {
       programs.chromium = {
+        # NOTE: programs.chromium.enable does not install any package!, it only creates policy files
         enable = true;
 
         extensions = [

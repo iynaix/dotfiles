@@ -1,26 +1,17 @@
 diff --git a/niri-config/src/appearance.rs b/niri-config/src/appearance.rs
-index a50e6a55..05124214 100644
+index eba265b0..274bdc01 100644
 --- a/niri-config/src/appearance.rs
 +++ b/niri-config/src/appearance.rs
-@@ -330,7 +330,7 @@ pub struct Shadow {
-     #[knuffel(child, unwrap(argument), default = Self::default().softness)]
-     pub softness: FloatOrInt<0, 1024>,
-     #[knuffel(child, unwrap(argument), default = Self::default().spread)]
--    pub spread: FloatOrInt<-1024, 1024>,
-+    pub spread: FloatOrInt<-4096, 4096>,
-     #[knuffel(child, unwrap(argument), default = Self::default().draw_behind_window)]
-     pub draw_behind_window: bool,
-     #[knuffel(child, default = Self::default().color)]
-@@ -373,7 +373,7 @@ pub struct WorkspaceShadow {
-     #[knuffel(child, unwrap(argument), default = Self::default().softness)]
-     pub softness: FloatOrInt<0, 1024>,
-     #[knuffel(child, unwrap(argument), default = Self::default().spread)]
--    pub spread: FloatOrInt<-1024, 1024>,
-+    pub spread: FloatOrInt<-4096, 4096>,
-     #[knuffel(child, default = Self::default().color)]
-     pub color: Color,
+@@ -432,7 +432,7 @@ pub struct WorkspaceShadowPart {
+     #[knuffel(child, unwrap(argument))]
+     pub softness: Option<FloatOrInt<0, 1024>>,
+     #[knuffel(child, unwrap(argument))]
+-    pub spread: Option<FloatOrInt<-1024, 1024>>,
++    pub spread: Option<FloatOrInt<-4096, 4096>>,
+     #[knuffel(child)]
+     pub color: Option<Color>,
  }
-@@ -538,7 +538,7 @@ pub struct ShadowRule {
+@@ -649,7 +649,7 @@ pub struct ShadowRule {
      #[knuffel(child, unwrap(argument))]
      pub softness: Option<FloatOrInt<0, 1024>>,
      #[knuffel(child, unwrap(argument))]
