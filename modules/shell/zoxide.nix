@@ -1,23 +1,38 @@
+{ lib, ... }:
+let
+  inherit (lib) getExe mkAfter;
+in
 {
-  flake.nixosModules.core = _: {
-    environment.shellAliases = {
-      z = "zoxide query -i";
-    };
+  flake.nixosModules.core =
+    { pkgs, ... }:
+    let
+      flags = "--cmd cd";
+    in
+    {
+      environment = {
+        systemPackages = [ pkgs.zoxide ];
 
-    # zoxide is initialized via `zoxide init fish <flags> | source` and is
-    # therefore not wrapped with flags
+        shellAliases = {
+          z = "zoxide query -i";
+        };
+      };
 
-    programs.zoxide = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      flags = [ "--cmd cd" ];
-    };
+      # zoxide is initialized via `zoxide init fish <flags> | source` and is
+      # therefore not wrapped with flags
+      programs = {
+        bash.interactiveShellInit = mkAfter ''
+          eval "$(${getExe pkgs.zoxide} init bash ${flags} )"
+        '';
 
-    custom.persist = {
-      home = {
-        cache.directories = [ ".local/share/zoxide" ];
+        fish.interactiveShellInit = mkAfter ''
+          ${getExe pkgs.zoxide} init fish ${flags} | source
+        '';
+      };
+
+      custom.persist = {
+        home = {
+          cache.directories = [ ".local/share/zoxide" ];
+        };
       };
     };
-  };
 }

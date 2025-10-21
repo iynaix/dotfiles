@@ -2,7 +2,7 @@
   flake.nixosModules.core =
     { lib, pkgs, ... }:
     let
-      inherit (lib) concatStrings getExe mkAfter;
+      inherit (lib) concatStrings getExe;
     in
     {
       programs = {
@@ -108,7 +108,7 @@
             '';
           interactiveShellInit =
             # fish
-            mkAfter ''
+            ''
               function starship_transient_prompt_func
                 ${getExe pkgs.starship} module character
               end

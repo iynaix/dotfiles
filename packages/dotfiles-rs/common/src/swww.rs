@@ -146,7 +146,7 @@ impl Swww {
                 .save(&blurred_fname)
                 .expect("failed to save blurred webp image for backdrop");
 
-            // set overview backdrop with blurred wallpaper via swaybg
+            // set overview backdrop with blurred wallpaper via a separate swww namespace
             // runs in the background and doesn't yield control back to the user, so don't wait
             execute::command_args!("swww", "img", "--no-resize", "--namespace", "backdrop")
                 .arg("--outputs")
