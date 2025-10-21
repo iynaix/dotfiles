@@ -354,7 +354,7 @@ in
             }
           ];
 
-          ghostty.settings = {
+          ghostty.extraSettings = {
             background-opacity = mkForce 0.95;
           };
 
