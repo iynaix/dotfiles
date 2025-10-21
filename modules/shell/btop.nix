@@ -1,21 +1,52 @@
-{ inputs, lib, ... }:
 {
-  flake.nixosModules.core =
-    {
-      config,
-      host,
-      pkgs,
-      ...
-    }:
+  inputs,
+  lib,
+  self,
+  ...
+}:
+let
+  inherit (lib)
+    concatStringsSep
+    isBool
+    isString
+    mkEnableOption
+    mkOption
+    ;
+  btopOptions = {
+    cudaSupport = mkEnableOption {
+      description = "Enable nvidia support for btop";
+    };
+
+    rocmSupport = mkEnableOption {
+      description = "Enable radeon support for btop";
+    };
+
+    extraSettings = mkOption {
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          bool
+          float
+          int
+          str
+        ]);
+      default = { };
+      example = {
+        color_theme = "Default";
+        theme_background = false;
+      };
+      description = ''
+        Options to add to {file}`btop.conf` file.
+        See <https://github.com/aristocratos/btop#configurability>
+        for options.
+      '';
+    };
+  };
+in
+{
+  flake.wrapperModules.btop = inputs.wrappers.lib.wrapModule (
+    { config, wlib, ... }:
     let
-      inherit (lib)
-        concatStringsSep
-        isBool
-        isString
-        mkOption
-        ;
-      # btop options and settings config from:
-      # https://github.com/nix-community/home-manager/blob/master/modules/programs/btop.nix
       toBtopConf = lib.generators.toKeyValue {
         mkKeyValue = lib.generators.mkKeyValueDefault {
           mkValueString =
@@ -28,80 +59,83 @@
               toString v;
         } " = ";
       };
+      baseBtopConf = {
+        color_theme = "TTY";
+        theme_background = false;
+        cpu_single_graph = true;
+        # base_10_sizes = true;
+        show_disks = true;
+        show_swap = true;
+        swap_disk = false;
+        use_fstab = false;
+        only_physical = false;
+        shown_boxes = "cpu mem net proc gpu0";
+        gpu_mirror_graph = false;
+      };
     in
     {
+      options = btopOptions // {
+        "btop.conf" = lib.mkOption {
+          type = wlib.types.file config.pkgs;
+          default.content = toBtopConf (baseBtopConf // config.extraSettings);
+          visible = false;
+        };
+      };
+
+      config.package = config.pkgs.btop.override {
+        inherit (config) cudaSupport;
+        inherit (config) rocmSupport;
+      };
+      config.flags = {
+        "--config" = config."btop.conf".path;
+      };
+    }
+  );
+
+  # expose generic btop package without disks set
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages.btop' = self.wrapperModules.btop.apply { inherit pkgs; };
+    };
+
+  flake.nixosModules.core =
+    {
+      config,
+      host,
+      pkgs,
+      ...
+    }:
+    {
       options.custom = {
-        programs.btop = {
+        programs.btop = btopOptions // {
+          # convenience option to add disks to btop
           disks = mkOption {
             type = with lib.types; listOf str;
             default = [ ];
             description = "List of disks to monitor in btop";
           };
-
-          settings = mkOption {
-            type =
-              with lib.types;
-              attrsOf (oneOf [
-                bool
-                float
-                int
-                str
-              ]);
-            default = { };
-            example = {
-              color_theme = "Default";
-              theme_background = false;
-            };
-            description = ''
-              Options to add to {file}`btop.conf` file.
-              See <https://github.com/aristocratos/btop#configurability>
-              for options.
-            '';
-          };
         };
       };
 
-      config =
-        let
-          cfg = config.custom.programs.btop;
-          btopConf = pkgs.writeText "btop.conf" (toBtopConf cfg.settings);
-          btop' = inputs.wrappers.lib.wrapPackage {
+      config = {
+        environment.systemPackages = [
+          (self.wrapperModules.btop.apply {
             inherit pkgs;
-            package = pkgs.btop.override {
-              cudaSupport = host == "desktop";
-              rocmSupport = host == "laptop";
-            };
-            flags = {
-              "--config" = btopConf;
-            };
-          };
-        in
-        {
-          custom = {
-            programs.btop.settings = {
-              color_theme = "TTY";
-              theme_background = false;
-              cpu_single_graph = true;
-              # base_10_sizes = true;
-              show_disks = true;
-              show_swap = true;
-              swap_disk = false;
-              use_fstab = false;
-              only_physical = false;
+            cudaSupport = host == "desktop";
+            rocmSupport = host == "framework";
+            extraSettings = {
               disks_filter = concatStringsSep " " (
                 [
                   "/"
                   "/boot"
                   "/persist"
                 ]
-                ++ cfg.disks
+                ++ config.custom.programs.btop.disks
               );
-              shown_boxes = "cpu mem net proc gpu0";
-              gpu_mirror_graph = false;
             };
-          };
-
-          environment.systemPackages = [ btop' ];
-        };
+          })
+        ];
+      };
     };
 }

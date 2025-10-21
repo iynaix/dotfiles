@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   imports = [ inputs.flake-parts.flakeModules.modules ];
 
@@ -16,4 +16,11 @@
       formatter = pkgs.nixfmt;
       packages = (import ../packages) { inherit inputs pkgs; };
     };
+
+  # expose wrapperModules as top level flake option
+  flake.options.wrapperModules = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.attrsOf lib.types.unspecified);
+    default = { };
+    description = "Wrapper modules";
+  };
 }
