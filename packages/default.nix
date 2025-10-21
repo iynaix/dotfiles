@@ -34,13 +34,6 @@ in
 
   hyprnstack = callPackage ./hyprnstack { };
 
-  # mpv plugins
-  mpv-cut = callPackage ./mpv-cut { };
-  mpv-deletefile = callPackage ./mpv-deletefile { };
-  mpv-nextfile = callPackage ./mpv-nextfile { };
-  mpv-sub-select = callPackage ./mpv-sub-select { };
-  mpv-subsearch = callPackage ./mpv-subsearch { };
-
   nsw = callPackage ./nsw { };
 
   rofi-themes = callPackage ./rofi-themes { };
