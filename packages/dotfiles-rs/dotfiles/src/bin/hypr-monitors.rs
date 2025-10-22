@@ -1,8 +1,8 @@
 use clap::Parser;
-use dotfiles::{cli::WmMonitorArgs, monitors::wm_monitors};
+use dotfiles::{cli::WmMonitorArgs, monitors::hypr_monitors};
 
 fn main() {
     let args = WmMonitorArgs::parse();
 
-    wm_monitors(args);
+    hypr_monitors(args);
 }

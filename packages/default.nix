@@ -1,8 +1,4 @@
-{
-  inputs,
-  pkgs,
-  ...
-}:
+{ inputs, pkgs, ... }:
 let
   inherit (pkgs) callPackage;
 in
@@ -20,11 +16,7 @@ in
     }).neovim
   ) { };
 
-  # ricing glue
   dotfiles-rs = callPackage ./dotfiles-rs { };
-  dotfiles-hyprland = callPackage ./dotfiles-rs { wm = "hyprland"; };
-  dotfiles-niri = callPackage ./dotfiles-rs { wm = "niri"; };
-  dotfiles-mango = callPackage ./dotfiles-rs { wm = "mango"; };
 
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };
 

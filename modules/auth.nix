@@ -8,13 +8,8 @@
       ...
     }:
     let
-      inherit (lib)
-        mkMerge
-        mkOption
-        optionalAttrs
-        types
-        ;
-      inherit (types) nullOr str;
+      inherit (lib) mkMerge mkOption optionalAttrs;
+      inherit (lib.types) nullOr str;
     in
     {
       options.custom = {

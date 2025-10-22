@@ -3,10 +3,10 @@
   perSystem =
     { pkgs, ... }:
     let
-      inherit (lib) concatMapStringsSep types;
+      inherit (lib) concatMapStringsSep;
       # implementation for loading plugins from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
-      tmuxPlugin = p: ''run-shell ${if types.package.check p then p.rtp else p.plugin.rtp}'';
+      tmuxPlugin = p: ''run-shell ${if lib.types.package.check p then p.rtp else p.plugin.rtp}'';
       tmuxConf = # tmux
         ''
           # start with defaults from the Sensible plugin

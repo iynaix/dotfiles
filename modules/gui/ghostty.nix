@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) getExe mkOption types;
+  inherit (lib) getExe mkOption;
   mkGhosttyOptions =
     pkgs:
     let
@@ -83,18 +83,18 @@ in
         # terminal options
         programs.terminal = {
           package = mkOption {
-            type = types.package;
+            type = lib.types.package;
             default = pkgs.ghostty;
             description = "Package to use for the terminal";
           };
 
           app-id = mkOption {
-            type = types.str;
+            type = lib.types.str;
             description = "app-id (wm class) for the terminal";
           };
 
           desktop = mkOption {
-            type = types.str;
+            type = lib.types.str;
             default = "${config.custom.programs.terminal.package.pname}.desktop";
             description = "Name of desktop file for the terminal";
           };

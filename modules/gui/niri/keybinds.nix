@@ -165,7 +165,7 @@
 
             "Mod+R".action.switch-preset-column-width = { };
             "Mod+Shift+R".action.switch-preset-window-height = { };
-            "Mod+Ctrl+R".action.spawn = getExe' config.custom.programs.dotfiles.package "niri-resize-workspace";
+            "Mod+Ctrl+R".action.spawn = getExe' pkgs.custom.dotfiles-rs "niri-resize-workspace";
             # full maximize
             "Mod+Z".action.maximize-column = { };
             "Mod+F".action.fullscreen-window = { };

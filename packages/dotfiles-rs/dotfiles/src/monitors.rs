@@ -6,7 +6,7 @@ use crate::{
 };
 use clap::CommandFactory;
 use common::{
-    WorkspacesByMonitor, debounce,
+    WorkspacesByMonitor, debounce, is_hyprland,
     nixjson::{NixJson, NixMonitor},
     rearranged_workspaces,
     rofi::Rofi,
@@ -105,11 +105,14 @@ pub fn distribute_workspaces(
         .collect()
 }
 
-pub fn wm_monitors(args: WmMonitorArgs) {
-    println!("wm_monitors");
+pub fn hypr_monitors(args: WmMonitorArgs) {
     // print shell completions
     if let Some(shell) = args.generate {
         return generate_completions("wm-monitors", &mut WmMonitorArgs::command(), &shell);
+    }
+
+    if !is_hyprland() {
+        std::process::exit(0);
     }
 
     let mut mirror = args.mirror;

@@ -1,9 +1,17 @@
 use clap::{CommandFactory, Parser};
+use common::{is_hyprland, is_niri};
 use dotfiles::{
     cli::{Direction, WmSameClassArgs},
     generate_completions,
 };
+use hyprland::dispatch;
+use hyprland::{
+    data::{Client, Clients},
+    dispatch::WindowIdentifier::Address,
+    shared::{HyprData, HyprDataActiveOptional},
+};
 use itertools::Itertools;
+use niri_ipc::{Action, Request, Response, socket::Socket};
 
 // gets the target window given the direction
 fn target_window<T>(active_idx: usize, matching: &[T], direction: &Direction) -> T
@@ -32,15 +40,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1);
     };
 
-    #[cfg(feature = "hyprland")]
-    {
-        use hyprland::dispatch;
-        use hyprland::{
-            data::{Client, Clients},
-            dispatch::{Dispatch, DispatchType, WindowIdentifier::Address},
-            shared::{HyprData, HyprDataActiveOptional},
-        };
-
+    if is_hyprland() {
         let active = Client::get_active()?.expect("no active window");
         let windows = Clients::get()?;
         let matching_windows = windows
@@ -61,10 +61,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         dispatch!(FocusWindow, Address(target.clone()))?;
     }
 
-    #[cfg(feature = "niri")]
-    {
-        use niri_ipc::{Action, Request, Response, socket::Socket};
-
+    if is_niri() {
         let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
         let active = match socket

@@ -1,5 +1,5 @@
 use clap::{CommandFactory, Parser};
-use common::niri::resize_workspace;
+use common::{is_niri, niri::resize_workspace};
 use dotfiles::{cli::NiriResizeWorkspaceArgs, generate_completions};
 use niri_ipc::{Request, Response, socket::Socket};
 
@@ -13,6 +13,11 @@ fn main() {
             &mut NiriResizeWorkspaceArgs::command(),
             &shell,
         );
+        std::process::exit(0);
+    }
+
+    // no-op if not niri
+    if !is_niri() {
         std::process::exit(0);
     }
 

@@ -15,15 +15,9 @@
   swww,
   wallust,
   wlr-randr,
-  wm ? "hyprland",
 }:
-assert lib.assertOneOf "dotfiles-rs wm" wm [
-  "hyprland"
-  "niri"
-  "mango"
-];
 rustPlatform.buildRustPackage {
-  pname = "dotfiles-${wm}";
+  pname = "dotfiles-rs";
   version = "0.9.0";
 
   src = ./.;
@@ -33,12 +27,6 @@ rustPlatform.buildRustPackage {
     # enable for niri-ipc git
     # allowBuiltinFetchGit = true;
   };
-
-  buildNoDefaultFeatures = true;
-  buildFeatures =
-    lib.optionals (wm == "hyprland") [ "hyprland" ]
-    ++ lib.optionals (wm == "niri") [ "niri" ]
-    ++ lib.optionals (wm == "mango") [ "mango" ];
 
   # create files for shell autocomplete
   nativeBuildInputs = [
@@ -55,11 +43,11 @@ rustPlatform.buildRustPackage {
   postInstall =
     let
       progs = [
-        "wm-same-class"
+        "hypr-monitors"
+        "niri-resize-workspace"
         "rofi-mpv"
-      ]
-      ++ lib.optionals (wm == "hyprland") [ "hypr-monitors" ]
-      ++ lib.optionals (wm == "niri") [ "niri-resize-workspace" ];
+        "wm-same-class"
+      ];
     in
     ''
       for prog in ${toString progs}; do
@@ -82,13 +70,11 @@ rustPlatform.buildRustPackage {
   postFixup = # sh
     let
       progs = [
-        "wallpaper"
-      ]
-      ++ lib.optionals (wm == "hyprland") [
         "hypr-ipc"
         "hypr-monitors"
-      ]
-      ++ lib.optionals (wm == "niri") [ "niri-ipc" ];
+        "niri-ipc"
+        "wallpaper"
+      ];
     in
     ''
       for prog in ${toString progs}; do
@@ -102,15 +88,7 @@ rustPlatform.buildRustPackage {
             wallust
             swww
             wlr-randr
-            # fix window resizing on the first image in niri if called in a keybind
-            (
-              if wm == "niri" then
-                pqiv.overrideAttrs (o: {
-                  patches = (o.patches or [ ]) ++ [ ./pqiv-gdk-wayland.patch ];
-                })
-              else
-                pqiv
-            )
+            pqiv
           ]
         }
       done

@@ -6,7 +6,6 @@ let
     mkEnableOption
     mkOption
     mod
-    optionalString
     ;
   inherit (lib.types)
     attrs
@@ -189,12 +188,13 @@ in
                   name = "init-helium";
                   runtimeInputs = [
                     pkgs.custom.helium
-                    config.custom.programs.dotfiles.package
+                    pkgs.custom.dotfiles-rs
                   ];
                   text = ''
                     helium --profile-directory=Default &
                     sleep 1; helium --incognito &
-                    ${optionalString (config.custom.wm == "niri") "sleep 5; niri-resize-workspace 1"}
+                    # no-op if not niri
+                    sleep 5; niri-resize-workspace 1
                   '';
                 }
               ))

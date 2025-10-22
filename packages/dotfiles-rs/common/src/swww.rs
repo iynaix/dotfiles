@@ -1,3 +1,4 @@
+use crate::is_niri;
 use crate::wallpaper::WallInfo;
 use execute::Execute;
 use fast_image_resize::{PixelType, ResizeOptions, Resizer, images::Image};
@@ -131,8 +132,7 @@ impl Swww {
             .wait()
             .expect("failed to wait for swww");
 
-        #[cfg(feature = "niri")]
-        {
+        if is_niri() {
             const BLUR_STRENGTH: f32 = 10.0;
             let blurred_fname = format!("/tmp/swww__{mon_name}_blurred.webp");
             let img = ImageReader::open(&fname)

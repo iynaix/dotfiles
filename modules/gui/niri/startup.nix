@@ -78,7 +78,7 @@
           };
 
           serviceConfig = {
-            ExecStart = getExe' config.custom.programs.dotfiles.package "niri-ipc";
+            ExecStart = getExe' pkgs.custom.dotfiles-rs "niri-ipc";
             Restart = "on-failure";
           };
         };

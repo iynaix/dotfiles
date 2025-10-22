@@ -56,7 +56,7 @@
           };
 
           serviceConfig = {
-            ExecStart = "${getExe' config.custom.programs.dotfiles.package "hypr-ipc"}";
+            ExecStart = "${getExe' pkgs.custom.dotfiles-rs "hypr-ipc"}";
             Restart = "on-failure";
           };
         };

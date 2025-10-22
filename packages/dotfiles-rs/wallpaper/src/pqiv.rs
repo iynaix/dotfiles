@@ -1,11 +1,12 @@
-use common::wallpaper;
+use common::{is_hyprland, is_niri, wallpaper};
+use execute::Execute;
+use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
+use niri_ipc::{Request, Response, socket::Socket};
 
-#[cfg_attr(not(feature = "hyprland"), allow(dead_code))]
 fn pqiv_hyprland_float_rule() -> String {
     const TARGET_PERCENT: f64 = 0.3;
 
-    use hyprland::shared::HyprDataActive;
     let mon = hyprland::data::Monitor::get_active().expect("could not get active monitor");
 
     // handle vertical monitor
@@ -16,10 +17,7 @@ fn pqiv_hyprland_float_rule() -> String {
     format!("[float;size {} {};center]", width.floor(), height.floor())
 }
 
-#[cfg_attr(not(feature = "niri"), allow(dead_code))]
 fn niri_window_title() -> String {
-    use niri_ipc::{Request, Response, socket::Socket};
-
     // append monitor name to title so relevant window-rule can match it
     let Ok(Response::FocusedOutput(Some(curr_mon))) = Socket::connect()
         .expect("failed to connect to niri socket")
@@ -37,8 +35,7 @@ pub fn show_pqiv() {
     let wall_dir = wallpaper::dir();
     let wall_dir = wall_dir.to_str().expect("invalid wallpaper dir");
 
-    #[cfg(feature = "hyprland")]
-    {
+    if is_hyprland() {
         // hyprland allows setting rules while spawning
         let pqiv = format!(
             "{} pqiv --shuffle '{}'",
@@ -47,13 +44,11 @@ pub fn show_pqiv() {
         );
 
         {
-            use hyprland::dispatch::{Dispatch, DispatchType};
             hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
         }
     }
 
-    #[cfg(feature = "niri")]
-    {
+    if is_niri() {
         use execute::Execute;
 
         // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
@@ -81,25 +76,17 @@ pub fn show_history() {
         .map(|(path, _)| path)
         .collect_vec();
 
-    #[cfg(feature = "hyprland")]
-    {
+    if is_hyprland() {
         let history = history
             .iter()
             .map(|p| format!("'{}'", p.display()))
             .collect_vec()
             .join(" ");
         let pqiv = format!("{} pqiv {}", pqiv_hyprland_float_rule(), history);
-
-        {
-            use hyprland::dispatch::{Dispatch, DispatchType};
-            hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
-        }
+        hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
     }
 
-    #[cfg(feature = "niri")]
-    {
-        use execute::Execute;
-
+    if is_niri() {
         let history = history
             .iter()
             .map(|p| p.display().to_string())

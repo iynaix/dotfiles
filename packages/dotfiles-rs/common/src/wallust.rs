@@ -1,9 +1,13 @@
 use crate::{
     colors::{NixColors, Rgb},
-    full_path, kill_wrapped_process,
+    full_path, is_hyprland, is_niri, kill_wrapped_process,
+    nixjson::NixJson,
+    rearranged_workspaces,
     wallpaper::WallInfo,
 };
 use core::panic;
+use hyprland::{data::Monitors, shared::HyprData};
+
 use execute::Execute;
 use image::ImageReader;
 use itertools::Itertools;
@@ -42,7 +46,6 @@ where
     }
 }
 
-#[cfg(feature = "hyprland")]
 fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     use hyprland::keyword::Keyword;
 
@@ -90,9 +93,7 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     .expect("failed to set hyprland sticky border color");
 }
 
-#[cfg(feature = "niri")]
 fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
-    use crate::nixjson::NixJson;
     let config_path = full_path("~/.config/niri/config.kdl");
 
     // replace symlink to nix store if needed
@@ -190,11 +191,13 @@ pub fn apply_colors() {
         let (waybar_accent, colors_by_usage) =
             wallust_colors_by_usage(&nixcolors.wallpaper, &colors);
 
-        #[cfg(feature = "hyprland")]
-        apply_hyprland_colors(&colors_by_usage, &nixcolors.colors);
+        if is_hyprland() {
+            apply_hyprland_colors(&colors_by_usage, &nixcolors.colors);
+        }
 
-        #[cfg(feature = "niri")]
-        apply_niri_colors(&colors_by_usage, &nixcolors.colors);
+        if is_niri() {
+            apply_niri_colors(&colors_by_usage, &nixcolors.colors);
+        }
 
         // set the waybar accent color to have more contrast
         set_waybar_colors(&waybar_accent);
@@ -215,11 +218,13 @@ pub fn apply_colors() {
             .take(16)
             .collect();
 
-        #[cfg(feature = "hyprland")]
-        apply_hyprland_colors(&[], &colors);
+        if is_hyprland() {
+            apply_hyprland_colors(&[], &colors);
+        }
 
-        #[cfg(feature = "niri")]
-        apply_niri_colors(&[], &colors);
+        if is_niri() {
+            apply_niri_colors(&[], &colors);
+        }
     }
 
     // refresh cava
@@ -315,11 +320,7 @@ pub fn set_waybar_colors(accent: &Rgb) {
     replace_in_file(&css_file, replacements);
 
     // write persistent workspaces config to waybar
-    #[cfg(feature = "hyprland")]
-    {
-        use crate::{nixjson::NixJson, rearranged_workspaces};
-        use hyprland::{data::Monitors, shared::HyprData};
-
+    if is_hyprland() {
         // add / remove persistent workspaces to waybar before launching
         let cfg_file = full_path("~/.config/waybar/config.jsonc");
 

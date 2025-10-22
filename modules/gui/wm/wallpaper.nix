@@ -6,30 +6,9 @@ let
     max
     mkIf
     mkMerge
-    mkOption
-    optionalString
     ;
-  inherit (lib.types) package;
 in
 {
-  flake.nixosModules.core =
-    { config, pkgs, ... }:
-    {
-      options.custom = {
-        programs = {
-          dotfiles = {
-            package = mkOption {
-              type = package;
-              default = pkgs.custom.dotfiles-rs.override {
-                inherit (config.custom) wm;
-              };
-              description = "Package to use for dotfiles-rs";
-            };
-          };
-        };
-      };
-    };
-
   flake.nixosModules.wm =
     {
       config,
@@ -40,7 +19,7 @@ in
       {
         environment = {
           systemPackages = with pkgs; [
-            config.custom.programs.dotfiles.package
+            pkgs.custom.dotfiles-rs
             swww
             nomacs
           ];
@@ -60,10 +39,11 @@ in
           let
             wallpaper-startup = pkgs.writeShellApplication {
               name = "wallpaper-startup";
-              runtimeInputs = [ config.custom.programs.dotfiles.package ];
+              runtimeInputs = [ pkgs.custom.dotfiles-rs ];
               text = ''
                 wallpaper "$@"
-                ${optionalString (config.custom.wm == "hyprland") "hypr-monitors"}
+                # no-op if not hyprland
+                hypr-monitors
               '';
             };
           in

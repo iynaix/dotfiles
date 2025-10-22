@@ -10,7 +10,6 @@ let
     mkOption
     mod
     toInt
-    types
     ;
 in
 {
@@ -21,7 +20,7 @@ in
         programs.niri = {
           settings = mkOption {
             # it's KDL not JSON, but the JSON type gives the wanted recursive merging properties
-            type = types.submodule { freeformType = (pkgs.formats.json { }).type; };
+            type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
             default = { };
             description = "Niri settings, will be passed directly to niri-flake and validated";
           };

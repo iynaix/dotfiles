@@ -1,5 +1,8 @@
 use execute::Execute;
+use hyprland::{data::Monitor, shared::HyprDataActive};
+use niri_ipc::{Request, Response, socket::Socket};
 use nixjson::NixMonitor;
+
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -152,6 +155,18 @@ pub fn debounce(interval: Duration, debounce_fn: impl FnOnce()) {
     debounce_fn();
 }
 
+pub fn is_hyprland() -> bool {
+    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "Hyprland"
+}
+
+pub fn is_niri() -> bool {
+    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "niri"
+}
+
+pub fn is_mango() -> bool {
+    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "mango"
+}
+
 pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
     let wrapped_name = format!(".{unwrapped_name}-wrapped");
 
@@ -225,10 +240,7 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
 }
 
 pub fn is_waybar_hidden() -> bool {
-    #[cfg(feature = "niri")]
-    {
-        use niri_ipc::{Request, Response, socket::Socket};
-
+    if is_niri() {
         const WAYBAR_HEIGHT: f64 = 36.0;
 
         let mut socket = Socket::connect().expect("failed to connect to niri socket");
@@ -296,23 +308,17 @@ pub fn is_waybar_hidden() -> bool {
             }
         }
 
-        true
+        return true;
     }
 
-    #[cfg(feature = "hyprland")]
-    {
-        use hyprland::{data::Monitor, shared::HyprDataActive};
-
+    if is_hyprland() {
         let mon = Monitor::get_active().expect("failed to get active monitor");
         let (_, height, _, _) = mon.reserved;
 
-        height == 0
+        return height == 0;
     }
 
-    #[cfg(not(any(feature = "hyprland", feature = "niri")))]
-    {
-        unimplemented!("is_waybar_hidden is not implemented outside of niri or hyprland!")
-    }
+    unimplemented!("is_waybar_hidden is not implemented outside of niri or hyprland!")
 }
 
 #[cfg(test)]

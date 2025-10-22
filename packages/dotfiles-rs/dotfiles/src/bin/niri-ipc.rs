@@ -1,5 +1,5 @@
 use common::{
-    CommandUtf8, debounce, is_waybar_hidden,
+    CommandUtf8, debounce, is_niri, is_waybar_hidden,
     niri::{MonitorExt, WindowExt, resize_workspace},
     nixjson::{NixJson, NixMonitor},
     wallpaper,
@@ -424,6 +424,11 @@ fn handle_window_opened_or_changed(
 }
 
 fn main() {
+    // no-op if not niri
+    if !is_niri() {
+        std::process::exit(0);
+    }
+
     let nix_info_monitors = NixJson::new().monitors;
 
     let mut socket = Socket::connect().expect("failed to connect to niri socket");

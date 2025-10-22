@@ -1,4 +1,5 @@
-#[cfg(feature = "hyprland")]
+use common::{is_hyprland, is_niri};
+
 fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     use common::vertical_dimensions;
     use hyprland::dispatch;
@@ -51,7 +52,6 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[cfg(feature = "niri")]
 fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
     use common::is_waybar_hidden;
     use niri_ipc::{
@@ -143,11 +143,13 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    #[cfg(feature = "hyprland")]
-    hyprland_pip()?;
+    if is_hyprland() {
+        hyprland_pip()?;
+    }
 
-    #[cfg(feature = "niri")]
-    niri_pip()?;
+    if is_niri() {
+        niri_pip()?;
+    }
 
     Ok(())
 }

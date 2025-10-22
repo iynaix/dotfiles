@@ -3,12 +3,6 @@ name = "wallpaper"
 version.workspace = true
 edition.workspace = true
 
-[features]
-default = []
-hyprland = []
-niri = []
-mango = []
-
 [lints]
 workspace = true
 

@@ -19,9 +19,8 @@
         mapAttrs
         mkOption
         optional
-        types
         ;
-      inherit (types)
+      inherit (lib.types)
         attrs
         attrsOf
         oneOf

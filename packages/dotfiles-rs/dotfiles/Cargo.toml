@@ -3,12 +3,6 @@ name = "dotfiles"
 version.workspace = true
 edition.workspace = true
 
-[features]
-default = []
-hyprland = []
-niri = []
-mango = []
-
 [lints]
 workspace = true
 
@@ -31,23 +25,3 @@ wallust_themes = "1.1.0"
 clap = { version = "4.5.48", features = ["derive", "string"] }
 clap_complete = { version = "4.5.58", features = ["unstable-dynamic"] }
 clap_mangen = "0.2.29"
-
-[[bin]]
-name = "hypr-ipc"
-path = "src/bin/hypr-ipc.rs"
-required-features = ["hyprland"]
-
-[[bin]]
-name = "hypr-monitors"
-path = "src/bin/hypr-monitors.rs"
-required-features = ["hyprland"]
-
-[[bin]]
-name = "niri-ipc"
-path = "src/bin/niri-ipc.rs"
-required-features = ["niri"]
-
-[[bin]]
-name = "niri-resize-workspace"
-path = "src/bin/niri-resize-workspace.rs"
-required-features = ["niri"]

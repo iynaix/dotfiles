@@ -7,7 +7,6 @@
         mkForce
         mkIf
         mkOption
-        types
         ;
       cfg = config.custom.specialisation;
     in
@@ -16,7 +15,7 @@
       options.custom = {
         specialisation = {
           current = mkOption {
-            type = types.str;
+            type = lib.types.str;
             default = "";
             description = "The current specialisation being used";
           };

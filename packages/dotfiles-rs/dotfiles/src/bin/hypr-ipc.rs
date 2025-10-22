@@ -1,5 +1,5 @@
-use common::nixjson::NixJson;
-use dotfiles::{cli::WmMonitorArgs, monitors::wm_monitors};
+use common::{is_hyprland, nixjson::NixJson};
+use dotfiles::{cli::WmMonitorArgs, monitors::hypr_monitors};
 use hyprland::{
     data::{Clients, Monitor, WorkspaceRules, Workspaces},
     event_listener::EventListener,
@@ -86,6 +86,11 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 }
 
 fn main() -> hyprland::Result<()> {
+    // no-op if not hyprland
+    if !is_hyprland() {
+        std::process::exit(0);
+    }
+
     let is_desktop = NixJson::new().host == "desktop";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
@@ -145,19 +150,19 @@ fn main() -> hyprland::Result<()> {
         // single monitor in config; is laptop
         if NixJson::new().monitors.len() == 1 {
             // --rofi
-            wm_monitors(WmMonitorArgs {
+            hypr_monitors(WmMonitorArgs {
                 rofi: Some(mon.name),
                 ..Default::default()
             });
         } else {
             // desktop, redistribute workspaces
-            wm_monitors(WmMonitorArgs::default());
+            hypr_monitors(WmMonitorArgs::default());
         }
     });
 
     listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
-        wm_monitors(WmMonitorArgs::default());
+        hypr_monitors(WmMonitorArgs::default());
     });
 
     listener.start_listener()
