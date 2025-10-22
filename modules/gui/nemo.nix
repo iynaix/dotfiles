@@ -41,13 +41,24 @@
         };
       };
 
+      # add a custom "open in terminal" option to the context menu
+      hj.xdg.data.files."nemo/actions/open-in-ghostty.nemo_action".text = ''
+        [Nemo Action]
+        Name=Open in Terminal
+        Comment=Open a terminal in this location
+        Exec=ghostty --working-directory=%P
+        Icon-Name=utilities-terminal
+        Selection=None
+        Extensions=dir;
+      '';
+
       custom = {
         dconf.settings = {
           # fix open in terminal
-          "org/gnome/desktop/applications/terminal" = {
+          "org/gnome/desktop/default-applications/terminal" = {
             exec = "xdg-terminal-exec";
           };
-          "org/cinnamon/desktop/applications/terminal" = {
+          "org/cinnamon/desktop/default-applications/terminal" = {
             exec = "xdg-terminal-exec";
           };
           "org/nemo/preferences" = {
@@ -66,6 +77,9 @@
             selection-menu-make-link = true;
             selection-menu-copy-to = true;
             selection-menu-move-to = true;
+            # hide the default "open in terminal options" to use the custom one
+            background-menu-open-in-terminal = false;
+            selection-menu-open-in-terminal = false;
           };
         };
 
