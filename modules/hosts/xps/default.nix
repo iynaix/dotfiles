@@ -12,6 +12,29 @@ topLevel: {
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
+        wm
+
+        ### programs
+        # deadbeef
+        # freecad
+        # helix
+        # orca-slicer
+        # obs-studio
+        # path-of-building
+        # vlc
+        # wallfacer
+        # zoom
+
+        ### hardware
+        # bluetooth
+        # keyd
+        # qmk
+
+        ### services
+        # bittorrent
+        # docker
+        # syncoid
+        # virtualisation
       ];
 
       custom = {
@@ -38,7 +61,7 @@ topLevel: {
           ];
         };
         programs = {
-          btop.settings = {
+          btop.extraSettings = {
             custom_gpu_name0 = "Intel HD Graphics 5500";
           };
         };
@@ -51,7 +74,9 @@ topLevel: {
 
       # larger runtime directory size to not run out of ram while building
       # https://discourse.nixos.org/t/run-usr-id-is-too-small/4842
-      services.logind.extraConfig = "RuntimeDirectorySize=3G";
+      services.logind.settings.Login = {
+        RuntimeDirectorySize = "3G";
+      };
 
       # touchpad support
       services.libinput.enable = true;

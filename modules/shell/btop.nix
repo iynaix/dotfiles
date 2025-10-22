@@ -119,22 +119,29 @@ in
       };
 
       config = {
-        environment.systemPackages = [
-          (self.wrapperModules.btop.apply {
-            inherit pkgs;
-            cudaSupport = host == "desktop";
-            rocmSupport = host == "framework";
-            extraSettings = {
-              disks_filter = concatStringsSep " " (
-                [
-                  "/"
-                  "/boot"
-                  "/persist"
-                ]
-                ++ config.custom.programs.btop.disks
-              );
+        nixpkgs.overlays = [
+          (_: prev: {
+            # overlay so that security wrappers for xps cann pick it up
+            btop = self.wrapperModules.btop.apply {
+              pkgs = prev;
+              cudaSupport = host == "desktop";
+              rocmSupport = host == "framework";
+              extraSettings = {
+                disks_filter = concatStringsSep " " (
+                  [
+                    "/"
+                    "/boot"
+                    "/persist"
+                  ]
+                  ++ config.custom.programs.btop.disks
+                );
+              };
             };
           })
+        ];
+
+        environment.systemPackages = [
+          pkgs.btop # overlay-ed above
         ];
       };
     };

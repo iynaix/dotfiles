@@ -12,6 +12,29 @@ topLevel: {
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
+        wm
+
+        ### programs
+        # deadbeef
+        freecad
+        # helix
+        # orca-slicer
+        # obs-studio
+        path-of-building
+        # vlc
+        wallfacer
+        # zoom
+
+        ### hardware
+        # bluetooth
+        # keyd
+        # qmk
+
+        ### services
+        # bittorrent
+        docker
+        # syncoid
+        virtualisation
       ];
 
       custom = {
@@ -45,19 +68,13 @@ topLevel: {
               ];
             }
           ];
-          qmk.enable = true;
         };
         programs = {
-          btop.settings = {
+          btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon 780M";
           };
-          freecad.enable = true;
-          orca-slicer.enable = true;
-          pathofbuilding.enable = true;
           waybar.hidden = true;
         };
-
-        virtualization.enable = true;
 
         # don't blind me on startup
         startup = [

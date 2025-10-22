@@ -14,15 +14,9 @@ topLevel: {
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
-
-        # WM / DE
         wm
-        # hyprland
-        # niri
-        # mango
-        # plasma
 
-        # programs
+        ### programs
         deadbeef
         freecad
         # helix
@@ -33,12 +27,12 @@ topLevel: {
         wallfacer
         # zoom
 
-        # hardware
+        ### hardware
         # bluetooth
         # keyd
         # qmk
 
-        # services
+        ### services
         bittorrent
         docker
         syncoid

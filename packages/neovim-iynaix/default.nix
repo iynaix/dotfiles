@@ -140,10 +140,7 @@
       python.enable = true;
       rust = {
         enable = true;
-        # hide null-ls deprecated notice
-        # TODO: re-enable when merged
-        # https://github.com/NotAShelf/nvf/pull/1124/
-        # crates.enable = false;
+        extensions.crates-nvim.enable = false;
       };
       tailwind.enable = true;
       ts = {

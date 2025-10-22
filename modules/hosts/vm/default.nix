@@ -1,12 +1,32 @@
 topLevel: {
   flake.nixosModules.host-vm =
     { lib, pkgs, ... }:
-    let
-      inherit (lib) getExe';
-    in
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
+        wm
+
+        ### programs
+        # deadbeef
+        # freecad
+        # helix
+        # orca-slicer
+        # obs-studio
+        # path-of-building
+        # vlc
+        # wallfacer
+        # zoom
+
+        ### hardware
+        # bluetooth
+        # keyd
+        # qmk
+
+        ### services
+        # bittorrent
+        # docker
+        # syncoid
+        # virtualisation
       ];
 
       custom = {
@@ -31,14 +51,7 @@ topLevel: {
             }
           ];
         };
-        programs = {
-          pathofbuilding.enable = false;
-        };
         wm = "plasma";
-        zfs = {
-          encryption = false;
-          zed = true;
-        };
       };
 
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
@@ -57,7 +70,7 @@ topLevel: {
         enable = true;
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {
-          ExecStart = "${getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
+          ExecStart = "${lib.getExe' pkgs.spice-vdagent "spice-vdagent"} -x";
         };
         unitConfig = {
           ConditionVirtualization = "vm";

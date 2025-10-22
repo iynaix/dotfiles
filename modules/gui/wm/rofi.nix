@@ -126,7 +126,7 @@ in
               matches = [ { namespace = "^rofi$"; } ];
               shadow = {
                 enable = true;
-                spread = 1024;
+                spread = 2048;
                 draw-behind-window = true;
                 color = "0000009A";
               };

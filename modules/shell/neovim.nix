@@ -12,10 +12,7 @@
       customNeovim = pkgs.custom.neovim-iynaix.override { inherit dots host; };
       nvim-direnv = pkgs.writeShellApplication {
         name = "nvim-direnv";
-        runtimeInputs = [
-          pkgs.direnv
-          customNeovim
-        ];
+        runtimeInputs = [ pkgs.direnv ];
         text = # sh
           ''
             if ! direnv exec "$(dirname "$1")" nvim "$@"; then

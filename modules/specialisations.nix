@@ -4,6 +4,7 @@
     let
       inherit (lib)
         mkEnableOption
+        mkForce
         mkIf
         mkOption
         types
@@ -36,7 +37,7 @@
           tty = {
             configuration = {
               custom = {
-                wm = "tty";
+                wm = mkForce "tty";
                 specialisation.current = "tty";
               };
             };
@@ -46,7 +47,7 @@
           hyprland = mkIf (config.custom.wm != "hyprland" && cfg.hyprland.enable) {
             configuration = {
               custom = {
-                wm = "hyprland";
+                wm = mkForce "hyprland";
                 specialisation.current = "hyprland";
               };
             };
@@ -55,7 +56,7 @@
           niri = mkIf (config.custom.wm != "niri" && cfg.niri.enable) {
             configuration = {
               custom = {
-                wm = "niri";
+                wm = mkForce "niri";
                 specialisation.current = "niri";
               };
             };
@@ -64,7 +65,7 @@
           mango = mkIf (config.custom.wm != "mango" && cfg.mango.enable) {
             configuration = {
               custom = {
-                wm = "mango";
+                wm = mkForce "mango";
                 specialisation.current = "mango";
               };
             };

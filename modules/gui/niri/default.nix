@@ -57,9 +57,6 @@ in
       nixpkgs.overlays = [ inputs.niri.overlays.niri ];
 
       environment = {
-        sessionVariables = {
-        };
-
         shellAliases = {
           niri-log = ''journalctl --user -u niri --no-hostname -o cat | awk '{$1=""; print $0}' | sed 's/^ *//' | sed 's/\x1b[[0-9;]*m//g' '';
         };

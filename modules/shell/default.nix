@@ -158,8 +158,6 @@
               trash-cli
               ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
               xdg-utils
-              # use the package configured by nvf
-              (custom.neovim-iynaix.override { inherit dots host; })
             ]
             # add custom user created shell packages
             ++ (attrValues config.custom.shell.packages);

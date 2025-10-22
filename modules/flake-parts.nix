@@ -23,4 +23,10 @@
     default = { };
     description = "Wrapper modules";
   };
+
+  flake.options.lib = lib.mkOption {
+    type = lib.types.attrsOf lib.types.anything;
+    default = { };
+    description = "Library functions / utilities";
+  };
 }

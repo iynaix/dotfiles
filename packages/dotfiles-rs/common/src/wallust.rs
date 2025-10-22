@@ -127,7 +127,7 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
         (r"active-gradient .*", active.as_str()),
         (r"inactive-color .*", inactive.as_str()),
         // increase maximum shadow spread value to workaround config validation errors during nix build
-        ("spread 1024", "spread 2048"),
+        // ("spread 1024", "spread 2048"),
     ];
 
     replace_in_file(&config_path, replacements);
