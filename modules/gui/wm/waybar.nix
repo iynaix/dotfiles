@@ -172,8 +172,11 @@ in
 
           modules-left = [ "custom/nix" ] ++ (optionals cfg.idleInhibitor [ "idle_inhibitor" ]);
 
-          modules-center =
-            if (config.custom.wm == "mango") then [ "dwl/tags" ] else [ "${config.custom.wm}/workspaces" ];
+          modules-center = [
+            "hyprland/workspaces"
+            "niri/workspaces"
+            "dwl/tags"
+          ];
 
           modules-right = [
             "network"
@@ -268,8 +271,6 @@ in
                   ${mkModuleClassName mod} {
                     ${baseModuleCss}
                   }'') arr;
-              workspaceModuleName = if (config.custom.wm == "mango") then "tags" else "workspaces";
-              workspaceActiveClass = if (config.custom.wm == "mango") then "focused" else "active";
             in
             {
               text = # css
@@ -288,31 +289,35 @@ in
                   font-size: 20px;
                 }
 
-                #${workspaceModuleName} button {
+                #workspaces button {
                   ${baseModuleCss}
-                  padding-left: 8px;
-                  padding-right: 8px;
-
-                  ${lib.optionalString (config.custom.wm == "niri" || config.custom.wm == "mango") ''
-                    /* niri workspaces seem to have excess padding */
-                    padding-left: 0px;
-                    padding-right: 0px;
-                  ''}
+                  /* the fuck is this bullshit */
+                  /* https://github.com/Alexays/Waybar/issues/450#issuecomment-527635548 */
+                  min-width: 0;
                 }
 
-                #${workspaceModuleName} button.${workspaceActiveClass} {
+                #workspaces button.active {
+                  border-bottom:  2px solid @accent;
+                  background-color: rgba(255,255,255, 0.25);
+                }
+
+                #workspaces button.empty {
+                  opacity: 0.6;
+                }
+
+                /* mango uses tags instead of workspaces */
+                #tags button {
+                  ${baseModuleCss}
+                  /* mango seems to add excess padding */
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+
+                #tags button.focused {
                   border-bottom:  2px solid @accent;
                   background-color: rgba(255,255,255, 0.25);
                 }
               ''
-              # dwl (for mango) tags style on occupied instead of empty
-              +
-                optionalString (config.custom.wm != "mango") # css
-                  ''
-                    #${workspaceModuleName} button.empty {
-                      opacity: 0.6;
-                    }
-                  ''
               +
                 # remove padding for the outermost modules
                 # css
