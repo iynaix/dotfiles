@@ -29,8 +29,8 @@ topLevel: {
 
         ### hardware
         # bluetooth
-        # keyd
         # qmk
+        # laptop
 
         ### services
         bittorrent

@@ -8,7 +8,9 @@ let
     last
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
+    mkOrder
     optionals
     optionalString
     range
@@ -100,34 +102,6 @@ in
         };
 
         waybar.config = {
-          backlight = mkIf config.custom.hardware.backlight.enable {
-            format = "{icon}   {percent}%";
-            format-icons = [
-              "󰃞"
-              "󰃟"
-              "󰃝"
-              "󰃠"
-            ];
-            on-scroll-down = "${getExe pkgs.brightnessctl} s 1%-";
-            on-scroll-up = "${getExe pkgs.brightnessctl} s +1%";
-          };
-
-          battery = mkIf config.custom.hardware.battery.enable {
-            format = "{icon}    {capacity}%";
-            format-charging = "     {capacity}%";
-            format-icons = [
-              ""
-              ""
-              ""
-              ""
-              ""
-            ];
-            states = {
-              critical = 20;
-            };
-            tooltip = false;
-          };
-
           clock = {
             calendar = {
               actions = {
@@ -178,32 +152,20 @@ in
             "dwl/tags"
           ];
 
-          modules-right = [
-            "network"
-            "pulseaudio"
-          ]
-          ++ (optionals config.custom.hardware.backlight.enable [ "backlight" ])
-          ++ (optionals config.custom.hardware.battery.enable [ "battery" ])
-          ++ [ "clock" ];
+          # allow ordering from other files, e.g. battery / backlight
+          modules-right = mkMerge [
+            (mkOrder 400 [
+              "network"
+              "pulseaudio"
+            ])
+            (mkOrder 2000 [ "clock" ])
+          ];
 
           network = {
             format-disconnected = "󰖪    Offline";
+            format-ethernet = "";
             tooltip = false;
-          }
-          // (
-            if config.custom.hardware.wifi.enable then
-              {
-                format = "    {essid}";
-                format-ethernet = " ";
-                # rofi wifi script
-                on-click = getExe pkgs.custom.rofi-wifi-menu;
-                on-click-right = "ghostty -e nmtui";
-              }
-            else
-              {
-                format-ethernet = "";
-              }
-          );
+          };
 
           position = "top";
 

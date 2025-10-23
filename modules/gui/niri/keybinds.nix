@@ -13,7 +13,6 @@
         getExe'
         mergeAttrsList
         mkIf
-        optionalAttrs
         ;
       inherit (config.custom.hardware) monitors;
       termExec =
@@ -221,9 +220,9 @@
               ];
               allow-when-locked = true;
             };
-          }
-          # mouse bindings
-          // {
+
+            # mouse bindings
+
             # having Mod + Scroll up / Down is impossible to control with trackball, so require Shift for workspaces
             "Mod+Shift+WheelScrollDown" = {
               action.focus-workspace-down = { };
@@ -253,25 +252,7 @@
               ))
                 monitors
             )
-          )
-          // optionalAttrs config.custom.hardware.backlight.enable {
-            "XF86MonBrightnessDown" = {
-              action.spawn = [
-                "brightnessctl"
-                "set"
-                "5%-"
-              ];
-              allow-when-locked = true;
-            };
-            "XF86MonBrightnessUp" = {
-              action.spawn = [
-                "brightnessctl"
-                "set"
-                "+5%"
-              ];
-              allow-when-locked = true;
-            };
-          };
+          );
         };
       };
     };

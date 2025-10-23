@@ -19,7 +19,6 @@
         lessThan
         mkForce
         mkOption
-        optionals
         sort
         unique
         ;
@@ -159,7 +158,6 @@
                 "/var/log" # systemd journal is stored in /var/log/journal
                 "/var/lib/nixos" # for persisting user uids and gids
               ]
-              ++ optionals config.custom.hardware.wifi.enable [ "/etc/NetworkManager" ]
               ++ cfg.root.directories
             );
 

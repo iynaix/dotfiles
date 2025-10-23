@@ -1,12 +1,9 @@
 { lib, ... }:
-let
-  inherit (lib) mkIf optionals;
-in
 {
   flake.nixosModules.wm =
     {
       config,
-      isNixOS,
+      host,
       pkgs,
       self,
       ...
@@ -67,7 +64,7 @@ in
       launcherPath = "${rofiThemesPkg}/launchers/type-2/style-2.rasi";
       powermenuDir = "${rofiThemesPkg}/powermenu/type-4";
     in
-    mkIf config.custom.isWm {
+    lib.mkIf config.custom.isWm {
       nixpkgs.overlays = [
         (_: prev: {
           # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
@@ -92,13 +89,9 @@ in
         # NOTE: rofi-power-menu only works for powermenuType = 4!
         (pkgs.custom.rofi-power-menu.override {
           reboot-to-windows =
-            if (config.custom.hardware.mswindows && isNixOS) then
-              self.packages.${pkgs.system}.reboot-to-windows
-            else
-              null;
+            if (host == "desktop") then self.packages.${pkgs.system}.reboot-to-windows else null;
         })
-      ]
-      ++ (optionals config.custom.hardware.wifi.enable [ pkgs.custom.rofi-wifi-menu ]);
+      ];
 
       # add blur for rofi shutdown
       custom.programs = {
@@ -176,7 +169,8 @@ in
 
           "rofi-power-menu.rasi" =
             let
-              columns = if config.custom.hardware.mswindows then 6 else 5;
+              # desktop has windows
+              columns = if (host == "desktop") then 6 else 5;
             in
             {
               text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
