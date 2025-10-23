@@ -5,7 +5,6 @@ let
     imap0
     listToAttrs
     mkForce
-    mkIf
     mkMerge
     mkOption
     mod
@@ -52,7 +51,7 @@ in
         inputs.niri.lib.internal.validated-config-for pkgs config.programs.niri.package
           niri-cfg-modules.config.programs.niri.finalConfig;
     in
-    mkIf (config.custom.wm == "niri") {
+    {
       nixpkgs.overlays = [ inputs.niri.overlays.niri ];
 
       environment = {

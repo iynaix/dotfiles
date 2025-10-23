@@ -8,14 +8,9 @@
       ...
     }:
     let
-      inherit (lib)
-        concatStringsSep
-        mkAfter
-        mkIf
-        optionals
-        ;
+      inherit (lib) concatStringsSep mkAfter optionals;
     in
-    mkIf (config.custom.wm == "hyprland") {
+    {
       custom.programs.hyprland =
         if config.custom.programs.hyprnstack.enable then
           {

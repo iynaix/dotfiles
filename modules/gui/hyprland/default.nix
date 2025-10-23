@@ -72,7 +72,7 @@ in
             config.custom.programs.hyprland.settings
           ];
     in
-    mkIf (config.custom.wm == "hyprland") {
+    {
       environment = {
         shellAliases = {
           hyprland = "Hyprland";

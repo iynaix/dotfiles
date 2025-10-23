@@ -24,9 +24,9 @@
         ]
         ++ (flatten cmd);
     in
-    mkIf (config.custom.wm == "niri") {
+    {
       custom = {
-        shell.packages = {
+        shell.packages = mkIf (config.custom.wm == "niri") {
           focus-or-run = {
             runtimeInputs = with pkgs; [
               config.programs.niri.package

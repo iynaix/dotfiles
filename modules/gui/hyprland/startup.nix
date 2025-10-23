@@ -14,10 +14,8 @@
         optionalString
         ;
     in
-    mkIf (config.custom.wm == "hyprland") {
-      custom = {
-        autologinCommand = "Hyprland";
-      };
+    {
+      custom.autologinCommand = mkIf (config.custom.wm == "hyprland") "Hyprland";
 
       custom.programs.hyprland.settings = {
         exec-once = [

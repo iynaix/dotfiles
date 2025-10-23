@@ -4,10 +4,8 @@
     let
       inherit (lib) mkIf;
     in
-    mkIf (config.custom.wm == "mango") {
-      custom = {
-        # autologinCommand = "mango";
-        autologinCommand = "mango -d &> /tmp/mango.log";
-      };
+    {
+      # autologinCommand = "mango";
+      custom.autologinCommand = mkIf (config.custom.wm == "mango") "mango -d &> /tmp/mango.log";
     };
 }

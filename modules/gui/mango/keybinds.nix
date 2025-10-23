@@ -1,26 +1,15 @@
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      inputs,
-      lib,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib)
-        concatStringsSep
-        flatten
-        mkIf
-        ;
+      inherit (lib) concatStringsSep flatten;
       termExec = cmd: "ghostty -e ${concatStringsSep " " cmd}";
     in
-    mkIf (config.custom.wm == "mango") {
+    {
       environment.systemPackages = with pkgs; [
         (writeShellApplication {
           name = "mango-focus-workspace";
-          runtimeInputs = [ inputs.mango.packages.${pkgs.system}.mmsg ];
           text = ''
             mmsg -d "focusmon,$1"
             mmsg -d "view,$2"
@@ -28,7 +17,6 @@
         })
         (writeShellApplication {
           name = "mango-move-to-workspace";
-          runtimeInputs = [ inputs.mango.packages.${pkgs.system}.mmsg ];
           text = ''
             mmsg -d "tagmon,$1"
             mmsg -d "tag,$2"

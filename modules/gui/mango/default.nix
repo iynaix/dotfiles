@@ -3,7 +3,6 @@ let
   inherit (lib)
     concatMapStringsSep
     flatten
-    mkIf
     range
     replaceString
     ;
@@ -47,7 +46,7 @@ in
       self,
       ...
     }:
-    mkIf (config.custom.wm == "mango") {
+    {
       programs.mango = {
         enable = true;
         package = inputs.mango.packages.${pkgs.system}.mango;

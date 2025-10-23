@@ -16,10 +16,8 @@
         reverseList
         ;
     in
-    mkIf (config.custom.wm == "niri") {
-      custom = {
-        autologinCommand = "niri-session";
-      };
+    {
+      custom.autologinCommand = mkIf (config.custom.wm == "niri") "niri-session";
 
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = mkMerge (

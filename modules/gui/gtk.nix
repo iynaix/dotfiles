@@ -12,7 +12,6 @@ let
     mkMerge
     mkOption
     nameValuePair
-    optionalAttrs
     ;
   inherit (lib.types)
     attrs
@@ -200,8 +199,6 @@ in
           GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
           XCURSOR_SIZE = gtkCfg.cursor.size;
           XCURSOR_THEME = gtkCfg.cursor.name;
-        }
-        // optionalAttrs (config.custom.wm == "hyprland") {
           HYPRCURSOR_SIZE = gtkCfg.cursor.size;
           HYPRCURSOR_THEME = gtkCfg.cursor.name;
         };

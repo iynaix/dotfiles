@@ -15,8 +15,8 @@ in
       termExec = cmd: "ghostty -e ${cmd}";
       qtile_like = config.custom.programs.hyprland.qtile;
     in
-    mkIf (config.custom.wm == "hyprland") {
-      custom.shell.packages = {
+    {
+      custom.shell.packages = mkIf (config.custom.wm == "hyprland") {
         focus-or-run = {
           runtimeInputs = with pkgs; [
             hyprland
