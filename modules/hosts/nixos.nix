@@ -22,7 +22,6 @@ let
           isVm
           user
           ;
-        isNixOS = true;
         isLaptop = host == "xps" || host == "framework";
         dots = "/persist/home/${user}/projects/dotfiles";
       };

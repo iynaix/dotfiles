@@ -3,30 +3,20 @@
     {
       config,
       inputs,
-      isNixOS,
       lib,
       pkgs,
       ...
     }:
     let
-      inherit (lib)
-        getExe'
-        mkAfter
-        mkIf
-        optionals
-        ;
-      focal = inputs.focal.packages.${pkgs.system}.default.override {
-        backend = config.custom.wm;
-        ocr = true;
-      };
+      inherit (lib) getExe' mkAfter mkIf;
+      focal = inputs.focal.packages.${pkgs.system}.default;
     in
     mkIf config.custom.isWm {
-      environment.systemPackages =
-        (with pkgs; [
-          swappy
-          wf-recorder
-        ])
-        ++ optionals isNixOS [ focal ];
+      environment.systemPackages = [
+        pkgs.swappy
+        pkgs.wf-recorder
+        focal
+      ];
 
       # swappy conf
       hj.xdg.config.files."swappy/config".text = lib.generators.toINI { } {

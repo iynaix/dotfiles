@@ -1,17 +1,23 @@
 { inputs, lib, ... }:
+let
+  inherit (lib)
+    concatLines
+    filter
+    getExe
+    isAttrs
+    optionalAttrs
+    ;
+in
 {
   flake.nixosModules.core =
     {
       config,
       dots,
       host,
-      isNixOS,
       pkgs,
-      user,
       ...
     }:
     let
-      inherit (lib) concatLines getExe optionalAttrs;
       tomlFormat = pkgs.formats.toml { };
       nix-init' = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
@@ -407,14 +413,10 @@
           nix-list-packages = {
             text =
               let
-                allPkgs = map (p: p.name) (
-                  config.environment.systemPackages ++ config.users.users.${user}.packages
-                );
+                allPkgs = config.environment.systemPackages |> filter isAttrs |> map (pkg: pkg.name);
               in
               ''sort -ui <<< "${concatLines allPkgs}"'';
           };
-        }
-        // optionalAttrs isNixOS {
           # nixos-rebuild boot
           nsbt = {
             runtimeInputs = [ pkgs.custom.shell.nsw ];

@@ -3,7 +3,6 @@
     {
       config,
       dots,
-      isNixOS,
       lib,
       pkgs,
       ...
@@ -169,7 +168,6 @@
               TERMINAL = "ghostty";
               EDITOR = "nvim";
               VISUAL = "nvim";
-              __IS_NIXOS = if isNixOS then "1" else "0";
               NIXPKGS_ALLOW_UNFREE = "1";
               # xdg
               XDG_CACHE_HOME = config.hj.xdg.cache.directory;

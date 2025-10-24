@@ -12,7 +12,6 @@
         flatten
         getExe'
         mergeAttrsList
-        mkIf
         ;
       inherit (config.custom.hardware) monitors;
       termExec =
@@ -25,26 +24,6 @@
     in
     {
       custom = {
-        shell.packages = mkIf (config.custom.wm == "niri") {
-          focus-or-run = {
-            runtimeInputs = with pkgs; [
-              config.programs.niri.package
-              jq
-            ];
-            # $1 is string to search for in window title
-            # $2 is the command to run if the window isn't found
-            text = # sh
-              ''
-                id=$(niri msg -j windows | jq -r ".[] | select(.title | contains(\"$1\")) | .id")
-                if [ -z "$id" ]; then
-                  eval "$2"
-                else
-                  niri msg action focus-window --id "$id"
-                fi
-              '';
-          };
-        };
-
         programs.niri.settings = {
           binds = {
             # Most actions that you can bind here can also be invoked programmatically with

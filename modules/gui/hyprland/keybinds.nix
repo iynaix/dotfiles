@@ -1,42 +1,13 @@
 { lib, ... }:
-let
-  inherit (lib) flatten mkIf;
-in
 {
   flake.nixosModules.wm =
-    {
-      config,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, self, ... }:
     let
       inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";
       qtile_like = config.custom.programs.hyprland.qtile;
     in
     {
-      custom.shell.packages = mkIf (config.custom.wm == "hyprland") {
-        focus-or-run = {
-          runtimeInputs = with pkgs; [
-            hyprland
-            jq
-          ];
-          # $1 is string to search for in window title
-          # $2 is the command to run if the window isn't found
-          text = # sh
-            ''
-              address=$(hyprctl clients -j | jq -r ".[] | select(.title | contains(\"$1\")) | .address")
-
-              if [ -z "$address" ]; then
-                eval "$2"
-              else
-                hyprctl dispatch focuswindow "address:$address"
-              fi
-            '';
-        };
-      };
-
       custom.programs.hyprland.settings = {
         bind = [
           "$mod, Return, exec, ghostty"
@@ -136,7 +107,7 @@ in
           ",XF86AudioMute, exec, pamixer -t"
         ]
         # workspace keybinds
-        ++ (flatten (
+        ++ (lib.flatten (
           (self.lib.mapWorkspaces (
             { workspace, key, ... }:
             if qtile_like then

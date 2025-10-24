@@ -114,3 +114,16 @@ pub struct RofiMpvArgs {
     )]
     pub generate: Option<ShellCompletion>,
 }
+
+#[derive(Parser, Debug)]
+#[command(name = "focus-or-run", about = "Focus window or run command")]
+pub struct FocusOrRunArgs {
+    #[arg(
+        index = 1,
+        help = "Substring to search for in a window's title, e.g., 'Firefox'"
+    )]
+    pub title: String,
+
+    #[arg(index = 2, help = "Command to execute if the window is not found")]
+    pub command: String,
+}
