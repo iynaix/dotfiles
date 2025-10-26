@@ -22,8 +22,6 @@
           # stop fucking with my cursors
           "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"
           "hyprctl dispatch workspace 1"
-          # disable middle click paste
-          "${getExe' pkgs.wl-clipboard "wl-paste"} -p --watch ${getExe' pkgs.wl-clipboard "wl-copy"} -pc"
         ]
         # generate from startup options
         ++ map (

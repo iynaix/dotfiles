@@ -85,8 +85,12 @@ in
       };
 
       xdg.portal = {
-        enable = true;
-        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+        config = {
+          hyprland = {
+            default = "hyprland";
+            "org.freedesktop.impl.portal.FileChooser" = "gtk";
+          };
+        };
       };
 
       # use the config file in home as wrapping the package produces as an error

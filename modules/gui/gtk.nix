@@ -235,6 +235,8 @@ in
                   font-name = "${gtkCfg.font.name} 10";
                   gtk-theme = "Tokyonight-Dark-Compact";
                   icon-theme = "Tela-${defaultAccent}-dark";
+                  # disable middle click paste
+                  gtk-enable-primary-paste = false;
                 };
               }
               config.custom.dconf.settings

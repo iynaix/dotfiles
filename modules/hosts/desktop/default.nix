@@ -29,7 +29,7 @@ topLevel: {
 
         ### hardware
         # bluetooth
-        # qmk
+        qmk
         # laptop
 
         ### services

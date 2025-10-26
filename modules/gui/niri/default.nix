@@ -89,16 +89,12 @@ in
       hj.xdg.config.files."niri/config.kdl".source = niriConf;
 
       xdg.portal = {
-        enable = true;
         config = {
-          common.default = [ "gnome" ];
           niri = {
             default = "gnome";
             "org.freedesktop.impl.portal.FileChooser" = "gtk";
           };
-          obs.default = [ "gnome" ];
         };
-        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
 
       custom = {
