@@ -7,7 +7,6 @@ let
     listToAttrs
     mapAttrs
     mapAttrs'
-    mkIf
     mkOption
     nameValuePair
     range
@@ -86,7 +85,7 @@ in
         ) cfg.templates;
       };
     in
-    mkIf config.custom.isWm {
+    {
       environment.systemPackages = [ pkgs.wallust ];
 
       hj.xdg.config.files = {

@@ -4,7 +4,6 @@ let
     getExe
     getExe'
     max
-    mkIf
     mkMerge
     ;
 in
@@ -15,7 +14,7 @@ in
       pkgs,
       ...
     }:
-    mkIf config.custom.isWm (mkMerge [
+    mkMerge [
       {
         environment = {
           systemPackages = with pkgs; [
@@ -123,5 +122,5 @@ in
           };
         };
       }
-    ]);
+    ];
 }

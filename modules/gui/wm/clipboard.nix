@@ -7,12 +7,7 @@
       ...
     }:
     let
-      inherit (lib)
-        escapeShellArgs
-        getExe
-        getExe'
-        mkIf
-        ;
+      inherit (lib) escapeShellArgs getExe getExe';
       extraOptionsStr = escapeShellArgs [
         "-max-dedupe-search"
         "10"
@@ -20,7 +15,7 @@
         "500"
       ];
     in
-    mkIf config.custom.isWm {
+    {
       environment.systemPackages = with pkgs; [
         # clipboard history
         cliphist

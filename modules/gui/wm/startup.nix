@@ -22,146 +22,136 @@ let
     ;
 in
 {
-  flake.nixosModules.core =
-    { config, ... }:
-    {
-      options.custom = {
-        wm = mkOption {
-          description = "The WM to use, either hyprland / niri / mango / plasma / tty";
-          type = enum [
-            "hyprland"
-            "niri"
-            "mango"
-            "plasma"
-            "tty"
-          ];
-          default = "hyprland";
-        };
-
-        isWm = mkOption {
-          description = "Readonly option to check if the WM is hyprland / niri / mango";
-          type = bool;
-          default =
-            config.custom.wm == "hyprland" || config.custom.wm == "niri" || config.custom.wm == "mango";
-          readOnly = true;
-        };
-
-        hardware.monitors = mkOption {
-          description = "Config for monitors";
-          type = nonEmptyListOf (
-            submodule (
-              { config, ... }:
-              {
-                options = {
-                  name = mkOption {
-                    type = str;
-                    description = "The name of the display, e.g. eDP-1";
-                  };
-                  width = mkOption {
-                    type = int;
-                    description = "Pixel width of the display";
-                  };
-                  height = mkOption {
-                    type = int;
-                    description = "Pixel width of the display";
-                  };
-                  refreshRate = mkOption {
-                    type = oneOf [
-                      int
-                      str
-                    ];
-                    default = 60;
-                    description = "Refresh rate of the display";
-                  };
-                  positionX = mkOption {
-                    type = int;
-                    default = 0;
-                    description = "Position x coordinate of the display";
-                  };
-                  positionY = mkOption {
-                    type = int;
-                    default = 0;
-                    description = "Position y coordinate of the display";
-                  };
-                  scale = mkOption {
-                    type = float;
-                    default = 1.0;
-                  };
-                  vrr = mkEnableOption "Variable Refresh Rate";
-                  transform = mkOption {
-                    type = int;
-                    description = "Tranform for rotation";
-                    default = 0;
-                  };
-                  workspaces = mkOption {
-                    type = nonEmptyListOf int;
-                    description = "List of workspace numbers";
-                  };
-                  defaultWorkspace = mkOption {
-                    type = enum config.workspaces;
-                    default = elemAt config.workspaces 0;
-                    description = "Default workspace for this monitor";
-                  };
-                  extraHyprlandConfig = mkOption {
-                    type = attrs;
-                    default = { };
-                    description = "Extra monitor config for hyprland";
-                  };
-                  isVertical = mkOption {
-                    type = bool;
-                    default = mod config.transform 2 == 1;
-                    description = "Whether the monitor is vertical";
-                    readOnly = true;
-                  };
-                };
-              }
-            )
-          );
-          default = [ ];
-        };
-
-        startup = mkOption {
-          description = "Programs to run on startup";
-          type = listOf (oneOf [
-            str
-            (submodule {
-              options = {
-                app-id = mkOption {
-                  type = nullOr str;
-                  description = "The app-id (class) of the program to start";
-                  default = null;
-                };
-                enable = mkEnableOption "Rule" // {
-                  default = true;
-                };
-                title = mkOption {
-                  type = nullOr str;
-                  description = "The window title of the program to start, for differentiating between multiple instances";
-                  default = null;
-                };
-                spawn = mkOption {
-                  type = listOf str;
-                  description = "Command to execute";
-                  default = null;
-                };
-                workspace = mkOption {
-                  type = nullOr int;
-                  description = "Optional workspace to start program on";
-                  default = null;
-                };
-                niriArgs = mkOption {
-                  type = attrs;
-                  description = "Extra arguments for niri window rules";
-                  default = { };
-                };
-              };
-            })
-          ]);
-          default = [ ];
-        };
+  flake.nixosModules.core = {
+    options.custom = {
+      wm = mkOption {
+        description = "The WM to use, either hyprland / niri / mango / plasma / tty";
+        type = enum [
+          "hyprland"
+          "niri"
+          "mango"
+          "plasma"
+          "tty"
+        ];
+        default = "hyprland";
       };
 
+      hardware.monitors = mkOption {
+        description = "Config for monitors";
+        type = nonEmptyListOf (
+          submodule (
+            { config, ... }:
+            {
+              options = {
+                name = mkOption {
+                  type = str;
+                  description = "The name of the display, e.g. eDP-1";
+                };
+                width = mkOption {
+                  type = int;
+                  description = "Pixel width of the display";
+                };
+                height = mkOption {
+                  type = int;
+                  description = "Pixel width of the display";
+                };
+                refreshRate = mkOption {
+                  type = oneOf [
+                    int
+                    str
+                  ];
+                  default = 60;
+                  description = "Refresh rate of the display";
+                };
+                positionX = mkOption {
+                  type = int;
+                  default = 0;
+                  description = "Position x coordinate of the display";
+                };
+                positionY = mkOption {
+                  type = int;
+                  default = 0;
+                  description = "Position y coordinate of the display";
+                };
+                scale = mkOption {
+                  type = float;
+                  default = 1.0;
+                };
+                vrr = mkEnableOption "Variable Refresh Rate";
+                transform = mkOption {
+                  type = int;
+                  description = "Tranform for rotation";
+                  default = 0;
+                };
+                workspaces = mkOption {
+                  type = nonEmptyListOf int;
+                  description = "List of workspace numbers";
+                };
+                defaultWorkspace = mkOption {
+                  type = enum config.workspaces;
+                  default = elemAt config.workspaces 0;
+                  description = "Default workspace for this monitor";
+                };
+                extraHyprlandConfig = mkOption {
+                  type = attrs;
+                  default = { };
+                  description = "Extra monitor config for hyprland";
+                };
+                isVertical = mkOption {
+                  type = bool;
+                  default = mod config.transform 2 == 1;
+                  description = "Whether the monitor is vertical";
+                  readOnly = true;
+                };
+              };
+            }
+          )
+        );
+        default = [ ];
+      };
+
+      startup = mkOption {
+        description = "Programs to run on startup";
+        type = listOf (oneOf [
+          str
+          (submodule {
+            options = {
+              app-id = mkOption {
+                type = nullOr str;
+                description = "The app-id (class) of the program to start";
+                default = null;
+              };
+              enable = mkEnableOption "Rule" // {
+                default = true;
+              };
+              title = mkOption {
+                type = nullOr str;
+                description = "The window title of the program to start, for differentiating between multiple instances";
+                default = null;
+              };
+              spawn = mkOption {
+                type = listOf str;
+                description = "Command to execute";
+                default = null;
+              };
+              workspace = mkOption {
+                type = nullOr int;
+                description = "Optional workspace to start program on";
+                default = null;
+              };
+              niriArgs = mkOption {
+                type = attrs;
+                description = "Extra arguments for niri window rules";
+                default = { };
+              };
+            };
+          })
+        ]);
+        default = [ ];
+      };
     };
+
+  };
 
   flake.nixosModules.wm =
     # generic functionality for all WMs

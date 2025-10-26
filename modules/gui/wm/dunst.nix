@@ -12,7 +12,6 @@
         getExe'
         isBool
         isString
-        mkIf
         ;
       opacity = "E5"; # 90%
       # see home-manager for original implementation
@@ -76,7 +75,7 @@
       # NOTE: real dunst config is read from here
       dunstConfigpath = "${config.hj.xdg.config.directory}/dunst/dunstrc";
     in
-    mkIf config.custom.isWm {
+    {
       # keybind to show dunst history
       custom.programs = {
         hyprland.settings.bind = [

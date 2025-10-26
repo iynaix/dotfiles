@@ -62,6 +62,7 @@ pub fn show_pqiv() {
             "--window-title",
             niri_window_title()
         )
+        .env("GDK_BACKEND", "wayland")
         .arg(wall_dir)
         .execute()
         .expect("failed to execute pqiv");

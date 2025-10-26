@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, self, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -15,12 +15,7 @@
     };
 
   flake.nixosModules.host-desktop =
-    {
-      config,
-      pkgs,
-      user,
-      ...
-    }:
+    { pkgs, user, ... }:
     {
       # dual boot
       boot = {
@@ -60,12 +55,12 @@
       };
 
       # allow rebooting directly into windows which requires sudo, see above
-      security.sudo.extraRules = lib.mkIf config.custom.lock.enable [
+      security.sudo.extraRules = [
         {
           users = [ user ];
           commands = [
             {
-              command = pkgs.custom.shell.lock;
+              command = lib.getExe self.packages.${pkgs.system}.reboot-to-windows;
               options = [ "NOPASSWD" ];
             }
           ];

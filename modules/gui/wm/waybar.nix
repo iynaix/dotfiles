@@ -51,7 +51,7 @@ in
       inherit (lib.strings) toJSON;
       cfg = config.custom.programs.waybar;
     in
-    mkIf config.custom.isWm {
+    {
       programs.waybar.enable = true;
 
       systemd.user.services.waybar = {

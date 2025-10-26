@@ -81,7 +81,7 @@ in
 
       config.package = config.pkgs.pqiv;
       # force wayland, it behaves weird when run through a niri keybind otherwise
-      config.env.GDK_BACKEND = "wayland";
+      # config.env.GDK_BACKEND = "wayland";
       config.env.PQIVRC_PATH = toString config.pqivrc.path;
     }
   );

@@ -8,10 +8,10 @@
       ...
     }:
     let
-      inherit (lib) getExe' mkAfter mkIf;
+      inherit (lib) getExe' mkAfter;
       focal = inputs.focal.packages.${pkgs.system}.default;
     in
-    mkIf config.custom.isWm {
+    {
       environment.systemPackages = [
         pkgs.swappy
         pkgs.wf-recorder

@@ -1,8 +1,7 @@
-{ lib, ... }:
 {
   flake.nixosModules.wm =
-    { config, pkgs, ... }:
-    lib.mkIf config.custom.isWm {
+    { pkgs, ... }:
+    {
       environment = {
         sessionVariables = {
           DISPLAY = ":0";

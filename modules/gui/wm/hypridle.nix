@@ -18,12 +18,7 @@
       ...
     }:
     let
-      inherit (lib)
-        assertMsg
-        getExe
-        mkIf
-        versionOlder
-        ;
+      inherit (lib) assertMsg getExe versionOlder;
       inherit (config.custom) wm;
       dpmsOff =
         if wm == "hyprland" then
@@ -44,7 +39,7 @@
         importantPrefixes = [ "$" ];
       };
     in
-    mkIf config.custom.isWm {
+    {
       custom = {
         programs.hypridle.settings = {
           general = {

@@ -1,4 +1,3 @@
-{ lib, ... }:
 {
   flake.nixosModules.wm =
     {
@@ -64,7 +63,7 @@
       launcherPath = "${rofiThemesPkg}/launchers/type-2/style-2.rasi";
       powermenuDir = "${rofiThemesPkg}/powermenu/type-4";
     in
-    lib.mkIf config.custom.isWm {
+    {
       nixpkgs.overlays = [
         (_: prev: {
           # TODO: bake theme in instead of using ~/.config/rofi/config.rasi?
