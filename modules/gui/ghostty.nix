@@ -106,7 +106,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.ghostty' = self.wrapperModules.ghostty.apply { inherit pkgs; };
+      packages.ghostty' = (self.wrapperModules.ghostty.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.gui =
@@ -123,7 +123,7 @@ in
             font-style = "Medium";
           }
           // config.custom.programs.ghostty.extraSettings;
-        })
+        }).wrapper
       ];
 
       custom.programs.terminal = {

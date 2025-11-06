@@ -96,7 +96,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.btop' = self.wrapperModules.btop.apply { inherit pkgs; };
+      packages.btop' = (self.wrapperModules.btop.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.core =
@@ -122,21 +122,22 @@ in
         nixpkgs.overlays = [
           (_: prev: {
             # overlay so that security wrappers for xps cann pick it up
-            btop = self.wrapperModules.btop.apply {
-              pkgs = prev;
-              cudaSupport = host == "desktop";
-              rocmSupport = host == "framework";
-              extraSettings = {
-                disks_filter = concatStringsSep " " (
-                  [
-                    "/"
-                    "/boot"
-                    "/persist"
-                  ]
-                  ++ config.custom.programs.btop.disks
-                );
-              };
-            };
+            btop =
+              (self.wrapperModules.btop.apply {
+                pkgs = prev;
+                cudaSupport = host == "desktop";
+                rocmSupport = host == "framework";
+                extraSettings = {
+                  disks_filter = concatStringsSep " " (
+                    [
+                      "/"
+                      "/boot"
+                      "/persist"
+                    ]
+                    ++ config.custom.programs.btop.disks
+                  );
+                };
+              }).wrapper;
           })
         ];
 

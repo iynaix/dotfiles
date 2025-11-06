@@ -19,7 +19,7 @@
 
   # expose wrapperModules as top level flake option
   flake.options.wrapperModules = lib.mkOption {
-    type = lib.types.attrsOf (lib.types.attrsOf lib.types.unspecified);
+    type = lib.types.attrs;
     default = { };
     description = "Wrapper modules";
   };
