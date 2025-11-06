@@ -100,7 +100,7 @@ in
           iconTheme = {
             package = mkOption {
               type = package;
-              default = pkgs.tokyo-night-gtk.override {
+              default = pkgs.tokyonight-gtk-theme.override {
                 colorVariants = [ "dark" ];
                 sizeVariants = [ "compact" ];
                 themeVariants = [ "all" ];

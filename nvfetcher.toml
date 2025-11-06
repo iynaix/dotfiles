@@ -22,10 +22,6 @@ fetch.github = "CogentRedTester/mpv-sub-select"
 src.git = "https://github.com/kelciour/mpv-scripts"
 fetch.github = "kelciour/mpv-scripts"
 
-[path-of-building]
-src.github_tag = "PathOfBuildingCommunity/PathOfBuilding"
-fetch.github = "PathOfBuildingCommunity/PathOfBuilding"
-
 [rofi-themes]
 src.git = "https://github.com/adi1090x/rofi"
 fetch.github = "adi1090x/rofi"

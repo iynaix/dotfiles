@@ -69,7 +69,7 @@ let
     # );
 
     # fix some ugly styling for nemo in tokyonight
-    tokyo-night-gtk = prev.tokyo-night-gtk.overrideAttrs (o: {
+    tokyonight-gtk-theme = prev.tokyonight-gtk-theme.overrideAttrs (o: {
       patches = (o.patches or [ ]) ++ [ ./tokyonight-style.patch ];
     });
   };

@@ -8,11 +8,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-d8kwLEU6qgEgp7nlEwdfRevB1JrbEKHRe8+GhGpGUig=",
+            "sha256": "sha256-N7JpLLOdsnYuzYreN1iaHI992MR2SuXTmXHfa6fd1UU=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.5.8.1/helium-0.5.8.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.6.3.1/helium-0.6.3.1-x86_64.AppImage"
         },
-        "version": "0.5.8.1"
+        "version": "0.6.3.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -118,27 +118,6 @@
             "type": "github"
         },
         "version": "9a5cda4fc8f0896cec27dca60a32251009c0e9c5"
-    },
-    "path-of-building": {
-        "cargoLocks": null,
-        "date": null,
-        "extract": null,
-        "name": "path-of-building",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "PathOfBuildingCommunity",
-            "repo": "PathOfBuilding",
-            "rev": "v2.56.0",
-            "sha256": "sha256-vzTMkrZgXtsCtEyxaDkea/MRj8tZDzDV3JAc440xrM8=",
-            "sparseCheckout": [],
-            "type": "github"
-        },
-        "version": "v2.56.0"
     },
     "rofi-themes": {
         "cargoLocks": null,

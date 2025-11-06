@@ -3,10 +3,10 @@
 {
   helium = {
     pname = "helium";
-    version = "0.5.8.1";
+    version = "0.6.3.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.5.8.1/helium-0.5.8.1-x86_64.AppImage";
-      sha256 = "sha256-d8kwLEU6qgEgp7nlEwdfRevB1JrbEKHRe8+GhGpGUig=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.6.3.1/helium-0.6.3.1-x86_64.AppImage";
+      sha256 = "sha256-N7JpLLOdsnYuzYreN1iaHI992MR2SuXTmXHfa6fd1UU=";
     };
   };
   mpv-cut = {
@@ -68,17 +68,6 @@
       sha256 = "sha256-BRyKJeXWFhsCDKTUNKsp+yqYpP9mzbaZMviUFXyA308=";
     };
     date = "2019-01-24";
-  };
-  path-of-building = {
-    pname = "path-of-building";
-    version = "v2.56.0";
-    src = fetchFromGitHub {
-      owner = "PathOfBuildingCommunity";
-      repo = "PathOfBuilding";
-      rev = "v2.56.0";
-      fetchSubmodules = false;
-      sha256 = "sha256-vzTMkrZgXtsCtEyxaDkea/MRj8tZDzDV3JAc440xrM8=";
-    };
   };
   rofi-themes = {
     pname = "rofi-themes";
