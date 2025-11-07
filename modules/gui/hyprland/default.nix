@@ -115,7 +115,7 @@ in
         });
         # package =
         #   assert (assertMsg (versionOlder config.programs.hyprland.package.version "0.42") "hyprland: use version from nixpkgs?");
-        #   inputs.hyprland.packages.${pkgs.system}.hyprland;
+        #   inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       };
 
       # hyprland-session systemd service, from home-manager

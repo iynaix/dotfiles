@@ -9,7 +9,7 @@
     }:
     let
       inherit (lib) getExe' mkAfter;
-      focal = inputs.focal.packages.${pkgs.system}.default;
+      focal = inputs.focal.packages.${pkgs.stdenv.hostPlatform.system}.default;
     in
     {
       environment.systemPackages = [

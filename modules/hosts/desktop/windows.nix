@@ -60,7 +60,7 @@
           users = [ user ];
           commands = [
             {
-              command = lib.getExe self.packages.${pkgs.system}.reboot-to-windows;
+              command = lib.getExe self.packages.${pkgs.stdenv.hostPlatform.system}.reboot-to-windows;
               options = [ "NOPASSWD" ];
             }
           ];

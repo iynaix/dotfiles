@@ -58,7 +58,7 @@
           lla = "eza -la";
         };
 
-        systemPackages = with self.packages.${pkgs.system}; [
+        systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
           eza'
           eza-tree
         ];

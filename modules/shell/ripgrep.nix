@@ -27,6 +27,6 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.system}.ripgrep' ];
+      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.ripgrep' ];
     };
 }

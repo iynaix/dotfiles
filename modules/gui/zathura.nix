@@ -71,7 +71,7 @@
   flake.nixosModules.gui =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.system}.zathura' ];
+      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.zathura' ];
 
       xdg.mime.defaultApplications = {
         "application/pdf" = "org.pwmt.zathura.desktop";

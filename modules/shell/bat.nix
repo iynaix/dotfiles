@@ -37,7 +37,7 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = with self.packages.${pkgs.system}; [
+      environment.systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
         bat'
         batman'
       ];

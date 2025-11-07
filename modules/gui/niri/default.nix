@@ -68,7 +68,7 @@ in
       programs.niri = {
         enable = true;
         # package = pkgs.niri.overrideAttrs (o: {
-        package = inputs.niri.packages.${pkgs.system}.niri-unstable.overrideAttrs (o: {
+        package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable.overrideAttrs (o: {
           patches =
             (o.patches or [ ])
             # not compatible with blur patch

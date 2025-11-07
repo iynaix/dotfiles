@@ -36,7 +36,7 @@ in
           ytplaylist = "ytdl --output '%(playlist_index)d - %(title)s.%(ext)s'";
         };
 
-        systemPackages = [ self.packages.${pkgs.system}.yt-dlp' ];
+        systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.yt-dlp' ];
       };
     };
 }

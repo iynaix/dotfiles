@@ -197,9 +197,9 @@ in
             pkgs.mpvScripts.dynamic-crop
             pkgs.mpvScripts.seekTo
             # custom packaged scripts
-            self.packages.${pkgs.system}.mpv-deletefile
-            self.packages.${pkgs.system}.mpv-nextfile
-            self.packages.${pkgs.system}.mpv-subsearch
+            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-deletefile
+            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-nextfile
+            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-subsearch
           ];
         }
 
@@ -280,7 +280,7 @@ in
         # mpv-cut settings
         {
           scripts = [
-            (self.packages.${pkgs.system}.mpv-cut.override {
+            (self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-cut.override {
               # disable bookmarks functionality
               configLua = # lua
                 ''
@@ -292,7 +292,7 @@ in
 
         # sub-select settings
         {
-          scripts = [ self.packages.${pkgs.system}.mpv-sub-select ];
+          scripts = [ self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-sub-select ];
 
           scriptOptsFiles = {
             "sub-select.json" = lib.strings.toJSON [
@@ -405,7 +405,7 @@ in
 
         environment.systemPackages = [
           pkgs.ffmpeg
-          self.packages.${pkgs.system}.mpv'
+          self.packages.${pkgs.stdenv.hostPlatform.system}.mpv'
         ];
 
         custom.persist = {

@@ -96,6 +96,6 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.system}.tmux' ];
+      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.tmux' ];
     };
 }

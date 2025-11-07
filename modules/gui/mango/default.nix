@@ -49,7 +49,7 @@ in
     {
       programs.mango = {
         enable = true;
-        package = inputs.mango.packages.${pkgs.system}.mango;
+        package = inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.mango;
       };
 
       # write the settings to home directory

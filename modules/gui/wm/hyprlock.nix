@@ -41,7 +41,7 @@ in
     mkIf config.custom.lock.enable {
       programs.hyprlock.enable = true;
 
-      environment.systemPackages = [ self.packages.${pkgs.system}.lock ];
+      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.lock ];
 
       # lock on idle
       custom.programs = {
