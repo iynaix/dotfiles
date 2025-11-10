@@ -13,16 +13,23 @@
           "format_short_id(id)" = "id.shortest()";
         };
       };
-      # doesn't make sense to expose with user details
-      jujutsu' = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.jujutsu;
-        flags = {
-          "--config-file" = tomlFormat.generate "config.toml" jujutsuConf;
-        };
-      };
     in
     {
-      environment.systemPackages = [ jujutsu' ];
+      nixpkgs.overlays = [
+        (_: prev: {
+          # doesn't make sense to expose with user details
+          jujutsu' = inputs.wrappers.lib.wrapPackage {
+            pkgs = prev;
+            package = prev.jujutsu;
+            flags = {
+              "--config-file" = tomlFormat.generate "config.toml" jujutsuConf;
+            };
+          };
+        })
+      ];
+
+      environment.systemPackages = [
+        pkgs.jujutsu # overlay-ed above
+      ];
     };
 }

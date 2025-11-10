@@ -37,9 +37,15 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
-        bat'
-        batman'
+      nixpkgs.overlays = [
+        (_: _prev: {
+          bat = self.packages.${pkgs.stdenv.hostPlatform.system}.bat';
+        })
+      ];
+
+      environment.systemPackages = [
+        pkgs.bat # overlay-ed above
+        self.packages.${pkgs.stdenv.hostPlatform.system}.batman'
       ];
 
       programs = {

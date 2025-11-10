@@ -5,11 +5,6 @@
   ...
 }:
 
-let
-  inherit (lib) flatten mapAttrsToList stringToCharacters;
-
-in
-
 {
   flake.wrapperModules.yazi = inputs.wrappers.lib.wrapModule (
     { config, ... }:
@@ -311,79 +306,9 @@ in
 
   flake.nixosModules.core =
     {
-      config,
       pkgs,
-      dots,
       ...
     }:
-    let
-      yazi' =
-        (self.wrapperModules.yazi.apply {
-          inherit pkgs;
-          extraSettings = {
-            keymap =
-              let
-                homeDir = "/persist${config.hj.directory}";
-                shortcuts = {
-                  h = homeDir;
-                  inherit dots;
-                  cfg = "${homeDir}/.config";
-                  vd = "${homeDir}/Videos";
-                  vaa = "${homeDir}/Videos/Anime";
-                  vm = "${homeDir}/Videos/Movies";
-                  vt = "${homeDir}/Videos/TV";
-                  vtn = "${homeDir}/Videos/TV/New";
-                  pp = "${homeDir}/projects";
-                  pc = "${homeDir}/Pictures";
-                  ps = "${homeDir}/Pictures/Screenshots";
-                  pw = "${homeDir}/Pictures/Wallpapers";
-                  dd = "${homeDir}/Downloads";
-                  dp = "${homeDir}/Downloads/pending";
-                  dus = "${homeDir}/Downloads/pending/Unsorted";
-                };
-              in
-              # add keymaps for shortcuts
-              {
-                mgr.prepend_keymap = flatten (
-                  mapAttrsToList (keys: loc: [
-                    # cd
-                    {
-                      on = [ "g" ] ++ stringToCharacters keys;
-                      run = "cd ${loc}";
-                      desc = "cd to ${loc}";
-                    }
-                    # new tab
-                    {
-                      on = [ "t" ] ++ stringToCharacters keys;
-                      run = "tab_create ${loc}";
-                      desc = "open new tab to ${loc}";
-                    }
-                    # mv
-                    {
-                      on = [ "m" ] ++ stringToCharacters keys;
-                      run = [
-                        "yank --cut"
-                        "escape --visual --select"
-                        loc
-                      ];
-                      desc = "move selection to ${loc}";
-                    }
-                    # cp
-                    {
-                      on = [ "Y" ] ++ stringToCharacters keys;
-                      run = [
-                        "yank"
-                        "escape --visual --select"
-                        loc
-                      ];
-                      desc = "copy selection to ${loc}";
-                    }
-                  ]) shortcuts
-                );
-              };
-          };
-        }).wrapper;
-    in
     {
       # shell integrations
       programs = {
@@ -412,8 +337,17 @@ in
           '';
       };
 
+      nixpkgs.overlays = [
+        (_: _prev: {
+          yazi = self.packages.${pkgs.stdenv.hostPlatform.system}.yazi';
+        })
+      ];
+
       environment = {
-        systemPackages = [ yazi' ];
+        systemPackages = [
+          pkgs.yazi # overlay-ed above
+        ];
+
         shellAliases = {
           lf = "yazi";
           y = "yazi";

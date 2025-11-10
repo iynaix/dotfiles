@@ -3,10 +3,10 @@
 {
   helium = {
     pname = "helium";
-    version = "0.6.3.1";
+    version = "0.6.5.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.6.3.1/helium-0.6.3.1-x86_64.AppImage";
-      sha256 = "sha256-N7JpLLOdsnYuzYreN1iaHI992MR2SuXTmXHfa6fd1UU=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.6.5.1/helium-0.6.5.1-x86_64.AppImage";
+      sha256 = "sha256-EHhIwNnLm7sTlbm5+OTWQl2FGnb1iaAD8S7P5RtIPu4=";
     };
   };
   mpv-cut = {
@@ -107,13 +107,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.10.22";
+    version = "2025.11.12";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.10.22";
+      rev = "2025.11.12";
       fetchSubmodules = false;
-      sha256 = "sha256-jQaENEflaF9HzY/EiMXIHgUehAJ3nnDT9IbaN6bDcac=";
+      sha256 = "sha256-Em8FLcCizSfvucg+KPuJyhFZ5MJ8STTjSpqaTD5xeKI=";
     };
   };
 }

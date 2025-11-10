@@ -21,6 +21,14 @@
   flake.nixosModules.helix =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.helix' ];
+      nixpkgs.overlays = [
+        (_: _prev: {
+          helix = self.packages.${pkgs.stdenv.hostPlatform.system}.helix';
+        })
+      ];
+
+      environment.systemPackages = [
+        pkgs.helix # overlay-ed above
+      ];
     };
 }

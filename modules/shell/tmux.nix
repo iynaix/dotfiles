@@ -96,6 +96,14 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.tmux' ];
+      nixpkgs.overlays = [
+        (_: _prev: {
+          tmux = self.packages.${pkgs.stdenv.hostPlatform.system}.tmux';
+        })
+      ];
+
+      environment.systemPackages = [
+        pkgs.tmux # overlay-ed above
+      ];
     };
 }

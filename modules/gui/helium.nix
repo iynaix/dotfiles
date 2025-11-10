@@ -13,9 +13,6 @@
       heliumPkg = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.custom.helium;
-        flags = {
-          "--disable-features" = "WaylandWpColorManagerV1";
-        };
         flagSeparator = "=";
       };
     in

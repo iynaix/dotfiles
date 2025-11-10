@@ -112,18 +112,25 @@ in
   flake.nixosModules.gui =
     { config, pkgs, ... }:
     {
+      nixpkgs.overlays = [
+        (_: prev: {
+          ghostty =
+            (self.wrapperModules.ghostty.apply {
+              pkgs = prev;
+              extraSettings = {
+                # set as default interactive shell, also set $SHELL for nix shell to pick up
+                command = "SHELL=${getExe pkgs.fish} fish";
+                font-family = config.custom.fonts.monospace;
+                font-feature = "zero";
+                font-style = "Medium";
+              }
+              // config.custom.programs.ghostty.extraSettings;
+            }).wrapper;
+        })
+      ];
+
       environment.systemPackages = [
-        (self.wrapperModules.ghostty.apply {
-          inherit pkgs;
-          extraSettings = {
-            # set as default interactive shell, also set $SHELL for nix shell to pick up
-            command = "SHELL=${getExe pkgs.fish} fish";
-            font-family = config.custom.fonts.monospace;
-            font-feature = "zero";
-            font-style = "Medium";
-          }
-          // config.custom.programs.ghostty.extraSettings;
-        }).wrapper
+        pkgs.ghostty # overlay-ed above
       ];
 
       custom.programs.terminal = {

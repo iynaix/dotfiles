@@ -1,4 +1,7 @@
 { inputs, lib, ... }:
+let
+  inherit (lib) getExe nameValuePair listToAttrs;
+in
 {
   flake.nixosModules.core =
     {
@@ -7,23 +10,24 @@
       user,
       ...
     }:
-    let
-      inherit (lib) getExe nameValuePair listToAttrs;
-      ghDir = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
-      # wrap gh to set GITHUB_TOKEN
-      gh' = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.gh;
-        env.GH_CONFIG_DIR = ghDir;
-        preHook = ''
-          GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
-          export GITHUB_TOKEN
-        '';
-      };
-    in
     {
       # setup auth token for gh
       sops.secrets.github_token.owner = user;
+
+      nixpkgs.overlays = [
+        (_: prev: {
+          # wrap gh to set GITHUB_TOKEN
+          gh = inputs.wrappers.lib.wrapPackage {
+            pkgs = prev;
+            package = prev.gh;
+            env.GH_CONFIG_DIR = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
+            preHook = ''
+              GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
+              export GITHUB_TOKEN
+            '';
+          };
+        })
+      ];
 
       # needed for github authentication for private repos
       # adapted from home-manager:
@@ -39,13 +43,13 @@
             nameValuePair host {
               helper = [
                 ""
-                "${getExe gh'} auth git-credential"
+                "${getExe pkgs.gh} auth git-credential"
               ];
             }
           )
           |> listToAttrs;
       };
 
-      environment.systemPackages = [ gh' ];
+      environment.systemPackages = [ pkgs.gh ]; # overlay-ed above
     };
 }

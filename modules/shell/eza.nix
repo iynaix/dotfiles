@@ -48,6 +48,12 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
+      nixpkgs.overlays = [
+        (_: _prev: {
+          eza = self.packages.${pkgs.stdenv.hostPlatform.system}.eza';
+        })
+      ];
+
       environment = {
         shellAliases = {
           t = "tree";
@@ -58,9 +64,9 @@
           lla = "eza -la";
         };
 
-        systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
-          eza'
-          eza-tree
+        systemPackages = [
+          pkgs.eza # overlay-ed above
+          self.packages.${pkgs.stdenv.hostPlatform.system}.eza-tree
         ];
       };
     };

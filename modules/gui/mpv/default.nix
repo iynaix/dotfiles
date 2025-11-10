@@ -403,9 +403,15 @@ in
           # ];
         };
 
-        environment.systemPackages = [
-          pkgs.ffmpeg
-          self.packages.${pkgs.stdenv.hostPlatform.system}.mpv'
+        nixpkgs.overlays = [
+          (_: _prev: {
+            mpv = self.packages.${pkgs.stdenv.hostPlatform.system}.mpv';
+          })
+        ];
+
+        environment.systemPackages = with pkgs; [
+          ffmpeg
+          mpv # overlay-ed above
         ];
 
         custom.persist = {

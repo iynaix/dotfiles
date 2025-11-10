@@ -27,6 +27,12 @@ in
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
+      nixpkgs.overlays = [
+        (_: _prev: {
+          yt-dlp = self.packages.${pkgs.stdenv.hostPlatform.system}.yt-dlp';
+        })
+      ];
+
       environment = {
         shellAliases = {
           yt = "yt-dlp";
@@ -36,7 +42,9 @@ in
           ytplaylist = "ytdl --output '%(playlist_index)d - %(title)s.%(ext)s'";
         };
 
-        systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.yt-dlp' ];
+        systemPackages = [
+          pkgs.yt-dlp # overlay-ed above
+        ];
       };
     };
 }

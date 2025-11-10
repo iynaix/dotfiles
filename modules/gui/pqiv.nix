@@ -98,7 +98,6 @@ in
     {
       nixpkgs.overlays = [
         (_: prev: {
-          # overlay so that dotfiles-rs can pick up wrapped package
           pqiv =
             (self.wrapperModules.pqiv.apply {
               pkgs = prev;

@@ -14,13 +14,6 @@
         ".jj"
         "node_modules"
       ];
-      difftastic' = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.difftastic;
-        flags = {
-          "--background" = "dark";
-        };
-      };
     in
     mkMerge [
       {
@@ -199,7 +192,21 @@
 
       # difftastic
       {
-        environment.systemPackages = [ difftastic' ];
+        nixpkgs.overlays = [
+          (_: prev: {
+            difftastic' = inputs.wrappers.lib.wrapPackage {
+              pkgs = prev;
+              package = prev.difftastic;
+              flags = {
+                "--background" = "dark";
+              };
+            };
+          })
+        ];
+
+        environment.systemPackages = [
+          pkgs.difftastic # overlay-ed above
+        ];
 
         programs.git.config = {
           diff = {

@@ -19,19 +19,24 @@ in
     }:
     let
       tomlFormat = pkgs.formats.toml { };
-      nix-init' = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.nix-init;
-        flags = {
-          "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
-        };
-      };
-      nixpkgs-review' = pkgs.nixpkgs-review.override { withNom = true; };
     in
     {
-      environment.systemPackages = [
-        nix-init'
-        nixpkgs-review'
+      nixpkgs.overlays = [
+        (_: prev: {
+          nix-init' = inputs.wrappers.lib.wrapPackage {
+            pkgs = prev;
+            package = prev.nix-init;
+            flags = {
+              "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
+            };
+          };
+          nixpkgs-review' = prev.nixpkgs-review.override { withNom = true; };
+        })
+      ];
+
+      environment.systemPackages = with pkgs; [
+        nix-init # overlay-ed above
+        nixpkgs-review # overlay-ed above
       ];
 
       custom = {

@@ -27,6 +27,14 @@
   flake.nixosModules.core =
     { pkgs, self, ... }:
     {
-      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.ripgrep' ];
+      nixpkgs.overlays = [
+        (_: _prev: {
+          ripgrep = self.packages.${pkgs.stdenv.hostPlatform.system}.ripgrep';
+        })
+      ];
+
+      environment.systemPackages = [
+        pkgs.ripgrep # overlay-ed above
+      ];
     };
 }
