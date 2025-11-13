@@ -125,8 +125,7 @@ in
             btop =
               (self.wrapperModules.btop.apply {
                 pkgs = prev;
-                cudaSupport = host == "desktop";
-                rocmSupport = host == "framework";
+                rocmSupport = host == "desktop" || host == "framework";
                 extraSettings = {
                   disks_filter = concatStringsSep " " (
                     [

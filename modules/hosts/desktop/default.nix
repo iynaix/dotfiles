@@ -49,7 +49,7 @@ topLevel: {
         hardware = {
           monitors = [
             {
-              name = "DP-2";
+              name = "DP-1";
               width = 3440;
               height = 1440;
               # niri / mango wants this to be exact down to the decimals
@@ -70,7 +70,7 @@ topLevel: {
               };
             }
             {
-              name = "DP-1";
+              name = "DP-2";
               width = 2560;
               height = 1440;
               positionX = 0;
@@ -118,6 +118,10 @@ topLevel: {
 
         programs = {
           hyprnstack.enable = true;
+
+          btop.extraSettings = {
+            custom_gpu_name0 = "AMD Radeon RX 9070XT";
+          };
 
           # wallust.colorscheme = "tokyo-night";
 
@@ -197,10 +201,6 @@ topLevel: {
             '';
         })
       ];
-
-      # fix no login prompts in ttys, virtual tty are being redirected to mobo video output
-      # https://unix.stackexchange.com/a/253401
-      boot.blacklistedKernelModules = [ "amdgpu" ];
 
       # enable flirc usb ir receiver
       hardware.flirc.enable = false;

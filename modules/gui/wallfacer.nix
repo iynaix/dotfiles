@@ -55,10 +55,6 @@
               # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
               # https://github.com/tauri-apps/tauri/issues/10702
               /* sh */ ''
-                if command -v nvidia-smi &> /dev/null; then
-                  export WEBKIT_DISABLE_DMABUF_RENDERER=1
-                fi
-
                 direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" --config "${tomlFormat.generate "wallfacer.toml" wallfacerConf}" "$@"
               '';
             # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images

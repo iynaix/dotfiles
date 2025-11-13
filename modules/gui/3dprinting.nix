@@ -1,40 +1,12 @@
-let
-  # software rendering workaround for nvidia, see:
-  # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
-  nvidiaSoftwareRenderingWorkaround =
-    host: pkgs: bin: pkg:
-    if host == "desktop" then
-      pkgs.symlinkJoin {
-        name = bin;
-        paths = [ pkg ];
-        buildInputs = [ pkgs.makeWrapper ];
-        # use zink workaround for nvidia, see:
-        # https://github.com/klylabs/OrcaSlicer/blob/5d6bc146e8b6a1eba7db78d2c6a706f51d49ec67/src/platform/unix/BuildLinuxImage.sh.in#L60
-        postBuild = # sh
-          ''
-            wrapProgram $out/bin/${bin} \
-              --set __GLX_VENDOR_LIBRARY_NAME mesa \
-              --set __EGL_VENDOR_LIBRARY_FILENAMES ${pkgs.mesa}/share/glvnd/egl_vendor.d/50_mesa.json \
-              --set MESA_LOADER_DRIVER_OVERRIDE zink \
-              --set GALLIUM_DRIVER zink \
-              --set WEBKIT_DISABLE_DMABUF_RENDERER 1
-          '';
-        meta.mainProgram = bin;
-      }
-    else
-      pkg;
-in
 {
   flake.nixosModules.orca-slicer =
-    { host, pkgs, ... }:
+    { pkgs, ... }:
     {
       environment.systemPackages = [
         (pkgs.symlinkJoin {
           name = "orca-slicer";
           paths = [
-            # software rendering workaround for nvidia, see:
-            # https://github.com/SoftFever/OrcaSlicer/issues/6433#issuecomment-2552029299
-            (nvidiaSoftwareRenderingWorkaround host pkgs "orca-slicer" pkgs.orca-slicer)
+            pkgs.orca-slicer
             # associate step files with orca-slicer
             (pkgs.writeTextFile {
               name = "model-step.xml";
@@ -80,12 +52,10 @@ in
     };
 
   flake.nixosModules.freecad =
-    { host, pkgs, ... }:
+    { pkgs, ... }:
     {
       environment.systemPackages = [
-        # freecad segfaults on starup on nvidia
-        # https://github.com/NixOS/nixpkgs/issues/366299
-        (nvidiaSoftwareRenderingWorkaround host pkgs "FreeCAD" pkgs.freecad-wayland)
+        pkgs.freecad-wayland
       ];
 
       custom.persist = {
