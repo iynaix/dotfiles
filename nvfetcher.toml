@@ -1,3 +1,8 @@
+[awakened-poe-trade]
+src.github_tag = "SnosMe/awakened-poe-trade"
+src.prefix = "v"                                                                                                    # remove prefix from version
+fetch.url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v$ver/Awakened-PoE-Trade-$ver.AppImage"
+
 [helium]
 src.github_tag = "imputnet/helium-linux"
 fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/helium-$ver-x86_64.AppImage"

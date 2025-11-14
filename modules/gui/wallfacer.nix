@@ -51,12 +51,9 @@
             };
           in
           {
-            text =
-              # workaround for Error 71 (Protocol error) dispatching to Wayland display. (nvidia only?)
-              # https://github.com/tauri-apps/tauri/issues/10702
-              /* sh */ ''
-                direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" --config "${tomlFormat.generate "wallfacer.toml" wallfacerConf}" "$@"
-              '';
+            text = /* sh */ ''
+              direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" --config "${tomlFormat.generate "wallfacer.toml" wallfacerConf}" "$@"
+            '';
             # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
             fishCompletion = # fish
               ''

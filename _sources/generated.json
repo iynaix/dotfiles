@@ -1,4 +1,19 @@
 {
+    "awakened-poe-trade": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "awakened-poe-trade",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-XEnxDo8Njt/r7tmRxbKMNKqG/YUlc59TJY/7mjiOyXE=",
+            "type": "url",
+            "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.105/Awakened-PoE-Trade-3.27.105.AppImage"
+        },
+        "version": "3.27.105"
+    },
     "helium": {
         "cargoLocks": null,
         "date": null,

@@ -135,7 +135,8 @@ in
                     ]
                     ++ config.custom.programs.btop.disks
                   );
-                };
+                }
+                // config.custom.programs.btop.extraSettings;
               }).wrapper;
           })
         ];

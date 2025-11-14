@@ -22,6 +22,8 @@ in
 
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
+  awakened-poe-trade = callPackage ./awakened-poe-trade { };
+
   helium = callPackage ./helium { };
 
   hyprnstack = callPackage ./hyprnstack { };

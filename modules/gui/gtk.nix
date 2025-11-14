@@ -86,7 +86,11 @@ in
           theme = {
             package = mkOption {
               type = package;
-              default = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
+              default = pkgs.tokyonight-gtk-theme.override {
+                colorVariants = [ "dark" ];
+                sizeVariants = [ "compact" ];
+                themeVariants = [ "all" ];
+              };
               description = "Package providing the theme.";
             };
 
@@ -100,11 +104,7 @@ in
           iconTheme = {
             package = mkOption {
               type = package;
-              default = pkgs.tokyonight-gtk-theme.override {
-                colorVariants = [ "dark" ];
-                sizeVariants = [ "compact" ];
-                themeVariants = [ "all" ];
-              };
+              default = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
               description = "Package providing the icon theme.";
             };
 
@@ -244,9 +244,6 @@ in
           }
         ];
       };
-
-      # TODO: port home-manager option:
-      # qt.enable = true;
 
       # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
       hj.xdg = {

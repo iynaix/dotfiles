@@ -23,6 +23,8 @@ topLevel: {
         orca-slicer
         obs-studio
         path-of-building
+        path-of-exile
+        steam
         vlc
         wallfacer
         # zoom
@@ -193,7 +195,7 @@ topLevel: {
       networking = mkMerge [
         { hostId = "89eaa833"; } # required for zfs
         (mkIf (!isVm) {
-          interfaces.enp5s0.wakeOnLan.enable = true;
+          interfaces.enp7s0.wakeOnLan.enable = true;
           # open ports for devices on the local network
           firewall.extraCommands = # sh
             ''
