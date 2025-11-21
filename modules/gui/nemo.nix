@@ -12,13 +12,12 @@
     in
     {
       environment.systemPackages = with pkgs; [
+        file-roller
         p7zip-rar # support for encrypted archives
         nemo-fileroller
         nemo-with-extensions
         webp-pixbuf-loader # for webp thumbnails
       ];
-
-      programs.file-roller.enable = true;
 
       xdg = {
         # fix opening terminal for nemo / thunar by using xdg-terminal-exec spec

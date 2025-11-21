@@ -135,7 +135,7 @@
       };
       nix = {
         enable = true;
-        format.type = "nixfmt";
+        format.type = [ "nixfmt" ];
       };
       python.enable = true;
       rust = {

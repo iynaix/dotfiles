@@ -22,8 +22,8 @@
         enable = true;
 
         extensions = [
-          # AutoPagerize
-          "igiofjhpmpihnifddepnpngfjhkfenbp"
+          # uAutoPagerize
+          "kdplapeciagkkjoignnkfpbfkebcfbpb"
           # Awesome Screen Recorder & Screenshot
           "nlipoenfbbikpbjkfpfillcgkoblgpmj"
           # Better PathOfExile Trading

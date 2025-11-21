@@ -64,6 +64,7 @@ in
         theme_background = false;
         cpu_single_graph = true;
         # base_10_sizes = true;
+        show_gpu_info = "Off"; # don't show gpu info in cpu box
         show_disks = true;
         show_swap = true;
         swap_disk = false;

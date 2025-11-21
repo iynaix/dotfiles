@@ -36,17 +36,6 @@
                     esac
                 done
 
-                # no features provided, use WM detection
-                if [[ -z "$FEATURES_FLAG" ]]; then
-                    if command -v hyprctl &>/dev/null; then
-                        FEATURES_FLAG="--features hyprland"
-                    elif command -v niri &>/dev/null; then
-                        FEATURES_FLAG="--features niri"
-                    elif command -v mmsg &>/dev/null; then
-                        FEATURES_FLAG="--features mango"
-                    fi
-                fi
-
                 CARGO_CMD="cargo run --manifest-path \"packages/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
                 if [[ -n "$FEATURES_FLAG" ]]; then
                     CARGO_CMD="$CARGO_CMD $FEATURES_FLAG"

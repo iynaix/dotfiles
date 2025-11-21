@@ -17,7 +17,7 @@ topLevel: {
         wm
 
         ### programs
-        deadbeef
+        # deadbeef  # swift is currently broken
         freecad
         # helix
         orca-slicer

@@ -38,10 +38,10 @@ pub trait MonitorExt {
     }
 
     fn is_fullscreen_window(&self, win: &Window) -> bool {
-        self.dimensions().map(|(w, h)| {
+        self.dimensions().is_some_and(|(w, h)| {
             let (win_w, win_h) = win.layout.window_size;
             w == win_w && h == win_h
-        }) == Some(true)
+        })
     }
 
     fn window_ratio(&self, win: &Window) -> Option<f64> {

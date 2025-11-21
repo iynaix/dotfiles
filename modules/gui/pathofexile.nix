@@ -32,7 +32,9 @@ topLevel: {
       custom.programs.hyprland.settings = {
         windowrulev2 = [
           "tag +poe, title:(Path of Exile)"
+          "tag +poe, initialTitle:(Path of Exile)"
           "tag +poe, class:(steam_app_238960)"
+          "tag +poe, initialClass:(steam_app_238960)"
           "workspace 5, tag:poe"
           "fullscreen, tag:poe"
           "tag +apt, title:(Awakened PoE Trade)"
