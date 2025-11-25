@@ -29,7 +29,6 @@
           nix-update
           nixd
           nixfmt
-          nixfmt
           nixpkgs-review
           nvfetcher
         ];
