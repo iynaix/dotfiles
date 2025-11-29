@@ -75,6 +75,7 @@
                   allowBuiltinFetchGit = true;
                 };
               }))
+              nil
               nixd
               nixfmt
               pre-commit

@@ -23,6 +23,7 @@
       environment = {
         systemPackages = with pkgs; [
           comma
+          nil
           nix-init
           nix-output-monitor
           nix-tree

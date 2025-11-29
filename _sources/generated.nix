@@ -31,15 +31,15 @@
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
-    version = "9bdce0050144cb24f92475f7bdd77180e0e4c26b";
+    version = "8bc3d8fd7660aaf08737eca4fb65f7193507b661";
     src = fetchFromGitHub {
       owner = "zenyd";
       repo = "mpv-scripts";
-      rev = "9bdce0050144cb24f92475f7bdd77180e0e4c26b";
+      rev = "8bc3d8fd7660aaf08737eca4fb65f7193507b661";
       fetchSubmodules = false;
-      sha256 = "sha256-9P/8q/OZXfaJMS08acQP4h3/zUA5mKRQee0JmkXcz1w=";
+      sha256 = "sha256-ke0h0LShy1x4P6GR93oTSWviEPSPr+kSGmffNd7zUOE=";
     };
-    date = "2024-02-12";
+    date = "2025-11-21";
   };
   mpv-nextfile = {
     pname = "mpv-nextfile";
@@ -91,15 +91,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "2301ff803a033cd16d16e62697474d6cb9a94711";
+    version = "eaf6920b7439fa7164a1c162a249c3c76dc0acd9";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "2301ff803a033cd16d16e62697474d6cb9a94711";
+      rev = "eaf6920b7439fa7164a1c162a249c3c76dc0acd9";
       fetchSubmodules = false;
-      sha256 = "sha256-+lirIBXv3EvztE/1b3zHnQ9r5N3VWBCUuH3gZR52fE0=";
+      sha256 = "sha256-B6zhZfp3SEaiviIzosI2aD8fk+hQF0epOTKi1qm8V3E=";
     };
-    date = "2025-11-19";
+    date = "2025-11-25";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
