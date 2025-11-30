@@ -63,6 +63,9 @@
       };
 
       # use config file instead of wrapping so it can be read during dev
-      hj.xdg.config.files."wallfacer/wallfacer.toml".source = wallfacerConf;
+      hj.xdg.config.files."wallfacer/wallfacer.toml" = {
+        source = wallfacerConf;
+        type = "copy";
+      };
     };
 }

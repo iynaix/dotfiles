@@ -53,15 +53,18 @@ in
       };
 
       # write the settings to home directory
-      hj.xdg.config.files."mango/config.conf".text =
-        (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
-          self.lib.generators.toHyprconf {
-            attrs = config.custom.programs.mango.settings;
-            importantPrefixes = [ "monitorrule" ];
-          }
-        ))
-        # temporarily source raw config directly for quick edits
-        + "source=${dots}/modules/gui/mango/mango.conf";
+      hj.xdg.config.files."mango/config.conf" = {
+        text =
+          (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
+            self.lib.generators.toHyprconf {
+              attrs = config.custom.programs.mango.settings;
+              importantPrefixes = [ "monitorrule" ];
+            }
+          ))
+          # temporarily source raw config directly for quick edits
+          + "source=${dots}/modules/gui/mango/mango.conf";
+        type = "copy";
+      };
 
       # TODO: startup scripts?
 

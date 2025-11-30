@@ -86,7 +86,10 @@ in
       };
 
       # write validated niri config with hjem
-      hj.xdg.config.files."niri/config.kdl".source = niriConf;
+      hj.xdg.config.files."niri/config.kdl" = {
+        source = niriConf;
+        type = "copy";
+      };
 
       xdg.portal = {
         config = {

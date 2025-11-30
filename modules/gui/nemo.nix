@@ -45,9 +45,9 @@
         [Nemo Action]
         Name=Open in Terminal
         Comment=Open a terminal in this location
-        Exec=ghostty --working-directory=%P
+        Exec=ghostty --working-directory=%F
         Icon-Name=utilities-terminal
-        Selection=None
+        Selection=Any
         Extensions=dir;
       '';
 

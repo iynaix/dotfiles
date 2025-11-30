@@ -73,14 +73,17 @@
         })
       ];
 
-      hj.xdg.config.files."rofi/config.rasi".text = ''
-        configuration {
-          location: 0;
-          xoffset: 0;
-          yoffset: 0;
-        }
-        @theme "${config.hj.xdg.cache.directory}/wallust/rofi.rasi"
-      '';
+      hj.xdg.config.files."rofi/config.rasi" = {
+        text = ''
+          configuration {
+            location: 0;
+            xoffset: 0;
+            yoffset: 0;
+          }
+          @theme "${config.hj.xdg.cache.directory}/wallust/rofi.rasi"
+        '';
+        type = "copy";
+      };
 
       environment.systemPackages = [
         pkgs.rofi

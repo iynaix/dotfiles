@@ -1,8 +1,10 @@
+{ inputs, ... }:
 {
   flake.nixosModules.core =
     {
       config,
       lib,
+      pkgs,
       ...
     }:
     let
@@ -23,8 +25,11 @@
         programs.dconf.enable = true;
         services.gvfs.enable = true;
 
-        # thanks for not fucking wasting my time
-        hjem.clobberByDefault = true;
+        hjem = {
+          # thanks for not fucking wasting my time
+          clobberByDefault = true;
+          linker = inputs.hjem.packages.${pkgs.stdenv.hostPlatform.system}.smfh;
+        };
 
         # create symlink to dotfiles from /etc/nixos
         custom.symlinks = {

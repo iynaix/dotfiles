@@ -89,7 +89,10 @@ in
       environment.systemPackages = [ pkgs.wallust ];
 
       hj.xdg.config.files = {
-        "wallust/wallust.toml".source = tomlFormat.generate "wallust.toml" wallustConf;
+        "wallust/wallust.toml" = {
+          source = tomlFormat.generate "wallust.toml" wallustConf;
+          type = "copy";
+        };
       }
       // (
         cfg.templates

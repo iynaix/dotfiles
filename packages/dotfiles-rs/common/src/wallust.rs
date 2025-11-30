@@ -96,14 +96,6 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     let config_path = full_path("~/.config/niri/config.kdl");
 
-    // replace symlink to nix store if needed
-    // it will replaced by the default config on startup as impermanence will remove the writable file anyway
-    if config_path.is_symlink() {
-        let contents = std::fs::read(&config_path).expect("unable to read niri config.kdl");
-        std::fs::remove_file(&config_path).expect("unable to remove niri config.kdl symlink");
-        std::fs::write(&config_path, contents).expect("unable to write niri config.kdl");
-    }
-
     let color = |idx: usize| {
         colors
             .get(&format!("color{idx}"))
