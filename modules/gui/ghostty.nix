@@ -70,7 +70,7 @@ in
         "--config-default-files" = false;
         # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
         # default location
-        "--config-file" = toGhosttyConf (baseGhosttyConf // config.extraSettings);
+        "--config-file" = toString (toGhosttyConf (baseGhosttyConf // config.extraSettings));
       };
       config.flagSeparator = "=";
     }

@@ -8,14 +8,14 @@
           inherit pkgs;
           package = pkgs.eza;
           flags = {
-            "--icons" = { };
-            "--group-directories-first" = { };
-            "--header" = { };
-            "--octal-permissions" = { };
-            "--hyperlink" = { };
+            "--icons" = true;
+            "--group-directories-first" = true;
+            "--header" = true;
+            "--octal-permissions" = true;
+            "--hyperlink" = true;
           };
         };
-        eza-tree = pkgs.writeShellApplication {
+        eza-tree' = pkgs.writeShellApplication {
           name = "tree";
           runtimeInputs = [ pkgs.eza ];
           text = # sh
@@ -66,7 +66,7 @@
 
         systemPackages = [
           pkgs.eza # overlay-ed above
-          self.packages.${pkgs.stdenv.hostPlatform.system}.eza-tree
+          self.packages.${pkgs.stdenv.hostPlatform.system}.eza-tree'
         ];
       };
     };

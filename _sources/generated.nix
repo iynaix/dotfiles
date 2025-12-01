@@ -11,10 +11,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.6.7.1";
+    version = "0.6.9.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.6.7.1/helium-0.6.7.1-x86_64.AppImage";
-      sha256 = "sha256-fZTBNhaDk5EeYcxZDJ83tweMZqtEhd7ws8AFUcHjFLs=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.6.9.1/helium-0.6.9.1-x86_64.AppImage";
+      sha256 = "sha256-L59Sm5qgORlV3L2yM6C0R8lDRyk05jOZcD5JPhQtbJE=";
     };
   };
   mpv-cut = {
@@ -31,15 +31,15 @@
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
-    version = "8bc3d8fd7660aaf08737eca4fb65f7193507b661";
+    version = "8309b669f060f95fbb2abf9e6882c3ae4ec1ff2d";
     src = fetchFromGitHub {
       owner = "zenyd";
       repo = "mpv-scripts";
-      rev = "8bc3d8fd7660aaf08737eca4fb65f7193507b661";
+      rev = "8309b669f060f95fbb2abf9e6882c3ae4ec1ff2d";
       fetchSubmodules = false;
-      sha256 = "sha256-ke0h0LShy1x4P6GR93oTSWviEPSPr+kSGmffNd7zUOE=";
+      sha256 = "sha256-pJ6eFqNdnb5yDVWIqjGgeBZlSnjKe+dM3jqtp7LEaCU=";
     };
-    date = "2025-11-21";
+    date = "2025-11-27";
   };
   mpv-nextfile = {
     pname = "mpv-nextfile";

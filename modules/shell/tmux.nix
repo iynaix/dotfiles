@@ -88,7 +88,7 @@
         inherit pkgs;
         package = pkgs.tmux;
         flags = {
-          "-f" = pkgs.writeText "tmux.conf" tmuxConf;
+          "-f" = toString (pkgs.writeText "tmux.conf" tmuxConf);
         };
       };
     };

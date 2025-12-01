@@ -88,7 +88,7 @@ in
         inherit (config) rocmSupport;
       };
       config.flags = {
-        "--config" = config."btop.conf".path;
+        "--config" = toString config."btop.conf".path;
       };
     }
   );

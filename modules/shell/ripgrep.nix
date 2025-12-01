@@ -18,8 +18,8 @@
         inherit pkgs;
         package = pkgs.ripgrep;
         flags = {
-          "--smart-case" = { };
-          "--ignore-file" = ignoreFile;
+          "--smart-case" = true;
+          "--ignore-file" = toString ignoreFile;
         };
       };
     };

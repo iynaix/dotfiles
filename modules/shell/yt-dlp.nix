@@ -14,12 +14,12 @@ in
         inherit pkgs;
         package = pkgs.yt-dlp.overrideAttrs source;
         flags = {
-          "--add-metadata" = { };
+          "--add-metadata" = true;
           "--format" = mkFormat 720;
-          "--no-mtime" = { };
+          "--no-mtime" = true;
           "--output" = "%(title)s.%(ext)s";
           "--sponsorblock-mark" = "all";
-          "--windows-filenames" = { };
+          "--windows-filenames" = true;
         };
       };
     };

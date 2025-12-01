@@ -63,7 +63,7 @@
         inherit pkgs;
         package = pkgs.zathura;
         flags = {
-          "--config-dir" = zathuraConf;
+          "--config-dir" = toString zathuraConf;
         };
       };
     };

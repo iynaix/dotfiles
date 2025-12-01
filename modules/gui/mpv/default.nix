@@ -372,7 +372,7 @@ in
         inherit pkgs;
         package = pkgs.mpv.override { inherit (mpvConfig) scripts; };
         flags = {
-          "--config-dir" = mpvDir;
+          "--config-dir" = toString mpvDir;
         };
         flagSeparator = "=";
       };
