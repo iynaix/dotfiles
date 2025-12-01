@@ -1,17 +1,18 @@
 {
   inputs,
+  lib,
   self,
-  system ? "x86_64-linux",
   ...
 }:
 let
-  inherit (self) lib;
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   mkIso =
     nixpkgs: isoPath:
     # use the lib from the nixpkgs passed in, so the nixos version will be correct
     nixpkgs.lib.nixosSystem {
-      inherit system;
+      # TODO: update for different architectures?
+      system = "x86_64-linux";
+
       modules = [
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
         (
@@ -43,13 +44,18 @@ let
                     text = # sh
                       "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
-                  bat
-                  btop
-                  eza
-                  tree
-                  # custom neovim
-                  self.packages.${system}.neovim-iynaix
                 ]
+                ++ (with self.packages.${system}; [
+                  # custom packages
+                  bat'
+                  batman'
+                  btop'
+                  eza'
+                  eza-tree'
+                  neovim-iynaix
+                  ripgrep'
+                  yazi'
+                ])
                 ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ ghostty ];
 
               variables = {
@@ -110,48 +116,6 @@ let
             programs = {
               # bye bye nano
               nano.enable = false;
-
-              # better defaults for yazi
-              yazi = {
-                enable = true;
-
-                settings = {
-                  yazi = {
-                    mgr = {
-                      ratio = [
-                        0
-                        1
-                        1
-                      ];
-                      sort_by = "alphabetical";
-                      sort_sensitive = false;
-                      sort_reverse = false;
-                      linemode = "size";
-                      show_hidden = true;
-                    };
-                  };
-
-                  theme = {
-                    mgr = {
-                      preview_hovered = {
-                        underline = false;
-                      };
-                      folder_offset = [
-                        1
-                        0
-                        1
-                        0
-                      ];
-                      preview_offset = [
-                        1
-                        1
-                        1
-                        1
-                      ];
-                    };
-                  };
-                };
-              };
             };
 
             # enable SSH in the boot process.
@@ -165,8 +129,8 @@ let
             };
             systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
             users.users.root.openssh.authorizedKeys.keyFiles = [
-              ../../modules/id_rsa.pub
-              ../../modules/id_ed25519.pub
+              ../../id_rsa.pub
+              ../../id_ed25519.pub
             ];
 
             # quality of life
@@ -206,8 +170,10 @@ let
     };
 in
 {
-  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
-  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
-  kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma6";
-  minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
+  flake.nixosConfigurations = {
+    kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
+    minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
+    kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma6";
+    minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
+  };
 }
