@@ -50,7 +50,7 @@ in
             {
               "com/raggesilver/BlackBox" = {
                 scrollback-lines = mkUint32 10000;
-                theme-dark = "Tommorow Night";
+                theme-dark = "Tommorrow Night";
               };
             }
           '';

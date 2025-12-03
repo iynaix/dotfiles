@@ -103,9 +103,9 @@ else
     ZFSDISK="${DISK}1"
 fi
 
-echo "Boot Partiton: $BOOTDISK"
-echo "SWAP Partiton: $SWAPDISK"
-echo "ZFS Partiton: $ZFSDISK"
+echo "Boot Partition: $BOOTDISK"
+echo "SWAP Partition: $SWAPDISK"
+echo "ZFS Partition: $ZFSDISK"
 
 echo ""
 do_format=$(yesno "This irreversibly formats the entire disk. Are you sure?")
@@ -165,7 +165,7 @@ sudo mount -t zfs zroot/root /mnt
 # sudo zfs snapshot zroot/home@blank
 # sudo mount --mkdir -t zfs zroot/home /mnt/home
 
-# create the boot parition after creating root
+# create the boot partition after creating root
 echo "Mounting /boot (efi)"
 sudo mount --mkdir "$BOOTDISK" /mnt/boot
 

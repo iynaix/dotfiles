@@ -309,7 +309,7 @@ in
                     ...
                   }:
                   {
-                    # start from 0 instead to prevent "1" and "10" from sorting wrongly in lexigraphical order
+                    # start from 0 instead to prevent "1" and "10" from sorting wrongly in lexicographical order
                     name = toString ((toInt workspace) - 1);
                     value = {
                       open-on-output = monitor.name;

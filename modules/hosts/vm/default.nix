@@ -15,11 +15,13 @@ topLevel: {
         # path-of-building
         # path-of-exile
         # steam
+        # subtitles
         # vlc
         # wallfacer
         # zoom
 
         ### hardware
+        # amdgpu
         # bluetooth
         # qmk
         # laptop

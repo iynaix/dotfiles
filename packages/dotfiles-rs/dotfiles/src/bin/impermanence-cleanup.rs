@@ -42,7 +42,7 @@ fn main() {
 
     for root in ["/persist", "/cache"] {
         walk_persist(&PathBuf::from(root), &persist_paths).unwrap_or_else(|e| {
-            eprintln!("An error has occured: {e}");
+            eprintln!("An error has occurred: {e}");
             std::process::exit(1);
         });
     }

@@ -22,6 +22,8 @@ in
 {
   perSystem =
     { pkgs, ... }:
+    # mpv options and settings config from home-manager:
+    # https://github.com/nix-community/home-manager/blob/master/modules/programs/mpv.nix
     let
       renderOption =
         option:
@@ -380,8 +382,6 @@ in
 
   flake.nixosModules.gui =
     { pkgs, ... }:
-    # mpv options and settings config from home-manager:
-    # https://github.com/nix-community/home-manager/blob/master/modules/programs/mpv.nix
     mkMerge [
       {
         custom.programs = {
@@ -420,19 +420,6 @@ in
           ];
         };
 
-      }
-
-      # subliminal
-      {
-        environment = {
-          systemPackages = with pkgs; [
-            python3Packages.subliminal
-          ];
-
-          shellAliases = {
-            subs = "subliminal download -l 'en' -l 'eng' -s";
-          };
-        };
       }
     ];
 }

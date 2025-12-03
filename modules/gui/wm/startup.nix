@@ -80,7 +80,7 @@ in
                 vrr = mkEnableOption "Variable Refresh Rate";
                 transform = mkOption {
                   type = int;
-                  description = "Tranform for rotation";
+                  description = "Transform for rotation";
                   default = 0;
                 };
                 workspaces = mkOption {

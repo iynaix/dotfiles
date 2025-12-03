@@ -122,7 +122,7 @@ in
       config = {
         nixpkgs.overlays = [
           (_: prev: {
-            # overlay so that security wrappers for xps cann pick it up
+            # overlay so that security wrappers for xps can pick it up
             btop =
               (self.wrapperModules.btop.apply {
                 pkgs = prev;
