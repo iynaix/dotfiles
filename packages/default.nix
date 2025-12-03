@@ -23,6 +23,7 @@ in
   distro-grub-themes-nixos = callPackage ./distro-grub-themes-nixos { };
 
   awakened-poe-trade = callPackage ./awakened-poe-trade { };
+  exiled-exchange-2 = callPackage ./exiled-exchange-2 { };
 
   helium = callPackage ./helium { };
 

@@ -9,6 +9,14 @@
       sha256 = "sha256-XEnxDo8Njt/r7tmRxbKMNKqG/YUlc59TJY/7mjiOyXE=";
     };
   };
+  exiled-exchange-2 = {
+    pname = "exiled-exchange-2";
+    version = "0.12.8";
+    src = fetchurl {
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.12.8/Exiled-Exchange-2-0.12.8.AppImage";
+      sha256 = "sha256-hGUmwyhFsM+8XTrFCuaLVYAA85jwrKCftkQ/wlViRHI=";
+    };
+  };
   helium = {
     pname = "helium";
     version = "0.6.9.1";
@@ -31,15 +39,15 @@
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
-    version = "8309b669f060f95fbb2abf9e6882c3ae4ec1ff2d";
+    version = "d20a64a008fc6fb03f026c379313111291bdd49f";
     src = fetchFromGitHub {
       owner = "zenyd";
       repo = "mpv-scripts";
-      rev = "8309b669f060f95fbb2abf9e6882c3ae4ec1ff2d";
+      rev = "d20a64a008fc6fb03f026c379313111291bdd49f";
       fetchSubmodules = false;
-      sha256 = "sha256-pJ6eFqNdnb5yDVWIqjGgeBZlSnjKe+dM3jqtp7LEaCU=";
+      sha256 = "sha256-4pJxADKQm4I4bdkitnMT6XayUgsy2+bRNaO7rFVdcfU=";
     };
-    date = "2025-11-27";
+    date = "2025-12-02";
   };
   mpv-nextfile = {
     pname = "mpv-nextfile";
