@@ -60,6 +60,15 @@
           "org/cinnamon/desktop/default-applications/terminal" = {
             exec = "xdg-terminal-exec";
           };
+          "org/nemo/list-view" = {
+            default-visible-columns = [
+              "name"
+              "size"
+              "mime_type"
+              "date_modified"
+            ];
+            enable-folder-expansion = true;
+          };
           "org/nemo/preferences" = {
             default-folder-viewer = "list-view";
             show-hidden-files = true;

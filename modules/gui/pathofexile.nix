@@ -24,8 +24,9 @@ topLevel: {
       ];
 
       # NOTE: POE is installed through steam
-      environment.systemPackages = [
-        self.packages.${pkgs.stdenv.hostPlatform.system}.awakened-poe-trade
+      environment.systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
+        awakened-poe-trade
+        exiled-exchange-2
       ];
 
       custom.programs.hyprland.settings = {

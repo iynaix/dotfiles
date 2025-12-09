@@ -147,9 +147,6 @@
       documentation.man.generateCaches = true;
 
       system = {
-        # use nixos-rebuild-ng to rebuild the system
-        rebuild.enableNg = true;
-
         # better nixos generation label
         # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
         nixos.label = concatStringsSep "-" (

@@ -29,8 +29,9 @@ in
 )
 // rec {
   inherit lib;
-  inherit (flake) inputs self;
+  inherit (flake) inputs;
   inherit flake host user;
+  self = flake;
 
   # default host
   inherit (flake.nixosConfigurations.${host}) pkgs;

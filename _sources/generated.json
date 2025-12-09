@@ -8,11 +8,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-XEnxDo8Njt/r7tmRxbKMNKqG/YUlc59TJY/7mjiOyXE=",
+            "sha256": "sha256-8L5Szn0KYfUMaTe+yyhJV1YZspmJCSlXSHXLPoiRhjE=",
             "type": "url",
-            "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.105/Awakened-PoE-Trade-3.27.105.AppImage"
+            "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.106/Awakened-PoE-Trade-3.27.106.AppImage"
         },
-        "version": "3.27.105"
+        "version": "3.27.106"
     },
     "exiled-exchange-2": {
         "cargoLocks": null,
@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-hGUmwyhFsM+8XTrFCuaLVYAA85jwrKCftkQ/wlViRHI=",
+            "sha256": "sha256-IJ8nzJvpyAKhUb+QNGmsPLYP50+ARJlaXivaGYKTgj8=",
             "type": "url",
-            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.12.8/Exiled-Exchange-2-0.12.8.AppImage"
+            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.3/Exiled-Exchange-2-0.13.3.AppImage"
         },
-        "version": "0.12.8"
+        "version": "0.13.3"
     },
     "helium": {
         "cargoLocks": null,
@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-spUogmjv+RNjtuDs5tY7vXFgKR62qUb85Gj/bERCza4=",
+            "sha256": "sha256-Rn08KobbfMh3vlM2o0PA9OhQx/syMTBKWG/eapF45eo=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.7.1.1/helium-0.7.1.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.7.5.1/helium-0.7.5.1-x86_64.AppImage"
         },
-        "version": "0.7.1.1"
+        "version": "0.7.5.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -67,7 +67,7 @@
     },
     "mpv-deletefile": {
         "cargoLocks": null,
-        "date": "2025-12-02",
+        "date": "2025-12-06",
         "extract": null,
         "name": "mpv-deletefile",
         "passthru": null,
@@ -79,12 +79,12 @@
             "name": null,
             "owner": "zenyd",
             "repo": "mpv-scripts",
-            "rev": "d20a64a008fc6fb03f026c379313111291bdd49f",
-            "sha256": "sha256-4pJxADKQm4I4bdkitnMT6XayUgsy2+bRNaO7rFVdcfU=",
+            "rev": "62f4bb313c6cb6366672e78dea940e9da8fec84a",
+            "sha256": "sha256-9gO+GkNoGsxAbMRrBWu0FfXEQtyTmHivlaxlYLpV2YM=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "d20a64a008fc6fb03f026c379313111291bdd49f"
+        "version": "62f4bb313c6cb6366672e78dea940e9da8fec84a"
     },
     "mpv-nextfile": {
         "cargoLocks": null,
@@ -226,11 +226,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2025.11.12",
-            "sha256": "sha256-Em8FLcCizSfvucg+KPuJyhFZ5MJ8STTjSpqaTD5xeKI=",
+            "rev": "2025.12.08",
+            "sha256": "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2025.11.12"
+        "version": "2025.12.08"
     }
 }

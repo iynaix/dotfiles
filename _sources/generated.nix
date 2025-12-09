@@ -3,26 +3,26 @@
 {
   awakened-poe-trade = {
     pname = "awakened-poe-trade";
-    version = "3.27.105";
+    version = "3.27.106";
     src = fetchurl {
-      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.105/Awakened-PoE-Trade-3.27.105.AppImage";
-      sha256 = "sha256-XEnxDo8Njt/r7tmRxbKMNKqG/YUlc59TJY/7mjiOyXE=";
+      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.106/Awakened-PoE-Trade-3.27.106.AppImage";
+      sha256 = "sha256-8L5Szn0KYfUMaTe+yyhJV1YZspmJCSlXSHXLPoiRhjE=";
     };
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.12.8";
+    version = "0.13.3";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.12.8/Exiled-Exchange-2-0.12.8.AppImage";
-      sha256 = "sha256-hGUmwyhFsM+8XTrFCuaLVYAA85jwrKCftkQ/wlViRHI=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.3/Exiled-Exchange-2-0.13.3.AppImage";
+      sha256 = "sha256-IJ8nzJvpyAKhUb+QNGmsPLYP50+ARJlaXivaGYKTgj8=";
     };
   };
   helium = {
     pname = "helium";
-    version = "0.7.1.1";
+    version = "0.7.5.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.7.1.1/helium-0.7.1.1-x86_64.AppImage";
-      sha256 = "sha256-spUogmjv+RNjtuDs5tY7vXFgKR62qUb85Gj/bERCza4=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.7.5.1/helium-0.7.5.1-x86_64.AppImage";
+      sha256 = "sha256-Rn08KobbfMh3vlM2o0PA9OhQx/syMTBKWG/eapF45eo=";
     };
   };
   mpv-cut = {
@@ -39,15 +39,15 @@
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
-    version = "d20a64a008fc6fb03f026c379313111291bdd49f";
+    version = "62f4bb313c6cb6366672e78dea940e9da8fec84a";
     src = fetchFromGitHub {
       owner = "zenyd";
       repo = "mpv-scripts";
-      rev = "d20a64a008fc6fb03f026c379313111291bdd49f";
+      rev = "62f4bb313c6cb6366672e78dea940e9da8fec84a";
       fetchSubmodules = false;
-      sha256 = "sha256-4pJxADKQm4I4bdkitnMT6XayUgsy2+bRNaO7rFVdcfU=";
+      sha256 = "sha256-9gO+GkNoGsxAbMRrBWu0FfXEQtyTmHivlaxlYLpV2YM=";
     };
-    date = "2025-12-02";
+    date = "2025-12-06";
   };
   mpv-nextfile = {
     pname = "mpv-nextfile";
@@ -123,13 +123,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.11.12";
+    version = "2025.12.08";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.11.12";
+      rev = "2025.12.08";
       fetchSubmodules = false;
-      sha256 = "sha256-Em8FLcCizSfvucg+KPuJyhFZ5MJ8STTjSpqaTD5xeKI=";
+      sha256 = "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=";
     };
   };
 }

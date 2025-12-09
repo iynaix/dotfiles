@@ -122,7 +122,7 @@
 
       # show compress ratio in zfs list output
       environment.shellAliases = {
-        zls = "zfs list -o name,used,avail,compressratio,mountpoint";
+        zls = "zfs list -o name,used,avail,compressratio";
       };
     };
 

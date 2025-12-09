@@ -81,8 +81,9 @@ in
               ./larger-shadow-spread.patch
             ];
 
-          doCheck = false;
+          doCheck = false; # faster builds
         });
+        # useNautilus = false;
       };
 
       # write validated niri config with hjem

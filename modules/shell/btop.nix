@@ -70,6 +70,7 @@ in
         swap_disk = false;
         use_fstab = false;
         only_physical = false;
+        zfs_arc_cached = true;
         shown_boxes = "cpu mem net proc gpu0";
         gpu_mirror_graph = false;
       };

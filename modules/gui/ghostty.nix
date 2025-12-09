@@ -68,8 +68,7 @@ in
       config.package = config.pkgs.ghostty;
       config.flags = {
         "--config-default-files" = false;
-        # NOTE: don't use wrapWithRuntimeConfig as ghostty "helpfully" creates an empty config in the
-        # default location
+        # NOTE: ghostty "helpfully" creates an empty config in the default location
         "--config-file" = toString (toGhosttyConf (baseGhosttyConf // config.extraSettings));
       };
       config.flagSeparator = "=";
