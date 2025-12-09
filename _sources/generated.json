@@ -170,6 +170,27 @@
         },
         "version": "093c1a79f58daab358199c4246de50357e5bf462"
     },
+    "rusty-path-of-building": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "rusty-path-of-building",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "meehl",
+            "repo": "rusty-path-of-building",
+            "rev": "v0.2.10",
+            "sha256": "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "v0.2.10"
+    },
     "yazi-plugins": {
         "cargoLocks": null,
         "date": "2025-12-04",

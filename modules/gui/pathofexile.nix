@@ -1,9 +1,23 @@
 topLevel: {
   flake.nixosModules.path-of-building =
     { pkgs, ... }:
+    let
+      source = (pkgs.callPackage ../../_sources/generated.nix { }).rusty-path-of-building;
+    in
     {
       # covers both poe1 and poe2
-      environment.systemPackages = [ pkgs.rusty-path-of-building ];
+      environment.systemPackages = [
+        # use latest version
+        (pkgs.rusty-path-of-building.overrideAttrs (
+          source
+          // {
+            cargoDeps = pkgs.rustPlatform.importCargoLock {
+              lockFile = source.src + "/Cargo.lock";
+              allowBuiltinFetchGit = true;
+            };
+          }
+        ))
+      ];
 
       custom.persist = {
         home = {

@@ -8,6 +8,10 @@ src.github_tag = "Kvan7/Exiled-Exchange-2"
 src.prefix = "v"
 fetch.url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v$ver/Exiled-Exchange-2-$ver.AppImage"
 
+[rusty-path-of-building]
+src.github_tag = "meehl/rusty-path-of-building"
+fetch.github = "meehl/rusty-path-of-building"
+
 [helium]
 src.github_tag = "imputnet/helium-linux"
 fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/helium-$ver-x86_64.AppImage"
