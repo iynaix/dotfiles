@@ -5,7 +5,6 @@ topLevel: {
       isVm,
       lib,
       pkgs,
-      user,
       ...
     }:
     let
@@ -151,7 +150,7 @@ topLevel: {
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        displayManager.autoLogin.user = user;
+        # displayManager.autoLogin.user = user;
 
         pipewire = {
           # enable soft-mixer to fix global volume control for kanto?
