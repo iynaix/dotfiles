@@ -87,12 +87,14 @@ in
           in
           {
             binds = {
-              "Mod+Shift+Ctrl+x".action.spawn = lockOrDpms;
+              "Mod+Shift+Ctrl+x".spawn = lockOrDpms;
             };
 
-            switch-events = {
-              lid-open.action.spawn = lockOrDpms;
-            };
+            /*
+              switch-events = {
+                lid-open.spawn = lockOrDpms;
+              };
+            */
           };
 
         # TODO: mango doesn't support switch events yet?

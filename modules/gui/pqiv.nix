@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption;
+  inherit (lib) mkDefault mkOption;
   pqivOptions = {
     options = mkOption {
       type = lib.types.lines;
@@ -79,9 +79,7 @@ in
         };
       };
 
-      config.package = config.pkgs.pqiv;
-      # force wayland, it behaves weird when run through a niri keybind otherwise
-      # config.env.GDK_BACKEND = "wayland";
+      config.package = mkDefault config.pkgs.pqiv;
       config.env.PQIVRC_PATH = toString config.pqivrc.path;
     }
   );

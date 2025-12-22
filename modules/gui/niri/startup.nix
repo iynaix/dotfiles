@@ -1,21 +1,21 @@
+{ lib, ... }:
+let
+  inherit (lib)
+    getExe'
+    mkAfter
+    mkIf
+    mkMerge
+    optionalString
+    reverseList
+    ;
+in
 {
   flake.nixosModules.wm =
     {
       config,
-      lib,
       pkgs,
       ...
     }:
-    let
-      inherit (lib)
-        getExe'
-        mkAfter
-        mkIf
-        mkMerge
-        optionalAttrs
-        reverseList
-        ;
-    in
     {
       custom.autologinCommand = mkIf (config.custom.wm == "niri") "niri-session";
 
@@ -24,40 +24,28 @@
         (map (
           startup:
           (mkIf startup.enable {
-            spawn-at-startup = [ { command = startup.spawn; } ];
-            window-rules = mkIf (startup.workspace != null) [
-              (
-                {
-                  matches = [
-                    (
-                      {
-                        at-startup = true;
-                      }
-                      // optionalAttrs (startup.app-id != null) { app-id = "^${startup.app-id}$"; }
-                      // optionalAttrs (startup.title != null) { title = "^${startup.title}$"; }
-                    )
-                  ];
-                  open-on-workspace = "W${toString startup.workspace}";
-                }
-                # any extra args
-                // startup.niriArgs
-              )
-            ];
+            spawn-at-startup = [ startup.spawn ];
+            config = /* kdl */ ''
+              window-rule {
+                  match ${optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
+                    optionalString (startup.title != null) ''title="^${startup.title}$"''
+                  } at-startup=true
+                  open-on-workspace "W${toString startup.workspace}"
+              }
+            '';
           })
         ) config.custom.startup)
         ++ [
           # focus default workspace for each monitor
           {
             spawn-at-startup = mkAfter (
-              map (mon: {
-                command = [
-                  "niri"
-                  "msg"
-                  "action"
-                  "focus-workspace"
-                  "W${toString mon.defaultWorkspace}"
-                ];
-              }) (reverseList config.custom.hardware.monitors)
+              map (mon: [
+                "niri"
+                "msg"
+                "action"
+                "focus-workspace"
+                "W${toString mon.defaultWorkspace}"
+              ]) (reverseList config.custom.hardware.monitors)
             );
           }
         ]

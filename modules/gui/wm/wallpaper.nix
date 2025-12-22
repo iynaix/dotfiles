@@ -1,6 +1,7 @@
 { lib, ... }:
 let
   inherit (lib)
+    concatMapStringsSep
     getExe
     getExe'
     max
@@ -83,7 +84,7 @@ in
 
         # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
         custom.programs.niri = {
-          settings.window-rules = map (
+          settings.config = concatMapStringsSep "\n" (
             mon:
             let
               targetPercent = 0.3;
@@ -91,12 +92,14 @@ in
               # 16:9 ratio
               height = builtins.floor (width / 16.0 * 9.0);
             in
-            {
-              matches = [ { title = "^wallpaper-rofi-${mon.name}$"; } ];
-              open-floating = true;
-              default-column-width.fixed = width;
-              default-window-height.fixed = height;
-            }
+            /* kdl */ ''
+              window-rule {
+                  match title="^wallpaper-rofi-${mon.name}$"
+                  default-column-width { fixed ${toString width}; }
+                  default-window-height { fixed ${toString height}; }
+                  open-floating true
+              }
+            ''
           ) config.custom.hardware.monitors;
         };
       }

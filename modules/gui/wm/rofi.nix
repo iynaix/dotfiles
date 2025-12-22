@@ -116,21 +116,19 @@
           ];
         };
 
-        niri.settings = {
-          # fake dimaround, see:
-          # https://github.com/YaLTeR/niri/discussions/1806
-          layer-rules = [
-            {
-              matches = [ { namespace = "^rofi$"; } ];
-              shadow = {
-                enable = true;
-                spread = 2048;
-                draw-behind-window = true;
-                color = "0000009A";
-              };
-            }
-          ];
-        };
+        # fake dimaround, see:
+        # https://github.com/YaLTeR/niri/discussions/1806
+        niri.settings.config = /* kdl */ ''
+          layer-rule {
+              match namespace="^rofi$"
+              shadow {
+                  on
+                  spread 2048
+                  draw-behind-window true
+                  color "0000009A"
+              }
+          }
+        '';
 
         wallust.templates = {
           # default launcher

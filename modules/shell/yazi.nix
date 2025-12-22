@@ -284,17 +284,19 @@
         };
       };
 
-      config.package = config.pkgs.yazi.override {
-        inherit (baseYaziConf) initLua plugins;
-        extraPackages = with config.pkgs; [
-          unar
-          exiftool
-        ];
-        settings = self.lib.recursiveMergeAttrsList [
-          baseYaziConf.settings
-          config.extraSettings
-        ];
-      };
+      config.package = lib.mkDefault (
+        config.pkgs.yazi.override {
+          inherit (baseYaziConf) initLua plugins;
+          extraPackages = with config.pkgs; [
+            unar
+            exiftool
+          ];
+          settings = self.lib.recursiveMergeAttrsList [
+            baseYaziConf.settings
+            config.extraSettings
+          ];
+        }
+      );
     }
   );
 

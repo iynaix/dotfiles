@@ -9,6 +9,7 @@ let
     concatStringsSep
     isBool
     isString
+    mkDefault
     mkEnableOption
     mkOption
     ;
@@ -84,10 +85,12 @@ in
         };
       };
 
-      config.package = config.pkgs.btop.override {
-        inherit (config) cudaSupport;
-        inherit (config) rocmSupport;
-      };
+      config.package = mkDefault (
+        config.pkgs.btop.override {
+          inherit (config) cudaSupport;
+          inherit (config) rocmSupport;
+        }
+      );
       config.flags = {
         "--config" = toString config."btop.conf".path;
       };

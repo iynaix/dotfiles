@@ -32,7 +32,6 @@ let
         ../../overlays
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index
-        inputs.niri.nixosModules.niri
         # alias for hjem
         (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.mango.nixosModules.mango

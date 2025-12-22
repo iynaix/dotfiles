@@ -45,24 +45,22 @@
 
         niri.settings = {
           binds = {
-            "Mod+backslash".action.screenshot = {
-              show-pointer = false;
-            };
-            "Mod+Shift+backslash".action.spawn = [
+            "Mod+backslash".action = "screenshot show-pointer=false";
+            "Mod+Shift+backslash".spawn = [
               "focal"
               "image"
               # "--edit"
               # "swappy"
               "--rofi"
             ];
-            # "Mod+Ctrl+backslash".action.spawn = [
+            # "Mod+Ctrl+backslash".spawn = [
             #   "focal"
             #   "image"
             #   "--area"
             #   "selection"
             #   "--ocr"
             # ];
-            "Alt+backslash".action.spawn = [
+            "Alt+backslash".spawn = [
               "focal"
               "video"
               "--rofi"

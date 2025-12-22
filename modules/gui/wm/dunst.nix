@@ -83,7 +83,7 @@
         ];
 
         niri.settings.binds = {
-          "Mod+N".action.spawn = [
+          "Mod+N".spawn = [
             "dunstctl"
             "history-pop"
           ];

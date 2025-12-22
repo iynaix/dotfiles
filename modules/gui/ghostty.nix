@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) getExe mkOption;
+  inherit (lib) getExe mkDefault mkOption;
   mkGhosttyOptions =
     pkgs:
     let
@@ -65,7 +65,7 @@ in
     {
       options = mkGhosttyOptions config.pkgs;
 
-      config.package = config.pkgs.ghostty;
+      config.package = mkDefault config.pkgs.ghostty;
       config.flags = {
         "--config-default-files" = false;
         # NOTE: ghostty "helpfully" creates an empty config in the default location

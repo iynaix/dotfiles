@@ -15,20 +15,24 @@
 
         niri.settings.binds = {
           "XF86MonBrightnessDown" = {
-            action.spawn = [
+            spawn = [
               "brightnessctl"
               "set"
               "5%-"
             ];
-            allow-when-locked = true;
+            parameters = {
+              allow-when-locked = true;
+            };
           };
           "XF86MonBrightnessUp" = {
-            action.spawn = [
+            spawn = [
               "brightnessctl"
               "set"
               "+5%"
             ];
-            allow-when-locked = true;
+            parameters = {
+              allow-when-locked = true;
+            };
           };
         };
 

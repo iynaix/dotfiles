@@ -1,59 +1,24 @@
 { lib, ... }:
 let
   inherit (lib)
+    concatImapStringsSep
+    concatLines
     getExe
-    imap0
-    listToAttrs
     mkForce
-    mkMerge
-    mkOption
     mod
-    toInt
+    optionalString
     ;
 in
 {
-  flake.nixosModules.core =
-    { pkgs, ... }:
-    {
-      options.custom = {
-        programs.niri = {
-          settings = mkOption {
-            # it's KDL not JSON, but the JSON type gives the wanted recursive merging properties
-            type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
-            default = { };
-            description = "Niri settings, will be passed directly to niri-flake and validated";
-          };
-        };
-      };
-    };
-
   flake.nixosModules.wm =
     {
       config,
       host,
-      inputs,
-      isVm,
       pkgs,
       self,
       ...
     }:
-    let
-      # niri-flake does not support generate a config.kdl without home-manager, generate the file manually
-      # and write it with hjem, see sodiboo's config for reference
-      # https://github.com/sodiboo/system/blob/8ca2b21c61a4f23052c67e52276bb673a574e17c/login.mod.nix#L66
-      niri-cfg-modules = lib.evalModules {
-        modules = [
-          inputs.niri.lib.internal.settings-module
-          { programs.niri.settings = config.custom.programs.niri.settings; }
-        ];
-      };
-      niriConf =
-        inputs.niri.lib.internal.validated-config-for pkgs config.programs.niri.package
-          niri-cfg-modules.config.programs.niri.finalConfig;
-    in
     {
-      nixpkgs.overlays = [ inputs.niri.overlays.niri ];
-
       environment = {
         shellAliases = {
           niri-log = ''journalctl --user -u niri --no-hostname -o cat | awk '{$1=""; print $0}' | sed 's/^ *//' | sed 's/\x1b[[0-9;]*m//g' '';
@@ -67,27 +32,29 @@ in
       # 6 7 3
       programs.niri = {
         enable = true;
-        # package = pkgs.niri.overrideAttrs (o: {
-        package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable.overrideAttrs (o: {
-          patches =
-            (o.patches or [ ])
-            # not compatible with blur patch
-            ++ [
-              # fix fullscreen windows have a black background
-              # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
-              ./transparent-fullscreen.patch
-              # increase maximum shadow spread to be able to fake dimaround on ultrawide
-              # see: https://github.com/YaLTeR/niri/discussions/1806
-              ./larger-shadow-spread.patch
-            ];
+        package =
+          (self.wrapperModules.niri.apply {
+            inherit pkgs;
+            package = pkgs.niri.overrideAttrs (o: {
+              patches =
+                (o.patches or [ ])
+                # not compatible with blur patch
+                ++ [
+                  # fix fullscreen windows have a black background
+                  # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
+                  ./transparent-fullscreen.patch
+                  # increase maximum shadow spread to be able to fake dimaround on ultrawide
+                  # see: https://github.com/YaLTeR/niri/discussions/1806
+                  ./larger-shadow-spread.patch
+                ];
 
-          doCheck = false; # faster builds
-        });
-        # useNautilus = false;
+              doCheck = false; # faster builds
+            });
+
+            inherit (config.custom.programs.niri) settings;
+          }).wrapper;
+        useNautilus = false;
       };
-
-      # write validated niri config with hjem
-      hj.xdg.config.files."niri/config.kdl".source = niriConf;
 
       xdg.portal = {
         config = {
@@ -100,251 +67,169 @@ in
 
       custom = {
         programs = {
-          niri.settings = mkMerge [
-            {
-              input = {
-                keyboard = {
-                  xkb = {
-                    layout = "us";
-                  };
+          niri.settings.config =
+            /* kdl */ ''
+              input {
+                  keyboard {
+                      xkb {
+                          layout "us"
+                          model ""
+                          rules ""
+                          variant ""
+                      }
+                      repeat-delay 600
+                      repeat-rate 25
+                      track-layout "global"
+                      numlock
+                  }
+                  touchpad {
+                      tap
+                      dwt
+                  }
+                  focus-follows-mouse max-scroll-amount="95%"
+                  workspace-auto-back-and-forth
+                  disable-power-key-handling
+              }
 
-                  numlock = true;
-                };
+              layout {
+                  gaps ${toString (if host == "desktop" then 8 else 4)}
 
-                touchpad = {
-                  tap = true;
-                  dwt = true; # disable while typing
-                  # drag = false;
-                  natural-scroll = false;
-                };
+                  struts {
+                      left 20
+                      right 20
+                      top 8
+                      bottom 8
+                  }
+                  focus-ring {
+                      width 2
+                      active-gradient angle=45 from="#89B4FA" relative-to="workspace-view" to="#94E2D5"
+                      inactive-color "#1e1e2e"
+                  }
+                  border { off; }
+                  shadow {
+                      on
+                      offset x=0.000000 y=5.000000
+                      softness 30
+                      spread 4
+                      draw-behind-window false
+                      color "#1a1a1aee"
+                  }
+                  tab-indicator {
+                      hide-when-single-tab
+                      gap 0
+                      width 12
+                      length total-proportion=1.000000
+                      position "top"
+                      gaps-between-tabs 0.000000
+                      corner-radius 0.000000
+                  }
+                  default-column-width { proportion 0.500000; }
+                  preset-column-widths {
+                      proportion 0.333330
+                      proportion 0.500000
+                      proportion 0.666670
+                      proportion 1.000000
+                  }
+                  preset-window-heights {
+                      proportion 0.333330
+                      proportion 0.500000
+                      proportion 0.666670
+                      proportion 1.000000
+                  }
+                  center-focused-column "never"
+                  always-center-single-column
+              }
 
-                mouse = {
-                  natural-scroll = false;
-                };
+              // no client-side decorations
+              prefer-no-csd
 
-                # setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-                focus-follows-mouse = {
-                  enable = true;
-                  max-scroll-amount = "95%";
-                };
+              gestures {
+                  hot-corners {
+                      off
+                  }
+              }
 
-                workspace-auto-back-and-forth = true;
+              cursor {
+                  xcursor-theme "${config.custom.gtk.cursor.name}"
+                  xcursor-size ${toString config.custom.gtk.cursor.size}
+              }
 
-                # let power button turn machine off
-                power-key-handling.enable = false;
-              };
+              // match focal format
+              screenshot-path "${config.hj.directory}/Pictures/Screenshots/%Y-%m-%dT%H:%M:%S%z.png";
 
-              # Settings that influence how windows are positioned and sized.
-              layout =
-                let
-                  gap = if host == "desktop" then 8 else 4;
-                in
-                {
-                  gaps = gap;
+              // allows jumping to a window when clicking on notifications
+              debug {
+                  honor-xdg-activation-with-invalid-serial
+              }
 
-                  # When to center a column when changing focus, options are:
-                  # - "never", default behavior, focusing an off-screen column will keep at the left
-                  #   or right edge of the screen.
-                  # - "always", the focused column will always be centered.
-                  # - "on-overflow", focusing a column will center it if it doesn't fit
-                  #   together with the previously focused column.
-                  center-focused-column = "never";
-                  always-center-single-column = true;
+              hotkey-overlay {
+                  skip-at-startup
+              }
 
-                  # widths that "switch-preset-column-width" (Mod+R) toggles between.
-                  preset-column-widths = [
-                    { proportion = 0.33333; }
-                    { proportion = 0.5; }
-                    { proportion = 0.66667; }
-                    { proportion = 1.0; }
-                  ];
+              clipboard {
+                  disable-primary
+              }
 
-                  # heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
-                  preset-window-heights = [
-                    { proportion = 0.33333; }
-                    { proportion = 0.5; }
-                    { proportion = 0.66667; }
-                    { proportion = 1.0; }
-                  ];
+              overview {
+                  zoom 0.4
+              }
 
-                  # default width of the new windows, empty for deciding initial width
-                  default-column-width = {
-                    proportion = 0.5;
-                  };
+              xwayland-satellite {
+                  path "${getExe pkgs.xwayland-satellite}"
+              }
 
-                  tab-indicator = {
-                    position = "top";
-                    hide-when-single-tab = true;
-                    gap = 0;
-                    length = {
-                      total-proportion = 1.0;
-                    };
-                    width = 12;
-                  };
+              // set blurred wallpaper backdrop for overview
+              layer-rule {
+                  // namespaced swww-daemon layer is named "swww-daemonbackdrop"
+                  match namespace="^swww-daemonbackdrop$"
+                  place-within-backdrop true
+              }
 
-                  focus-ring = {
-                    width = 2;
-
-                    active = {
-                      gradient = {
-                        from = "#89B4FA";
-                        to = "#94E2D5";
-                        relative-to = "workspace-view";
-                        angle = 45;
-                      };
-                    };
-
-                    inactive = {
-                      color = "#1e1e2e"; # background
-                    };
-                  };
-
-                  # redundant, use focus-ring instead
-                  border.enable = false;
-
-                  shadow = {
-                    enable = !isVm;
-
-                    # By default, the shadow draws only around its window, and not behind it.
-                    # draw-behind-window = true; # breaks ghostty transparency?
-
-                    # You can change how shadows look. The values below are in logical
-                    # pixels and match the CSS box-shadow properties.
-
-                    # Softness controls the shadow blur radius.
-                    softness = 30;
-                    spread = 4;
-
-                    # offset = { x = 0; y = 5; };
-
-                    color = "#1a1a1aee";
-                  };
-
-                  # outer gaps
-                  struts = {
-                    # larger struts to be able to see the other window when maximized
-                    left = gap + 12;
-                    right = gap + 12;
-                    top = gap;
-                    bottom = gap;
-                  };
-                };
-
-              # no client-side decorations
-              prefer-no-csd = true;
-
-              animations = { };
-
-              gestures = {
-                hot-corners.enable = false;
-              };
-
-              cursor = {
-                theme = config.custom.gtk.cursor.name;
-                size = config.custom.gtk.cursor.size;
-              };
-
-              # match focal format
-              screenshot-path = "${config.hj.directory}/Pictures/Screenshots/%Y-%m-%dT%H:%M:%S%z.png";
-
-              # allows jumping to a window when clicking on notifications
-              debug = {
-                honor-xdg-activation-with-invalid-serial = { };
-              };
-
-              window-rules = [
-                # rounded corners for all windows
-                {
-                  geometry-corner-radius =
-                    let
-                      radius = 4.0;
-                    in
-                    {
-                      top-left = radius;
-                      top-right = radius;
-                      bottom-left = radius;
-                      bottom-right = radius;
-                    };
-                  clip-to-geometry = true;
-                  draw-border-with-background = false;
-                }
-              ];
-
-              # set blurred wallpaper backdrop for overview
-              layer-rules = [
-                {
-                  # namespaced swww-daemon layer is named "swww-daemonbackdrop"
-                  matches = [ { namespace = "^swww-daemonbackdrop$"; } ];
-                  place-within-backdrop = true;
-                }
-              ];
-
-              hotkey-overlay = {
-                skip-at-startup = true;
-              };
-
-              clipboard = {
-                disable-primary = true;
-              };
-
-              overview = {
-                zoom = 0.4;
-              };
-
-              xwayland-satellite = {
-                enable = true;
-                path = getExe pkgs.xwayland-satellite;
-              };
-            }
-
-            # create workspaces config
-            {
-              workspaces = listToAttrs (
-                self.lib.mapWorkspaces (
+              window-rule {
+                  draw-border-with-background false
+                  // rounded corners for all windows
+                  geometry-corner-radius 4
+                  clip-to-geometry true
+                  open-maximized-to-edges false
+              }
+            ''
+            +
+              # create workspaces config
+              (
+                config.custom.hardware.monitors
+                |> self.lib.mapWorkspaces (
                   {
                     workspace,
                     monitor,
                     ...
                   }:
-                  {
-                    # start from 0 instead to prevent "1" and "10" from sorting wrongly in lexicographical order
-                    name = toString ((toInt workspace) - 1);
-                    value = {
-                      open-on-output = monitor.name;
-                      name = "W${toString workspace}";
-                    };
+                  ''
+                    workspace "W${toString workspace}" {
+                        open-on-output "${monitor.name}"
+                    }
+                  ''
+                )
+                |> concatLines
+              )
+            +
+              # create monitors config
+              concatImapStringsSep "\n" (
+                i: d:
+                let
+                  rotation = toString (mod (d.transform * 90) 360);
+                  flipped = d.transform > 3;
+                in
+                ''
+                  output "${d.name}" {
+                    ${optionalString (i == 1) "focus-at-startup"}
+                    scale ${toString d.scale};
+                    transform "${optionalString flipped "flipped-"}${if rotation == "0" then "normal" else rotation}";
+                    mode "${toString d.width}x${toString d.height}"
+                    position x=${toString d.positionX} y=${toString d.positionY}
+                    ${optionalString d.vrr "variable-refresh-rate"}
                   }
-                ) config.custom.hardware.monitors
-              );
-            }
-
-            # create monitors config
-            {
-              outputs = listToAttrs (
-                imap0 (i: d: {
-                  inherit (d) name;
-                  value = {
-                    focus-at-startup = i == 0;
-                    mode = {
-                      inherit (d) width height;
-                      # use highest refresh rate by not setting it
-                      # refresh = d.refreshRate * 1.0;
-                    };
-                    position = {
-                      x = d.positionX;
-                      y = d.positionY;
-                    };
-                    variable-refresh-rate = d.vrr;
-                    transform = {
-                      rotation = mod (d.transform * 90) 360;
-                      flipped = d.transform > 3;
-                    };
-                    inherit (d) scale;
-                  };
-                }) config.custom.hardware.monitors
-              );
-            }
-          ];
+                ''
+              ) config.custom.hardware.monitors;
 
           ghostty.extraSettings = {
             background-opacity = mkForce 0.95;

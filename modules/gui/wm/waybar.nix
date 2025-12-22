@@ -80,12 +80,12 @@ in
 
         niri.settings = {
           binds = {
-            "Mod+A".action.spawn = [
+            "Mod+A".spawn = [
               (getExe' pkgs.procps "pkill")
               "-SIGUSR1"
               ".waybar-wrapped"
             ];
-            "Mod+Shift+A".action.spawn = [
+            "Mod+Shift+A".spawn = [
               (getExe' pkgs.procps "pkill")
               "-SIGUSR2"
               ".waybar-wrapped"

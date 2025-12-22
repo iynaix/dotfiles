@@ -391,16 +391,6 @@ in
             # fix mpv-dynamic-crop unmaximizing the window
             "suppressevent maximize,class:(mpv)"
           ];
-
-          # open full height in niri
-          # niri.settings.window-rules = [
-          #   {
-          #     matches = [ { app-id = "^mpv$"; } ];
-          #     default-window-height = {
-          #       proportion = 1.0;
-          #     };
-          #   }
-          # ];
         };
 
         nixpkgs.overlays = [

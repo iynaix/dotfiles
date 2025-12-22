@@ -210,9 +210,9 @@ in
               "--class=${app-id}"
             ];
             workspace = 7;
-            niriArgs = {
-              open-maximized = true;
-            };
+            niriArgs = /* kdl */ ''
+              open-maximized true;
+            '';
           }
 
           # librewolf for discord
@@ -220,9 +220,9 @@ in
             app-id = "librewolf";
             spawn = [ "librewolf" ];
             workspace = 9;
-            niriArgs = {
-              open-maximized = true;
-            };
+            niriArgs = /* kdl */ ''
+              open-maximized true;
+            '';
           }
 
           # download related
