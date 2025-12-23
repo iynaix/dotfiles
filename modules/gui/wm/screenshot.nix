@@ -81,8 +81,7 @@
         waybar = {
           config = {
             "custom/focal" = {
-              exec = # sh
-                ''${getExe' focal "focal-waybar"} --recording "󰑋"'';
+              exec = /* sh */ ''${getExe' focal "focal-waybar"} --recording "󰑋"'';
               format = "{}";
               # hide-empty-text = true;
               # return-type = "json";
@@ -93,12 +92,11 @@
             modules-left = mkAfter [ "custom/focal" ];
           };
 
-          extraCss = # css
-            ''
-              #custom-focal {
-                font-size: 24px;
-              }
-            '';
+          extraCss = /* css */ ''
+            #custom-focal {
+              font-size: 24px;
+            }
+          '';
         };
       };
     };

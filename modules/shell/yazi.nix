@@ -20,12 +20,10 @@
             git = "${sources.yazi-plugins.src}/git.yazi";
           };
 
-          initLua =
-            config.pkgs.writeText "init.lua" # lua
-              ''
-                require("full-border"):setup({ type = ui.Border.ROUNDED })
-                require("git"):setup()
-              '';
+          initLua = config.pkgs.writeText "init.lua" /* lua */ ''
+            require("full-border"):setup({ type = ui.Border.ROUNDED })
+            require("git"):setup()
+          '';
 
           settings = {
             yazi = {
@@ -105,8 +103,7 @@
                 # dropping to shell
                 {
                   on = "!";
-                  run = # sh
-                    ''shell "$SHELL" --block --confirm'';
+                  run = /* sh */ ''shell "$SHELL" --block --confirm'';
                   desc = "Open shell here";
                 }
                 # close input by a single Escape press
@@ -121,8 +118,7 @@
                     "g"
                     "r"
                   ];
-                  run = # sh
-                    ''shell -- ya emit cd "$(git rev-parse --show-toplevel)"'';
+                  run = /* sh */ ''shell -- ya emit cd "$(git rev-parse --show-toplevel)"'';
                   desc = "Cd to root of current git repo";
                 }
               ];
@@ -314,29 +310,27 @@
     {
       # shell integrations
       programs = {
-        bash.interactiveShellInit = # sh
-          ''
-            function yy() {
-              local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
-              yazi "$@" --cwd-file="$tmp"
-              if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-                builtin cd -- "$cwd"
-              fi
-              rm -f -- "$tmp"
-            }
-          '';
+        bash.interactiveShellInit = /* sh */ ''
+          function yy() {
+            local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+            yazi "$@" --cwd-file="$tmp"
+            if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+              builtin cd -- "$cwd"
+            fi
+            rm -f -- "$tmp"
+          }
+        '';
 
-        fish.interactiveShellInit = # fish
-          ''
-            function yy
-              set -l tmp (mktemp -t "yazi-cwd.XXXXX")
-              command yazi $argv --cwd-file="$tmp"
-              if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-                builtin cd -- "$cwd"
-              end
-              rm -f -- "$tmp"
+        fish.interactiveShellInit = /* fish */ ''
+          function yy
+            set -l tmp (mktemp -t "yazi-cwd.XXXXX")
+            command yazi $argv --cwd-file="$tmp"
+            if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+              builtin cd -- "$cwd"
             end
-          '';
+            rm -f -- "$tmp"
+          end
+        '';
       };
 
       nixpkgs.overlays = [

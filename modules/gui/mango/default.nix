@@ -122,16 +122,15 @@ in
               "num-tags" = 10;
             };
           };
-          extraCss = # css
-            ''
-              #tags button {
-                opacity: 0.6;
-              }
+          extraCss = /* css */ ''
+            #tags button {
+              opacity: 0.6;
+            }
 
-              #tags button.occupied {
-                opacity: 1;
-              }
-            '';
+            #tags button.occupied {
+              opacity: 1;
+            }
+          '';
         };
       };
     };

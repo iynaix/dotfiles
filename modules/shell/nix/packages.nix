@@ -43,57 +43,54 @@ in
         shell.packages = {
           # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
           ngeneration = {
-            text = # sh
-              ''
-                curr=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+            text = /* sh */ ''
+              curr=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
 
-                if [ "$#" -eq 0 ]; then
-                  # previous desktop versions: 1196
-                  prev=${if host == "desktop" then "1196" else "0"}
-                  if [ "$prev" -gt 0 ]; then
-                    echo "$curr ($((curr + prev)))"
-                  else
-                    echo "$curr"
-                  fi
+              if [ "$#" -eq 0 ]; then
+                # previous desktop versions: 1196
+                prev=${if host == "desktop" then "1196" else "0"}
+                if [ "$prev" -gt 0 ]; then
+                  echo "$curr ($((curr + prev)))"
                 else
-                  if [[ -f "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" ]]; then
-                    sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
+                  echo "$curr"
+                fi
+              else
+                if [[ -f "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" ]]; then
+                  sudo "/nix/var/nix/profiles/system-$1-link/bin/switch-to-configuration" boot
+                else
+                  target="/nix/var/nix/profiles/system-$((curr + $1))-link/bin/switch-to-configuration"
+                  if [[ -f "$target" ]]; then
+                    sudo "$target" boot
                   else
-                    target="/nix/var/nix/profiles/system-$((curr + $1))-link/bin/switch-to-configuration"
-                    if [[ -f "$target" ]]; then
-                      sudo "$target" boot
-                    else
-                      echo "No generation $((curr + $1)) found."
-                      exit 1
-                    fi
+                    echo "No generation $((curr + $1)) found."
+                    exit 1
                   fi
                 fi
-              '';
-            bashCompletion = # sh
-              ''
-                _ngeneration() {
-                    local profile_dir="/nix/var/nix/profiles"
-                    local profiles=$(command ls -1 "$profile_dir" | \
-                        grep -E '^system-[0-9]+-link$' | \
-                        sed -E 's/^system-([0-9]+)-link$/\1/' | \
-                        sort -rnu)
-                    COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
-                }
+              fi
+            '';
+            bashCompletion = /* sh */ ''
+              _ngeneration() {
+                  local profile_dir="/nix/var/nix/profiles"
+                  local profiles=$(command ls -1 "$profile_dir" | \
+                      grep -E '^system-[0-9]+-link$' | \
+                      sed -E 's/^system-([0-9]+)-link$/\1/' | \
+                      sort -rnu)
+                  COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
+              }
 
-                complete -F _ngeneration ngeneration
-              '';
-            fishCompletion = # fish
-              ''
-                function _ngeneration
-                    set -l profile_dir "/nix/var/nix/profiles"
-                    command ls -1 "$profile_dir" | \
-                      string match -r '^system-([0-9]+)-link$' | \
-                      string replace -r '^system-([0-9]+)-link$' '$1' | \
-                      sort -ru
-                end
+              complete -F _ngeneration ngeneration
+            '';
+            fishCompletion = /* fish */ ''
+              function _ngeneration
+                  set -l profile_dir "/nix/var/nix/profiles"
+                  command ls -1 "$profile_dir" | \
+                    string match -r '^system-([0-9]+)-link$' | \
+                    string replace -r '^system-([0-9]+)-link$' '$1' | \
+                    sort -ru
+              end
 
-                complete --keep-order -c ngeneration -f -a "(_ngeneration)"
-              '';
+              complete --keep-order -c ngeneration -f -a "(_ngeneration)"
+            '';
           };
           # nixos-rebuild switch, use different package for home-manager standalone
           nsw = pkgs.custom.nsw.override {
@@ -103,16 +100,15 @@ in
           # update all nvfetcher overlays and packages
           nv-update = {
             runtimeInputs = [ pkgs.nvfetcher ];
-            text = # sh
-              ''
-                pushd ${dots} > /dev/null
-                if [ "$#" -eq 0 ]; then
-                  nvfetcher --keep-old
-                else
-                  nvfetcher --keep-old --filter "$1"
-                fi
-                popd > /dev/null
-              '';
+            text = /* sh */ ''
+              pushd ${dots} > /dev/null
+              if [ "$#" -eq 0 ]; then
+                nvfetcher --keep-old
+              else
+                nvfetcher --keep-old --filter "$1"
+              fi
+              popd > /dev/null
+            '';
           };
           # update via nix flake
           upd8 = {
@@ -121,176 +117,167 @@ in
               custom.shell.nsw
               custom.shell.nv-update
             ];
-            text = # sh
-              ''
-                pushd ${dots} > /dev/null
-                nix flake update
-                nv-update
-                nsw "$@"
-                popd > /dev/null
-              '';
+            text = /* sh */ ''
+              pushd ${dots} > /dev/null
+              nix flake update
+              nv-update
+              nsw "$@"
+              popd > /dev/null
+            '';
           };
           # nix garbage collection
-          ngc = # sh
-            ''
-              # sudo rm /nix/var/nix/gcroots/auto/*
+          ngc = /* sh */ ''
+            # sudo rm /nix/var/nix/gcroots/auto/*
 
-              rm -f "${dots}/result"
+            rm -f "${dots}/result"
 
-              if [ "$#" -eq 0 ]; then
-                sudo nix-collect-garbage -d
-              else
-                sudo nix-collect-garbage "$@"
-              fi
-            '';
+            if [ "$#" -eq 0 ]; then
+              sudo nix-collect-garbage -d
+            else
+              sudo nix-collect-garbage "$@"
+            fi
+          '';
           # utility for creating a nix repl, allows editing within the repl.nix
           # https://bmcgee.ie/posts/2023/01/nix-and-its-slow-feedback-loop/
-          nrepl = # sh
-            ''
-              if [[ -f repl.nix ]]; then
-                nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-              elif [[ -f ./flake.nix ]]; then
-                nix repl .
-              else
-                # use flake repl if not in a nix project
-                pushd ${dots} > /dev/null
-                nix repl --arg host '"${host}"' --file ./repl.nix "$@"
-                popd > /dev/null
-              fi
-            '';
+          nrepl = /* sh */ ''
+            if [[ -f repl.nix ]]; then
+              nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+            elif [[ -f ./flake.nix ]]; then
+              nix repl .
+            else
+              # use flake repl if not in a nix project
+              pushd ${dots} > /dev/null
+              nix repl --arg host '"${host}"' --file ./repl.nix "$@"
+              popd > /dev/null
+            fi
+          '';
           # build local package if possible, otherwise build config
           nb = {
             runtimeInputs = with pkgs; [ nix-output-monitor ];
-            text = # sh
-              ''
-                if [ "$#" -eq 0 ]; then
-                    nom build .
-                    exit
-                fi
+            text = /* sh */ ''
+              if [ "$#" -eq 0 ]; then
+                  nom build .
+                  exit
+              fi
 
-                TARGET="''${1/.\#}"
+              TARGET="''${1/.\#}"
 
-                # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
-                if [[ $(pwd) =~ /nixpkgs$ ]]; then
-                    # stop bothering me about untracked files
-                    untracked_files=$(git ls-files --exclude-standard --others .)
-                    if [ -n "$untracked_files" ]; then
-                        git add "$untracked_files"
-                    fi
+              # using nix build with nixpkgs is very slow as it has to copy nixpkgs to the store
+              if [[ $(pwd) =~ /nixpkgs$ ]]; then
+                  # stop bothering me about untracked files
+                  untracked_files=$(git ls-files --exclude-standard --others .)
+                  if [ -n "$untracked_files" ]; then
+                      git add "$untracked_files"
+                  fi
 
-                    nix-build -A "$TARGET"
-                elif nix eval ".#nixosConfigurations.$TARGET.class" &>/dev/null; then
-                    nsw --dry --hostname "$TARGET"
-                # dotfiles, build local package
-                elif [[ $(pwd) =~ /dotfiles$ ]]; then
-                    # stop bothering me about untracked files
-                    untracked_files=$(git ls-files --exclude-standard --others .)
-                    if [ -n "$untracked_files" ]; then
-                        git add "$untracked_files"
-                    fi
+                  nix-build -A "$TARGET"
+              elif nix eval ".#nixosConfigurations.$TARGET.class" &>/dev/null; then
+                  nsw --dry --hostname "$TARGET"
+              # dotfiles, build local package
+              elif [[ $(pwd) =~ /dotfiles$ ]]; then
+                  # stop bothering me about untracked files
+                  untracked_files=$(git ls-files --exclude-standard --others .)
+                  if [ -n "$untracked_files" ]; then
+                      git add "$untracked_files"
+                  fi
 
-                    if nix eval ".#$TARGET.name" &>/dev/null; then
-                      nom build ".#$TARGET"
-                    else
-                      nom build ".#nixosConfigurations.${host}.pkgs.$TARGET"
-                    fi
-                # nix repo, build package within flake
-                else
+                  if nix eval ".#$TARGET.name" &>/dev/null; then
                     nom build ".#$TARGET"
-                fi
-              '';
+                  else
+                    nom build ".#nixosConfigurations.${host}.pkgs.$TARGET"
+                  fi
+              # nix repo, build package within flake
+              else
+                  nom build ".#$TARGET"
+              fi
+            '';
           };
           # test all packages that depend on this change, used for nixpkgs and copied from the PR template
           nb-dependents = {
             runtimeInputs = [ pkgs.nixpkgs-review ];
-            text = # sh
-              ''nixpkgs-review rev HEAD'';
+            text = /* sh */ ''nixpkgs-review rev HEAD'';
           };
           # build and run local package if possible, otherwise run from nixpkgs
-          nr = # sh
-            ''
-              if [ "$#" -eq 0 ]; then
-                  echo "No package specified."
-                  exit 1
-              fi
+          nr = /* sh */ ''
+            if [ "$#" -eq 0 ]; then
+                echo "No package specified."
+                exit 1
+            fi
 
-              # assume building packages in local nixpkgs if possible
-              src="nixpkgs"
-              if [[ $(pwd) =~ /nixpkgs$ ]]; then
+            # assume building packages in local nixpkgs if possible
+            src="nixpkgs"
+            if [[ $(pwd) =~ /nixpkgs$ ]]; then
+                src="."
+            # dotfiles, custom package exists, build it
+            elif [[ $(pwd) =~ /dotfiles$ ]]; then
+                if [[ -d "./packages/$1" ]]; then
                   src="."
-              # dotfiles, custom package exists, build it
-              elif [[ $(pwd) =~ /dotfiles$ ]]; then
-                  if [[ -d "./packages/$1" ]]; then
-                    src="."
-                  else
-                    src="nixpkgs"
-                  fi
-              # flake
-              elif [[ -f flake.nix ]]; then
-                  if nix eval ".#$1" &>/dev/null; then
-                    src="."
-                  fi
-              fi
+                else
+                  src="nixpkgs"
+                fi
+            # flake
+            elif [[ -f flake.nix ]]; then
+                if nix eval ".#$1" &>/dev/null; then
+                  src="."
+                fi
+            fi
 
-              if [ "$src" = "nixpkgs" ]; then
-                  # don't bother me about unfree
-                  NIXPKGS_ALLOW_UNFREE=1 nix run --impure "$src#$1" -- "''${@:2}"
-              else
-                  nix run "$src#$1" -- "''${@:2}"
-              fi
-            '';
+            if [ "$src" = "nixpkgs" ]; then
+                # don't bother me about unfree
+                NIXPKGS_ALLOW_UNFREE=1 nix run --impure "$src#$1" -- "''${@:2}"
+            else
+                nix run "$src#$1" -- "''${@:2}"
+            fi
+          '';
           # creates a file with the symlink contents and renames the original symlink to .orig
-          nsymlink = # sh
-            ''
-              if [ "$#" -eq 0 ]; then
-                  echo "No file(s) specified."
-                  exit 1
+          nsymlink = /* sh */ ''
+            if [ "$#" -eq 0 ]; then
+                echo "No file(s) specified."
+                exit 1
+            fi
+
+            for file in "$@"; do
+              if [[ "$file" == *.bak ]]; then
+                  continue
               fi
 
-              for file in "$@"; do
-                if [[ "$file" == *.bak ]]; then
-                    continue
-                fi
+              if [ -L "$file" ]; then
+                  mv "$file" "$file.bak"
+                  cp -L "$file.bak" "$file"
+                  chmod +w "$file"
 
-                if [ -L "$file" ]; then
-                    mv "$file" "$file.bak"
-                    cp -L "$file.bak" "$file"
-                    chmod +w "$file"
-
-                # regular file, reverse the process
-                elif [ -f "$file" ] && [ -L "$file.bak" ]; then
-                    mv "$file.bak" "$file"
-                fi
-              done
-            '';
-          nattr = # sh
-            ''
-              if [ "$#" -eq 0 ]; then
-                  echo "No package specified."
-                  exit 1
+              # regular file, reverse the process
+              elif [ -f "$file" ] && [ -L "$file.bak" ]; then
+                  mv "$file.bak" "$file"
               fi
+            done
+          '';
+          nattr = /* sh */ ''
+            if [ "$#" -eq 0 ]; then
+                echo "No package specified."
+                exit 1
+            fi
 
-              NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw "nixpkgs#$1.outPath"
-            '';
+            NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw "nixpkgs#$1.outPath"
+          '';
           ynattr = {
             runtimeInputs = with pkgs; [
               custom.shell.nattr
             ];
-            text = # sh
-              ''
-                if [ "$#" -eq 0 ]; then
-                    echo "No package specified."
-                    exit 1
-                fi
+            text = /* sh */ ''
+              if [ "$#" -eq 0 ]; then
+                  echo "No package specified."
+                  exit 1
+              fi
 
-                PKG_DIR=$(nattr "$1")
-                # path not found, build it
-                if [ ! -e "$PKG_DIR" ]; then
-                    nix build "nixpkgs#$1" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
-                fi
+              PKG_DIR=$(nattr "$1")
+              # path not found, build it
+              if [ ! -e "$PKG_DIR" ]; then
+                  nix build "nixpkgs#$1" --print-out-paths | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- | head -n1
+              fi
 
-                yazi "$PKG_DIR"
-              '';
+              yazi "$PKG_DIR"
+            '';
           };
           # tui for searching nix packages or options
           ntv = {
@@ -344,75 +331,70 @@ in
             '';
           };
           # what depends on the given package in the current nixos install?
-          ndepends = # sh
-            ''
-              if [ "$#" -eq 0 ]; then
-                  echo "No package(s) provided."
-                  exit 1
-              fi
+          ndepends = /* sh */ ''
+            if [ "$#" -eq 0 ]; then
+                echo "No package(s) provided."
+                exit 1
+            fi
 
-              # use path if given, otherwise assume it is a package
-              get_path() {
-                  if [[ "$1" == /* ]]; then
-                      echo "$1"
-                  else
-                      nix eval --raw "nixpkgs#$1.outPath"
-                  fi
-              }
+            # use path if given, otherwise assume it is a package
+            get_path() {
+                if [[ "$1" == /* ]]; then
+                    echo "$1"
+                else
+                    nix eval --raw "nixpkgs#$1.outPath"
+                fi
+            }
 
-              parent="/run/current-system"
-              child="$(get_path "$1")"
+            parent="/run/current-system"
+            child="$(get_path "$1")"
 
-              if [ "$#" -eq 2 ]; then
-                  parent="$(get_path "$1")"
-                  child="$(get_path "$2")"
-              fi
+            if [ "$#" -eq 2 ]; then
+                parent="$(get_path "$1")"
+                child="$(get_path "$2")"
+            fi
 
-              # echo then run the command
-              cmd="nix why-depends --precise \"$parent\" \"$child\""
-              echo "$cmd" >&2
-              eval "$cmd"
-            '';
+            # echo then run the command
+            cmd="nix why-depends --precise \"$parent\" \"$child\""
+            echo "$cmd" >&2
+            eval "$cmd"
+          '';
           json2nix = {
             runtimeInputs = with pkgs; [
               hjson
               nixfmt
             ];
-            text = # sh
-              ''
-                json=$(cat - | hjson -j 2> /dev/null)
-                nix eval --expr "fromJSON '''$json'''" | nixfmt -q
-              '';
+            text = /* sh */ ''
+              json=$(cat - | hjson -j 2> /dev/null)
+              nix eval --expr "fromJSON '''$json'''" | nixfmt -q
+            '';
           };
           yaml2nix = {
             runtimeInputs = with pkgs; [
               yq
               nixfmt
             ];
-            text = # sh
-              ''
-                yaml=$(cat - | yq)
-                nix eval --expr "fromJSON '''$yaml'''" | nixfmt -q
-              '';
+            text = /* sh */ ''
+              yaml=$(cat - | yq)
+              nix eval --expr "fromJSON '''$yaml'''" | nixfmt -q
+            '';
           };
           # build iso images
           nbuild-iso = {
             runtimeInputs = [ pkgs.nixos-generators ];
-            text = # sh
-              ''
-                pushd ${dots} > /dev/null
-                nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
-                popd > /dev/null
-              '';
-            fishCompletion = # fish
-              ''
-                function _nbuild_iso
-                  nix eval --impure --json --expr \
-                    'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-                    ${getExe pkgs.jq} -r '.[]' | grep iso
-                  end
-                  complete -c nbuild-iso -f -a '(_nbuild_iso)'
-              '';
+            text = /* sh */ ''
+              pushd ${dots} > /dev/null
+              nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
+              popd > /dev/null
+            '';
+            fishCompletion = /* fish */ ''
+              function _nbuild_iso
+                nix eval --impure --json --expr \
+                  'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
+                  ${getExe pkgs.jq} -r '.[]' | grep iso
+                end
+                complete -c nbuild-iso -f -a '(_nbuild_iso)'
+            '';
           };
           # list all installed packages
           nix-list-packages = {
@@ -425,14 +407,12 @@ in
           # nixos-rebuild boot
           nsbt = {
             runtimeInputs = [ pkgs.custom.shell.nsw ];
-            text = # sh
-              ''nsw boot "$@"'';
+            text = /* sh */ ''nsw boot "$@"'';
           };
           # nixos-rebuild build
           nsb = {
             runtimeInputs = [ pkgs.custom.shell.nsw ];
-            text = # sh
-              ''nsw build "$@"'';
+            text = /* sh */ ''nsw build "$@"'';
           };
           # nixos-rebuild test
           nst = {
@@ -441,18 +421,16 @@ in
                 specialisation = config.custom.specialisation.current;
               })
             ];
-            text = # sh
-              ''nsw test "$@"'';
+            text = /* sh */ ''nsw test "$@"'';
           };
         }
         // optionalAttrs (host == "desktop") {
           # build and push config for laptop
-          nsw-remote = # sh
-            ''
-              pushd ${dots} > /dev/null
-              nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
-              popd > /dev/null
-            '';
+          nsw-remote = /* sh */ ''
+            pushd ${dots} > /dev/null
+            nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
+            popd > /dev/null
+          '';
         };
       };
 

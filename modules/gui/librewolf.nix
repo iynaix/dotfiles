@@ -81,7 +81,7 @@
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         };
 
-        #   userChrome = # css
+        #   userChrome = /* css */
         #     ''
         #       /* remove useless urlbar padding */
         #       #customizableui-special-spring1 { display:none }

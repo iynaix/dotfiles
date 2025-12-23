@@ -73,7 +73,6 @@
           };
         }
 
-        # misc
         {
           security = {
             polkit.enable = true;

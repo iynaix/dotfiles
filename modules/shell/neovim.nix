@@ -13,12 +13,11 @@
       nvim-direnv = pkgs.writeShellApplication {
         name = "nvim-direnv";
         runtimeInputs = [ pkgs.direnv ];
-        text = # sh
-          ''
-            if ! direnv exec "$(dirname "$1")" nvim "$@"; then
-                nvim "$@"
-            fi
-          '';
+        text = /* sh */ ''
+          if ! direnv exec "$(dirname "$1")" nvim "$@"; then
+              nvim "$@"
+          fi
+        '';
       };
       nvim-desktop-entry = pkgs.makeDesktopItem {
         name = "Neovim";

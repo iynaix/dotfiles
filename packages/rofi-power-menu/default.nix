@@ -16,29 +16,28 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postInstall = # sh
-    ''
-      mkdir -p $out/bin
-      ${
-        if (reboot-to-windows == null) then
-          ''substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu --replace-fail '|$windows' ""''
-        else
-          "cp ./rofi-power-menu.sh $out/bin/rofi-power-menu"
+  postInstall = /* sh */ ''
+    mkdir -p $out/bin
+    ${
+      if (reboot-to-windows == null) then
+        ''substitute ./rofi-power-menu.sh $out/bin/rofi-power-menu --replace-fail '|$windows' ""''
+      else
+        "cp ./rofi-power-menu.sh $out/bin/rofi-power-menu"
+    }
+
+    chmod +x $out/bin/rofi-power-menu
+
+    wrapProgram $out/bin/rofi-power-menu \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          procps # for uptime
+          libnotify
+          networkmanager
+          rofi
+          reboot-to-windows
+        ]
       }
-
-      chmod +x $out/bin/rofi-power-menu
-
-      wrapProgram $out/bin/rofi-power-menu \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            procps # for uptime
-            libnotify
-            networkmanager
-            rofi
-            reboot-to-windows
-          ]
-        }
-    '';
+  '';
 
   meta = {
     description = "A huge collection of Rofi based custom Applets, Launchers & Powermenus";

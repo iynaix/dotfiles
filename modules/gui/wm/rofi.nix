@@ -17,8 +17,7 @@
             if rofiTheme != null then
               ''@import "${rofiThemesPkg}/colors/${rofiTheme}.rasi"''
             else
-              # css
-              ''
+              /* css */ ''
                 *   {
                     background:     {{background}}{{ 60 | alpha_hexa }};
                     background-alt: {{color0}};

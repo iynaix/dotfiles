@@ -61,15 +61,13 @@ topLevel: {
           # woke poe1 / poe2 trade
           "tag +apt, title:(Awakened PoE Trade)"
           "tag +apt, title:(Exiled Exchange 2)"
-          "float, tag:apt "
+          # "float, tag:apt "
           "noblur, tag:apt"
-          "nofocus, tag:apt # Disable auto-focus"
+          # "nofocus, tag:apt # Disable auto-focus"
           "noshadow, tag:apt"
           "noborder, tag:apt"
-          "pin, tag:apt"
-          "renderunfocused, tag:apt"
-          "size 100% 100%, tag:apt"
-          "center, tag:apt"
+          # "pin, tag:apt"
+          # "renderunfocused, tag:apt"
         ];
       };
 

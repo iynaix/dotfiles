@@ -216,70 +216,63 @@
           custom.shell.packages =
             let
               binariesCompletion = binaryName: {
-                bashCompletion = # sh
-                  ''
-                    _complete_path_binaries()
-                    {
-                        local cur prev words cword
-                        _init_completion || return
+                bashCompletion = /* sh */ ''
+                  _complete_path_binaries()
+                  {
+                      local cur prev words cword
+                      _init_completion || return
 
-                        local IFS=:
-                        local binaries=()
-                        for path in $PATH; do
-                            for bin in "$path"/*; do
-                                if [[ -x "$bin" && -f "$bin" ]]; then
-                                    binaries+=("$(basename "$bin")")
-                                fi
-                            done
-                        done
+                      local IFS=:
+                      local binaries=()
+                      for path in $PATH; do
+                          for bin in "$path"/*; do
+                              if [[ -x "$bin" && -f "$bin" ]]; then
+                                  binaries+=("$(basename "$bin")")
+                              fi
+                          done
+                      done
 
-                        COMPREPLY=($(compgen -W "''${binaries[*]}" -- "$cur"))
-                    }
+                      COMPREPLY=($(compgen -W "''${binaries[*]}" -- "$cur"))
+                  }
 
-                    complete -F _complete_path_binaries ${binaryName}
-                  '';
-                fishCompletion = # fish
-                  ''
-                    function __complete_path_binaries
-                        for path in $PATH
-                            for bin in $path/*
-                                if test -x $bin -a -f $bin
-                                    set -l bin_name (basename $bin)
-                                    echo $bin_name
-                                end
-                            end
-                        end
-                    end
+                  complete -F _complete_path_binaries ${binaryName}
+                '';
+                fishCompletion = /* fish */ ''
+                  function __complete_path_binaries
+                      for path in $PATH
+                          for bin in $path/*
+                              if test -x $bin -a -f $bin
+                                  set -l bin_name (basename $bin)
+                                  echo $bin_name
+                              end
+                          end
+                      end
+                  end
 
-                    complete -c ${binaryName} -f -a "(__complete_path_binaries)"
-                  '';
+                  complete -c ${binaryName} -f -a "(__complete_path_binaries)"
+                '';
               };
             in
             {
               fdnix = {
                 runtimeInputs = [ pkgs.fd ];
-                text = # sh
-                  ''fd "$@" /nix/store'';
+                text = /* sh */ ''fd "$@" /nix/store'';
               };
-              md = # sh
-                ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
+              md = /* sh */ ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
               # improved which for nix
               nwhich = {
-                text = # sh
-                  ''readlink -f "$(which "$1")"'';
+                text = /* sh */ ''readlink -f "$(which "$1")"'';
               }
               // binariesCompletion "nwhich";
               cnwhich = {
-                text = # sh
-                  ''cat "$(nwhich "$1")"'';
+                text = /* sh */ ''cat "$(nwhich "$1")"'';
               }
               // binariesCompletion "cnwhich";
               ynwhich = {
                 runtimeInputs = with pkgs; [
                   custom.shell.nwhich
                 ];
-                text = # sh
-                  ''yazi "$(dirname "$(dirname "$(nwhich "$1")")")"'';
+                text = /* sh */ ''yazi "$(dirname "$(dirname "$(nwhich "$1")")")"'';
               }
               // binariesCompletion "ynwhich";
               # uniq but maintain original order
@@ -288,34 +281,32 @@
 
           # pj cannot be implemented as script as it needs to change the directory of the shell
           programs = {
-            bash.shellInit = # sh
-              ''
-                function pj() {
-                    cd ${proj_dir}
-                    if [[ $# -eq 1 ]]; then
-                      cd "$1";
-                    fi
-                }
-                _pj() {
-                    ( cd ${proj_dir}; printf "%s\n" "$2"* )
-                }
-                complete -o nospace -C _pj pj
-              '';
-
-            fish.shellInit = # fish
-              ''
-                function pj
+            bash.shellInit = /* sh */ ''
+              function pj() {
                   cd ${proj_dir}
-                  if test (count $argv) -eq 1
-                    cd $argv[1]
-                  end
-                end
+                  if [[ $# -eq 1 ]]; then
+                    cd "$1";
+                  fi
+              }
+              _pj() {
+                  ( cd ${proj_dir}; printf "%s\n" "$2"* )
+              }
+              complete -o nospace -C _pj pj
+            '';
 
-                function _pj
-                    find ${proj_dir} -maxdepth 1 -type d -exec basename {} \;
+            fish.shellInit = /* fish */ ''
+              function pj
+                cd ${proj_dir}
+                if test (count $argv) -eq 1
+                  cd $argv[1]
                 end
-                complete -c pj -f -a "(_pj)"
-              '';
+              end
+
+              function _pj
+                  find ${proj_dir} -maxdepth 1 -type d -exec basename {} \;
+              end
+              complete -c pj -f -a "(_pj)"
+            '';
           };
         };
     };

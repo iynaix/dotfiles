@@ -206,25 +206,24 @@ in
                 "cursor"
               ]
               ++ map (i: "color${toString i}") (range 0 15);
-              colorDefinitions = # css
-              ''
-                @define-color accent {{foreground}};
-                @define-color complementary {{color4}};
-              ''
-              + (concatMapStringsSep "\n" (name: "@define-color ${name} {{${name}}};") colorNames);
-              baseModuleCss = # css
+              colorDefinitions =
+                /* css */ ''
+                  @define-color accent {{foreground}};
+                  @define-color complementary {{color4}};
                 ''
-                  font-family: "${config.custom.fonts.regular}";
-                  font-weight: bold;
-                  color: @accent;
-                  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                  border: none;
-                  border-radius: 0;
-                  transition: none;
-                  border-bottom:  2px solid transparent;
-                  padding-left: ${margin};
-                  padding-right: ${margin};
-                '';
+                + (concatMapStringsSep "\n" (name: "@define-color ${name} {{${name}}};") colorNames);
+              baseModuleCss = /* css */ ''
+                font-family: "${config.custom.fonts.regular}";
+                font-weight: bold;
+                color: @accent;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                border: none;
+                border-radius: 0;
+                transition: none;
+                border-bottom:  2px solid transparent;
+                padding-left: ${margin};
+                padding-right: ${margin};
+              '';
               mkModuleClassName = mod: "#${replaceStrings [ "hyprland/" "/" ] [ "" "-" ] mod}";
               mkModulesCss =
                 arr:
@@ -234,91 +233,87 @@ in
                   }'') arr;
             in
             {
-              text = # css
-              ''
-                ${colorDefinitions}
+              text =
+                /* css */ ''
+                  ${colorDefinitions}
 
-                #waybar {
-                  background: rgba(0,0,0,0.75);
-                }
+                  #waybar {
+                    background: rgba(0,0,0,0.75);
+                  }
 
-                ${mkModulesCss cfg.config.modules-left}
-                ${mkModulesCss cfg.config.modules-center}
-                ${mkModulesCss cfg.config.modules-right}
+                  ${mkModulesCss cfg.config.modules-left}
+                  ${mkModulesCss cfg.config.modules-center}
+                  ${mkModulesCss cfg.config.modules-right}
 
-                ${mkModuleClassName "custom/nix"} {
-                  font-size: 20px;
-                }
+                  ${mkModuleClassName "custom/nix"} {
+                    font-size: 20px;
+                  }
 
-                #workspaces button {
-                  ${baseModuleCss}
-                  /* the fuck is this bullshit */
-                  /* https://github.com/Alexays/Waybar/issues/450#issuecomment-527635548 */
-                  min-width: 0;
-                }
+                  #workspaces button {
+                    ${baseModuleCss}
+                    /* the fuck is this bullshit */
+                    /* https://github.com/Alexays/Waybar/issues/450#issuecomment-527635548 */
+                    min-width: 0;
+                  }
 
-                #workspaces button.active {
-                  border-bottom:  2px solid @accent;
-                  background-color: rgba(255,255,255, 0.25);
-                }
+                  #workspaces button.active {
+                    border-bottom:  2px solid @accent;
+                    background-color: rgba(255,255,255, 0.25);
+                  }
 
-                #workspaces button.empty {
-                  opacity: 0.6;
-                }
+                  #workspaces button.empty {
+                    opacity: 0.6;
+                  }
 
-                /* mango uses tags instead of workspaces */
-                #tags button {
-                  ${baseModuleCss}
-                  /* mango seems to add excess padding */
-                  padding-left: 0px;
-                  padding-right: 0px;
-                }
+                  /* mango uses tags instead of workspaces */
+                  #tags button {
+                    ${baseModuleCss}
+                    /* mango seems to add excess padding */
+                    padding-left: 0px;
+                    padding-right: 0px;
+                  }
 
-                #tags button.focused {
-                  border-bottom:  2px solid @accent;
-                  background-color: rgba(255,255,255, 0.25);
-                }
-              ''
-              +
-                # remove padding for the outermost modules
+                  #tags button.focused {
+                    border-bottom:  2px solid @accent;
+                    background-color: rgba(255,255,255, 0.25);
+                  }
+                ''
+                +
+                  # remove padding for the outermost modules
+                  /* css */ ''
+                    ${mkModuleClassName (head cfg.config.modules-left)} {
+                      padding-left: 0;
+                      margin-left: ${margin};
+                    }
+                    ${mkModuleClassName (last cfg.config.modules-right)} {
+                      padding-right: 0;
+                      margin-right: ${margin};
+                    }
+                  ''
+                # idle inhibitor icon is wonky, add extra padding
+                + optionalString cfg.idleInhibitor /* css */ ''
+                  ${mkModuleClassName "idle_inhibitor"} {
+                    font-size: 17px;
+                    padding-right: 16px;
+                  }
+                  ${mkModuleClassName "idle_inhibitor.activated"} {
+                    color: @complementary;
+                  }
+                ''
+                # add complementary classes
                 # css
-                ''
-                  ${mkModuleClassName (head cfg.config.modules-left)} {
-                    padding-left: 0;
-                    margin-left: ${margin};
+                + ''
+                  ${
+                    concatMapStringsSep ", " mkModuleClassName [
+                      "network.disconnected"
+                      "pulseaudio.muted"
+                      "custom/focal"
+                    ]
+                  } {
+                    color: @complementary;
                   }
-                  ${mkModuleClassName (last cfg.config.modules-right)} {
-                    padding-right: 0;
-                    margin-right: ${margin};
-                  }
                 ''
-              # idle inhibitor icon is wonky, add extra padding
-              +
-                optionalString cfg.idleInhibitor
-                  # css
-                  ''
-                    ${mkModuleClassName "idle_inhibitor"} {
-                      font-size: 17px;
-                      padding-right: 16px;
-                    }
-                    ${mkModuleClassName "idle_inhibitor.activated"} {
-                      color: @complementary;
-                    }
-                  ''
-              # add complementary classes
-              # css
-              + ''
-                ${
-                  concatMapStringsSep ", " mkModuleClassName [
-                    "network.disconnected"
-                    "pulseaudio.muted"
-                    "custom/focal"
-                  ]
-                } {
-                  color: @complementary;
-                }
-              ''
-              + cfg.extraCss;
+                + cfg.extraCss;
 
               target = "${config.hj.xdg.config.directory}/waybar/style.css";
             };

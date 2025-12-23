@@ -284,10 +284,9 @@ in
           scripts = [
             (self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-cut.override {
               # disable bookmarks functionality
-              configLua = # lua
-                ''
-                  KEY_BOOKMARK_ADD = ""
-                '';
+              configLua = /* lua */ ''
+                KEY_BOOKMARK_ADD = ""
+              '';
             })
           ];
         }

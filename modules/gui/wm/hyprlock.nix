@@ -15,8 +15,7 @@ in
           procps
           hyprlock
         ];
-        text = # sh
-          "pidof hyprlock || hyprlock";
+        text = /* sh */ "pidof hyprlock || hyprlock";
       };
     };
 
@@ -75,7 +74,7 @@ in
           let
             lockOrDpms =
               if config.custom.lock.enable then
-                "lock"
+                [ "lock" ]
               else
                 # lid-open actions only support spawn for now
                 [

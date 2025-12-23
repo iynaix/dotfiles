@@ -10,17 +10,16 @@
             # associate step files with orca-slicer
             (pkgs.writeTextFile {
               name = "model-step.xml";
-              text = # xml
-                ''
-                  <?xml version="1.0" encoding="UTF-8"?>
-                  <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-                      <mime-type type="model/step">
-                          <glob pattern="*.step"/>
-                          <glob pattern="*.stp"/>
-                          <comment>STEP CAD File</comment>
-                      </mime-type>
-                  </mime-info>
-                '';
+              text = /* xml */ ''
+                <?xml version="1.0" encoding="UTF-8"?>
+                <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+                    <mime-type type="model/step">
+                        <glob pattern="*.step"/>
+                        <glob pattern="*.stp"/>
+                        <comment>STEP CAD File</comment>
+                    </mime-type>
+                </mime-info>
+              '';
               executable = true;
               destination = "/share/mime/packages/model-step.xml";
             })

@@ -18,26 +18,24 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postPatch = # sh
-    ''
-      substituteInPlace nsw.sh \
-        --replace-fail "@dots@" "${dots}" \
-        --replace-fail "@host@" "${host}" \
-        --replace-fail "@specialisation@" "${specialisation}"
-    '';
+  postPatch = /* sh */ ''
+    substituteInPlace nsw.sh \
+      --replace-fail "@dots@" "${dots}" \
+      --replace-fail "@host@" "${host}" \
+      --replace-fail "@specialisation@" "${specialisation}"
+  '';
 
-  postInstall = # sh
-    ''
-      install -D ./nsw.sh $out/bin/nsw
+  postInstall = /* sh */ ''
+    install -D ./nsw.sh $out/bin/nsw
 
-      wrapProgram $out/bin/nsw \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            git
-            nh
-          ]
-        }
-    '';
+    wrapProgram $out/bin/nsw \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          nh
+        ]
+      }
+  '';
 
   meta = {
     description = "nh wrapper";

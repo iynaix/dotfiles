@@ -212,7 +212,7 @@ let
         ```nix
           config = builtins.readFile ./config.kdl
             +
-            # kdl
+            /* kdl */
             '''
               focus-ring {
                 active-color ''${config.local.colors.border-active}

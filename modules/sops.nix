@@ -33,8 +33,7 @@
               persistHome = "/persist${config.hj.directory}";
               copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
             in
-            # sh
-            ''
+            /* sh */ ''
               read -rp "Enter ip of remote host: " remote
               target="/mnt${persistHome}"
 

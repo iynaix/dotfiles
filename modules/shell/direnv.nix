@@ -7,10 +7,8 @@
     };
 
     custom.shell.packages = {
-      mkdirenv = # sh
-        ''nix flake init --template github:iynaix/dotfiles#"$1"'';
-      redirenv = # sh
-        ''rm -r .direnv .devenv'';
+      mkdirenv = /* sh */ ''nix flake init --template github:iynaix/dotfiles#"$1"'';
+      redirenv = /* sh */ ''rm -r .direnv .devenv'';
     };
 
     custom.persist = {

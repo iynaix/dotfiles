@@ -52,13 +52,12 @@
             direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
           '';
           # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
-          fishCompletion = # fish
-            ''
-              function _wallfacer_gui
-                find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
-              end
-              complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
-            '';
+          fishCompletion = /* fish */ ''
+            function _wallfacer_gui
+              find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
+            end
+            complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
+          '';
         };
       };
 

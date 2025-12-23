@@ -4,54 +4,52 @@
     {
       devShells.default =
         let
-          crb =
-            pkgs.writeShellScriptBin "crb" # sh
-              ''
-                FEATURES_FLAG=""
-                RELEASE_FLAG=""
-                BINARY_NAME=""
-                REST_ARGS=()
+          crb = pkgs.writeShellScriptBin "crb" /* sh */ ''
+            FEATURES_FLAG=""
+            RELEASE_FLAG=""
+            BINARY_NAME=""
+            REST_ARGS=()
 
-                # first arg in bin name
-                if [[ $# -gt 0 ]]; then
-                    BINARY_NAME="$1"
+            # first arg in bin name
+            if [[ $# -gt 0 ]]; then
+                BINARY_NAME="$1"
+                shift
+            fi
+
+            # use --features flag if provided
+            while [[ $# -gt 0 ]]; do
+                case $1 in
+                --features)
+                    FEATURES_FLAG="--features $2"
+                    shift 2
+                    ;;
+                --release)
+                    RELEASE_FLAG="--release"
                     shift
-                fi
+                    ;;
+                *)
+                    REST_ARGS+=("$1")
+                    shift
+                    ;;
+                esac
+            done
 
-                # use --features flag if provided
-                while [[ $# -gt 0 ]]; do
-                    case $1 in
-                    --features)
-                        FEATURES_FLAG="--features $2"
-                        shift 2
-                        ;;
-                    --release)
-                        RELEASE_FLAG="--release"
-                        shift
-                        ;;
-                    *)
-                        REST_ARGS+=("$1")
-                        shift
-                        ;;
-                    esac
-                done
+            CARGO_CMD="cargo run --manifest-path \"packages/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
+            if [[ -n "$FEATURES_FLAG" ]]; then
+                CARGO_CMD="$CARGO_CMD $FEATURES_FLAG"
+            fi
 
-                CARGO_CMD="cargo run --manifest-path \"packages/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
-                if [[ -n "$FEATURES_FLAG" ]]; then
-                    CARGO_CMD="$CARGO_CMD $FEATURES_FLAG"
-                fi
+            # Add --bin with the binary name and remaining arguments
+            CARGO_CMD="$CARGO_CMD --bin $BINARY_NAME"
 
-                # Add --bin with the binary name and remaining arguments
-                CARGO_CMD="$CARGO_CMD --bin $BINARY_NAME"
+            # Add remaining arguments if any
+            if [[ ''${#REST_ARGS[@]} -gt 0 ]]; then
+                CARGO_CMD="$CARGO_CMD -- ''${REST_ARGS[*]}"
+            fi
 
-                # Add remaining arguments if any
-                if [[ ''${#REST_ARGS[@]} -gt 0 ]]; then
-                    CARGO_CMD="$CARGO_CMD -- ''${REST_ARGS[*]}"
-                fi
-
-                echo "$CARGO_CMD"
-                eval "$CARGO_CMD"
-              '';
+            echo "$CARGO_CMD"
+            eval "$CARGO_CMD"
+          '';
         in
         pkgs.mkShell {
           packages =
@@ -81,11 +79,9 @@
               pre-commit
               cargo-edit
               crb
-              (pkgs.writeShellScriptBin "crrb" # sh
-                ''
-                  crb "$1" --release "''${@:2}"
-                ''
-              )
+              (pkgs.writeShellScriptBin "crrb" /* sh */ ''
+                crb "$1" --release "''${@:2}"
+              '')
             ]
             ++ [
               wlr-randr # used to get display info

@@ -49,8 +49,7 @@
               let
                 inherit (config.sops) secrets;
               in
-              # sh
-              ''
+              /* sh */ ''
                 outDir=/tmp/sonarr-ical-sync
                 mkdir -p "$outDir"
 
