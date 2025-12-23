@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-IJ8nzJvpyAKhUb+QNGmsPLYP50+ARJlaXivaGYKTgj8=",
+            "sha256": "sha256-jA/VXMi+VJmRcHRBgnt71PLvGrSBe2S2KmUtrQlIFjk=",
             "type": "url",
-            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.3/Exiled-Exchange-2-0.13.3.AppImage"
+            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.8/Exiled-Exchange-2-0.13.8.AppImage"
         },
-        "version": "0.13.3"
+        "version": "0.13.8"
     },
     "helium": {
         "cargoLocks": null,
@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-Rn08KobbfMh3vlM2o0PA9OhQx/syMTBKWG/eapF45eo=",
+            "sha256": "sha256-qEHUFzCwsCyFNLFCC62wo2x1lr/boAI/UDsaaNP1vrc=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.7.5.1/helium-0.7.5.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.7.7.1/helium-0.7.7.1-x86_64.AppImage"
         },
-        "version": "0.7.5.1"
+        "version": "0.7.7.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -148,6 +148,27 @@
             "type": "github"
         },
         "version": "9a5cda4fc8f0896cec27dca60a32251009c0e9c5"
+    },
+    "niri": {
+        "cargoLocks": null,
+        "date": "2025-12-23",
+        "extract": null,
+        "name": "niri",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "YaLTeR",
+            "repo": "niri",
+            "rev": "4d295418ce8e8e110060396bb485c4f0c381d37e",
+            "sha256": "sha256-LRSUhcm2erq/v/6EkwVP86kdVyRSsZ+AYQgwsKJMwCM=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "4d295418ce8e8e110060396bb485c4f0c381d37e"
     },
     "rofi-themes": {
         "cargoLocks": null,

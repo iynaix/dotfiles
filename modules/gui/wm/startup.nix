@@ -14,6 +14,7 @@ let
     float
     int
     nonEmptyListOf
+    lines
     listOf
     nullOr
     oneOf
@@ -140,9 +141,9 @@ in
                 default = null;
               };
               niriArgs = mkOption {
-                type = attrs;
+                type = lines;
                 description = "Extra arguments for niri window rules";
-                default = { };
+                default = "";
               };
             };
           })
@@ -211,7 +212,7 @@ in
             ];
             workspace = 7;
             niriArgs = /* kdl */ ''
-              open-maximized true;
+              open-maximized true
             '';
           }
 
@@ -221,7 +222,7 @@ in
             spawn = [ "librewolf" ];
             workspace = 9;
             niriArgs = /* kdl */ ''
-              open-maximized true;
+              open-maximized true
             '';
           }
 

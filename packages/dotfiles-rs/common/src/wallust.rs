@@ -96,14 +96,6 @@ fn apply_hyprland_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
 fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
     let config_path = full_path("~/.config/niri/config.kdl");
 
-    // replace symlink to nix store if needed
-    // it will replaced by the default config on startup as impermanence will remove the writable file anyway
-    if config_path.is_symlink() {
-        let contents = std::fs::read(&config_path).expect("unable to read niri config.kdl");
-        std::fs::remove_file(&config_path).expect("unable to remove niri config.kdl symlink");
-        std::fs::write(&config_path, contents).expect("unable to write niri config.kdl");
-    }
-
     let color = |idx: usize| {
         colors
             .get(&format!("color{idx}"))
@@ -116,22 +108,31 @@ fn apply_niri_colors(accents: &[Rgb], colors: &HashMap<String, Rgb>) {
             .to_hex_str()
     };
 
-    let active = format!(
-        r#"active-gradient angle=45 from="{}" relative-to="workspace-view" to="{}""#,
+    let content = format!(
+        r#"
+            layout {{
+                focus-ring {{
+                    active-gradient angle=45 from="{}" relative-to="workspace-view" to="{}"
+                    inactive-color "{}"
+                }}
+            }}
+
+            layer-rule {{
+                match namespace="^rofi$"
+                shadow {{
+                    spread 2048
+                }}
+            }}
+        "#,
         accent_or_color(0, 4),
         accent_or_color(1, 0),
+        &color(0).to_hex_str(),
     );
-    let inactive = format!(r#"inactive-color "{}""#, &color(0).to_hex_str());
 
-    let replacements = vec![
-        // focus-ring colors
-        (r"active-gradient .*", active.as_str()),
-        (r"inactive-color .*", inactive.as_str()),
-        // increase maximum shadow spread value to workaround config validation errors during nix build
-        // ("spread 1024", "spread 2048"),
-    ];
-
-    replace_in_file(&config_path, replacements);
+    if let Some(parent) = config_path.parent() {
+        std::fs::create_dir_all(parent).expect("Failed to create config directory");
+    }
+    std::fs::write(&config_path, content).expect("Failed to write niri config file");
 }
 
 /// sort accents by their color usage within the wallpaper

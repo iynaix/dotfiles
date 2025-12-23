@@ -31,6 +31,7 @@ in
                     optionalString (startup.title != null) ''title="^${startup.title}$"''
                   } at-startup=true
                   open-on-workspace "W${toString startup.workspace}"
+                  ${startup.niriArgs}
               }
             '';
           })

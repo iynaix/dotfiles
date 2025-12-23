@@ -123,7 +123,8 @@
               match namespace="^rofi$"
               shadow {
                   on
-                  spread 2048
+                  // overwritten by wallpaper script later
+                  spread 1024
                   draw-behind-window true
                   color "0000009A"
               }
