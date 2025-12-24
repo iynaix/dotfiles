@@ -34,6 +34,7 @@ let
         inputs.nix-index-database.nixosModules.nix-index
         # alias for hjem
         (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
+        inputs.noctalia.nixosModules.default
         inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops
