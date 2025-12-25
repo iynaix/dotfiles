@@ -1,4 +1,3 @@
-{ lib, ... }:
 {
   flake.nixosModules.backlight =
     { pkgs, ... }:
@@ -34,22 +33,6 @@
               allow-when-locked = true;
             };
           };
-        };
-
-        waybar.config = {
-          backlight = {
-            format = "{icon}   {percent}%";
-            format-icons = [
-              "󰃞"
-              "󰃟"
-              "󰃝"
-              "󰃠"
-            ];
-            on-scroll-down = "brightnessctl s 1%-";
-            on-scroll-up = "brightnessctl s +1%";
-          };
-
-          modules-right = lib.mkOrder 600 [ "backlight" ];
         };
       };
     };

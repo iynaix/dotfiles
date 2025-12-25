@@ -1,6 +1,4 @@
 use execute::Execute;
-use hyprland::{data::Monitor, shared::HyprDataActive};
-use niri_ipc::{Request, Response, socket::Socket};
 use nixjson::NixMonitor;
 
 use std::{
@@ -237,88 +235,6 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
     }
 
     workspaces_by_mon
-}
-
-pub fn is_waybar_hidden() -> bool {
-    if is_niri() {
-        const WAYBAR_HEIGHT: f64 = 36.0;
-
-        let mut socket = Socket::connect().expect("failed to connect to niri socket");
-
-        let Ok(Response::Windows(windows)) = socket
-            .send(Request::Windows)
-            .expect("failed to send Windows")
-        else {
-            panic!("invalid reply for Windows");
-        };
-
-        let Ok(Response::Workspaces(workspaces)) = socket
-            .send(Request::Workspaces)
-            .expect("failed to send Workspaces")
-        else {
-            panic!("invalid reply for Workspaces");
-        };
-
-        let Ok(Response::Outputs(monitors)) = socket
-            .send(Request::Outputs)
-            .expect("failed to send Outputs")
-        else {
-            panic!("invalid reply for Outputs");
-        };
-
-        for win in &windows {
-            let Some(wksp_id) = win.workspace_id else {
-                continue;
-            };
-
-            // must be top tile in column
-            let Some((_, 1)) = win.layout.pos_in_scrolling_layout else {
-                continue;
-            };
-
-            // get workspace for the window
-            let Some(wksp) = workspaces.iter().find(|wksp| wksp.id == wksp_id) else {
-                continue;
-            };
-
-            // get monitor for the workspace
-            let Some((mon_w, mon_h)) = monitors.values().find_map(|mon| {
-                use crate::niri::MonitorExt;
-
-                if Some(&mon.name) != wksp.output.as_ref() {
-                    return None;
-                }
-
-                mon.dimensions()
-            }) else {
-                continue;
-            };
-
-            let (win_w, win_h) = win.layout.window_size;
-
-            // is fullscreen!
-            if mon_w == win_w && mon_h == win_h {
-                continue;
-            }
-
-            // should be within 1 or 2 multiples of the waybar height
-            let height_diff_multiple = f64::from(mon_h - win_h) / WAYBAR_HEIGHT;
-            if height_diff_multiple > 1.0 && height_diff_multiple < 2.0 {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    if is_hyprland() {
-        let mon = Monitor::get_active().expect("failed to get active monitor");
-        let (_, height, _, _) = mon.reserved;
-
-        return height == 0;
-    }
-
-    unimplemented!("is_waybar_hidden is not implemented outside of niri or hyprland!")
 }
 
 #[cfg(test)]

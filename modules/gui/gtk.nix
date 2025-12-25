@@ -7,11 +7,9 @@ let
     isBool
     isString
     literalExpression
-    mapAttrs'
     mapAttrsToList
     mkMerge
     mkOption
-    nameValuePair
     ;
   inherit (lib.types)
     attrs
@@ -255,20 +253,7 @@ in
         data.files = {
           "icons/default/index.theme".source = "${defaultIndexThemePackage}/share/icons/default/index.theme";
           "icons/${gtkCfg.cursor.name}".source = "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
-        }
-        //
-          # create symlink in $XDG_DATA_HOME/.icons for each icon accent variant
-          # allows dunst to be able to refer to icons by name, $XDG_DATA_HOME is used as
-          # /usr/share/icons does not exist on nixos
-          mapAttrs' (
-            accent: _:
-            let
-              iconTheme = "Tela-${accent}-dark";
-            in
-            nameValuePair "icons/${iconTheme}" {
-              source = "${config.custom.gtk.iconTheme.package}/share/icons/${iconTheme}";
-            }
-          ) accents;
+        };
       };
 
       # write theme accents into nix.json for rust to read

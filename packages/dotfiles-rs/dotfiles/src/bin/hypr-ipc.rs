@@ -16,7 +16,7 @@ fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
         .iter()
         .find(|w| w.name == wksp_name)
     {
-        wksp.monitor.to_string()
+        wksp.monitor.clone()
     } else {
         // workspace is empty and doesn't exist yet, search workspace rules for the monitor
         let wksp_rules = WorkspaceRules::get().expect("could not get workspace rules");
@@ -32,7 +32,7 @@ fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
             })
             .expect("no rule found for monitor");
 
-        rule_monitor.to_string()
+        rule_monitor.clone()
     };
 
     monitors.into_iter().find(|mon| mon.name == mon_name)

@@ -4,7 +4,6 @@ let
     assertMsg
     concatMapStrings
     getExe'
-    listToAttrs
     mkEnableOption
     mkIf
     mkOption
@@ -123,19 +122,6 @@ in
           # ++ optional cfg.systemd.enableXdgAutostart "xdg-desktop-autostart.target";
           After = [ "graphical-session-pre.target" ];
           # Before = lib.mkIf cfg.systemd.enableXdgAutostart [ "xdg-desktop-autostart.target" ];
-        };
-      };
-
-      # waybar config for hyprland
-      custom.programs.waybar.config = {
-        "hyprland/workspaces" = {
-          format = "{name}";
-          persistent-workspaces = listToAttrs (
-            map (mon: {
-              inherit (mon) name;
-              value = mon.workspaces;
-            }) config.custom.hardware.monitors
-          );
         };
       };
 

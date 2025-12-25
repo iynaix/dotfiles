@@ -8,13 +8,11 @@
       ...
     }:
     let
-      inherit (lib) getExe' mkAfter;
       focal = inputs.focal.packages.${pkgs.stdenv.hostPlatform.system}.default;
     in
     {
       environment.systemPackages = [
         pkgs.swappy
-        pkgs.wf-recorder
         focal
       ];
 
@@ -75,28 +73,6 @@
             "$mod+CTRL, backslash, spawn, focal image --area selection --ocr"
             "ALT, backslash, spawn, focal video --rofi --no-rounded-windows"
           ];
-        };
-
-        # add focal module to waybar
-        waybar = {
-          config = {
-            "custom/focal" = {
-              exec = /* sh */ ''${getExe' focal "focal-waybar"} --recording "󰑋"'';
-              format = "{}";
-              # hide-empty-text = true;
-              # return-type = "json";
-              on-click = "focal video --stop";
-              interval = 2; # poll every 2s
-            };
-
-            modules-left = mkAfter [ "custom/focal" ];
-          };
-
-          extraCss = /* css */ ''
-            #custom-focal {
-              font-size: 24px;
-            }
-          '';
         };
       };
     };

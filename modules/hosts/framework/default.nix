@@ -77,7 +77,6 @@ topLevel: {
           btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon 780M";
           };
-          waybar.hidden = true;
         };
 
         # don't blind me on startup

@@ -9,7 +9,7 @@ This config is intended to be used with NixOS.
 - Automatic ZFS snapshots with rotation
 - Flexible NixOS config via feature flags
 - sops-nix for managing secrets
-- Hyprland / niri with waybar setup, with screen capture
+- Hyprland / niri with noctalia shell
 - Dynamic colorschemes using wallust (pywal, but maintained)
 
 ## How to Install

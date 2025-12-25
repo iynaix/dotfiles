@@ -35,7 +35,9 @@
           # JSON Viewer
           "gbmdgpbipfallnflgajpaliibnhdgobh"
           # Looty
-          # {id = "ajfbflclpnpbjkfibijekgcombcgehbi"
+          # "ajfbflclpnpbjkfibijekgcombcgehbi"
+          # Plasma Integration (browser mpris support)
+          # "cimiefiiaegbelhefglklhhakcgmhkai"
           # Old Reddit Redirect
           "dneaehbmnbhcippjikoajpoabadpodje"
           # React Dev Tools

@@ -184,7 +184,7 @@ impl NixColors {
         self.colors
             .iter()
             .filter(|&(name, _)| !names.contains(&name.as_str()))
-            .map(|(name, color)| (name.to_string(), color.clone()))
+            .map(|(name, color)| (name.clone(), color.clone()))
             .collect()
     }
 }

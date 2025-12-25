@@ -1,11 +1,10 @@
 use common::{
-    CommandUtf8, debounce, is_niri, is_waybar_hidden,
+    debounce, is_niri,
     niri::{MonitorExt, WindowExt, resize_workspace},
     nixjson::{NixJson, NixMonitor},
     wallpaper,
 };
 use dotfiles::cli::MonitorExtend;
-use execute::Execute;
 use itertools::Itertools;
 use niri_ipc::{
     Action, Event, Request, Response, Window, WindowLayout, Workspace, WorkspaceReferenceArg,
@@ -120,7 +119,7 @@ pub fn distribute_workspaces(
                     MonitorExtend::Primary => is_base_monitor,
                     MonitorExtend::Secondary => !is_base_monitor,
                 },
-                (*mon_name).to_string(),
+                (*mon_name).clone(),
             )
         })
         .collect_vec();
@@ -134,7 +133,7 @@ pub fn distribute_workspaces(
         for wksp in start..end {
             socket
                 .send(Request::Action(Action::MoveWorkspaceToMonitor {
-                    output: (*mon_name).to_string(),
+                    output: (*mon_name).clone(),
                     reference: Some(WorkspaceReferenceArg::Name(format!("W{}", wksp + 1))),
                 }))
                 .expect("failed to send MoveWorkspaceToMonitor")
@@ -192,38 +191,6 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
     }
 
     focus_workspaces(nix_info_monitors);
-}
-
-fn waybar_main_pid() -> Option<String> {
-    execute::command_args!("pidof", "waybar")
-        .execute_stdout_lines()
-        .expect("unable to get pidof waybar")
-        .first()
-        .cloned()
-}
-
-fn handle_overview_changed(is_open: bool, waybar_initial_hidden: &mut bool) {
-    let waybar_hidden = is_waybar_hidden();
-
-    // get the PID of the main waybar instance via systemd
-    if is_open {
-        // write the initial waybar state
-        *waybar_initial_hidden = waybar_hidden;
-
-        // hide main waybar if needed
-        if !waybar_hidden && let Some(waybar_pid) = waybar_main_pid() {
-            execute::command_args!("kill", "-SIGUSR1", waybar_pid)
-                .execute()
-                .expect("unable to toggle waybar");
-        }
-    } else {
-        // show waybar if needed
-        if !*waybar_initial_hidden {
-            execute::command_args!("pkill", "-SIGUSR1", ".waybar-wrapped")
-                .execute()
-                .expect("unable to toggle waybar");
-        }
-    }
 }
 
 fn resize_workspace_from_state(
@@ -440,9 +407,6 @@ fn main() {
     let mut first_workspace_event_skipped = false;
     let mut first_overview_event_skipped = false;
 
-    // track overview waybar pid and initial hidden state when opened
-    let mut waybar_initial_hidden = false;
-
     if matches!(reply, Ok(Response::Handled)) {
         let mut state = EventStreamState::default();
         let mut read_event = socket.read_events();
@@ -462,13 +426,10 @@ fn main() {
 
                             handle_workspaces_changed(&workspaces, &nix_info_monitors);
                         }
-                        Event::OverviewOpenedOrClosed { is_open } => {
+                        Event::OverviewOpenedOrClosed { is_open: _ } => {
                             if !first_overview_event_skipped {
                                 first_overview_event_skipped = true;
-                                continue;
                             }
-
-                            handle_overview_changed(is_open, &mut waybar_initial_hidden);
                         }
                         Event::WindowOpenedOrChanged { window } => {
                             handle_window_opened_or_changed(&window, &prev_windows, &state);

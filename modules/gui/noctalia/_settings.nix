@@ -11,7 +11,7 @@
     position = "center";
     showCategories = false;
     sortByMostUsed = true;
-    terminalCommand = "xterm -e";
+    terminalCommand = "ghostty -e";
     useApp2Unit = false;
     viewMode = "list";
   };
@@ -86,7 +86,7 @@
         }
         {
           customFont = "";
-          formatHorizontal = "HH:mm ddd, MMM dd";
+          formatHorizontal = "HH:mm";
           formatVertical = "HH mm - dd MM";
           id = "Clock";
           useCustomFont = false;
@@ -112,11 +112,11 @@
       }
       {
         enabled = true;
-        id = "timer-card";
+        id = "weather-card";
       }
       {
         enabled = true;
-        id = "weather-card";
+        id = "timer-card";
       }
     ];
   };
@@ -269,7 +269,7 @@
     use12hourFormat = false;
     useFahrenheit = false;
     weatherEnabled = true;
-    weatherShowEffects = true;
+    weatherShowEffects = false;
   };
   network = {
     wifiEnabled = false;

@@ -53,7 +53,6 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
-    use common::is_waybar_hidden;
     use niri_ipc::{
         Action, LogicalOutput, Output, PositionChange, Request, Response, SizeChange,
         socket::Socket,
@@ -125,10 +124,8 @@ fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
             }))
             .expect("failed to send SetWindowHeight")?;
 
-        let waybar_offset = if is_waybar_hidden() { 0.0 } else { 36.0 };
-
         let final_x = f64::from(curr_width) - PADDING - target_w;
-        let final_y = f64::from(curr_height) - PADDING - target_h - waybar_offset;
+        let final_y = f64::from(curr_height) - PADDING - target_h;
 
         socket
             .send(Request::Action(Action::MoveFloatingWindow {

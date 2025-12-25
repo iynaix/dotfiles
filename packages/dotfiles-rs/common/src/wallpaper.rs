@@ -91,7 +91,7 @@ where
     if wallpapers.is_empty() {
         NixJson::new().fallback
     } else {
-        wallpapers[fastrand::usize(..wallpapers.len())].to_string()
+        wallpapers[fastrand::usize(..wallpapers.len())].clone()
     }
 }
 

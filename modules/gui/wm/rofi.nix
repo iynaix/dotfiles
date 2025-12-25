@@ -2,9 +2,7 @@
   flake.nixosModules.wm =
     {
       config,
-      host,
       pkgs,
-      self,
       ...
     }:
     let
@@ -60,7 +58,6 @@
         in
         "${toString out}/${name}";
       launcherPath = "${rofiThemesPkg}/launchers/type-2/style-2.rasi";
-      powermenuDir = "${rofiThemesPkg}/powermenu/type-4";
     in
     {
       nixpkgs.overlays = [
@@ -86,15 +83,6 @@
 
       environment.systemPackages = [
         pkgs.rofi
-        self.packages.${pkgs.stdenv.hostPlatform.system}.reboot-to-windows
-        # NOTE: rofi-power-menu only works for powermenuType = 4!
-        (pkgs.custom.rofi-power-menu.override {
-          reboot-to-windows =
-            if (host == "desktop") then
-              self.packages.${pkgs.stdenv.hostPlatform.system}.reboot-to-windows
-            else
-              null;
-        })
       ];
 
       # add blur for rofi shutdown
@@ -148,54 +136,6 @@
               textbox-prompt-colon { enabled: false; }
             '';
             target = "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi";
-          };
-
-          "rofi-menu-noinput.rasi" = {
-            text = patchRasi "rofi-menu-noinput.rasi" launcherPath ''
-              listview { columns: 1; }
-              * { width: 1000; }
-              window { height: 625; }
-              mainbox {
-                  children: [listview,message];
-              }
-              message {
-                padding:                     15px;
-                border:                      0px solid;
-                border-radius:               0px;
-                border-color:                @selected;
-                /* background-color is set in style overrides */
-                text-color:                  @foreground;
-              }
-            '';
-            target = "${config.hj.xdg.cache.directory}/wallust/rofi-menu-noinput.rasi";
-          };
-
-          "rofi-power-menu.rasi" =
-            let
-              # desktop has windows
-              columns = if (host == "desktop") then 6 else 5;
-            in
-            {
-              text = patchRasi "rofi-power-menu.rasi" "${powermenuDir}/style-3.rasi" ''
-                * { background-window: @background; } // darken background
-                window {
-                  width: ${toString (columns * 200)}px;
-                  border-radius: 12px; // no rounded corners as it doesn't interact well with blur on hyprland
-                }
-                element normal.normal { background-color: var(background-normal); }
-                element selected.normal { background-color: @selected; }
-                element-text { vertical-align: 0; }
-                listview { columns: ${toString columns}; }
-              '';
-              target = "${config.hj.xdg.cache.directory}/wallust/rofi-power-menu.rasi";
-            };
-
-          "rofi-power-menu-confirm.rasi" = {
-            text = patchRasi "rofi-power-menu-confirm.rasi" "${powermenuDir}/shared/confirm.rasi" ''
-              element { background-color: transparent; }
-              element normal.normal { background-color: transparent; }
-            '';
-            target = "${config.hj.xdg.cache.directory}/wallust/rofi-power-menu-confirm.rasi";
           };
         };
       };

@@ -34,7 +34,7 @@ impl ThemeEntry {
 
         Self {
             name: name.to_string(),
-            display_name: display_name.to_string(),
+            display_name: display_name.clone(),
             rofi: format!("{swatches}\t\t{display_name}"),
         }
     }
@@ -51,14 +51,14 @@ fn main() {
 
             ThemeEntry::new(name, &swatches)
         })
-        .sorted_by_key(|theme| theme.display_name.to_string())
+        .sorted_by_key(|theme| theme.display_name.clone())
         .collect_vec();
 
     // display with rofi
     let rofi = Rofi::new(
         &all_themes
             .iter()
-            .map(|theme| theme.rofi.to_string())
+            .map(|theme| theme.rofi.clone())
             .collect_vec(),
     )
     .theme(full_path("~/.cache/wallust/rofi-menu.rasi"));

@@ -125,18 +125,6 @@ topLevel: {
           btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon RX 9070XT";
           };
-
-          # wallust.colorscheme = "tokyo-night";
-
-          # change waybar icon for headphones / speakers
-          waybar.config = {
-            pulseaudio = {
-              # show DAC as headphones
-              format-icons = {
-                "alsa_output.usb-Kanto_Audio_ORA_by_Kanto_20240130-00.analog-stereo" = "󰓃";
-              };
-            };
-          };
         };
 
         shell.packages = {
