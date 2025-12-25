@@ -45,7 +45,8 @@ in
   tty = c.specialisation.tty.configuration;
   niri = c.specialisation.niri.configuration;
   hyprland = c.specialisation.hyprland.configuration;
-  mango = c.specialisation.mango.configuration;
+  # mango = c.specialisation.mango.configuration;
+  noctalia = c.specialisation.noctalia.configuration;
 
   # your code here
 }

@@ -52,7 +52,7 @@ in
       cfg = config.custom.programs.waybar;
     in
     {
-      programs.waybar.enable = true;
+      programs.waybar.enable = config.custom.specialisation.current != "noctalia";
 
       systemd.user.services.waybar = {
         # wait for colorscheme to be ready on boot

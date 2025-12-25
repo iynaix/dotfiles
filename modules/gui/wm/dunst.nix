@@ -97,6 +97,8 @@
       # dunst user service referenced from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/services/dunst.nix
       systemd.user.services.dunst = {
+        enable = config.custom.specialisation.current != "noctalia";
+
         unitConfig = {
           Description = "Dunst notification daemon";
           # ensure colorscheme is ready on boot

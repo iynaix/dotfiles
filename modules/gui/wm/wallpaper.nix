@@ -51,8 +51,8 @@ in
             # adapted from home-manager:
             # https://github.com/nix-community/home-manager/blob/master/modules/services/swww.nix
             swww = {
+              enable = config.custom.specialisation.current != "noctalia";
               wantedBy = [ "graphical-session.target" ];
-
               unitConfig = {
                 ConditionEnvironment = "WAYLAND_DISPLAY";
                 Description = "swww-daemon";
@@ -67,6 +67,7 @@ in
               };
             };
             wallpaper = {
+              enable = config.custom.specialisation.current != "noctalia";
               wantedBy = [ "swww.service" ];
               unitConfig = {
                 Description = "Set the wallpaper and update colorscheme";

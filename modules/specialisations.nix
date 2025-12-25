@@ -69,6 +69,14 @@
               };
             };
           };
+
+          noctalia = {
+            configuration = {
+              custom = {
+                specialisation.current = "noctalia";
+              };
+            };
+          };
         };
       };
     };
