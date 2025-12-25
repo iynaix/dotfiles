@@ -20,5 +20,7 @@
         };
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
+
+      hj.files.".face".source = ../../avatar.png;
     };
 }

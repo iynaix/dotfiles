@@ -359,26 +359,6 @@ in
             echo "$cmd" >&2
             eval "$cmd"
           '';
-          json2nix = {
-            runtimeInputs = with pkgs; [
-              hjson
-              nixfmt
-            ];
-            text = /* sh */ ''
-              json=$(cat - | hjson -j 2> /dev/null)
-              nix eval --expr "fromJSON '''$json'''" | nixfmt -q
-            '';
-          };
-          yaml2nix = {
-            runtimeInputs = with pkgs; [
-              yq
-              nixfmt
-            ];
-            text = /* sh */ ''
-              yaml=$(cat - | yq)
-              nix eval --expr "fromJSON '''$yaml'''" | nixfmt -q
-            '';
-          };
           # build iso images
           nbuild-iso = {
             runtimeInputs = [ pkgs.nixos-generators ];

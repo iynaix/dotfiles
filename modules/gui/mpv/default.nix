@@ -197,6 +197,7 @@ in
 
           scripts = [
             pkgs.mpvScripts.dynamic-crop
+            pkgs.mpvScripts.mpris
             pkgs.mpvScripts.seekTo
             # custom packaged scripts
             self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-deletefile

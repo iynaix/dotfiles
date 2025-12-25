@@ -4,7 +4,7 @@
     {
       environment.systemPackages = [ pkgs.zoom-us ];
 
-      hj.".config/zoomus.conf" = {
+      hj.xdg.config.files."zoomus.conf" = {
         text = ''
           [General]
           xwayland=false
