@@ -1816,6 +1816,7 @@ dependencies = [
  "csv",
  "dirs",
  "execute",
+ "fast_image_resize",
  "fastrand",
  "hyprland",
  "image",

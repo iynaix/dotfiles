@@ -10,6 +10,31 @@ pub struct BackupArgs {
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
+pub struct CropArgs {
+    #[arg(
+        short,
+        long,
+        name = "size",
+        help = "Target size of the cropped wallpaper"
+    )]
+    pub size: String,
+
+    #[arg(
+        value_hint = clap::ValueHint::FilePath,
+        value_name = "INPUT",
+        help = "Wallpaper to crop",
+    )]
+    pub input: PathBuf,
+
+    #[arg(
+        value_hint = clap::ValueHint::FilePath,
+        value_name = "OUTPUT",
+        help = "Output file to write cropped wallpaper to",
+    )]
+    pub output: PathBuf,
+}
+
+#[derive(Args, Debug, PartialEq, Eq)]
 pub struct RemoteArgs {
     #[arg(name = "REMOTE", help = "Hostname of remote machine")]
     pub hostname: Option<String>,
@@ -167,6 +192,13 @@ pub enum WallpaperSubcommand {
     Remote(RemoteArgs),
 
     #[command(
+        name = "crop",
+        visible_aliases = ["resize"],
+        about = "Crop a wallpaper to a specific size"
+    )]
+    Crop(CropArgs),
+
+    #[command(
         name = "colorspace",
         visible_aliases = ["cs", "toggle", "cycle"],
         about = "Toggles and saves the colorspace for wallust"
@@ -204,22 +236,6 @@ pub struct WallpaperArgs {
 
     #[arg(long, action, help = "Do not resize or set wallpaper")]
     pub skip_wallpaper: bool,
-
-    // TODO: pass through specific swww arguments?
-    /*
-    -f, --filter
-    -t, --transition-type
-    --transition-step
-    --transition-duration
-    --transition-fps
-    --transition-angle
-    --transition-pos
-    --transition-bezier
-    --transition-wave
-    --invert-y
-    */
-    #[arg(long, action, help = "Transition type for swww")]
-    pub transition: Option<String>,
 
     // optional image to use, uses a random one otherwise
     #[arg(

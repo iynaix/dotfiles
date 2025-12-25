@@ -73,7 +73,7 @@ pub fn edit(args: EditArgs) {
         .expect("wallfacer gui failed");
 
     // reload the wallpaper
-    wallpaper::set(&image, None);
+    wallpaper::set(&image);
 }
 
 pub fn add(args: AddArgs) {

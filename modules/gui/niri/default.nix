@@ -37,17 +37,16 @@ in
                 // {
                   inherit (o) version;
 
-                  patches =
-                    (o.patches or [ ])
-                    # not compatible with blur patch
-                    ++ [
-                      # fix fullscreen windows have a black background
-                      # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
-                      ./transparent-fullscreen.patch
-                      # increase maximum shadow spread to be able to fake dimaround on ultrawide
-                      # see: https://github.com/YaLTeR/niri/discussions/1806
-                      ./larger-shadow-spread.patch
-                    ];
+                  # patches =
+                  #   (o.patches or [ ])
+                  #   # not compatible with blur patch
+                  #   ++ [
+                  #     # fix fullscreen windows have a black background
+                  #     # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
+                  #     # unmerged PR to fix this
+                  #     # https://github.com/YaLTeR/niri/pull/3004
+                  #     ./transparent-fullscreen.patch
+                  #   ];
 
                   # creating an overlay for buildRustPackage overlay
                   # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3

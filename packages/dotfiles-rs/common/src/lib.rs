@@ -12,7 +12,6 @@ pub mod colors;
 pub mod niri;
 pub mod nixjson;
 pub mod rofi;
-pub mod swww;
 pub mod wallpaper;
 pub mod wallust;
 

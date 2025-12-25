@@ -1,10 +1,14 @@
+use execute::Execute;
 use itertools::Itertools;
+use rayon::prelude::*;
 use rexiv2::Metadata;
+use serde::Deserialize;
 
-use crate::{full_path, nixjson::NixJson, swww::Swww, wallust};
+use crate::{full_path, nixjson::NixJson, wallust};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
+    process::Stdio,
 };
 
 pub fn dir() -> PathBuf {
@@ -42,10 +46,17 @@ where
 }
 
 /// sets the wallpaper and reloads the wallust theme
-pub fn set<P>(wallpaper: P, transition: Option<&str>)
+pub fn set<P>(wallpaper: P)
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
+    #[derive(Debug, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    pub struct WlrMonitor {
+        pub enabled: bool,
+        pub name: String,
+    }
+
     // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
     std::fs::write(
         dirs::runtime_dir()
@@ -68,15 +79,40 @@ where
     }
 
     // set the wallpaper with cropping
-    Swww::new(&wallpaper).run(&wallpaper_info, transition);
+    // set the wallpaper per monitor, use wlr-randr so it is wm agnostic
+    let wlr_cmd = execute::command_args!("wlr-randr", "--json")
+        .stdout(Stdio::piped())
+        .execute_output()
+        .expect("failed to run wlr-randr");
+    let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
+    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json).expect("failed to parse json");
+
+    let wallpaper = wallpaper
+        .as_ref()
+        .to_str()
+        .expect("could not convert wallpaper path to str")
+        .to_string();
+    monitors
+        .par_iter()
+        .filter(|mon| mon.enabled)
+        .for_each(|mon| {
+            //
+            execute::command_args!("noctalia-shell", "ipc", "call", "wallpaper", "set")
+                .arg(&wallpaper)
+                .arg(&mon.name)
+                .spawn()
+                .unwrap_or_else(|_| panic!("failed to set wallpaper: {wallpaper}"))
+                .wait()
+                .expect("failed to wait for noctalia wallpaper set");
+        });
 
     // do wallust earlier to create the necessary templates
-    wallust::apply_colors();
+    // wallust::apply_colors();
 }
 
 /// reloads the wallpaper and wallust theme
-pub fn reload(transition: Option<&str>) {
-    set(current().expect("no current wallpaper set"), transition);
+pub fn reload() {
+    set(current().expect("no current wallpaper set"));
 }
 
 pub fn random_from_dir<P>(dir: P) -> String

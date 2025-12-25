@@ -293,7 +293,7 @@
     monitors = [
 
     ];
-    normalUrgencyDuration = 8;
+    normalUrgencyDuration = 3;
     overlayLayer = true;
     respectExpireTimeout = false;
     sounds = {

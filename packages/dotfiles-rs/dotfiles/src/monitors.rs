@@ -170,6 +170,6 @@ pub fn hypr_monitors(args: WmMonitorArgs) {
     // reload wallpaper
     debounce(Duration::from_secs(5), || {
         std::thread::sleep(Duration::from_secs(3));
-        wallpaper::reload(None);
+        wallpaper::reload();
     });
 }

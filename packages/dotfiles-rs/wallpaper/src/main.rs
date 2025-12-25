@@ -1,9 +1,9 @@
+use ::wallpaper::write_wallpaper_history;
 use clap::{CommandFactory, Parser};
 use clap_complete::{Shell, generate};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
-use common::{full_path, wallpaper};
+use common::wallpaper;
 use std::{
-    collections::HashMap,
     io::{Read, Write},
     path::PathBuf,
 };
@@ -11,53 +11,17 @@ use std::{
 pub mod backup;
 pub mod cli;
 pub mod colorspace;
+pub mod crop;
 pub mod dedupe;
 pub mod metadata;
 pub mod pqiv;
 pub mod search;
 pub mod wallfacer;
 
-fn write_wallpaper_history(wallpaper: PathBuf) {
-    // not a wallpaper from the wallpapers dir
-    if wallpaper.parent() != Some(&wallpaper::dir()) {
-        return;
-    }
-
-    let mut history: HashMap<_, _> = wallpaper::history().into_iter().collect();
-    // insert or update timestamp
-    history.insert(wallpaper, chrono::Local::now().into());
-
-    // update the history csv
-    let history_csv = full_path("~/Pictures/wallpapers_history.csv");
-    let writer = std::io::BufWriter::new(
-        std::fs::File::create(history_csv).expect("could not create wallpapers_history.csv"),
-    );
-    let mut wtr = csv::WriterBuilder::new()
-        .has_headers(false)
-        .from_writer(writer);
-
-    for (path, dt) in &history {
-        let filename = path
-            .file_name()
-            .expect("could not get timestamp filename")
-            .to_str()
-            .expect("could not convert filename to str");
-
-        let row = [
-            filename,
-            &dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-        ];
-
-        wtr.write_record(row)
-            .unwrap_or_else(|_| panic!("could not write {row:?}"));
-    }
-    wtr.flush().expect("could not flush wallpapers_history.csv");
-}
-
 fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
     match image_or_dir {
         // use stdin instead
-        Some(p) if *p == PathBuf::from("-") => {
+        Some(p) if p == "-" => {
             let mut buf = Vec::new();
             std::io::stdin()
                 .read_to_end(&mut buf)
@@ -100,7 +64,7 @@ fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
     }
 }
 
-fn wallpaper_rm(wallpaper: &str, transition: Option<&str>) {
+fn wallpaper_rm(wallpaper: &str) {
     let current = wallpaper::current().unwrap_or_else(|| {
         eprintln!("Failed to get current wallpaper");
         std::process::exit(1)
@@ -116,7 +80,7 @@ fn wallpaper_rm(wallpaper: &str, transition: Option<&str>) {
 
     if input.trim().eq_ignore_ascii_case("y") {
         // load next wallpaper
-        wallpaper::set(wallpaper, transition);
+        wallpaper::set(wallpaper);
 
         write_wallpaper_history(PathBuf::from(wallpaper));
 
@@ -157,11 +121,9 @@ fn main() {
                 })
             ),
             WallpaperSubcommand::Rm => {
-                wallpaper_rm(
-                    &get_random_wallpaper(args.image_or_dir.as_ref()),
-                    args.transition.as_deref(),
-                );
+                wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
             }
+            WallpaperSubcommand::Crop(args) => crop::crop(&args),
             WallpaperSubcommand::History => pqiv::show_history(),
             WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
@@ -184,7 +146,7 @@ fn main() {
     };
 
     if !args.skip_wallpaper {
-        wallpaper::set(&wallpaper, args.transition.as_deref());
+        wallpaper::set(&wallpaper);
 
         if !is_reload && !args.skip_history {
             write_wallpaper_history(PathBuf::from(wallpaper));

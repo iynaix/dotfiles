@@ -143,7 +143,7 @@ pub fn toggle(args: ColorspaceArgs) {
         .expect("failed to update image wallust tag");
 
     // reload the wallpaper
-    common::wallpaper::set(&image, None);
+    common::wallpaper::set(&image);
 }
 
 #[cfg(test)]

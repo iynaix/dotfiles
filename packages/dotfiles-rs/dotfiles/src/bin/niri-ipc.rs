@@ -187,7 +187,7 @@ fn handle_workspaces_changed(workspaces: &[Workspace], nix_info_monitors: &[NixM
 
         // reload the wallpaper (which also reloads waybar)
         // only run at most once per 5s
-        debounce(Duration::from_secs(5), || wallpaper::reload(None));
+        debounce(Duration::from_secs(5), wallpaper::reload);
     }
 
     focus_workspaces(nix_info_monitors);
