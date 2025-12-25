@@ -22,16 +22,10 @@ pub fn metadata(args: MetadataArgs) {
 
     let mut crops = Vec::new();
     let mut scale = 1;
-    let mut wallust = String::new();
     let mut faces = String::new();
 
     for tag in meta.get_xmp_tags().expect("unable to read xmp tags") {
         match tag.as_str() {
-            "Xmp.wallfacer.wallust" => {
-                wallust = meta
-                    .get_tag_string(&tag)
-                    .expect("could not get wallust tag");
-            }
             "Xmp.wallfacer.scale" => {
                 scale = meta
                     .get_tag_string(&tag)
@@ -77,5 +71,4 @@ pub fn metadata(args: MetadataArgs) {
         print_kv(&format!("    {aspect}"), &geom);
     }
     println!("Scale: {scale}");
-    print_kv("Wallust", &wallust);
 }

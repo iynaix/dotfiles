@@ -63,9 +63,7 @@ impl NixMonitor {
 pub struct NixJson {
     pub wallpaper: String,
     pub fallback: String,
-    pub colorscheme: Option<String>,
     pub host: String,
-    pub niri_blur: Option<bool>,
     pub monitors: Vec<NixMonitor>,
 }
 

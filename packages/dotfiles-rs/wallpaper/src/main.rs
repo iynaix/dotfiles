@@ -10,7 +10,6 @@ use std::{
 
 pub mod backup;
 pub mod cli;
-pub mod colorspace;
 pub mod crop;
 pub mod dedupe;
 pub mod metadata;
@@ -132,7 +131,6 @@ fn main() {
             WallpaperSubcommand::Search(args) => search::search(args),
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),
-            WallpaperSubcommand::Colorspace(args) => colorspace::toggle(args),
             WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
             WallpaperSubcommand::Reload => {} // handled later
         }

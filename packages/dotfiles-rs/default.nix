@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage {
       progs = [
         "hypr-monitors"
         "niri-resize-workspace"
-        "rofi-mpv"
         "wm-same-class"
       ];
     in

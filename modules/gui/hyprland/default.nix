@@ -69,6 +69,9 @@ in
                 map (p: "hyprctl plugin load ${mkEntry p}") config.custom.programs.hyprland.plugins;
             }
             config.custom.programs.hyprland.settings
+
+            # load dynamically generated matugen colors by noctalia
+            ''source = "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.conf"''
           ];
     in
     {
@@ -94,10 +97,7 @@ in
 
       # use the config file in home as wrapping the package produces as an error
       # when nixos tries to call it
-      hj.xdg.config.files."hypr/hyprland.conf" = {
-        text = hyprlandConfText;
-        type = "copy";
-      };
+      hj.xdg.config.files."hypr/hyprland.conf".text = hyprlandConfText;
 
       programs.hyprland = {
         enable =

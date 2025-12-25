@@ -1,5 +1,4 @@
 use clap::{ArgGroup, Args, Parser, Subcommand, ValueEnum};
-use serde::Deserialize;
 use std::path::PathBuf;
 
 #[allow(clippy::module_name_repetitions)]
@@ -76,35 +75,6 @@ pub struct AddArgs {
         last = true
     )]
     pub image_or_dir: Option<PathBuf>,
-}
-
-#[derive(Debug, Clone, Default, ValueEnum, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
-pub enum Colorspace {
-    #[default]
-    #[clap(name = "lab")]
-    Lab,
-    #[clap(name = "labmixed")]
-    LabMixed,
-    #[clap(name = "lch")]
-    Lch,
-    #[clap(name = "lchmixed")]
-    LchMixed,
-    #[clap(name = "lchansi")]
-    LchAnsi,
-}
-
-#[allow(clippy::module_name_repetitions)]
-#[derive(Args, Debug, PartialEq, Eq)]
-pub struct ColorspaceArgs {
-    #[arg(short, long, help = "Colorspace to use")]
-    pub colorspace: Option<Colorspace>,
-
-    #[arg(
-        name = "COLORSPACE_OR_IMAGE",
-        help = "Wallpaper to edit, defaults to current wallpaper"
-    )]
-    pub file: Option<PathBuf>,
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
@@ -197,13 +167,6 @@ pub enum WallpaperSubcommand {
         about = "Crop a wallpaper to a specific size"
     )]
     Crop(CropArgs),
-
-    #[command(
-        name = "colorspace",
-        visible_aliases = ["cs", "toggle", "cycle"],
-        about = "Toggles and saves the colorspace for wallust"
-    )]
-    Colorspace(ColorspaceArgs),
 
     #[command(
         name = "metadata",

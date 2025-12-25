@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use rexiv2::Metadata;
 use serde::Deserialize;
 
-use crate::{full_path, nixjson::NixJson, wallust};
+use crate::{full_path, nixjson::NixJson};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
@@ -68,15 +68,6 @@ where
             .expect("could not convert wallpaper path to str"),
     )
     .ok();
-
-    let wallpaper_info = WallInfo::new_from_file(&wallpaper);
-
-    // use colorscheme set from nix if available
-    if let Some(cs) = NixJson::new().colorscheme {
-        wallust::apply_theme(&cs);
-    } else {
-        wallust::from_wallpaper(&wallpaper_info, &wallpaper);
-    }
 
     // set the wallpaper with cropping
     // set the wallpaper per monitor, use wlr-randr so it is wm agnostic

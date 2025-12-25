@@ -10,7 +10,7 @@ This config is intended to be used with NixOS.
 - Flexible NixOS config via feature flags
 - sops-nix for managing secrets
 - Hyprland / niri with noctalia shell
-- Dynamic colorschemes using wallust (pywal, but maintained)
+- Dynamic colorschemes with noctalia shell
 
 ## How to Install
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.

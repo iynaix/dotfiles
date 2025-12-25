@@ -44,18 +44,6 @@ fetch.github = "kelciour/mpv-scripts"
 src.git = "https://github.com/adi1090x/rofi"
 fetch.github = "adi1090x/rofi"
 
-# [awww]
-# src.git = "https://codeberg.org/LGFae/awww"
-# # src.manual = "9a012646e66420ab8058b9f595cdfa0c14625755"
-# fetch.git = "https://codeberg.org/LGFae/awww"
-# cargo_lock = ["Cargo.lock"]
-
-# [wallust]
-# src.git = "https://codeberg.org/explosion-mental/wallust"
-# # src.manual = "549b30dae0ae9db0bdda780a17d474562378399f"
-# fetch.git = "https://codeberg.org/explosion-mental/wallust"
-# cargo_lock = ["Cargo.lock"]
-
 [yazi-plugins]
 src.git = "https://github.com/yazi-rs/plugins"
 fetch.github = "yazi-rs/plugins"

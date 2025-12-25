@@ -13,7 +13,6 @@ pub mod niri;
 pub mod nixjson;
 pub mod rofi;
 pub mod wallpaper;
-pub mod wallust;
 
 pub const MIN_ULTRAWIDE_RATIO: f64 = (21.0_f64 / 9.0).min(3440.0 / 1440.0).min(3840.0 / 1600.0);
 

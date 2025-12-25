@@ -40,7 +40,7 @@
     position = "top";
     showCapsule = false;
     showOutline = false;
-    transparent = true;
+    transparent = false;
     widgets = {
       center = [
         {
@@ -65,19 +65,19 @@
           id = "ControlCenter";
           useDistroLogo = true;
         }
-        {
-          hideMode = "hidden";
-          hideWhenIdle = false;
-          id = "MediaMini";
-          maxWidth = 145;
-          scrollingMode = "hover";
-          showAlbumArt = false;
-          showArtistFirst = true;
-          showProgressRing = true;
-          showVisualizer = false;
-          useFixedWidth = false;
-          visualizerType = "linear";
-        }
+        # {
+        #   hideMode = "hidden";
+        #   hideWhenIdle = false;
+        #   id = "MediaMini";
+        #   maxWidth = 145;
+        #   scrollingMode = "hover";
+        #   showAlbumArt = false;
+        #   showArtistFirst = true;
+        #   showProgressRing = true;
+        #   showVisualizer = false;
+        #   useFixedWidth = false;
+        #   visualizerType = "linear";
+        # }
       ];
       right = [
         {
@@ -361,13 +361,13 @@
         action = "suspend";
         command = "";
         countdownEnabled = false;
-        enabled = true;
+        enabled = false;
       }
       {
         action = "hibernate";
         command = "";
         countdownEnabled = false;
-        enabled = true;
+        enabled = false;
       }
       {
         action = "logout";
@@ -403,21 +403,21 @@
   };
   templates = {
     alacritty = false;
-    cava = false;
+    cava = true;
     code = false;
     discord = false;
     emacs = false;
     enableUserTemplates = false;
     foot = false;
     fuzzel = false;
-    ghostty = false;
-    gtk = false;
+    ghostty = true;
+    gtk = true;
     helix = false;
-    hyprland = false;
+    hyprland = true;
     kcolorscheme = false;
     kitty = false;
     mango = false;
-    niri = false;
+    niri = true;
     pywalfox = false;
     qt = false;
     spicetify = false;
@@ -425,7 +425,7 @@
     vicinae = false;
     walker = false;
     wezterm = false;
-    yazi = false;
+    yazi = true;
     zed = false;
   };
   ui = {

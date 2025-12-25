@@ -39,7 +39,7 @@ let
 in
 {
   flake.wrapperModules.ghostty = inputs.wrappers.lib.wrapModule (
-    { config, ... }:
+    { config, wlib, ... }:
     let
       # adapted from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/programs/ghostty.nix
@@ -63,13 +63,18 @@ in
       };
     in
     {
-      options = mkGhosttyOptions config.pkgs;
+      options = (mkGhosttyOptions config.pkgs) // {
+        "ghostty.conf" = mkOption {
+          type = wlib.types.file config.pkgs;
+          default.path = toGhosttyConf (baseGhosttyConf // config.extraSettings);
+          visible = false;
+        };
+      };
 
       config.package = mkDefault config.pkgs.ghostty;
       config.flags = {
-        "--config-default-files" = false;
         # NOTE: ghostty "helpfully" creates an empty config in the default location
-        "--config-file" = toString (toGhosttyConf (baseGhosttyConf // config.extraSettings));
+        "--config-file" = toString config."ghostty.conf".path;
       };
       config.flagSeparator = "=";
     }
@@ -122,6 +127,8 @@ in
                 font-family = config.custom.fonts.monospace;
                 font-feature = "zero";
                 font-style = "Medium";
+                # load dynamically generated matugen colors by noctalia
+                config-file = "?${config.hj.xdg.config.directory}/ghostty/themes/noctalia";
               }
               // config.custom.programs.ghostty.extraSettings;
             }).wrapper;

@@ -4,16 +4,13 @@ let
     filterAttrs
     hasInfix
     hasPrefix
-    listToAttrs
     mapAttrs
     mapAttrs'
     mkOption
     nameValuePair
-    range
     ;
   inherit (lib.types)
     attrsOf
-    nullOr
     str
     submodule
     ;
@@ -24,11 +21,6 @@ in
     {
       options.custom = {
         programs.wallust = {
-          colorscheme = mkOption {
-            type = nullOr str;
-            default = null;
-            description = "The colorscheme to use. If null, will use the default colorscheme from the wallpaper.";
-          };
           nixJson = mkOption {
             type = submodule { freeformType = (pkgs.formats.json { }).type; };
             default = { };
@@ -102,23 +94,6 @@ in
         )
       );
 
-      # setup wallust colorschemes for shells
-      programs = {
-        bash.interactiveShellInit = ''
-          wallust_colors="${config.hj.xdg.cache.directory}/wallust/sequences"
-          if [ -e "$wallust_colors" ]; then
-            command cat "$wallust_colors"
-          fi
-        '';
-
-        fish.interactiveShellInit = ''
-          set wallust_colors "${config.hj.xdg.cache.directory}/wallust/sequences"
-          if test -e "$wallust_colors"
-              command cat "$wallust_colors"
-          end
-        '';
-      };
-
       custom.programs.wallust.templates = {
         # misc information for nix
         "nix.json" = {
@@ -128,19 +103,7 @@ in
               wallpaper = "{{wallpaper}}";
               fallback = "${../../wallpaper-default.jpg}";
               inherit (config.custom.hardware) monitors;
-              inherit (config.custom.programs.wallust) colorscheme;
               inherit host;
-              special = {
-                background = "{{background}}";
-                foreground = "{{foreground}}";
-                cursor = "{{cursor}}";
-              };
-              colors = listToAttrs (
-                map (i: {
-                  name = "color${toString i}";
-                  value = "{{color${toString i}}}";
-                }) (range 0 15)
-              );
             }
             // cfg.nixJson
           );

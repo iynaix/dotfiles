@@ -1,4 +1,4 @@
-use common::{full_path, rofi::Rofi, wallust};
+use common::{full_path, rofi::Rofi};
 use itertools::Itertools;
 
 struct ThemeEntry {
@@ -75,7 +75,6 @@ fn main() {
         .name;
 
     if !sel.is_empty() {
-        wallust::apply_theme(sel);
-        wallust::apply_colors();
+        // TODO: apply theme with matugen?
     }
 }
