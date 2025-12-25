@@ -101,7 +101,7 @@ in
               pkgs = prev;
               keybindings = ''
                 c { command(nomacs $1) }
-                w { command(wallpaper $1) }
+                w { command(noctalia-shell ipc call wallpaper set $1) }
                 m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in") }
               '';
             }).wrapper;

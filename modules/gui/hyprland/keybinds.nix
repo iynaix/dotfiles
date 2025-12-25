@@ -6,12 +6,13 @@
       inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";
       qtile_like = config.custom.programs.hyprland.qtile;
+      noctalia = cmd: "noctalia-shell ipc call ${cmd}";
     in
     {
       custom.programs.hyprland.settings = {
         bind = [
           "$mod, Return, exec, ghostty"
-          "$mod_SHIFT, Return, exec, rofi -show drun"
+          "$mod_SHIFT, Return, exec, ${noctalia " launcher toggle"}"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
           "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
@@ -24,11 +25,20 @@
 
           # exit hyprland
           "ALT, F4, exit,"
-          # without the rounding, the blur shows up around the corners
-          "CTRL_ALT, Delete, exec, rofi-power-menu"
+
+          "CTRL_ALT, Delete, exec, ${noctalia "sessionMenu toggle"}"
+
+          # toggle the bar
+          "$mod, a, exec, ${noctalia "bar toggle"}"
+
+          # restart noctalia
+          "$mod_SHIFT, a, exec, systemctl --user restart noctalia-shell.service"
 
           # clipboard history
-          "$mod_CTRL, v, exec, rofi-clipboard-history"
+          "$mod_CTRL, v, exec, ${noctalia "launcher clipboard"}"
+
+          # notification history
+          "$mod, n, exec, ${noctalia "notifications toggleHistory"}"
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, hypr-monitors"

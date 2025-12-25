@@ -21,6 +21,14 @@
           "-e"
         ]
         ++ (flatten cmd);
+      noctalia =
+        cmd:
+        [
+          "noctalia-shell"
+          "ipc"
+          "call"
+        ]
+        ++ (flatten cmd);
     in
     {
       custom = {
@@ -33,10 +41,9 @@
             # "Mod+Shift+Slash".action = "show-hotkey-overlay";
 
             "Mod+Return".spawn = [ "ghostty" ];
-            "Mod+Shift+Return".spawn = [
-              "rofi"
-              "-show"
-              "drun"
+            "Mod+Shift+Return".spawn = noctalia [
+              "launcher"
+              "toggle"
             ];
             "Mod+BackSpace" = {
               action = "close-window";
@@ -73,10 +80,36 @@
 
             # exit niri
             "Alt+F4".action = "quit";
-            "Ctrl+Alt+Delete".spawn = [ "rofi-power-menu" ];
+            "Ctrl+Alt+Delete".spawn = noctalia [
+              "sessionMenu"
+              "toggle"
+            ];
+
+            # toggle the bar
+            "Mod+A".spawn = noctalia [
+              "bar"
+              "toggle"
+            ];
+
+            # restart noctalia
+            "Mod+Shift+A".spawn = [
+              "systemctl"
+              "--user"
+              "restart"
+              "noctalia-shell.service"
+            ];
 
             # clipboard history
-            "Mod+Ctrl+V".spawn = [ "rofi-clipboard-history" ];
+            "Mod+Ctrl+V".spawn = noctalia [
+              "launcher"
+              "clipboard"
+            ];
+
+            # notification history
+            "Mod+N".spawn = noctalia [
+              "notifications"
+              "toggleHistory"
+            ];
 
             # TODO: reset monitors?
             # "CTRL_SHIFT, Escape, exec, niri-monitors"

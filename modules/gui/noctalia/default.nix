@@ -1,7 +1,6 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.wm =
-    { config, ... }:
     let
       noctaliaSettings = import ./_settings.nix;
     in

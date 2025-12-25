@@ -289,7 +289,7 @@
     enableKeyboardLayoutToast = true;
     enabled = true;
     location = "top_right";
-    lowUrgencyDuration = 3;
+    lowUrgencyDuration = 2;
     monitors = [
 
     ];
