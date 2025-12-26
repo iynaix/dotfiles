@@ -131,9 +131,10 @@
           };
 
           # HDR related settings
-          # render = {
-          #   cm_auto_hdr = 1;
-          # };
+          render = {
+            cm_enabled = false;
+            #   cm_auto_hdr = 1;
+          };
 
           # experimental = {
           #   xx_color_management_v4 = true;

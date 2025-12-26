@@ -1,10 +1,10 @@
 { lib, ... }:
 let
-  inherit (lib) mkMerge;
+  inherit (lib) concatMapStringsSep max mkMerge;
 in
 {
   flake.nixosModules.wm =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     mkMerge [
       {
         environment = {
@@ -13,6 +13,27 @@ in
             swww
             nomacs
           ];
+        };
+
+        # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
+        custom.programs.niri = {
+          settings.config = concatMapStringsSep "\n" (
+            mon:
+            let
+              targetPercent = 0.3;
+              width = builtins.floor (builtins.div (targetPercent * (max mon.width mon.height)) mon.scale);
+              # 16:9 ratio
+              height = builtins.floor (width / 16.0 * 9.0);
+            in
+            /* kdl */ ''
+              window-rule {
+                  match title="^wallpaper-rofi-${mon.name}$"
+                  default-column-width { fixed ${toString width}; }
+                  default-window-height { fixed ${toString height}; }
+                  open-floating true
+              }
+            ''
+          ) config.custom.hardware.monitors;
         };
 
         custom.persist = {

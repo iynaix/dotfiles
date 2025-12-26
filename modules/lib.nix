@@ -1,6 +1,15 @@
 { lib, ... }:
 {
   flake.lib = rec {
+    generators = {
+      # produces ini format strings, takes a single argument of the object
+      toQuotedINI = lib.generators.toINI {
+        mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+          mkValueString = v: if lib.isString v then "\"${v}\"" else lib.generators.mkValueStringDefault { } v;
+        };
+      };
+    };
+
     # saner api for iterating through workspaces in a flat list
     # takes a function that accepts the following attrset {workspace, key, monitor}
     mapWorkspaces =

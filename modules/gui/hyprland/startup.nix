@@ -8,7 +8,6 @@
     }:
     let
       inherit (lib)
-        concatStringsSep
         getExe'
         mkIf
         optionalString
@@ -33,7 +32,7 @@
           }:
           let
             rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-            exec = concatStringsSep " " spawn;
+            exec = builtins.concatStringsSep " " spawn;
           in
           if enable then "${rules} ${exec}" else ""
         ) config.custom.startup;

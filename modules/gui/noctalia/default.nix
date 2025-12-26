@@ -2,26 +2,61 @@
 {
   flake.nixosModules.wm =
     let
+      inherit (lib) getExe mkBefore;
       noctaliaSettings = import ./_settings.nix;
     in
     { pkgs, ... }:
     {
-      services.noctalia-shell = {
-        enable = true;
-        package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
-          patches = [ ./face-aware-crop.patch ];
-        };
-        # TODO: set custom target for niri / mango?
-        target = "hyprland-session.target";
-      };
+      # don't use the systemd service, it's very buggy :(
+      nixpkgs.overlays = [
+        (_: _prev: {
+          noctalia-shell = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
+            patches = [ ./face-aware-crop.patch ];
+          };
+        })
+      ];
 
-      environment.systemPackages = with pkgs; [
-        matugen
+      environment.systemPackages = [
+        pkgs.noctalia-shell
       ];
 
       hj.xdg.config.files = {
         "noctalia/settings.json".text = lib.strings.toJSON noctaliaSettings;
       };
+
+      custom.shell.packages = {
+        noctalia-shell-reload = {
+          runtimeInputs = with pkgs; [
+            killall
+            noctalia-shell
+          ];
+          text = /* sh */ ''
+            killall .quickshell-wrapper && noctalia-shell
+          '';
+        };
+      };
+
+      custom.startup = mkBefore [
+        {
+          spawn = [
+            # set random wallpaper on startup
+            (getExe (
+              pkgs.writeShellApplication {
+                name = "noctalia-startup";
+                runtimeInputs = with pkgs; [
+                  noctalia-shell
+                  custom.dotfiles-rs
+                ];
+                text = /* sh */ ''
+                  noctalia-shell &
+                  sleep 1
+                  wallpaper
+                '';
+              }
+            ))
+          ];
+        }
+      ];
 
       custom.persist = {
         home = {

@@ -139,6 +139,11 @@ in
         pkgs.ghostty # overlay-ed above
       ];
 
+      hj.xdg.config.files."ghostty/config" = {
+        text = "";
+        type = "copy";
+      };
+
       custom.programs.terminal = {
         app-id = "com.mitchellh.ghostty";
         desktop = "com.mitchellh.ghostty.desktop";

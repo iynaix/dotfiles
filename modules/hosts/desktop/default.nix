@@ -68,7 +68,7 @@ topLevel: {
                 5
               ];
               extraHyprlandConfig = {
-                supports_hdr = 1;
+                # supports_hdr = 1;
                 bitdepth = 10;
               };
             }

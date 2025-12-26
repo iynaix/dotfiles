@@ -32,7 +32,7 @@
           "$mod, a, exec, ${noctalia "bar toggle"}"
 
           # restart noctalia
-          "$mod_SHIFT, a, exec, systemctl --user restart noctalia-shell.service"
+          "$mod_SHIFT, a, exec, noctalia-shell-reload"
 
           # clipboard history
           "$mod_CTRL, v, exec, ${noctalia "launcher clipboard"}"

@@ -93,10 +93,7 @@
 
             # restart noctalia
             "Mod+Shift+A".spawn = [
-              "systemctl"
-              "--user"
-              "restart"
-              "noctalia-shell.service"
+              "noctalia-shell-reload"
             ];
 
             # clipboard history
