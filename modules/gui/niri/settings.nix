@@ -141,6 +141,12 @@ in
                 clip-to-geometry true
                 open-maximized-to-edges false
             }
+
+            // use blurred overview from noctalia
+            layer-rule {
+                match namespace="^noctalia-overview*"
+                place-within-backdrop true
+            }
           ''
 
           # create workspaces config

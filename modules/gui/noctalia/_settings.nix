@@ -125,7 +125,7 @@
     generateTemplatesForPredefined = true;
     manualSunrise = "06:30";
     manualSunset = "18:30";
-    matugenSchemeType = "scheme-content";
+    matugenSchemeType = "scheme-fruit-salad";
     predefinedScheme = "Noctalia (default)";
     schedulingMode = "off";
     useWallpaperColors = true;
@@ -160,11 +160,17 @@
     position = "close_to_bar_button";
     shortcuts = {
       left = [
+        # {
+        #   id = "WiFi";
+        # }
+        # {
+        #   id = "Bluetooth";
+        # }
         {
-          id = "WiFi";
+          id = "KeepAwake";
         }
         {
-          id = "Bluetooth";
+          id = "Notifications";
         }
         {
           id = "ScreenRecorder";
@@ -174,39 +180,16 @@
         }
       ];
       right = [
-        {
-          id = "Notifications";
-        }
-        {
-          id = "PowerProfile";
-        }
-        {
-          id = "KeepAwake";
-        }
+        # {
+        #   id = "PowerProfile";
+        # }
       ];
     };
   };
   desktopWidgets = {
     enabled = false;
     gridSnap = false;
-    monitorWidgets = [
-      {
-        name = "DP-1";
-        widgets = [
-          {
-            clockStyle = "digital";
-            format = "HH:mm\\nd MMMM yyyy";
-            id = "Clock";
-            scale = 0.5;
-            showBackground = true;
-            useCustomFont = false;
-            usePrimaryColor = false;
-            x = 50;
-            y = 50;
-          }
-        ];
-      }
-    ];
+    monitorWidgets = [ ];
   };
   dock = {
     animationSpeed = 1;
@@ -233,7 +216,7 @@
     animationSpeed = 1;
     avatarImage = "/home/iynaix/.face";
     boxRadiusRatio = 1;
-    compactLockScreen = false;
+    compactLockScreen = true;
     dimmerOpacity = 0.2;
     enableShadows = true;
     forceBlackScreenCorners = false;
@@ -336,7 +319,7 @@
   sessionMenu = {
     countdownDuration = 3000;
     enableCountdown = true;
-    largeButtonsStyle = true;
+    largeButtonsStyle = false;
     position = "center";
     powerOptions = [
       {
@@ -376,7 +359,7 @@
         enabled = true;
       }
     ];
-    showHeader = true;
+    showHeader = false;
   };
   settingsVersion = 32;
   systemMonitor = {
@@ -425,7 +408,7 @@
     vicinae = false;
     walker = false;
     wezterm = false;
-    yazi = true;
+    yazi = false;
     zed = false;
   };
   ui = {

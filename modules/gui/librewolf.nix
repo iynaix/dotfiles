@@ -15,7 +15,7 @@
     {
       programs.firefox = {
         enable = true;
-        package = pkgs.librewolf-bin.overrideAttrs (o: {
+        package = pkgs.librewolf.overrideAttrs (o: {
           # launch librewolf with user profile
           buildCommand = o.buildCommand + ''
             wrapProgram "$out/bin/librewolf" \

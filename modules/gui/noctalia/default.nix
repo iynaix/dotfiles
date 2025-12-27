@@ -31,7 +31,7 @@
             noctalia-shell
           ];
           text = /* sh */ ''
-            killall .quickshell-wrapper && noctalia-shell
+            killall .quickshell-wrapper || noctalia-shell &
           '';
         };
       };

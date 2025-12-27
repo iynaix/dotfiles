@@ -82,6 +82,12 @@ in
           };
 
           theme = {
+            accents = mkOption {
+              type = attrs;
+              default = accents;
+              description = "GTK theme accents colors";
+            };
+
             package = mkOption {
               type = package;
               default = pkgs.tokyonight-gtk-theme.override {
@@ -253,6 +259,31 @@ in
         data.files = {
           "icons/default/index.theme".source = "${defaultIndexThemePackage}/share/icons/default/index.theme";
           "icons/${gtkCfg.cursor.name}".source = "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
+        };
+      };
+
+      custom.programs.matugen.settings.templates = {
+        # use dynamic gtk theme and icon theme
+        "gtk-theme" = {
+          colors_to_compare = mapAttrsToList (name: value: {
+            name = if name == "Default" then "Tokyonight-Dark-Compact" else "Tokyonight-${name}-Dark-Compact";
+            color = value;
+          }) config.custom.gtk.theme.accents;
+          compare_to = "{{colors.primary.default.hex}}";
+          post_hook = ''dconf write "/org/gnome/desktop/interface/gtk-theme" "'{{closest_color}}'"'';
+          # dummy value so matugen doesn't complain
+          input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+        };
+
+        "gtk-icon-theme" = {
+          colors_to_compare = mapAttrsToList (name: value: {
+            name = "Tela-${name}-dark";
+            color = value;
+          }) config.custom.gtk.theme.accents;
+          compare_to = "{{colors.primary.default.hex}}";
+          post_hook = ''dconf write "/org/gnome/desktop/interface/icon-theme" "'{{closest_color}}'"'';
+          # dummy value so matugen doesn't complain
+          input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
         };
       };
     };

@@ -24,10 +24,20 @@
     };
 
   flake.nixosModules.gui =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       environment.systemPackages = [
         pkgs.imagemagick
       ];
+
+      custom.programs = {
+        matugen.settings.templates = {
+          wfetch = {
+            # dummy value so matugen doesn't complain
+            input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+            post_hook = "bash -c 'pgrep -f .wfetch-wrapped >/dev/null && pkill -SIGUSR2 .wfetch-wrapped || true'";
+          };
+        };
+      };
     };
 }
