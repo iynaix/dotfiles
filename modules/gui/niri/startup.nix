@@ -69,32 +69,6 @@ in
             Restart = "on-failure";
           };
         };
-
-        # start a separate swww service in a different namespace for niri backdrop
-        swww-backdrop = {
-          wantedBy = [ "graphical-session.target" ];
-
-          unitConfig = {
-            ConditionEnvironment = "WAYLAND_DISPLAY";
-            Description = "swww-daemon-backdrop";
-            After = [ "graphical-session.target" ];
-            PartOf = [ "graphical-session.target" ];
-          };
-
-          serviceConfig = {
-            ExecStart = "${getExe' pkgs.swww "swww-daemon"} --namespace backdrop";
-            Restart = "always";
-            RestartSec = 10;
-          };
-        };
-
-        # wallpaper needs both swww daemons running
-        wallpaper = {
-          unitConfig = {
-            After = [ "swww-backdrop.service" ];
-            Requires = [ "swww-backdrop.service" ];
-          };
-        };
       };
     };
 }

@@ -110,81 +110,84 @@ in
             bind = [ "$mod+SHIFT+CTRL, x, ${lockOrDpms}" ];
           };
 
-        wallust.templates."hyprlock.conf" = {
-          text =
-            let
-              rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }},${toString alpha})";
-            in
-            self.lib.generators.toHyprconf {
-              attrs = {
-                general = {
-                  disable_loading_bar = false;
-                  grace = 0;
-                  hide_cursor = false;
-                };
+        # TODO: hyprlock
+        /*
+          wallust.templates."hyprlock.conf" = {
+            text =
+              let
+                rgba = colorname: alpha: "rgba({{ ${colorname} | rgb }},${toString alpha})";
+              in
+              self.lib.generators.toHyprconf {
+                attrs = {
+                  general = {
+                    disable_loading_bar = false;
+                    grace = 0;
+                    hide_cursor = false;
+                  };
 
-                background = map (mon: {
-                  monitor = "${mon.name}";
-                  # add trailing comment with monitor name for wallpaper to replace later
-                  path = "/tmp/swww__${mon.name}.webp";
-                  color = "${rgba "background" 1}";
-                }) config.custom.hardware.monitors;
+                  background = map (mon: {
+                    monitor = "${mon.name}";
+                    # add trailing comment with monitor name for wallpaper to replace later
+                    path = "/tmp/swww__${mon.name}.webp";
+                    color = "${rgba "background" 1}";
+                  }) config.custom.hardware.monitors;
 
-                input-field = {
-                  monitor = "";
-                  size = "300, 50";
-                  outline_thickness = 2;
-                  dots_size = 0.33;
-                  dots_spacing = 0.15;
-                  dots_center = true;
-                  outer_color = "${rgba "background" 0.8}";
-                  inner_color = "${rgba "foreground" 0.9}";
-                  font_color = "${rgba "background" 0.8}";
-                  fade_on_empty = false;
-                  placeholder_text = "";
-                  hide_input = false;
-
-                  position = "0, -20";
-                  halign = "center";
-                  valign = "center";
-                };
-
-                label = [
-                  {
+                  input-field = {
                     monitor = "";
-                    text = ''cmd[update:1000] echo "<b><big>$(date +"%H:%M")</big></b>"'';
-                    color = "${rgba "foreground" 1}";
-                    font_size = 150;
-                    font_family = "${config.custom.fonts.regular}";
+                    size = "300, 50";
+                    outline_thickness = 2;
+                    dots_size = 0.33;
+                    dots_spacing = 0.15;
+                    dots_center = true;
+                    outer_color = "${rgba "background" 0.8}";
+                    inner_color = "${rgba "foreground" 0.9}";
+                    font_color = "${rgba "background" 0.8}";
+                    fade_on_empty = false;
+                    placeholder_text = "";
+                    hide_input = false;
 
-                    # shadow makes it more readable on light backgrounds
-                    shadow_passes = 1;
-                    shadow_size = 4;
-
-                    position = "0, 190";
+                    position = "0, -20";
                     halign = "center";
                     valign = "center";
-                  }
-                  {
-                    monitor = "";
-                    text = ''cmd[update:1000] echo "<b><big>$(date +"%A, %B %-d")</big></b>"'';
-                    color = "${rgba "foreground" 1}";
-                    font_size = 40;
-                    font_family = "${config.custom.fonts.regular}";
+                  };
 
-                    # shadow makes it more readable on light backgrounds
-                    shadow_passes = 1;
-                    shadow_size = 2;
+                  label = [
+                    {
+                      monitor = "";
+                      text = ''cmd[update:1000] echo "<b><big>$(date +"%H:%M")</big></b>"'';
+                      color = "${rgba "foreground" 1}";
+                      font_size = 150;
+                      font_family = "${config.custom.fonts.regular}";
 
-                    position = "0, 60";
-                    halign = "center";
-                    valign = "center";
-                  }
-                ];
+                      # shadow makes it more readable on light backgrounds
+                      shadow_passes = 1;
+                      shadow_size = 4;
+
+                      position = "0, 190";
+                      halign = "center";
+                      valign = "center";
+                    }
+                    {
+                      monitor = "";
+                      text = ''cmd[update:1000] echo "<b><big>$(date +"%A, %B %-d")</big></b>"'';
+                      color = "${rgba "foreground" 1}";
+                      font_size = 40;
+                      font_family = "${config.custom.fonts.regular}";
+
+                      # shadow makes it more readable on light backgrounds
+                      shadow_passes = 1;
+                      shadow_size = 2;
+
+                      position = "0, 60";
+                      halign = "center";
+                      valign = "center";
+                    }
+                  ];
+                };
               };
-            };
-          target = "${config.hj.xdg.config.directory}/hypr/hyprlock.conf";
-        };
+            target = "${config.hj.xdg.config.directory}/hypr/hyprlock.conf";
+          };
+        */
       };
     };
 }

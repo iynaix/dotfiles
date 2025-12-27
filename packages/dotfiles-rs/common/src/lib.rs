@@ -8,7 +8,6 @@ use std::{
     time::{Duration, SystemTime},
 };
 
-pub mod colors;
 pub mod niri;
 pub mod nixjson;
 pub mod rofi;

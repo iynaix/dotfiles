@@ -6,25 +6,20 @@
       ...
     }:
     let
-      rofiTheme = null;
       rofiThemesPkg = pkgs.custom.rofi-themes;
       patchRasi =
         name: rasiPath: overrideStyles:
         let
-          themeStyles =
-            if rofiTheme != null then
-              ''@import "${rofiThemesPkg}/colors/${rofiTheme}.rasi"''
-            else
-              /* css */ ''
-                *   {
-                    background:     {{background}}{{ 60 | alpha_hexa }};
-                    background-alt: {{color0}};
-                    foreground:     {{foreground}};
-                    selected:       {{color4}};
-                    active:         {{color6}};
-                    urgent:         {{color1}};
-                }
-              '';
+          themeStyles = /* css */ ''
+            *   {
+                background:     {{colors.surface.default.hex | set_alpha: 0.6 }};
+                background-alt: {{colors.surface_dim.default.hex}};
+                foreground:     {{colors.on_surface.default.hex}};
+                selected:       {{colors.primary.default.hex}};
+                active:         {{colors.on_primary.default.hex}};
+                urgent:         {{colors.error.default.hex}};
+            }
+          '';
           # patch rasi here
           out = pkgs.runCommand name { } ''
             mkdir $out
@@ -76,7 +71,7 @@
             xoffset: 0;
             yoffset: 0;
           }
-          @theme "${config.hj.xdg.cache.directory}/wallust/rofi.rasi"
+          @theme "${config.hj.xdg.config.directory}/rofi/rofi.rasi"
         '';
         type = "copy";
       };
@@ -118,24 +113,44 @@
           }
         '';
 
-        wallust.templates = {
+        matugen.settings.templates = {
           # default launcher
           "rofi.rasi" = {
-            text = patchRasi "rofi.rasi" launcherPath ''
+            input_path = patchRasi "rofi.rasi" launcherPath ''
               inputbar { background-color: transparent; }
               element normal.normal { background-color: transparent; }
             '';
-            target = "${config.hj.xdg.cache.directory}/wallust/rofi.rasi";
+            output_path = "${config.hj.xdg.config.directory}/rofi/rofi.rasi";
           };
 
           # generic single column rofi menu
           "rofi-menu.rasi" = {
-            text = patchRasi "rofi-menu.rasi" launcherPath ''
+            input_path = patchRasi "rofi-menu.rasi" launcherPath ''
               listview { columns: 1; }
               prompt { enabled: false; }
               textbox-prompt-colon { enabled: false; }
             '';
-            target = "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi";
+            output_path = "${config.hj.xdg.config.directory}/rofi/rofi-menu.rasi";
+          };
+
+          "rofi-menu-noinput.rasi" = {
+            input_path = patchRasi "rofi-menu-noinput.rasi" launcherPath ''
+              listview { columns: 1; }
+              * { width: 1000; }
+              window { height: 625; }
+              mainbox {
+                  children: [listview,message];
+              }
+              message {
+                padding:                     15px;
+                border:                      0px solid;
+                border-radius:               0px;
+                border-color:                @selected;
+                /* background-color is set in style overrides */
+                text-color:                  @foreground;
+              }
+            '';
+            output_path = "${config.hj.xdg.config.directory}/rofi/rofi-menu-noinput.rasi";
           };
         };
       };

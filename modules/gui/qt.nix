@@ -45,33 +45,38 @@
       };
 
       # qtct config
-      custom.programs.wallust.templates =
+      custom.programs.matugen.settings.templates =
         let
           defaultFont = "${config.custom.gtk.font.name},${builtins.toString config.custom.gtk.font.size}";
           createQtctConf =
-            font:
-            lib.generators.toINI { } {
-              Appearance = {
-                custom_palette = false;
-                icon_theme = config.custom.gtk.iconTheme.name;
-                standard_dialogs = "xdgdesktopportal";
-                style = "kvantum";
-              };
-              Fonts = {
-                fixed = font;
-                general = font;
-              };
-            };
+            name: font:
+            toString (
+              pkgs.writeTextFile {
+                inherit name;
+                text = lib.generators.toINI { } {
+                  Appearance = {
+                    custom_palette = false;
+                    icon_theme = config.custom.gtk.iconTheme.name;
+                    standard_dialogs = "xdgdesktopportal";
+                    style = "kvantum";
+                  };
+                  Fonts = {
+                    fixed = font;
+                    general = font;
+                  };
+                };
+              }
+            );
         in
         {
           "qt5ct.conf" = {
-            text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
-            target = "${config.hj.xdg.config.directory}/qt5ct/qt5ct.conf";
+            input_path = createQtctConf "qt5ct.conf" ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+            output_path = "${config.hj.xdg.config.directory}/qt5ct/qt5ct.conf";
           };
 
           "qt6ct.conf" = {
-            text = createQtctConf ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
-            target = "${config.hj.xdg.config.directory}/qt6ct/qt6ct.conf";
+            input_path = createQtctConf "qt6ct.conf" ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
+            output_path = "${config.hj.xdg.config.directory}/qt6ct/qt6ct.conf";
           };
         };
     };

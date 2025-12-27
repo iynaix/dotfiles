@@ -21,9 +21,6 @@ impl Rofi {
         let mut cmd = Command::new("rofi");
 
         cmd.arg("-dmenu")
-            // .arg("-theme")
-            // .arg(full_path(format!("~/.cache/wallust/{theme}")))
-            // use | as separator
             .arg("-sep")
             .arg("|")
             .arg("-disable-history")
@@ -34,7 +31,7 @@ impl Rofi {
         Self {
             choices: choices.iter().map(|s| s.as_ref().to_string()).collect(),
             command: cmd,
-            theme: full_path("~/.cache/wallust/rofi-menu-noinput.rasi"),
+            theme: full_path("~/.config/rofi/rofi-menu-noinput.rasi"),
         }
     }
 

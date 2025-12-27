@@ -11,10 +11,7 @@
       inherit (lib)
         any
         assertMsg
-        attrValues
         concatLines
-        filter
-        hasInfix
         hasPrefix
         lessThan
         mkForce
@@ -126,24 +123,14 @@
           # show all files stored on tmpfs, useful for finding files to persist
           show-tmpfs = {
             runtimeInputs = [ pkgs.fd ];
-            text =
-              let
-                wallustExcludes =
-                  config.custom.programs.wallust.templates
-                  |> attrValues
-                  |> map (a: a.target)
-                  |> filter (t: !(hasInfix "wallust" t))
-                  |> map (t: ''--exclude "${t}" \'')
-                  |> concatLines;
-              in
-              /* sh */ ''
-                sudo fd --one-file-system --base-directory / --type f --hidden \
-                  --exclude "/etc/{ssh,passwd,shadow}" \
-                  --exclude "*.timer" \
-                  --exclude "/var/lib/NetworkManager" \
-                  --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mpv,nvim,pre-commit,swww,wallust,fish,nvf}" \
-                  ${wallustExcludes}  --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
-              '';
+            text = /* sh */ ''
+              sudo fd --one-file-system --base-directory / --type f --hidden \
+                --exclude "/etc/{ssh,passwd,shadow}" \
+                --exclude "*.timer" \
+                --exclude "/var/lib/NetworkManager" \
+                --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mpv,noctalia,nvim,pre-commit,fish,nvf}" \
+                --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
+            '';
           };
         };
 
@@ -164,8 +151,6 @@
               files = unique cfg.home.files;
               directories = unique (
                 [
-                  ".cache/dconf"
-                  ".config/dconf"
                   "Desktop"
                   "Documents"
                   "Pictures"

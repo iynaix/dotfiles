@@ -3,42 +3,38 @@
   perSystem =
     { pkgs, ... }:
     let
-      # generated using `wallust theme Tokyo-Night`
-      zathuraColors = ''
-        set default-bg                  "#414868"
-        set default-fg                  "#F7768E"
-
-        set statusbar-fg                "#7AA2F7"
-        set statusbar-bg                "#9ECE6A"
-
-        set inputbar-bg                 "#414868"
-        set inputbar-fg                 "#A9B1D6"
-
-        set notification-bg             "#414868"
-        set notification-fg             "#A9B1D6"
-
-        set notification-error-bg       "#414868"
-        set notification-error-fg       "#414868"
-
-        set notification-warning-bg     "#414868"
-        set notification-warning-fg     "#414868"
-
-        set highlight-color             "rgba(158,206,106,0.5)"
-        set highlight-active-color      "rgba(187,154,247,0.5)"
-
-        set completion-bg               "#F7768E"
-        set completion-fg               "#BB9AF7"
-
-        set completion-highlight-fg     "#A9B1D6"
-        set completion-highlight-bg     "#BB9AF7"
-
-        set recolor-lightcolor          "#414868"
-        set recolor-darkcolor           "#7DCFFF"
-      '';
       zathuraConf = pkgs.writeTextFile {
         name = "zathurarc";
         text = ''
-          ${zathuraColors}
+            set default-bg                  "#414868"
+            set default-fg                  "#F7768E"
+
+            set statusbar-fg                "#7AA2F7"
+            set statusbar-bg                "#9ECE6A"
+
+            set inputbar-bg                 "#414868"
+            set inputbar-fg                 "#A9B1D6"
+
+            set notification-bg             "#414868"
+            set notification-fg             "#A9B1D6"
+
+            set notification-error-bg       "#414868"
+            set notification-error-fg       "#414868"
+
+            set notification-warning-bg     "#414868"
+            set notification-warning-fg     "#414868"
+
+            set highlight-color             "rgba(158,206,106,0.5)"
+            set highlight-active-color      "rgba(187,154,247,0.5)"
+
+            set completion-bg               "#F7768E"
+            set completion-fg               "#BB9AF7"
+
+            set completion-highlight-fg     "#A9B1D6"
+            set completion-highlight-bg     "#BB9AF7"
+
+            set recolor-lightcolor          "#414868"
+            set recolor-darkcolor           "#7DCFFF"
 
           set adjust-open	"best-fit"
           set page-padding	"1"

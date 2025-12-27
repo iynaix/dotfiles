@@ -255,10 +255,5 @@ in
           "icons/${gtkCfg.cursor.name}".source = "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
         };
       };
-
-      # write theme accents into nix.json for rust to read
-      custom.programs.wallust.nixJson = {
-        themeAccents = accents;
-      };
     };
 }

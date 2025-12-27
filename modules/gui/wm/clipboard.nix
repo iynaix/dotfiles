@@ -1,7 +1,6 @@
 {
   flake.nixosModules.wm =
     {
-      config,
       lib,
       pkgs,
       ...
@@ -21,17 +20,6 @@
         cliphist
         wl-clipboard
       ];
-
-      custom = {
-        shell.packages = {
-          rofi-clipboard-history = /* sh */ ''
-            rofi \
-              -modi clipboard:${getExe' pkgs.cliphist "cliphist-rofi-img"} \
-              -theme "${config.hj.xdg.cache.directory}/wallust/rofi-menu.rasi" \
-              -show clipboard -show-icons
-          '';
-        };
-      };
 
       # implementation of cliphist services from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/services/cliphist.nix

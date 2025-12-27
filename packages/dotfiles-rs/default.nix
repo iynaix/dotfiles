@@ -12,8 +12,6 @@
   pqiv,
   rsync,
   rclip,
-  swww,
-  wallust,
   wlr-randr,
 }:
 rustPlatform.buildRustPackage {
@@ -84,8 +82,6 @@ rustPlatform.buildRustPackage {
             procps
             rclip
             rsync
-            wallust
-            swww
             wlr-randr
             pqiv
           ]

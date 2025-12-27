@@ -62,7 +62,7 @@ impl NixMonitor {
 #[serde(rename_all = "camelCase")]
 pub struct NixJson {
     pub wallpaper: String,
-    pub fallback: String,
+    pub fallback_wallpaper: String,
     pub host: String,
     pub monitors: Vec<NixMonitor>,
 }
@@ -76,7 +76,6 @@ impl Default for NixJson {
 impl NixJson {
     /// get nix info from ~/.config before wallust has processed it
     pub fn new() -> Self {
-        json::load("~/.config/wallust/templates/nix.json")
-            .unwrap_or_else(|_| panic!("unable to read nix.json"))
+        json::load("~/.local/state/nix.json").unwrap_or_else(|_| panic!("unable to read nix.json"))
     }
 }

@@ -61,7 +61,7 @@ fn main() {
             .map(|theme| theme.rofi.clone())
             .collect_vec(),
     )
-    .theme(full_path("~/.cache/wallust/rofi-menu.rasi"));
+    .theme(full_path("~/.config/rofi/rofi-menu.rasi"));
 
     let (sel, _) = rofi
         .arg("-i") // case insensitive

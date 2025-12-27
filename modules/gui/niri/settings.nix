@@ -134,13 +134,6 @@ in
                 path "${getExe pkgs.xwayland-satellite}"
             }
 
-            // set blurred wallpaper backdrop for overview
-            layer-rule {
-                // namespaced swww-daemon layer is named "swww-daemonbackdrop"
-                match namespace="^swww-daemonbackdrop$"
-                place-within-backdrop true
-            }
-
             window-rule {
                 draw-border-with-background false
                 // rounded corners for all windows

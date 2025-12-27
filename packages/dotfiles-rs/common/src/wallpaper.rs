@@ -45,7 +45,7 @@ where
         })
 }
 
-/// sets the wallpaper and reloads the wallust theme
+/// sets the wallpaper for all monitors
 pub fn set<P>(wallpaper: P)
 where
     P: AsRef<Path> + std::fmt::Debug,
@@ -68,6 +68,11 @@ where
             .expect("could not convert wallpaper path to str"),
     )
     .ok();
+
+    // clear noctalia cache to force the wallpaper to be reloaded
+    let noctalia_cache = full_path("~/.cache/noctalia/images/wallpapers/large");
+    std::fs::remove_dir_all(&noctalia_cache).expect("unable to clear noctalia cache");
+    std::fs::create_dir(&noctalia_cache).ok();
 
     // set the wallpaper with cropping
     // set the wallpaper per monitor, use wlr-randr so it is wm agnostic
@@ -96,12 +101,9 @@ where
                 .wait()
                 .expect("failed to wait for noctalia wallpaper set");
         });
-
-    // do wallust earlier to create the necessary templates
-    // wallust::apply_colors();
 }
 
-/// reloads the wallpaper and wallust theme
+/// reloads the wallpaper
 pub fn reload() {
     set(current().expect("no current wallpaper set"));
 }
@@ -111,12 +113,12 @@ where
     P: AsRef<Path> + std::fmt::Debug,
 {
     if !dir.as_ref().exists() {
-        return NixJson::new().fallback;
+        return NixJson::new().fallback_wallpaper;
     }
 
     let wallpapers = filter_images(dir).collect_vec();
     if wallpapers.is_empty() {
-        NixJson::new().fallback
+        NixJson::new().fallback_wallpaper
     } else {
         wallpapers[fastrand::usize(..wallpapers.len())].clone()
     }
@@ -136,7 +138,6 @@ const fn gcd(mut a: u32, mut b: u32) -> u32 {
 pub struct WallInfo {
     pub path: PathBuf,
     pub geometries: HashMap<String, String>,
-    pub wallust: String,
 }
 
 impl WallInfo {
@@ -147,7 +148,6 @@ impl WallInfo {
         let meta = Metadata::new_from_path(img.as_ref()).expect("could not init new metadata");
 
         let mut crops = HashMap::new();
-        let mut wallust = String::new();
 
         for tag in meta.get_xmp_tags().expect("unable to read xmp tags") {
             if tag.starts_with("Xmp.wallfacer.crop.") {
@@ -158,18 +158,11 @@ impl WallInfo {
 
                 crops.insert(aspect.to_string(), geom);
             }
-
-            if tag == "Xmp.wallfacer.wallust" {
-                wallust = meta
-                    .get_tag_string(&tag)
-                    .expect("could not get wallust tag");
-            }
         }
 
         Self {
             path: img.as_ref().to_path_buf(),
             geometries: crops,
-            wallust,
         }
     }
 

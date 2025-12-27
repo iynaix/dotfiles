@@ -48,4 +48,5 @@ in
   # mango = c.specialisation.mango.configuration;
 
   # your code here
+  x = c.custom.programs.matugen;
 }

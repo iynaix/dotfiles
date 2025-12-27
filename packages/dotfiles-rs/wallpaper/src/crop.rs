@@ -5,7 +5,7 @@ use wallpaper::write_wallpaper_history;
 
 use crate::cli::CropArgs;
 
-// use crop info from wallpaper for swww
+/// uses crop info from wallpaper xmp metadata
 pub fn crop(args: &CropArgs) {
     // parse size
     let size: Vec<_> = args.size.split('x').flat_map(str::parse::<u32>).collect();

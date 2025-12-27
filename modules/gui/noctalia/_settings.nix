@@ -407,11 +407,11 @@
     code = false;
     discord = false;
     emacs = false;
-    enableUserTemplates = false;
+    enableUserTemplates = true;
     foot = false;
     fuzzel = false;
     ghostty = true;
-    gtk = true;
+    gtk = false;
     helix = false;
     hyprland = true;
     kcolorscheme = false;

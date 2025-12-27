@@ -105,7 +105,7 @@
 
           # switching wallpapers or themes
           "$mod, apostrophe, exec, wallpaper rofi"
-          "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
+          "$mod_SHIFT, apostrophe, exec, rofi--theme"
           "ALT, apostrophe, exec, wallpaper history"
 
           # special keys
