@@ -177,9 +177,9 @@ in
               (getExe (
                 pkgs.writeShellApplication {
                   name = "init-helium";
-                  runtimeInputs = [
-                    pkgs.custom.helium
-                    pkgs.custom.dotfiles-rs
+                  runtimeInputs = with pkgs; [
+                    custom.helium
+                    custom.dotfiles-rs
                   ];
                   text = ''
                     helium --profile-directory=Default &
