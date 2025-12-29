@@ -30,7 +30,7 @@ topLevel: {
 
         ### hardware
         amdgpu
-        # bluetooth
+        bluetooth
         # qmk
         laptop
 

@@ -159,7 +159,7 @@ in
                 ...
               }:
               ''
-                workspace "W${toString workspace}" {
+                workspace "${toString workspace}" {
                     open-on-output "${monitor.name}"
                 }
               ''

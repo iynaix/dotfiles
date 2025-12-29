@@ -26,11 +26,6 @@
         };
       };
 
-      # add bluetooth audio icon to waybar
-      custom.programs.waybar.config.pulseaudio = {
-        format-bluetooth = "  {volume}%";
-      };
-
       custom.persist = {
         root.directories = [ "/var/lib/bluetooth" ];
       };

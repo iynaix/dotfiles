@@ -30,7 +30,7 @@ in
                   match ${optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
                     optionalString (startup.title != null) ''title="^${startup.title}$"''
                   } at-startup=true
-                  open-on-workspace "W${toString startup.workspace}"
+                  open-on-workspace "${toString startup.workspace}"
                   ${startup.niriArgs}
               }
             '';
@@ -45,7 +45,7 @@ in
                 "msg"
                 "action"
                 "focus-workspace"
-                "W${toString mon.defaultWorkspace}"
+                "${toString mon.defaultWorkspace}"
               ]) (reverseList config.custom.hardware.monitors)
             );
           }
