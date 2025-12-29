@@ -15,6 +15,15 @@ in
       self,
       ...
     }:
+    let
+      hyprlandWrapped = self.wrapperModules.hyprland.apply (
+        {
+          inherit pkgs;
+          package = pkgs.hyprland;
+        }
+        // config.custom.programs.hyprland
+      );
+    in
     {
       environment = {
         shellAliases = {
@@ -42,14 +51,16 @@ in
             assertMsg (versionOlder config.programs.hyprland.package.version "0.53") "hyprland updated, sync with hyprnstack?"
           );
           true;
-        package =
-          (self.wrapperModules.hyprland.apply (
-            {
-              inherit pkgs;
-              package = pkgs.hyprland;
-            }
-            // config.custom.programs.hyprland
-          )).wrapper;
+        package = hyprlandWrapped.wrapper;
+      };
+
+      custom.shell.packages = {
+        # similar helper function to nvf-print-config
+        hyprland-print-config = {
+          text = /* sh */ ''
+            cat "${hyprlandWrapped.flags."--config"}"
+          '';
+        };
       };
 
       custom.persist = {

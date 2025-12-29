@@ -10,6 +10,44 @@ in
       self,
       ...
     }:
+
+    let
+      source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
+      niriWrapped = self.wrapperModules.niri.apply {
+        inherit pkgs;
+        package = pkgs.niri.overrideAttrs (
+          o:
+          (
+            source
+            // {
+              inherit (o) version;
+
+              # patches =
+              #   (o.patches or [ ])
+              #   # not compatible with blur patch
+              #   ++ [
+              #     # fix fullscreen windows have a black background
+              #     # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
+              #     # unmerged PR to fix this
+              #     # https://github.com/YaLTeR/niri/pull/3004
+              #     ./transparent-fullscreen.patch
+              #   ];
+
+              # creating an overlay for buildRustPackage overlay
+              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+              cargoDeps = pkgs.rustPlatform.importCargoLock {
+                lockFile = source.src + "/Cargo.lock";
+                allowBuiltinFetchGit = true;
+              };
+
+              doCheck = false; # faster builds
+            }
+          )
+        );
+
+        inherit (config.custom.programs.niri) settings;
+      };
+    in
     {
       environment = {
         shellAliases = {
@@ -24,44 +62,7 @@ in
       # 6 7 3
       programs.niri = {
         enable = true;
-        package =
-          let
-            source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
-          in
-          (self.wrapperModules.niri.apply {
-            inherit pkgs;
-            package = pkgs.niri.overrideAttrs (
-              o:
-              (
-                source
-                // {
-                  inherit (o) version;
-
-                  # patches =
-                  #   (o.patches or [ ])
-                  #   # not compatible with blur patch
-                  #   ++ [
-                  #     # fix fullscreen windows have a black background
-                  #     # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
-                  #     # unmerged PR to fix this
-                  #     # https://github.com/YaLTeR/niri/pull/3004
-                  #     ./transparent-fullscreen.patch
-                  #   ];
-
-                  # creating an overlay for buildRustPackage overlay
-                  # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-                  cargoDeps = pkgs.rustPlatform.importCargoLock {
-                    lockFile = source.src + "/Cargo.lock";
-                    allowBuiltinFetchGit = true;
-                  };
-
-                  doCheck = false; # faster builds
-                }
-              )
-            );
-
-            inherit (config.custom.programs.niri) settings;
-          }).wrapper;
+        package = niriWrapped.wrapper;
         useNautilus = false;
       };
 
@@ -74,8 +75,16 @@ in
       };
 
       custom = {
-        programs = {
+        shell.packages = {
+          # similar helper function to nvf-print-config
+          niri-print-config = {
+            text = /* sh */ ''
+              cat "${niriWrapped.env."NIRI_CONFIG"}"
+            '';
+          };
+        };
 
+        programs = {
           ghostty.extraSettings = {
             background-opacity = mkForce 0.95;
           };

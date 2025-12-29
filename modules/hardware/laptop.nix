@@ -7,6 +7,7 @@ topLevel: {
       wifi
     ];
 
+    # required for noctalia's battery module
     services.upower.enable = true;
   };
 }
