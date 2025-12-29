@@ -55,7 +55,7 @@
             settings.workspace = mkAfter (
               self.lib.mapWorkspaces (
                 { monitor, workspace, ... }:
-                "${workspace},layoutopt:orientation:${if (monitor.isVertical != 0) then "top" else "left"}"
+                "${workspace},layoutopt:orientation:${if monitor.isVertical then "top" else "left"}"
               ) config.custom.hardware.monitors
             );
           };

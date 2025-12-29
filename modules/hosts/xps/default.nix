@@ -63,13 +63,11 @@ topLevel: {
             }
           ];
         };
+
         programs = {
           btop.extraSettings = {
             custom_gpu_name0 = "Intel HD Graphics 5500";
           };
-        };
-        persist = {
-          home.directories = [ "Downloads" ];
         };
       };
 

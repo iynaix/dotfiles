@@ -9,6 +9,12 @@
   };
 
   flake.nixosModules.wm =
+    {
+      config,
+      isLaptop,
+      pkgs,
+      ...
+    }:
     let
       inherit (lib)
         getExe
@@ -16,10 +22,7 @@
         mkBefore
         mkMerge
         ;
-      noctaliaSettings = import ./_settings.nix;
-    in
-    { config, pkgs, ... }:
-    let
+      noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
       noctalia-shell' =
         inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs
           {
@@ -70,7 +73,7 @@
       })
 
       # start using WM startup
-      (mkIf config.custom.programs.noctalia.systemd.enable {
+      (mkIf (!config.custom.programs.noctalia.systemd.enable) {
         environment.systemPackages = [
           noctalia-shell'
         ];

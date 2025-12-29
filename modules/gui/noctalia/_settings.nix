@@ -1,3 +1,4 @@
+{ lib, isLaptop, ... }:
 {
   appLauncher = {
     customLaunchPrefix = "";
@@ -79,20 +80,32 @@
         #   visualizerType = "linear";
         # }
       ];
-      right = [
-        {
-          displayMode = "alwaysShow";
-          id = "Volume";
-        }
-        {
-          customFont = "";
-          formatHorizontal = "HH:mm";
-          formatVertical = "HH mm - dd MM";
-          id = "Clock";
-          useCustomFont = false;
-          usePrimaryColor = true;
-        }
-      ];
+      right =
+        (lib.optionals isLaptop [
+          {
+            displayMode = "alwaysShow";
+            hideIfNotDetected = true;
+            id = "Battery";
+            showNoctaliaPerformance = true;
+            showPowerProfiles = true;
+            warningThreshold = 20;
+          }
+
+        ])
+        ++ [
+          {
+            displayMode = "alwaysShow";
+            id = "Volume";
+          }
+          {
+            customFont = "";
+            formatHorizontal = "HH:mm";
+            formatVertical = "HH mm - dd MM";
+            id = "Clock";
+            useCustomFont = false;
+            usePrimaryColor = true;
+          }
+        ];
     };
   };
   brightness = {
@@ -145,7 +158,7 @@
         id = "audio-card";
       }
       {
-        enabled = false;
+        enabled = isLaptop;
         id = "brightness-card";
       }
       {
@@ -159,13 +172,15 @@
     ];
     position = "close_to_bar_button";
     shortcuts = {
-      left = [
-        # {
-        #   id = "WiFi";
-        # }
-        # {
-        #   id = "Bluetooth";
-        # }
+      left = lib.optionals isLaptop [
+        {
+          id = "WiFi";
+        }
+        {
+          id = "Bluetooth";
+        }
+      ];
+      right = [
         {
           id = "KeepAwake";
         }
@@ -178,11 +193,6 @@
         {
           id = "WallpaperSelector";
         }
-      ];
-      right = [
-        # {
-        #   id = "PowerProfile";
-        # }
       ];
     };
   };

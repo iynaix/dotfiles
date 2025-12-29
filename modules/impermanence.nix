@@ -2,6 +2,7 @@
   flake.nixosModules.core =
     {
       config,
+      host,
       lib,
       pkgs,
       user,
@@ -16,6 +17,7 @@
         lessThan
         mkForce
         mkOption
+        optionals
         sort
         unique
         ;
@@ -155,6 +157,9 @@
                   "Documents"
                   "Pictures"
                   "projects"
+                ]
+                ++ optionals (host != "desktop") [
+                  "Downloads"
                 ]
                 ++ cfg.home.directories
               );
