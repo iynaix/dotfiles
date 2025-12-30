@@ -77,8 +77,6 @@ topLevel: {
           btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon 780M";
           };
-
-          noctalia.systemd.enable = true;
         };
 
         # don't blind me on startup

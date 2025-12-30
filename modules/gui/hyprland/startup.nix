@@ -41,13 +41,13 @@
       systemd.user.services = {
         # listen to events from hyprland, done as a service so it will restart from nixos-rebuild
         hypr-ipc = {
-          wantedBy = [ "hyprland-session.target" ];
+          wantedBy = [ "graphical-session.target" ];
 
           unitConfig = {
             ConditionEnvironment = "WAYLAND_DISPLAY";
             Description = "Custom hypr-ipc from dotfiles-rs";
-            After = [ "hyprland-session.target" ];
-            PartOf = [ "hyprland-session.target" ];
+            After = [ "graphical-session.target" ];
+            PartOf = [ "graphical-session.target" ];
           };
 
           serviceConfig = {

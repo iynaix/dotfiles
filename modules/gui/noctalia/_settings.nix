@@ -330,6 +330,7 @@
     countdownDuration = 3000;
     enableCountdown = true;
     largeButtonsStyle = false;
+    showNumberLabels = true;
     position = "center";
     powerOptions = [
       {

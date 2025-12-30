@@ -7,8 +7,7 @@
           DISPLAY = ":0";
           WAYLAND_DISPLAY = "wayland-1";
           NIXOS_OZONE_WL = "1";
-          QT_QPA_PLATFORM = "wayland;xcb";
-          # GDK_BACKEND = "wayland,x11,*";
+          QT_QPA_PLATFORM = "wayland";
         };
       };
 
