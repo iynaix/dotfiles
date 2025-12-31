@@ -69,11 +69,6 @@ where
     )
     .ok();
 
-    // clear noctalia cache to force the wallpaper to be reloaded
-    let noctalia_cache = full_path("~/.cache/noctalia/images/wallpapers/large");
-    std::fs::remove_dir_all(&noctalia_cache).expect("unable to clear noctalia cache");
-    std::fs::create_dir(&noctalia_cache).ok();
-
     // set the wallpaper with cropping
     // set the wallpaper per monitor, use wlr-randr so it is wm agnostic
     let wlr_cmd = execute::command_args!("wlr-randr", "--json")
@@ -105,6 +100,11 @@ where
 
 /// reloads the wallpaper
 pub fn reload() {
+    // clear noctalia cache to force the wallpaper to be reloaded
+    let noctalia_cache = full_path("~/.cache/noctalia/images/wallpapers/large");
+    std::fs::remove_dir_all(&noctalia_cache).expect("unable to clear noctalia cache");
+    std::fs::create_dir(&noctalia_cache).ok();
+
     set(current().expect("no current wallpaper set"));
 }
 

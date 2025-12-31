@@ -26,6 +26,7 @@
             mkhl.direnv
             ms-python.black-formatter
             ms-python.flake8
+            ms-python.python
             ms-python.vscode-pylance
             pkief.material-icon-theme
             prisma.prisma

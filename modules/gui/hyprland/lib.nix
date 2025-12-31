@@ -2,6 +2,7 @@
 let
   inherit (lib)
     concatMapStrings
+    getExe'
     mkDefault
     mkEnableOption
     mkOption
@@ -150,6 +151,12 @@ in
       ];
       # don't use mkMerge as the order is important
       hyprlandConfText = concatMapStrings (attrs: toHyprconf { inherit attrs importantPrefixes; }) [
+        # systemd activation blurb
+        {
+          exec-once = [
+            "${getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+          ];
+        }
         # handle the plugins, loaded before the settings, implementation from home-manager:
         # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
         {

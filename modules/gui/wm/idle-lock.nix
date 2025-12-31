@@ -49,33 +49,30 @@ in
       dpms-on = pkgs.writeShellApplication {
         name = "dpms-on";
         text = /* sh */ ''
-          # TODO: mango?
           if [ "$XDG_CURRENT_DESKTOP" = "Hyprland" ]; then
               hyprctl dispatch dpms on
           elif [ "$XDG_CURRENT_DESKTOP" = "niri" ]; then
               niri msg action power-on-monitors
           fi
+          # TODO: mango?
         '';
       };
       dpms-off = pkgs.writeShellApplication {
         name = "dpms-off";
         text = /* sh */ ''
-          # TODO: mango?
           if [ "$XDG_CURRENT_DESKTOP" = "Hyprland" ]; then
               hyprctl dispatch dpms off
           elif [ "$XDG_CURRENT_DESKTOP" = "niri" ]; then
               niri msg action power-off-monitors
           fi
+          # TODO: mango?
         '';
       };
       lock = pkgs.writeShellApplication {
         name = "lock";
-        text =
-          if config.custom.lock.enable then # sh
-            (getExe noctalia-lock)
-          else
-            (getExe dpms-off);
+        text = if config.custom.lock.enable then (getExe noctalia-lock) else (getExe dpms-off);
       };
+      lockCmd = getExe lock;
     in
     {
       environment.systemPackages = [
@@ -90,29 +87,29 @@ in
           settings = {
             general = {
               ignore_dbus_inhibit = false;
-              lock_cmd = "lock";
+              lock_cmd = lockCmd;
             };
 
             listener = [
               {
                 timeout = 5 * 60;
-                on-timeout = "lock";
-                on-resume = "dpms-on";
+                on-timeout = lockCmd;
+                on-resume = getExe dpms-on;
               }
             ];
           };
         };
 
         hyprland.settings = {
-          bind = [ "$mod_SHIFT_CTRL, x, exec, lock" ];
+          bind = [ "$mod_SHIFT_CTRL, x, exec, ${lockCmd}" ];
 
           # handle laptop lid
-          bindl = mkIf isLaptop [ ",switch:Lid Switch, lock" ];
+          bindl = mkIf isLaptop [ ",switch:Lid Switch, ${lockCmd}" ];
         };
 
         niri.settings = {
           binds = {
-            "Mod+Shift+Ctrl+x".spawn = [ "lock" ];
+            "Mod+Shift+Ctrl+x".spawn = [ lockCmd ];
           };
 
           /*
@@ -124,7 +121,7 @@ in
 
         # TODO: mango doesn't support switch events yet?
         mango.settings = {
-          bind = [ "$mod+SHIFT+CTRL, x, lock" ];
+          bind = [ "$mod+SHIFT+CTRL, x, ${lockCmd}" ];
         };
       };
 
@@ -156,5 +153,31 @@ in
       # by default, the service uses the systemd package from the hypridle derivation,
       # so using a config file is necessary
       hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
+
+      systemd.user.services.hypridle = {
+        unitConfig = {
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+          # if it fails to start 5 times in 60s, stop trying (to avoid infinite spam)
+          StartLimitBurst = 5;
+          StartLimitIntervalSec = 60;
+        };
+
+        serviceConfig = {
+          # wait for XDG_CURRENT_DESKTOP to be set
+          ExecStartPre = "${getExe pkgs.bash} -c 'while [ -z \"$XDG_CURRENT_DESKTOP\" ]; do sleep 0.1; done'";
+
+          # faster retries then gradually slow down to a maximum of 10s
+          RestartSec = 1;
+          RestartMaxDelaySec = "10s";
+          RestartSteps = 5;
+
+          # loop for 30s for ExecStartPre
+          TimeoutStartSec = 30;
+        };
+      };
+
+      custom.programs.print-config = {
+        hypridle = /* sh */ ''cat "${config.hj.xdg.config.directory}/hypr/hypridle.conf"'';
+      };
     };
 }

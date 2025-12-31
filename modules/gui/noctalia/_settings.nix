@@ -67,17 +67,17 @@
           useDistroLogo = true;
         }
         # {
-        #   hideMode = "hidden";
-        #   hideWhenIdle = false;
-        #   id = "MediaMini";
-        #   maxWidth = 145;
-        #   scrollingMode = "hover";
-        #   showAlbumArt = false;
-        #   showArtistFirst = true;
-        #   showProgressRing = true;
-        #   showVisualizer = false;
-        #   useFixedWidth = false;
-        #   visualizerType = "linear";
+        #   "hideMode" = "hidden";
+        #   "hideWhenIdle" = false;
+        #   "id" = "MediaMini";
+        #   "maxWidth" = 500;
+        #   "scrollingMode" = "hover";
+        #   "showAlbumArt" = false;
+        #   "showArtistFirst" = false;
+        #   "showProgressRing" = true;
+        #   "showVisualizer" = false;
+        #   "useFixedWidth" = false;
+        #   "visualizerType" = "linear";
         # }
       ];
       right =
@@ -254,7 +254,7 @@
   };
   location = {
     analogClockInCalendar = false;
-    firstDayOfWeek = -1;
+    firstDayOfWeek = 0;
     name = "Singapore";
     showCalendarEvents = true;
     showCalendarWeather = true;
@@ -329,7 +329,7 @@
   sessionMenu = {
     countdownDuration = 3000;
     enableCountdown = true;
-    largeButtonsStyle = false;
+    largeButtonsStyle = true;
     showNumberLabels = true;
     position = "center";
     powerOptions = [
@@ -445,7 +445,7 @@
     monitorDirectories = [
 
     ];
-    overviewEnabled = false;
+    overviewEnabled = true;
     panelPosition = "follow_bar";
     randomEnabled = false;
     randomIntervalSec = 300;
