@@ -32,8 +32,6 @@ in
   nsw = callPackage ./nsw { };
 
   rofi-themes = callPackage ./rofi-themes { };
-  rofi-power-menu = callPackage ./rofi-power-menu { };
-  rofi-wifi-menu = callPackage ./rofi-wifi-menu { };
 
   tokyo-night-kvantum = callPackage ./tokyo-night-kvantum { };
 }

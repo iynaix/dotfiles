@@ -16,9 +16,6 @@
       };
     };
 
-    import-tree.url = "github:vic/import-tree";
-    pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
-
     wrappers = {
       url = "github:Lassulus/wrappers";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,7 +80,15 @@
 
   outputs =
     inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } (
-      _: (inputs.import-tree ./modules) // { flake.templates = import ./templates; }
-    );
+    let
+      inherit (inputs.nixpkgs.lib.fileset) toList fileFilter;
+      import-tree =
+        path:
+        toList (fileFilter (file: file.hasExt "nix" && !(inputs.nixpkgs.lib.hasPrefix "_" file.name)) path);
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = import-tree ./modules;
+
+      flake.templates = import ./templates;
+    };
 }
