@@ -120,6 +120,10 @@ in
         "image/png" = "pqiv.desktop";
       };
 
+      custom.programs.print-config = {
+        pqiv = /* sh */ ''cat "${pkgs.pqiv.env.PQIVRC_PATH}"'';
+      };
+
       custom.persist = {
         home = {
           directories = [

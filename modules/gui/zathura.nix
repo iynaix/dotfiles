@@ -80,5 +80,9 @@
       xdg.mime.defaultApplications = {
         "application/pdf" = "org.pwmt.zathura.desktop";
       };
+
+      custom.programs.print-config = {
+        zathura = /* sh */ ''cat "${pkgs.zathura.flags."--config-dir"}/zathurarc"'';
+      };
     };
 }

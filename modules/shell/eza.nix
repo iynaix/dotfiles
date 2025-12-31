@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -67,6 +67,10 @@
           pkgs.eza # overlay-ed above
           self.packages.${pkgs.stdenv.hostPlatform.system}.eza-tree'
         ];
+      };
+
+      custom.programs.print-config = {
+        eza = /* sh */ ''cat "${lib.getExe pkgs.eza}"'';
       };
     };
 }

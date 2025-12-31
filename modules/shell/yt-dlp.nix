@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 let
   mkFormat =
     height: ''bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'';
@@ -42,9 +42,13 @@ in
           ytplaylist = "ytdl --output '%(playlist_index)d - %(title)s.%(ext)s'";
         };
 
-        systemPackages = [
-          pkgs.yt-dlp # overlay-ed above
+        systemPackages = with pkgs; [
+          yt-dlp # overlay-ed above
         ];
+      };
+
+      custom.programs.print-config = {
+        yt-dlp = /* sh */ ''cat "${lib.getExe pkgs.yt-dlp}"'';
       };
     };
 }

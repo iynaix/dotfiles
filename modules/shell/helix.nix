@@ -30,5 +30,9 @@
       environment.systemPackages = [
         pkgs.helix # overlay-ed above
       ];
+
+      custom.programs.print-config = {
+        helix = /* sh */ ''cat "${pkgs.helix.flags."--config"}"'';
+      };
     };
 }

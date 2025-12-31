@@ -144,9 +144,16 @@ in
         type = "copy";
       };
 
-      custom.programs.terminal = {
-        app-id = "com.mitchellh.ghostty";
-        desktop = "com.mitchellh.ghostty.desktop";
+      custom.programs = {
+        terminal = {
+          app-id = "com.mitchellh.ghostty";
+          desktop = "com.mitchellh.ghostty.desktop";
+        };
+
+        print-config = {
+          ghostty = /* sh */ ''cat "${pkgs.ghostty.flags."--config-file"}"'';
+
+        };
       };
     };
 }

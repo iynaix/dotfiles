@@ -404,12 +404,21 @@ in
           mpv # overlay-ed above
         ];
 
+        custom.programs.print-config =
+          let
+            mpvDir = pkgs.mpv.flags."--config-dir";
+          in
+          {
+            mpv = /* sh */ ''cat "${mpvDir}/mpv.conf"'';
+            mpv-input = /* sh */ ''cat "${mpvDir}/input.conf"'';
+            mpv-plugins = /* sh */ ''cat ${mpvDir}/script-opts/*'';
+          };
+
         custom.persist = {
           home.directories = [
             ".local/state/mpv" # watch later
           ];
         };
-
       }
     ];
 }

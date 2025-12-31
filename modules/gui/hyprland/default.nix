@@ -54,13 +54,8 @@ in
         package = hyprlandWrapped.wrapper;
       };
 
-      custom.shell.packages = {
-        # similar helper function to nvf-print-config
-        hyprland-print-config = {
-          text = /* sh */ ''
-            cat "${hyprlandWrapped.flags."--config"}"
-          '';
-        };
+      custom.programs.print-config = {
+        hyprland = /* sh */ ''cat "${hyprlandWrapped.flags."--config"}"'';
       };
 
       custom.persist = {

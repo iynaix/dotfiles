@@ -149,6 +149,10 @@ in
         environment.systemPackages = [
           pkgs.btop # overlay-ed above
         ];
+
+        custom.programs.print-config = {
+          btop = /* sh */ ''cat "${pkgs.btop.flags."--config"}"'';
+        };
       };
     };
 }

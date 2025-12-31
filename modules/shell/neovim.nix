@@ -60,6 +60,11 @@
         };
       };
 
+      custom.programs.print-config = {
+        neovim = /* sh */ "nvf-print-config";
+        nvf = /* sh */ "nvf-print-config";
+      };
+
       custom.persist = {
         home.directories = [
           ".local/share/nvim" # data directory

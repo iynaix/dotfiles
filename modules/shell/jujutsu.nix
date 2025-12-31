@@ -13,6 +13,7 @@
           "format_short_id(id)" = "id.shortest()";
         };
       };
+      jujutsuToml = tomlFormat.generate "config.toml" jujutsuConf;
     in
     {
       nixpkgs.overlays = [
@@ -22,7 +23,7 @@
             pkgs = prev;
             package = prev.jujutsu;
             flags = {
-              "--config-file" = tomlFormat.generate "config.toml" jujutsuConf;
+              "--config-file" = toString jujutsuToml;
             };
           };
         })
@@ -31,5 +32,9 @@
       environment.systemPackages = [
         pkgs.jujutsu # overlay-ed above
       ];
+
+      custom.programs.print-config = {
+        jujutsu = /* sh */ ''cat "${toString jujutsuToml}"'';
+      };
     };
 }

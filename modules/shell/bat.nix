@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -53,6 +53,10 @@
         fish.interactiveShellInit = /* fish */ ''
           abbr -a --position anywhere -- --help '--help | bat --plain --language=help'
         '';
+      };
+
+      custom.programs.print-config = {
+        bat = /* sh */ ''cat "${lib.getExe pkgs.bat}"'';
       };
     };
 }

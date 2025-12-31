@@ -349,5 +349,20 @@
           y = "yazi";
         };
       };
+
+      custom.programs.print-config =
+        # yazi uses makeWrapper directly, no choice but to parse the wrapper
+        let
+          catYaziPath = path: /* sh */ ''
+            YAZI_PATH=$(grep "export YAZI_CONFIG_HOME=" "${lib.getExe pkgs.yazi.passthru.configuration.package}" | cut -d"'" -f2)
+
+            cat "$YAZI_PATH/${path}"
+          '';
+        in
+        {
+          yazi = catYaziPath "yazi.toml";
+          yazi-theme = catYaziPath "theme.toml";
+          yazi-keymap = catYaziPath "keymap.toml";
+        };
     };
 }

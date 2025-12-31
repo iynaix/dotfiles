@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -36,5 +36,14 @@
       environment.systemPackages = [
         pkgs.ripgrep # overlay-ed above
       ];
+
+      custom.programs.print-config =
+        let
+          cmd = /* sh */ ''cat "${lib.getExe pkgs.ripgrep}"'';
+        in
+        {
+          rg = cmd;
+          ripgrep = cmd;
+        };
     };
 }

@@ -74,20 +74,13 @@ in
         };
       };
 
-      custom = {
-        shell.packages = {
-          # similar helper function to nvf-print-config
-          niri-print-config = {
-            text = /* sh */ ''
-              cat "${niriWrapped.env."NIRI_CONFIG"}"
-            '';
-          };
+      custom.programs = {
+        ghostty.extraSettings = {
+          background-opacity = mkForce 0.95;
         };
 
-        programs = {
-          ghostty.extraSettings = {
-            background-opacity = mkForce 0.95;
-          };
+        print-config = {
+          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}"'';
         };
       };
     };

@@ -105,5 +105,9 @@
       environment.systemPackages = [
         pkgs.tmux # overlay-ed above
       ];
+
+      custom.programs.print-config = {
+        tmux = /* sh */ ''cat "${pkgs.tmux.flags."-f"}"'';
+      };
     };
 }
