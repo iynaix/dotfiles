@@ -48,7 +48,7 @@ in
       programs.hyprland = {
         enable =
           assert (
-            assertMsg (versionOlder config.programs.hyprland.package.version "0.53") "hyprland updated, sync with hyprnstack?"
+            assertMsg (versionOlder config.programs.hyprland.package.version "0.54") "hyprland updated, sync with hyprnstack?"
           );
           true;
         package = hyprlandWrapped.wrapper;

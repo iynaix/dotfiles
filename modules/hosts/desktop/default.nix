@@ -119,7 +119,8 @@ topLevel: {
         lock.enable = false;
 
         programs = {
-          hyprnstack.enable = true;
+          # FIXME: currently does not build due to massive Hyprland refactor
+          hyprnstack.enable = false;
 
           btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon RX 9070XT";

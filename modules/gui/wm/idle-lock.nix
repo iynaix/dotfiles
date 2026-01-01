@@ -43,7 +43,7 @@ in
         ];
         # to be used on laptops, so suspend as well
         text = /* sh */ ''
-          noctalia-shell ipc call lockScreen lockAndSuspend
+          noctalia-shell ipc call sessionMenu lockAndSuspend
         '';
       };
       dpms-on = pkgs.writeShellApplication {
@@ -104,7 +104,7 @@ in
           bind = [ "$mod_SHIFT_CTRL, x, exec, ${lockCmd}" ];
 
           # handle laptop lid
-          bindl = mkIf isLaptop [ ",switch:Lid Switch, ${lockCmd}" ];
+          bindl = mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
         };
 
         niri.settings = {

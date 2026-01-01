@@ -82,15 +82,13 @@
 
       custom.programs.hyprland.settings.windowrule = [
         # do not idle while watching videos
-        "idleinhibit fullscreen,class:^(helium)$"
-        "idleinhibit focus,class:^(helium)$,title:(.*)(YouTube)(.*)"
+        "match:class helium idle_inhibit fullscreen"
+        "match:class helium match:title (.*)(YouTube)(.*) idle_inhibit focus,"
         # float save dialogs
         # save as
-        "float,initialClass:^(helium)$,initialTitle:^(Save File)$"
-        "size <50% <50%,initialClass:^(helium)$,initialTitle:^(Save File)$"
+        "match:initial_class helium match:initial_title ^(Save File)$ float on, size <50% <50%"
         # save image
-        "float,initialClass:^(helium)$,initialTitle:(.*)(wants to save)$"
-        "size <50% <50%,initialClass:^(helium)$,initialTitle:(.*)(wants to save)$"
+        "match:initial_class helium match:initial_title (.*)(wants to save)$ float on, size <50% <50%"
       ];
 
       custom.persist = {

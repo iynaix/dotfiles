@@ -102,6 +102,18 @@
                 repo = "nixpkgs";
               };
             };
+            # for nix flake init
+            templates = {
+              from = {
+                id = "templates";
+                type = "indirect";
+              };
+              to = {
+                type = "github";
+                owner = "NixOS";
+                repo = "templates";
+              };
+            };
           };
           settings = {
             auto-optimise-store = true; # Optimise symlinks

@@ -22,9 +22,8 @@ in
       # openai-whisper for transcribing audio / video
       {
         environment = {
-          systemPackages = with pkgs; [
-            python3Packages.faster-whisper
-            whisper-ctranslate2
+          systemPackages = [
+            # pkgs.whisper-ctranslate2
           ];
         };
 

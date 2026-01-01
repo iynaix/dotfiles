@@ -110,7 +110,7 @@
 
       custom.programs.hyprland.settings = {
         # disable transparency for file delete dialog
-        windowrule = [ "forcergbx,floating:1,class:(nemo)" ];
+        windowrule = [ "match:class nemo match:float forcergbx" ];
       };
 
       custom.persist = {

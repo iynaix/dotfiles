@@ -150,12 +150,10 @@
           };
 
           windowrule = [
-            # "dimaround,floating:1"
-            "bordersize 5,fullscreen:1" # monocle mode
-            "float,class:(wlroots)" # hyprland debug session
+            "match:fullscreen border_size 5" # monocle mode
+            "match:class wlroots float on" # hyprland debug session
             # save dialog
-            "float,class:(xdg-desktop-portal-gtk)"
-            "size <50% <50%,class:(xdg-desktop-portal-gtk)"
+            "match:class xdg-desktop-portal-gtk float on, size <50% <50%"
           ];
 
           # handle trackpad settings
