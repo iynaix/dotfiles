@@ -427,9 +427,9 @@
     bluetoothDetailsViewMode = "grid";
     bluetoothHideUnnamedDevices = false;
     fontDefault = "Geist";
-    fontDefaultScale = 1;
-    fontFixed = "JetBrainsMono Nerd Font";
-    fontFixedScale = 1;
+    fontDefaultScale = 0.9;
+    fontFixed = "Geist Mono";
+    fontFixedScale = 0.9;
     panelBackgroundOpacity = 0.85;
     panelsAttachedToBar = true;
     settingsPanelMode = "centered";

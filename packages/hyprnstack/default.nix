@@ -6,12 +6,12 @@
 }:
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprNStack";
-  version = "1959ecbc50071e5e182b6ce0edff92245870caf1";
+  version = "cbffba31ed820e2fbad6cb21ad0b15a051a9a4e7";
   src = fetchFromGitHub {
     owner = "zakk4223";
     repo = "hyprNstack";
     rev = finalAttrs.version;
-    sha256 = "sha256-LL1+gGBQcb+P0hiCGhHKDIhy7+UqwUBmU+kh0YQTYI0=";
+    hash = "sha256-Cf0TFPrr+XLHRhbRF+zd2/YHgtS2KXskIFv0BQiYjLc=";
   };
 
   inherit (hyprland) nativeBuildInputs;
