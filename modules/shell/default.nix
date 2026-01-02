@@ -10,15 +10,15 @@
     let
       inherit (lib)
         attrValues
+        concatMapAttrsStringSep
         functionArgs
         hiPrio
         intersectAttrs
         isDerivation
         isString
-        length
         mapAttrs
         mkOption
-        optional
+        optionalString
         ;
       inherit (lib.types)
         attrs
@@ -28,44 +28,38 @@
         str
         ;
       proj_dir = "/persist${config.hj.directory}/projects";
+
       # writeShellApplication with support for completions
       writeShellApplicationCompletions =
         {
           name,
-          bashCompletion ? null,
-          zshCompletion ? null,
-          fishCompletion ? null,
+          completions ? { },
           ...
         }@shellArgs:
         let
-          inherit (pkgs) writeShellApplication writeTextFile symlinkJoin;
+          inherit (pkgs) writeShellApplication writeText installShellFiles;
           # get the needed arguments for writeShellApplication
           app = writeShellApplication (intersectAttrs (functionArgs writeShellApplication) shellArgs);
-          completions =
-            optional (bashCompletion != null) (writeTextFile {
-              name = "${name}.bash";
-              destination = "/share/bash-completion/completions/${name}.bash";
-              text = bashCompletion;
-            })
-            ++ optional (zshCompletion != null) (writeTextFile {
-              name = "${name}.zsh";
-              destination = "/share/zsh/site-functions/_${name}";
-              text = zshCompletion;
-            })
-            ++ optional (fishCompletion != null) (writeTextFile {
-              name = "${name}.fish";
-              destination = "/share/fish/vendor_completions.d/${name}.fish";
-              text = fishCompletion;
-            });
+          completionsStr = concatMapAttrsStringSep " " (
+            shell: content:
+            optionalString (builtins.elem shell [
+              "bash"
+              "zsh"
+              "fish"
+              "nushell"
+            ]) "--${shell} ${writeText "${shell}-completion" content}"
+          ) completions;
         in
-        if length completions == 0 then
+        if completions == { } then
           app
         else
-          symlinkJoin {
-            inherit name;
-            inherit (app) meta;
-            paths = [ app ] ++ completions;
-          };
+          app.overrideAttrs (o: {
+            nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ installShellFiles ];
+
+            buildCommand = o.buildCommand + ''
+              installShellCompletion --cmd ${name} ${completionsStr}
+            '';
+          });
     in
     {
       options.custom = {
@@ -197,7 +191,7 @@
             "user-dirs.dirs".text =
               let
                 # For some reason, these need to be wrapped with quotes to be valid.
-                wrapped = lib.mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
+                wrapped = mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
               in
               lib.generators.toKeyValue { } wrapped;
           };
@@ -216,7 +210,7 @@
           custom.shell.packages =
             let
               binariesCompletion = binaryName: {
-                bashCompletion = /* sh */ ''
+                completions.bash = /* sh */ ''
                   _complete_path_binaries()
                   {
                       local cur prev words cword
@@ -237,7 +231,7 @@
 
                   complete -F _complete_path_binaries ${binaryName}
                 '';
-                fishCompletion = /* fish */ ''
+                completions.fish = /* fish */ ''
                   function __complete_path_binaries
                       for path in $PATH
                           for bin in $path/*

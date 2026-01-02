@@ -39,8 +39,8 @@
               cargo run --bin "$1" -- "''${@:2}"
             fi;
           '';
-          fishCompletion = "complete -c crb -f -a '(__cargo_bins)'";
-          bashCompletion = "complete -F __cargo_bins crb";
+          completions.fish = "complete -c crb -f -a '(__cargo_bins)'";
+          completions.bash = "complete -F __cargo_bins crb";
         };
         crrb = {
           text = /* sh */ ''
@@ -50,8 +50,8 @@
               cargo run --release --bin "$1" -- "''${@:2}"
             fi;
           '';
-          fishCompletion = "complete -c crrb -f -a '(__cargo_bins)'";
-          bashCompletion = "complete -F __cargo_bins crrb";
+          completions.fish = "complete -c crrb -f -a '(__cargo_bins)'";
+          completions.bash = "complete -F __cargo_bins crrb";
         };
         # runs rust using the direnv of specified directory
         direnv-cargo-run = pkgs.writeShellApplication {

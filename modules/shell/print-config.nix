@@ -47,7 +47,7 @@ in
                 esac
               '';
 
-              bashCompletion = /* sh */ ''
+              completions.bash = /* sh */ ''
                 _print_config_completions() {
                     local suggestions=(${bashProgsList})
 
@@ -60,7 +60,7 @@ in
                 complete -F _print_config_completions print-config
               '';
 
-              fishCompletion = /* fish */ ''
+              completions.fish = /* fish */ ''
                 # Disable default file completions
                 complete -c print-config -f
 

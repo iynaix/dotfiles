@@ -68,7 +68,7 @@ in
                 fi
               fi
             '';
-            bashCompletion = /* sh */ ''
+            completions.bash = /* sh */ ''
               _ngeneration() {
                   local profile_dir="/nix/var/nix/profiles"
                   local profiles=$(command ls -1 "$profile_dir" | \
@@ -80,7 +80,7 @@ in
 
               complete -F _ngeneration ngeneration
             '';
-            fishCompletion = /* fish */ ''
+            completions.fish = /* fish */ ''
               function _ngeneration
                   set -l profile_dir "/nix/var/nix/profiles"
                   command ls -1 "$profile_dir" | \
@@ -367,7 +367,7 @@ in
               nix build ".#nixosConfigurations.$1.config.system.build.isoImage"
               popd > /dev/null
             '';
-            fishCompletion = /* fish */ ''
+            completions.fish = /* fish */ ''
               function _nbuild_iso
                 nix eval --impure --json --expr \
                   'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \

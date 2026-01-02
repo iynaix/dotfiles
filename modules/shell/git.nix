@@ -117,7 +117,7 @@
               git branch -D "$1" || true
               git push origin --delete "$1"
             '';
-            fishCompletion = /* fish */ ''
+            completions.fish = /* fish */ ''
               function __git_remote_branches
                 command git branch --no-color -r 2>/dev/null | \
                   sed -e 's/^..//' -e 's/^origin\///' | \
@@ -126,7 +126,7 @@
 
               complete -c grd -f -a '(__git_remote_branches)'
             '';
-            bashCompletion = /* sh */ ''
+            completions.bash = /* sh */ ''
               __git_remote_branches() {
                   git branch --no-color -r 2>/dev/null | \
                   sed -e 's/^..//' -e 's/^origin\///' | \
