@@ -29,13 +29,13 @@ in
       };
 
       systemd.user = {
-        # hyprland-session from home-manager, started from within exec-once in the hyprland conf,
+        # ly -> hyprland-start -> exec-once hyprland-session.service -> noctalia-shell etc
         # so the environment will be properly set
         targets.hyprland-session = {
           unitConfig = {
             Description = "Hyprland compositor session";
-            Documentation = [ "man:systemd.special(7)" ];
             BindsTo = [ "graphical-session.target" ];
+            # start the other services here after the WM has already started (push vs pull)
             Wants = [ "graphical-session-pre.target" ] ++ config.custom.startupServices;
             Before = config.custom.startupServices;
             After = [ "graphical-session-pre.target" ];
@@ -60,5 +60,8 @@ in
           };
         };
       };
+
+      # start after WM initializes
+      custom.startupServices = [ "hypr-ipc.service" ];
     };
 }

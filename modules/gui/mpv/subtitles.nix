@@ -23,7 +23,7 @@ in
       {
         environment = {
           systemPackages = [
-            # pkgs.whisper-ctranslate2
+            pkgs.whisper-ctranslate2
           ];
         };
 

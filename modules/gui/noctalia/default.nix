@@ -3,7 +3,7 @@
   flake.nixosModules.wm =
     { isLaptop, pkgs, ... }:
     let
-      inherit (lib) getExe' mkForce;
+      inherit (lib) getExe getExe' mkForce;
       noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -33,6 +33,7 @@
           partOf = [ "graphical-session.target" ];
           restartTriggers = [ noctalia-shell' ];
 
+          # fix runtime deps when starting noctalia-shell from systemd
           # use runtime environment, similar to hyprland
           # https://github.com/noctalia-dev/noctalia-shell/pull/418
           environment = {
@@ -48,7 +49,6 @@
           };
         };
 
-        # fix runtime deps when starting noctalia-shell from systemd
         # run wallpaper after noctalia-shell starts
         wallpaper = {
           wantedBy = [ "noctalia-shell.service" ];
@@ -62,7 +62,17 @@
 
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = getExe' pkgs.custom.dotfiles-rs "wallpaper";
+            ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 3";
+            ExecStart = getExe (
+              pkgs.writeShellApplication {
+                name = "wallpaper-startup";
+                runtimeInputs = [
+                  noctalia-shell'
+                  pkgs.custom.dotfiles-rs
+                ];
+                text = ''wallpaper'';
+              }
+            );
           };
         };
       };

@@ -266,6 +266,7 @@
   };
   network = {
     wifiEnabled = false;
+    bluetoothRssiPollingEnabled = false;
   };
   nightLight = {
     autoSchedule = true;
@@ -398,7 +399,7 @@
   };
   templates = {
     alacritty = false;
-    cava = true;
+    cava = "truehttps://git-wrapped.com/";
     code = false;
     discord = false;
     emacs = false;
