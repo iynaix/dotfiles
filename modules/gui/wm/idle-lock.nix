@@ -150,31 +150,18 @@ in
         #   };
       };
 
+      systemd.user.services.hypridle = {
+        serviceConfig = {
+          RestartSec = 1;
+        };
+      };
+
+      # start after WM initializes
+      custom.startupServices = [ "hypridle.service" ];
+
       # by default, the service uses the systemd package from the hypridle derivation,
       # so using a config file is necessary
       hj.xdg.config.files."hypr/hypridle.conf".text = hypridleConfText;
-
-      systemd.user.services.hypridle = {
-        unitConfig = {
-          ConditionEnvironment = "WAYLAND_DISPLAY";
-          # if it fails to start 5 times in 60s, stop trying (to avoid infinite spam)
-          StartLimitBurst = 5;
-          StartLimitIntervalSec = 60;
-        };
-
-        serviceConfig = {
-          # wait for XDG_CURRENT_DESKTOP to be set
-          ExecStartPre = "${getExe pkgs.bash} -c 'while [ -z \"$XDG_CURRENT_DESKTOP\" ]; do sleep 0.1; done'";
-
-          # faster retries then gradually slow down to a maximum of 10s
-          RestartSec = 1;
-          RestartMaxDelaySec = "10s";
-          RestartSteps = 5;
-
-          # loop for 30s for ExecStartPre
-          TimeoutStartSec = 30;
-        };
-      };
 
       custom.programs.print-config = {
         hypridle = /* sh */ ''cat "${config.hj.xdg.config.directory}/hypr/hypridle.conf"'';

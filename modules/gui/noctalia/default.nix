@@ -1,14 +1,9 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      isLaptop,
-      pkgs,
-      ...
-    }:
+    { isLaptop, pkgs, ... }:
     let
-      inherit (lib) getExe mkBefore;
+      inherit (lib) getExe' mkForce;
       noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -30,51 +25,60 @@
         "noctalia/settings.json".text = lib.strings.toJSON noctaliaSettings;
       };
 
-      # start using WM startup, the systemd service is very buggy
-      environment = {
-        sessionVariables = {
-          # write changed settings to gui-settings.json
-          "NOCTALIA_SETTINGS_FALLBACK" = "${config.hj.xdg.config.directory}/noctalia/gui-settings.json";
+      # custom noctalia service that starts after the WM is ready
+      systemd.user.services = {
+        noctalia-shell = {
+          description = "Noctalia Shell - Wayland desktop shell";
+          documentation = [ "https://docs.noctalia.dev/docs" ];
+          partOf = [ "graphical-session.target" ];
+          restartTriggers = [ noctalia-shell' ];
+
+          # use runtime environment, similar to hyprland
+          # https://github.com/noctalia-dev/noctalia-shell/pull/418
+          environment = {
+            PATH = mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
+          };
+
+          serviceConfig = {
+            ExecStart = lib.getExe noctalia-shell';
+            Restart = "on-failure";
+            Environment = [
+              "NOCTALIA_SETTINGS_FALLBACK=%h/.config/noctalia/gui-settings.json"
+            ];
+          };
         };
 
-        systemPackages = [
-          noctalia-shell'
-        ];
+        # fix runtime deps when starting noctalia-shell from systemd
+        # run wallpaper after noctalia-shell starts
+        wallpaper = {
+          wantedBy = [ "noctalia-shell.service" ];
+
+          unitConfig = {
+            Description = "Set the wallpapers";
+            PartOf = [ "graphical-session.target" ];
+            After = [ "noctalia-shell.service" ];
+            Requires = [ "noctalia-shell.service" ];
+          };
+
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = getExe' pkgs.custom.dotfiles-rs "wallpaper";
+          };
+        };
       };
+
+      environment.systemPackages = [ noctalia-shell' ];
+
+      # start after WM initializes
+      custom.startupServices = [ "noctalia-shell.service" ];
 
       custom.shell.packages = {
         noctalia-shell-reload = {
-          runtimeInputs = with pkgs; [
-            killall
-            noctalia-shell
-          ];
           text = /* sh */ ''
-            killall .quickshell-wrapper || noctalia-shell &
+            systemctl --user restart noctalia-shell
           '';
         };
       };
-
-      custom.startup = mkBefore [
-        {
-          spawn = [
-            # set random wallpaper on startup
-            (getExe (
-              pkgs.writeShellApplication {
-                name = "noctalia-startup";
-                runtimeInputs = with pkgs; [
-                  noctalia-shell
-                  custom.dotfiles-rs
-                ];
-                text = /* sh */ ''
-                  noctalia-shell &
-                  sleep 1
-                  wallpaper
-                '';
-              }
-            ))
-          ];
-        }
-      ];
 
       custom.persist = {
         home = {
@@ -88,6 +92,5 @@
           ];
         };
       };
-
     };
 }

@@ -1,8 +1,17 @@
 diff --git a/Services/UI/ImageCacheService.qml b/Services/UI/ImageCacheService.qml
-index 9da04cda..6c57fc4f 100644
+index 52fcef85..0ce3e5f9 100644
 --- a/Services/UI/ImageCacheService.qml
 +++ b/Services/UI/ImageCacheService.qml
-@@ -274,7 +274,7 @@ Singleton {
+@@ -269,7 +269,7 @@ Singleton {
+     const srcEsc = sourcePath.replace(/'/g, "'\\''");
+     const dstEsc = outputPath.replace(/'/g, "'\\''");
+ 
+-    const command = `magick -define jpeg:size=768x768 '${srcEsc}' -auto-orient -thumbnail '384x384^' -gravity center -extent 384x384 -quality 85 '${dstEsc}'`;
++    const command = `wallpaper resize --size 384x384 '${srcEsc}' '${dstEsc}'`;
+ 
+     runProcess(command, cacheKey, outputPath, sourcePath);
+   }
+@@ -283,7 +283,7 @@ Singleton {
      const doubleWidth = width * 2;
      const doubleHeight = height * 2;
  

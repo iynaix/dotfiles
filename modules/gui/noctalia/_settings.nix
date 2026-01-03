@@ -427,9 +427,9 @@
     bluetoothDetailsViewMode = "grid";
     bluetoothHideUnnamedDevices = false;
     fontDefault = "Geist";
-    fontDefaultScale = 0.9;
+    fontDefaultScale = 1.0;
     fontFixed = "Geist Mono";
-    fontFixedScale = 0.9;
+    fontFixedScale = 1.0;
     panelBackgroundOpacity = 0.85;
     panelsAttachedToBar = true;
     settingsPanelMode = "centered";
@@ -442,7 +442,7 @@
     enabled = true;
     fillColor = "#000000";
     fillMode = "crop";
-    hideWallpaperFilenames = false;
+    hideWallpaperFilenames = true;
     monitorDirectories = [
 
     ];

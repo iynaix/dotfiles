@@ -1,11 +1,23 @@
 { inputs, lib, ... }:
 let
   inherit (lib)
+    all
     concatMapStrings
+    concatMapStringsSep
+    concatStrings
+    concatStringsSep
+    filterAttrs
+    foldl
+    generators
     getExe'
+    hasPrefix
+    isAttrs
+    isList
+    mapAttrsToList
     mkDefault
     mkEnableOption
     mkOption
+    replicate
     ;
   # copied from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
@@ -16,21 +28,6 @@ let
       importantPrefixes ? [ "$" ],
     }:
     let
-      inherit (lib)
-        all
-        concatMapStringsSep
-        concatStrings
-        concatStringsSep
-        filterAttrs
-        foldl
-        generators
-        hasPrefix
-        isAttrs
-        isList
-        mapAttrsToList
-        replicate
-        ;
-
       initialIndent = concatStrings (replicate indentLevel "  ");
 
       toHyprconf' =
@@ -154,7 +151,7 @@ in
         # systemd activation blurb
         {
           exec-once = [
-            "${getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+            "${getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart hyprland-session.target"
           ];
         }
         # handle the plugins, loaded before the settings, implementation from home-manager:

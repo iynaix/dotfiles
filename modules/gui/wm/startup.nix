@@ -150,6 +150,12 @@ in
         ]);
         default = [ ];
       };
+
+      startupServices = mkOption {
+        description = "Services to start after the WM is initialized";
+        type = listOf str;
+        default = [ ];
+      };
     };
 
   };

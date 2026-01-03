@@ -53,6 +53,13 @@ in
       );
 
       systemd.user.services = {
+        niri = {
+          unitConfig = {
+            Before = config.custom.startupServices;
+            Wants = config.custom.startupServices;
+          };
+        };
+
         # listen to events from niri, done as a service so it will restart from nixos-rebuild
         niri-ipc = {
           wantedBy = [ "graphical-session.target" ];

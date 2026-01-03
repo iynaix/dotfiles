@@ -54,8 +54,8 @@
                 mktplcRef = {
                   name = "qt-qml";
                   publisher = "TheQtCompany";
-                  version = "1.10.0";
-                  hash = "sha256-5k80WTSDwdf3WeePUt2CgTd3dTejj0+fKnbjzNfMXng=";
+                  version = "1.11.1";
+                  hash = "sha256-lUXx2VAXK0Av4T3bRW7hXpP0u7zJbDvMbKkpPACT4WE=";
                 };
               })
             ];
