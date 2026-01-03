@@ -1,21 +1,11 @@
+{ lib, ... }:
+let
+  inherit (lib) getExe' optionalString;
+in
 {
   flake.nixosModules.wm =
+    { config, pkgs, ... }:
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib)
-        getExe'
-        mkIf
-        optionalString
-        ;
-    in
-    {
-      custom.autologinCommand = mkIf (config.custom.wm == "hyprland") "Hyprland";
-
       custom.programs.hyprland.settings = {
         exec-once = [
           # stop fucking with my cursors

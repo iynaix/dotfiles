@@ -1,29 +1,16 @@
+{ lib, ... }:
+let
+  inherit (lib) mkDefault mkIf mkMerge;
+in
 {
   flake.nixosModules.core =
     {
       config,
-      lib,
       pkgs,
       user,
       ...
     }:
-    let
-      inherit (lib)
-        mkIf
-        mkMerge
-        mkOption
-        ;
-      inherit (lib.types) nullOr str;
-    in
     {
-      options.custom = {
-        autologinCommand = mkOption {
-          type = nullOr str;
-          default = null;
-          description = "Command to run after autologin";
-        };
-      };
-
       config = mkMerge [
         # ssh settings
         {
@@ -121,7 +108,7 @@
             // {
               auto_login_service = "ly-autologin";
               # auto_login_session = config.services.displayManager.sessionData.autologinSession;
-              auto_login_session = "hyprland";
+              auto_login_session = mkDefault "hyprland";
               auto_login_user = user;
             };
           };

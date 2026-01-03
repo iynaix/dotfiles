@@ -39,6 +39,8 @@
                 wm = mkForce "tty";
                 specialisation.current = "tty";
               };
+
+              services.displayManager.ly.enable = mkForce false;
             };
           };
 
@@ -49,6 +51,8 @@
                 wm = mkForce "hyprland";
                 specialisation.current = "hyprland";
               };
+
+              services.displayManager.ly.settings.auto_login_session = "hyprland";
             };
           };
 
@@ -58,6 +62,8 @@
                 wm = mkForce "niri";
                 specialisation.current = "niri";
               };
+
+              services.displayManager.ly.settings.auto_login_session = "niri";
             };
           };
 
@@ -67,6 +73,8 @@
                 wm = mkForce "mango";
                 specialisation.current = "mango";
               };
+
+              services.displayManager.ly.settings.auto_login_session = "mango";
             };
           };
         };

@@ -11,14 +11,8 @@ let
 in
 {
   flake.nixosModules.wm =
+    { config, pkgs, ... }:
     {
-      config,
-      pkgs,
-      ...
-    }:
-    {
-      custom.autologinCommand = mkIf (config.custom.wm == "niri") "niri-session";
-
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = mkMerge (
         (map (
