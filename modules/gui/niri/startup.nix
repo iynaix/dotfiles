@@ -46,22 +46,27 @@ in
         ]
       );
 
-      systemd.user.services = {
-        niri = {
+      systemd.user = {
+        # ly -> niri.service -> niri-session.service -> noctalia-shell.service etc
+        targets.niri-session = {
+          wantedBy = [ "niri.service" ];
+
           unitConfig = {
+            Description = "Niri compositor session";
+            BindsTo = [ "niri.service" ];
+            # start the other services here after the WM has already started (push vs pull)
+            Wants = [ "niri.service" ] ++ config.custom.startupServices;
             Before = config.custom.startupServices;
-            Wants = config.custom.startupServices;
+            After = [ "niri.service" ];
           };
         };
 
         # listen to events from niri, done as a service so it will restart from nixos-rebuild
-        niri-ipc = {
+        services.niri-ipc = {
           wantedBy = [ "graphical-session.target" ];
 
           unitConfig = {
-            ConditionEnvironment = "WAYLAND_DISPLAY";
             Description = "Custom niri-ipc from dotfiles-rs";
-            After = [ "niri.service" ];
             PartOf = [ "graphical-session.target" ];
           };
 
@@ -71,5 +76,8 @@ in
           };
         };
       };
+
+      # start after WM initializes
+      custom.startupServices = [ "niri-ipc.service" ];
     };
 }

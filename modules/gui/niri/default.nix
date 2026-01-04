@@ -33,6 +33,13 @@ in
               #     ./transparent-fullscreen.patch
               #   ];
 
+              # https://github.com/YaLTeR/niri/pull/3190
+              postPatch = ''
+                patchShebangs resources/niri-session
+                substituteInPlace resources/niri.service \
+                  --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
+              '';
+
               # creating an overlay for buildRustPackage overlay
               # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
               cargoDeps = pkgs.rustPlatform.importCargoLock {

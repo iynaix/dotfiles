@@ -27,7 +27,7 @@ in
             text = lib.strings.toJSON (
               # use pywal template syntax here
               {
-                fallback_wallpaper = "${../wallpaper-default.jpg}";
+                fallbackWallpaper = "${../wallpaper-default.jpg}";
                 inherit (config.custom.hardware) monitors;
                 inherit host;
               }

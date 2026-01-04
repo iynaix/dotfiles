@@ -1,4 +1,4 @@
-use crate::{MIN_ULTRAWIDE_RATIO, json};
+use crate::{MIN_ULTRAWIDE_RATIO, full_path, json};
 use serde::Deserialize;
 
 #[derive(Clone, Default, Deserialize, Debug, PartialEq)]
@@ -61,7 +61,6 @@ impl NixMonitor {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NixJson {
-    pub wallpaper: String,
     pub fallback_wallpaper: String,
     pub host: String,
     pub monitors: Vec<NixMonitor>,
@@ -74,8 +73,8 @@ impl Default for NixJson {
 }
 
 impl NixJson {
-    /// get nix info from ~/.config before wallust has processed it
     pub fn new() -> Self {
-        json::load("~/.local/state/nix.json").unwrap_or_else(|_| panic!("unable to read nix.json"))
+        json::load(full_path("~/.local/state/nix.json"))
+            .unwrap_or_else(|_| panic!("error reading nix.json"))
     }
 }
