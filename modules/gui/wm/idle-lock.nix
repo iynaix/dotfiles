@@ -39,11 +39,11 @@ in
       noctalia-lock = pkgs.writeShellApplication {
         name = "noctalia-lock";
         runtimeInputs = with pkgs; [
-          noctalia-shell
+          noctalia-ipc
         ];
         # to be used on laptops, so suspend as well
         text = /* sh */ ''
-          noctalia-shell ipc call sessionMenu lockAndSuspend
+          noctalia-ipc sessionMenu lockAndSuspend
         '';
       };
       dpms-on = pkgs.writeShellApplication {

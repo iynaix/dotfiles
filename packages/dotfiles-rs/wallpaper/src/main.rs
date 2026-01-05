@@ -124,7 +124,7 @@ fn main() {
             }
             WallpaperSubcommand::Crop(args) => crop::crop(&args),
             WallpaperSubcommand::History => pqiv::show_history(),
-            WallpaperSubcommand::Rofi => pqiv::show_pqiv(),
+            WallpaperSubcommand::Select => pqiv::show_pqiv(),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
             WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
             WallpaperSubcommand::Add(args) => wallfacer::add(args),

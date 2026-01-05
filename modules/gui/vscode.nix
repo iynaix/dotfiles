@@ -1,6 +1,6 @@
 {
   flake.nixosModules.gui =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     let
       inherit (pkgs.vscode-utils) buildVscodeMarketplaceExtension;
       vscodium' = pkgs.vscode-with-extensions.override {
@@ -63,26 +63,6 @@
     in
     {
       environment.systemPackages = [ vscodium' ];
-
-      custom = {
-        shell.packages = {
-          rofi-edit-proj = /* sh */ ''
-            proj_dir="/persist${config.hj.directory}/projects";
-            projects=$(find "$proj_dir" -maxdepth 1 -type d | sort | sed "s|$proj_dir||" | grep -v "^$" | sed 's|^/||')
-
-            selected=$(echo "$projects" | rofi -dmenu -i -p "Open Project:")
-
-            # Check if a project was selected
-            if [ -z "$selected" ]; then
-                echo "No project selected"
-                exit 0
-            fi
-
-            # Open the project in VS Code
-            codium "$proj_dir/$selected"
-          '';
-        };
-      };
 
       custom.persist = {
         home.directories = [

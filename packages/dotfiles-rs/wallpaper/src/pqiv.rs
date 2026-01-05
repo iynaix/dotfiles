@@ -27,7 +27,7 @@ fn niri_window_title() -> String {
         panic!("Failed to get focused output from niri");
     };
 
-    format!("wallpaper-rofi-{}", curr_mon.name)
+    format!("wallpaper-selector-{}", curr_mon.name)
 }
 
 #[allow(clippy::module_name_repetitions)]

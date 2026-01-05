@@ -137,6 +137,11 @@
         format.type = [ "nixfmt" ];
       };
       python.enable = true;
+      qml = {
+        enable = true;
+        format.enable = true;
+        lsp.enable = true;
+      };
       rust = {
         enable = true;
         extensions.crates-nvim.enable = false;

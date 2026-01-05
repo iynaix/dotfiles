@@ -106,8 +106,8 @@ pub fn reload() {
     std::fs::remove_dir_all(&wallpaper_cache).expect("unable to clear noctalia cache");
     std::fs::create_dir(&wallpaper_cache).ok();
 
-    let wallpaper_json = noctalia_cache.join("wallpapers.json");
-    std::fs::remove_file(&wallpaper_json).ok();
+    // let wallpaper_json = noctalia_cache.join("wallpapers.json");
+    // std::fs::remove_file(&wallpaper_json).ok();
 
     set(current().expect("no current wallpaper set"));
 }

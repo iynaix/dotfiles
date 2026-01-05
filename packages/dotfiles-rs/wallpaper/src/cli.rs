@@ -118,11 +118,11 @@ pub enum WallpaperSubcommand {
     History,
 
     #[command(
-        name = "rofi",
-        visible_alias = "pqiv",
+        name = "select",
+        visible_aliases = ["selector", "rofi", "pqiv"],
         about = "Show wallpaper selector with pqiv"
     )]
-    Rofi,
+    Select,
 
     #[command(
         name = "dedupe",

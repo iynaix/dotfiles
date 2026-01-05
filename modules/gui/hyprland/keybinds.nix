@@ -6,39 +6,38 @@
       inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";
       qtile_like = config.custom.programs.hyprland.qtile;
-      noctalia = cmd: "noctalia-shell ipc call ${cmd}";
     in
     {
       custom.programs.hyprland.settings = {
         bind = [
           "$mod, Return, exec, ghostty"
-          "$mod_SHIFT, Return, exec, ${noctalia " launcher toggle"}"
+          "$mod_SHIFT, Return, exec, noctalia-ipc launcher toggle"
           "$mod, BackSpace, killactive,"
           "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
           "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
           "$mod, w, exec, helium"
           "$mod_SHIFT, w, exec, helium --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
-          "$mod_SHIFT, v, exec, rofi-edit-proj"
+          "$mod_SHIFT, v, exec, noctalia-ipc plugin:projects toggle"
           ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.hj.directory}/projects/dotfiles"''
           ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.hj.directory}/projects/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"
 
-          "CTRL_ALT, Delete, exec, ${noctalia "sessionMenu toggle"}"
+          "CTRL_ALT, Delete, exec, noctalia-ipc sessionMenu toggle"
 
           # toggle the bar
-          "$mod, a, exec, ${noctalia "bar toggle"}"
+          "$mod, a, exec, noctalia-ipc bar toggle"
 
           # restart noctalia
           "$mod_SHIFT, a, exec, noctalia-shell-reload"
 
           # clipboard history
-          "$mod_CTRL, v, exec, ${noctalia "launcher clipboard"}"
+          "$mod_CTRL, v, exec, noctalia-ipc launcher clipboard"
 
           # notification history
-          "$mod, n, exec, ${noctalia "notifications toggleHistory"}"
+          "$mod, n, exec, noctalia-ipc notifications toggleHistory"
 
           # reset monitors
           "CTRL_SHIFT, Escape, exec, hypr-monitors"
@@ -104,8 +103,8 @@
           "$mod, mouse_up, workspace, e-1"
 
           # switching wallpapers or themes
-          "$mod, apostrophe, exec, wallpaper rofi"
-          "$mod_SHIFT, apostrophe, exec, rofi--theme"
+          "$mod, apostrophe, exec, wallpaper select"
+          # "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
           "ALT, apostrophe, exec, wallpaper history"
 
           # special keys

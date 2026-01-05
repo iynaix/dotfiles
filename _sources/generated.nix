@@ -87,15 +87,15 @@
   };
   niri = {
     pname = "niri";
-    version = "3158f5a9c0f81184520e51d280ffa3f516bf9275";
+    version = "b7eb8a635b7f75705808eaed85c016f02ae4fd2d";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "3158f5a9c0f81184520e51d280ffa3f516bf9275";
+      rev = "b7eb8a635b7f75705808eaed85c016f02ae4fd2d";
       fetchSubmodules = false;
-      sha256 = "sha256-C9lTaFYI5hoe6Bxmzy3fFh/9lEZ3u+NbZvnKFmhOeCo=";
+      sha256 = "sha256-IyH3zaCT2JZ6fdY4vKlUz2RbDdxaryvSZWUVixKYrKM=";
     };
-    date = "2026-01-03";
+    date = "2026-01-05";
   };
   rofi-themes = {
     pname = "rofi-themes";

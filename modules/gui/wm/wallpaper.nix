@@ -14,7 +14,7 @@ in
           ];
         };
 
-        # add separate window rules to set dimensions for each monitor for rofi-wallpaper, this is so ugly :(
+        # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
         custom.programs.niri = {
           settings.config = concatMapStringsSep "\n" (
             mon:
@@ -26,7 +26,7 @@ in
             in
             /* kdl */ ''
               window-rule {
-                  match title="^wallpaper-rofi-${mon.name}$"
+                  match title="^wallpaper-selector-${mon.name}$"
                   default-column-width { fixed ${toString width}; }
                   default-window-height { fixed ${toString height}; }
                   open-floating true

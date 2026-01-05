@@ -9,7 +9,12 @@ let
 in
 {
   flake.nixosModules.wm =
-    { isLaptop, pkgs, ... }:
+    {
+      config,
+      isLaptop,
+      pkgs,
+      ...
+    }:
     let
       noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
       noctalia-shell' =
@@ -50,7 +55,12 @@ in
             };
           };
         };
-        "plugins/projects-provider".source = ./projects-provider;
+        # substitute projects dir into code
+        "noctalia/plugins/projects-provider".source = pkgs.runCommand "set-project-dir" { } /* sh */ ''
+          cp -r ${./projects-provider} $out
+              substituteInPlace $out/LauncherProvider.qml \
+                --replace-fail "%PROJECT_DIR%" "/persist${config.hj.directory}/projects"
+        '';
       };
 
       # custom noctalia service that starts after the WM is ready
@@ -60,7 +70,9 @@ in
           description = "Noctalia Shell - Wayland desktop shell";
           documentation = [ "https://docs.noctalia.dev/docs" ];
           partOf = [ "graphical-session.target" ];
-          restartTriggers = [ noctalia-shell' ];
+          # this shit doesn't work because nixos doesn't properly restart user services
+          # https://github.com/NixOS/nixpkgs/issues/246611#issuecomment-3342453760
+          # restartIfChanged = true;
 
           # fix runtime deps when starting noctalia-shell from systemd
           # use runtime environment, similar to hyprland
@@ -84,7 +96,6 @@ in
 
           unitConfig = {
             Description = "Set the wallpapers";
-            PartOf = [ "graphical-session.target" ];
             After = [ "noctalia-shell.service" ];
             Requires = [ "noctalia-shell.service" ];
           };
@@ -106,6 +117,9 @@ in
                 '';
               }
             );
+            # ensures systemd considers it "active" even after the script finishes
+            # this prevents it from restarting again when noctalia-shell restarts after boot
+            RemainAfterExit = "yes";
           };
         };
       };
@@ -121,7 +135,47 @@ in
             systemctl --user restart noctalia-shell
           '';
         };
+        noctalia-ipc = {
+          runtimeInputs = with pkgs; [
+            killall
+            jq
+          ];
+          text = /* sh */ ''
+            RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
+
+            # invalid json, no instances running, so start noctalia-shell
+            if [[ ! "$RAW_OUTPUT" == "["* ]]; then
+              systemctl --user restart noctalia-shell
+              exit
+            fi
+
+            NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
+
+            # using dev version, don't kill the shell
+            if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
+              "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
+              exit
+            fi
+
+            # different instance, kill previous instances
+            if [[ ! "$NOCTALIA_PATH" =~ "${pkgs.noctalia-shell}" ]]; then
+              killall .quickshell-wrapper
+              systemctl --user restart noctalia-shell
+              sleep 2
+            fi
+
+            ${lib.getExe pkgs.noctalia-shell} ipc call "$@"
+          '';
+        };
       };
+
+      # setup blur for hyprland
+      # custom.programs.hyprland.settings = {
+      #   layerrule = [
+      #     ''match:namespace noctalia-background-.*$ ignore_alpha 0.5, blur on, blur_popups on''
+      #     ''match:namespace noctalia-bar-.*$ ignore_alpha 0.5, blur on''
+      #   ];
+      # };
 
       custom.persist = {
         home = {

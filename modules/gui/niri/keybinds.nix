@@ -21,14 +21,6 @@
           "-e"
         ]
         ++ (flatten cmd);
-      noctalia =
-        cmd:
-        [
-          "noctalia-shell"
-          "ipc"
-          "call"
-        ]
-        ++ (flatten cmd);
     in
     {
       custom = {
@@ -41,7 +33,8 @@
             # "Mod+Shift+Slash".action = "show-hotkey-overlay";
 
             "Mod+Return".spawn = [ "ghostty" ];
-            "Mod+Shift+Return".spawn = noctalia [
+            "Mod+Shift+Return".spawn = [
+              "noctalia-ipc"
               "launcher"
               "toggle"
             ];
@@ -66,7 +59,11 @@
               "--incognito"
             ];
             "Mod+V".spawn = termExec [ "nvim" ];
-            "Mod+Shift+V".spawn = [ "rofi-edit-proj" ];
+            "Mod+Shift+V".spawn = [
+              "noctalia-ipc"
+              "plugin:projects"
+              "toggle"
+            ];
             "Mod+period".spawn = [
               "focus-or-run"
               "dotfiles - VSCodium"
@@ -80,13 +77,15 @@
 
             # exit niri
             "Alt+F4".action = "quit";
-            "Ctrl+Alt+Delete".spawn = noctalia [
+            "Ctrl+Alt+Delete".spawn = [
+              "noctalia-ipc"
               "sessionMenu"
               "toggle"
             ];
 
             # toggle the bar
-            "Mod+A".spawn = noctalia [
+            "Mod+A".spawn = [
+              "noctalia-ipc"
               "bar"
               "toggle"
             ];
@@ -97,13 +96,15 @@
             ];
 
             # clipboard history
-            "Mod+Ctrl+V".spawn = noctalia [
+            "Mod+Ctrl+V".spawn = [
+              "noctalia-ipc"
               "launcher"
               "clipboard"
             ];
 
             # notification history
-            "Mod+N".spawn = noctalia [
+            "Mod+N".spawn = [
+              "noctalia-ipc"
               "notifications"
               "toggleHistory"
             ];
@@ -205,7 +206,7 @@
               "wallpaper"
               "rofi"
             ];
-            "Mod+Shift+Apostrophe".spawn = [ "rofi-wallust-theme" ];
+            # "Mod+Shift+Apostrophe".spawn = [ "rofi-wallust-theme" ];
             "Alt+Apostrophe".spawn = [
               "wallpaper"
               "history"
