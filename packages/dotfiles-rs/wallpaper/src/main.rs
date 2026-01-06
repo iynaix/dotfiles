@@ -144,7 +144,11 @@ fn main() {
     };
 
     if !args.skip_wallpaper {
-        wallpaper::set(&wallpaper);
+        if is_reload {
+            wallpaper::reload();
+        } else {
+            wallpaper::set(&wallpaper);
+        }
 
         if !is_reload && !args.skip_history {
             write_wallpaper_history(PathBuf::from(wallpaper));

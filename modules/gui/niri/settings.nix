@@ -21,7 +21,6 @@ in
     }:
     {
       custom.programs = {
-
         niri.settings.config = mkMerge [
           /* kdl */ ''
             input {

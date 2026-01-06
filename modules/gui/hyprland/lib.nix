@@ -165,6 +165,8 @@ in
             map (p: "hyprctl plugin load ${mkEntry p}") config.plugins;
         }
         config.settings
+        # source the hyprland config at the default location
+        { source = "~/.config/hypr/hyprland.conf"; }
       ];
     in
     {

@@ -1,0 +1,22 @@
+{
+  "id": "projects-provider",
+  "name": "Projects Provider",
+  "version": "1.0.0",
+  "description": "Browse and open projects in the editor",
+  "tags": ["Launcher", "Utility"],
+  "minNoctaliaVersion": "3.9.0",
+  "author": "iynaix",
+  "license": "MIT",
+  "repository": "https://github.com/iynaix/dotfiles",
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+    }
+  }
+}

@@ -159,7 +159,7 @@
       # lspSignature?
       # mappings?
       servers.nixd = {
-        init_options = lib.mkIf (dots != null) {
+        options = lib.mkIf (dots != null) {
           nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
           home-manager.expr = "(builtins.getFlake \"${dots}\").homeConfigurations.${host}.options";
         };

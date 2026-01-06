@@ -1,9 +1,16 @@
 { inputs, lib, ... }:
+let
+  inherit (lib)
+    getExe
+    getExe'
+    mkForce
+    optionalString
+    ;
+in
 {
   flake.nixosModules.wm =
     { isLaptop, pkgs, ... }:
     let
-      inherit (lib) getExe getExe' mkForce;
       noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -11,9 +18,13 @@
         }).overrideAttrs
           {
             patches = [ ./face-aware-crop.patch ];
+
+            postPatch = ''
+              substituteInPlace "Services/Noctalia/UpdateService.qml" \
+                --replace-fail "3.8" "3.9"
+            '';
           };
     in
-    # don't use the systemd service, it's very buggy :(
     {
       nixpkgs.overlays = [
         (_: _prev: {
@@ -23,9 +34,27 @@
 
       hj.xdg.config.files = {
         "noctalia/settings.json".text = lib.strings.toJSON noctaliaSettings;
+        "noctalia/plugins.json" = {
+          text = lib.strings.toJSON {
+            sources = [
+              {
+                enabled = true;
+                name = "Official Noctalia Plugins";
+                url = "https://github.com/noctalia-dev/noctalia-plugins";
+              }
+            ];
+            states = {
+              projects-provider = {
+                enabled = true;
+              };
+            };
+          };
+        };
+        "plugins/projects-provider".source = ./projects-provider;
       };
 
       # custom noctalia service that starts after the WM is ready
+      # don't use flake's systemd service, it's very buggy :(
       systemd.user.services = {
         noctalia-shell = {
           description = "Noctalia Shell - Wayland desktop shell";
@@ -70,7 +99,11 @@
                   noctalia-shell'
                   pkgs.custom.dotfiles-rs
                 ];
-                text = ''wallpaper'';
+                text = ''
+                  # hide on laptop screens to save space
+                  ${optionalString isLaptop "noctalia-shell ipc call bar hide"}
+                  wallpaper
+                '';
               }
             );
           };
@@ -96,7 +129,7 @@
             ".config/noctalia"
           ];
 
-          # mainly so the new version popup doesn't reappear
+          # wallpapers.json contains the last set wallpaper
           cache.directories = [
             ".cache/noctalia"
           ];

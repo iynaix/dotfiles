@@ -87,7 +87,6 @@ where
         .par_iter()
         .filter(|mon| mon.enabled)
         .for_each(|mon| {
-            //
             execute::command_args!("noctalia-shell", "ipc", "call", "wallpaper", "set")
                 .arg(&wallpaper)
                 .arg(&mon.name)
@@ -101,9 +100,14 @@ where
 /// reloads the wallpaper
 pub fn reload() {
     // clear noctalia cache to force the wallpaper to be reloaded
-    let noctalia_cache = full_path("~/.cache/noctalia/images/wallpapers/large");
-    std::fs::remove_dir_all(&noctalia_cache).expect("unable to clear noctalia cache");
-    std::fs::create_dir(&noctalia_cache).ok();
+    let noctalia_cache = full_path("~/.cache/noctalia");
+
+    let wallpaper_cache = noctalia_cache.join("images/wallpapers/large");
+    std::fs::remove_dir_all(&wallpaper_cache).expect("unable to clear noctalia cache");
+    std::fs::create_dir(&wallpaper_cache).ok();
+
+    let wallpaper_json = noctalia_cache.join("wallpapers.json");
+    std::fs::remove_file(&wallpaper_json).ok();
 
     set(current().expect("no current wallpaper set"));
 }

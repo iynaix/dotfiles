@@ -190,9 +190,9 @@
         {
           id = "ScreenRecorder";
         }
-        {
-          id = "WallpaperSelector";
-        }
+        # {
+        #   id = "WallpaperSelector";
+        # }
       ];
     };
   };
@@ -239,6 +239,7 @@
     shadowDirection = "bottom_right";
     shadowOffsetX = 2;
     shadowOffsetY = 3;
+    showChangelogOnStartup = false;
     showHibernateOnLockScreen = false;
     showScreenCorners = false;
     showSessionButtonsOnLockScreen = true;

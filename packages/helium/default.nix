@@ -23,10 +23,6 @@ appimageTools.wrapType2 (
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 
-    extraPkgs = pkgs: [
-      pkgs.dbus # mpris support
-    ];
-
     # pass through files from the root fs
     extraBwrapArgs = [
       # chromium policies
