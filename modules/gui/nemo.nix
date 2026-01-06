@@ -108,11 +108,6 @@
         ];
       };
 
-      custom.programs.hyprland.settings = {
-        # disable transparency for file delete dialog
-        windowrule = [ "match:class nemo match:float forcergbx" ];
-      };
-
       custom.persist = {
         home = {
           directories = [

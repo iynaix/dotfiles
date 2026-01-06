@@ -1,4 +1,9 @@
-{ lib, isLaptop, ... }:
+{
+  config,
+  lib,
+  isLaptop,
+  ...
+}:
 {
   appLauncher = {
     customLaunchPrefix = "";
@@ -28,20 +33,19 @@
     volumeStep = 1;
   };
   bar = {
+    backgroundOpacity = 0.5;
     capsuleOpacity = 1;
     density = "default";
     exclusive = true;
     floating = false;
     marginHorizontal = 0.25;
     marginVertical = 0.25;
-    monitors = [
-
-    ];
+    monitors = [ ];
     outerCorners = false;
     position = "top";
     showCapsule = false;
     showOutline = false;
-    transparent = false;
+    useSeparateOpacity = true;
     widgets = {
       center = [
         {
@@ -138,8 +142,8 @@
     generateTemplatesForPredefined = true;
     manualSunrise = "06:30";
     manualSunset = "18:30";
-    matugenSchemeType = "scheme-fruit-salad";
-    predefinedScheme = "Noctalia (default)";
+    matugenSchemeType = "scheme-tonal-spot";
+    predefinedScheme = "Tokyo Night";
     schedulingMode = "off";
     useWallpaperColors = true;
   };
@@ -439,7 +443,7 @@
     wifiDetailsViewMode = "grid";
   };
   wallpaper = {
-    directory = "/home/iynaix/Pictures/Wallpapers";
+    directory = "${config.hj.directory}/Pictures/Wallpapers";
     enableMultiMonitorDirectories = false;
     enabled = true;
     fillColor = "#000000";

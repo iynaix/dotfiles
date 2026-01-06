@@ -387,9 +387,9 @@ in
         custom.programs = {
           hyprland.settings.windowrule = [
             # do not idle while watching videos
-            "match:class mpv idleinhibit focus"
+            "match:class mpv, idle_inhibit focus"
             # fix mpv-dynamic-crop unmaximizing the window
-            "match:class mpv suppressevent maximize"
+            "match:class mpv, suppress_event maximize"
           ];
         };
 

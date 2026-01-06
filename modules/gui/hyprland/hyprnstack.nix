@@ -39,6 +39,7 @@
                   concatStringsSep "," (
                     [
                       workspace
+                      "persistent:true"
                       "layoutopt:nstack-stacks:${toString stacks}"
                       "layoutopt:nstack-orientation:${if monitor.isVertical then "top" else "left"}"
                     ]
@@ -55,7 +56,7 @@
             settings.workspace = mkAfter (
               self.lib.mapWorkspaces (
                 { monitor, workspace, ... }:
-                "${workspace},layoutopt:orientation:${if monitor.isVertical then "top" else "left"}"
+                "${workspace},persistent:true,layoutopt:orientation:${if monitor.isVertical then "top" else "left"}"
               ) config.custom.hardware.monitors
             );
           };

@@ -16,7 +16,7 @@ in
       ...
     }:
     let
-      noctaliaSettings = import ./_settings.nix { inherit lib isLaptop; };
+      noctaliaSettings = import ./_settings.nix { inherit config lib isLaptop; };
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
           calendarSupport = true;
@@ -72,7 +72,7 @@ in
           partOf = [ "graphical-session.target" ];
           # this shit doesn't work because nixos doesn't properly restart user services
           # https://github.com/NixOS/nixpkgs/issues/246611#issuecomment-3342453760
-          # restartIfChanged = true;
+          restartTriggers = [ noctalia-shell' ];
 
           # fix runtime deps when starting noctalia-shell from systemd
           # use runtime environment, similar to hyprland
@@ -97,7 +97,7 @@ in
           unitConfig = {
             Description = "Set the wallpapers";
             After = [ "noctalia-shell.service" ];
-            Requires = [ "noctalia-shell.service" ];
+            # Wants = [ "noctalia-shell.service" ];
           };
 
           serviceConfig = {
@@ -170,12 +170,11 @@ in
       };
 
       # setup blur for hyprland
-      # custom.programs.hyprland.settings = {
-      #   layerrule = [
-      #     ''match:namespace noctalia-background-.*$ ignore_alpha 0.5, blur on, blur_popups on''
-      #     ''match:namespace noctalia-bar-.*$ ignore_alpha 0.5, blur on''
-      #   ];
-      # };
+      custom.programs.hyprland.settings = {
+        layerrule = [
+          ''match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on''
+        ];
+      };
 
       custom.persist = {
         home = {

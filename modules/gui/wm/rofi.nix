@@ -84,12 +84,12 @@
       custom.programs = {
         hyprland.settings = {
           layerrule = [
-            "match:namespace rofi blur on, dim_around on, ignore_alpha 0"
+            "match:namespace rofi, blur on, dim_around on, ignore_alpha 0"
           ];
 
           # force center rofi on monitor
           windowrule = [
-            "match:class Rofi float on, center on, rounding 12, dim_around on"
+            "match:class Rofi, float on, center on, rounding 12, dim_around on"
           ];
         };
 

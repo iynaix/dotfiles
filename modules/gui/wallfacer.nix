@@ -8,7 +8,7 @@
         wallpapers_path = wallpapers_dir;
         min_width = 3840; # 4k width
         min_height = 2880; # lg dualup height
-        show_faces = false;
+        show_faces = true;
 
         resolutions = [
           {

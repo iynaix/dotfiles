@@ -112,11 +112,11 @@ in
             "Mod+Shift+Ctrl+x".spawn = [ lockCmd ];
           };
 
-          /*
-            switch-events = {
-              lid-open.spawn = lockOrDpms;
-            };
-          */
+          config = /* kdl */ ''
+            switch-events {
+                lid-open { spawn "${lockCmd}"; }
+            }
+          '';
         };
 
         # TODO: mango doesn't support switch events yet?
