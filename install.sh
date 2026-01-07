@@ -115,7 +115,7 @@ fi
 
 echo "Creating partitions"
 sudo blkdiscard -f "$DISK"
-sudo sgdisk --clear"$DISK"
+sudo sgdisk --clear "$DISK"
 
 sudo sgdisk -n3:1M:+1G -t3:EF00 "$DISK"
 sudo sgdisk -n2:0:+16G -t2:8200 "$DISK"

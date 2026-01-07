@@ -57,7 +57,6 @@
         "/" = {
           device = "zroot/root";
           fsType = "zfs";
-          neededForBoot = true;
         };
 
         # uncomment to use separate home dataset
