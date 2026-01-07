@@ -45,7 +45,7 @@
     position = "top";
     showCapsule = false;
     showOutline = false;
-    useSeparateOpacity = true;
+    useSeparateOpacity = false;
     widgets = {
       center = [
         {
@@ -105,6 +105,7 @@
             customFont = "";
             formatHorizontal = "HH:mm";
             formatVertical = "HH mm - dd MM";
+            tooltipFormat = "dd MMM yyyy";
             id = "Clock";
             useCustomFont = false;
             usePrimaryColor = true;
@@ -432,11 +433,12 @@
   ui = {
     bluetoothDetailsViewMode = "grid";
     bluetoothHideUnnamedDevices = false;
+    boxBorderEnabled = true;
     fontDefault = "Geist";
     fontDefaultScale = 1.0;
     fontFixed = "Geist Mono";
     fontFixedScale = 1.0;
-    panelBackgroundOpacity = 0.85;
+    panelBackgroundOpacity = 0.50;
     panelsAttachedToBar = true;
     settingsPanelMode = "centered";
     tooltipsEnabled = true;

@@ -140,21 +140,6 @@ topLevel: {
         # displayManager.autoLogin.user = user;
 
         pipewire = {
-          # enable soft-mixer to fix global volume control for kanto?
-          # wireplumber.extraConfig = mkIf (host == "desktop") {
-          #   "alsa-soft-mixer"."monitor.alsa.rules" = [
-          #     {
-          #       actions.update-props."api.alsa.soft-mixer" = true;
-          #       matches = [
-          #         {
-          #           "device.name" = "alsa_output.usb-Kanto_Audio_ORA_by_Kanto_20240130-00.analog-stereo";
-          #           "device.name" = "~alsa_card.*";
-          #         }
-          #       ];
-          #     }
-          #   ];
-          # };
-
           # wireplumber.configPackages = [
           #   # prefer DAC over speakers
           #   (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-custom-audio-priority.conf" ''
@@ -175,6 +160,25 @@ topLevel: {
           #     ]
           #   '')
           # ];
+
+          wireplumber.extraConfig = {
+            "99-disable-devices" = {
+              "monitor.alsa.rules" = [
+                {
+                  matches = [
+                    { "device.name" = "alsa_card.pci-0000_03_00.1"; }
+                    { "device.name" = "alsa_card.usb-Generic_USB_Audio-00"; }
+                    { "device.name" = "alsa_card.pci-0000_0f_00.1"; }
+                  ];
+                  actions = {
+                    update-props = {
+                      "device.disabled" = true;
+                    };
+                  };
+                }
+              ];
+            };
+          };
         };
       };
 
