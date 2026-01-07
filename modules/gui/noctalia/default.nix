@@ -29,6 +29,7 @@ in
                 --replace-fail "3.8" "3.9"
             '';
           };
+      noctalia-plugins = (pkgs.callPackage ../../../_sources/generated.nix { }).noctalia-plugins.src;
     in
     {
       nixpkgs.overlays = [
@@ -49,12 +50,16 @@ in
               }
             ];
             states = {
+              kaomoji-provider = {
+                enabled = true;
+              };
               projects-provider = {
                 enabled = true;
               };
             };
           };
         };
+        "noctalia/plugins/kaomoji-provider".source = "${noctalia-plugins}/kaomoji-provider";
         # substitute projects dir into code
         "noctalia/plugins/projects-provider".source = pkgs.runCommand "set-project-dir" { } /* sh */ ''
           cp -r ${./projects-provider} $out

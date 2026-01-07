@@ -97,6 +97,18 @@
     };
     date = "2026-01-05";
   };
+  noctalia-plugins = {
+    pname = "noctalia-plugins";
+    version = "64e928c0f9b28fc8dd0ad65ab2bc9b2ae456d58d";
+    src = fetchFromGitHub {
+      owner = "noctalia-dev";
+      repo = "noctalia-plugins";
+      rev = "64e928c0f9b28fc8dd0ad65ab2bc9b2ae456d58d";
+      fetchSubmodules = false;
+      sha256 = "sha256-sAzFc3TpI+3cg+IPa+BmPY52NFz4GMmH3Su8M/1afrE=";
+    };
+    date = "2026-01-07";
+  };
   rofi-themes = {
     pname = "rofi-themes";
     version = "093c1a79f58daab358199c4246de50357e5bf462";
@@ -122,15 +134,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "03cdd4b5b15341b3c0d0f4c850d633fadd05a45f";
+    version = "4e5590280db0de5f130bf377e9c32a202110f575";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "03cdd4b5b15341b3c0d0f4c850d633fadd05a45f";
+      rev = "4e5590280db0de5f130bf377e9c32a202110f575";
       fetchSubmodules = false;
-      sha256 = "sha256-5dMAJ6W/L66XuH4CCwRRFpKSLy0ZDFIABAYleFX0AsQ=";
+      sha256 = "sha256-/yGS8R1YsYqqX4JTlIJeg+NfFSxGUHvSdKQZGk6KiBU=";
     };
-    date = "2026-01-03";
+    date = "2026-01-06";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
