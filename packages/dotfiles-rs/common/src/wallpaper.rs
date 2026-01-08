@@ -87,7 +87,7 @@ where
         .par_iter()
         .filter(|mon| mon.enabled)
         .for_each(|mon| {
-            execute::command_args!("noctalia-shell", "ipc", "call", "wallpaper", "set")
+            execute::command_args!("noctalia-ipc", "wallpaper", "set")
                 .arg(&wallpaper)
                 .arg(&mon.name)
                 .spawn()
@@ -138,6 +138,13 @@ const fn gcd(mut a: u32, mut b: u32) -> u32 {
     a
 }
 
+pub struct Geometry {
+    pub w: f64,
+    pub h: f64,
+    pub x: f64,
+    pub y: f64,
+}
+
 #[derive(Debug, Clone)]
 pub struct WallInfo {
     pub path: PathBuf,
@@ -170,7 +177,7 @@ impl WallInfo {
         }
     }
 
-    pub fn get_geometry(&self, width: u32, height: u32) -> Option<(f64, f64, f64, f64)> {
+    pub fn get_geometry(&self, width: u32, height: u32) -> Option<Geometry> {
         self.get_geometry_str(width, height).and_then(|geom| {
             let geometry = geom
                 .split(['+', 'x'])
@@ -178,7 +185,7 @@ impl WallInfo {
                 .collect_vec();
 
             match geometry.as_slice() {
-                &[w, h, x, y] => Some((w, h, x, y)),
+                &[w, h, x, y] => Some(Geometry { w, h, x, y }),
                 _ => None,
             }
         })

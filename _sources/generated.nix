@@ -19,10 +19,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.7.9.1";
+    version = "0.7.10.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.7.9.1/helium-0.7.9.1-x86_64.AppImage";
-      sha256 = "sha256-69y8dNJPJk+HgnLzkyYLMdps1Med65yeN+77Nk6jbyM=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.7.10.1/helium-0.7.10.1-x86_64.AppImage";
+      sha256 = "sha256-11xSlHIqmyyVwjjwt5FmLhp72P3m07PppOo7a9DbTcE=";
     };
   };
   mpv-cut = {
@@ -87,25 +87,25 @@
   };
   niri = {
     pname = "niri";
-    version = "b7eb8a635b7f75705808eaed85c016f02ae4fd2d";
+    version = "10df9f4717cbd4efd20ae796eb6b0aa400127bdc";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "b7eb8a635b7f75705808eaed85c016f02ae4fd2d";
+      rev = "10df9f4717cbd4efd20ae796eb6b0aa400127bdc";
       fetchSubmodules = false;
-      sha256 = "sha256-IyH3zaCT2JZ6fdY4vKlUz2RbDdxaryvSZWUVixKYrKM=";
+      sha256 = "sha256-qS4tdG2iUQwSld9dTH1gk8GcIOrRi9umMgPv8MGDIA0=";
     };
-    date = "2026-01-05";
+    date = "2026-01-07";
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "64e928c0f9b28fc8dd0ad65ab2bc9b2ae456d58d";
+    version = "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "64e928c0f9b28fc8dd0ad65ab2bc9b2ae456d58d";
+      rev = "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e";
       fetchSubmodules = false;
-      sha256 = "sha256-sAzFc3TpI+3cg+IPa+BmPY52NFz4GMmH3Su8M/1afrE=";
+      sha256 = "sha256-bcVPBNeMKIkjKogwFzXg64KQ89fgGwk1AxsSyeVtBAs=";
     };
     date = "2026-01-07";
   };
@@ -134,15 +134,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "4e5590280db0de5f130bf377e9c32a202110f575";
+    version = "68f7d4898c19dcf50beda251f8143992c3e8371f";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "4e5590280db0de5f130bf377e9c32a202110f575";
+      rev = "68f7d4898c19dcf50beda251f8143992c3e8371f";
       fetchSubmodules = false;
-      sha256 = "sha256-/yGS8R1YsYqqX4JTlIJeg+NfFSxGUHvSdKQZGk6KiBU=";
+      sha256 = "sha256-6iA/C0dzbLPkEDbdEs8oAnVfG6W+L8/dYyjTuO5euOw=";
     };
-    date = "2026-01-06";
+    date = "2026-01-08";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

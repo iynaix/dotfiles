@@ -1,22 +1,22 @@
 diff --git a/Services/UI/ImageCacheService.qml b/Services/UI/ImageCacheService.qml
-index 52fcef85..0ce3e5f9 100644
+index c09fc614..cb70c58d 100644
 --- a/Services/UI/ImageCacheService.qml
 +++ b/Services/UI/ImageCacheService.qml
-@@ -269,7 +269,7 @@ Singleton {
-     const srcEsc = sourcePath.replace(/'/g, "'\\''");
+@@ -270,7 +270,7 @@ Singleton {
      const dstEsc = outputPath.replace(/'/g, "'\\''");
  
--    const command = `magick -define jpeg:size=768x768 '${srcEsc}' -auto-orient -thumbnail '384x384^' -gravity center -extent 384x384 -quality 85 '${dstEsc}'`;
+     // Use Lanczos filter for high-quality downscaling, subtle unsharp mask, and PNG for lossless output
+-    const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '384x384^' -gravity center -extent 384x384 -unsharp 0x0.5 '${dstEsc}'`;
 +    const command = `wallpaper resize --size 384x384 '${srcEsc}' '${dstEsc}'`;
  
      runProcess(command, cacheKey, outputPath, sourcePath);
    }
 @@ -283,7 +283,7 @@ Singleton {
-     const doubleWidth = width * 2;
-     const doubleHeight = height * 2;
+     const dstEsc = outputPath.replace(/'/g, "'\\''");
  
--    const command = `magick -define jpeg:size=${doubleWidth}x${doubleHeight} '${srcEsc}' -auto-orient -thumbnail '${width}x${height}^' -quality 95 '${dstEsc}'`;
-+    const command = `wallpaper resize --size ${width}x${height} ${srcEsc} ${dstEsc}`
+     // Use Lanczos filter for high-quality downscaling, subtle unsharp mask, and PNG for lossless output
+-    const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '${width}x${height}^' -unsharp 0x0.5 '${dstEsc}'`;
++    const command = `wallpaper resize --size ${width}x${height} '${srcEsc}' '${dstEsc}'`;
  
      runProcess(command, cacheKey, outputPath, sourcePath);
    }

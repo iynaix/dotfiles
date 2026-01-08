@@ -12,7 +12,7 @@
         let
           themeStyles = /* css */ ''
             *   {
-                background:     {{colors.surface.default.hex | set_alpha: 0.6 }};
+                background:     {{colors.surface.default.hex | to_color | set_alpha: 0.6 }};
                 background-alt: {{colors.surface_dim.default.hex}};
                 foreground:     {{colors.on_surface.default.hex}};
                 selected:       {{colors.primary.default.hex}};
