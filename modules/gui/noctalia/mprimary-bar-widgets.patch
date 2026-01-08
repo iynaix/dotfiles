@@ -1,0 +1,25 @@
+diff --git a/Modules/Bar/Widgets/Battery.qml b/Modules/Bar/Widgets/Battery.qml
+index d686e032..51b3465a 100644
+--- a/Modules/Bar/Widgets/Battery.qml
++++ b/Modules/Bar/Widgets/Battery.qml
+@@ -206,7 +206,7 @@ Item {
+     forceOpen: isReady && displayMode === "alwaysShow"
+     forceClose: displayMode === "alwaysHide" || (initializationComplete && !isReady)
+     customBackgroundColor: !initializationComplete ? "transparent" : (charging ? Color.mPrimary : (isLowBattery ? Color.mError : "transparent"))
+-    customTextIconColor: !initializationComplete ? "transparent" : (charging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : "transparent"))
++    customTextIconColor: !initializationComplete ? "transparent" : (charging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : Color.mPrimary))
+
+     tooltipText: {
+       let lines = [];
+diff --git a/Modules/Bar/Widgets/Volume.qml b/Modules/Bar/Widgets/Volume.qml
+index 79f5b9c1..81c89b19 100644
+--- a/Modules/Bar/Widgets/Volume.qml
++++ b/Modules/Bar/Widgets/Volume.qml
+@@ -121,6 +121,7 @@ Item {
+       const displayVolume = Math.min(maxVolume, AudioService.volume);
+       return Math.round(displayVolume * 100);
+     }
++    customTextIconColor: AudioService.muted  ? Color.mError : Color.mPrimary
+     suffix: "%"
+     forceOpen: displayMode === "alwaysShow"
+     forceClose: displayMode === "alwaysHide"

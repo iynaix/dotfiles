@@ -22,7 +22,11 @@ in
           calendarSupport = true;
         }).overrideAttrs
           {
-            patches = [ ./face-aware-crop.patch ];
+            patches = [
+              ./face-aware-crop.patch
+              # battery and volume widgets that use the primary color instead of white
+              ./mprimary-bar-widgets.patch
+            ];
 
             postPatch = ''
               substituteInPlace "Services/Noctalia/UpdateService.qml" \

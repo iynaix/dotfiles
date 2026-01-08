@@ -87,7 +87,7 @@ where
         .par_iter()
         .filter(|mon| mon.enabled)
         .for_each(|mon| {
-            execute::command_args!("noctalia-ipc", "wallpaper", "set")
+            execute::command_args!("noctalia-shell", "ipc", "call", "wallpaper", "set")
                 .arg(&wallpaper)
                 .arg(&mon.name)
                 .spawn()

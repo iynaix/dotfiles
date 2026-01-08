@@ -102,7 +102,7 @@
             id = "Volume";
           }
           {
-            customFont = "";
+            customFont = "Geist Mono";
             formatHorizontal = "HH:mm";
             formatVertical = "HH mm - dd MM";
             tooltipFormat = "dd MMM yyyy";
