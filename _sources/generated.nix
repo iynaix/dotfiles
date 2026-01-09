@@ -99,15 +99,15 @@
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e";
+    version = "306d1a1508482d6d1af4902da0f19749d1988174";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e";
+      rev = "306d1a1508482d6d1af4902da0f19749d1988174";
       fetchSubmodules = false;
-      sha256 = "sha256-bcVPBNeMKIkjKogwFzXg64KQ89fgGwk1AxsSyeVtBAs=";
+      sha256 = "sha256-o7P34mQh9S9GhwOsn3JtblTpIlqeKoFI9mWZ6ohd48Q=";
     };
-    date = "2026-01-07";
+    date = "2026-01-09";
   };
   rofi-themes = {
     pname = "rofi-themes";

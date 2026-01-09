@@ -9,6 +9,44 @@ topLevel: {
     }:
     let
       inherit (lib) mkIf mkMerge;
+      toggle-speaker = pkgs.writeShellScriptBin "toggle-speaker" /* sh */ ''
+        # Device names
+        KANTO="ORA"
+        TOPPING="DX5"
+
+        # Get current default sink with asterisk
+        current_line=$(wpctl status | grep -A 20 "Sinks:" | grep "\*")
+
+        if [ -z "$current_line" ]; then
+            echo "Could not determine current audio sink"
+            exit 1
+        fi
+
+        # Determine which device to switch to
+        if echo "$current_line" | grep -q "Kanto"; then
+            target_device="$TOPPING"
+        elif echo "$current_line" | grep -q "DX5"; then
+            target_device="$KANTO"
+        else
+            echo "Current device is neither Kanto nor Topping, defaulting to KANTO"
+            target_device="$KANTO"
+        fi
+
+        echo "TARGET DEVICE: $target_device"
+
+        # Get the sink ID for the target device
+        sink_id=$(wpctl status | grep -A 20 "Sinks:" | grep "$target_device" | awk '{print $2}' | grep -oP '[0-9]+' | head -1)
+
+        if [ -z "$sink_id" ]; then
+            noctalia-ipc toast send "{\"title\": \"Unable to switch to $target_device\", \"type\": \"warning\"}"
+            exit 1
+        fi
+
+        # Set as default
+        wpctl set-default "$sink_id"
+
+        noctalia-ipc toast send "{\"title\": \"Switched audio output to $target_device\"}"
+      '';
     in
     {
       imports = with topLevel.config.flake.nixosModules; [
@@ -140,27 +178,6 @@ topLevel: {
         # displayManager.autoLogin.user = user;
 
         pipewire = {
-          # wireplumber.configPackages = [
-          #   # prefer DAC over speakers
-          #   (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-custom-audio-priority.conf" ''
-          #     monitor.alsa.rules = [
-          #       {
-          #         matches = [
-          #           {
-          #             node.name = "alsa_output.usb-Yoyodyne_Consulting_ODAC-revB-01.analog-stereo"
-          #           }
-          #         ]
-          #         actions = {
-          #           update-props = {
-          #             priority.driver = 2000
-          #             priority.session = 2000
-          #           }
-          #         }
-          #       }
-          #     ]
-          #   '')
-          # ];
-
           wireplumber.extraConfig = {
             "99-disable-devices" = {
               "monitor.alsa.rules" = [
@@ -187,19 +204,16 @@ topLevel: {
         (mkIf (!isVm) {
           interfaces.enp7s0.wakeOnLan.enable = true;
           # open ports for devices on the local network
-          firewall.extraCommands = # sh
-            ''
-              iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
-            '';
+          firewall.extraCommands = /* sh */ ''
+            iptables -A nixos-fw -p tcp --source 192.168.1.0/24 -j nixos-fw-accept
+          '';
         })
       ];
 
       # enable flirc usb ir receiver
       hardware.flirc.enable = false;
-      environment.systemPackages = mkIf config.hardware.flirc.enable [ pkgs.flirc ];
-
-      # fix intel i225-v ethernet dying due to power management
-      # https://reddit.com/r/buildapc/comments/xypn1m/network_card_intel_ethernet_controller_i225v_igc/
-      # boot.kernelParams = ["pcie_port_pm=off" "pcie_aspm.policy=performance"];
+      environment.systemPackages = [
+        toggle-speaker
+      ];
     };
 }

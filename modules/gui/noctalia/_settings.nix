@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   isLaptop,
   ...
@@ -23,10 +24,7 @@
   };
   audio = {
     cavaFrameRate = 30;
-    externalMixer = "pwvucontrol || pavucontrol";
-    mprisBlacklist = [
-
-    ];
+    mprisBlacklist = [ ];
     preferredPlayer = "";
     visualizerType = "linear";
     volumeOverdrive = false;
@@ -100,6 +98,7 @@
           {
             displayMode = "alwaysShow";
             id = "Volume";
+            middleClickCommand = if (host == "desktop") then "toggle-speaker" else "pwvucontrol || pavucontrol";
           }
           {
             customFont = "Geist Mono";

@@ -111,7 +111,8 @@ Item {
       }];
     }
 
-    var query = searchText.replace(/^>pj/, "").replace(/^>projects/, "").trim().toLowerCase();
+    var query = searchText.replace(/^>pj/, "").replace(/^>projects/, "").trim();
+    var queryRegex = new RegExp(query.split("").join(".*"), "i");
     var results = [];
 
     var keys = Object.keys(projects);
@@ -122,7 +123,7 @@ Item {
       var project = keys[k];
       var directory = projects[project];
 
-      if (query === "" || project.toLowerCase().indexOf(query) !== -1) {
+      if (query === "" || queryRegex.test(project)) {
         results.push(formatProjectEntry(project, directory));
         count++;
       }

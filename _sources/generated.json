@@ -172,7 +172,7 @@
     },
     "noctalia-plugins": {
         "cargoLocks": null,
-        "date": "2026-01-07",
+        "date": "2026-01-09",
         "extract": null,
         "name": "noctalia-plugins",
         "passthru": null,
@@ -184,12 +184,12 @@
             "name": null,
             "owner": "noctalia-dev",
             "repo": "noctalia-plugins",
-            "rev": "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e",
-            "sha256": "sha256-bcVPBNeMKIkjKogwFzXg64KQ89fgGwk1AxsSyeVtBAs=",
+            "rev": "306d1a1508482d6d1af4902da0f19749d1988174",
+            "sha256": "sha256-o7P34mQh9S9GhwOsn3JtblTpIlqeKoFI9mWZ6ohd48Q=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "27b6ce0917e6d8887b4f3e4bd84accee7b7f697e"
+        "version": "306d1a1508482d6d1af4902da0f19749d1988174"
     },
     "rofi-themes": {
         "cargoLocks": null,
