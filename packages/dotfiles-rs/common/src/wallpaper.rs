@@ -87,7 +87,7 @@ where
         .par_iter()
         .filter(|mon| mon.enabled)
         .for_each(|mon| {
-            execute::command_args!("noctalia-shell", "ipc", "call", "wallpaper", "set")
+            execute::command_args!("noctalia-ipc", "wallpaper", "set")
                 .arg(&wallpaper)
                 .arg(&mon.name)
                 .spawn()
@@ -106,10 +106,12 @@ pub fn reload() {
     std::fs::remove_dir_all(&wallpaper_cache).expect("unable to clear noctalia cache");
     std::fs::create_dir(&wallpaper_cache).ok();
 
-    // let wallpaper_json = noctalia_cache.join("wallpapers.json");
-    // std::fs::remove_file(&wallpaper_json).ok();
-
-    set(current().expect("no current wallpaper set"));
+    // reload noctalia-shell
+    execute::command_args!("systemctl", "restart", "--user", "noctalia-shell")
+        .spawn()
+        .unwrap_or_else(|_| panic!("failed to restart noctalia-shell"))
+        .wait()
+        .expect("failed to wait for noctalia-shell restart");
 }
 
 pub fn random_from_dir<P>(dir: P) -> String

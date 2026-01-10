@@ -1,7 +1,6 @@
 { lib, ... }:
 let
   inherit (lib) mkOption;
-  inherit (lib.types) submodule;
 in
 {
   flake.nixosModules.core =
@@ -13,14 +12,26 @@ in
     }:
     {
       options.custom = {
+        programs = {
+          dotfiles-rs = mkOption {
+            type = lib.types.package;
+            default = pkgs.custom.dotfiles-rs;
+            description = "dotfiles-rs package";
+          };
+        };
+
         nixJson = mkOption {
-          type = submodule { freeformType = (pkgs.formats.json { }).type; };
+          type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
           default = { };
           description = "Data to be written to nix.json for use in other programs at runtime.";
         };
       };
 
       config = {
+        environment.systemPackages = [
+          config.custom.programs.dotfiles-rs
+        ];
+
         hj.xdg.state.files = {
           # misc information for nix
           "nix.json" = {

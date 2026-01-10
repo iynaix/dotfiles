@@ -3,7 +3,6 @@
     {
       config,
       lib,
-      pkgs,
       self,
       ...
     }:
@@ -179,7 +178,7 @@
             "Mod+R".action = "switch-preset-column-width";
             "Mod+Shift+R".action = "switch-preset-window-height";
             "Mod+Ctrl+R".spawn = [
-              (getExe' pkgs.custom.dotfiles-rs "niri-resize-workspace")
+              (getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
             ];
             # full maximize
             "Mod+Z".action = "maximize-column";

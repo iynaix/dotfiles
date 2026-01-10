@@ -6,16 +6,9 @@
   glib,
   gexiv2,
   rustPlatform,
-  dconf,
-  procps,
-  czkawka,
-  pqiv,
-  rsync,
-  rclip,
-  wlr-randr,
 }:
 rustPlatform.buildRustPackage {
-  pname = "dotfiles-rs";
+  pname = "dotfiles-rs-unwrapped";
   version = "0.9.0";
 
   src = ./.;
@@ -40,14 +33,14 @@ rustPlatform.buildRustPackage {
 
   postInstall =
     let
-      progs = [
+      binsWithCompletions = [
         "hypr-monitors"
         "niri-resize-workspace"
         "wm-same-class"
       ];
     in
-    ''
-      for prog in ${toString progs}; do
+    /* sh */ ''
+      for prog in ${toString binsWithCompletions}; do
         installShellCompletion --cmd $prog \
           --bash <($out/bin/$prog --generate bash) \
           --fish <($out/bin/$prog --generate fish) \
@@ -62,31 +55,6 @@ rustPlatform.buildRustPackage {
           --zsh <($out/bin/$prog generate zsh)
       done
       installManPage wallpaper/target/man/*
-    '';
-
-  postFixup = # sh
-    let
-      progs = [
-        "hypr-ipc"
-        "hypr-monitors"
-        "niri-ipc"
-        "wallpaper"
-      ];
-    in
-    ''
-      for prog in ${toString progs}; do
-        wrapProgram $out/bin/$prog --prefix PATH : ${
-          lib.makeBinPath [
-            czkawka
-            dconf
-            procps
-            rclip
-            rsync
-            wlr-randr
-            pqiv
-          ]
-        }
-      done
     '';
 
   meta = {

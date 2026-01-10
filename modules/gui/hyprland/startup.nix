@@ -4,7 +4,7 @@ let
 in
 {
   flake.nixosModules.wm =
-    { config, pkgs, ... }:
+    { config, ... }:
     {
       custom.programs.hyprland.settings = {
         exec-once = [
@@ -54,7 +54,7 @@ in
           };
 
           serviceConfig = {
-            ExecStart = "${getExe' pkgs.custom.dotfiles-rs "hypr-ipc"}";
+            ExecStart = "${getExe' config.custom.programs.dotfiles-rs "hypr-ipc"}";
             RestartSec = 1;
             Restart = "on-failure";
           };

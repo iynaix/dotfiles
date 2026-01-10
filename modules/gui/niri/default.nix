@@ -10,7 +10,6 @@ in
       self,
       ...
     }:
-
     let
       source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
       niriWrapped = self.wrapperModules.niri.apply {

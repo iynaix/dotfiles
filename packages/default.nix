@@ -16,7 +16,9 @@ in
     }).neovim
   ) { };
 
-  dotfiles-rs = callPackage ./dotfiles-rs { };
+  dotfiles-rs = callPackage ./dotfiles-rs/wrapped.nix {
+    dotfiles-rs-unwrapped = callPackage ./dotfiles-rs { };
+  };
 
   tela-dynamic-icon-theme = callPackage ./tela-dynamic-icon-theme { };
 

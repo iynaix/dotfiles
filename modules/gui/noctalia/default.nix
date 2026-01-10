@@ -11,12 +11,20 @@ in
   flake.nixosModules.wm =
     {
       config,
+      host,
       isLaptop,
       pkgs,
       ...
     }:
     let
-      noctaliaSettings = import ./_settings.nix { inherit config lib isLaptop; };
+      noctaliaSettings = import ./_settings.nix {
+        inherit
+          config
+          host
+          lib
+          isLaptop
+          ;
+      };
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
           calendarSupport = true;
@@ -34,6 +42,40 @@ in
             '';
           };
       noctalia-plugins = (pkgs.callPackage ../../../_sources/generated.nix { }).noctalia-plugins.src;
+      # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
+      noctalia-ipc = pkgs.writeShellApplication {
+        name = "noctalia-ipc";
+        runtimeInputs = with pkgs; [
+          killall
+          jq
+        ];
+        text = /* sh */ ''
+          RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
+
+          # invalid json, no instances running, so start noctalia-shell
+          if [[ ! "$RAW_OUTPUT" == "["* ]]; then
+            systemctl --user restart noctalia-shell
+            exit
+          fi
+
+          NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
+
+          # using dev version, don't kill the shell
+          if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
+            "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
+            exit
+          fi
+
+          # different instance, kill previous instances
+          if [[ ! "$NOCTALIA_PATH" =~ "${pkgs.noctalia-shell}" ]]; then
+            killall .quickshell-wrapper
+            systemctl --user restart noctalia-shell
+            sleep 2
+          fi
+
+          ${lib.getExe pkgs.noctalia-shell} ipc call "$@"
+        '';
+      };
     in
     {
       nixpkgs.overlays = [
@@ -117,7 +159,7 @@ in
                 name = "wallpaper-startup";
                 runtimeInputs = [
                   noctalia-shell'
-                  pkgs.custom.dotfiles-rs
+                  config.custom.programs.dotfiles-rs
                 ];
                 text = ''
                   # hide on laptop screens to save space
@@ -133,7 +175,10 @@ in
         };
       };
 
-      environment.systemPackages = [ noctalia-shell' ];
+      environment.systemPackages = [
+        noctalia-shell'
+        noctalia-ipc
+      ];
 
       # start after WM initializes
       custom.startupServices = [ "noctalia-shell.service" ];
@@ -144,45 +189,17 @@ in
             systemctl --user restart noctalia-shell
           '';
         };
-        noctalia-ipc = {
-          runtimeInputs = with pkgs; [
-            killall
-            jq
-          ];
-          text = /* sh */ ''
-            RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
-
-            # invalid json, no instances running, so start noctalia-shell
-            if [[ ! "$RAW_OUTPUT" == "["* ]]; then
-              systemctl --user restart noctalia-shell
-              exit
-            fi
-
-            NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
-
-            # using dev version, don't kill the shell
-            if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
-              "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
-              exit
-            fi
-
-            # different instance, kill previous instances
-            if [[ ! "$NOCTALIA_PATH" =~ "${pkgs.noctalia-shell}" ]]; then
-              killall .quickshell-wrapper
-              systemctl --user restart noctalia-shell
-              sleep 2
-            fi
-
-            ${lib.getExe pkgs.noctalia-shell} ipc call "$@"
-          '';
-        };
       };
 
-      # setup blur for hyprland
-      custom.programs.hyprland.settings = {
-        layerrule = [
-          ''match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on''
-        ];
+      custom.programs = {
+        # add noctalia-ipc to dotfiles-rs, so wallpaper can find it on boot
+        dotfiles-rs = pkgs.custom.dotfiles-rs.override { extraPackages = [ noctalia-ipc ]; };
+        # setup blur for hyprland
+        hyprland.settings = {
+          layerrule = [
+            ''match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on''
+          ];
+        };
       };
 
       custom.persist = {

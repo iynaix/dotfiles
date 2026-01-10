@@ -9,7 +9,6 @@ in
       {
         environment = {
           systemPackages = with pkgs; [
-            pkgs.custom.dotfiles-rs
             nomacs
           ];
         };
