@@ -1,17 +1,11 @@
+{ lib, self, ... }:
 {
-  inputs,
-  lib,
-  self,
-  ...
-}:
-
-{
-  flake.wrapperModules.yazi = inputs.wrappers.lib.wrapModule (
-    { config, ... }:
+  perSystem =
+    { pkgs, ... }:
     let
-      sources = config.pkgs.callPackage ../../_sources/generated.nix { };
+      sources = pkgs.callPackage ../../_sources/generated.nix { };
       mkYaziPlugin = name: text: {
-        "${name}" = toString (config.pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
+        "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
       };
       baseYaziConf = self.lib.recursiveMergeAttrsList [
         {
@@ -20,7 +14,7 @@
             git = "${sources.yazi-plugins.src}/git.yazi";
           };
 
-          initLua = config.pkgs.writeText "init.lua" /* lua */ ''
+          initLua = pkgs.writeText "init.lua" /* lua */ ''
             require("full-border"):setup({ type = ui.Border.ROUNDED })
             require("git"):setup()
           '';
@@ -71,9 +65,6 @@
 
             theme = {
               mgr = {
-                preview_hovered = {
-                  underline = false;
-                };
                 folder_offset = [
                   1
                   0
@@ -88,14 +79,27 @@
                 ];
               };
 
-              mode = {
-                normal_main = {
-                  bg = "cyan";
+              indicator = {
+                padding = {
+                  open = "█";
+                  close = "█";
                 };
-                # normal_alt = {
-                #   bg = "cyan";
-                # };
+                preview = {
+                  underline = false;
+                };
               };
+
+              status = {
+                sep_left = {
+                  open = "";
+                  close = "";
+                };
+                sep_right = {
+                  open = "";
+                  close = "";
+                };
+              };
+
             };
 
             keymap = {
@@ -243,70 +247,23 @@
       ];
     in
     {
-      # yazi option definitions copied from nixpkgs:
-      # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/yazi.nix
-      options = {
-        extraSettings = lib.mkOption {
-          type =
-            with lib.types;
-            submodule {
-              options = lib.listToAttrs (
-                map
-                  (
-                    name:
-                    lib.nameValuePair name (
-                      lib.mkOption {
-                        inherit (config.pkgs.formats.toml { }) type;
-                        default = { };
-                        description = ''
-                          Configuration included in `${name}.toml`.
-
-                          See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
-                        '';
-                      }
-                    )
-                  )
-                  [
-                    "yazi"
-                    "theme"
-                    "keymap"
-                  ]
-              );
-            };
-          default = { };
-          description = ''
-            Configuration included in `$YAZI_CONFIG_HOME`.
-          '';
-        };
-      };
-
-      config.package = lib.mkDefault (
-        config.pkgs.yazi.override {
-          inherit (baseYaziConf) initLua plugins;
-          extraPackages = with config.pkgs; [
+      packages.yazi' =
+        (pkgs.yazi.override {
+          inherit (baseYaziConf) initLua plugins settings;
+          extraPackages = with pkgs; [
             unar
             exiftool
           ];
-          settings = self.lib.recursiveMergeAttrsList [
-            baseYaziConf.settings
-            config.extraSettings
-          ];
-        }
-      );
-    }
-  );
-
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.yazi' = (self.wrapperModules.yazi.apply { inherit pkgs; }).wrapper;
+        }).overrideAttrs
+          {
+            passthru = {
+              inherit (baseYaziConf) settings;
+            };
+          };
     };
 
   flake.nixosModules.core =
-    {
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     {
       # shell integrations
       programs = {
@@ -333,11 +290,27 @@
         '';
       };
 
-      nixpkgs.overlays = [
-        (_: _prev: {
-          yazi = self.packages.${pkgs.stdenv.hostPlatform.system}.yazi';
-        })
-      ];
+      nixpkgs.overlays =
+        let
+          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) yazi';
+        in
+        [
+          (_: _prev: {
+            # set dynamic noctalia flavor from matugen
+            yazi = yazi'.override {
+              settings = lib.recursiveUpdate yazi'.passthru.settings {
+                theme.flavor = {
+                  dark = "noctalia";
+                  light = "noctalia";
+                };
+              };
+
+              flavors = {
+                noctalia = "${config.hj.xdg.config.directory}/yazi/flavors/noctalia.yazi";
+              };
+            };
+          })
+        ];
 
       environment = {
         systemPackages = [
@@ -354,7 +327,7 @@
         # yazi uses makeWrapper directly, no choice but to parse the wrapper
         let
           catYaziPath = path: /* sh */ ''
-            YAZI_PATH=$(grep "export YAZI_CONFIG_HOME=" "${lib.getExe pkgs.yazi.passthru.configuration.package}" | cut -d"'" -f2)
+            YAZI_PATH=$(grep "export YAZI_CONFIG_HOME=" '${lib.getExe pkgs.yazi}' | cut -d"'" -f2)
 
             cat "$YAZI_PATH/${path}"
           '';
