@@ -151,8 +151,12 @@ in
       };
 
       systemd.user.services.hypridle = {
+        unitConfig = {
+          ConditionEnvironment = "XDG_CURRENT_DESKTOP";
+        };
+
         serviceConfig = {
-          RestartSec = 1;
+          RestartSec = 2;
         };
       };
 

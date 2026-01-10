@@ -18,7 +18,7 @@ Item {
 
   // Projects
   readonly property string projectDir: "%PROJECT_DIR%" // actual value will be substituted in by nix
-  property var projects: ({})
+  property var projects: []
   property bool loaded: false
   property bool loading: false
 
@@ -54,11 +54,11 @@ Item {
         proj = proj.replace(/^\/+/g, ""); // replace leading slashes
 
         if (proj.length > 0) {
-          root.projects[proj] = dir;
+          root.projects.push({name: proj, directory: dir});
         };
       });
 
-      Logger.i("ProjectsProvider", "Projects loaded,", Object.keys(root.projects).length, "entries");
+      Logger.i("ProjectsProvider", "Projects loaded,", root.projects.length, "entries");
     }
   }
 
@@ -112,19 +112,25 @@ Item {
     }
 
     var query = searchText.replace(/^>pj/, "").replace(/^>projects/, "").trim();
-    var queryRegex = new RegExp(query.split("").join(".*"), "i");
     var results = [];
 
-    var keys = Object.keys(projects);
-    var count = 0;
+    if (query === "") {
+      var count = 0;
+      for (i = 0; i < projects.length && count < 100; i++) {
+        var res = projects[i];
+        results.push(formatProjectEntry(res.name, res.directory));
+        count++;
+      }
+    } else {
+      const fuzzyResults = FuzzySort.go(query, projects, {
+                                          "keys": ["name"],
+                                          "threshold": -1000,
+                                          "limit": 100,
+                                        });
 
-    // show up to 100 results
-    for (var k = 0; k < keys.length && count < 100; k++) {
-      var project = keys[k];
-      var directory = projects[project];
-
-      if (query === "" || queryRegex.test(project)) {
-        results.push(formatProjectEntry(project, directory));
+      for (var i = 0; i < fuzzyResults.length; i++) {
+        let res = fuzzyResults[i].obj;
+        results.push(formatProjectEntry(res.name, res.directory));
         count++;
       }
     }

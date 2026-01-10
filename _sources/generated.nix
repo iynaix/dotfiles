@@ -11,10 +11,10 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.13.8";
+    version = "0.13.10";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.8/Exiled-Exchange-2-0.13.8.AppImage";
-      sha256 = "sha256-jA/VXMi+VJmRcHRBgnt71PLvGrSBe2S2KmUtrQlIFjk=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.13.10/Exiled-Exchange-2-0.13.10.AppImage";
+      sha256 = "sha256-mQNUJptaObbEMtBLCgJn7A6nmgVpl4o0JWTg6FH20U0=";
     };
   };
   helium = {
@@ -87,27 +87,27 @@
   };
   niri = {
     pname = "niri";
-    version = "10df9f4717cbd4efd20ae796eb6b0aa400127bdc";
+    version = "45fc76328145e0bf91b13edb7a43ac1f5770cb48";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "10df9f4717cbd4efd20ae796eb6b0aa400127bdc";
+      rev = "45fc76328145e0bf91b13edb7a43ac1f5770cb48";
       fetchSubmodules = false;
-      sha256 = "sha256-qS4tdG2iUQwSld9dTH1gk8GcIOrRi9umMgPv8MGDIA0=";
+      sha256 = "sha256-ZR4bY+cF1Nm0PJx0xJWwl5Pf9ku8baUgvbD+d2Q3X1w=";
     };
-    date = "2026-01-07";
+    date = "2026-01-10";
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "306d1a1508482d6d1af4902da0f19749d1988174";
+    version = "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "306d1a1508482d6d1af4902da0f19749d1988174";
+      rev = "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae";
       fetchSubmodules = false;
-      sha256 = "sha256-o7P34mQh9S9GhwOsn3JtblTpIlqeKoFI9mWZ6ohd48Q=";
+      sha256 = "sha256-FjbSGe2gsufqc4UkC/GZnp6z1wO/3BhNQLCBNsFLF7c=";
     };
-    date = "2026-01-09";
+    date = "2026-01-10";
   };
   rofi-themes = {
     pname = "rofi-themes";

@@ -1,30 +1,43 @@
 { inputs, lib, ... }:
 let
   inherit (lib)
+    foldl'
     getExe
     getExe'
+    isFunction
+    listToAttrs
     mkForce
+    mkOption
+    mkOptionType
     optionalString
     ;
 in
 {
+  flake.nixosModules.core = {
+    options.custom = {
+      programs.noctalia = {
+        settingsReducers = mkOption {
+          type = lib.types.listOf (mkOptionType {
+            name = "noctalia-settings-reducer";
+            check = isFunction;
+          });
+          default = [ ];
+          description = "Reducers that will be applied to a copy of desktop's gui-settings.json";
+        };
+      };
+    };
+  };
+
   flake.nixosModules.wm =
     {
       config,
-      host,
       isLaptop,
       pkgs,
       ...
     }:
     let
-      noctaliaSettings = import ./_settings.nix {
-        inherit
-          config
-          host
-          lib
-          isLaptop
-          ;
-      };
+      # settings.json is the desktop copy of gui-settings.json without any modifications
+      defaultSettings = builtins.fromJSON (builtins.readFile ./settings.json);
       noctalia-shell' =
         (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
           calendarSupport = true;
@@ -35,11 +48,6 @@ in
               # battery and volume widgets that use the primary color instead of white
               ./mprimary-bar-widgets.patch
             ];
-
-            postPatch = ''
-              substituteInPlace "Services/Noctalia/UpdateService.qml" \
-                --replace-fail "3.8" "3.9"
-            '';
           };
       noctalia-plugins = (pkgs.callPackage ../../../_sources/generated.nix { }).noctalia-plugins.src;
       # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
@@ -84,35 +92,58 @@ in
         })
       ];
 
-      hj.xdg.config.files = {
-        "noctalia/settings.json".text = lib.strings.toJSON noctaliaSettings;
-        "noctalia/plugins.json" = {
-          text = lib.strings.toJSON {
-            sources = [
-              {
-                enabled = true;
-                name = "Official Noctalia Plugins";
-                url = "https://github.com/noctalia-dev/noctalia-plugins";
+      hj.xdg.config.files =
+        let
+          officialPlugins = [
+            "kaomoji-provider"
+            "screen-recorder"
+            "timer"
+          ];
+        in
+        {
+          "noctalia/settings.json".text =
+            config.custom.programs.noctalia.settingsReducers
+            |> foldl' (curr: reducer: reducer curr) defaultSettings
+            |> lib.strings.toJSON;
+          "noctalia/plugins.json" = {
+            text = lib.strings.toJSON {
+              sources = [
+                {
+                  enabled = true;
+                  name = "Official Noctalia Plugins";
+                  url = "https://github.com/noctalia-dev/noctalia-plugins";
+                }
+              ];
+              states = {
+                projects-provider = {
+                  enabled = true;
+                };
               }
-            ];
-            states = {
-              kaomoji-provider = {
-                enabled = true;
-              };
-              projects-provider = {
-                enabled = true;
-              };
+              // (
+                officialPlugins
+                |> map (plugin: {
+                  name = plugin;
+                  value.enabled = true;
+                })
+                |> listToAttrs
+              );
             };
           };
-        };
-        "noctalia/plugins/kaomoji-provider".source = "${noctalia-plugins}/kaomoji-provider";
-        # substitute projects dir into code
-        "noctalia/plugins/projects-provider".source = pkgs.runCommand "set-project-dir" { } /* sh */ ''
-          cp -r ${./projects-provider} $out
-              substituteInPlace $out/LauncherProvider.qml \
-                --replace-fail "%PROJECT_DIR%" "/persist${config.hj.directory}/projects"
-        '';
-      };
+          # substitute projects dir into code
+          "noctalia/plugins/projects-provider".source = pkgs.runCommand "set-project-dir" { } /* sh */ ''
+            cp -r ${./projects-provider} $out
+                substituteInPlace $out/LauncherProvider.qml \
+                  --replace-fail "%PROJECT_DIR%" "/persist${config.hj.directory}/projects"
+          '';
+        }
+        // (
+          officialPlugins
+          |> map (plugin: {
+            name = "noctalia/plugins/${plugin}";
+            value.source = "${noctalia-plugins}/${plugin}";
+          })
+          |> listToAttrs
+        );
 
       # custom noctalia service that starts after the WM is ready
       # don't use flake's systemd service, it's very buggy :(
@@ -189,6 +220,7 @@ in
             systemctl --user restart noctalia-shell
           '';
         };
+        inherit noctalia-ipc;
       };
 
       custom.programs = {
