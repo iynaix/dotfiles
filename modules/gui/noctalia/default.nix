@@ -16,6 +16,8 @@ in
   flake.nixosModules.core = {
     options.custom = {
       programs.noctalia = {
+        # reducer functions are used instead of plain attrsets, as attrsets cannot be merged together to override
+        # lists at arbitrary indexes
         settingsReducers = mkOption {
           type = lib.types.listOf (mkOptionType {
             name = "noctalia-settings-reducer";

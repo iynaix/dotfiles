@@ -134,7 +134,14 @@
       };
       nix = {
         enable = true;
-        format.type = [ "nixfmt" ];
+        format = {
+          enable = true;
+          type = [ "nixfmt" ];
+        };
+        lsp.servers = [
+          "nil"
+          "nixd"
+        ];
       };
       python.enable = true;
       qml = {
@@ -164,9 +171,8 @@
       # lspSignature?
       # mappings?
       servers.nixd = {
-        options = lib.mkIf (dots != null) {
+        settings.options = lib.mkIf (dots != null) {
           nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
-          home-manager.expr = "(builtins.getFlake \"${dots}\").homeConfigurations.${host}.options";
         };
       };
     };

@@ -151,7 +151,7 @@
     },
     "niri": {
         "cargoLocks": null,
-        "date": "2026-01-10",
+        "date": "2026-01-11",
         "extract": null,
         "name": "niri",
         "passthru": null,
@@ -163,16 +163,16 @@
             "name": null,
             "owner": "YaLTeR",
             "repo": "niri",
-            "rev": "45fc76328145e0bf91b13edb7a43ac1f5770cb48",
-            "sha256": "sha256-ZR4bY+cF1Nm0PJx0xJWwl5Pf9ku8baUgvbD+d2Q3X1w=",
+            "rev": "e9d888cd52f8a783b07e0d6c0ec9a341a81031ca",
+            "sha256": "sha256-1gtx2la5f8RphvN+BUZuZjiGh25WdO0Hf9+kJKIu3rA=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "45fc76328145e0bf91b13edb7a43ac1f5770cb48"
+        "version": "e9d888cd52f8a783b07e0d6c0ec9a341a81031ca"
     },
     "noctalia-plugins": {
         "cargoLocks": null,
-        "date": "2026-01-10",
+        "date": "2026-01-11",
         "extract": null,
         "name": "noctalia-plugins",
         "passthru": null,
@@ -184,12 +184,12 @@
             "name": null,
             "owner": "noctalia-dev",
             "repo": "noctalia-plugins",
-            "rev": "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae",
-            "sha256": "sha256-FjbSGe2gsufqc4UkC/GZnp6z1wO/3BhNQLCBNsFLF7c=",
+            "rev": "359c076b3a679117fa11da3bb23575c134518649",
+            "sha256": "sha256-Mhy3mvviXSs/VO2AXvGk9vHGqZR6enAxiZJEwtJ0EKk=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae"
+        "version": "359c076b3a679117fa11da3bb23575c134518649"
     },
     "rofi-themes": {
         "cargoLocks": null,

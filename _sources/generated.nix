@@ -87,27 +87,27 @@
   };
   niri = {
     pname = "niri";
-    version = "45fc76328145e0bf91b13edb7a43ac1f5770cb48";
+    version = "e9d888cd52f8a783b07e0d6c0ec9a341a81031ca";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "45fc76328145e0bf91b13edb7a43ac1f5770cb48";
+      rev = "e9d888cd52f8a783b07e0d6c0ec9a341a81031ca";
       fetchSubmodules = false;
-      sha256 = "sha256-ZR4bY+cF1Nm0PJx0xJWwl5Pf9ku8baUgvbD+d2Q3X1w=";
+      sha256 = "sha256-1gtx2la5f8RphvN+BUZuZjiGh25WdO0Hf9+kJKIu3rA=";
     };
-    date = "2026-01-10";
+    date = "2026-01-11";
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae";
+    version = "359c076b3a679117fa11da3bb23575c134518649";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "6614d59ce3e8d6d400c5fc666eda5d0e5e61cdae";
+      rev = "359c076b3a679117fa11da3bb23575c134518649";
       fetchSubmodules = false;
-      sha256 = "sha256-FjbSGe2gsufqc4UkC/GZnp6z1wO/3BhNQLCBNsFLF7c=";
+      sha256 = "sha256-Mhy3mvviXSs/VO2AXvGk9vHGqZR6enAxiZJEwtJ0EKk=";
     };
-    date = "2026-01-10";
+    date = "2026-01-11";
   };
   rofi-themes = {
     pname = "rofi-themes";
