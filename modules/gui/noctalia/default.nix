@@ -209,6 +209,7 @@ in
       environment.systemPackages = [
         noctalia-shell'
         noctalia-ipc
+        pkgs.gpu-screen-recorder # screen recorder plugin
       ];
 
       # start after WM initializes

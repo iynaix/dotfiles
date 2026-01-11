@@ -56,7 +56,7 @@ Introduction
 #
 # After initial login, you can then set new passwords for root and your user(s)
 # using `users.YOUR_USERNAME.hashedPasswordFile = /persist/PATH_TO_HASHED_PASSWORD_FILE`
-# read -s -p "" PASSWORD && mkpasswd -m sha-512 "$PASSWORD" | sudo tee -a /persist/PATH_TO_HASHED_PASSWORD_FILE
+# read -s -p "" PASSWORD && mkpasswd -m sha-512 "$PASSWORD" | sudo tee /persist/PATH_TO_HASHED_PASSWORD_FILE
 
 # NOTE: during rebuild, there will be warnings about setting multiple password options, this is expected :(
 # (https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990)
