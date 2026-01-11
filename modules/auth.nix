@@ -102,6 +102,19 @@ in
         {
           services.displayManager.ly = {
             enable = true;
+            # fix hyprland-uwsm being selected over hyprland, even with auto_login_session = hyprland
+            # https://codeberg.org/fairyglade/ly/issues/895
+            package = pkgs.ly.overrideAttrs (_o: rec {
+              version = "1.3.1";
+
+              src = pkgs.fetchFromGitea {
+                domain = "codeberg.org";
+                owner = "fairyglade";
+                repo = "ly";
+                tag = "v${version}";
+                hash = "sha256-BelsR/+sfm3qdEnyf4bbadyzuUVvVPrPEhdZaNPLxiE=";
+              };
+            });
             settings = {
               bigclock = "en";
             }
