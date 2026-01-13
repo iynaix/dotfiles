@@ -151,7 +151,7 @@
     },
     "niri": {
         "cargoLocks": null,
-        "date": "2026-01-12",
+        "date": "2026-01-15",
         "extract": null,
         "name": "niri",
         "passthru": null,
@@ -163,16 +163,16 @@
             "name": null,
             "owner": "YaLTeR",
             "repo": "niri",
-            "rev": "3672e79369d72297abda8878245ea4ec327062c6",
-            "sha256": "sha256-mttBQdVnVFO3mn+M+oqCsZZOtS2HvXYy+VaHxb8YuMw=",
+            "rev": "87e2dd0361172a48cb3ac8e5b3f6f701c758700d",
+            "sha256": "sha256-+WOpoDSvYJds8zCMlwDHKBivxSViM5n1J1Jo9Lcf19Y=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "3672e79369d72297abda8878245ea4ec327062c6"
+        "version": "87e2dd0361172a48cb3ac8e5b3f6f701c758700d"
     },
     "noctalia-plugins": {
         "cargoLocks": null,
-        "date": "2026-01-12",
+        "date": "2026-01-15",
         "extract": null,
         "name": "noctalia-plugins",
         "passthru": null,
@@ -184,12 +184,12 @@
             "name": null,
             "owner": "noctalia-dev",
             "repo": "noctalia-plugins",
-            "rev": "49640d6349c815ab0a475efff60b47b1a795d610",
-            "sha256": "sha256-FgIsjd20u0eGAj8rNim/+0Z75huBL5dgTTb+dnHDh20=",
+            "rev": "c298de97b8853503bb627f79e04192a9b73b5641",
+            "sha256": "sha256-fsNHmBX/auY8JiYAtpgqMSFh/CQNwQIKBQjZy4O6ot8=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "49640d6349c815ab0a475efff60b47b1a795d610"
+        "version": "c298de97b8853503bb627f79e04192a9b73b5641"
     },
     "rofi-themes": {
         "cargoLocks": null,
@@ -235,7 +235,7 @@
     },
     "yazi-plugins": {
         "cargoLocks": null,
-        "date": "2026-01-12",
+        "date": "2026-01-15",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -247,16 +247,16 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "75f6f7276fadf306597c2d2b4e264335fa0937cf",
-            "sha256": "sha256-iiV6WSLdc7LPjXr+DRwVKzgJr+0Z8hO2eil5cdAgW4g=",
+            "rev": "56971d05b41142ff0bc29a4977c7b0e5ad89d8b8",
+            "sha256": "sha256-J5H0fz6GzXvGOo7J5eNmU0F31YgKQ9yKz3h/kd9l4KU=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "75f6f7276fadf306597c2d2b4e264335fa0937cf"
+        "version": "56971d05b41142ff0bc29a4977c7b0e5ad89d8b8"
     },
     "yazi-time-travel": {
         "cargoLocks": null,
-        "date": "2025-02-14",
+        "date": "2026-01-16",
         "extract": null,
         "name": "yazi-time-travel",
         "passthru": null,
@@ -268,12 +268,12 @@
             "name": null,
             "owner": "iynaix",
             "repo": "time-travel.yazi",
-            "rev": "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2",
-            "sha256": "sha256-ZZgn5rsBzvZcnDWZfjMBPRg9QUz4FTq5UIPWfnwXHQs=",
+            "rev": "aaec6e26e525bd146354a5137ec40f1f23257a4e",
+            "sha256": "sha256-/+KiuGUox763dMQvHl1l3+Ci3vL8NwRuKNu9pi3gjyE=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2"
+        "version": "aaec6e26e525bd146354a5137ec40f1f23257a4e"
     },
     "yt-dlp": {
         "cargoLocks": null,

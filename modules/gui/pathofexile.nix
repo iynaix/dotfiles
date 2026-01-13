@@ -43,26 +43,42 @@ topLevel: {
         exiled-exchange-2
       ];
 
-      custom.programs.hyprland.settings = {
-        # NOTE: multiple rules so they are OR-ed
-        windowrule = [
-          # poe1
-          "match:title (Path of Exile), tag +poe"
-          "match:initial_title (Path of Exile), tag +poe"
-          "match:class (steam_app_238960), tag +poe"
-          "match:initial_class (steam_app_238960), tag +poe"
-          # poe2
-          "match:title (Path of Exile 2), tag +poe"
-          "match:initial_title (Path of Exile 2), tag +poe"
-          "match:class (steam_app_2694490), tag +poe"
-          "match:initial_class (steam_app_2694490), tag +poe"
-          # poe1 / poe2 rules
-          "match:tag poe, workspace 5, fullscreen on"
-          # woke poe1 / poe2 trade
-          "match:title (Awakened PoE Trade), tag +apt"
-          "match:title (Exiled Exchange 2), tag +apt"
-          "match:tag apt, no_blur on, no_shadow on, border_size 0"
-        ];
+      custom.programs = {
+        hyprland.settings = {
+          # NOTE: multiple rules so they are OR-ed
+          windowrule = [
+            # poe1 / poe2
+            "match:title (Path of Exile( 2)?), tag +poe"
+            "match:initial_title (Path of Exile( 2)?), tag +poe"
+            "match:class (steam_app_(238960|2694490)), tag +poe"
+            "match:initial_class (steam_app_(238960|2694490)), tag +poe"
+            # poe1 / poe2 rules
+            "match:tag poe, workspace 5, fullscreen on"
+            # woke poe1 / poe2 trade
+            "match:title (Awakened PoE Trade), tag +apt"
+            "match:title (Exiled Exchange 2), tag +apt"
+            "match:tag apt, no_blur on, no_shadow on, border_size 0"
+          ];
+        };
+
+        niri.settings.config = /* kdl */ ''
+          // poe1 / poe2
+          window-rule {
+              match title="^Path of Exile( 2)?$"
+              match app-id="^steam_app_(238960|2694490)$"
+
+              open-on-workspace "5"
+              open-fullscreen true
+          }
+
+          // Trade Tools (Awakened PoE Trade / Exiled Exchange 2)
+          window-rule {
+              match title="^Awakened PoE Trade$"
+              match title="^Exiled Exchange 2$"
+
+              open-floating true
+          }
+        '';
       };
 
       custom.persist = {

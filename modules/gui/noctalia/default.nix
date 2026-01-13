@@ -232,7 +232,7 @@ in
         # setup blur for hyprland
         hyprland.settings = {
           layerrule = [
-            ''match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on''
+            "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
           ];
         };
       };

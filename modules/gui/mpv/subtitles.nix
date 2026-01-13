@@ -21,10 +21,18 @@ in
 
       # openai-whisper for transcribing audio / video
       {
-        environment = {
-          systemPackages = [
-            # pkgs.whisper-ctranslate2
-          ];
+        environment.systemPackages = with pkgs; [
+          whisper-ctranslate2
+        ];
+
+        custom.shell.packages = {
+          ai-subs = {
+            runtimeInputs = [ pkgs.whisper-ctranslate2 ];
+            # int8 is the fastest on cpu, according to the project page
+            text = /* sh */ ''
+              whisper-ctranslate2 ---language en --output_format srt --compute_type int8 --model medium "$@"
+            '';
+          };
         };
 
         custom.persist = {

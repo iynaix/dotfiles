@@ -113,9 +113,10 @@ Item {
 
     var query = searchText.replace(/^>pj/, "").replace(/^>projects/, "").trim();
     var results = [];
+    var count = 0;
+    var i = 0;
 
     if (query === "") {
-      var count = 0;
       for (i = 0; i < projects.length && count < 100; i++) {
         var res = projects[i];
         results.push(formatProjectEntry(res.name, res.directory));
@@ -128,7 +129,7 @@ Item {
                                           "limit": 100,
                                         });
 
-      for (var i = 0; i < fuzzyResults.length; i++) {
+      for (i = 0; i < fuzzyResults.length; i++) {
         let res = fuzzyResults[i].obj;
         results.push(formatProjectEntry(res.name, res.directory));
         count++;

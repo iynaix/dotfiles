@@ -87,27 +87,27 @@
   };
   niri = {
     pname = "niri";
-    version = "3672e79369d72297abda8878245ea4ec327062c6";
+    version = "87e2dd0361172a48cb3ac8e5b3f6f701c758700d";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "3672e79369d72297abda8878245ea4ec327062c6";
+      rev = "87e2dd0361172a48cb3ac8e5b3f6f701c758700d";
       fetchSubmodules = false;
-      sha256 = "sha256-mttBQdVnVFO3mn+M+oqCsZZOtS2HvXYy+VaHxb8YuMw=";
+      sha256 = "sha256-+WOpoDSvYJds8zCMlwDHKBivxSViM5n1J1Jo9Lcf19Y=";
     };
-    date = "2026-01-12";
+    date = "2026-01-15";
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "49640d6349c815ab0a475efff60b47b1a795d610";
+    version = "c298de97b8853503bb627f79e04192a9b73b5641";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "49640d6349c815ab0a475efff60b47b1a795d610";
+      rev = "c298de97b8853503bb627f79e04192a9b73b5641";
       fetchSubmodules = false;
-      sha256 = "sha256-FgIsjd20u0eGAj8rNim/+0Z75huBL5dgTTb+dnHDh20=";
+      sha256 = "sha256-fsNHmBX/auY8JiYAtpgqMSFh/CQNwQIKBQjZy4O6ot8=";
     };
-    date = "2026-01-12";
+    date = "2026-01-15";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -134,27 +134,27 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "75f6f7276fadf306597c2d2b4e264335fa0937cf";
+    version = "56971d05b41142ff0bc29a4977c7b0e5ad89d8b8";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "75f6f7276fadf306597c2d2b4e264335fa0937cf";
+      rev = "56971d05b41142ff0bc29a4977c7b0e5ad89d8b8";
       fetchSubmodules = false;
-      sha256 = "sha256-iiV6WSLdc7LPjXr+DRwVKzgJr+0Z8hO2eil5cdAgW4g=";
+      sha256 = "sha256-J5H0fz6GzXvGOo7J5eNmU0F31YgKQ9yKz3h/kd9l4KU=";
     };
-    date = "2026-01-12";
+    date = "2026-01-15";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
-    version = "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2";
+    version = "aaec6e26e525bd146354a5137ec40f1f23257a4e";
     src = fetchFromGitHub {
       owner = "iynaix";
       repo = "time-travel.yazi";
-      rev = "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2";
+      rev = "aaec6e26e525bd146354a5137ec40f1f23257a4e";
       fetchSubmodules = false;
-      sha256 = "sha256-ZZgn5rsBzvZcnDWZfjMBPRg9QUz4FTq5UIPWfnwXHQs=";
+      sha256 = "sha256-/+KiuGUox763dMQvHl1l3+Ci3vL8NwRuKNu9pi3gjyE=";
     };
-    date = "2025-02-14";
+    date = "2026-01-16";
   };
   yt-dlp = {
     pname = "yt-dlp";
