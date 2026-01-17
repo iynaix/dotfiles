@@ -31,7 +31,7 @@ in
           in
           valueType;
         default = { };
-        description = ''Mango configuration settings.'';
+        description = "Mango configuration settings.";
       };
     };
   };
@@ -56,7 +56,7 @@ in
       hj.xdg.config.files."mango/config.conf" = {
         text =
           (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
-            self.lib.generators.toHyprconf {
+            self.libCustom.generators.toHyprconf {
               attrs = config.custom.programs.mango.settings;
               importantPrefixes = [ "monitorrule" ];
             }

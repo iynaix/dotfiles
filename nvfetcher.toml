@@ -20,10 +20,6 @@ fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/hel
 src.git = "https://github.com/YaLTeR/niri"
 fetch.github = "YaLTeR/niri"
 
-[noctalia-plugins]
-src.git = "https://github.com/noctalia-dev/noctalia-plugins"
-fetch.github = "noctalia-dev/noctalia-plugins"
-
 [mpv-cut]
 src.git = "https://github.com/familyfriendlymikey/mpv-cut"
 fetch.github = "familyfriendlymikey/mpv-cut"

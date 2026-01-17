@@ -151,7 +151,7 @@ in
           # create workspaces config
           (
             config.custom.hardware.monitors
-            |> self.lib.mapWorkspaces (
+            |> self.libCustom.mapWorkspaces (
               {
                 workspace,
                 monitor,

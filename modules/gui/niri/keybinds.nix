@@ -264,7 +264,7 @@
           # named workspace setup, dynamic workspaces are urgh
           // mergeAttrsList (
             flatten (
-              (self.lib.mapWorkspaces (
+              (self.libCustom.mapWorkspaces (
                 { workspace, key, ... }:
                 [
                   {

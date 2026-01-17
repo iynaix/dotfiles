@@ -18,7 +18,7 @@ in
         };
 
         programs.hypridle = {
-          settings = self.lib.types.hyprlandSettingsType;
+          settings = self.libCustom.types.hyprlandSettingsType;
         };
       };
     };
@@ -32,7 +32,7 @@ in
       ...
     }:
     let
-      hypridleConfText = self.lib.generators.toHyprconf {
+      hypridleConfText = self.libCustom.generators.toHyprconf {
         attrs = config.custom.programs.hypridle.settings;
         importantPrefixes = [ "$" ];
       };

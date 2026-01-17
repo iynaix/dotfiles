@@ -58,7 +58,7 @@
         ++
           # tag keybinds, switch to monitor first before switching tag
           flatten (
-            (self.lib.mapWorkspaces (
+            (self.libCustom.mapWorkspaces (
               {
                 monitor,
                 workspace,
@@ -67,9 +67,9 @@
               }:
               [
                 # Switch workspaces with $mod + [0-9]
-                ''$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${workspace}''
+                "$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${workspace}"
                 # Move active window to a workspace with $mod + SHIFT + [0-9]
-                ''$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}''
+                "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}"
               ]
             ))
               config.custom.hardware.monitors

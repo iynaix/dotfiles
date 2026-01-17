@@ -173,6 +173,18 @@ topLevel: {
             direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
           '';
         };
+
+        # disable networkmanager software wifi switch on startup, so noctalia doesn't toggle it back on when syncing state
+        startup = [
+          {
+            spawn = [
+              "nmcli"
+              "radio"
+              "wifi"
+              "off"
+            ];
+          }
+        ];
       };
 
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;

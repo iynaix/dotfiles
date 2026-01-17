@@ -117,7 +117,7 @@ in
       createShaderKeybind =
         shaders: description:
         ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
-      mpvConfig = self.lib.recursiveMergeAttrsList [
+      mpvConfig = self.libCustom.recursiveMergeAttrsList [
         {
           bindings = {
             MBTN_LEFT = "cycle pause";
@@ -411,7 +411,7 @@ in
           {
             mpv = /* sh */ ''cat "${mpvDir}/mpv.conf"'';
             mpv-input = /* sh */ ''cat "${mpvDir}/input.conf"'';
-            mpv-plugins = /* sh */ ''cat ${mpvDir}/script-opts/*'';
+            mpv-plugins = /* sh */ "cat ${mpvDir}/script-opts/*";
           };
 
         custom.persist = {

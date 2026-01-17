@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.lib = rec {
+  flake.libCustom = rec {
     generators = {
       # produces ini format strings, takes a single argument of the object
       toQuotedINI = lib.generators.toINI {

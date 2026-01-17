@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-n1wn80h9O7GpZz4AygNSKMcilX8lr6fJkiQBBPPQXok=",
+            "sha256": "sha256-abNHp4WaR2MqidG42TErJZBR1PcUVtRpBYFiKCmadW8=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.1.1/helium-0.8.1.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.2.1/helium-0.8.2.1-x86_64.AppImage"
         },
-        "version": "0.8.1.1"
+        "version": "0.8.2.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -151,7 +151,7 @@
     },
     "niri": {
         "cargoLocks": null,
-        "date": "2026-01-15",
+        "date": "2026-01-17",
         "extract": null,
         "name": "niri",
         "passthru": null,
@@ -163,33 +163,12 @@
             "name": null,
             "owner": "YaLTeR",
             "repo": "niri",
-            "rev": "87e2dd0361172a48cb3ac8e5b3f6f701c758700d",
-            "sha256": "sha256-+WOpoDSvYJds8zCMlwDHKBivxSViM5n1J1Jo9Lcf19Y=",
+            "rev": "d7184a04b904e07113f4623610775ae78d32394c",
+            "sha256": "sha256-Ub8eed4DsfIDWyg30xEe+8bSxL/z5Af/gCjmvJ0V/Hs=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "87e2dd0361172a48cb3ac8e5b3f6f701c758700d"
-    },
-    "noctalia-plugins": {
-        "cargoLocks": null,
-        "date": "2026-01-16",
-        "extract": null,
-        "name": "noctalia-plugins",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "noctalia-dev",
-            "repo": "noctalia-plugins",
-            "rev": "7474569749fc4b703482a66700b6cbccdb36f0e9",
-            "sha256": "sha256-CrCAaVOB3jHJ0XLPAuKgfPMgv07Lr7tMM0CFIjUa3a4=",
-            "sparseCheckout": [],
-            "type": "github"
-        },
-        "version": "7474569749fc4b703482a66700b6cbccdb36f0e9"
+        "version": "d7184a04b904e07113f4623610775ae78d32394c"
     },
     "rofi-themes": {
         "cargoLocks": null,

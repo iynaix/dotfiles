@@ -124,7 +124,7 @@ let
   };
 in
 {
-  flake.lib = {
+  flake.libCustom = {
     generators = {
       inherit toHyprconf;
     };

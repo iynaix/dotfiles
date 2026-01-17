@@ -164,7 +164,7 @@
         //
           # bind workspaces to monitors, don't bother if there is only one monitor
           optionalAttrs (length config.custom.hardware.monitors > 1) {
-            workspace = self.lib.mapWorkspaces (
+            workspace = self.libCustom.mapWorkspaces (
               { workspace, monitor, ... }:
               "${workspace},monitor:${monitor.name}"
               + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"

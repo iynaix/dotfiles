@@ -4,7 +4,7 @@
     {
       environment.systemPackages = [ pkgs.cava ];
 
-      hj.xdg.config.files."cava/config".text = self.lib.generators.toQuotedINI {
+      hj.xdg.config.files."cava/config".text = self.libCustom.generators.toQuotedINI {
         general = {
           # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.
           mode = "normal";

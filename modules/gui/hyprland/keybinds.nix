@@ -117,7 +117,7 @@
         ]
         # workspace keybinds
         ++ (lib.flatten (
-          (self.lib.mapWorkspaces (
+          (self.libCustom.mapWorkspaces (
             { workspace, key, ... }:
             if qtile_like then
               [

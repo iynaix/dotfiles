@@ -7,7 +7,7 @@
       mkYaziPlugin = name: text: {
         "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
       };
-      baseYaziConf = self.lib.recursiveMergeAttrsList [
+      baseYaziConf = self.libCustom.recursiveMergeAttrsList [
         {
           plugins = {
             full-border = "${sources.yazi-plugins.src}/full-border.yazi";
