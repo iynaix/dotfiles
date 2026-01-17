@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-11xSlHIqmyyVwjjwt5FmLhp72P3m07PppOo7a9DbTcE=",
+            "sha256": "sha256-n1wn80h9O7GpZz4AygNSKMcilX8lr6fJkiQBBPPQXok=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.7.10.1/helium-0.7.10.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.1.1/helium-0.8.1.1-x86_64.AppImage"
         },
-        "version": "0.7.10.1"
+        "version": "0.8.1.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -172,7 +172,7 @@
     },
     "noctalia-plugins": {
         "cargoLocks": null,
-        "date": "2026-01-15",
+        "date": "2026-01-16",
         "extract": null,
         "name": "noctalia-plugins",
         "passthru": null,
@@ -184,12 +184,12 @@
             "name": null,
             "owner": "noctalia-dev",
             "repo": "noctalia-plugins",
-            "rev": "c298de97b8853503bb627f79e04192a9b73b5641",
-            "sha256": "sha256-fsNHmBX/auY8JiYAtpgqMSFh/CQNwQIKBQjZy4O6ot8=",
+            "rev": "7474569749fc4b703482a66700b6cbccdb36f0e9",
+            "sha256": "sha256-CrCAaVOB3jHJ0XLPAuKgfPMgv07Lr7tMM0CFIjUa3a4=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "c298de97b8853503bb627f79e04192a9b73b5641"
+        "version": "7474569749fc4b703482a66700b6cbccdb36f0e9"
     },
     "rofi-themes": {
         "cargoLocks": null,

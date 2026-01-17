@@ -19,10 +19,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.7.10.1";
+    version = "0.8.1.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.7.10.1/helium-0.7.10.1-x86_64.AppImage";
-      sha256 = "sha256-11xSlHIqmyyVwjjwt5FmLhp72P3m07PppOo7a9DbTcE=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.8.1.1/helium-0.8.1.1-x86_64.AppImage";
+      sha256 = "sha256-n1wn80h9O7GpZz4AygNSKMcilX8lr6fJkiQBBPPQXok=";
     };
   };
   mpv-cut = {
@@ -99,15 +99,15 @@
   };
   noctalia-plugins = {
     pname = "noctalia-plugins";
-    version = "c298de97b8853503bb627f79e04192a9b73b5641";
+    version = "7474569749fc4b703482a66700b6cbccdb36f0e9";
     src = fetchFromGitHub {
       owner = "noctalia-dev";
       repo = "noctalia-plugins";
-      rev = "c298de97b8853503bb627f79e04192a9b73b5641";
+      rev = "7474569749fc4b703482a66700b6cbccdb36f0e9";
       fetchSubmodules = false;
-      sha256 = "sha256-fsNHmBX/auY8JiYAtpgqMSFh/CQNwQIKBQjZy4O6ot8=";
+      sha256 = "sha256-CrCAaVOB3jHJ0XLPAuKgfPMgv07Lr7tMM0CFIjUa3a4=";
     };
-    date = "2026-01-15";
+    date = "2026-01-16";
   };
   rofi-themes = {
     pname = "rofi-themes";

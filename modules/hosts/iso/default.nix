@@ -52,6 +52,7 @@ let
                   btop'
                   eza'
                   eza-tree'
+                  moor
                   neovim-iynaix
                   ripgrep'
                   yazi'
@@ -61,6 +62,7 @@ let
               variables = {
                 EDITOR = "nvim";
                 VISUAL = "nvim";
+                PAGER = "moor";
                 NIXPKGS_ALLOW_UNFREE = "1";
               };
 

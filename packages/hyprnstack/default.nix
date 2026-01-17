@@ -1,10 +1,10 @@
 {
   lib,
-  gcc14Stdenv,
+  gcc15Stdenv,
   hyprland,
   fetchFromGitHub,
 }:
-gcc14Stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprNStack";
   version = "cbffba31ed820e2fbad6cb21ad0b15a051a9a4e7";
   src = fetchFromGitHub {
