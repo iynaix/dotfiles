@@ -75,6 +75,6 @@ fn main() {
         .name;
 
     if !sel.is_empty() {
-        // TODO: apply theme with matugen?
+        // TODO: apply theme with noctalia?
     }
 }

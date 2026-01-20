@@ -296,7 +296,7 @@
         in
         [
           (_: _prev: {
-            # set dynamic noctalia flavor from matugen
+            # set dynamic flavor from noctalia
             yazi = yazi'.override {
               settings = lib.recursiveUpdate yazi'.passthru.settings {
                 theme.flavor = {

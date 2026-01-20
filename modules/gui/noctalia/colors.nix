@@ -10,12 +10,12 @@ in
     in
     {
       options.custom = {
-        programs.matugen = {
-          settings = mkOption {
+        programs.noctalia = {
+          colors = mkOption {
             inherit (tomlFormat) type;
             default = { };
             description = ''
-              TOML config for matugen, see https://iniox.github.io/#matugen/configuration for
+              TOML config for noctalia, similar to https://iniox.github.io/#matugen/configuration for
               available options
             '';
           };
@@ -29,12 +29,8 @@ in
       tomlFormat = pkgs.formats.toml { };
     in
     {
-      environment.systemPackages = with pkgs; [
-        matugen
-      ];
-
       hj.xdg.config.files."noctalia/user-templates.toml".source =
         tomlFormat.generate "user-template.toml"
-          ({ config = { }; } // config.custom.programs.matugen.settings);
+          ({ config = { }; } // config.custom.programs.noctalia.colors);
     };
 }

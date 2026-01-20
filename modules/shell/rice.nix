@@ -31,10 +31,11 @@
       ];
 
       custom.programs = {
-        matugen.settings.templates = {
+        noctalia.colors.templates = {
           wfetch = {
-            # dummy value so matugen doesn't complain
+            # dummy values so noctalia doesn't complain
             input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+            output_path = "/dev/null";
             post_hook = "bash -c 'pgrep -f .wfetch-wrapped >/dev/null && pkill -SIGUSR2 .wfetch-wrapped || true'";
           };
         };

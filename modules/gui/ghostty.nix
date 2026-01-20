@@ -127,7 +127,7 @@ in
                 font-family = config.custom.fonts.monospace;
                 font-feature = "zero";
                 font-style = "Medium";
-                # load dynamically generated matugen colors by noctalia
+                # load dynamically generated colors by noctalia
                 config-file = "?${config.hj.xdg.config.directory}/ghostty/themes/noctalia";
               }
               // config.custom.programs.ghostty.extraSettings;

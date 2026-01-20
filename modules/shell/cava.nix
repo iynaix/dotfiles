@@ -106,7 +106,7 @@
         };
 
         color = {
-          # load dynamically generated matugen colors by noctalia
+          # load dynamically generated noctalia colors
           theme = "noctalia";
         };
       };

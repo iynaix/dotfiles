@@ -11,45 +11,51 @@ in
       ...
     }:
     let
-      source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
+      # source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
       niriWrapped = self.wrapperModules.niri.apply {
         inherit pkgs;
-        package = pkgs.niri.overrideAttrs (
-          o:
-          (
-            source
-            // {
-              inherit (o) version;
+        package = pkgs.niri.overrideAttrs (o:
+        # source
+        # // {
+        # inherit (o) version;
 
-              # patches =
-              #   (o.patches or [ ])
-              #   # not compatible with blur patch
-              #   ++ [
-              #     # fix fullscreen windows have a black background
-              #     # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
-              #     # unmerged PR to fix this
-              #     # https://github.com/YaLTeR/niri/pull/3004
-              #     ./transparent-fullscreen.patch
-              #   ];
+        # https://github.com/YaLTeR/niri/pull/3190
+        # postPatch = ''
+        #   patchShebangs resources/niri-session
+        #   substituteInPlace resources/niri.service \
+        #     --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
+        # '';
 
-              # https://github.com/YaLTeR/niri/pull/3190
-              postPatch = ''
-                patchShebangs resources/niri-session
-                substituteInPlace resources/niri.service \
-                  --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
-              '';
+        # creating an overlay for buildRustPackage overlay
+        # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+        #     cargoDeps = pkgs.rustPlatform.importCargoLock {
+        #       lockFile = source.src + "/Cargo.lock";
+        #       allowBuiltinFetchGit = true;
+        #     };
 
-              # creating an overlay for buildRustPackage overlay
-              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-              cargoDeps = pkgs.rustPlatform.importCargoLock {
-                lockFile = source.src + "/Cargo.lock";
-                allowBuiltinFetchGit = true;
-              };
+        #   }
+        # )
+        {
+          # patches =
+          #   (o.patches or [ ])
+          #   # not compatible with blur patch
+          #   ++ [
+          #     # fix fullscreen windows have a black background
+          #     # https://github.com/YaLTeR/niri/discussions/1399#discussioncomment-12745734
+          #     # unmerged PR to fix this
+          #     # https://github.com/YaLTeR/niri/pull/3004
+          #     ./transparent-fullscreen.patch
+          #   ];
 
-              doCheck = false; # faster builds
-            }
-          )
-        );
+          patches = (o.patches or [ ]) ++ [
+            (pkgs.fetchpatch {
+              url = "https://github.com/YaLTeR/niri/commit/7a237e519c69ec493851ffac169abb3aa917a7b3.patch";
+              hash = "sha256-svv8YOrDR45qHbKM8GCAp5tkJbFBefE8z1GftxyOZlA=";
+            })
+          ];
+
+          doCheck = false; # faster builds
+        });
 
         inherit (config.custom.programs.niri) settings;
       };

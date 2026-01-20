@@ -49,6 +49,12 @@ in
               # battery and volume widgets that use the primary color instead of white
               ./mprimary-bar-widgets.patch
             ];
+
+            # don't want to add python3 to the global path
+            postPatch = ''
+              substituteInPlace Services/Theming/TemplateProcessor.qml \
+                --replace-fail "python3" "${getExe pkgs.python3}"
+            '';
           };
       # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
       noctalia-ipc = pkgs.writeShellApplication {
@@ -158,7 +164,6 @@ in
           restartTriggers = [ noctalia-shell' ];
 
           # fix runtime deps when starting noctalia-shell from systemd
-          # use runtime environment, similar to hyprland
           # https://github.com/noctalia-dev/noctalia-shell/pull/418
           environment = {
             PATH = mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
@@ -167,9 +172,6 @@ in
           serviceConfig = {
             ExecStart = lib.getExe noctalia-shell';
             Restart = "on-failure";
-            Environment = [
-              "NOCTALIA_SETTINGS_FALLBACK=%h/.config/noctalia/gui-settings.json"
-            ];
           };
         };
 
@@ -180,7 +182,6 @@ in
           unitConfig = {
             Description = "Set the wallpapers";
             After = [ "noctalia-shell.service" ];
-            # Wants = [ "noctalia-shell.service" ];
           };
 
           serviceConfig = {
@@ -217,12 +218,22 @@ in
       custom.startupServices = [ "noctalia-shell.service" ];
 
       custom.shell.packages = {
+        inherit noctalia-ipc;
         noctalia-shell-reload = {
           text = /* sh */ ''
             systemctl --user restart noctalia-shell
           '';
         };
-        inherit noctalia-ipc;
+        noctalia-diff = {
+          runtimeInputs = with pkgs; [
+            jq
+            colordiff
+            wl-clipboard
+          ];
+          text = /* sh */ ''
+            diff -u <(jq -S . ${config.hj.xdg.config.directory}/noctalia/settings.json) <(wl-paste | jq -S .) | colordiff
+          '';
+        };
       };
 
       custom.programs = {

@@ -9,6 +9,7 @@ let
     filterAttrs
     foldl
     generators
+    getExe
     getExe'
     hasPrefix
     isAttrs
@@ -168,12 +169,24 @@ in
         # source the hyprland config at the default location
         { source = "~/.config/hypr/hyprland.conf"; }
       ];
+      checkedHyprlandConf = config.pkgs.writeTextFile {
+        name = "checked-hyprland.conf";
+        text = hyprlandConfText;
+        # validate hyprland config, filter out source to non-existent file
+        # can be removed when the PR is merged:
+        # https://github.com/hyprwm/Hyprland/pull/12286
+        checkPhase = ''
+          export XDG_RUNTIME_DIR=$(mktemp -d)
+          grep -v '^source' "$out" > config_without_source.conf
+          ${getExe config.package} --verify-config -c config_without_source.conf
+        '';
+      };
     in
     {
       options = hyprlandOptions // {
         "hyprland.conf" = mkOption {
           type = wlib.types.file config.pkgs;
-          default.content = hyprlandConfText;
+          default.path = checkedHyprlandConf;
           visible = false;
         };
       };

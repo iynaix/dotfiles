@@ -262,7 +262,7 @@ in
         };
       };
 
-      custom.programs.matugen.settings.templates = {
+      custom.programs.noctalia.colors.templates = {
         # use dynamic gtk theme and icon theme
         "gtk-theme" = {
           colors_to_compare = mapAttrsToList (name: value: {
@@ -271,8 +271,9 @@ in
           }) config.custom.gtk.theme.accents;
           compare_to = "{{colors.primary.default.hex}}";
           post_hook = ''dconf write "/org/gnome/desktop/interface/gtk-theme" "'{{closest_color}}'"'';
-          # dummy value so matugen doesn't complain
+          # dummy values so noctalia doesn't complain
           input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+          output_path = "/dev/null";
         };
 
         "gtk-icon-theme" = {
@@ -282,8 +283,9 @@ in
           }) config.custom.gtk.theme.accents;
           compare_to = "{{colors.primary.default.hex}}";
           post_hook = ''dconf write "/org/gnome/desktop/interface/icon-theme" "'{{closest_color}}'"'';
-          # dummy value so matugen doesn't complain
+          # dummy values so noctalia doesn't complain
           input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+          output_path = "/dev/null";
         };
       };
     };
