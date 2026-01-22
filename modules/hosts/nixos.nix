@@ -5,15 +5,31 @@
   ...
 }:
 let
-  inherit (inputs.nixpkgs) lib;
-  user = "iynaix";
   mkNixos =
     host:
     {
+      system ? "x86_64-linux",
       isVm ? false,
+      user ? "iynaix",
       extraConfig ? { },
     }:
+    let
+      nixpkgs-bootstrap = import inputs.nixpkgs { inherit system; };
+      # apply patches from nixpkgs
+      nixpkgs-patched = nixpkgs-bootstrap.applyPatches {
+        name = "nixpkgs-iynaix";
+        src = inputs.nixpkgs;
+        patches = map nixpkgs-bootstrap.fetchpatch self.patches;
+      };
+      inherit (inputs.nixpkgs) lib;
+      # alteratively, nixosSystem = import (nixpkgs-patched + "/nixos/lib/eval-config.nix")
+    in
     lib.nixosSystem {
+      pkgs = import nixpkgs-patched {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
       specialArgs = {
         inherit
           inputs

@@ -18,6 +18,13 @@
     };
 
   # expose wrapperModules as top level flake option
+  flake.options.patches = lib.mkOption {
+    type = lib.types.anything;
+    default = [ ];
+    description = "Patches to be applied onto nixpkgs";
+  };
+
+  # expose wrapperModules as top level flake option
   flake.options.wrapperModules = lib.mkOption {
     type = lib.types.attrs;
     default = { };
