@@ -19,15 +19,16 @@ in
           startup:
           (mkIf startup.enable {
             spawn-at-startup = [ startup.spawn ];
-            config = /* kdl */ ''
-              window-rule {
-                  match ${optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
-                    optionalString (startup.title != null) ''title="^${startup.title}$"''
-                  } at-startup=true
-                  open-on-workspace "${toString startup.workspace}"
-                  ${startup.niriArgs}
-              }
-            '';
+            config = # kdl
+              mkIf (startup.app-id != null || startup.title != null) ''
+                window-rule {
+                    match ${optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
+                      optionalString (startup.title != null) ''title="^${startup.title}$"''
+                    } at-startup=true
+                    open-on-workspace "${toString startup.workspace}"
+                    ${startup.niriArgs}
+                }
+              '';
           })
         ) config.custom.startup)
         ++ [

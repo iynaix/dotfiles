@@ -16,9 +16,9 @@ fetch.github = "meehl/rusty-path-of-building"
 src.github_tag = "imputnet/helium-linux"
 fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/helium-$ver-x86_64.AppImage"
 
-[niri]
-src.git = "https://github.com/YaLTeR/niri"
-fetch.github = "YaLTeR/niri"
+# [niri]
+# src.git = "https://github.com/YaLTeR/niri"
+# fetch.github = "YaLTeR/niri"
 
 [mpv-cut]
 src.git = "https://github.com/familyfriendlymikey/mpv-cut"

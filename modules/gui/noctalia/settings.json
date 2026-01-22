@@ -14,7 +14,7 @@
     "marginHorizontal": 5,
     "outerCorners": false,
     "exclusive": true,
-    "hideOnOverview": false,
+    "hideOnOverview": true,
     "widgets": {
       "left": [
         {
@@ -420,7 +420,7 @@
     "schedulingMode": "off",
     "manualSunrise": "06:30",
     "manualSunset": "18:30",
-    "generationMethod": "vibrant"
+    "generationMethod": "tonal-spot"
   },
   "templates": {
     "activeTemplates": [

@@ -1,7 +1,4 @@
-topLevel:
-let
-  inherit (topLevel) lib;
-in
+{ lib, ... }@topLevel:
 {
   flake.nixosModules.laptop = {
     imports = with topLevel.config.flake.nixosModules; [

@@ -77,6 +77,7 @@ topLevel: {
               match title="^Exiled Exchange 2$"
 
               open-floating true
+              open-focused true
           }
         '';
       };

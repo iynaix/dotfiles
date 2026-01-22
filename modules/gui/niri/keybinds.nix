@@ -146,25 +146,11 @@
             "Mod+Shift+Up".action = "move-column-to-monitor-up";
             "Mod+Shift+Right".action = "move-column-to-monitor-right";
 
-            # classic alt tab in a workspace?
-            "Alt+Tab".action = "focus-column-right-or-first";
-            "Alt+Shift+Tab".action = "focus-column-left-or-last";
-
             # toggle between prev and current windows
             "Mod+grave".action = "focus-window-previous";
 
             # Switches focus between the current and the previous workspace.
             "Mod+Tab".action = "focus-workspace-previous";
-
-            # switches to the next / previous window of the same class
-            "Ctrl+Alt+Tab".spawn = [
-              "wm-same-class"
-              "next"
-            ];
-            "Ctrl+Alt+Shift+Tab".spawn = [
-              "wm-same-class"
-              "prev"
-            ];
 
             # picture in picture mode
             "Mod+P".spawn = [ "wm-pip" ];

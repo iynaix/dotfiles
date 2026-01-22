@@ -109,6 +109,16 @@ in
                 xcursor-size ${toString config.custom.gtk.cursor.size}
             }
 
+            recent-windows {
+                binds {
+                    Alt+Tab         { next-window     scope="output"; }
+                    Alt+Shift+Tab   { previous-window scope="output"; }
+                    // switches to the next / prev window of the same class
+                    Ctrl+Alt+Tab       { next-window     scope="all" filter="app-id"; }
+                    Ctrl+Alt+Shift+Tab { previous-window scope="all" filter="app-id"; }
+                }
+            }
+
             // match focal format
             screenshot-path "${config.hj.directory}/Pictures/Screenshots/%Y-%m-%dT%H:%M:%S%z.png";
 
@@ -157,11 +167,7 @@ in
                 monitor,
                 ...
               }:
-              ''
-                workspace "${toString workspace}" {
-                    open-on-output "${monitor.name}"
-                }
-              ''
+              ''workspace "${toString workspace}" { open-on-output "${monitor.name}"; }''
             )
             |> concatLines
           )
@@ -172,6 +178,7 @@ in
             let
               rotation = toString (mod (d.transform * 90) 360);
               flipped = d.transform > 3;
+              isVertical = d.transform == 1 || d.transform == 3;
             in
             ''
               output "${d.name}" {
@@ -181,6 +188,12 @@ in
                 mode "${toString d.width}x${toString d.height}"
                 position x=${toString d.positionX} y=${toString d.positionY}
                 ${optionalString d.vrr "variable-refresh-rate"}
+
+                ${optionalString isVertical ''
+                  layout {
+                      default-column-width { proportion 1.0; }
+                  }
+                ''}
               }
             ''
           ) config.custom.hardware.monitors)

@@ -44,37 +44,36 @@
             };
           };
 
-          # NOTE: no point having a separate boot option if that WM is already the default
-          hyprland = mkIf (config.custom.wm != "hyprland" && cfg.hyprland.enable) {
+          hyprland = mkIf cfg.hyprland.enable {
             configuration = {
               custom = {
                 wm = mkForce "hyprland";
                 specialisation.current = "hyprland";
               };
 
-              services.displayManager.ly.settings.auto_login_session = "hyprland";
+              services.displayManager.ly.settings.auto_login_session = mkForce "hyprland";
             };
           };
 
-          niri = mkIf (config.custom.wm != "niri" && cfg.niri.enable) {
+          niri = mkIf cfg.niri.enable {
             configuration = {
               custom = {
                 wm = mkForce "niri";
                 specialisation.current = "niri";
               };
 
-              services.displayManager.ly.settings.auto_login_session = "niri";
+              services.displayManager.ly.settings.auto_login_session = mkForce "niri";
             };
           };
 
-          mango = mkIf (config.custom.wm != "mango" && cfg.mango.enable) {
+          mango = mkIf cfg.mango.enable {
             configuration = {
               custom = {
                 wm = mkForce "mango";
                 specialisation.current = "mango";
               };
 
-              services.displayManager.ly.settings.auto_login_session = "mango";
+              services.displayManager.ly.settings.auto_login_session = mkForce "mango";
             };
           };
         };

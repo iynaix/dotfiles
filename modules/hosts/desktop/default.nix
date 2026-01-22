@@ -1,9 +1,9 @@
-topLevel: {
+{ lib, ... }@topLevel:
+{
   flake.nixosModules.host-desktop =
     {
       config,
       isVm,
-      lib,
       pkgs,
       ...
     }:
@@ -96,7 +96,7 @@ topLevel: {
               width = 3440;
               height = 1440;
               # niri / mango wants this to be exact down to the decimals
-              refreshRate = if config.custom.wm == "hyprland" then "144" else "174.963";
+              refreshRate = "174.963";
               vrr = false;
               positionX = 1440;
               positionY = 1080;
@@ -191,6 +191,7 @@ topLevel: {
 
       services = {
         # displayManager.autoLogin.user = user;
+        displayManager.ly.settings.auto_login_session = "niri";
 
         pipewire = {
           wireplumber.extraConfig = {

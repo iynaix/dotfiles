@@ -85,7 +85,7 @@
           "$mod, grave, focuscurrentorlast"
 
           # switches to the next / previous window of the same class
-          "CTRL_ALT_, Tab, exec, wm-same-class next"
+          "CTRL_ALT, Tab, exec, wm-same-class next"
           "CTRL_ALT_SHIFT, Tab, exec, wm-same-class prev"
 
           # picture in picture mode

@@ -1,8 +1,7 @@
-topLevel: {
+{ lib, ... }@topLevel:
+{
   flake.nixosModules.host-framework =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
@@ -55,7 +54,7 @@ topLevel: {
               width = 2880;
               height = 1920;
               # 60.001 for 60 fps
-              refreshRate = if config.custom.wm == "hyprland" then "120" else "120.000";
+              refreshRate = "120.000";
               scale = 1.5;
               vrr = true;
               workspaces = [

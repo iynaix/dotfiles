@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-abNHp4WaR2MqidG42TErJZBR1PcUVtRpBYFiKCmadW8=",
+            "sha256": "sha256-GGltZ0/6rGQJixlGz3Na/vAwOlTeUR87WGyAPpLmtKM=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.2.1/helium-0.8.2.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.3.1/helium-0.8.3.1-x86_64.AppImage"
         },
-        "version": "0.8.2.1"
+        "version": "0.8.3.1"
     },
     "mpv-cut": {
         "cargoLocks": null,
@@ -148,27 +148,6 @@
             "type": "github"
         },
         "version": "9a5cda4fc8f0896cec27dca60a32251009c0e9c5"
-    },
-    "niri": {
-        "cargoLocks": null,
-        "date": "2026-01-17",
-        "extract": null,
-        "name": "niri",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "YaLTeR",
-            "repo": "niri",
-            "rev": "d7184a04b904e07113f4623610775ae78d32394c",
-            "sha256": "sha256-Ub8eed4DsfIDWyg30xEe+8bSxL/z5Af/gCjmvJ0V/Hs=",
-            "sparseCheckout": [],
-            "type": "github"
-        },
-        "version": "d7184a04b904e07113f4623610775ae78d32394c"
     },
     "rofi-themes": {
         "cargoLocks": null,

@@ -19,10 +19,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.8.2.1";
+    version = "0.8.3.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.8.2.1/helium-0.8.2.1-x86_64.AppImage";
-      sha256 = "sha256-abNHp4WaR2MqidG42TErJZBR1PcUVtRpBYFiKCmadW8=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.8.3.1/helium-0.8.3.1-x86_64.AppImage";
+      sha256 = "sha256-GGltZ0/6rGQJixlGz3Na/vAwOlTeUR87WGyAPpLmtKM=";
     };
   };
   mpv-cut = {
@@ -84,18 +84,6 @@
       sha256 = "sha256-BRyKJeXWFhsCDKTUNKsp+yqYpP9mzbaZMviUFXyA308=";
     };
     date = "2019-01-24";
-  };
-  niri = {
-    pname = "niri";
-    version = "d7184a04b904e07113f4623610775ae78d32394c";
-    src = fetchFromGitHub {
-      owner = "YaLTeR";
-      repo = "niri";
-      rev = "d7184a04b904e07113f4623610775ae78d32394c";
-      fetchSubmodules = false;
-      sha256 = "sha256-Ub8eed4DsfIDWyg30xEe+8bSxL/z5Af/gCjmvJ0V/Hs=";
-    };
-    date = "2026-01-17";
   };
   rofi-themes = {
     pname = "rofi-themes";

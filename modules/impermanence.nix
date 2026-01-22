@@ -132,7 +132,7 @@
                 --exclude "/etc/{ssh,passwd,shadow}" \
                 --exclude "*.timer" \
                 --exclude "/var/lib/NetworkManager" \
-                --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mpv,noctalia,nvim,pre-commit,fish,nvf}" \
+                --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mesa_shader_cache,mpv,noctalia,nvim,pre-commit,radv_builtin_shaders,fish,nvf}" \
                 --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
             '';
           };

@@ -1,8 +1,7 @@
-topLevel: {
+{ lib, ... }@topLevel:
+{
   flake.nixosModules.host-xps =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
@@ -59,7 +58,7 @@ topLevel: {
                 9
                 10
               ];
-              refreshRate = if config.custom.wm == "hyprland" then "60" else "59.934";
+              refreshRate = "59.934";
             }
           ];
         };

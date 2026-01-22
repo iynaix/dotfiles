@@ -1,20 +1,13 @@
 diff --git a/src/layout/tile.rs b/src/layout/tile.rs
-index bc39db6d..b1ae438b 100644
+index beaa981f..04b587d9 100644
 --- a/src/layout/tile.rs
 +++ b/src/layout/tile.rs
-@@ -1216,6 +1216,7 @@ impl<W: LayoutElement> Tile<W> {
-             .chain(rounded_corner_damage)
-             .chain(window_surface.into_iter().flatten());
- 
-+        /*
-         let elem = (fullscreen_progress > 0.).then(|| {
-             let alpha = fullscreen_progress as f32;
- 
-@@ -1258,6 +1259,7 @@ impl<W: LayoutElement> Tile<W> {
-             }
-         });
-         let rv = rv.chain(elem);
-+        */
- 
-         let elem = self.visual_border_width().map(|width| {
-             self.border
+@@ -191,7 +191,7 @@ impl<W: LayoutElement> Tile<W> {
+             focus_ring: FocusRing::new(focus_ring_config),
+             shadow: Shadow::new(shadow_config),
+             sizing_mode,
+-            fullscreen_backdrop: SolidColorBuffer::new((0., 0.), [0., 0., 0., 1.]),
++            fullscreen_backdrop: SolidColorBuffer::new((0., 0.), [0., 0., 0., 0.]),
+             restore_to_floating: false,
+             floating_window_size: None,
+             floating_pos: None,

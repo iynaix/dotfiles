@@ -1,6 +1,7 @@
-topLevel: {
+{ lib, ... }@topLevel:
+{
   flake.nixosModules.host-vm =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
