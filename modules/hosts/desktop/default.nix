@@ -5,6 +5,7 @@
       config,
       isVm,
       pkgs,
+      user,
       ...
     }:
     let
@@ -190,8 +191,10 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        # displayManager.autoLogin.user = user;
-        displayManager.ly.settings.auto_login_session = "niri";
+        displayManager = {
+          autoLogin.user = user;
+          defaultSession = "niri";
+        };
 
         pipewire = {
           wireplumber.extraConfig = {

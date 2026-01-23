@@ -17,7 +17,7 @@
       packages = (import ../packages) { inherit inputs pkgs; };
     };
 
-  # expose wrapperModules as top level flake option
+  # expose patches as top level flake option
   flake.options.patches = lib.mkOption {
     type = lib.types.anything;
     default = [ ];

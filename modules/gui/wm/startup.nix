@@ -25,18 +25,6 @@ in
 {
   flake.nixosModules.core = {
     options.custom = {
-      wm = mkOption {
-        description = "The WM to use, either hyprland / niri / mango / plasma / tty";
-        type = enum [
-          "hyprland"
-          "niri"
-          "mango"
-          "plasma"
-          "tty"
-        ];
-        default = "hyprland";
-      };
-
       hardware.monitors = mkOption {
         description = "Config for monitors";
         type = nonEmptyListOf (

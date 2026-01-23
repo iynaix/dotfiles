@@ -19,12 +19,7 @@ in
       hyprlandWrapped = self.wrapperModules.hyprland.apply (
         {
           inherit pkgs;
-          package = pkgs.hyprland.overrideAttrs (o: {
-            passthru = o.passthru // {
-              providedSessions = [ "hyprland" ];
-            };
-          });
-          filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
+          package = pkgs.hyprland;
         }
         // config.custom.programs.hyprland
       );

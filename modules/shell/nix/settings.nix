@@ -70,6 +70,9 @@
         systemBuilderCommands = "ln -s ${self.sourceInfo.outPath} $out/src";
       };
 
+      # i dgaf
+      nixpkgs.config.allowUnfree = true;
+
       nix =
         let
           nixPath = mapAttrsToList (name: _: "${name}=flake:${name}") inputs;

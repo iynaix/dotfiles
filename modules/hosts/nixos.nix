@@ -21,14 +21,10 @@ let
         src = inputs.nixpkgs;
         patches = map nixpkgs-bootstrap.fetchpatch self.patches;
       };
-      inherit (inputs.nixpkgs) lib;
-      # alteratively, nixosSystem = import (nixpkgs-patched + "/nixos/lib/eval-config.nix")
+      nixosSystem = import (nixpkgs-patched + "/nixos/lib/eval-config.nix");
     in
-    lib.nixosSystem {
-      pkgs = import nixpkgs-patched {
-        inherit system;
-        config.allowUnfree = true;
-      };
+    nixosSystem {
+      inherit system;
 
       specialArgs = {
         inherit
@@ -49,7 +45,7 @@ let
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index
         # alias for hjem
-        (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
+        (inputs.nixpkgs.lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.noctalia.nixosModules.default
         inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
