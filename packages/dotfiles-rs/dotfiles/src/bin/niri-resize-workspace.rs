@@ -46,7 +46,7 @@ fn main() {
         |wksp_no| {
             workspaces
                 .iter()
-                .find(|wksp| wksp.name == Some(format!("W{wksp_no}")))
+                .find(|wksp| wksp.name == Some(wksp_no.to_string()))
                 .map(|wksp| wksp.id)
         },
     ) else {

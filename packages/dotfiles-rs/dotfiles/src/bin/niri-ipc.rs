@@ -56,10 +56,11 @@ fn focus_workspaces(nix_info_monitors: &[NixMonitor]) {
                 .iter()
                 .find(|nix_mon| nix_mon.name == mon_name)
             {
-                let wksp_name = format!("W{}", nix_mon.default_workspace);
                 socket
                     .send(Request::Action(Action::FocusWorkspace {
-                        reference: WorkspaceReferenceArg::Name(wksp_name),
+                        reference: WorkspaceReferenceArg::Name(
+                            nix_mon.default_workspace.to_string(),
+                        ),
                     }))
                     .expect("failed to send FocusWorkspace")
                     .ok();
@@ -79,8 +80,7 @@ fn renumber_workspaces(by_monitor: &HashMap<String, Vec<Workspace>>) {
                     // shouldn't trigger since it's already previously filtered out
                     || panic!("workspace name is None!"),
                     |name| {
-                        name.replace('W', "")
-                            .parse::<u8>()
+                        name.parse::<u8>()
                             .unwrap_or_else(|_| panic!("failed to parse workspace name: {name}"))
                     },
                 )
@@ -134,7 +134,7 @@ pub fn distribute_workspaces(
             socket
                 .send(Request::Action(Action::MoveWorkspaceToMonitor {
                     output: (*mon_name).clone(),
-                    reference: Some(WorkspaceReferenceArg::Name(format!("W{}", wksp + 1))),
+                    reference: Some(WorkspaceReferenceArg::Name((wksp + 1).to_string())),
                 }))
                 .expect("failed to send MoveWorkspaceToMonitor")
                 .ok();
