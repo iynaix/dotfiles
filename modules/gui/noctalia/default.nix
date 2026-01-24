@@ -50,10 +50,14 @@ in
               ./mprimary-bar-widgets.patch
             ];
 
-            # don't want to add python3 to the global path
-            postPatch = ''
+            postPatch = /* sh */ ''
+              # don't want to add python3 to the global path
               substituteInPlace Services/Theming/TemplateProcessor.qml \
                 --replace-fail "python3" "${getExe pkgs.python3}"
+
+              # show location on weather card in clock panel
+              substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
+                --replace-fail "showLocation: false" "showLocation: true"
             '';
           };
       # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
@@ -167,6 +171,9 @@ in
           # https://github.com/noctalia-dev/noctalia-shell/pull/418
           environment = {
             PATH = mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
+            # fix missing app icons:
+            # https://docs.noctalia.dev/getting-started/faq/#configuration
+            QT_QPA_PLATFORMTHEME = "gtk3";
           };
 
           serviceConfig = {

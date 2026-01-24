@@ -22,7 +22,6 @@
     {
       environment = {
         systemPackages = with pkgs; [
-          comma
           nil
           nix-init
           nix-output-monitor
@@ -49,7 +48,6 @@
         };
 
         nix-index.enable = true;
-        nix-index-database.comma.enable = true;
 
         # run unpatched binaries on nixos
         nix-ld.enable = true;
