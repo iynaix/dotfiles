@@ -1,4 +1,5 @@
-topLevel: {
+{ self, ... }@topLevel:
+{
   flake.nixosModules.path-of-building =
     { pkgs, ... }:
     let
@@ -30,7 +31,7 @@ topLevel: {
     };
 
   flake.nixosModules.path-of-exile =
-    { pkgs, self, ... }:
+    { pkgs, ... }:
     {
       imports = with topLevel.config.flake.nixosModules; [
         path-of-building

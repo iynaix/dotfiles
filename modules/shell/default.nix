@@ -1,12 +1,7 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-      dots,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       inherit (lib)
         attrValues
@@ -27,6 +22,7 @@
         package
         str
         ;
+      inherit (config.custom.constants) dots;
       proj_dir = "/persist${config.hj.directory}/projects";
 
       # writeShellApplication with support for completions
@@ -176,7 +172,9 @@
               TERMINAL = "ghostty";
               EDITOR = "nvim";
               VISUAL = "nvim";
-              PAGER = "moor";
+              PAGER = "moor --quit-if-one-screen";
+              SYSTEMD_PAGER = "moor --quit-if-one-screen";
+              SYSTEMD_PAGERSECURE = "1";
               NIXPKGS_ALLOW_UNFREE = "1";
               # xdg
               XDG_CACHE_HOME = config.hj.xdg.cache.directory;

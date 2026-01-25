@@ -1,11 +1,9 @@
 {
   flake.nixosModules.core =
-    {
-      config,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) user;
+    in
     {
       sops = {
         # to edit secrets file, run "sops hosts/secrets.json"

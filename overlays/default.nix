@@ -13,7 +13,6 @@ let
       (prev.custom or { })
       // (import ../packages {
         inherit (prev) pkgs;
-        inherit inputs;
       });
   };
   overlayPatches = _: prev: {

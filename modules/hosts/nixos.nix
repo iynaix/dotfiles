@@ -26,19 +26,14 @@ let
     nixosSystem {
       inherit system;
 
-      specialArgs = {
-        inherit
-          inputs
-          self
-          host
-          isVm
-          user
-          ;
-        isLaptop = host == "xps" || host == "framework";
-        dots = "/persist/home/${user}/projects/dotfiles";
-      };
-
       modules = [
+        {
+          config.custom.constants = {
+            inherit host isVm user;
+            isLaptop = host == "xps" || host == "framework";
+            dots = "/persist/home/${user}/projects/dotfiles";
+          };
+        }
         config.flake.nixosModules."host-${host}"
         config.flake.nixosModules.core
         ../../overlays

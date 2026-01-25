@@ -1,7 +1,12 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 let
   mkFormat =
-    height: ''bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'';
+    height: "bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best";
 in
 {
   perSystem =
@@ -25,7 +30,7 @@ in
     };
 
   flake.nixosModules.core =
-    { pkgs, self, ... }:
+    { pkgs, ... }:
     {
       nixpkgs.overlays = [
         (_: _prev: {

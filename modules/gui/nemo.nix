@@ -1,14 +1,9 @@
+{ lib, ... }:
 {
   flake.nixosModules.gui =
-    {
-      config,
-      host,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib) gvariant optionals;
+      inherit (config.custom.constants) host;
     in
     {
       environment.systemPackages = with pkgs; [
@@ -75,11 +70,11 @@
             start-with-dual-pane = true;
             date-format-monospace = true;
             # needs to be a uint64!
-            thumbnail-limit = gvariant.mkUint64 (100 * 1024 * 1024); # 100 mb
+            thumbnail-limit = lib.gvariant.mkUint64 (100 * 1024 * 1024); # 100 mb
           };
           "org/nemo/window-state" = {
-            sidebar-bookmark-breakpoint = gvariant.mkInt32 0;
-            sidebar-width = gvariant.mkInt32 180;
+            sidebar-bookmark-breakpoint = lib.gvariant.mkInt32 0;
+            sidebar-width = lib.gvariant.mkInt32 180;
           };
           "org/nemo/preferences/menu-config" = {
             selection-menu-make-link = true;
@@ -100,7 +95,7 @@
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]
-        ++ optionals (host == "desktop") [
+        ++ lib.optionals (host == "desktop") [
           "${config.hj.directory}/Pictures/wallpapers_in Walls In"
         ]
         ++ [

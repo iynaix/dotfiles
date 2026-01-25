@@ -30,13 +30,9 @@ in
   };
 
   flake.nixosModules.wm =
-    {
-      config,
-      isLaptop,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
+      inherit (config.custom.constants) isLaptop;
       # settings.json is the desktop copy of gui-settings.json without any modifications
       defaultSettings = builtins.fromJSON (builtins.readFile ./settings.json);
       noctalia-shell' =

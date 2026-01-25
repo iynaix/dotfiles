@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   flake.nixosModules.core =
-    { host, pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) host;
+    in
     {
       # setup pipewire for audio
       security.rtkit.enable = true;

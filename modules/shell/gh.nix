@@ -4,12 +4,10 @@ let
 in
 {
   flake.nixosModules.core =
-    {
-      config,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) user;
+    in
     {
       # setup auth token for gh
       sops.secrets.github_token.owner = user;

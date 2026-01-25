@@ -1,15 +1,9 @@
 { lib, ... }@topLevel:
 {
   flake.nixosModules.host-desktop =
-    {
-      config,
-      isVm,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib) mkIf mkMerge;
+      inherit (config.custom.constants) isVm user;
       toggle-speaker = pkgs.writeShellScriptBin "toggle-speaker" /* sh */ ''
         # Device names
         KANTO="ORA"
@@ -218,9 +212,9 @@
         };
       };
 
-      networking = mkMerge [
+      networking = lib.mkMerge [
         { hostId = "89eaa833"; } # required for zfs
-        (mkIf (!isVm) {
+        (lib.mkIf (!isVm) {
           interfaces.enp7s0.wakeOnLan.enable = true;
           # open ports for devices on the local network
           firewall.extraCommands = /* sh */ ''

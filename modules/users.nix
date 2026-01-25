@@ -1,9 +1,9 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
     {
       config,
-      lib,
-      user,
+
       ...
     }:
     let
@@ -14,6 +14,7 @@
         mkMerge
         mkOption
         ;
+      inherit (config.custom.constants) user;
     in
     {
       # silence warning about setting multiple user password options

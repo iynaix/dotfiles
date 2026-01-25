@@ -1,15 +1,12 @@
 {
+  inputs,
+  lib,
+  self,
+  ...
+}:
+{
   flake.nixosModules.core =
-    {
-      config,
-      dots,
-      inputs,
-      lib,
-      pkgs,
-      self,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       inherit (lib)
         concatStringsSep
@@ -18,6 +15,7 @@
         mkOverride
         sort
         ;
+      inherit (config.custom.constants) dots user;
     in
     {
       environment = {

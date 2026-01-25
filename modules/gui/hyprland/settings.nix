@@ -1,20 +1,9 @@
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      host,
-      lib,
-      self,
-      isVm,
-      ...
-    }:
+    { config, ... }:
     let
-      inherit (lib)
-        length
-        mkDefault
-        optionalAttrs
-        optionalString
-        ;
+      inherit (config.custom.constants) host isVm;
     in
     {
       custom.programs.hyprland = {
@@ -52,7 +41,7 @@
               gaps_in = gap;
               gaps_out = gap;
               border_size = 2;
-              layout = mkDefault "master";
+              layout = lib.mkDefault "master";
             };
 
           decoration = {
@@ -163,11 +152,11 @@
         }
         //
           # bind workspaces to monitors, don't bother if there is only one monitor
-          optionalAttrs (length config.custom.hardware.monitors > 1) {
+          lib.optionalAttrs (lib.length config.custom.hardware.monitors > 1) {
             workspace = self.libCustom.mapWorkspaces (
               { workspace, monitor, ... }:
               "${workspace},monitor:${monitor.name}"
-              + optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
+              + lib.optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
             ) config.custom.hardware.monitors;
           };
       };

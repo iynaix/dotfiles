@@ -1,18 +1,9 @@
-{ lib, ... }:
-let
-  inherit (lib)
-    assertMsg
-    mkIf
-    versionOlder
-    ;
-in
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
     {
       config,
-      host,
       pkgs,
-      self,
       ...
     }:
     let
@@ -23,6 +14,7 @@ in
         }
         // config.custom.programs.hyprland
       );
+      inherit (config.custom.constants) host;
     in
     {
       environment = {
@@ -31,7 +23,7 @@ in
           hypr-log = "hyprctl rollinglog --follow";
         };
 
-        variables = mkIf (host == "vm" || host == "vm-hyprland") {
+        variables = lib.mkIf (host == "vm" || host == "vm-hyprland") {
           WLR_RENDERER_ALLOW_SOFTWARE = "1";
         };
       };
@@ -48,7 +40,7 @@ in
       programs.hyprland = {
         enable =
           assert (
-            assertMsg (versionOlder config.programs.hyprland.package.version "0.54") "hyprland updated, sync with hyprnstack?"
+            lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.54") "hyprland updated, sync with hyprnstack?"
           );
           true;
         package = hyprlandWrapped.wrapper;

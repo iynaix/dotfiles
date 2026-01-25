@@ -8,10 +8,6 @@
 {
   # nvf options can be found at:
   # https://notashelf.github.io/nvf/options.html
-  imports = [
-    ./keymaps.nix
-  ];
-
   vim = {
     viAlias = true;
     vimAlias = true;

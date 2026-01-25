@@ -1,19 +1,14 @@
+{ lib, ... }:
 {
   flake.nixosModules.bittorrent =
-    {
-      config,
-      lib,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib) hiPrio mkMerge;
+      inherit (config.custom.constants) user;
       persistHome = "/persist${config.hj.directory}";
       downloadDir = "/media/IRONWOLF22/Downloads";
       pendingDir = "${downloadDir}/pending";
     in
-    mkMerge [
+    lib.mkMerge [
       {
         services.transmission = {
           enable = true;
@@ -119,7 +114,7 @@
 
         # create new desktop entries for transmission
         environment.systemPackages = [
-          (hiPrio (
+          (lib.hiPrio (
             pkgs.makeDesktopItem {
               name = "transmission";
               desktopName = "Transmission Remote";
@@ -128,7 +123,7 @@
               exec = ''transmission-remote -a "%U"'';
             }
           ))
-          (hiPrio pkgs.makeDesktopItem {
+          (lib.hiPrio pkgs.makeDesktopItem {
             name = "transmission-web";
             desktopName = "Transmission Web";
             genericName = "BitTorrent Client";

@@ -105,12 +105,10 @@ in
     };
 
   flake.nixosModules.core =
-    {
-      config,
-      host,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) host;
+    in
     {
       options.custom = {
         programs.btop = btopOptions // {

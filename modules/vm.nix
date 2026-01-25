@@ -1,6 +1,9 @@
 {
   flake.nixosModules.virtualisation =
-    { pkgs, user, ... }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) user;
+    in
     {
       config = {
         virtualisation = {

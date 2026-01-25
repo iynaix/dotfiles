@@ -4,12 +4,7 @@ let
 in
 {
   flake.nixosModules.core =
-    {
-      config,
-      host,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     {
       options.custom = {
         programs = {
@@ -40,7 +35,7 @@ in
               {
                 fallbackWallpaper = "${../wallpaper-default.jpg}";
                 inherit (config.custom.hardware) monitors;
-                inherit host;
+                inherit (config.custom.constants) host;
               }
               // config.custom.nixJson
             );

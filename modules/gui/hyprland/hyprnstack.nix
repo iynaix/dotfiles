@@ -1,15 +1,7 @@
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      lib,
-      pkgs,
-      self,
-      ...
-    }:
-    let
-      inherit (lib) concatStringsSep mkAfter optionals;
-    in
+    { config, pkgs, ... }:
     {
       custom.programs.hyprland =
         if config.custom.programs.hyprnstack.enable then
@@ -29,21 +21,21 @@
               };
 
               # add rules for vertical displays and number of stacks
-              workspace = mkAfter (
+              workspace = lib.mkAfter (
                 self.libCustom.mapWorkspaces (
                   { monitor, workspace, ... }:
                   let
                     isUltrawide = builtins.div (monitor.width * 1.0) monitor.height > builtins.div 16.0 9;
                     stacks = if (monitor.isVertical || isUltrawide) then 3 else 2;
                   in
-                  concatStringsSep "," (
+                  lib.concatStringsSep "," (
                     [
                       workspace
                       "persistent:true"
                       "layoutopt:nstack-stacks:${toString stacks}"
                       "layoutopt:nstack-orientation:${if monitor.isVertical then "top" else "left"}"
                     ]
-                    ++ optionals (!isUltrawide) [ "layoutopt:nstack-mfact:0.0" ]
+                    ++ lib.optionals (!isUltrawide) [ "layoutopt:nstack-mfact:0.0" ]
                   )
                 ) config.custom.hardware.monitors
               );
@@ -53,7 +45,7 @@
         # handle workspace orientation without hyprnstack
         else
           {
-            settings.workspace = mkAfter (
+            settings.workspace = lib.mkAfter (
               self.libCustom.mapWorkspaces (
                 { monitor, workspace, ... }:
                 "${workspace},persistent:true,layoutopt:orientation:${if monitor.isVertical then "top" else "left"}"

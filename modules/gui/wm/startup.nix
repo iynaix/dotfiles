@@ -150,13 +150,9 @@ in
 
   flake.nixosModules.wm =
     # generic functionality for all WMs
-    {
-      config,
-      host,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
+      inherit (config.custom.constants) host;
       # ensure setting terminal title using --title or exec with -e works
       termExe =
         assert config.custom.programs.terminal.package.pname == "ghostty";

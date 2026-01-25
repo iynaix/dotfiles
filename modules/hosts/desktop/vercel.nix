@@ -1,12 +1,14 @@
+{ lib, ... }:
 {
   flake.nixosModules.host-desktop =
     {
       config,
-      lib,
       pkgs,
-      user,
       ...
     }:
+    let
+      inherit (config.custom.constants) user;
+    in
     {
       sops.secrets.vercel_postgres.owner = user;
 

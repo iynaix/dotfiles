@@ -1,13 +1,8 @@
+{ inputs, lib, ... }:
 {
   flake.nixosModules.gui =
-    {
-      inputs,
-      lib,
-      pkgs,
-      ...
-    }:
+    { pkgs, ... }:
     let
-      inherit (lib) getExe;
       # fix chromium based browsers crashing on monitor change:
       # https://github.com/brave/brave-browser/issues/49862
       heliumPkg = inputs.wrappers.lib.wrapPackage {
@@ -63,8 +58,8 @@
 
       environment = {
         sessionVariables = {
-          DEFAULT_BROWSER = getExe heliumPkg;
-          BROWSER = getExe heliumPkg;
+          DEFAULT_BROWSER = lib.getExe heliumPkg;
+          BROWSER = lib.getExe heliumPkg;
         };
 
         systemPackages = [

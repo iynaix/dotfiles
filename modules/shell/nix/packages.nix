@@ -10,15 +10,10 @@ let
 in
 {
   flake.nixosModules.core =
-    {
-      config,
-      dots,
-      host,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };
+      inherit (config.custom.constants) dots host;
     in
     {
       nixpkgs.overlays = [
@@ -195,7 +190,7 @@ in
           # test all packages that depend on this change, used for nixpkgs and copied from the PR template
           nb-dependents = {
             runtimeInputs = [ pkgs.nixpkgs-review ];
-            text = /* sh */ ''nixpkgs-review rev HEAD'';
+            text = /* sh */ "nixpkgs-review rev HEAD";
           };
           # build and run local package if possible, otherwise run from nixpkgs
           nr = /* sh */ ''

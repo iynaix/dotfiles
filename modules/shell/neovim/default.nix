@@ -1,15 +1,36 @@
 {
-  flake.nixosModules.core =
+  lib,
+  inputs,
+  self,
+  ...
+}:
+{
+  perSystem =
+    { pkgs, ... }:
     {
-      dots,
-      host,
-      lib,
-      pkgs,
-      ...
-    }:
+      packages.neovim-iynaix = pkgs.callPackage (
+        {
+          dots ? null,
+          host ? "desktop",
+        }:
+        (inputs.nvf.lib.neovimConfiguration {
+          inherit pkgs;
+          modules = [
+            ./_settings.nix
+            ./_keymaps.nix
+          ];
+          extraSpecialArgs = { inherit dots host; };
+        }).neovim
+      ) { };
+    };
+
+  flake.nixosModules.core =
+    { config, pkgs, ... }:
     let
-      inherit (lib) getExe hiPrio;
-      customNeovim = pkgs.custom.neovim-iynaix.override { inherit dots host; };
+      inherit (config.custom.constants) dots host;
+      customNeovim = self.packages.${pkgs.stdenv.hostPlatform.system}.neovim-iynaix.override {
+        inherit dots host;
+      };
       nvim-direnv = pkgs.writeShellApplication {
         name = "nvim-direnv";
         runtimeInputs = [ pkgs.direnv ];
@@ -26,7 +47,7 @@
         icon = "nvim";
         terminal = true;
         # load direnv before opening nvim
-        exec = ''${getExe nvim-direnv} "%F"'';
+        exec = ''${lib.getExe nvim-direnv} "%F"'';
       };
     in
     {
@@ -41,7 +62,7 @@
           customNeovim
           nvim-direnv
           # add the new desktop entry
-          (hiPrio nvim-desktop-entry)
+          (lib.hiPrio nvim-desktop-entry)
         ];
       };
 

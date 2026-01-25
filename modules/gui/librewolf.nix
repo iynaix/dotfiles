@@ -1,15 +1,10 @@
+{ lib, ... }:
 {
   flake.nixosModules.gui =
-    {
-      config,
-      host,
-      lib,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       inherit (lib) concatStringsSep optionals;
+      inherit (config.custom.constants) host user;
       configPath = ".config/.librewolf";
     in
     {

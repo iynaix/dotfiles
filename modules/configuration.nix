@@ -2,13 +2,14 @@
   flake.nixosModules.core =
     # leftovers from initial configuration.nix
     {
-      host,
+      config,
       pkgs,
       lib,
       ...
     }:
     let
       inherit (lib) mkForce;
+      inherit (config.custom.constants) host;
     in
     {
       networking.hostName = host;

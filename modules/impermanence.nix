@@ -2,10 +2,8 @@
   flake.nixosModules.core =
     {
       config,
-      host,
       lib,
       pkgs,
-      user,
       ...
     }:
     let
@@ -22,6 +20,7 @@
         unique
         ;
       inherit (lib.types) listOf str;
+      inherit (config.custom.constants) host user;
       cfg = config.custom.persist;
       assertNoHomeDirs =
         paths:

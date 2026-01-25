@@ -1,12 +1,9 @@
-{ lib, ... }:
-let
-  inherit (lib)
-    concatMapStringsSep
-    flatten
-    range
-    replaceString
-    ;
-in
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 {
   flake.nixosModules.core = {
     options.custom = {
@@ -37,15 +34,10 @@ in
   };
 
   flake.nixosModules.wm =
-    {
-      config,
-      dots,
-      inputs,
-      isVm,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) dots isVm;
+    in
     {
       programs.mango = {
         enable = true;
@@ -55,7 +47,7 @@ in
       # write the settings to home directory
       hj.xdg.config.files."mango/config.conf" = {
         text =
-          (replaceString "$mod" (if isVm then "ALT" else "SUPER") (
+          (lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (
             self.libCustom.generators.toHyprconf {
               attrs = config.custom.programs.mango.settings;
               importantPrefixes = [ "monitorrule" ];
@@ -86,7 +78,7 @@ in
         mango.settings = {
           monitorrule = map (
             mon:
-            concatMapStringsSep "," toString [
+            lib.concatMapStringsSep "," toString [
               mon.name
               0.5 # mfact
               1 # nmaster
@@ -101,17 +93,17 @@ in
             ]
           ) config.custom.hardware.monitors;
 
-          tagrule = flatten (
+          tagrule = lib.flatten (
             map (
               mon:
               map (
                 wksp:
-                concatMapStringsSep "," toString [
+                lib.concatMapStringsSep "," toString [
                   "id:${toString wksp}"
                   "monitor_name:${mon.name}"
                   "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
                 ]
-              ) (range 1 10)
+              ) (lib.range 1 10)
             ) config.custom.hardware.monitors
           );
         };

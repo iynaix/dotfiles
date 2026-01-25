@@ -1,15 +1,7 @@
-{ lib, ... }:
-let
-  inherit (lib) mkForce;
-in
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       # source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
       niriWrapped = self.wrapperModules.niri.apply {
@@ -59,7 +51,7 @@ in
 
       custom.programs = {
         ghostty.extraSettings = {
-          background-opacity = mkForce 0.95;
+          background-opacity = lib.mkForce 0.95;
         };
 
         print-config = {

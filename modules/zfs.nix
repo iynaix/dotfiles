@@ -1,11 +1,10 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-      isVm,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) isVm;
+    in
     # NOTE: zfs datasets are created via install.sh
     {
       boot = {
@@ -127,13 +126,10 @@
 
   # setup zfs event daemon for email notifications
   flake.nixosModules.zfs-zed =
-    {
-      config,
-      lib,
-      pkgs,
-      user,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) user;
+    in
     {
       sops.secrets.zfs-zed.owner = user;
 

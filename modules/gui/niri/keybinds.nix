@@ -1,17 +1,8 @@
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    {
-      config,
-      lib,
-      self,
-      ...
-    }:
+    { config, ... }:
     let
-      inherit (lib)
-        flatten
-        getExe'
-        mergeAttrsList
-        ;
       inherit (config.custom.hardware) monitors;
       termExec =
         cmd:
@@ -19,7 +10,7 @@
           "ghostty"
           "-e"
         ]
-        ++ (flatten cmd);
+        ++ (lib.flatten cmd);
     in
     {
       custom = {
@@ -164,7 +155,7 @@
             "Mod+R".action = "switch-preset-column-width";
             "Mod+Shift+R".action = "switch-preset-window-height";
             "Mod+Ctrl+R".spawn = [
-              (getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
+              (lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
             ];
             # full maximize
             "Mod+Z".action = "maximize-column";
@@ -248,8 +239,8 @@
             "Mod+WheelScrollLeft".action = "focus-column-left-or-last";
           }
           # named workspace setup, dynamic workspaces are urgh
-          // mergeAttrsList (
-            flatten (
+          // lib.mergeAttrsList (
+            lib.flatten (
               (self.libCustom.mapWorkspaces (
                 { workspace, key, ... }:
                 [

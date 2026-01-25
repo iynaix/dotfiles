@@ -1,16 +1,16 @@
+{ lib, ... }:
 {
   flake.nixosModules.bittorrent =
     {
       config,
-      lib,
       pkgs,
-      user,
+
       ...
     }:
     let
-      inherit (lib) getExe mkMerge;
+      inherit (config.custom.constants) user;
     in
-    mkMerge [
+    lib.mkMerge [
       {
         services = {
           sonarr = {
@@ -69,7 +69,7 @@
           services.sonarr-ical-sync = {
             serviceConfig.Type = "oneshot";
             serviceConfig.User = user;
-            script = getExe pkgs.custom.shell.sonarr-ical-sync;
+            script = lib.getExe pkgs.custom.shell.sonarr-ical-sync;
           };
           timers.sonarr-ical-sync = {
             wantedBy = [ "timers.target" ];

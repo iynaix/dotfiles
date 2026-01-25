@@ -5,7 +5,6 @@
   ...
 }:
 let
-  inherit (lib) getExe mkDefault mkOption;
   mkGhosttyOptions =
     pkgs:
     let
@@ -64,14 +63,14 @@ in
     in
     {
       options = (mkGhosttyOptions config.pkgs) // {
-        "ghostty.conf" = mkOption {
+        "ghostty.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
           default.path = toGhosttyConf (baseGhosttyConf // config.extraSettings);
           visible = false;
         };
       };
 
-      config.package = mkDefault config.pkgs.ghostty;
+      config.package = lib.mkDefault config.pkgs.ghostty;
       config.flags = {
         # NOTE: ghostty "helpfully" creates an empty config in the default location
         "--config-file" = toString config."ghostty.conf".path;
@@ -86,18 +85,18 @@ in
       options.custom = {
         # terminal options
         programs.terminal = {
-          package = mkOption {
+          package = lib.mkOption {
             type = lib.types.package;
             default = pkgs.ghostty;
             description = "Package to use for the terminal";
           };
 
-          app-id = mkOption {
+          app-id = lib.mkOption {
             type = lib.types.str;
             description = "app-id (wm class) for the terminal";
           };
 
-          desktop = mkOption {
+          desktop = lib.mkOption {
             type = lib.types.str;
             default = "${config.custom.programs.terminal.package.pname}.desktop";
             description = "Name of desktop file for the terminal";
@@ -123,7 +122,7 @@ in
               pkgs = prev;
               extraSettings = {
                 # set as default interactive shell, also set $SHELL for nix shell to pick up
-                command = "SHELL=${getExe pkgs.fish} fish";
+                command = "SHELL=${lib.getExe pkgs.fish} fish";
                 font-family = config.custom.fonts.monospace;
                 font-feature = "zero";
                 font-style = "Medium";

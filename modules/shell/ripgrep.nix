@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 {
   perSystem =
     { pkgs, ... }:
@@ -25,7 +30,7 @@
     };
 
   flake.nixosModules.core =
-    { pkgs, self, ... }:
+    { pkgs, ... }:
     {
       nixpkgs.overlays = [
         (_: _prev: {

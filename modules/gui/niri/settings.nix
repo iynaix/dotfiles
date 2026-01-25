@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, self, ... }:
 let
   inherit (lib)
     concatImapStringsSep
@@ -12,13 +12,10 @@ let
 in
 {
   flake.nixosModules.wm =
-    {
-      config,
-      host,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, pkgs, ... }:
+    let
+      inherit (config.custom.constants) host;
+    in
     {
       custom.programs = {
         niri.settings.config = mkMerge [

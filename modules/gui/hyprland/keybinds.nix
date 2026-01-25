@@ -1,7 +1,7 @@
-{ lib, ... }:
+{ lib, self, ... }:
 {
   flake.nixosModules.wm =
-    { config, self, ... }:
+    { config, ... }:
     let
       inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";

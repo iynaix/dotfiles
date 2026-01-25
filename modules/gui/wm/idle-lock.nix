@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, self, ... }:
 let
   inherit (lib)
     assertMsg
@@ -10,7 +10,10 @@ let
 in
 {
   flake.nixosModules.core =
-    { isLaptop, self, ... }:
+    { config, ... }:
+    let
+      inherit (config.custom.constants) isLaptop;
+    in
     {
       options.custom = {
         lock.enable = mkEnableOption "screen locking of host" // {
@@ -24,14 +27,9 @@ in
     };
 
   flake.nixosModules.wm =
-    {
-      config,
-      isLaptop,
-      pkgs,
-      self,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
+      inherit (config.custom.constants) isLaptop;
       hypridleConfText = self.libCustom.generators.toHyprconf {
         attrs = config.custom.programs.hypridle.settings;
         importantPrefixes = [ "$" ];
