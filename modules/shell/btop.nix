@@ -15,14 +15,14 @@ let
     };
 
     extraSettings = lib.mkOption {
-      type =
-        with lib.types;
-        attrsOf (oneOf [
-          bool
-          float
-          int
-          str
-        ]);
+      type = lib.types.attrsOf (
+        lib.types.oneOf [
+          lib.types.bool
+          lib.types.float
+          lib.types.int
+          lib.types.str
+        ]
+      );
       default = { };
       example = {
         color_theme = "Default";
@@ -106,7 +106,7 @@ in
         programs.btop = btopOptions // {
           # convenience option to add disks to btop
           disks = lib.mkOption {
-            type = with lib.types; listOf str;
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "List of disks to monitor in btop";
           };

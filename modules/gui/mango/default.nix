@@ -10,18 +10,19 @@
       # copied from home-manger's hypland module, since mango config is similar to hyprlang
       programs.mango.settings = lib.mkOption {
         type =
-          with lib.types;
           let
             valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
+              lib.types.nullOr (
+                lib.types.oneOf [
+                  lib.types.bool
+                  lib.types.int
+                  lib.types.float
+                  lib.types.str
+                  lib.types.path
+                  (lib.types.attrsOf valueType)
+                  (lib.types.listOf valueType)
+                ]
+              )
               // {
                 description = "Mango configuration value";
               };

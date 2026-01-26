@@ -52,18 +52,19 @@ let
   # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
   hyprlandSettingsType = lib.mkOption {
     type =
-      with lib.types;
       let
         valueType =
-          nullOr (oneOf [
-            bool
-            int
-            float
-            str
-            path
-            (attrsOf valueType)
-            (listOf valueType)
-          ])
+          lib.types.nullOr (
+            lib.types.oneOf [
+              lib.types.bool
+              lib.types.int
+              lib.types.float
+              lib.types.str
+              lib.types.path
+              (lib.types.attrsOf valueType)
+              (lib.types.listOf valueType)
+            ]
+          )
           // {
             description = "Hyprland configuration value";
           };
@@ -95,7 +96,7 @@ let
   };
   hyprlandOptions = {
     plugins = lib.mkOption {
-      type = with lib.types; listOf (either package path);
+      type = lib.types.listOf (lib.types.either lib.types.package lib.types.path);
       default = [ ];
       description = ''
         List of Hyprland plugins to use. Can either be packages or

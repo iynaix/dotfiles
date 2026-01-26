@@ -1,86 +1,70 @@
 { lib, ... }:
-let
-  inherit (lib.types)
-    attrs
-    bool
-    enum
-    float
-    int
-    nonEmptyListOf
-    lines
-    listOf
-    nullOr
-    oneOf
-    str
-    submodule
-    ;
-in
 {
   flake.nixosModules.core = {
     options.custom = {
       hardware.monitors = lib.mkOption {
         description = "Config for monitors";
-        type = nonEmptyListOf (
-          submodule (
+        type = lib.types.nonEmptyListOf (
+          lib.types.submodule (
             { config, ... }:
             {
               options = {
                 name = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   description = "The name of the display, e.g. eDP-1";
                 };
                 width = lib.mkOption {
-                  type = int;
+                  type = lib.types.int;
                   description = "Pixel width of the display";
                 };
                 height = lib.mkOption {
-                  type = int;
+                  type = lib.types.int;
                   description = "Pixel width of the display";
                 };
                 refreshRate = lib.mkOption {
-                  type = oneOf [
-                    int
-                    str
+                  type = lib.types.oneOf [
+                    lib.types.int
+                    lib.types.str
                   ];
                   default = 60;
                   description = "Refresh rate of the display";
                 };
                 positionX = lib.mkOption {
-                  type = int;
+                  type = lib.types.int;
                   default = 0;
                   description = "Position x coordinate of the display";
                 };
                 positionY = lib.mkOption {
-                  type = int;
+                  type = lib.types.int;
                   default = 0;
                   description = "Position y coordinate of the display";
                 };
                 scale = lib.mkOption {
-                  type = float;
+                  type = lib.types.float;
                   default = 1.0;
                 };
                 vrr = lib.mkEnableOption "Variable Refresh Rate";
                 transform = lib.mkOption {
-                  type = int;
+                  type = lib.types.int;
                   description = "Transform for rotation";
                   default = 0;
                 };
                 workspaces = lib.mkOption {
-                  type = nonEmptyListOf int;
+                  type = lib.types.nonEmptyListOf lib.types.int;
                   description = "List of workspace numbers";
                 };
                 defaultWorkspace = lib.mkOption {
-                  type = enum config.workspaces;
+                  type = lib.types.enum config.workspaces;
                   default = lib.elemAt config.workspaces 0;
                   description = "Default workspace for this monitor";
                 };
                 extraHyprlandConfig = lib.mkOption {
-                  type = attrs;
+                  type = lib.types.attrs;
                   default = { };
                   description = "Extra monitor config for hyprland";
                 };
                 isVertical = lib.mkOption {
-                  type = bool;
+                  type = lib.types.bool;
                   default = lib.mod config.transform 2 == 1;
                   description = "Whether the monitor is vertical";
                   readOnly = true;
@@ -94,47 +78,49 @@ in
 
       startup = lib.mkOption {
         description = "Programs to run on startup";
-        type = listOf (oneOf [
-          str
-          (submodule {
-            options = {
-              app-id = lib.mkOption {
-                type = nullOr str;
-                description = "The app-id (class) of the program to start";
-                default = null;
+        type = lib.types.listOf (
+          lib.types.oneOf [
+            lib.types.str
+            (lib.types.submodule {
+              options = {
+                app-id = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  description = "The app-id (class) of the program to start";
+                  default = null;
+                };
+                enable = lib.mkEnableOption "Rule" // {
+                  default = true;
+                };
+                title = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  description = "The window title of the program to start, for differentiating between multiple instances";
+                  default = null;
+                };
+                spawn = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  description = "Command to execute";
+                  default = null;
+                };
+                workspace = lib.mkOption {
+                  type = lib.types.nullOr lib.types.int;
+                  description = "lib.Optional workspace to start program on";
+                  default = null;
+                };
+                niriArgs = lib.mkOption {
+                  type = lib.types.lines;
+                  description = "Extra arguments for niri window rules";
+                  default = "";
+                };
               };
-              enable = lib.mkEnableOption "Rule" // {
-                default = true;
-              };
-              title = lib.mkOption {
-                type = nullOr str;
-                description = "The window title of the program to start, for differentiating between multiple instances";
-                default = null;
-              };
-              spawn = lib.mkOption {
-                type = listOf str;
-                description = "Command to execute";
-                default = null;
-              };
-              workspace = lib.mkOption {
-                type = nullOr int;
-                description = "lib.Optional workspace to start program on";
-                default = null;
-              };
-              niriArgs = lib.mkOption {
-                type = lines;
-                description = "Extra arguments for niri window rules";
-                default = "";
-              };
-            };
-          })
-        ]);
+            })
+          ]
+        );
         default = [ ];
       };
 
       startupServices = lib.mkOption {
         description = "Services to start after the WM is initialized";
-        type = listOf str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
       };
     };

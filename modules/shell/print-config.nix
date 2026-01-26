@@ -5,7 +5,7 @@
     {
       options.custom = {
         programs.print-config = lib.mkOption {
-          type = with lib.types; attrsOf str;
+          type = lib.types.attrsOf lib.types.str;
           default = { };
           description = "Attrs of program and the command to print their config.";
         };

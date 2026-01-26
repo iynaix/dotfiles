@@ -1,13 +1,5 @@
 { lib, ... }:
 let
-  inherit (lib.types)
-    attrs
-    int
-    package
-    number
-    listOf
-    str
-    ;
   accents = {
     Default = "#2e7de9";
     Green = "#387068";
@@ -29,7 +21,7 @@ in
         # type referenced from nixpkgs:
         # https://github.com/NixOS/nixpkgs/blob/554be6495561ff07b6c724047bdd7e0716aa7b46/nixos/modules/programs/dconf.nix#L121C9-L134C11
         dconf.settings = lib.mkOption {
-          type = attrs;
+          type = lib.types.attrs;
           default = { };
           description = "An attrset used to generate dconf keyfile.";
           example = lib.literalExpression ''
@@ -44,7 +36,7 @@ in
         };
         gtk = {
           bookmarks = lib.mkOption {
-            type = listOf str;
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             example = [ "/home/jane/Documents" ];
             description = "File browser bookmarks.";
@@ -52,19 +44,19 @@ in
 
           font = {
             package = lib.mkOption {
-              type = package;
+              type = lib.types.package;
               default = pkgs.geist-font;
               description = "Package providing the font";
             };
 
             name = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = config.custom.fonts.regular;
               description = "The family name of the font within the package.";
             };
 
             size = lib.mkOption {
-              type = number;
+              type = lib.types.number;
               default = 10;
               description = "The size of the font.";
             };
@@ -72,13 +64,13 @@ in
 
           theme = {
             accents = lib.mkOption {
-              type = attrs;
+              type = lib.types.attrs;
               default = accents;
               description = "GTK theme accents colors";
             };
 
             package = lib.mkOption {
-              type = package;
+              type = lib.types.package;
               default = pkgs.tokyonight-gtk-theme.override {
                 colorVariants = [ "dark" ];
                 sizeVariants = [ "compact" ];
@@ -88,7 +80,7 @@ in
             };
 
             name = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = "Tokyonight-Dark-Compact";
               description = "The name of the theme within the package.";
             };
@@ -96,13 +88,13 @@ in
 
           iconTheme = {
             package = lib.mkOption {
-              type = package;
+              type = lib.types.package;
               default = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
               description = "Package providing the icon theme.";
             };
 
             name = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = "Tela-${defaultAccent}-dark";
               description = "The name of the icon theme within the package.";
             };
@@ -110,19 +102,19 @@ in
 
           cursor = {
             package = lib.mkOption {
-              type = package;
+              type = lib.types.package;
               default = pkgs.simp1e-cursors;
               description = "Package providing the cursor theme.";
             };
 
             name = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = "Simp1e-Tokyo-Night";
               description = "The cursor name within the package.";
             };
 
             size = lib.mkOption {
-              type = int;
+              type = lib.types.int;
               default = 28;
               description = "The cursor size.";
             };

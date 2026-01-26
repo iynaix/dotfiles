@@ -6,16 +6,6 @@
   ...
 }:
 let
-  inherit (lib.types)
-    listOf
-    attrsOf
-    anything
-    str
-    lines
-    submodule
-    nullOr
-    ;
-
   toNiriSpawn = commands: lib.concatMapStringsSep " " (arg: "\"${arg}\"") commands;
 
   toNiriBinds =
@@ -60,10 +50,10 @@ let
   toNiriSpawnAtStartup =
     spawn: lib.concatMapStringsSep "\n" (commands: "spawn-at-startup " + (toNiriSpawn commands)) spawn;
 
-  bindsModule = submodule {
+  bindsModule = lib.types.submodule {
     options = {
       spawn = lib.mkOption {
-        type = nullOr (listOf str);
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         example = [
           "foot"
@@ -78,7 +68,7 @@ let
         '';
       };
       action = lib.mkOption {
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "focus-column-left";
         description = ''
@@ -89,7 +79,7 @@ let
         '';
       };
       parameters = lib.mkOption {
-        type = attrsOf anything;
+        type = lib.types.attrsOf lib.types.anything;
         default = { };
         example = {
           allow-when-locked = true;
@@ -106,7 +96,7 @@ let
 
   mkNiriOptions = pkgs: {
     binds = lib.mkOption {
-      type = attrsOf bindsModule;
+      type = lib.types.attrsOf bindsModule;
       default = { };
       example = {
         "Mod+Return" = {
@@ -134,7 +124,7 @@ let
       '';
     };
     spawn-at-startup = lib.mkOption {
-      type = listOf (listOf str);
+      type = lib.types.listOf (lib.types.listOf lib.types.str);
       default = [ ];
       example = lib.literalExpression ''
         [
@@ -163,7 +153,7 @@ let
       '';
     };
     config = lib.mkOption {
-      type = lines;
+      type = lib.types.lines;
       default = "";
       example = lib.literalExpression ''
         screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"

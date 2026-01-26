@@ -3,13 +3,6 @@
   flake.nixosModules.core =
     { config, pkgs, ... }:
     let
-      inherit (lib.types)
-        attrs
-        attrsOf
-        oneOf
-        package
-        str
-        ;
       inherit (config.custom.constants) dots;
       proj_dir = "/persist${config.hj.directory}/projects";
 
@@ -49,11 +42,13 @@
       options.custom = {
         shell = {
           packages = lib.mkOption {
-            type = attrsOf (oneOf [
-              str
-              attrs
-              package
-            ]);
+            type = lib.types.attrsOf (
+              lib.types.oneOf [
+                lib.types.str
+                lib.types.attrs
+                lib.types.package
+              ]
+            );
             # produces an attrset shell package with completions from either a string / writeShellApplication attrset / package
             apply = lib.mapAttrs (
               name: value:
