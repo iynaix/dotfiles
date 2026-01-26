@@ -8,7 +8,6 @@
   perSystem =
     { pkgs, ... }:
     let
-      inherit (lib) concatMapStringsSep;
       # implementation for loading plugins from home-manager:
       # https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
       tmuxPlugin = p: "run-shell ${if lib.types.package.check p then p.rtp else p.plugin.rtp}";
@@ -52,7 +51,7 @@
           set  -g history-limit     2000
 
           # load plugins
-          ${concatMapStringsSep "\n" tmuxPlugin (
+          ${lib.concatMapStringsSep "\n" tmuxPlugin (
             with pkgs.tmuxPlugins;
             [
               vim-tmux-navigator

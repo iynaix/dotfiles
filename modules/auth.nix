@@ -1,7 +1,4 @@
 { lib, ... }:
-let
-  inherit (lib) mkDefault mkIf mkMerge;
-in
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
@@ -9,7 +6,7 @@ in
       inherit (config.custom.constants) user;
     in
     {
-      config = mkMerge [
+      config = lib.mkMerge [
         # ssh settings
         {
           services.openssh = {
@@ -99,7 +96,7 @@ in
 
         {
           services.displayManager = {
-            defaultSession = mkDefault "hyprland";
+            defaultSession = lib.mkDefault "hyprland";
 
             ly = {
               enable = true;
@@ -110,7 +107,7 @@ in
           };
 
           # block other ttys from autologin when bypassed from lockscreen
-          services.getty.autologinUser = mkIf (!config.custom.lock.enable) user;
+          services.getty.autologinUser = lib.mkIf (!config.custom.lock.enable) user;
         }
       ];
     };

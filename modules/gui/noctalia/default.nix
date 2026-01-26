@@ -1,27 +1,17 @@
 { inputs, lib, ... }:
-let
-  inherit (lib)
-    foldl'
-    getExe
-    getExe'
-    isFunction
-    mkForce
-    mkOption
-    mkOptionType
-    optionalString
-    ;
-in
 {
   flake.nixosModules.core = {
     options.custom = {
       programs.noctalia = {
         # reducer functions are used instead of plain attrsets, as attrsets cannot be merged together to override
         # lists at arbitrary indexes
-        settingsReducers = mkOption {
-          type = lib.types.listOf (mkOptionType {
-            name = "noctalia-settings-reducer";
-            check = isFunction;
-          });
+        settingsReducers = lib.mkOption {
+          type = lib.types.listOf (
+            lib.mkOptionType {
+              name = "noctalia-settings-reducer";
+              check = lib.isFunction;
+            }
+          );
           default = [ ];
           description = "Reducers that will be applied to a copy of desktop's gui-settings.json";
         };
@@ -49,7 +39,7 @@ in
             postPatch = /* sh */ ''
               # don't want to add python3 to the global path
               substituteInPlace Services/Theming/TemplateProcessor.qml \
-                --replace-fail "python3" "${getExe pkgs.python3}"
+                --replace-fail "python3" "${lib.getExe pkgs.python3}"
 
               # show location on weather card in clock panel
               substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
@@ -109,7 +99,7 @@ in
           "noctalia/settings.json".text =
             # create settings by applying reducers
             config.custom.programs.noctalia.settingsReducers
-            |> foldl' (curr: reducer: reducer curr) defaultSettings
+            |> lib.foldl' (curr: reducer: reducer curr) defaultSettings
             |> lib.strings.toJSON;
           "noctalia/plugins.json".text = lib.strings.toJSON {
             sources = [
@@ -166,7 +156,7 @@ in
           # fix runtime deps when starting noctalia-shell from systemd
           # https://github.com/noctalia-dev/noctalia-shell/pull/418
           environment = {
-            PATH = mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
+            PATH = lib.mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
             # fix missing app icons:
             # https://docs.noctalia.dev/getting-started/faq/#configuration
             QT_QPA_PLATFORMTHEME = "gtk3";
@@ -189,8 +179,8 @@ in
 
           serviceConfig = {
             Type = "oneshot";
-            ExecStartPre = "${getExe' pkgs.coreutils "sleep"} 3";
-            ExecStart = getExe (
+            ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 3";
+            ExecStart = lib.getExe (
               pkgs.writeShellApplication {
                 name = "wallpaper-startup";
                 runtimeInputs = [
@@ -199,7 +189,7 @@ in
                 ];
                 text = ''
                   # hide on laptop screens to save space
-                  ${optionalString isLaptop "noctalia-shell ipc call bar hide"}
+                  ${lib.optionalString isLaptop "noctalia-shell ipc call bar hide"}
                   wallpaper
                 '';
               }

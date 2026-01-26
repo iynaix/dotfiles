@@ -1,16 +1,13 @@
 { lib, ... }:
-let
-  inherit (lib) concatMapAttrsStringSep mkOption;
-in
 {
   flake.nixosModules.core =
     { config, ... }:
     {
       options.custom = {
-        programs.print-config = mkOption {
+        programs.print-config = lib.mkOption {
           type = with lib.types; attrsOf str;
           default = { };
-          description = ''Attrs of program and the command to print their config.'';
+          description = "Attrs of program and the command to print their config.";
         };
       };
 
@@ -18,14 +15,14 @@ in
         custom.shell.packages =
           let
             cmds = config.custom.programs.print-config;
-            ifBlocks = concatMapAttrsStringSep "\n" (prog: cmd: ''
+            ifBlocks = lib.concatMapAttrsStringSep "\n" (prog: cmd: ''
               "${prog}")
                 ${cmd}
                 ;;
             '') cmds;
-            bashProgsStr = concatMapAttrsStringSep ", " (prog: _: prog) cmds;
-            bashProgsList = concatMapAttrsStringSep " " (prog: _: ''"${prog}"'') cmds;
-            fishCompletes = concatMapAttrsStringSep "\n" (
+            bashProgsStr = lib.concatMapAttrsStringSep ", " (prog: _: prog) cmds;
+            bashProgsList = lib.concatMapAttrsStringSep " " (prog: _: ''"${prog}"'') cmds;
+            fishCompletes = lib.concatMapAttrsStringSep "\n" (
               prog: _: ''complete -c print-config -a "${prog}"''
             ) cmds;
           in

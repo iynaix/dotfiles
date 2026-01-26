@@ -8,13 +8,6 @@
   flake.nixosModules.core =
     { config, pkgs, ... }:
     let
-      inherit (lib)
-        concatStringsSep
-        mapAttrs
-        mapAttrsToList
-        mkOverride
-        sort
-        ;
       inherit (config.custom.constants) dots user;
     in
     {
@@ -54,8 +47,8 @@
       # execute shebangs that assume hardcoded shell paths
       services.envfs.enable = true;
       system = {
-        # envfs sets usrbinenv activation script to "" with mkForce
-        activationScripts.usrbinenv = mkOverride (50 - 1) ''
+        # envfs sets usrbinenv activation script to "" with lib.mkForce
+        activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
           if [ ! -d "/usr/bin" ]; then
             mkdir -p /usr/bin
             chmod 0755 /usr/bin
@@ -71,8 +64,8 @@
 
       nix =
         let
-          nixPath = mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
-          registry = mapAttrs (_: flake: { inherit flake; }) inputs;
+          nixPath = lib.mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
+          registry = lib.mapAttrs (_: flake: { inherit flake; }) inputs;
         in
         {
           channel.enable = false;
@@ -155,8 +148,8 @@
       system = {
         # better nixos generation label
         # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
-        nixos.label = concatStringsSep "-" (
-          (sort (x: y: x < y) config.system.nixos.tags)
+        nixos.label = lib.concatStringsSep "-" (
+          (lib.sort (x: y: x < y) config.system.nixos.tags)
           ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
         );
       };

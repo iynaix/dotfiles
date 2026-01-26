@@ -3,8 +3,7 @@
   flake.nixosModules.wm =
     { config, pkgs, ... }:
     let
-      inherit (lib) concatStringsSep flatten;
-      termExec = cmd: "ghostty -e ${concatStringsSep " " cmd}";
+      termExec = cmd: "ghostty -e ${lib.concatStringsSep " " cmd}";
     in
     {
       environment.systemPackages = with pkgs; [
@@ -57,7 +56,7 @@
         ]
         ++
           # tag keybinds, switch to monitor first before switching tag
-          flatten (
+          lib.flatten (
             (self.libCustom.mapWorkspaces (
               {
                 monitor,

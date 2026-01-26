@@ -5,27 +5,26 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkOption;
   pqivOptions = {
-    options = mkOption {
+    options = lib.mkOption {
       type = lib.types.lines;
       default = "";
       description = "Contents under [options] section of pqiv config file";
     };
 
-    actions = mkOption {
+    actions = lib.mkOption {
       type = lib.types.lines;
       default = "";
       description = "Contents under [actions] section of pqiv config file";
     };
 
-    keybindings = mkOption {
+    keybindings = lib.mkOption {
       type = lib.types.lines;
       default = "";
       description = "Contents under [keybindings] section of pqiv config file";
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
       description = "Extra config to add to pqiv config file";
@@ -79,7 +78,7 @@ in
         };
       };
 
-      config.package = mkDefault config.pkgs.pqiv;
+      config.package = lib.mkDefault config.pkgs.pqiv;
       config.env.PQIVRC_PATH = toString config.pqivrc.path;
     }
   );

@@ -1,25 +1,5 @@
 { inputs, lib, ... }:
 let
-  inherit (lib)
-    all
-    concatMapStrings
-    concatMapStringsSep
-    concatStrings
-    concatStringsSep
-    filterAttrs
-    foldl
-    generators
-    getExe
-    getExe'
-    hasPrefix
-    isAttrs
-    isList
-    mapAttrsToList
-    mkDefault
-    mkEnableOption
-    mkOption
-    replicate
-    ;
   # copied from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
   toHyprconf =
@@ -29,39 +9,41 @@ let
       importantPrefixes ? [ "$" ],
     }:
     let
-      initialIndent = concatStrings (replicate indentLevel "  ");
+      initialIndent = lib.concatStrings (lib.replicate indentLevel "  ");
 
       toHyprconf' =
         indent: attrs:
         let
-          sections = filterAttrs (_n: v: isAttrs v || (isList v && all isAttrs v)) attrs;
+          sections = lib.filterAttrs (_n: v: lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v)) attrs;
 
           mkSection =
             n: attrs:
             if lib.isList attrs then
-              (concatMapStringsSep "\n" (a: mkSection n a) attrs)
+              (lib.concatMapStringsSep "\n" (a: mkSection n a) attrs)
             else
               ''
                 ${indent}${n} {
                 ${toHyprconf' "  ${indent}" attrs}${indent}}
               '';
 
-          mkFields = generators.toKeyValue {
+          mkFields = lib.generators.toKeyValue {
             listsAsDuplicateKeys = true;
             inherit indent;
           };
 
-          allFields = filterAttrs (_n: v: !(isAttrs v || (isList v && all isAttrs v))) attrs;
+          allFields = lib.filterAttrs (
+            _n: v: !(lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v))
+          ) attrs;
 
           isImportantField =
-            n: _: foldl (acc: prev: if hasPrefix prev n then true else acc) false importantPrefixes;
+            n: _: lib.foldl (acc: prev: if lib.hasPrefix prev n then true else acc) false importantPrefixes;
 
-          importantFields = filterAttrs isImportantField allFields;
+          importantFields = lib.filterAttrs isImportantField allFields;
 
-          fields = removeAttrs allFields (mapAttrsToList (n: _: n) importantFields);
+          fields = removeAttrs allFields (lib.mapAttrsToList (n: _: n) importantFields);
         in
         mkFields importantFields
-        + concatStringsSep "\n" (mapAttrsToList mkSection sections)
+        + lib.concatStringsSep "\n" (lib.mapAttrsToList mkSection sections)
         + mkFields fields;
     in
     toHyprconf' initialIndent attrs;
@@ -112,7 +94,7 @@ let
     '';
   };
   hyprlandOptions = {
-    plugins = mkOption {
+    plugins = lib.mkOption {
       type = with lib.types; listOf (either package path);
       default = [ ];
       description = ''
@@ -120,7 +102,7 @@ let
         absolute plugin paths.
       '';
     };
-    qtile = mkEnableOption "qtile like behavior for workspaces";
+    qtile = lib.mkEnableOption "qtile like behavior for workspaces";
     settings = hyprlandSettingsType;
   };
 in
@@ -147,12 +129,12 @@ in
         "name"
         "output"
       ];
-      # don't use mkMerge as the order is important
-      hyprlandConfText = concatMapStrings (attrs: toHyprconf { inherit attrs importantPrefixes; }) [
+      # don't use lib.mkMerge as the order is important
+      hyprlandConfText = lib.concatMapStrings (attrs: toHyprconf { inherit attrs importantPrefixes; }) [
         # systemd activation blurb
         {
           exec-once = [
-            "${getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart hyprland-session.target"
+            "${lib.getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart hyprland-session.target"
           ];
         }
         # handle the plugins, loaded before the settings, implementation from home-manager:
@@ -178,20 +160,20 @@ in
         checkPhase = ''
           export XDG_RUNTIME_DIR=$(mktemp -d)
           grep -v '^source' "$out" > config_without_source.conf
-          ${getExe config.package} --verify-config -c config_without_source.conf
+          ${lib.getExe config.package} --verify-config -c config_without_source.conf
         '';
       };
     in
     {
       options = hyprlandOptions // {
-        "hyprland.conf" = mkOption {
+        "hyprland.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
           default.path = checkedHyprlandConf;
           visible = false;
         };
       };
 
-      config.package = mkDefault config.pkgs;
+      config.package = lib.mkDefault config.pkgs;
       config.filesToPatch = [
         "share/wayland-sessions/*.desktop"
       ];
@@ -205,7 +187,7 @@ in
     options.custom = {
       programs = {
         hyprland = hyprlandOptions;
-        hyprnstack.enable = mkEnableOption "hyprnstack";
+        hyprnstack.enable = lib.mkEnableOption "hyprnstack";
       };
     };
   };

@@ -1,11 +1,8 @@
 { lib, ... }:
-let
-  inherit (lib) concatMapStringsSep max mkMerge;
-in
 {
   flake.nixosModules.wm =
     { config, pkgs, ... }:
-    mkMerge [
+    lib.mkMerge [
       {
         environment = {
           systemPackages = with pkgs; [
@@ -15,11 +12,11 @@ in
 
         # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
         custom.programs.niri = {
-          settings.config = concatMapStringsSep "\n" (
+          settings.config = lib.concatMapStringsSep "\n" (
             mon:
             let
               targetPercent = 0.3;
-              width = builtins.floor (builtins.div (targetPercent * (max mon.width mon.height)) mon.scale);
+              width = builtins.floor (builtins.div (targetPercent * (lib.max mon.width mon.height)) mon.scale);
               # 16:9 ratio
               height = builtins.floor (width / 16.0 * 9.0);
             in

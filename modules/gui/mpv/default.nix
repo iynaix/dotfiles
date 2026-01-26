@@ -4,21 +4,6 @@
   self,
   ...
 }:
-let
-  inherit (lib)
-    concatLines
-    concatMapStringsSep
-    concatStringsSep
-    generators
-    hasSuffix
-    imap
-    listToAttrs
-    mapAttrsToList
-    mkMerge
-    optionalString
-    typeOf
-    ;
-in
 {
   perSystem =
     { pkgs, ... }:
@@ -33,7 +18,7 @@ in
           bool = if option then "yes" else "no";
           string = option;
         }
-        .${typeOf option};
+        .${lib.typeOf option};
       renderOptionValue =
         value:
         let
@@ -41,18 +26,18 @@ in
           length = toString (builtins.stringLength rendered);
         in
         "%${length}%${rendered}";
-      renderOptions = generators.toKeyValue {
-        mkKeyValue = generators.mkKeyValueDefault { mkValueString = renderOptionValue; } "=";
+      renderOptions = lib.generators.toKeyValue {
+        mkKeyValue = lib.generators.mkKeyValueDefault { mkValueString = renderOptionValue; } "=";
         listsAsDuplicateKeys = true;
       };
       renderBindings =
         bindings: lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") bindings);
-      renderProfiles = generators.toINI {
-        mkKeyValue = generators.mkKeyValueDefault { mkValueString = renderOptionValue; } "=";
+      renderProfiles = lib.generators.toINI {
+        mkKeyValue = lib.generators.mkKeyValueDefault { mkValueString = renderOptionValue; } "=";
         listsAsDuplicateKeys = true;
       };
-      renderScriptOptions = generators.toKeyValue {
-        mkKeyValue = generators.mkKeyValueDefault { mkValueString = renderOption; } "=";
+      renderScriptOptions = lib.generators.toKeyValue {
+        mkKeyValue = lib.generators.mkKeyValueDefault { mkValueString = renderOption; } "=";
         listsAsDuplicateKeys = true;
       };
       mpvDir = pkgs.runCommand "mpv-config" { } (
@@ -65,39 +50,39 @@ in
 
           cat > $out/mpv.conf << 'EOF'
           ${renderOptions mpvConfig.config}
-          ${optionalString (mpvConfig.profiles != { }) (renderProfiles mpvConfig.profiles)}
+          ${lib.optionalString (mpvConfig.profiles != { }) (renderProfiles mpvConfig.profiles)}
           EOF
         ''
         # write scriptOpts
         + (
           mpvConfig.scriptOpts
-          |> mapAttrsToList (
+          |> lib.mapAttrsToList (
             name: opts: ''
               cat > $out/script-opts/${name}.conf << 'EOF'
               ${renderScriptOptions opts}
               EOF
             ''
           )
-          |> concatLines
+          |> lib.concatLines
         )
         # write scriptOptsFiles
         + (
           mpvConfig.scriptOptsFiles
-          |> mapAttrsToList (
+          |> lib.mapAttrsToList (
             name: content: ''
               cat > $out/script-opts/${name} << 'EOF'
               ${content}
               EOF
             ''
           )
-          |> concatLines
+          |> lib.concatLines
         )
       );
       shaders_dir = "${pkgs.mpv-shim-default-shaders}/share/mpv-shim-default-shaders/shaders";
       shaderList =
         shaders:
-        concatMapStringsSep ":"
-          (s: if (hasSuffix ".hook" s) then "${shaders_dir}/${s}" else "${shaders_dir}/${s}.glsl")
+        lib.concatMapStringsSep ":"
+          (s: if (lib.hasSuffix ".hook" s) then "${shaders_dir}/${s}" else "${shaders_dir}/${s}.glsl")
           (
             # Adds a very small amount of static noise to help with debanding.
             [
@@ -230,8 +215,8 @@ in
             # clear all shaders
             "CTRL+0" = ''no-osd change-list glsl-shaders clr ""; show-text "Shaders cleared"'';
           }
-          // listToAttrs (
-            imap
+          // lib.listToAttrs (
+            lib.imap
               (i: v: {
                 name = "CTRL+${toString i}";
                 value = v;
@@ -357,7 +342,7 @@ in
                     credit = "^Credit";
                     sponsorblock = "Sponsor/SponsorBlock";
                   };
-                  categoriesStr = concatStringsSep "; " (mapAttrsToList (k: v: "${k}>${v}") categories);
+                  categoriesStr = lib.concatStringsSep "; " (lib.mapAttrsToList (k: v: "${k}>${v}") categories);
                 in
                 ''[ ["internal-chapters", "${categoriesStr}"] ]'';
               skip = ''[ ["internal-chapters", "toggle;toggle_idx;opening;ending;preview;credit;sponsorblock"], ["external-chapters", "toggle;toggle_idx"] ]'';
@@ -382,7 +367,7 @@ in
 
   flake.nixosModules.gui =
     { pkgs, ... }:
-    mkMerge [
+    lib.mkMerge [
       {
         custom.programs = {
           hyprland.settings.windowrule = [

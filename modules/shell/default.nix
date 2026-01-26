@@ -3,18 +3,6 @@
   flake.nixosModules.core =
     { config, pkgs, ... }:
     let
-      inherit (lib)
-        attrValues
-        concatMapAttrsStringSep
-        functionArgs
-        hiPrio
-        intersectAttrs
-        isDerivation
-        isString
-        mapAttrs
-        mkOption
-        optionalString
-        ;
       inherit (lib.types)
         attrs
         attrsOf
@@ -35,10 +23,10 @@
         let
           inherit (pkgs) writeShellApplication writeText installShellFiles;
           # get the needed arguments for writeShellApplication
-          app = writeShellApplication (intersectAttrs (functionArgs writeShellApplication) shellArgs);
-          completionsStr = concatMapAttrsStringSep " " (
+          app = writeShellApplication (lib.intersectAttrs (lib.functionArgs writeShellApplication) shellArgs);
+          completionsStr = lib.concatMapAttrsStringSep " " (
             shell: content:
-            optionalString (builtins.elem shell [
+            lib.optionalString (builtins.elem shell [
               "bash"
               "zsh"
               "fish"
@@ -60,22 +48,22 @@
     {
       options.custom = {
         shell = {
-          packages = mkOption {
+          packages = lib.mkOption {
             type = attrsOf (oneOf [
               str
               attrs
               package
             ]);
             # produces an attrset shell package with completions from either a string / writeShellApplication attrset / package
-            apply = mapAttrs (
+            apply = lib.mapAttrs (
               name: value:
-              if isString value then
+              if lib.isString value then
                 pkgs.writeShellApplication {
                   inherit name;
                   text = value;
                 }
               # packages
-              else if isDerivation value then
+              else if lib.isDerivation value then
                 value
               # attrs to pass to writeShellApplication
               else
@@ -159,14 +147,14 @@
                 killall
                 moor
                 procs # better ps
-                (hiPrio procps) # for uptime
+                (lib.hiPrio procps) # for uptime
                 sd # better sed
                 trash-cli
                 ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
                 xdg-utils
               ]
               # add custom user created shell packages
-              ++ (attrValues config.custom.shell.packages);
+              ++ (lib.attrValues config.custom.shell.packages);
 
             variables = {
               TERMINAL = "ghostty";
@@ -192,7 +180,7 @@
             "user-dirs.dirs".text =
               let
                 # For some reason, these need to be wrapped with quotes to be valid.
-                wrapped = mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
+                wrapped = lib.mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
               in
               lib.generators.toKeyValue { } wrapped;
           };

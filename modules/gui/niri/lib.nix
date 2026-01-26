@@ -6,21 +6,6 @@
   ...
 }:
 let
-  inherit (lib)
-    literalExpression
-    mkDefault
-    mkOption
-    pipe
-    mapAttrsToList
-    concatStringsSep
-    concatMapStringsSep
-    mapAttrs
-    isBool
-    boolToString
-    isInt
-    optionalString
-    getExe
-    ;
   inherit (lib.types)
     listOf
     attrsOf
@@ -31,28 +16,28 @@ let
     nullOr
     ;
 
-  toNiriSpawn = commands: concatMapStringsSep " " (arg: "\"${arg}\"") commands;
+  toNiriSpawn = commands: lib.concatMapStringsSep " " (arg: "\"${arg}\"") commands;
 
   toNiriBinds =
     binds:
-    concatStringsSep "\n" (
-      mapAttrsToList (
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
         bind: bindOptions:
         let
-          parameters = pipe bindOptions.parameters [
-            (mapAttrs (
+          parameters = lib.pipe bindOptions.parameters [
+            (lib.mapAttrs (
               _: value:
-              if isBool value then
-                boolToString value
-              else if isInt value then
+              if lib.isBool value then
+                lib.boolToString value
+              else if lib.isInt value then
                 toString value
               else if isNull value then
                 "null"
               else
                 ''"${value}"''
             ))
-            (mapAttrsToList (name: value: "${name}=${value}"))
-            (concatStringsSep " ")
+            (lib.mapAttrsToList (name: value: "${name}=${value}"))
+            (lib.concatStringsSep " ")
           ];
           action =
             let
@@ -73,11 +58,11 @@ let
     );
 
   toNiriSpawnAtStartup =
-    spawn: concatMapStringsSep "\n" (commands: "spawn-at-startup " + (toNiriSpawn commands)) spawn;
+    spawn: lib.concatMapStringsSep "\n" (commands: "spawn-at-startup " + (toNiriSpawn commands)) spawn;
 
   bindsModule = submodule {
     options = {
-      spawn = mkOption {
+      spawn = lib.mkOption {
         type = nullOr (listOf str);
         default = null;
         example = [
@@ -92,7 +77,7 @@ let
           {option}`binds.<keybind>.action`. See [niri's wiki] for more information.
         '';
       };
-      action = mkOption {
+      action = lib.mkOption {
         type = nullOr str;
         default = null;
         example = "focus-column-left";
@@ -103,7 +88,7 @@ let
           {option}`binds.<keybind>.spawn`. See [niri's wiki] for a complete list.
         '';
       };
-      parameters = mkOption {
+      parameters = lib.mkOption {
         type = attrsOf anything;
         default = { };
         example = {
@@ -120,7 +105,7 @@ let
   };
 
   mkNiriOptions = pkgs: {
-    binds = mkOption {
+    binds = lib.mkOption {
       type = attrsOf bindsModule;
       default = { };
       example = {
@@ -148,10 +133,10 @@ let
         A list of key bindings that will be added to the configuration file. See [niri's wiki] for a complete list.
       '';
     };
-    spawn-at-startup = mkOption {
+    spawn-at-startup = lib.mkOption {
       type = listOf (listOf str);
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           ["waybar"]
           ["alacritty" "-e" "fish"]
@@ -163,7 +148,7 @@ let
         A list of programs to be loaded with niri on startup. see [niri's wiki] for more details on the API.
       '';
     };
-    extraVariables = mkOption {
+    extraVariables = lib.mkOption {
       type = inputs.hjem.hjem-lib.${pkgs.stdenv.hostPlatform.system}.envVarType;
       default = { };
       example = {
@@ -177,10 +162,10 @@ let
         You can therefore set a variable to `null` to force unset it in Niri. Learn more from [niri's wiki].
       '';
     };
-    config = mkOption {
+    config = lib.mkOption {
       type = lines;
       default = "";
-      example = literalExpression ''
+      example = lib.literalExpression ''
         screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
         switch-events {
@@ -239,18 +224,18 @@ in
             else
               "\"${inputs.hjem.hjem-lib.${config.pkgs.stdenv.hostPlatform.system}.toEnv var}\"";
         in
-        pipe cfg.extraVariables [
-          (mapAttrsToList (n: v: n + " ${toNiriEnv v}"))
-          (concatStringsSep "\n")
+        lib.pipe cfg.extraVariables [
+          (lib.mapAttrsToList (n: v: n + " ${toNiriEnv v}"))
+          (lib.concatStringsSep "\n")
         ];
 
-      niriConf = concatStringsSep "\n" [
-        (optionalString (cfg.extraVariables != { }) ''
+      niriConf = lib.concatStringsSep "\n" [
+        (lib.optionalString (cfg.extraVariables != { }) ''
           environment {
             ${niriEnvironment}
           }
         '')
-        (optionalString (cfg.binds != { }) ''
+        (lib.optionalString (cfg.binds != { }) ''
           binds {
             ${toNiriBinds cfg.binds}
           }
@@ -262,13 +247,13 @@ in
         name = "niri.kdl";
         text = niriConf;
         checkPhase = ''
-          ${getExe config.package} validate -c $out
+          ${lib.getExe config.package} validate -c $out
         '';
       };
     in
     {
       options = {
-        "config.kdl" = mkOption {
+        "config.kdl" = lib.mkOption {
           type = wlib.types.file config.pkgs;
           default.path = checkedNiriConf;
           visible = false;
@@ -276,7 +261,7 @@ in
         settings = mkNiriOptions config.pkgs;
       };
 
-      config.package = mkDefault config.pkgs.niri;
+      config.package = lib.mkDefault config.pkgs.niri;
       config.filesToPatch = [
         "share/applications/*.desktop"
         "share/systemd/user/niri.service"

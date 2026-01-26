@@ -1,15 +1,4 @@
 { lib, self, ... }:
-let
-  inherit (lib)
-    concatImapStringsSep
-    concatLines
-    getExe
-    mkAfter
-    mkMerge
-    mod
-    optionalString
-    ;
-in
 {
   flake.nixosModules.wm =
     { config, pkgs, ... }:
@@ -18,7 +7,7 @@ in
     in
     {
       custom.programs = {
-        niri.settings.config = mkMerge [
+        niri.settings.config = lib.mkMerge [
           /* kdl */ ''
             input {
                 keyboard {
@@ -137,7 +126,7 @@ in
             }
 
             xwayland-satellite {
-                path "${getExe pkgs.xwayland-satellite}"
+                path "${lib.getExe pkgs.xwayland-satellite}"
             }
 
             window-rule {
@@ -166,27 +155,29 @@ in
               }:
               ''workspace "${toString workspace}" { open-on-output "${monitor.name}"; }''
             )
-            |> concatLines
+            |> lib.concatLines
           )
 
           # create monitors config
-          (concatImapStringsSep "\n" (
+          (lib.concatImapStringsSep "\n" (
             i: d:
             let
-              rotation = toString (mod (d.transform * 90) 360);
+              rotation = toString (lib.mod (d.transform * 90) 360);
               flipped = d.transform > 3;
               isVertical = d.transform == 1 || d.transform == 3;
             in
             ''
               output "${d.name}" {
-                ${optionalString (i == 1) "focus-at-startup"}
+                ${lib.optionalString (i == 1) "focus-at-startup"}
                 scale ${toString d.scale};
-                transform "${optionalString flipped "flipped-"}${if rotation == "0" then "normal" else rotation}";
+                transform "${lib.optionalString flipped "flipped-"}${
+                  if rotation == "0" then "normal" else rotation
+                }";
                 mode "${toString d.width}x${toString d.height}"
                 position x=${toString d.positionX} y=${toString d.positionY}
-                ${optionalString d.vrr "variable-refresh-rate"}
+                ${lib.optionalString d.vrr "variable-refresh-rate"}
 
-                ${optionalString isVertical ''
+                ${lib.optionalString isVertical ''
                   layout {
                       default-column-width { proportion 1.0; }
                   }
@@ -196,7 +187,7 @@ in
           ) config.custom.hardware.monitors)
 
           # final include right at the end of the file
-          (mkAfter ''
+          (lib.mkAfter ''
             include optional=true "${config.hj.xdg.config.directory}/niri/config.kdl";
           '')
         ];

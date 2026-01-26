@@ -1,13 +1,9 @@
+{ lib, ... }:
 {
   flake.nixosModules.wm =
-    {
-      lib,
-      pkgs,
-      ...
-    }:
+    { pkgs, ... }:
     let
-      inherit (lib) escapeShellArgs getExe getExe';
-      extraOptionsStr = escapeShellArgs [
+      extraOptionsStr = lib.escapeShellArgs [
         "-max-dedupe-search"
         "10"
         "-max-items"
@@ -34,7 +30,7 @@
 
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${lib.getExe' pkgs.wl-clipboard "wl-paste"} --watch ${getExe pkgs.cliphist} ${extraOptionsStr} store";
+          ExecStart = "${lib.getExe' pkgs.wl-clipboard "wl-paste"} --watch ${lib.getExe pkgs.cliphist} ${extraOptionsStr} store";
           Restart = "on-failure";
         };
       };
@@ -50,7 +46,7 @@
 
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${getExe' pkgs.wl-clipboard "wl-paste"} --type image --watch ${getExe pkgs.cliphist} ${extraOptionsStr} store";
+          ExecStart = "${lib.getExe' pkgs.wl-clipboard "wl-paste"} --type image --watch ${lib.getExe pkgs.cliphist} ${extraOptionsStr} store";
           Restart = "on-failure";
         };
       };

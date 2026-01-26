@@ -1,20 +1,11 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) mapAttrsToList mkOption;
-      inherit (lib.types) attrsOf str;
-    in
+    { config, pkgs, ... }:
     {
       options.custom = {
-        symlinks = mkOption {
-          type = attrsOf str;
+        symlinks = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           default = { };
           description = "Symlinks to create in the format { dest = src;}";
         };
@@ -41,7 +32,7 @@
           # cleanup systemd coredumps once a week
           "D! /var/lib/systemd/coredump root root 7d"
         ]
-        ++ (mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
+        ++ (lib.mapAttrsToList (dest: src: "L+ ${dest} - - - - ${src}") config.custom.symlinks);
       };
     };
 }

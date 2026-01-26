@@ -1,16 +1,5 @@
 { lib, ... }:
 let
-  inherit (lib)
-    concatLines
-    concatMapStringsSep
-    gvariant
-    isBool
-    isString
-    literalExpression
-    mapAttrsToList
-    mkMerge
-    mkOption
-    ;
   inherit (lib.types)
     attrs
     int
@@ -39,11 +28,11 @@ in
       options.custom = {
         # type referenced from nixpkgs:
         # https://github.com/NixOS/nixpkgs/blob/554be6495561ff07b6c724047bdd7e0716aa7b46/nixos/modules/programs/dconf.nix#L121C9-L134C11
-        dconf.settings = mkOption {
+        dconf.settings = lib.mkOption {
           type = attrs;
           default = { };
           description = "An attrset used to generate dconf keyfile.";
-          example = literalExpression ''
+          example = lib.literalExpression ''
             with lib.gvariant;
             {
               "com/raggesilver/BlackBox" = {
@@ -54,7 +43,7 @@ in
           '';
         };
         gtk = {
-          bookmarks = mkOption {
+          bookmarks = lib.mkOption {
             type = listOf str;
             default = [ ];
             example = [ "/home/jane/Documents" ];
@@ -62,19 +51,19 @@ in
           };
 
           font = {
-            package = mkOption {
+            package = lib.mkOption {
               type = package;
               default = pkgs.geist-font;
               description = "Package providing the font";
             };
 
-            name = mkOption {
+            name = lib.mkOption {
               type = str;
               default = config.custom.fonts.regular;
               description = "The family name of the font within the package.";
             };
 
-            size = mkOption {
+            size = lib.mkOption {
               type = number;
               default = 10;
               description = "The size of the font.";
@@ -82,13 +71,13 @@ in
           };
 
           theme = {
-            accents = mkOption {
+            accents = lib.mkOption {
               type = attrs;
               default = accents;
               description = "GTK theme accents colors";
             };
 
-            package = mkOption {
+            package = lib.mkOption {
               type = package;
               default = pkgs.tokyonight-gtk-theme.override {
                 colorVariants = [ "dark" ];
@@ -98,7 +87,7 @@ in
               description = "Package providing the theme.";
             };
 
-            name = mkOption {
+            name = lib.mkOption {
               type = str;
               default = "Tokyonight-Dark-Compact";
               description = "The name of the theme within the package.";
@@ -106,13 +95,13 @@ in
           };
 
           iconTheme = {
-            package = mkOption {
+            package = lib.mkOption {
               type = package;
               default = pkgs.custom.tela-dynamic-icon-theme.override { colors = accents; };
               description = "Package providing the icon theme.";
             };
 
-            name = mkOption {
+            name = lib.mkOption {
               type = str;
               default = "Tela-${defaultAccent}-dark";
               description = "The name of the icon theme within the package.";
@@ -120,19 +109,19 @@ in
           };
 
           cursor = {
-            package = mkOption {
+            package = lib.mkOption {
               type = package;
               default = pkgs.simp1e-cursors;
               description = "Package providing the cursor theme.";
             };
 
-            name = mkOption {
+            name = lib.mkOption {
               type = str;
               default = "Simp1e-Tokyo-Night";
               description = "The cursor name within the package.";
             };
 
-            size = mkOption {
+            size = lib.mkOption {
               type = int;
               default = 28;
               description = "The cursor size.";
@@ -176,9 +165,9 @@ in
         key: value:
         let
           value' =
-            if isBool value then
+            if lib.isBool value then
               (if value then "true" else "false")
-            else if isString value then
+            else if lib.isString value then
               "\"${value}\""
             else
               toString value;
@@ -196,7 +185,7 @@ in
         etc = {
           "xdg/gtk-3.0/settings.ini".text = gtkIni;
           "xdg/gtk-4.0/settings.ini".text = gtkIni;
-          "xdg/gtk-2.0/gtkrc".text = concatLines (mapAttrsToList toGtk2File gtkSharedSettings);
+          "xdg/gtk-2.0/gtkrc".text = lib.concatLines (lib.mapAttrsToList toGtk2File gtkSharedSettings);
         };
 
         sessionVariables = {
@@ -224,7 +213,7 @@ in
         # custom option, the default nesting is horrendous
         profiles.user.databases = [
           {
-            settings = mkMerge [
+            settings = lib.mkMerge [
               {
                 # disable dconf first use warning
                 "ca/desrt/dconf-editor" = {
@@ -235,7 +224,7 @@ in
                   # set dark theme for gtk 4
                   color-scheme = "prefer-dark";
                   cursor-theme = gtkCfg.cursor.name;
-                  cursor-size = gvariant.mkUint32 gtkCfg.cursor.size;
+                  cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
                   font-name = "${gtkCfg.font.name} 10";
                   gtk-theme = "Tokyonight-Dark-Compact";
                   icon-theme = "Tela-${defaultAccent}-dark";
@@ -252,7 +241,7 @@ in
       # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
       hj.xdg = {
         # use per user settings
-        config.files."gtk-3.0/bookmarks".text = concatMapStringsSep "\n" (
+        config.files."gtk-3.0/bookmarks".text = lib.concatMapStringsSep "\n" (
           b: "file://${b}"
         ) gtkCfg.bookmarks;
 
@@ -265,7 +254,7 @@ in
       custom.programs.noctalia.colors.templates = {
         # use dynamic gtk theme and icon theme
         "gtk-theme" = {
-          colors_to_compare = mapAttrsToList (name: value: {
+          colors_to_compare = lib.mapAttrsToList (name: value: {
             name = if name == "Default" then "Tokyonight-Dark-Compact" else "Tokyonight-${name}-Dark-Compact";
             color = value;
           }) config.custom.gtk.theme.accents;
@@ -277,7 +266,7 @@ in
         };
 
         "gtk-icon-theme" = {
-          colors_to_compare = mapAttrsToList (name: value: {
+          colors_to_compare = lib.mapAttrsToList (name: value: {
             name = "Tela-${name}-dark";
             color = value;
           }) config.custom.gtk.theme.accents;

@@ -5,24 +5,16 @@
   ...
 }:
 let
-  inherit (lib)
-    concatStringsSep
-    isBool
-    isString
-    mkDefault
-    mkEnableOption
-    mkOption
-    ;
   btopOptions = {
-    cudaSupport = mkEnableOption {
+    cudaSupport = lib.mkEnableOption {
       description = "Enable nvidia support for btop";
     };
 
-    rocmSupport = mkEnableOption {
+    rocmSupport = lib.mkEnableOption {
       description = "Enable radeon support for btop";
     };
 
-    extraSettings = mkOption {
+    extraSettings = lib.mkOption {
       type =
         with lib.types;
         attrsOf (oneOf [
@@ -52,9 +44,9 @@ in
         mkKeyValue = lib.generators.mkKeyValueDefault {
           mkValueString =
             v:
-            if isBool v then
+            if lib.isBool v then
               (if v then "True" else "False")
-            else if isString v then
+            else if lib.isString v then
               ''"${v}"''
             else
               toString v;
@@ -85,7 +77,7 @@ in
         };
       };
 
-      config.package = mkDefault (
+      config.package = lib.mkDefault (
         config.pkgs.btop.override {
           inherit (config) cudaSupport;
           inherit (config) rocmSupport;
@@ -113,7 +105,7 @@ in
       options.custom = {
         programs.btop = btopOptions // {
           # convenience option to add disks to btop
-          disks = mkOption {
+          disks = lib.mkOption {
             type = with lib.types; listOf str;
             default = [ ];
             description = "List of disks to monitor in btop";
@@ -130,7 +122,7 @@ in
                 pkgs = prev;
                 rocmSupport = host == "desktop" || host == "framework";
                 extraSettings = {
-                  disks_filter = concatStringsSep " " (
+                  disks_filter = lib.concatStringsSep " " (
                     [
                       "/"
                       "/boot"

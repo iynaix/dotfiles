@@ -7,7 +7,6 @@
       ...
     }:
     let
-      inherit (lib) concatStringsSep mkMerge;
       gitignores = [
         ".direnv"
         ".devenv"
@@ -15,7 +14,7 @@
         "node_modules"
       ];
     in
-    mkMerge [
+    lib.mkMerge [
       {
         programs = {
           git = {
@@ -40,7 +39,7 @@
                 sort = "-committerdate";
               };
               core = {
-                excludesFile = pkgs.writeText ".gitignore" (concatStringsSep "\n" gitignores);
+                excludesFile = pkgs.writeText ".gitignore" (lib.concatStringsSep "\n" gitignores);
               };
               diff = {
                 guitool = "code";

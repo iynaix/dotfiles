@@ -1,7 +1,4 @@
 { lib, ... }:
-let
-  inherit (lib) getExe' optionalString;
-in
 {
   flake.nixosModules.wm =
     { config, ... }:
@@ -21,8 +18,8 @@ in
             ...
           }:
           let
-            rules = optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-            exec = builtins.concatStringsSep " " spawn;
+            rules = lib.optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+            exec = lib.concatStringsSep " " spawn;
           in
           if enable then "${rules} ${exec}" else ""
         ) config.custom.startup;
@@ -54,7 +51,7 @@ in
           };
 
           serviceConfig = {
-            ExecStart = "${getExe' config.custom.programs.dotfiles-rs "hypr-ipc"}";
+            ExecStart = "${lib.getExe' config.custom.programs.dotfiles-rs "hypr-ipc"}";
             RestartSec = 1;
             Restart = "on-failure";
           };

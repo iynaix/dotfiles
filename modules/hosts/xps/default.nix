@@ -1,13 +1,7 @@
 { lib, ... }@topLevel:
 {
   flake.nixosModules.host-xps =
-    {
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) getExe;
-    in
+    { pkgs, ... }:
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
@@ -87,7 +81,7 @@
           group = "wheel";
           owner = "root";
           permissions = "0750";
-          source = getExe pkgs.btop;
+          source = lib.getExe pkgs.btop;
         };
       };
     };

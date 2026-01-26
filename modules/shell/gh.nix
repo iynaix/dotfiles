@@ -1,7 +1,4 @@
 { inputs, lib, ... }:
-let
-  inherit (lib) getExe nameValuePair listToAttrs;
-in
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
@@ -38,14 +35,14 @@ in
           ]
           |> map (
             host:
-            nameValuePair host {
+            lib.nameValuePair host {
               helper = [
                 ""
-                "${getExe pkgs.gh} auth git-credential"
+                "${lib.getExe pkgs.gh} auth git-credential"
               ];
             }
           )
-          |> listToAttrs;
+          |> lib.listToAttrs;
       };
 
       environment.systemPackages = [ pkgs.gh ]; # overlay-ed above

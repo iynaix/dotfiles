@@ -3,7 +3,6 @@
   flake.nixosModules.gui =
     { config, pkgs, ... }:
     let
-      inherit (lib) concatStringsSep optionals;
       inherit (config.custom.constants) host user;
       configPath = ".config/.librewolf";
     in
@@ -16,7 +15,7 @@
             wrapProgram "$out/bin/librewolf" \
               --set 'HOME' '${config.hj.xdg.config.directory}' \
               --append-flags "${
-                concatStringsSep " " (
+                lib.concatStringsSep " " (
                   [
                     # load librewolf profile with same name as user
                     "--profile ${config.hj.directory}/${configPath}/${user}"
@@ -25,7 +24,7 @@
                     # launch with the following urls:
                     "https://discordapp.com/channels/@me"
                   ]
-                  ++ optionals (host == "desktop") [
+                  ++ lib.optionals (host == "desktop") [
                     "https://web.whatsapp.com" # requires access via local network
                     "http://localhost:9091" # transmission
                   ]

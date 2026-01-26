@@ -1,7 +1,4 @@
 { lib, ... }:
-let
-  inherit (lib) mkOption;
-in
 {
   flake.nixosModules.core =
     { pkgs, ... }:
@@ -11,7 +8,7 @@ in
     {
       options.custom = {
         programs.noctalia = {
-          colors = mkOption {
+          colors = lib.mkOption {
             inherit (tomlFormat) type;
             default = { };
             description = ''

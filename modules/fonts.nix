@@ -1,18 +1,16 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    { lib, pkgs, ... }:
-    let
-      inherit (lib) mkOption;
-    in
+    { pkgs, ... }:
     {
       options.custom = {
         fonts = {
-          regular = mkOption {
+          regular = lib.mkOption {
             type = lib.types.str;
             default = "Geist";
             description = "The font to use for regular text";
           };
-          monospace = mkOption {
+          monospace = lib.mkOption {
             type = lib.types.str;
             default = "JetBrainsMono Nerd Font";
             description = "The font to use for monospace text";

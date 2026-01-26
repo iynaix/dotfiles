@@ -1,13 +1,7 @@
 { lib, ... }@topLevel:
 {
   flake.nixosModules.host-framework =
-    {
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) getExe;
-    in
+    { pkgs, ... }:
     {
       imports = with topLevel.config.flake.nixosModules; [
         gui
@@ -82,7 +76,7 @@
         startup = [
           {
             spawn = [
-              (getExe pkgs.brightnessctl)
+              (lib.getExe pkgs.brightnessctl)
               "s"
               "20%"
             ];

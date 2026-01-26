@@ -1,13 +1,7 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      inherit (lib) mkForce;
-    in
+    { pkgs, ... }:
     {
       # Bootloader.
       boot = {
@@ -34,9 +28,9 @@
       };
 
       # faster boot times
-      systemd.services.NetworkManager-wait-online.wantedBy = mkForce [ ];
+      systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
 
       # reduce journald logs
-      services.journald.extraConfig = ''SystemMaxUse=50M'';
+      services.journald.extraConfig = "SystemMaxUse=50M";
     };
 }

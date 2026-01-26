@@ -1,21 +1,18 @@
 { lib, ... }:
-let
-  inherit (lib) mkOption;
-in
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
     {
       options.custom = {
         programs = {
-          dotfiles-rs = mkOption {
+          dotfiles-rs = lib.mkOption {
             type = lib.types.package;
             default = pkgs.custom.dotfiles-rs;
             description = "dotfiles-rs package";
           };
         };
 
-        nixJson = mkOption {
+        nixJson = lib.mkOption {
           type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
           default = { };
           description = "Data to be written to nix.json for use in other programs at runtime.";

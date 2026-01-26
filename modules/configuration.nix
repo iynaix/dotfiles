@@ -1,14 +1,9 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
     # leftovers from initial configuration.nix
-    {
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib) mkForce;
       inherit (config.custom.constants) host;
     in
     {
@@ -53,7 +48,7 @@
       };
 
       # bye bye nano
-      programs.nano.enable = mkForce false;
+      programs.nano.enable = lib.mkForce false;
 
       # enable sysrq in case for kernel panic
       # boot.kernel.sysctl."kernel.sysrq" = 1;

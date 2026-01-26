@@ -1,11 +1,8 @@
 { lib, ... }:
-let
-  inherit (lib) mkMerge;
-in
 {
   flake.nixosModules.subtitles =
     { pkgs, ... }:
-    mkMerge [
+    lib.mkMerge [
       # subliminal
       {
         environment = {

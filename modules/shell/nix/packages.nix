@@ -1,13 +1,4 @@
 { inputs, lib, ... }:
-let
-  inherit (lib)
-    concatLines
-    filter
-    getExe
-    isAttrs
-    optionalAttrs
-    ;
-in
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
@@ -366,7 +357,7 @@ in
               function _nbuild_iso
                 nix eval --impure --json --expr \
                   'with builtins.getFlake (toString ./.); builtins.attrNames nixosConfigurations' | \
-                  ${getExe pkgs.jq} -r '.[]' | grep iso
+                  ${lib.getExe pkgs.jq} -r '.[]' | grep iso
                 end
                 complete -c nbuild-iso -f -a '(_nbuild_iso)'
             '';
@@ -375,9 +366,9 @@ in
           nix-list-packages = {
             text =
               let
-                allPkgs = config.environment.systemPackages |> filter isAttrs |> map (pkg: pkg.name);
+                allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
               in
-              ''sort -ui <<< "${concatLines allPkgs}"'';
+              ''sort -ui <<< "${lib.concatLines allPkgs}"'';
           };
           # nixos-rebuild boot
           nsbt = {
@@ -399,7 +390,7 @@ in
             text = /* sh */ ''nsw test "$@"'';
           };
         }
-        // optionalAttrs (host == "desktop") {
+        // lib.optionalAttrs (host == "desktop") {
           # build and push config for laptop
           nsw-remote = /* sh */ ''
             pushd ${dots} > /dev/null

@@ -11,7 +11,7 @@
         kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
-        #   assert assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
+        #   assert lib.assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
         #     "zfs 2.3 supports kernel 6.11 or greater";
         #   pkgs.linuxPackagesFor (
         #     pkgs.linux_xanmod_latest.override {

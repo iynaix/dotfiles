@@ -1,29 +1,19 @@
 { lib, ... }:
-let
-  inherit (lib)
-    getExe'
-    mkAfter
-    mkIf
-    mkMerge
-    optionalString
-    reverseList
-    ;
-in
 {
   flake.nixosModules.wm =
     { config, ... }:
     {
       # generate startup rules, god i hate having to use rules for startup
-      custom.programs.niri.settings = mkMerge (
+      custom.programs.niri.settings = lib.mkMerge (
         (map (
           startup:
-          (mkIf startup.enable {
+          (lib.mkIf startup.enable {
             spawn-at-startup = [ startup.spawn ];
             config = # kdl
-              mkIf (startup.app-id != null || startup.title != null) ''
+              lib.mkIf (startup.app-id != null || startup.title != null) ''
                 window-rule {
-                    match ${optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
-                      optionalString (startup.title != null) ''title="^${startup.title}$"''
+                    match ${lib.optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
+                      lib.optionalString (startup.title != null) ''title="^${startup.title}$"''
                     } at-startup=true
                     open-on-workspace "${toString startup.workspace}"
                     ${startup.niriArgs}
@@ -34,14 +24,14 @@ in
         ++ [
           # focus default workspace for each monitor
           {
-            spawn-at-startup = mkAfter (
+            spawn-at-startup = lib.mkAfter (
               map (mon: [
                 "niri"
                 "msg"
                 "action"
                 "focus-workspace"
                 "${toString mon.defaultWorkspace}"
-              ]) (reverseList config.custom.hardware.monitors)
+              ]) (lib.reverseList config.custom.hardware.monitors)
             );
           }
         ]
@@ -72,7 +62,7 @@ in
           };
 
           serviceConfig = {
-            ExecStart = getExe' config.custom.programs.dotfiles-rs "niri-ipc";
+            ExecStart = lib.getExe' config.custom.programs.dotfiles-rs "niri-ipc";
             Restart = "on-failure";
           };
         };

@@ -1,56 +1,40 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
-      inherit (lib)
-        any
-        assertMsg
-        concatLines
-        hasPrefix
-        lessThan
-        mkForce
-        mkOption
-        optionals
-        sort
-        unique
-        ;
       inherit (lib.types) listOf str;
       inherit (config.custom.constants) host user;
       cfg = config.custom.persist;
       assertNoHomeDirs =
         paths:
-        assert (assertMsg (!any (hasPrefix "/home") paths) "/home used in a root persist!");
+        assert (lib.assertMsg (!lib.any (lib.hasPrefix "/home") paths) "/home used in a root persist!");
         paths;
     in
     {
       options.custom = {
         persist = {
           root = {
-            directories = mkOption {
+            directories = lib.mkOption {
               type = listOf str;
               default = [ ];
               apply = assertNoHomeDirs;
               description = "Directories to persist in root filesystem";
             };
-            files = mkOption {
+            files = lib.mkOption {
               type = listOf str;
               default = [ ];
               apply = assertNoHomeDirs;
               description = "Files to persist in root filesystem";
             };
             cache = {
-              directories = mkOption {
+              directories = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 apply = assertNoHomeDirs;
                 description = "Directories to persist, but not to snapshot";
               };
-              files = mkOption {
+              files = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 apply = assertNoHomeDirs;
@@ -59,23 +43,23 @@
             };
           };
           home = {
-            directories = mkOption {
+            directories = lib.mkOption {
               type = listOf str;
               default = [ ];
               description = "Directories to persist in home directory";
             };
-            files = mkOption {
+            files = lib.mkOption {
               type = listOf str;
               default = [ ];
               description = "Files to persist in home directory";
             };
             cache = {
-              directories = mkOption {
+              directories = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 description = "Directories to persist, but not to snapshot";
               };
-              files = mkOption {
+              files = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 description = "Files to persist, but not to snapshot";
@@ -90,7 +74,7 @@
         boot.tmp.cleanOnBoot = true;
 
         # root and home on tmpfs
-        fileSystems."/" = mkForce {
+        fileSystems."/" = lib.mkForce {
           device = "tmpfs";
           fsType = "tmpfs";
           options = [
@@ -107,7 +91,7 @@
         # uncomment to use separate home dataset
         # neededForBoot is required, so there won't be permission errors creating directories or symlinks
         # https://github.com/nix-community/impermanence/issues/149#issuecomment-1806604102
-        # fileSystems."/home" = mkForce {
+        # fileSystems."/home" = lib.mkForce {
         #   device = "tmpfs";
         #   fsType = "tmpfs";
         #   neededForBoot = true;
@@ -141,8 +125,8 @@
         environment.persistence = {
           "/persist" = {
             hideMounts = true;
-            files = unique cfg.root.files;
-            directories = unique (
+            files = lib.unique cfg.root.files;
+            directories = lib.unique (
               [
                 "/var/log" # systemd journal is stored in /var/log/journal
                 "/var/lib/nixos" # for persisting user uids and gids
@@ -151,15 +135,15 @@
             );
 
             users.${user} = {
-              files = unique cfg.home.files;
-              directories = unique (
+              files = lib.unique cfg.home.files;
+              directories = lib.unique (
                 [
                   "Desktop"
                   "Documents"
                   "Pictures"
                   "projects"
                 ]
-                ++ optionals (host != "desktop") [
+                ++ lib.optionals (host != "desktop") [
                   "Downloads"
                 ]
                 ++ cfg.home.directories
@@ -171,12 +155,12 @@
           # e.g. npm, cargo cache etc, that could always be redownloaded
           "/cache" = {
             hideMounts = true;
-            files = unique cfg.root.cache.files;
-            directories = [ "/var/lib/systemd/coredump" ] ++ unique cfg.root.cache.directories;
+            files = lib.unique cfg.root.cache.files;
+            directories = [ "/var/lib/systemd/coredump" ] ++ lib.unique cfg.root.cache.directories;
 
             users.${user} = {
-              files = unique cfg.home.cache.files;
-              directories = unique cfg.home.cache.directories;
+              files = lib.unique cfg.home.cache.files;
+              directories = lib.unique cfg.home.cache.directories;
             };
           };
         };
@@ -196,7 +180,7 @@
               map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
               ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
           in
-          (allDirectories ++ allFiles) |> unique |> sort lessThan |> concatLines;
+          (allDirectories ++ allFiles) |> lib.unique |> lib.sort lib.lessThan |> lib.concatLines;
       };
     };
 }

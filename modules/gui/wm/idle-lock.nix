@@ -1,13 +1,4 @@
 { lib, self, ... }:
-let
-  inherit (lib)
-    assertMsg
-    getExe
-    mkEnableOption
-    mkIf
-    versionOlder
-    ;
-in
 {
   flake.nixosModules.core =
     { config, ... }:
@@ -16,7 +7,7 @@ in
     in
     {
       options.custom = {
-        lock.enable = mkEnableOption "screen locking of host" // {
+        lock.enable = lib.mkEnableOption "screen locking of host" // {
           default = isLaptop;
         };
 
@@ -68,9 +59,9 @@ in
       };
       lock = pkgs.writeShellApplication {
         name = "lock";
-        text = if config.custom.lock.enable then (getExe noctalia-lock) else (getExe dpms-off);
+        text = if config.custom.lock.enable then (lib.getExe noctalia-lock) else (lib.getExe dpms-off);
       };
-      lockCmd = getExe lock;
+      lockCmd = lib.getExe lock;
     in
     {
       environment.systemPackages = [
@@ -92,7 +83,7 @@ in
               {
                 timeout = 5 * 60;
                 on-timeout = lockCmd;
-                on-resume = getExe dpms-on;
+                on-resume = lib.getExe dpms-on;
               }
             ];
           };
@@ -102,7 +93,7 @@ in
           bind = [ "$mod_SHIFT_CTRL, x, exec, ${lockCmd}" ];
 
           # handle laptop lid
-          bindl = mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
+          bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lockCmd}" ];
         };
 
         niri.settings = {
@@ -125,7 +116,9 @@ in
 
       services.hypridle = {
         enable =
-          assert (assertMsg (versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper");
+          assert (
+            lib.assertMsg (lib.versionOlder pkgs.hypridle.version "0.1.8") "hypridle updated, use wrapper"
+          );
           true;
 
         # package =

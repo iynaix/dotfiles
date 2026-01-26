@@ -1,12 +1,5 @@
 { lib, ... }:
 let
-  inherit (lib)
-    elemAt
-    getExe
-    mkEnableOption
-    mkOption
-    mod
-    ;
   inherit (lib.types)
     attrs
     bool
@@ -25,26 +18,26 @@ in
 {
   flake.nixosModules.core = {
     options.custom = {
-      hardware.monitors = mkOption {
+      hardware.monitors = lib.mkOption {
         description = "Config for monitors";
         type = nonEmptyListOf (
           submodule (
             { config, ... }:
             {
               options = {
-                name = mkOption {
+                name = lib.mkOption {
                   type = str;
                   description = "The name of the display, e.g. eDP-1";
                 };
-                width = mkOption {
+                width = lib.mkOption {
                   type = int;
                   description = "Pixel width of the display";
                 };
-                height = mkOption {
+                height = lib.mkOption {
                   type = int;
                   description = "Pixel width of the display";
                 };
-                refreshRate = mkOption {
+                refreshRate = lib.mkOption {
                   type = oneOf [
                     int
                     str
@@ -52,43 +45,43 @@ in
                   default = 60;
                   description = "Refresh rate of the display";
                 };
-                positionX = mkOption {
+                positionX = lib.mkOption {
                   type = int;
                   default = 0;
                   description = "Position x coordinate of the display";
                 };
-                positionY = mkOption {
+                positionY = lib.mkOption {
                   type = int;
                   default = 0;
                   description = "Position y coordinate of the display";
                 };
-                scale = mkOption {
+                scale = lib.mkOption {
                   type = float;
                   default = 1.0;
                 };
-                vrr = mkEnableOption "Variable Refresh Rate";
-                transform = mkOption {
+                vrr = lib.mkEnableOption "Variable Refresh Rate";
+                transform = lib.mkOption {
                   type = int;
                   description = "Transform for rotation";
                   default = 0;
                 };
-                workspaces = mkOption {
+                workspaces = lib.mkOption {
                   type = nonEmptyListOf int;
                   description = "List of workspace numbers";
                 };
-                defaultWorkspace = mkOption {
+                defaultWorkspace = lib.mkOption {
                   type = enum config.workspaces;
-                  default = elemAt config.workspaces 0;
+                  default = lib.elemAt config.workspaces 0;
                   description = "Default workspace for this monitor";
                 };
-                extraHyprlandConfig = mkOption {
+                extraHyprlandConfig = lib.mkOption {
                   type = attrs;
                   default = { };
                   description = "Extra monitor config for hyprland";
                 };
-                isVertical = mkOption {
+                isVertical = lib.mkOption {
                   type = bool;
-                  default = mod config.transform 2 == 1;
+                  default = lib.mod config.transform 2 == 1;
                   description = "Whether the monitor is vertical";
                   readOnly = true;
                 };
@@ -99,36 +92,36 @@ in
         default = [ ];
       };
 
-      startup = mkOption {
+      startup = lib.mkOption {
         description = "Programs to run on startup";
         type = listOf (oneOf [
           str
           (submodule {
             options = {
-              app-id = mkOption {
+              app-id = lib.mkOption {
                 type = nullOr str;
                 description = "The app-id (class) of the program to start";
                 default = null;
               };
-              enable = mkEnableOption "Rule" // {
+              enable = lib.mkEnableOption "Rule" // {
                 default = true;
               };
-              title = mkOption {
+              title = lib.mkOption {
                 type = nullOr str;
                 description = "The window title of the program to start, for differentiating between multiple instances";
                 default = null;
               };
-              spawn = mkOption {
+              spawn = lib.mkOption {
                 type = listOf str;
                 description = "Command to execute";
                 default = null;
               };
-              workspace = mkOption {
+              workspace = lib.mkOption {
                 type = nullOr int;
-                description = "Optional workspace to start program on";
+                description = "lib.Optional workspace to start program on";
                 default = null;
               };
-              niriArgs = mkOption {
+              niriArgs = lib.mkOption {
                 type = lines;
                 description = "Extra arguments for niri window rules";
                 default = "";
@@ -139,7 +132,7 @@ in
         default = [ ];
       };
 
-      startupServices = mkOption {
+      startupServices = lib.mkOption {
         description = "Services to start after the WM is initialized";
         type = listOf str;
         default = [ ];
@@ -164,7 +157,7 @@ in
           {
             app-id = "helium";
             spawn = [
-              (getExe (
+              (lib.getExe (
                 pkgs.writeShellApplication {
                   name = "init-helium";
                   runtimeInputs = [
@@ -242,7 +235,7 @@ in
             # fix gparted "cannot open display: :0" error
             {
               spawn = [
-                (getExe pkgs.xorg.xhost)
+                (lib.getExe pkgs.xorg.xhost)
                 "+local:${user}"
               ];
             }
@@ -250,7 +243,7 @@ in
             # fix Authorization required, but no authorization protocol specified error
             {
               spawn = [
-                (getExe pkgs.xorg.xhost)
+                (lib.getExe pkgs.xorg.xhost)
                 "si:localuser:root"
               ];
             }

@@ -1,9 +1,7 @@
+{ lib, ... }:
 {
   flake.nixosModules.core =
-    { lib, pkgs, ... }:
-    let
-      inherit (lib) concatStrings getExe;
-    in
+    { pkgs, ... }:
     {
       programs = {
         starship = {
@@ -18,7 +16,7 @@
             in
             {
               add_newline = false;
-              format = concatStrings [
+              format = lib.concatStrings [
                 # begin left format
                 "$username"
                 "$hostname"
@@ -107,7 +105,7 @@
           '';
           interactiveShellInit = /* fish */ ''
             function starship_transient_prompt_func
-              ${getExe pkgs.starship} module character
+              ${lib.getExe pkgs.starship} module character
             end
           '';
         };

@@ -1,31 +1,22 @@
 { lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-
-      ...
-    }:
+    { config, ... }:
     let
-      inherit (lib)
-        filter
-        hasInfix
-        mkForce
-        mkMerge
-        mkOption
-        ;
       inherit (config.custom.constants) user;
     in
     {
       # silence warning about setting multiple user password options
       # https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990
       options = {
-        warnings = mkOption {
-          apply = filter (w: !(hasInfix "If multiple of these password options are set at the same time" w));
+        warnings = lib.mkOption {
+          apply = lib.filter (
+            w: !(lib.hasInfix "If multiple of these password options are set at the same time" w)
+          );
         };
       };
 
-      config = mkMerge [
+      config = lib.mkMerge [
         {
           users = {
             mutableUsers = false; # set to true if *NOT* using impermanence
@@ -62,8 +53,8 @@
           # create a password with for root and $user with:
           # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
           users.users = {
-            root.hashedPasswordFile = mkForce config.sops.secrets.rp.path;
-            ${user}.hashedPasswordFile = mkForce config.sops.secrets.up.path;
+            root.hashedPasswordFile = lib.mkForce config.sops.secrets.rp.path;
+            ${user}.hashedPasswordFile = lib.mkForce config.sops.secrets.up.path;
           };
         }
       ];
