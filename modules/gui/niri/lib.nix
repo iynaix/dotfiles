@@ -14,8 +14,9 @@ let
       lib.mapAttrsToList (
         bind: bindOptions:
         let
-          parameters = lib.pipe bindOptions.parameters [
-            (lib.mapAttrs (
+          parameters =
+            bindOptions.parameters
+            |> lib.mapAttrs (
               _: value:
               if lib.isBool value then
                 lib.boolToString value
@@ -25,10 +26,9 @@ let
                 "null"
               else
                 ''"${value}"''
-            ))
-            (lib.mapAttrsToList (name: value: "${name}=${value}"))
-            (lib.concatStringsSep " ")
-          ];
+            )
+            |> lib.mapAttrsToList (name: value: "${name}=${value}")
+            |> lib.concatStringsSep " ";
           action =
             let
               spawnIsNull = isNull bindOptions.spawn;
@@ -214,10 +214,7 @@ in
             else
               "\"${inputs.hjem.hjem-lib.${config.pkgs.stdenv.hostPlatform.system}.toEnv var}\"";
         in
-        lib.pipe cfg.extraVariables [
-          (lib.mapAttrsToList (n: v: n + " ${toNiriEnv v}"))
-          (lib.concatStringsSep "\n")
-        ];
+        cfg.extraVariables |> lib.mapAttrsToList (n: v: n + " ${toNiriEnv v}") |> lib.concatStringsSep "\n";
 
       niriConf = lib.concatStringsSep "\n" [
         (lib.optionalString (cfg.extraVariables != { }) ''

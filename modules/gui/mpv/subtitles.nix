@@ -27,7 +27,7 @@
             runtimeInputs = [ pkgs.whisper-ctranslate2 ];
             # int8 is the fastest on cpu, according to the project page
             text = /* sh */ ''
-              whisper-ctranslate2 ---language en --output_format srt --compute_type int8 --model medium "$@"
+              whisper-ctranslate2 --language en --output_format srt --compute_type int8 --model medium "$@"
             '';
           };
         };

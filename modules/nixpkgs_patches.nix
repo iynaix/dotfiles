@@ -4,14 +4,14 @@
     # use unstable ly to fix incorrect session being selected
     # https://codeberg.org/fairyglade/ly/issues/911
     {
-      url = "https://github.com/NixOS/nixpkgs/commit/b07a099e213a916200722457f6d49d7e2736d9c0.patch";
-      hash = "sha256-Ilsel16dblyGxum27ihUCJW9fT9VSrPwrC8oEf/AY7o=";
+      url = "https://github.com/NixOS/nixpkgs/commit/7c7c50758f95b2df0d897db84a0ac879f2499d82.patch";
+      hash = "sha256-yQkTFCPuF27zmYaz8vECGxDXH/xLZfPcPqQBIyAursM=";
     }
     # autologin support for ly module
     # https://github.com/NixOS/nixpkgs/pull/473013
     {
-      url = "https://github.com/NixOS/nixpkgs/pull/473013/commits/e60ab309b46f2a9e8d93bb0465db469856a786bb.patch";
-      hash = "sha256-BEHv3ToUqjFqW2JJti5/TjPJEEVTn4B1hK58zycfezI=";
+      url = "https://github.com/NixOS/nixpkgs/pull/473013.patch";
+      hash = "sha256-eHDeWYamHuzO29Wg4zEEQYaK5XdmH1bi+nRtq+83aYc=";
     }
     # orca-slicer 2.3.2-dev
     # https://github.com/NixOS/nixpkgs/pull/480799
