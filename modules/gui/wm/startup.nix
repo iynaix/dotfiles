@@ -203,7 +203,7 @@
               termExe
               "--class=${app-id}"
             ];
-            workspace = 10;
+            workspace = 8;
           }
           rec {
             enable = host == "desktop";
@@ -215,7 +215,7 @@
               "nvim"
               "${config.hj.directory}/Desktop/yt.txt"
             ];
-            workspace = 10;
+            workspace = 8;
           }
           /*
             # fix gparted "cannot open display: :0" error

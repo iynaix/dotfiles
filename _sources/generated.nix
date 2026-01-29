@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.8.3.1";
+    version = "0.8.4.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.8.3.1/helium-0.8.3.1-x86_64.AppImage";
-      sha256 = "sha256-GGltZ0/6rGQJixlGz3Na/vAwOlTeUR87WGyAPpLmtKM=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.8.4.1/helium-0.8.4.1-x86_64.AppImage";
+      sha256 = "sha256-y4KzR+pkBUuyVU+ALrzdY0n2rnTB7lTN2ZmVSzag5vE=";
     };
   };
   mpv-cut = {
@@ -115,15 +115,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "e07bf41442a7f6fdd003069f380e1ae469a86211";
+    version = "230b9c6055a3144f6974fef297ad1a91b46a6aac";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "e07bf41442a7f6fdd003069f380e1ae469a86211";
+      rev = "230b9c6055a3144f6974fef297ad1a91b46a6aac";
       fetchSubmodules = false;
-      sha256 = "sha256-aC8DUZpzNHEf9MW3tX3XcDYY/mWClAHkw+nZaxDQHp8=";
+      sha256 = "sha256-dd2PWWi/HsdLWEUci5lP+Vc2IABtpEleaR/aMFUC3Qw=";
     };
-    date = "2026-01-26";
+    date = "2026-02-01";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
@@ -139,13 +139,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2025.12.08";
+    version = "2026.01.31";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2025.12.08";
+      rev = "2026.01.31";
       fetchSubmodules = false;
-      sha256 = "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=";
+      sha256 = "sha256-3sXXyWuQI6KTOQIkkOfJhCTBBh3Zkv59ENhkrz9Sgxc=";
     };
   };
 }

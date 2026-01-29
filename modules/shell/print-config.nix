@@ -37,7 +37,7 @@
                 case "$1" in
                     ${ifBlocks}
                     *)
-                        echo "Error: Configuration for 'PROGRAM' not found or supported."
+                        echo "Error: Configuration for '$1' not found or supported."
                         echo "Supported: ${bashProgsStr}"
                         exit 1
                         ;;

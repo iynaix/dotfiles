@@ -35,15 +35,17 @@
   };
 
   flake.nixosModules.wm =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.constants) dots isVm;
     in
     {
-      programs.mango = {
-        enable = true;
-        package = inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.mango;
-      };
+      # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
+      imports = [
+        "${inputs.nixpkgs}/nixos/modules/programs/wayland/mangowc.nix"
+      ];
+
+      programs.mangowc.enable = true;
 
       # write the settings to home directory
       hj.xdg.config.files."mango/config.conf" = {
@@ -57,22 +59,6 @@
           # temporarily source raw config directly for quick edits
           + "source=${dots}/modules/gui/mango/mango.conf";
         type = "copy";
-      };
-
-      # TODO: startup scripts?
-
-      systemd.user.targets.mango-session = {
-        unitConfig = {
-          Description = "mango compositor session";
-          Documentation = [ "man:systemd.special(7)" ];
-          BindsTo = [ "graphical-session.target" ];
-          Wants = [
-            "graphical-session-pre.target"
-          ];
-          # ++ lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
-          After = [ "graphical-session-pre.target" ];
-          # Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
-        };
       };
 
       custom.programs = {
@@ -104,9 +90,13 @@
                   "monitor_name:${mon.name}"
                   "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
                 ]
-              ) (lib.range 1 10)
+              ) (lib.range 1 9)
             ) config.custom.hardware.monitors
           );
+        };
+
+        print-config = {
+          mango = /* sh */ ''cat "${config.hj.xdg.config.directory}/mango/config.conf" "${dots}/modules/gui/mango/mango.conf"'';
         };
       };
     };

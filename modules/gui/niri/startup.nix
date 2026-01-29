@@ -5,9 +5,10 @@
     {
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = lib.mkMerge (
-        (map (
-          startup:
-          (lib.mkIf startup.enable {
+        (
+          config.custom.startup
+          |> lib.filter (startup: startup.enable)
+          |> map (startup: {
             spawn-at-startup = [ startup.spawn ];
             config = # kdl
               lib.mkIf (startup.app-id != null || startup.title != null) ''
@@ -20,7 +21,7 @@
                 }
               '';
           })
-        ) config.custom.startup)
+        )
         ++ [
           # focus default workspace for each monitor
           {

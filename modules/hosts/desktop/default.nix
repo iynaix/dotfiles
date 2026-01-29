@@ -81,7 +81,7 @@
         specialisation = {
           niri.enable = true;
           hyprland.enable = true;
-          mango.enable = false;
+          mango.enable = true;
         };
 
         hardware = {
@@ -187,7 +187,7 @@
       services = {
         displayManager = {
           autoLogin.user = user;
-          defaultSession = "niri";
+          defaultSession = "hyprland";
         };
 
         pipewire = {

@@ -42,7 +42,6 @@ let
         # alias for hjem
         (inputs.nixpkgs.lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.noctalia.nixosModules.default
-        inputs.mango.nixosModules.mango
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops
         extraConfig

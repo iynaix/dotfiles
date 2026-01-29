@@ -58,7 +58,7 @@
             # woke poe1 / poe2 trade
             "match:title (Awakened PoE Trade), tag +apt"
             "match:title (Exiled Exchange 2), tag +apt"
-            "match:tag apt, no_blur on, no_shadow on, border_size 0"
+            "match:tag apt, float on, no_blur on, no_shadow on, no_focus on, render_unfocused on, border_size 0"
           ];
         };
 

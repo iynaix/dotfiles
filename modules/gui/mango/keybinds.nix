@@ -26,7 +26,7 @@
       custom.programs.mango.settings = {
         bind = [
           "$mod, Return, spawn, ghostty"
-          "$mod+SHIFT, Return, spawn, rofi -show drun"
+          "$mod+SHIFT, Return, spawn, noctalia-ipc launcher toggle"
 
           "$mod, BackSpace, killclient, "
 
@@ -41,7 +41,7 @@
           "$mod+Shift, w, spawn, helium --incognito"
 
           "$mod, v, spawn, ${termExec [ "nvim" ]}"
-          "$mod+Shift, v, spawn, rofi-edit-proj"
+          "$mod+Shift, v, spawn, noctalia-ipc plugin:projects toggle"
 
           # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
           "$mod, period, spawn, codium ${config.hj.directory}/projects/dotfiles"
@@ -49,10 +49,38 @@
 
           # exit mango
           "ALT, F4, quit,"
-          "CTRL+ALT, Delete, spawn, rofi-power-menu"
+          "CTRL+ALT, Delete, spawn, noctalia-ipc sessionMenu toggle"
+
+          # toggle the bar
+          "$mod, a, spawn, noctalia-ipc bar toggle"
+
+          # restart noctalia
+          "$mod_SHIFT, a, spawn, noctalia-shell-reload"
 
           # clipboard history
-          "$mod+CTRL, v, spawn, rofi-clipboard-history"
+          "$mod+CTRL, v, spawn, noctalia-ipc launcher clipboard"
+
+          # notification history
+          "$mod, n, exec, noctalia-ipc notifications toggleHistory"
+
+          # fullscreen
+          "$mod, f, togglefullscreen,"
+
+          # sticky
+          "$mod, g, togglefloating"
+
+          # sticky
+          "$mod, s, toggleglobal"
+
+          # switch layout
+          "$mod+SHIFT, n, switch_layout"
+
+          "$mod, o, toggleoverview"
+
+          # audio
+          ",XF86AudioLowerVolume, spawn, pamixer -d 5"
+          ",XF86AudioRaiseVolume, spawn, pamixer -i 5"
+          ",XF86AudioMute, spawn, pamixer -t"
         ]
         ++
           # tag keybinds, switch to monitor first before switching tag
@@ -64,11 +92,15 @@
                 key,
                 ...
               }:
+              let
+                # there are only 9 tags
+                wksp = if workspace == "10" then "8" else workspace;
+              in
               [
                 # Switch workspaces with $mod + [0-9]
-                "$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${workspace}"
+                "$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${wksp}"
                 # Move active window to a workspace with $mod + SHIFT + [0-9]
-                "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${workspace}"
+                "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${wksp}"
               ]
             ))
               config.custom.hardware.monitors

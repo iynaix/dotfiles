@@ -21,7 +21,7 @@
             rules = lib.optionalString (workspace != null) "[workspace ${toString workspace} silent]";
             exec = lib.concatStringsSep " " spawn;
           in
-          if enable then "${rules} ${exec}" else ""
+          lib.optionalString enable "${rules} ${exec}"
         ) config.custom.startup;
       };
 

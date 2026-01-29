@@ -43,7 +43,7 @@
           elif [ "$XDG_CURRENT_DESKTOP" = "niri" ]; then
               niri msg action power-on-monitors
           fi
-          # TODO: mango?
+          # TODO: mango: togglemonitor?
         '';
       };
       dpms-off = pkgs.writeShellApplication {
@@ -54,7 +54,7 @@
           elif [ "$XDG_CURRENT_DESKTOP" = "niri" ]; then
               niri msg action power-off-monitors
           fi
-          # TODO: mango?
+          # TODO: mango: togglemonitor?
         '';
       };
       lock = pkgs.writeShellApplication {
@@ -108,9 +108,8 @@
           '';
         };
 
-        # TODO: mango doesn't support switch events yet?
         mango.settings = {
-          bind = [ "$mod+SHIFT+CTRL, x, ${lockCmd}" ];
+          bind = [ "$mod+SHIFT+CTRL, x, spawn, ${lockCmd}" ];
         };
       };
 
