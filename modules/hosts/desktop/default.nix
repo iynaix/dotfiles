@@ -81,7 +81,7 @@
         specialisation = {
           niri.enable = true;
           hyprland.enable = true;
-          mango.enable = false;
+          mango.enable = true;
         };
 
         hardware = {
@@ -228,5 +228,9 @@
       environment.systemPackages = [
         toggle-speaker
       ];
+
+      specialisation.mango.configuration = {
+        services.displayManager.ly.enable = lib.mkForce false;
+      };
     };
 }

@@ -218,8 +218,8 @@ in
                   cursor-theme = gtkCfg.cursor.name;
                   cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
                   font-name = "${gtkCfg.font.name} 10";
-                  gtk-theme = "Tokyonight-Dark-Compact";
-                  icon-theme = "Tela-${defaultAccent}-dark";
+                  gtk-theme = gtkCfg.theme.name;
+                  icon-theme = gtkCfg.iconTheme.name;
                   # disable middle click paste
                   gtk-enable-primary-paste = false;
                 };

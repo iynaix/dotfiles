@@ -25,6 +25,10 @@ in
           "--output" = "%(title)s.%(ext)s";
           "--sponsorblock-mark" = "all";
           "--windows-filenames" = true;
+          # youtube causing 403 errors
+          # https://github.com/yt-dlp/yt-dlp/issues/15712#issuecomment-3808702603
+          # PR: https://github.com/yt-dlp/yt-dlp/pull/15726
+          "--extractor-args" = "youtube:player_client=default,-android_sdkless";
         };
       };
     };

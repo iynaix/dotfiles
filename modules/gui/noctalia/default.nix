@@ -133,6 +133,9 @@
                 enabled = true;
                 sourceUrl = my-plugins;
               };
+              focal = {
+                enabled = true;
+              };
             };
             version = 2;
           };

@@ -35,15 +35,17 @@
   };
 
   flake.nixosModules.wm =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.constants) dots isVm;
     in
     {
-      programs.mango = {
-        enable = true;
-        package = inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.mango;
-      };
+      # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
+      imports = [
+        "${inputs.nixpkgs}/nixos/modules/programs/wayland/mangowc.nix"
+      ];
+
+      programs.mangowc.enable = true;
 
       # write the settings to home directory
       hj.xdg.config.files."mango/config.conf" = {
@@ -61,52 +63,56 @@
 
       # TODO: startup scripts?
 
-      systemd.user.targets.mango-session = {
-        unitConfig = {
-          Description = "mango compositor session";
-          Documentation = [ "man:systemd.special(7)" ];
-          BindsTo = [ "graphical-session.target" ];
-          Wants = [
-            "graphical-session-pre.target"
-          ];
-          # ++ lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
-          After = [ "graphical-session-pre.target" ];
-          # Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
-        };
-      };
+      # systemd.user.targets.mango-session = {
+      #   unitConfig = {
+      #     Description = "mango compositor session";
+      #     Documentation = [ "man:systemd.special(7)" ];
+      #     BindsTo = [ "graphical-session.target" ];
+      #     Wants = [
+      #       "graphical-session-pre.target"
+      #     ];
+      #     # ++ lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+      #     After = [ "graphical-session-pre.target" ];
+      #     # Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+      #   };
+      # };
 
       custom.programs = {
-        mango.settings = {
-          monitorrule = map (
-            mon:
-            lib.concatMapStringsSep "," toString [
-              mon.name
-              0.5 # mfact
-              1 # nmaster
-              "tile" # layout
-              mon.transform
-              mon.scale
-              mon.positionX
-              mon.positionY
-              mon.width
-              mon.height
-              mon.refreshRate
-            ]
-          ) config.custom.hardware.monitors;
+        # mango.settings = {
+        #   monitorrule = map (
+        #     mon:
+        #     lib.concatMapStringsSep "," toString [
+        #       mon.name
+        #       0.5 # mfact
+        #       1 # nmaster
+        #       "tile" # layout
+        #       mon.transform
+        #       mon.scale
+        #       mon.positionX
+        #       mon.positionY
+        #       mon.width
+        #       mon.height
+        #       mon.refreshRate
+        #     ]
+        #   ) config.custom.hardware.monitors;
 
-          tagrule = lib.flatten (
-            map (
-              mon:
-              map (
-                wksp:
-                lib.concatMapStringsSep "," toString [
-                  "id:${toString wksp}"
-                  "monitor_name:${mon.name}"
-                  "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
-                ]
-              ) (lib.range 1 10)
-            ) config.custom.hardware.monitors
-          );
+        #   tagrule = lib.flatten (
+        #     map (
+        #       mon:
+        #       map (
+        #         wksp:
+        #         lib.concatMapStringsSep "," toString [
+        #           "id:${toString wksp}"
+        #           "monitor_name:${mon.name}"
+        #           "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
+        #         ]
+        #       ) (lib.range 1 10)
+        #     ) config.custom.hardware.monitors
+        #   );
+        # };
+
+        print-config = {
+          mango = /* sh */ ''cat "${config.hj.xdg.config.directory}/mango/config.conf" "${dots}/modules/gui/mango/mango.conf"'';
         };
       };
     };

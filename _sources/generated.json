@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-GGltZ0/6rGQJixlGz3Na/vAwOlTeUR87WGyAPpLmtKM=",
+            "sha256": "sha256-y4KzR+pkBUuyVU+ALrzdY0n2rnTB7lTN2ZmVSzag5vE=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.3.1/helium-0.8.3.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.8.4.1/helium-0.8.4.1-x86_64.AppImage"
         },
-        "version": "0.8.3.1"
+        "version": "0.8.4.1"
     },
     "mpv-cut": {
         "cargoLock": null,
@@ -193,7 +193,7 @@
     },
     "yazi-plugins": {
         "cargoLock": null,
-        "date": "2026-01-26",
+        "date": "2026-01-29",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -205,12 +205,12 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "e07bf41442a7f6fdd003069f380e1ae469a86211",
-            "sha256": "sha256-aC8DUZpzNHEf9MW3tX3XcDYY/mWClAHkw+nZaxDQHp8=",
+            "rev": "6f50636be808bd0455b7d58f62bbbb143e2f747a",
+            "sha256": "sha256-4eytBRdyARGnnZHiuZ9wSPPyG/sTy5/gfARmTSuSKdo=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "e07bf41442a7f6fdd003069f380e1ae469a86211"
+        "version": "6f50636be808bd0455b7d58f62bbbb143e2f747a"
     },
     "yazi-time-travel": {
         "cargoLock": null,
