@@ -24,6 +24,7 @@
             rust-analyzer
             rustfmt
             clippy
+            cargo-edit # cargo upgrade command
           ];
         };
       });

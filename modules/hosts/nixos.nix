@@ -14,13 +14,7 @@ let
       extraConfig ? { },
     }:
     let
-      nixpkgs-bootstrap = import inputs.nixpkgs { inherit system; };
-      # apply patches from nixpkgs
-      nixpkgs-patched = nixpkgs-bootstrap.applyPatches {
-        name = "nixpkgs-iynaix";
-        src = inputs.nixpkgs;
-        patches = map nixpkgs-bootstrap.fetchpatch self.patches;
-      };
+      nixpkgs-patched = self.libCustom.nixpkgsWithPatchesFor system;
       nixosSystem = import (nixpkgs-patched + "/nixos/lib/eval-config.nix");
     in
     nixosSystem {

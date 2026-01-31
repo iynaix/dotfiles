@@ -10,6 +10,7 @@
   distro-grub-themes-nixos = pkgs.callPackage ./distro-grub-themes-nixos { };
 
   awakened-poe-trade = pkgs.callPackage ./awakened-poe-trade { };
+  awakened-poe-trade-2 = pkgs.callPackage ./awakened-poe-trade-2 { };
   exiled-exchange-2 = pkgs.callPackage ./exiled-exchange-2 { };
 
   helium = pkgs.callPackage ./helium { };

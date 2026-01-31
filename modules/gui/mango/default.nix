@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   self,
   ...
@@ -40,11 +39,6 @@
       inherit (config.custom.constants) dots isVm;
     in
     {
-      # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
-      imports = [
-        "${inputs.nixpkgs}/nixos/modules/programs/wayland/mangowc.nix"
-      ];
-
       programs.mangowc.enable = true;
 
       # write the settings to home directory

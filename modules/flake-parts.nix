@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 {
   imports = [ inputs.flake-parts.flakeModules.modules ];
 
@@ -11,8 +16,18 @@
   ];
 
   perSystem =
-    { pkgs, ... }:
+    { system, ... }:
+    let
+      nixpkgs-patched = self.libCustom.nixpkgsWithPatchesFor system;
+      pkgs = import nixpkgs-patched {
+        inherit system;
+        config.allowUnfree = true;
+      };
+    in
     {
+      # initialize the pkgs for perSystem to be the patched nixpkgs
+      _module.args = { inherit pkgs; };
+
       formatter = pkgs.nixfmt;
       packages = (import ../packages) { inherit inputs pkgs; };
     };
