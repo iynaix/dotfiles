@@ -4,47 +4,50 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm user;
-      toggle-speaker = pkgs.writeShellScriptBin "toggle-speaker" /* sh */ ''
-        # Device names
-        KANTO="ORA"
-        TOPPING="DX5"
+      toggle-speaker = pkgs.writeShellApplication {
+        name = "toggle-speaker";
+        text = /* sh */ ''
+          # Device names
+          KANTO="ORA"
+          TOPPING="DX5"
 
-        # Get current default sink with asterisk
-        current_line=$(wpctl status | grep -A 20 "Sinks:" | grep "\*")
+          # Get current default sink with asterisk
+          current_line=$(wpctl status | grep -A 20 "Sinks:" | grep "\*")
 
-        if [ -z "$current_line" ]; then
-            echo "Could not determine current audio sink"
-            exit 1
-        fi
+          if [ -z "$current_line" ]; then
+              echo "Could not determine current audio sink"
+              exit 1
+          fi
 
-        # Determine which device to switch to
-        if echo "$current_line" | grep -q "Kanto"; then
-            target_device="$TOPPING"
-            friendly_name="Headphones"
-        elif echo "$current_line" | grep -q "DX5"; then
-            target_device="$KANTO"
-            friendly_name="Speakers"
-        else
-            echo "Current device is neither Kanto nor Topping, defaulting to KANTO"
-            target_device="$KANTO"
-            friendly_name="Speakers"
-        fi
+          # Determine which device to switch to
+          if echo "$current_line" | grep -q "Kanto"; then
+              target_device="$TOPPING"
+              friendly_name="Headphones"
+          elif echo "$current_line" | grep -q "DX5"; then
+              target_device="$KANTO"
+              friendly_name="Speakers"
+          else
+              echo "Current device is neither Kanto nor Topping, defaulting to KANTO"
+              target_device="$KANTO"
+              friendly_name="Speakers"
+          fi
 
-        echo "TARGET DEVICE: $target_device"
+          echo "TARGET DEVICE: $target_device"
 
-        # Get the sink ID for the target device
-        sink_id=$(wpctl status | grep -A 20 "Sinks:" | grep "$target_device" | awk '{print $2}' | grep -oP '[0-9]+' | head -1)
+          # Get the sink ID for the target device
+          sink_id=$(wpctl status | grep -A 20 "Sinks:" | grep "$target_device" | awk '{print $2}' | grep -oP '[0-9]+' | head -1)
 
-        if [ -z "$sink_id" ]; then
-            noctalia-ipc toast send "{\"title\": \"Unable to switch to $friendly_name\", \"type\": \"warning\"}"
-            exit 1
-        fi
+          if [ -z "$sink_id" ]; then
+              noctalia-ipc toast send "{\"title\": \"Unable to switch to $friendly_name\", \"type\": \"warning\"}"
+              exit 1
+          fi
 
-        # Set as default
-        wpctl set-default "$sink_id"
+          # Set as default
+          wpctl set-default "$sink_id"
 
-        noctalia-ipc toast send "{\"title\": \"Switched audio output to $friendly_name\"}"
-      '';
+          noctalia-ipc toast send "{\"title\": \"Switched audio output to $friendly_name\"}"
+        '';
+      };
     in
     {
       imports = with topLevel.config.flake.nixosModules; [

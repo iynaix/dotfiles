@@ -122,6 +122,7 @@ in
                 pkgs = prev;
                 rocmSupport = host == "desktop" || host == "framework";
                 extraSettings = {
+                  color_theme = "noctalia";
                   disks_filter = lib.concatStringsSep " " (
                     [
                       "/"

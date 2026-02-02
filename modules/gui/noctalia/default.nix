@@ -34,6 +34,8 @@
               ./face-aware-crop.patch
               # battery and volume widgets that use the primary color instead of white
               ./mprimary-bar-widgets.patch
+              # remove transparency from zathura template
+              ./zathura-transparency.patch
             ];
 
             postPatch = /* sh */ ''

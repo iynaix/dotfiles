@@ -1,0 +1,10 @@
+diff --git a/Assets/Templates/zathurarc b/Assets/Templates/zathurarc
+index 248a52cc..e64cc776 100644
+--- a/Assets/Templates/zathurarc
++++ b/Assets/Templates/zathurarc
+@@ -1,4 +1,4 @@
+-set default-bg              "{{colors.surface.default.rgba | set_alpha: 0.8}}"
++set default-bg              "{{colors.surface.default.hex}}"
+ set default-fg              "{{colors.on_surface.default.hex}}"
+ set recolor-lightcolor      "rgba(0,0,0,0)"
+ set recolor-darkcolor       "{{colors.on_surface.default.hex}}"

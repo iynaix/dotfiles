@@ -1,41 +1,29 @@
-{ inputs, self, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  inputs,
+  lib,
+  self,
+  ...
+}:
+let
+  zathuraOptions = {
+    extraSettings = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = ''
+        Extra settings to add to {file}`zathurarc` file.
+        See <https://man.archlinux.org/man/zathurarc.5> for options.
+      '';
+    };
+  };
+in
+{
+  flake.wrapperModules.zathura = inputs.wrappers.lib.wrapModule (
+    { config, ... }:
     let
-      zathuraConf = pkgs.writeTextFile {
+      zathuraConf = config.pkgs.writeTextFile {
         name = "zathurarc";
+        destination = "/zathurarc"; # zathura expects a directory
         text = ''
-            set default-bg                  "#414868"
-            set default-fg                  "#F7768E"
-
-            set statusbar-fg                "#7AA2F7"
-            set statusbar-bg                "#9ECE6A"
-
-            set inputbar-bg                 "#414868"
-            set inputbar-fg                 "#A9B1D6"
-
-            set notification-bg             "#414868"
-            set notification-fg             "#A9B1D6"
-
-            set notification-error-bg       "#414868"
-            set notification-error-fg       "#414868"
-
-            set notification-warning-bg     "#414868"
-            set notification-warning-fg     "#414868"
-
-            set highlight-color             "rgba(158,206,106,0.5)"
-            set highlight-active-color      "rgba(187,154,247,0.5)"
-
-            set completion-bg               "#F7768E"
-            set completion-fg               "#BB9AF7"
-
-            set completion-highlight-fg     "#A9B1D6"
-            set completion-highlight-bg     "#BB9AF7"
-
-            set recolor-lightcolor          "#414868"
-            set recolor-darkcolor           "#7DCFFF"
-
           set adjust-open	"best-fit"
           set page-padding	"1"
           set recolor	"true"
@@ -50,26 +38,48 @@
           map p   print
           map r   reload
           map u   scroll half-up
+
+          ${config.extraSettings}
         '';
-        destination = "/zathurarc";
       };
     in
     {
-      packages.zathura' = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.zathura;
-        flags = {
-          "--config-dir" = toString zathuraConf;
-        };
-      };
-    };
+      options = zathuraOptions;
 
-  flake.nixosModules.gui =
+      config.package = lib.mkDefault config.pkgs.zathura;
+      config.flags = {
+        "--config-dir" = toString zathuraConf;
+      };
+    }
+  );
+
+  perSystem =
     { pkgs, ... }:
     {
+      packages.zathura' = (self.wrapperModules.zathura.apply { inherit pkgs; }).wrapper;
+    };
+
+  flake.nixosModules.core = {
+    options.custom = {
+      programs.zathura = zathuraOptions;
+    };
+  };
+
+  flake.nixosModules.gui =
+    { config, pkgs, ... }:
+    let
+      noctaliaColors = "${config.hj.xdg.config.directory}/zathura/noctaliarc";
+    in
+    {
       nixpkgs.overlays = [
-        (_: _prev: {
-          zathura = self.packages.${pkgs.stdenv.hostPlatform.system}.zathura';
+        (_: prev: {
+          zathura =
+            (self.wrapperModules.zathura.apply {
+              pkgs = prev;
+              extraSettings = ''
+                include ${noctaliaColors}
+              '';
+            }).wrapper;
         })
       ];
 
@@ -82,7 +92,7 @@
       };
 
       custom.programs.print-config = {
-        zathura = /* sh */ ''cat "${pkgs.zathura.flags."--config-dir"}/zathurarc"'';
+        zathura = /* sh */ ''cat "${pkgs.zathura.flags."--config-dir"}/zathurarc" "${noctaliaColors}"'';
       };
     };
 }

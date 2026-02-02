@@ -1,4 +1,4 @@
-From 2f49ac439fd42c1714e5bf9d292ec046d292559c Mon Sep 17 00:00:00 2001
+From d6d48967fa1a78c20a75cb1c52c6e1a46f909fa2 Mon Sep 17 00:00:00 2001
 From: Lin Xianyi <iynaix@gmail.com>
 Date: Fri, 23 Jan 2026 15:30:25 +0800
 Subject: [PATCH] ly: 1.3.1 -> 1.4.0-unstable-2026-01-18
@@ -53,18 +53,17 @@ index 689a3a413c71..c24cc929737e 100644
    }
  ]
 diff --git a/pkgs/by-name/ly/ly/package.nix b/pkgs/by-name/ly/ly/package.nix
-index 5119ca1660ad..d691c6d3e757 100644
+index 7b937ad12d5e..5d189f8842ae 100644
 --- a/pkgs/by-name/ly/ly/package.nix
 +++ b/pkgs/by-name/ly/ly/package.nix
-@@ -17,14 +17,14 @@ let
+@@ -17,13 +17,13 @@ let
  in
  stdenv.mkDerivation (finalAttrs: {
    pname = "ly";
 -  version = "1.3.1";
 +  version = "1.4.0";
- 
-   src = fetchFromGitea {
-     domain = "codeberg.org";
+
+   src = fetchFromCodeberg {
      owner = "fairyglade";
      repo = "ly";
 -    tag = "v${finalAttrs.version}";
@@ -72,8 +71,7 @@ index 5119ca1660ad..d691c6d3e757 100644
 +    rev = "b672d04dc6097505cfc23c531c5e868517c260f7";
 +    hash = "sha256-Nn5Hl8bC03sFST249maA4zL/ct8DH69TIAbDAVSMxDo=";
    };
- 
-   nativeBuildInputs = [
--- 
-2.52.0
 
+   nativeBuildInputs = [
+--
+2.52.0

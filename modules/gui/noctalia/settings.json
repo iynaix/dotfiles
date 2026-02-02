@@ -1,6 +1,7 @@
 {
-  "settingsVersion": 42,
+  "settingsVersion": 46,
   "bar": {
+    "barType": "simple",
     "position": "top",
     "monitors": [],
     "density": "default",
@@ -12,9 +13,13 @@
     "floating": false,
     "marginVertical": 5,
     "marginHorizontal": 5,
+    "frameThickness": 8,
+    "frameRadius": 12,
     "outerCorners": false,
-    "exclusive": true,
     "hideOnOverview": true,
+    "displayMode": "always_visible",
+    "autoHideDelay": 500,
+    "autoShowDelay": 150,
     "widgets": {
       "left": [
         {
@@ -31,15 +36,20 @@
         {
           "characterCount": 2,
           "colorizeIcons": false,
+          "emptyColor": "onSurface",
           "enableScrollWheel": true,
+          "focusedColor": "primary",
           "followFocusedScreen": false,
           "groupedBorderOpacity": 1,
           "hideUnoccupied": false,
           "iconScale": 0.8,
           "id": "Workspace",
           "labelMode": "name",
+          "occupiedColor": "secondary",
+          "reverseScroll": false,
           "showApplications": false,
-          "showLabelsOnlyWhenOccupied": true,
+          "showBadge": true,
+          "showLabelsOnlyWhenOccupied": false,
           "unfocusedIconsOpacity": 1
         }
       ],
@@ -97,7 +107,9 @@
     "showChangelogOnStartup": false,
     "telemetryEnabled": false,
     "enableLockScreenCountdown": true,
-    "lockScreenCountdownDuration": 10000
+    "lockScreenCountdownDuration": 10000,
+    "autoStartAuth": false,
+    "allowPasswordWithFprintd": false
   },
   "ui": {
     "fontDefault": "Geist",
@@ -150,7 +162,8 @@
     "directory": "/home/iynaix/Pictures/Wallpapers",
     "monitorDirectories": [],
     "enableMultiMonitorDirectories": false,
-    "recursiveSearch": false,
+    "showHiddenFiles": false,
+    "viewMode": "single",
     "setWallpaperOnAllMonitors": true,
     "fillMode": "crop",
     "fillColor": "#000000",
@@ -174,13 +187,16 @@
     "wallhavenApiKey": "",
     "wallhavenResolutionMode": "atleast",
     "wallhavenResolutionWidth": "",
-    "wallhavenResolutionHeight": ""
+    "wallhavenResolutionHeight": "",
+    "sortOrder": "name"
   },
   "appLauncher": {
     "enableClipboardHistory": true,
     "autoPasteClipboard": false,
     "enableClipPreview": true,
     "clipboardWrapText": true,
+    "clipboardWatchTextCommand": "wl-paste --type text --watch cliphist store",
+    "clipboardWatchImageCommand": "wl-paste --type image --watch cliphist store",
     "position": "center",
     "pinnedApps": [],
     "useApp2Unit": false,
@@ -192,6 +208,8 @@
     "showCategories": false,
     "iconMode": "tabler",
     "showIconBackground": false,
+    "enableSettingsSearch": true,
+    "enableWindowsSearch": true,
     "ignoreMouseInput": false,
     "screenshotAnnotationTool": ""
   },
@@ -420,7 +438,8 @@
     "schedulingMode": "off",
     "manualSunrise": "06:30",
     "manualSunset": "18:30",
-    "generationMethod": "tonal-spot"
+    "generationMethod": "tonal-spot",
+    "monitorForColors": ""
   },
   "templates": {
     "activeTemplates": [
@@ -443,6 +462,18 @@
       {
         "enabled": true,
         "id": "hyprland"
+      },
+      {
+        "enabled": true,
+        "id": "btop"
+      },
+      {
+        "enabled": true,
+        "id": "zathura"
+      },
+      {
+        "enabled": true,
+        "id": "mango"
       }
     ],
     "enableUserTheming": true
@@ -464,6 +495,7 @@
     "screenUnlock": "",
     "performanceModeEnabled": "",
     "performanceModeDisabled": "",
+    "startup": "",
     "session": ""
   },
   "desktopWidgets": {

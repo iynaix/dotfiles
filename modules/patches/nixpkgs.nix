@@ -33,12 +33,6 @@
       url = "https://github.com/NixOS/nixpkgs/commit/6c08970e09a1f7de80bbdc165c7f9afb8306c027.patch";
       hash = "sha256-gDow7JMMrNgqkRDZVPL9dgPAZCghd4GWI7GBHeteEDo=";
     }
-    # yt-dlp: 2025.12.08 -> 2025.01.29
-    # https://github.com/NixOS/nixpkgs/pull/485127
-    {
-      url = "https://github.com/NixOS/nixpkgs/compare/32062d4c3937fe4e2c77c1ee96fba7458c6dd7f1%5E..ad5a7a5f67adb9c63300409bc935b52bc35947b0.patch";
-      hash = "sha256-dAXsH97qldtwfkwJ9/N/xnNxmdYcYz0cgtbM7e1jXpE=";
-    }
     # actually import the mangowc module
     # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
     {
