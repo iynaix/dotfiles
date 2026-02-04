@@ -8,6 +8,7 @@
       sops = {
         # to edit secrets file, run "sops hosts/secrets.json"
         defaultSopsFile = ./hosts/secrets.json;
+        useSystemdActivation = true;
 
         # use full path to persist as the secrets activation script runs at the start
         # of stage 2 boot before impermanence

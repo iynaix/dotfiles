@@ -188,7 +188,7 @@
     "wallhavenResolutionMode": "atleast",
     "wallhavenResolutionWidth": "",
     "wallhavenResolutionHeight": "",
-    "sortOrder": "name"
+    "sortOrder": "random"
   },
   "appLauncher": {
     "enableClipboardHistory": true,

@@ -24,9 +24,6 @@
 
   # patches to be applied to nixpkgs
   flake.patches = [
-    # use unstable ly to fix incorrect session being selected
-    # https://codeberg.org/fairyglade/ly/issues/911
-    ./ly-unstable.patch
     # orca-slicer 2.3.2-dev
     # https://github.com/NixOS/nixpkgs/pull/480799
     {

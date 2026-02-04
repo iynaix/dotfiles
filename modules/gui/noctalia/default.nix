@@ -91,7 +91,6 @@
       ];
 
       hj.xdg.config.files =
-
         let
           official = "https://github.com/noctalia-dev/noctalia-plugins";
           my-plugins = "https://github.com/iynaix/noctalia-plugins-iynaix";

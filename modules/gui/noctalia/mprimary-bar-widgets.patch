@@ -1,4 +1,4 @@
-From 88725838528a3260da2cabd1688630481aefbc5b Mon Sep 17 00:00:00 2001
+From 729762a6de07c7f12fca58209cb19377bcbc9c9d Mon Sep 17 00:00:00 2001
 From: Lin Xianyi <iynaix@gmail.com>
 Date: Wed, 28 Jan 2026 13:17:27 +0800
 Subject: [PATCH] iynaix patches
@@ -9,20 +9,20 @@ Subject: [PATCH] iynaix patches
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Modules/Bar/Widgets/Battery.qml b/Modules/Bar/Widgets/Battery.qml
-index f83e6656..93045866 100644
+index ab346926..50687e21 100644
 --- a/Modules/Bar/Widgets/Battery.qml
 +++ b/Modules/Bar/Widgets/Battery.qml
-@@ -145,7 +145,7 @@ Item {
-     forceOpen: isReady && displayMode === "alwaysShow"
-     forceClose: displayMode === "alwaysHide" || !isReady
-     customBackgroundColor: isCharging ? Color.mPrimary : (isLowBattery ? Color.mError : "transparent")
--    customTextIconColor: isCharging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : "transparent")
-+    customTextIconColor: isCharging ? Color.mOnPrimary : (isLowBattery ? Color.mOnError : Color.mPrimary)
+@@ -210,7 +210,7 @@ Item {
+     forceOpen: root.isReady && root.displayMode === "icon-always"
+     forceClose: root.displayMode === "icon-only" || !root.isReady
+     customBackgroundColor: root.isCharging ? Color.mPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mError : "transparent")
+-    customTextIconColor: root.isCharging ? Color.mOnPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mOnError : "transparent")
++    customTextIconColor: root.isCharging ? Color.mOnPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mOnError : Color.mPrimary)
+     tooltipText: root.tooltipText
  
-     tooltipText: {
-       let lines = [];
+     onClicked: openBatteryPanel()
 diff --git a/Modules/Bar/Widgets/Volume.qml b/Modules/Bar/Widgets/Volume.qml
-index 276c9b18..417cce46 100644
+index 9ecfd919..8d93e3dc 100644
 --- a/Modules/Bar/Widgets/Volume.qml
 +++ b/Modules/Bar/Widgets/Volume.qml
 @@ -118,6 +118,7 @@ Item {

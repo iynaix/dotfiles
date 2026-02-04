@@ -27,36 +27,48 @@
         style = "kvantum";
       };
 
-      hj.xdg.config.files =
+      # use dynamic theme for qt5ct.conf and qt6ct.conf
+      custom.programs.noctalia.colors.templates =
         let
           defaultFont = "${config.custom.gtk.font.name},${toString config.custom.gtk.font.size}";
-          createQtctConf =
-            font:
-            lib.generators.toINI { } {
-              Appearance = {
-                custom_palette = false;
-                # NOTE: matugen does not support closest_color in templates
-                icon_theme = config.custom.gtk.iconTheme.name;
-                standard_dialogs = "xdgdesktopportal";
-                style = "kvantum";
-              };
-              Fonts = {
-                fixed = font;
-                general = font;
-              };
-            };
+          createQtctConf = filename: font: {
+            colors_to_compare = lib.mapAttrsToList (name: value: {
+              name = "Tela-${name}-dark";
+              color = value;
+            }) config.custom.gtk.theme.accents;
+            compare_to = "{{colors.primary.default.hex}}";
+            # dummy values so noctalia doesn't complain
+            input_path = pkgs.writeText filename (
+              lib.generators.toINI { } {
+                Appearance = {
+                  custom_palette = false;
+                  icon_theme = "{{ closest_color }}";
+                  standard_dialogs = "xdgdesktopportal";
+                  style = "kvantum";
+                };
+                Fonts = {
+                  fixed = font;
+                  general = font;
+                };
+              }
+            );
+            output_path = "${config.hj.xdg.config.directory}/${filename}";
+          };
         in
         {
-          # Kvantum
-          "Kvantum/Kvantum-Tokyo-Night".source =
-            "${pkgs.custom.tokyo-night-kvantum}/share/Kvantum/Kvantum-Tokyo-Night";
-
-          "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } {
-            General.theme = "Kvantum-Tokyo-Night";
-          };
-
-          # qtct configs
-          "qt6ct.conf".text = createQtctConf ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+          "qt5ct.conf" = createQtctConf "qt5ct.conf" ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+          "qt6ct.conf" =
+            createQtctConf "qt6ct.conf" ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
         };
+
+      hj.xdg.config.files = {
+        # Kvantum
+        "Kvantum/Kvantum-Tokyo-Night".source =
+          "${pkgs.custom.tokyo-night-kvantum}/share/Kvantum/Kvantum-Tokyo-Night";
+
+        "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } {
+          General.theme = "Kvantum-Tokyo-Night";
+        };
+      };
     };
 }

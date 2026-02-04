@@ -3,7 +3,7 @@
   flake.nixosModules.core =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) user;
+      inherit (config.custom.constants) isLaptop user;
     in
     {
       config = lib.mkMerge [
@@ -96,7 +96,8 @@
 
         {
           services.displayManager = {
-            defaultSession = lib.mkDefault "hyprland";
+            # scrolling is nicer for laptop with a smaller screen
+            defaultSession = lib.mkDefault (if isLaptop then "niri" else "hyprland");
 
             ly = {
               enable = true;

@@ -1,12 +1,22 @@
 {
+  lib,
   callPackage,
   appimageTools,
   makeWrapper,
+  killall,
+  writeShellApplication,
 }:
 let
   source = (callPackage ../../_sources/generated.nix { }).exiled-exchange-2;
   appimageContents = appimageTools.extract {
     inherit (source) pname version src;
+  };
+  wrapped = writeShellApplication {
+    name = "exiled-exchange-2";
+    runtimeInputs = [ killall ];
+    text = ''
+      killall "exiled-exchange-2" || exiled-exchange-2 --ozone-platform=x11 "$@"
+    '';
   };
 in
 appimageTools.wrapType2 (
@@ -17,7 +27,7 @@ appimageTools.wrapType2 (
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/exiled-exchange-2.desktop $out/share/applications/${source.pname}.desktop
       substituteInPlace $out/share/applications/${source.pname}.desktop \
-        --replace-fail "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 --ozone-platform=x11 %U"
+        --replace-fail "Exec=AppRun --sandbox %U" "Exec=${lib.getExe wrapped} %U"
 
       install -m 444 -D ${appimageContents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${source.pname}.png
 
