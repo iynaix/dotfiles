@@ -29,10 +29,7 @@
   flake.patches = [
     # orca-slicer 2.3.2-dev
     # https://github.com/NixOS/nixpkgs/pull/480799
-    {
-      url = "https://github.com/NixOS/nixpkgs/commit/6c08970e09a1f7de80bbdc165c7f9afb8306c027.patch";
-      hash = "sha256-gDow7JMMrNgqkRDZVPL9dgPAZCghd4GWI7GBHeteEDo=";
-    }
+    ./orca-slicer-2.3.2.patch
     # actually import the mangowc module
     # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
     {
