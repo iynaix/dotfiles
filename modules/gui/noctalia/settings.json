@@ -1,5 +1,5 @@
 {
-  "settingsVersion": 46,
+  "settingsVersion": 47,
   "bar": {
     "barType": "simple",
     "position": "top",
@@ -46,6 +46,7 @@
           "id": "Workspace",
           "labelMode": "name",
           "occupiedColor": "secondary",
+          "pillSize": 0.6,
           "reverseScroll": false,
           "showApplications": false,
           "showBadge": true,
@@ -61,8 +62,7 @@
           "hideIfNotDetected": true,
           "id": "Battery",
           "showNoctaliaPerformance": true,
-          "showPowerProfiles": true,
-          "warningThreshold": 20
+          "showPowerProfiles": true
         },
         {
           "displayMode": "alwaysShow",
@@ -70,13 +70,13 @@
           "middleClickCommand": "toggle-speaker"
         },
         {
+          "clockColor": "primary",
           "customFont": "Geist Mono",
           "formatHorizontal": "HH:mm",
           "formatVertical": "HH mm - dd MM",
           "id": "Clock",
           "tooltipFormat": "dd MMM yyyy",
-          "useCustomFont": false,
-          "usePrimaryColor": true
+          "useCustomFont": false
         }
       ]
     },
@@ -293,13 +293,14 @@
     "swapCriticalThreshold": 90,
     "diskWarningThreshold": 80,
     "diskCriticalThreshold": 90,
-    "cpuPollingInterval": 3000,
-    "tempPollingInterval": 3000,
+    "diskAvailWarningThreshold": 20,
+    "diskAvailCriticalThreshold": 10,
+    "cpuPollingInterval": 1000,
     "gpuPollingInterval": 3000,
     "enableDgpuMonitoring": false,
-    "memPollingInterval": 3000,
+    "memPollingInterval": 1000,
     "diskPollingInterval": 3000,
-    "networkPollingInterval": 3000,
+    "networkPollingInterval": 1000,
     "loadAvgPollingInterval": 3000,
     "useCustomColors": false,
     "warningColor": "",
@@ -387,7 +388,6 @@
     "lowUrgencyDuration": 2,
     "normalUrgencyDuration": 3,
     "criticalUrgencyDuration": 15,
-    "enableKeyboardLayoutToast": true,
     "saveToHistory": {
       "low": true,
       "normal": true,
@@ -402,7 +402,10 @@
       "lowSoundFile": "",
       "excludedApps": "discord,firefox,chrome,chromium,edge"
     },
-    "enableMediaToast": false
+    "enableMediaToast": false,
+    "enableKeyboardLayoutToast": true,
+    "batteryWarningThreshold": 20,
+    "batteryCriticalThreshold": 5
   },
   "osd": {
     "enabled": true,

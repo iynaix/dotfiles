@@ -30,6 +30,17 @@
       sha256 = "sha256-y4KzR+pkBUuyVU+ALrzdY0n2rnTB7lTN2ZmVSzag5vE=";
     };
   };
+  mango = {
+    pname = "mango";
+    version = "0.12.0";
+    src = fetchFromGitHub {
+      owner = "DreamMaoMao";
+      repo = "mangowc";
+      rev = "0.12.0";
+      fetchSubmodules = false;
+      sha256 = "sha256-JAD974jIq9qb5WAPrBp+uWo/nlkcjqta8ekC6cbsin0=";
+    };
+  };
   mpv-cut = {
     pname = "mpv-cut";
     version = "3b18f1161ffb2ff822c88cb97e099772d4b3c26d";

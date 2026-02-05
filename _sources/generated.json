@@ -44,6 +44,27 @@
         },
         "version": "0.8.4.1"
     },
+    "mango": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mango",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "DreamMaoMao",
+            "repo": "mangowc",
+            "rev": "0.12.0",
+            "sha256": "sha256-JAD974jIq9qb5WAPrBp+uWo/nlkcjqta8ekC6cbsin0=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "0.12.0"
+    },
     "mpv-cut": {
         "cargoLock": null,
         "date": "2023-11-22",

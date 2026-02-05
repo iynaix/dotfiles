@@ -1,0 +1,26 @@
+From 0b8da3ce0bc1ad960dd050f21336bedef88a4f9a Mon Sep 17 00:00:00 2001
+From: Lin Xianyi <iynaix@gmail.com>
+Date: Thu, 5 Feb 2026 13:07:01 +0800
+Subject: [PATCH] Use CacheDir for plugin settings instead as git will not
+ clone to a non-empty directory
+
+---
+ Services/Noctalia/PluginRegistry.qml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Services/Noctalia/PluginRegistry.qml b/Services/Noctalia/PluginRegistry.qml
+index 36b25ebe..5773f579 100644
+--- a/Services/Noctalia/PluginRegistry.qml
++++ b/Services/Noctalia/PluginRegistry.qml
+@@ -552,7 +552,7 @@ Singleton {
+ 
+   // Get plugin settings file path
+   function getPluginSettingsFile(pluginId) {
+-    return getPluginDir(pluginId) + "/settings.json";
++    return Settings.cacheDir + "plugins" + "/" + pluginId + "-settings.json";
+   }
+ 
+   // Validate manifest
+-- 
+2.52.0
+

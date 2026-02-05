@@ -7,19 +7,22 @@
       let
         nixpkgs-bootstrap = import inputs.nixpkgs { inherit system; };
       in
-      nixpkgs-bootstrap.applyPatches {
-        name = "nixpkgs-iynaix";
-        src = inputs.nixpkgs;
-        patches = map (
-          patch:
-          # attrset for fetchurl
-          if builtins.isAttrs patch then
-            nixpkgs-bootstrap.fetchpatch patch
-          # patch as local file
-          else
-            patch
-        ) self.patches;
-      };
+      if self.patches == [ ] then
+        inputs.nixpkgs
+      else
+        nixpkgs-bootstrap.applyPatches {
+          name = "nixpkgs-iynaix";
+          src = inputs.nixpkgs;
+          patches = map (
+            patch:
+            # attrset for fetchurl
+            if builtins.isAttrs patch then
+              nixpkgs-bootstrap.fetchpatch patch
+            # patch as local file
+            else
+              patch
+          ) self.patches;
+        };
   };
 
   # patches to be applied to nixpkgs

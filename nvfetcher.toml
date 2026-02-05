@@ -20,6 +20,10 @@ fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/hel
 # src.git = "https://github.com/YaLTeR/niri"
 # fetch.github = "YaLTeR/niri"
 
+[mango]
+src.github_tag = "DreamMaoMao/mangowc"
+fetch.github = "DreamMaoMao/mangowc"
+
 [mpv-cut]
 src.git = "https://github.com/familyfriendlymikey/mpv-cut"
 fetch.github = "familyfriendlymikey/mpv-cut"
