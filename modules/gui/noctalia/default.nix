@@ -60,7 +60,10 @@
             colordiff
           ];
           text = /* sh */ ''
-            diff -u <(jq -S . "$XDG_CONFIG_HOME/noctalia/settings.json") <(noctalia-shell ipc call state all | jq '.settings') | colordiff
+            diff -u \
+              <(jq -S . "''${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/settings.json") \
+              <(noctalia-shell ipc call state all | jq -S '.settings') \
+              | colordiff --nobanner
           '';
         };
       };
@@ -264,11 +267,16 @@
         dotfiles-rs = pkgs.custom.dotfiles-rs.override {
           extraPackages = [ pkgs.custom.noctalia-ipc ];
         };
+
         # setup blur for hyprland
         hyprland.settings = {
           layerrule = [
             "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
           ];
+        };
+
+        print-config = {
+          noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings"'';
         };
       };
 

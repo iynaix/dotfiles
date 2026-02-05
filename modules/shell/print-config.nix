@@ -24,7 +24,7 @@
           fishCompletes = lib.concatMapAttrsStringSep "\n" (
             prog: _: ''complete -c print-config -a "${prog}"''
           ) cmds;
-          print-config = pkgs.writeShellApplicationCompletions {
+          print-config = pkgs.custom.writeShellApplicationCompletions {
             name = "print-config";
             text = /* sh */ ''
               if [ -z "''${1-}" ]; then

@@ -1,39 +1,5 @@
-{ lib, self, ... }:
+{ lib, ... }:
 {
-  flake.overlays.writeShellApplicationCompletions = _: prev: {
-    # writeShellApplication with support for completions
-    writeShellApplicationCompletions =
-      {
-        name,
-        completions ? { },
-        ...
-      }@shellArgs:
-      let
-        inherit (prev) writeShellApplication writeText installShellFiles;
-        # get the needed arguments for writeShellApplication
-        app = writeShellApplication (lib.intersectAttrs (lib.functionArgs writeShellApplication) shellArgs);
-        completionsStr = lib.concatMapAttrsStringSep " " (
-          shell: content:
-          lib.optionalString (builtins.elem shell [
-            "bash"
-            "zsh"
-            "fish"
-            "nushell"
-          ]) "--${shell} ${writeText "${shell}-completion" content}"
-        ) completions;
-      in
-      if completions == { } then
-        app
-      else
-        app.overrideAttrs (o: {
-          nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ installShellFiles ];
-
-          buildCommand = o.buildCommand + ''
-            installShellCompletion --cmd ${name} ${completionsStr}
-          '';
-        });
-  };
-
   perSystem =
     { pkgs, ... }:
     let
@@ -83,21 +49,21 @@
           text = /* sh */ ''fd "$@" /nix/store'';
         };
         # improved which for nix
-        nwhich = pkgs.writeShellApplicationCompletions (
+        nwhich = pkgs.custom.writeShellApplicationCompletions (
           {
             name = "nwhich";
             text = /* sh */ ''readlink -f "$(which "$1")"'';
           }
           // binariesCompletion "nwhich"
         );
-        cnwhich = pkgs.writeShellApplicationCompletions (
+        cnwhich = pkgs.custom.writeShellApplicationCompletions (
           {
             name = "cnwhich";
             text = /* sh */ ''cat "$(nwhich "$1")"'';
           }
           // binariesCompletion "cnwhich"
         );
-        ynwhich = pkgs.writeShellApplicationCompletions (
+        ynwhich = pkgs.custom.writeShellApplicationCompletions (
           {
             name = "ynwhich";
             runtimeInputs = with pkgs; [
@@ -139,9 +105,6 @@
       };
     in
     {
-      # use the writeShellApplicationCompletions
-      nixpkgs.overlays = [ self.overlays.writeShellApplicationCompletions ];
-
       environment = {
         shellAliases = {
           ":e" = "nvim";

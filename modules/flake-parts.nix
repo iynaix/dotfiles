@@ -2,7 +2,6 @@
   inputs,
   lib,
   self,
-  withSystem,
   ...
 }:
 {
@@ -24,7 +23,7 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          self.overlays.customPkgs
+          self.overlays.pkgsCustom
           self.overlays.writeShellApplicationCompletions
         ];
       };
@@ -57,16 +56,5 @@
         description = "Custom library functions / utilities";
       };
     };
-
-    config = {
-      overlays.customPkgs = _: prev: {
-        custom = withSystem prev.stdenv.hostPlatform.system ({ config, ... }: config.packages);
-      };
-
-      nixosModules.core = _: {
-        nixpkgs.overlays = [ self.overlays.customPkgs ];
-      };
-    };
   };
-
 }

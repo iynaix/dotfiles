@@ -30,7 +30,6 @@ let
         }
         config.flake.nixosModules."host-${host}"
         config.flake.nixosModules.core
-        ../../overlays
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index
         # alias for hjem

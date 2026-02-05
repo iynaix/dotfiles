@@ -44,7 +44,7 @@
         ];
         wallpaper_command = "wallpaper $1";
       };
-      wallfacer = pkgs.writeShellApplicationCompletions {
+      wallfacer = pkgs.custom.writeShellApplicationCompletions {
         name = "wallfacer";
         text = /* sh */ ''
           direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
