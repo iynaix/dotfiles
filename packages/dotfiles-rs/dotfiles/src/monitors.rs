@@ -16,7 +16,7 @@ use itertools::Itertools;
 
 /// mirrors the current display onto the new display
 fn mirror_monitors(new_mon: &str) {
-    let nix_monitors = NixJson::new().monitors;
+    let nix_monitors = NixJson::load().monitors;
 
     let primary = nix_monitors.first().expect("no primary monitor found");
 
@@ -36,7 +36,7 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
         .as_str()
         == "nstack";
 
-    let nix_info_monitors = NixJson::new().monitors;
+    let nix_info_monitors = NixJson::load().monitors;
 
     for (mon_name, wksps) in workspaces {
         let nix_info_mon = nix_info_monitors
@@ -150,7 +150,7 @@ pub fn hypr_monitors(args: WmMonitorArgs) {
     }
 
     // distribute workspaces per monitor
-    let nix_monitors = NixJson::new().monitors;
+    let nix_monitors = NixJson::load().monitors;
     let workspaces = if let Some(extend) = extend_type {
         // --extend
         distribute_workspaces(&extend, &nix_monitors)

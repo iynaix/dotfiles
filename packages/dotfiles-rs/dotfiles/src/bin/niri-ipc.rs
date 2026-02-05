@@ -404,7 +404,7 @@ fn main() {
         std::process::exit(0);
     }
 
-    let nix_info_monitors = NixJson::new().monitors;
+    let nix_info_monitors = NixJson::load().monitors;
 
     let mut socket = Socket::connect().expect("failed to connect to niri socket");
     let reply = socket

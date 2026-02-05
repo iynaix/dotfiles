@@ -91,7 +91,7 @@ fn main() -> hyprland::Result<()> {
         std::process::exit(0);
     }
 
-    let is_desktop = NixJson::new().host == "desktop";
+    let is_desktop = NixJson::load().host == "desktop";
     let nstack = Keyword::get("general:layout")?.value.to_string().as_str() == "nstack";
 
     let mut listener = EventListener::new();
@@ -148,7 +148,7 @@ fn main() -> hyprland::Result<()> {
 
     listener.add_monitor_added_handler(|mon| {
         // single monitor in config; is laptop
-        if NixJson::new().monitors.len() == 1 {
+        if NixJson::load().monitors.len() == 1 {
             // --rofi
             hypr_monitors(WmMonitorArgs {
                 rofi: Some(mon.name),

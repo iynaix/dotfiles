@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use rexiv2::Metadata;
 use serde::Deserialize;
 
-use crate::{full_path, nixjson::NixJson};
+use crate::{full_path, nixjson::NixJson, wallpaper};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
@@ -99,12 +99,17 @@ where
 
 /// reloads the wallpaper
 pub fn reload() {
-    // clear noctalia cache to force the wallpaper to be reloaded
-    let noctalia_cache = full_path("~/.cache/noctalia");
+    let Some(img) = wallpaper::current() else {
+        eprintln!("Unable to get current wallpaper");
+        return;
+    };
 
-    let wallpaper_cache = noctalia_cache.join("images/wallpapers/large");
-    std::fs::remove_dir_all(&wallpaper_cache).expect("unable to clear noctalia cache");
-    std::fs::create_dir(&wallpaper_cache).ok();
+    // remove the cache files for the current wallpaper
+    NixJson::load().monitors.iter().for_each(|mon| {
+        let cache_path = mon.noctalia_wallpaper_cache_path(&img);
+        // don't care if it errors
+        std::fs::remove_file(&cache_path).ok();
+    });
 
     // reload noctalia-shell
     execute::command_args!("systemctl", "restart", "--user", "noctalia-shell")
@@ -119,12 +124,12 @@ where
     P: AsRef<Path> + std::fmt::Debug,
 {
     if !dir.as_ref().exists() {
-        return NixJson::new().fallback_wallpaper;
+        return NixJson::load().fallback_wallpaper;
     }
 
     let wallpapers = filter_images(dir).collect_vec();
     if wallpapers.is_empty() {
-        NixJson::new().fallback_wallpaper
+        NixJson::load().fallback_wallpaper
     } else {
         wallpapers[fastrand::usize(..wallpapers.len())].clone()
     }
