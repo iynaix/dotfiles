@@ -3,7 +3,7 @@
   perSystem =
     { pkgs, ... }:
     let
-      sources = pkgs.callPackage ../../_sources/generated.nix { };
+      sources = self.libCustom.nvFetcherSources pkgs;
       mkYaziPlugin = name: text: {
         "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
       };

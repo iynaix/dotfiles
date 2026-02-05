@@ -3,7 +3,7 @@
   flake.nixosModules.path-of-building =
     { pkgs, ... }:
     let
-      source = (pkgs.callPackage ../../_sources/generated.nix { }).rusty-path-of-building;
+      source = (self.libCustom.nvFetcherSources pkgs).rusty-path-of-building;
     in
     {
       # covers both poe1 and poe2

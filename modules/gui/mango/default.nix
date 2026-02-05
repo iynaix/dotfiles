@@ -39,7 +39,12 @@
       inherit (config.custom.constants) dots isVm;
     in
     {
-      programs.mangowc.enable = true;
+      programs.mangowc = {
+        enable = true;
+        # package = pkgs.mangowc.overrideAttrs (o: {
+        #   source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
+        # });
+      };
 
       # write the settings to home directory
       hj.xdg.config.files."mango/config.conf" = {

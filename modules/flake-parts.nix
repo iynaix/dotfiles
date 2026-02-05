@@ -32,23 +32,24 @@
       packages = (import ../packages) { inherit inputs pkgs; };
     };
 
-  # expose patches as top level flake option
-  flake.options.patches = lib.mkOption {
-    type = lib.types.anything;
-    default = [ ];
-    description = "Patches to be applied onto nixpkgs";
-  };
+  # expose top level flake options
+  flake.options = {
+    patches = lib.mkOption {
+      type = lib.types.anything;
+      default = [ ];
+      description = "Patches to be applied onto nixpkgs";
+    };
 
-  # expose wrapperModules as top level flake option
-  flake.options.wrapperModules = lib.mkOption {
-    type = lib.types.attrs;
-    default = { };
-    description = "Wrapper modules";
-  };
+    wrapperModules = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Wrapper modules";
+    };
 
-  flake.options.libCustom = lib.mkOption {
-    type = lib.types.attrsOf lib.types.anything;
-    default = { };
-    description = "Library functions / utilities";
+    libCustom = lib.mkOption {
+      type = lib.types.attrsOf lib.types.anything;
+      default = { };
+      description = "Custom library functions / utilities";
+    };
   };
 }

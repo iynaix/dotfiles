@@ -12,7 +12,7 @@ in
   perSystem =
     { pkgs, ... }:
     let
-      source = (pkgs.callPackage ../../_sources/generated.nix { }).yt-dlp;
+      source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
     in
     {
       packages.yt-dlp' = inputs.wrappers.lib.wrapPackage {

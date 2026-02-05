@@ -3,7 +3,7 @@
   flake.nixosModules.wm =
     { config, pkgs, ... }:
     let
-      # source = (pkgs.callPackage ../../../_sources/generated.nix { }).niri;
+      # source = (self.libCustom.nvFetcherSources pkgs).niri;
       niriWrapped = self.wrapperModules.niri.apply {
         inherit pkgs;
         package = pkgs.niri.overrideAttrs (o: {
