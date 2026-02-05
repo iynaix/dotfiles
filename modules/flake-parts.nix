@@ -29,7 +29,6 @@
       _module.args = { inherit pkgs; };
 
       formatter = pkgs.nixfmt;
-      packages = (import ../packages) { inherit inputs pkgs; };
     };
 
   # expose top level flake options

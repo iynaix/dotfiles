@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 {
   flake.nixosModules.core = {
     options.custom = {
@@ -238,7 +243,9 @@
 
       custom.programs = {
         # add noctalia-ipc to dotfiles-rs, so wallpaper can find it on boot
-        dotfiles-rs = pkgs.custom.dotfiles-rs.override { extraPackages = [ noctalia-ipc ]; };
+        dotfiles-rs = self.packages.${pkgs.stdenv.hostPlatform.system}.dotfiles-rs.override {
+          extraPackages = [ noctalia-ipc ];
+        };
         # setup blur for hyprland
         hyprland.settings = {
           layerrule = [

@@ -7,14 +7,6 @@ let
       config.allowUnfree = true;
     };
   };
-  # include custom packages
-  overlayCustom = _: prev: {
-    custom =
-      (prev.custom or { })
-      // (import ../packages {
-        inherit (prev) pkgs;
-      });
-  };
   overlayPatches = _: prev: {
     # nixos-small logo looks like ass
     fastfetch = prev.fastfetch.overrideAttrs (o: {
@@ -44,7 +36,6 @@ in
 {
   nixpkgs.overlays = [
     overlayStable
-    overlayCustom
     overlayPatches
   ];
 }

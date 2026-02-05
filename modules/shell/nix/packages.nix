@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  self,
+  ...
+}:
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
@@ -79,7 +84,7 @@
             '';
           };
           # nixos-rebuild switch, use different package for home-manager standalone
-          nsw = pkgs.custom.nsw.override {
+          nsw = self.packages.${pkgs.stdenv.hostPlatform.system}.nsw.override {
             inherit dots host;
             specialisation = config.custom.specialisation.current;
           };

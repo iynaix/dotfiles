@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, self, ... }:
 {
   flake.nixosModules.core =
     { config, pkgs, ... }:
@@ -7,7 +7,7 @@
         programs = {
           dotfiles-rs = lib.mkOption {
             type = lib.types.package;
-            default = pkgs.custom.dotfiles-rs;
+            default = self.packages.${pkgs.stdenv.hostPlatform.system}.dotfiles-rs;
             description = "dotfiles-rs package";
           };
         };
