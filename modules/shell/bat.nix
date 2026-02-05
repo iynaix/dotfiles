@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -44,13 +43,13 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          bat = self.packages.${pkgs.stdenv.hostPlatform.system}.bat';
+          bat = pkgs.custom.bat';
         })
       ];
 
       environment.systemPackages = [
         pkgs.bat # overlay-ed above
-        self.packages.${pkgs.stdenv.hostPlatform.system}.batman'
+        pkgs.custom.batman'
       ];
 
       programs = {

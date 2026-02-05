@@ -13,6 +13,84 @@
         ".jj"
         "node_modules"
       ];
+      # checkout main / master, whichever exists
+      gmain = pkgs.writeShellApplication {
+        name = "gmain";
+        text = /* sh */ ''
+          if git show-ref --verify --quiet refs/heads/master; then
+              BRANCH="master"
+          else
+              BRANCH="main"
+          fi
+
+          git checkout "$BRANCH"
+        '';
+      };
+      # create a new branch and push it to origin
+      gbc = pkgs.writeShellApplication {
+        name = "gbc";
+        text = /* sh */ ''
+          git branch "$1"
+          git checkout "$1"
+        '';
+      };
+      # delete a remote branch
+      grd = pkgs.writeShellApplicationCompletions {
+        name = "grd";
+        text = /* sh */ ''
+          git branch -D "$1" || true
+          git push origin --delete "$1"
+        '';
+        completions.fish = /* fish */ ''
+          function __git_remote_branches
+            command git branch --no-color -r 2>/dev/null | \
+              sed -e 's/^..//' -e 's/^origin\///' | \
+              grep -vE 'HEAD|^main$|^master$'
+          end
+
+          complete -c grd -f -a '(__git_remote_branches)'
+        '';
+        completions.bash = /* sh */ ''
+          __git_remote_branches() {
+              git branch --no-color -r 2>/dev/null | \
+              sed -e 's/^..//' -e 's/^origin\///' | \
+              grep -vE 'HEAD|^main$|^master$'
+          }
+
+          complete -F __git_remote_branches grd
+        '';
+      };
+      # searches git history, can never remember this stupid thing
+      # 2nd argument is target path and subsequent arguments are passed through
+      grg = pkgs.writeShellApplication {
+        name = "grg";
+        text = /* sh */ ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
+      };
+      # syncs with upstream
+      gsync = pkgs.writeShellApplication {
+        name = "gsync";
+        runtimeInputs = [
+          pkgs.gh
+          gmain
+        ];
+        text = /* sh */ ''
+          REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
+          BRANCH="''${1:-}"
+          if [ -z "$BRANCH" ]; then
+            if git show-ref --verify --quiet refs/heads/master; then
+                BRANCH="master"
+            else
+                BRANCH="main"
+            fi
+          fi
+
+          # check if repo is forked and sync with upstream if it is
+          if gh repo view "iynaix/$REPO_NAME" >/dev/null 2>&1; then
+              gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
+          fi
+          git pull origin "$BRANCH"
+        '';
+      };
     in
     lib.mkMerge [
       {
@@ -104,75 +182,13 @@
         };
 
         # extra git functions
-        custom.shell.packages = {
-          # create a new branch and push it to origin
-          gbc = /* sh */ ''
-            git branch "$1"
-            git checkout "$1"
-          '';
-          # delete a remote branch
-          grd = {
-            text = /* sh */ ''
-              git branch -D "$1" || true
-              git push origin --delete "$1"
-            '';
-            completions.fish = /* fish */ ''
-              function __git_remote_branches
-                command git branch --no-color -r 2>/dev/null | \
-                  sed -e 's/^..//' -e 's/^origin\///' | \
-                  grep -vE 'HEAD|^main$|^master$'
-              end
-
-              complete -c grd -f -a '(__git_remote_branches)'
-            '';
-            completions.bash = /* sh */ ''
-              __git_remote_branches() {
-                  git branch --no-color -r 2>/dev/null | \
-                  sed -e 's/^..//' -e 's/^origin\///' | \
-                  grep -vE 'HEAD|^main$|^master$'
-              }
-
-              complete -F __git_remote_branches grd
-            '';
-          };
-          # searches git history, can never remember this stupid thing
-          # 2nd argument is target path and subsequent arguments are passed through
-          grg = /* sh */ ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
-          # checkout main / master, whichever exists
-          gmain = /* sh */ ''
-            if git show-ref --verify --quiet refs/heads/master; then
-                BRANCH="master"
-            else
-                BRANCH="main"
-            fi
-
-            git checkout "$BRANCH"
-          '';
-          # syncs with upstream
-          gsync = {
-            runtimeInputs = with pkgs; [
-              pkgs.gh
-              custom.shell.gmain
-            ];
-            text = /* sh */ ''
-              REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
-              BRANCH="''${1:-}"
-              if [ -z "$BRANCH" ]; then
-                if git show-ref --verify --quiet refs/heads/master; then
-                    BRANCH="master"
-                else
-                    BRANCH="main"
-                fi
-              fi
-
-              # check if repo is forked and sync with upstream if it is
-              if gh repo view "iynaix/$REPO_NAME" >/dev/null 2>&1; then
-                  gh repo sync "iynaix/$REPO_NAME" -b "$BRANCH"
-              fi
-              git pull origin "$BRANCH"
-            '';
-          };
-        };
+        environment.systemPackages = [
+          gmain
+          gbc
+          grd
+          grg
+          gsync
+        ];
 
         custom.persist = {
           home.directories = [

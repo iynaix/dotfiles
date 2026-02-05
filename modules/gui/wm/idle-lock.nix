@@ -27,8 +27,8 @@
       };
       noctalia-lock = pkgs.writeShellApplication {
         name = "noctalia-lock";
-        runtimeInputs = with pkgs; [
-          custom.shell.noctalia-ipc
+        runtimeInputs = [
+          pkgs.custom.noctalia-ipc
         ];
         # to be used on laptops, so suspend as well
         text = /* sh */ ''

@@ -1,10 +1,71 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
+  perSystem =
+    { pkgs, ... }:
+    let
+      drv =
+        {
+          lib,
+          noctalia-shell,
+          writeShellApplication,
+          killall,
+          jq,
+        }:
+        # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
+        writeShellApplication {
+          name = "noctalia-ipc";
+          runtimeInputs = [
+            killall
+            jq
+          ];
+          text = /* sh */ ''
+            RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
+
+            # invalid json, no instances running, so start noctalia-shell
+            if [[ ! "$RAW_OUTPUT" == "["* ]]; then
+              systemctl --user restart noctalia-shell
+              exit
+            fi
+
+            NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
+
+            # using dev version, don't kill the shell
+            if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
+              "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
+              exit
+            fi
+
+            # different instance, kill previous instances
+            if [[ ! "$NOCTALIA_PATH" =~ ${noctalia-shell} ]]; then
+              killall .quickshell-wrapper
+              systemctl --user restart noctalia-shell
+              sleep 2
+            fi
+
+            ${lib.getExe noctalia-shell} ipc call "$@"
+          '';
+        };
+    in
+    {
+      packages = {
+        noctalia-ipc = pkgs.callPackage drv { };
+        noctalia-diff = pkgs.writeShellApplication {
+          name = "noctalia-diff";
+          runtimeInputs = with pkgs; [
+            jq
+            colordiff
+          ];
+          text = /* sh */ ''
+            diff -u <(jq -S . "$XDG_CONFIG_HOME/noctalia/settings.json") <(noctalia-shell ipc call state all | jq '.settings') | colordiff
+          '';
+        };
+      };
+    };
+
   flake.nixosModules.core = {
     options.custom = {
       programs.noctalia = {
@@ -55,38 +116,10 @@
                 --replace-fail "showLocation: false" "showLocation: true"
             '';
           };
-      # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
-      noctalia-ipc = pkgs.writeShellApplication {
-        name = "noctalia-ipc";
-        runtimeInputs = with pkgs; [
-          killall
-          jq
-        ];
+      noctalia-shell-reload = pkgs.writeShellApplication {
+        name = "noctalia-shell-reload";
         text = /* sh */ ''
-          RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
-
-          # invalid json, no instances running, so start noctalia-shell
-          if [[ ! "$RAW_OUTPUT" == "["* ]]; then
-            systemctl --user restart noctalia-shell
-            exit
-          fi
-
-          NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
-
-          # using dev version, don't kill the shell
-          if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
-            "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
-            exit
-          fi
-
-          # different instance, kill previous instances
-          if [[ ! "$NOCTALIA_PATH" =~ "${pkgs.noctalia-shell}" ]]; then
-            killall .quickshell-wrapper
-            systemctl --user restart noctalia-shell
-            sleep 2
-          fi
-
-          ${lib.getExe pkgs.noctalia-shell} ipc call "$@"
+          systemctl --user restart noctalia-shell
         '';
       };
     in
@@ -215,36 +248,21 @@
 
       environment.systemPackages = [
         noctalia-shell'
-        noctalia-ipc
         pkgs.gpu-screen-recorder # screen recorder plugin
-      ];
+        noctalia-shell-reload
+      ]
+      ++ (with pkgs.custom; [
+        noctalia-ipc
+        noctalia-diff
+      ]);
 
       # start after WM initializes
       custom.startupServices = [ "noctalia-shell.service" ];
 
-      custom.shell.packages = {
-        inherit noctalia-ipc;
-        noctalia-shell-reload = {
-          text = /* sh */ ''
-            systemctl --user restart noctalia-shell
-          '';
-        };
-        noctalia-diff = {
-          runtimeInputs = with pkgs; [
-            jq
-            colordiff
-            wl-clipboard
-          ];
-          text = /* sh */ ''
-            diff -u <(jq -S . ${config.hj.xdg.config.directory}/noctalia/settings.json) <(wl-paste | jq -S .) | colordiff
-          '';
-        };
-      };
-
       custom.programs = {
         # add noctalia-ipc to dotfiles-rs, so wallpaper can find it on boot
-        dotfiles-rs = self.packages.${pkgs.stdenv.hostPlatform.system}.dotfiles-rs.override {
-          extraPackages = [ noctalia-ipc ];
+        dotfiles-rs = pkgs.custom.dotfiles-rs.override {
+          extraPackages = [ pkgs.custom.noctalia-ipc ];
         };
         # setup blur for hyprland
         hyprland.settings = {

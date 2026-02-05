@@ -1,4 +1,4 @@
-{ lib, self, ... }:
+{ lib, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -103,9 +103,8 @@
 
       hj.xdg.config.files = {
         # Kvantum
-        "Kvantum/Kvantum-Tokyo-Night".source = "${
-          self.packages.${pkgs.stdenv.hostPlatform.system}.tokyo-night-kvantum
-        }/share/Kvantum/Kvantum-Tokyo-Night";
+        "Kvantum/Kvantum-Tokyo-Night".source =
+          "${pkgs.custom.tokyo-night-kvantum}/share/Kvantum/Kvantum-Tokyo-Night";
 
         "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } {
           General.theme = "Kvantum-Tokyo-Night";

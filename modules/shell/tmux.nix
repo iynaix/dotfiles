@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -102,7 +101,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          tmux = self.packages.${pkgs.stdenv.hostPlatform.system}.tmux';
+          tmux = pkgs.custom.tmux';
         })
       ];
 

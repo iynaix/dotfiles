@@ -1,4 +1,4 @@
-{ inputs, self, ... }:
+{ inputs, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -23,7 +23,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          helix = self.packages.${pkgs.stdenv.hostPlatform.system}.helix';
+          helix = pkgs.custom.helix';
         })
       ];
 

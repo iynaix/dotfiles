@@ -44,22 +44,24 @@
         ];
         wallpaper_command = "wallpaper $1";
       };
+      wallfacer = pkgs.writeShellApplicationCompletions {
+        name = "wallfacer";
+        text = /* sh */ ''
+          direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
+        '';
+        # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
+        completions.fish = /* fish */ ''
+          function _wallfacer_gui
+            find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
+          end
+          complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
+        '';
+      };
     in
     {
-      custom.shell.packages = {
-        wallfacer = {
-          text = /* sh */ ''
-            direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
-          '';
-          # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
-          completions.fish = /* fish */ ''
-            function _wallfacer_gui
-              find ${wallpapers_dir} -maxdepth 1 -name "*.webp"
-            end
-            complete -c wallfacer -n '__fish_seen_subcommand_from gui' -a '(_wallfacer_gui)'
-          '';
-        };
-      };
+      environment.systemPackages = [
+        wallfacer
+      ];
 
       # use config file instead of wrapping so it can be read during dev
       hj.xdg.config.files."wallfacer/wallfacer.toml" = {

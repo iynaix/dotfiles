@@ -7,6 +7,14 @@
       persistHome = "/persist${config.hj.directory}";
       downloadDir = "/media/IRONWOLF22/Downloads";
       pendingDir = "${downloadDir}/pending";
+      # process downloaded files
+      renamer = pkgs.writeShellApplication {
+        name = "renamer";
+        runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
+        text = /* sh */ ''
+          direnv-cargo-run "${persistHome}/projects/renamer" "$@"
+        '';
+      };
     in
     lib.mkMerge [
       {
@@ -130,6 +138,7 @@
             icon = "transmission";
             exec = "xdg-open http://localhost:9091/transmission/web/";
           })
+          renamer
         ];
 
         # xdg handler for magnet links
@@ -142,13 +151,6 @@
             ".config/transmission-daemon"
             ".config/transmission-remote-gtk"
           ];
-
-          # process downloaded files
-          shell.packages = {
-            renamer = /* sh */ ''
-              direnv-cargo-run "${persistHome}/projects/renamer" "$@"
-            '';
-          };
         };
       }
 

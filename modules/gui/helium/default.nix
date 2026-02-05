@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -12,7 +11,7 @@
       # https://github.com/brave/brave-browser/issues/49862
       heliumPkg = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}.helium;
+        package = pkgs.custom.helium;
         flagSeparator = "=";
       };
     in

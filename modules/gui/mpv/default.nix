@@ -180,14 +180,14 @@
             write-filename-in-watch-later-config = true;
           };
 
-          scripts = [
-            pkgs.mpvScripts.dynamic-crop
-            pkgs.mpvScripts.mpris
-            pkgs.mpvScripts.seekTo
+          scripts = with pkgs; [
+            mpvScripts.dynamic-crop
+            mpvScripts.mpris
+            mpvScripts.seekTo
             # custom packaged scripts
-            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-deletefile
-            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-nextfile
-            self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-subsearch
+            custom.mpv-deletefile
+            custom.mpv-nextfile
+            custom.mpv-subsearch
           ];
         }
 
@@ -268,7 +268,7 @@
         # mpv-cut settings
         {
           scripts = [
-            (self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-cut.override {
+            (pkgs.custom.mpv-cut.override {
               # disable bookmarks functionality
               configLua = /* lua */ ''
                 KEY_BOOKMARK_ADD = ""
@@ -279,7 +279,7 @@
 
         # sub-select settings
         {
-          scripts = [ self.packages.${pkgs.stdenv.hostPlatform.system}.mpv-sub-select ];
+          scripts = [ pkgs.custom.mpv-sub-select ];
 
           scriptOptsFiles = {
             "sub-select.json" = lib.strings.toJSON [
@@ -380,7 +380,7 @@
 
         nixpkgs.overlays = [
           (_: _prev: {
-            mpv = self.packages.${pkgs.stdenv.hostPlatform.system}.mpv';
+            mpv = pkgs.custom.mpv';
           })
         ];
 

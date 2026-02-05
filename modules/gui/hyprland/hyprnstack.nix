@@ -57,7 +57,7 @@
       custom.programs.hyprland =
         if config.custom.programs.hyprnstack.enable then
           {
-            plugins = [ self.packages.${pkgs.stdenv.hostPlatform.system}.hyprnstack ];
+            plugins = [ pkgs.custom.hyprnstack ];
 
             settings = {
               general.layout = "nstack";

@@ -1,4 +1,4 @@
-{ lib, self, ... }:
+{ lib, ... }:
 let
   accents = {
     Default = "#2e7de9";
@@ -89,7 +89,7 @@ in
           iconTheme = {
             package = lib.mkOption {
               type = lib.types.package;
-              default = self.packages.${pkgs.stdenv.hostPlatform.system}.tela-dynamic-icon-theme.override {
+              default = pkgs.custom.tela-dynamic-icon-theme.override {
                 colors = accents;
               };
               description = "Package providing the icon theme.";

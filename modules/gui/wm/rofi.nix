@@ -52,7 +52,7 @@
       ...
     }:
     let
-      rofiThemesPkg = self.packages.${pkgs.stdenv.hostPlatform.system}.rofi-themes;
+      rofiThemesPkg = pkgs.custom.rofi-themes;
       patchRasi =
         name: rasiPath: overrideStyles:
         let

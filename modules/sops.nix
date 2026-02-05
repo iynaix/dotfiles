@@ -3,6 +3,42 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) user;
+      # script to bootstrap a new install
+      install-remote-secrets = pkgs.writeShellApplication {
+        name = "install-remote-secrets";
+        runtimeInputs = [ pkgs.rsync ];
+        text =
+          let
+            persistHome = "/persist${config.hj.directory}";
+            copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
+          in
+          /* sh */ ''
+            read -rp "Enter ip of remote host: " remote
+            target="/mnt${persistHome}"
+
+            while true; do
+                read -rp "Use /mnt? [y/n] " yn
+                case $yn in
+                  [Yy]*)
+                    echo "y";
+                    target="/mnt${persistHome}"
+                    break;;
+                  [Nn]*)
+                    echo "n";
+                    target="${persistHome}"
+                    break;;
+                  *)
+                    echo "Please answer yes or no.";;
+                esac
+            done
+
+            read -rp "Enter user on remote host: [nixos] " user
+            user=''${user:-nixos}
+
+            ${copy ".ssh/"}
+            ${copy ".config/sops/age/"}
+          '';
+      };
     in
     {
       sops = {
@@ -23,43 +59,9 @@
 
       users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
-      # script to bootstrap a new install
-      custom.shell.packages = {
-        install-remote-secrets = {
-          runtimeInputs = [ pkgs.rsync ];
-          text =
-            let
-              persistHome = "/persist${config.hj.directory}";
-              copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
-            in
-            /* sh */ ''
-              read -rp "Enter ip of remote host: " remote
-              target="/mnt${persistHome}"
-
-              while true; do
-                  read -rp "Use /mnt? [y/n] " yn
-                  case $yn in
-                    [Yy]*)
-                      echo "y";
-                      target="/mnt${persistHome}"
-                      break;;
-                    [Nn]*)
-                      echo "n";
-                      target="${persistHome}"
-                      break;;
-                    *)
-                      echo "Please answer yes or no.";;
-                  esac
-              done
-
-              read -rp "Enter user on remote host: [nixos] " user
-              user=''${user:-nixos}
-
-              ${copy ".ssh/"}
-              ${copy ".config/sops/age/"}
-            '';
-        };
-      };
+      environment.systemPackages = [
+        install-remote-secrets
+      ];
 
       custom.persist.home = {
         directories = [ ".config/sops" ];

@@ -1,7 +1,6 @@
 {
   lib,
   inputs,
-  self,
   ...
 }:
 {
@@ -28,7 +27,7 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) dots host;
-      customNeovim = self.packages.${pkgs.stdenv.hostPlatform.system}.neovim-iynaix.override {
+      customNeovim = pkgs.custom.neovim-iynaix.override {
         inherit dots host;
       };
       nvim-direnv = pkgs.writeShellApplication {

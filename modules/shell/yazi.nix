@@ -292,7 +292,7 @@
 
       nixpkgs.overlays =
         let
-          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) yazi';
+          inherit (pkgs.custom) yazi';
         in
         [
           (_: _prev: {

@@ -1,4 +1,4 @@
-{ lib, self, ... }:
+{ lib, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -39,7 +39,7 @@
             enable = true;
             devices = [ "nodev" ];
             efiSupport = true;
-            theme = self.packages.${pkgs.stdenv.hostPlatform.system}.distro-grub-themes-nixos;
+            theme = pkgs.custom.distro-grub-themes-nixos;
           };
           timeout = 3;
         };

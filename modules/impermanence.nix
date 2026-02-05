@@ -9,6 +9,19 @@
         paths:
         assert (lib.assertMsg (!lib.any (lib.hasPrefix "/home") paths) "/home used in a root persist!");
         paths;
+      # show all files stored on tmpfs, useful for finding files to persist
+      show-tmpfs = pkgs.writeShellApplication {
+        name = "show-tmpfs";
+        runtimeInputs = [ pkgs.fd ];
+        text = /* sh */ ''
+          sudo fd --one-file-system --base-directory / --type f --hidden \
+            --exclude "/etc/{ssh,passwd,shadow}" \
+            --exclude "*.timer" \
+            --exclude "/var/lib/NetworkManager" \
+            --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mesa_shader_cache,mpv,noctalia,nvim,pre-commit,radv_builtin_shaders,fish,nvf}" \
+            --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
+        '';
+      };
     in
     {
       options.custom = {
@@ -105,20 +118,9 @@
         # shut sudo up
         security.sudo.extraConfig = "Defaults lecture=never";
 
-        custom.shell.packages = {
-          # show all files stored on tmpfs, useful for finding files to persist
-          show-tmpfs = {
-            runtimeInputs = [ pkgs.fd ];
-            text = /* sh */ ''
-              sudo fd --one-file-system --base-directory / --type f --hidden \
-                --exclude "/etc/{ssh,passwd,shadow}" \
-                --exclude "*.timer" \
-                --exclude "/var/lib/NetworkManager" \
-                --exclude "${config.hj.xdg.cache.directory}/{bat,fontconfig,mesa_shader_cache,mpv,noctalia,nvim,pre-commit,radv_builtin_shaders,fish,nvf}" \
-                --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
-            '';
-          };
-        };
+        environment.systemPackages = [
+          show-tmpfs
+        ];
 
         # setup persistence
         environment.persistence = {

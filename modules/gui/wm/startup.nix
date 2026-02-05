@@ -1,4 +1,4 @@
-{ lib, self, ... }:
+{ lib, ... }:
 {
   flake.nixosModules.core = {
     options.custom = {
@@ -147,7 +147,7 @@
                 pkgs.writeShellApplication {
                   name = "init-helium";
                   runtimeInputs = [
-                    self.packages.${pkgs.stdenv.hostPlatform.system}.helium
+                    pkgs.custom.helium
                     config.custom.programs.dotfiles-rs
                   ];
                   text = ''

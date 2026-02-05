@@ -2,6 +2,7 @@
   inputs,
   lib,
   self,
+  withSystem,
   ...
 }:
 {
@@ -22,6 +23,10 @@
       pkgs = import nixpkgs-patched {
         inherit system;
         config.allowUnfree = true;
+        overlays = [
+          self.overlays.customPkgs
+          self.overlays.writeShellApplicationCompletions
+        ];
       };
     in
     {
@@ -31,24 +36,37 @@
       formatter = pkgs.nixfmt;
     };
 
-  # expose top level flake options
-  flake.options = {
-    patches = lib.mkOption {
-      type = lib.types.anything;
-      default = [ ];
-      description = "Patches to be applied onto nixpkgs";
+  flake = {
+    # expose top level flake options
+    options = {
+      patches = lib.mkOption {
+        type = lib.types.anything;
+        default = [ ];
+        description = "Patches to be applied onto nixpkgs";
+      };
+
+      wrapperModules = lib.mkOption {
+        type = lib.types.attrs;
+        default = { };
+        description = "Wrapper modules";
+      };
+
+      libCustom = lib.mkOption {
+        type = lib.types.attrsOf lib.types.anything;
+        default = { };
+        description = "Custom library functions / utilities";
+      };
     };
 
-    wrapperModules = lib.mkOption {
-      type = lib.types.attrs;
-      default = { };
-      description = "Wrapper modules";
-    };
+    config = {
+      overlays.customPkgs = _: prev: {
+        custom = withSystem prev.stdenv.hostPlatform.system ({ config, ... }: config.packages);
+      };
 
-    libCustom = lib.mkOption {
-      type = lib.types.attrsOf lib.types.anything;
-      default = { };
-      description = "Custom library functions / utilities";
+      nixosModules.core = _: {
+        nixpkgs.overlays = [ self.overlays.customPkgs ];
+      };
     };
   };
+
 }

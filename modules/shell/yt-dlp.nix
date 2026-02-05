@@ -38,7 +38,7 @@ in
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          yt-dlp = self.packages.${pkgs.stdenv.hostPlatform.system}.yt-dlp';
+          yt-dlp = pkgs.custom.yt-dlp';
         })
       ];
 

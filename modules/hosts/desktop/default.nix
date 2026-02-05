@@ -4,6 +4,15 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm user;
+      # fetch wallpapers from pixiv for user
+      pixiv = pkgs.writeShellApplication {
+        name = "pixiv";
+        runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
+        text = /* sh */ ''
+          direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
+        '';
+      };
+
       toggle-speaker = pkgs.writeShellApplication {
         name = "toggle-speaker";
         text = /* sh */ ''
@@ -165,13 +174,6 @@
           };
         };
 
-        shell.packages = {
-          # fetch wallpapers from pixiv for user
-          pixiv = /* sh */ ''
-            direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
-          '';
-        };
-
         # disable networkmanager software wifi switch on startup, so noctalia doesn't toggle it back on when syncing state
         startup = [
           {
@@ -229,6 +231,7 @@
       # enable flirc usb ir receiver
       hardware.flirc.enable = false;
       environment.systemPackages = [
+        pixiv
         toggle-speaker
       ];
     };

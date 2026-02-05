@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 let
@@ -45,7 +44,7 @@ let
                       "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                 ]
-                ++ (with self.packages.${system}; [
+                ++ (with pkgs.custom; [
                   # custom packages
                   bat'
                   batman'

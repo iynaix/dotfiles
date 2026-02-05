@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -34,7 +33,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          ripgrep = self.packages.${pkgs.stdenv.hostPlatform.system}.ripgrep';
+          ripgrep = pkgs.custom.ripgrep';
         })
       ];
 

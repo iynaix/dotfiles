@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -54,7 +53,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          eza = self.packages.${pkgs.stdenv.hostPlatform.system}.eza';
+          eza = pkgs.custom.eza';
         })
       ];
 
@@ -70,7 +69,7 @@
 
         systemPackages = [
           pkgs.eza # overlay-ed above
-          self.packages.${pkgs.stdenv.hostPlatform.system}.eza-tree'
+          pkgs.custom.eza-tree'
         ];
       };
 

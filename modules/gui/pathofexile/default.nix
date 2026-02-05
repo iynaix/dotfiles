@@ -39,7 +39,7 @@
       ];
 
       # NOTE: POE is installed through steam
-      environment.systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
+      environment.systemPackages = with pkgs.custom; [
         awakened-poe-trade
         exiled-exchange-2
       ];

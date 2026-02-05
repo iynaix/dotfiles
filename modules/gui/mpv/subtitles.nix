@@ -1,13 +1,27 @@
 { lib, ... }:
 {
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages.ai-subs = pkgs.writeShellApplication {
+        name = "ai-subs";
+        runtimeInputs = [ pkgs.whisper-ctranslate2 ];
+        # int8 is the fastest on cpu, according to the project page
+        text = /* sh */ ''
+          whisper-ctranslate2 --language en --output_format srt --compute_type int8 --model medium "$@"
+        '';
+      };
+    };
+
   flake.nixosModules.subtitles =
     { pkgs, ... }:
     lib.mkMerge [
       # subliminal
       {
         environment = {
-          systemPackages = with pkgs; [
-            python3Packages.subliminal
+          systemPackages = [
+            pkgs.python3Packages.subliminal
+            pkgs.custom.ai-subs
           ];
 
           shellAliases = {
@@ -21,16 +35,6 @@
         environment.systemPackages = with pkgs; [
           whisper-ctranslate2
         ];
-
-        custom.shell.packages = {
-          ai-subs = {
-            runtimeInputs = [ pkgs.whisper-ctranslate2 ];
-            # int8 is the fastest on cpu, according to the project page
-            text = /* sh */ ''
-              whisper-ctranslate2 --language en --output_format srt --compute_type int8 --model medium "$@"
-            '';
-          };
-        };
 
         custom.persist = {
           home.directories = [
