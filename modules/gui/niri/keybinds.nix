@@ -1,7 +1,7 @@
 { lib, self, ... }:
 {
   flake.nixosModules.wm =
-    { config, ... }:
+    { config, pkgs, ... }:
     let
       inherit (config.custom.hardware) monitors;
       termExec =
@@ -155,7 +155,7 @@
             "Mod+R".action = "switch-preset-column-width";
             "Mod+Shift+R".action = "switch-preset-window-height";
             "Mod+Ctrl+R".spawn = [
-              (lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
+              (lib.getExe' pkgs.custom.dotfiles-rs "niri-resize-workspace")
             ];
             # full maximize
             "Mod+Z".action = "maximize-column";

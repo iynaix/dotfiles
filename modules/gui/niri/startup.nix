@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   flake.nixosModules.wm =
-    { config, ... }:
+    { config, pkgs, ... }:
     {
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = lib.mkMerge (
@@ -63,7 +63,7 @@
           };
 
           serviceConfig = {
-            ExecStart = lib.getExe' config.custom.programs.dotfiles-rs "niri-ipc";
+            ExecStart = lib.getExe' pkgs.custom.dotfiles-rs "niri-ipc";
             Restart = "on-failure";
           };
         };

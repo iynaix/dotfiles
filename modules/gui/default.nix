@@ -4,14 +4,6 @@
     { config, pkgs, ... }:
     {
       options.custom = {
-        programs = {
-          dotfiles-rs = lib.mkOption {
-            type = lib.types.package;
-            default = pkgs.custom.dotfiles-rs;
-            description = "dotfiles-rs package";
-          };
-        };
-
         nixJson = lib.mkOption {
           type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
           default = { };
@@ -21,7 +13,7 @@
 
       config = {
         environment.systemPackages = [
-          config.custom.programs.dotfiles-rs
+          pkgs.custom.dotfiles-rs
         ];
 
         hj.xdg.state.files = {

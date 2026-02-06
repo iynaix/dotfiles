@@ -192,7 +192,7 @@
       services = {
         displayManager = {
           autoLogin.user = user;
-          defaultSession = "hyprland";
+          defaultSession = "niri";
         };
 
         pipewire = {

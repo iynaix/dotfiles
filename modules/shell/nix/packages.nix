@@ -307,6 +307,14 @@
         '';
       };
 
+      nix-eval-time = pkgs.writeShellApplication {
+        name = "nix-eval-time";
+        text = /* sh */ ''
+          time nix eval "$NH_FLAKE"#nixosConfigurations."''${1:-${host}}".config.system.build.toplevel --substituters " " \
+            --option eval-cache false --raw --read-only
+        '';
+      };
+
       # nixpkgs activity summary
       # from https://github.com/NixOS/nixpkgs/issues/321665
       nixpkgs-commits = pkgs.writeShellApplication {
@@ -341,6 +349,7 @@
           EOM
         '';
       };
+
       # build iso images
       nbuild-iso = pkgs.custom.writeShellApplicationCompletions {
         name = "nbuild-iso";
@@ -359,6 +368,7 @@
             complete -c nbuild-iso -f -a '(_nbuild_iso)'
         '';
       };
+
       # list all installed packages
       nix-list-packages = pkgs.writeShellApplication {
         name = "nix-list-packages";
@@ -398,6 +408,7 @@
           nr
           nixpkgs-commits
           nbuild-iso
+          nix-eval-time
           nix-list-packages
         ]
         ++ (with pkgs.custom; [

@@ -34,7 +34,8 @@
                 esac
             done
 
-            CARGO_CMD="cargo run --manifest-path \"packages/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
+            CARGO_CMD="cargo run --manifest-path \"modules/gui/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
+
             if [[ -n "$FEATURES_FLAG" ]]; then
                 CARGO_CMD="$CARGO_CMD $FEATURES_FLAG"
             fi

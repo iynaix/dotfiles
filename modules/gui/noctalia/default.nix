@@ -51,8 +51,33 @@
         };
     in
     {
-      packages = {
-        noctalia-ipc = pkgs.callPackage drv { };
+      packages = rec {
+        noctalia-shell' =
+          (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+            calendarSupport = true;
+          }).overrideAttrs
+            {
+              patches = [
+                ./face-aware-crop.patch
+                # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
+                ./plugin-settings-location.patch
+                # battery and volume widgets that use the primary color instead of white
+                # ./mprimary-bar-widgets.patch
+                # remove transparency from zathura template
+                ./zathura-transparency.patch
+              ];
+
+              postPatch = /* sh */ ''
+                # don't want to add python3 to the global path
+                substituteInPlace Services/Theming/TemplateProcessor.qml \
+                  --replace-fail "python3" "${lib.getExe pkgs.python3}"
+
+                # show location on weather card in clock panel
+                substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
+                  --replace-fail "showLocation: false" "showLocation: true"
+              '';
+            };
+        noctalia-ipc = pkgs.callPackage drv { noctalia-shell = noctalia-shell'; };
         noctalia-diff = pkgs.writeShellApplication {
           name = "noctalia-diff";
           runtimeInputs = with pkgs; [
@@ -94,31 +119,6 @@
       inherit (config.custom.constants) isLaptop;
       # settings.json is the desktop copy of gui-settings.json without any modifications
       defaultSettings = builtins.fromJSON (builtins.readFile ./settings.json);
-      noctalia-shell' =
-        (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-          calendarSupport = true;
-        }).overrideAttrs
-          {
-            patches = [
-              ./face-aware-crop.patch
-              # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
-              ./plugin-settings-location.patch
-              # battery and volume widgets that use the primary color instead of white
-              ./mprimary-bar-widgets.patch
-              # remove transparency from zathura template
-              ./zathura-transparency.patch
-            ];
-
-            postPatch = /* sh */ ''
-              # don't want to add python3 to the global path
-              substituteInPlace Services/Theming/TemplateProcessor.qml \
-                --replace-fail "python3" "${lib.getExe pkgs.python3}"
-
-              # show location on weather card in clock panel
-              substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
-                --replace-fail "showLocation: false" "showLocation: true"
-            '';
-          };
       noctalia-shell-reload = pkgs.writeShellApplication {
         name = "noctalia-shell-reload";
         text = /* sh */ ''
@@ -129,7 +129,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          noctalia-shell = noctalia-shell';
+          noctalia-shell = pkgs.custom.noctalia-shell';
         })
       ];
 
@@ -199,7 +199,7 @@
           partOf = [ "graphical-session.target" ];
           # this shit doesn't work because nixos doesn't properly restart user services
           # https://github.com/NixOS/nixpkgs/issues/246611#issuecomment-3342453760
-          restartTriggers = [ noctalia-shell' ];
+          restartTriggers = [ pkgs.noctalia-shell ];
 
           # fix runtime deps when starting noctalia-shell from systemd
           # https://github.com/noctalia-dev/noctalia-shell/pull/418
@@ -211,7 +211,7 @@
           };
 
           serviceConfig = {
-            ExecStart = lib.getExe noctalia-shell';
+            ExecStart = lib.getExe pkgs.noctalia-shell;
             Restart = "on-failure";
           };
         };
@@ -232,8 +232,9 @@
               pkgs.writeShellApplication {
                 name = "wallpaper-startup";
                 runtimeInputs = [
-                  noctalia-shell'
-                  config.custom.programs.dotfiles-rs
+                  pkgs.noctalia-shell
+                  pkgs.custom.noctalia-ipc # needed for wallpaper
+                  pkgs.custom.dotfiles-rs
                 ];
                 text = ''
                   # hide on laptop screens to save space
@@ -250,7 +251,7 @@
       };
 
       environment.systemPackages = [
-        noctalia-shell'
+        pkgs.noctalia-shell
         pkgs.gpu-screen-recorder # screen recorder plugin
         noctalia-shell-reload
       ]
@@ -263,11 +264,6 @@
       custom.startupServices = [ "noctalia-shell.service" ];
 
       custom.programs = {
-        # add noctalia-ipc to dotfiles-rs, so wallpaper can find it on boot
-        dotfiles-rs = pkgs.custom.dotfiles-rs.override {
-          extraPackages = [ pkgs.custom.noctalia-ipc ];
-        };
-
         # setup blur for hyprland
         hyprland.settings = {
           layerrule = [
