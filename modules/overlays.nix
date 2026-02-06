@@ -8,11 +8,6 @@
 {
   flake = {
     overlays = {
-      # add flake.packages as pkgs.custom
-      pkgsCustom = _: prev: {
-        custom = withSystem prev.stdenv.hostPlatform.system ({ config, ... }: config.packages);
-      };
-
       # access to nixpkgs-stable
       nixpkgsStable = _: prev: {
         stable = import inputs.nixpkgs-stable {
@@ -21,11 +16,16 @@
         };
       };
 
+      # add flake.packages as pkgs.custom
+      pkgsCustom = _: prev: {
+        custom = withSystem prev.stdenv.hostPlatform.system ({ config, ... }: config.packages);
+      };
+
       # misc patches to packages in pkgs
       pkgsPatches = _: prev: {
         # nixos-small logo looks like ass
         fastfetch = prev.fastfetch.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [ ./fastfetch-nixos-old-small.patch ];
+          patches = (o.patches or [ ]) ++ [ ./patches/fastfetch-nixos-old-small.patch ];
         });
 
         # add default font to silence null font errors
@@ -39,12 +39,12 @@
 
         # fix nix package count for nitch
         nitch = prev.nitch.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [ ./nitch-nix-pkgs-count.patch ];
+          patches = (o.patches or [ ]) ++ [ ./patches/nitch-nix-pkgs-count.patch ];
         });
 
         # fix some ugly styling for nemo in tokyonight
         tokyonight-gtk-theme = prev.tokyonight-gtk-theme.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [ ./tokyonight-style.patch ];
+          patches = (o.patches or [ ]) ++ [ ./patches/tokyonight-style.patch ];
         });
       };
 

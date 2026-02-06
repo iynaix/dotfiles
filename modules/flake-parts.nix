@@ -18,8 +18,7 @@
   perSystem =
     { system, ... }:
     let
-      nixpkgs-patched = self.libCustom.nixpkgsWithPatchesFor system;
-      pkgs = import nixpkgs-patched {
+      pkgs = import inputs.nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = [

@@ -1,7 +1,6 @@
 {
   config,
   inputs,
-  self,
   ...
 }:
 let
@@ -13,12 +12,10 @@ let
       user ? "iynaix",
       extraConfig ? { },
     }:
-    let
-      nixpkgs-patched = self.libCustom.nixpkgsWithPatchesFor system;
-      nixosSystem = import (nixpkgs-patched + "/nixos/lib/eval-config.nix");
-    in
-    nixosSystem {
+    inputs.nixpkgs-patcher.lib.nixosSystem {
       inherit system;
+
+      nixpkgsPatcher.inputs = inputs; # for nixpkgs-patcher to patch
 
       modules = [
         {
