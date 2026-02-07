@@ -34,31 +34,45 @@
   };
 
   flake.nixosModules.wm =
-    { config, ... }:
+    { config, pkgs, ... }:
     let
       inherit (config.custom.constants) dots isVm;
     in
     {
       programs.mangowc = {
         enable = true;
-        # package = pkgs.mangowc.overrideAttrs (o: {
-        #   source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
-        # });
+        package = pkgs.mangowc.overrideAttrs (_: (self.libCustom.nvFetcherSources pkgs).mango);
       };
 
       # write the settings to home directory
-      hj.xdg.config.files."mango/config.conf" = {
-        text =
-          (lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (
+      hj.xdg.config.files."mango/config.conf" =
+        let
+          contents = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (
             self.libCustom.generators.toHyprconf {
               attrs = config.custom.programs.mango.settings;
               importantPrefixes = [ "monitorrule" ];
             }
-          ))
-          # temporarily source raw config directly for quick edits
-          + "source=${dots}/modules/gui/mango/mango.conf";
-        type = "copy";
-      };
+          );
+          # validate if config is valid
+          checkedMangoConf = pkgs.runCommand "check-mango-conf" { } ''
+            # write $out with source directives
+            cat > "$out" <<'EOF'
+            ${contents}
+            source-optional=${dots}/modules/gui/mango/mango.conf
+            source-optional=~/.config/mango/noctalia.conf
+            EOF
+
+            # filter out the source directives for validation, the nix sandbox won't have those files
+            # concat the mango.conf for validation
+            cat $out ${./mango.conf} >> config_full.conf
+
+            ${lib.getExe config.programs.mangowc.package} -c config_full.conf -p
+          '';
+        in
+        {
+          source = checkedMangoConf;
+          type = "copy";
+        };
 
       custom.programs = {
         mango.settings = {

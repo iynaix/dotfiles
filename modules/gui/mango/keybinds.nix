@@ -55,13 +55,13 @@
           "$mod, a, spawn, noctalia-ipc bar toggle"
 
           # restart noctalia
-          "$mod_SHIFT, a, spawn, noctalia-shell-reload"
+          "$mod+SHIFT, a, spawn, noctalia-shell-reload"
 
           # clipboard history
           "$mod+CTRL, v, spawn, noctalia-ipc launcher clipboard"
 
           # notification history
-          "$mod, n, exec, noctalia-ipc notifications toggleHistory"
+          "$mod, n, spawn, noctalia-ipc notifications toggleHistory"
 
           # fullscreen
           "$mod, f, togglefullscreen,"
@@ -78,9 +78,9 @@
           "$mod, o, toggleoverview"
 
           # audio
-          ",XF86AudioLowerVolume, spawn, pamixer -d 5"
-          ",XF86AudioRaiseVolume, spawn, pamixer -i 5"
-          ",XF86AudioMute, spawn, pamixer -t"
+          "NONE, XF86AudioLowerVolume, spawn, pamixer -d 5"
+          "NONE, XF86AudioRaiseVolume, spawn, pamixer -i 5"
+          "NONE, XF86AudioMute, spawn, pamixer -t"
         ]
         ++
           # tag keybinds, switch to monitor first before switching tag

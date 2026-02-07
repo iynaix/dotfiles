@@ -15,7 +15,7 @@
           # remove when https://github.com/NixOS/nixpkgs/pull/484963 is merged
           (pkgs.fetchurl {
             url = "https://github.com/NixOS/nixpkgs/commit/966fced4f13518621e9d6ed528d2617640c6f315.patch";
-            hash = "sha256-ZN55kHhhmwfjZ2QLG00AjGbDV7f7ZRAKD0Fs/sMDUXA=";
+            hash = "sha256-+aBUfHygKzZZApYA4z8scMejymJVem45TNMp/9GDZkM=";
           })
         ];
       };

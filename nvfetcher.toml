@@ -21,6 +21,7 @@ fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/hel
 # fetch.github = "YaLTeR/niri"
 
 [mango]
+# src.git = "https://github.com/DreamMaoMao/mangowc"
 src.github_tag = "DreamMaoMao/mangowc"
 fetch.github = "DreamMaoMao/mangowc"
 
