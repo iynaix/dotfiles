@@ -36,8 +36,8 @@
         };
 
         mango.settings.bind = [
-          ",XF86MonBrightnessDown, spawn, brightnessctl set 5%-"
-          ",XF86MonBrightnessUp, spawn, brightnessctl set +5%"
+          "NONE,XF86MonBrightnessDown, spawn, brightnessctl set 5%-"
+          "NONE,XF86MonBrightnessUp, spawn, brightnessctl set +5%"
         ];
       };
     };

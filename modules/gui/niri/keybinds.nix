@@ -1,7 +1,7 @@
 { lib, self, ... }:
 {
   flake.nixosModules.wm =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.hardware) monitors;
       termExec =
@@ -43,10 +43,16 @@
               "yazi"
               "${config.hj.directory}/Downloads"
             ];
-            "Mod+W".spawn = [ "helium" ];
+            # background process to workaround a race condition that causes helium to only open sometimes
+            "Mod+W".spawn = [
+              "sh"
+              "-c"
+              "helium &"
+            ];
             "Mod+Shift+W".spawn = [
-              "helium"
-              "--incognito"
+              "sh"
+              "-c"
+              "helium --incognito &"
             ];
             "Mod+V".spawn = termExec [ "nvim" ];
             "Mod+Shift+V".spawn = [
@@ -155,7 +161,7 @@
             "Mod+R".action = "switch-preset-column-width";
             "Mod+Shift+R".action = "switch-preset-window-height";
             "Mod+Ctrl+R".spawn = [
-              (lib.getExe' pkgs.custom.dotfiles-rs "niri-resize-workspace")
+              (lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
             ];
             # full maximize
             "Mod+Z".action = "maximize-column";

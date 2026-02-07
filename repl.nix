@@ -39,13 +39,5 @@ in
   config = c;
   o = c.custom;
 
-  # testing specialisations
-  spec = c: spec_name: c.specialisation.${spec_name}.configuration;
-
-  tty = c.specialisation.tty.configuration;
-  niri = c.specialisation.niri.configuration;
-  hyprland = c.specialisation.hyprland.configuration;
-  # mango = c.specialisation.mango.configuration;
-
   # your code here
 }

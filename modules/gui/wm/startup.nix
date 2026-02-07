@@ -148,7 +148,7 @@
                   name = "init-helium";
                   runtimeInputs = [
                     pkgs.custom.helium
-                    pkgs.custom.dotfiles-rs
+                    config.custom.programs.dotfiles-rs
                   ];
                   text = ''
                     helium --profile-directory=Default &

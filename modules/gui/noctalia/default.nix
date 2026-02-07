@@ -242,7 +242,7 @@
                 runtimeInputs = [
                   pkgs.noctalia-shell
                   pkgs.custom.noctalia-ipc # needed for wallpaper
-                  pkgs.custom.dotfiles-rs
+                  config.custom.programs.dotfiles-rs
                 ];
                 text = ''
                   # hide on laptop screens to save space

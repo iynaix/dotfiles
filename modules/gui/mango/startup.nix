@@ -32,9 +32,11 @@
           exec-once = [
             "${lib.getExe' pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart mango-session.target"
           ]
-          ++ map (
-            { enable, spawn, ... }: lib.optionalString enable (lib.concatStringsSep " " spawn)
-          ) config.custom.startup;
+          ++ (
+            config.custom.startup
+            |> lib.filter (startup: startup.enable)
+            |> map (startup: lib.concatStringsSep " " startup.spawn)
+          );
 
           # create rules to open the programs on the initial workspaces
           windowrule =

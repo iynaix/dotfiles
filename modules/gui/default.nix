@@ -12,10 +12,6 @@
       };
 
       config = {
-        environment.systemPackages = [
-          pkgs.custom.dotfiles-rs
-        ];
-
         hj.xdg.state.files = {
           # misc information for nix
           "nix.json" = {
