@@ -106,8 +106,11 @@
         "Kvantum/Kvantum-Tokyo-Night".source =
           "${pkgs.custom.tokyo-night-kvantum}/share/Kvantum/Kvantum-Tokyo-Night";
 
-        "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } {
-          General.theme = "Kvantum-Tokyo-Night";
+        "Kvantum/kvantum.kvconfig" = {
+          generator = lib.generators.toINI { };
+          value = {
+            General.theme = "Kvantum-Tokyo-Night";
+          };
         };
       };
     };

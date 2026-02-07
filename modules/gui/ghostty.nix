@@ -139,6 +139,7 @@ in
       ];
 
       hj.xdg.config.files."ghostty/config" = {
+        permissions = "666";
         text = "";
         type = "copy";
       };

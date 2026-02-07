@@ -19,15 +19,13 @@
         hj.xdg.state.files = {
           # misc information for nix
           "nix.json" = {
-            text = lib.strings.toJSON (
-              # use pywal template syntax here
-              {
-                fallbackWallpaper = "${../wallpaper-default.jpg}";
-                inherit (config.custom.hardware) monitors;
-                inherit (config.custom.constants) host;
-              }
-              // config.custom.nixJson
-            );
+            generator = lib.strings.toJSON;
+            value = {
+              fallbackWallpaper = "${../wallpaper-default.jpg}";
+              inherit (config.custom.hardware) monitors;
+              inherit (config.custom.constants) host;
+            }
+            // config.custom.nixJson;
           };
         };
       };

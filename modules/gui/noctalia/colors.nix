@@ -26,8 +26,12 @@
       tomlFormat = pkgs.formats.toml { };
     in
     {
-      hj.xdg.config.files."noctalia/user-templates.toml".source =
-        tomlFormat.generate "user-template.toml"
-          ({ config = { }; } // config.custom.programs.noctalia.colors);
+      hj.xdg.config.files."noctalia/user-templates.toml" = {
+        generator = tomlFormat.generate "user-template.toml";
+        value = {
+          config = { };
+        }
+        // config.custom.programs.noctalia.colors;
+      };
     };
 }

@@ -36,6 +36,7 @@
     "autoShowDelay": 150,
     "backgroundOpacity": 0.5,
     "barType": "simple",
+    "capsuleColorKey": "none",
     "capsuleOpacity": 1,
     "density": "default",
     "displayMode": "always_visible",
@@ -242,8 +243,8 @@
     "autoStartAuth": false,
     "avatarImage": "/home/iynaix/.face",
     "boxRadiusRatio": 1,
-    "clockFormat": "hh\\nmm",
-    "clockStyle": "custom",
+    "clockFormat": "HH:mm:ss",
+    "clockStyle": "digital",
     "compactLockScreen": true,
     "dimmerOpacity": 0.2,
     "enableLockScreenCountdown": true,
@@ -252,7 +253,7 @@
     "iRadiusRatio": 1,
     "language": "",
     "lockOnSuspend": true,
-    "lockScreenCountdownDuration": 10000,
+    "lockScreenCountdownDuration": 5000,
     "radiusRatio": 1,
     "scaleRatio": 1,
     "screenRadiusRatio": 1,
@@ -309,9 +310,8 @@
   },
   "notifications": {
     "backgroundOpacity": 1,
-    "batteryCriticalThreshold": 5,
-    "batteryWarningThreshold": 20,
     "criticalUrgencyDuration": 15,
+    "enableBatteryToast": true,
     "enableKeyboardLayoutToast": true,
     "enableMediaToast": false,
     "enabled": true,
@@ -348,6 +348,9 @@
     "location": "top_right",
     "monitors": [],
     "overlayLayer": true
+  },
+  "plugins": {
+    "autoUpdate": true
   },
   "sessionMenu": {
     "countdownDuration": 3000,
@@ -396,8 +399,10 @@
     "showHeader": false,
     "showNumberLabels": true
   },
-  "settingsVersion": 47,
+  "settingsVersion": 49,
   "systemMonitor": {
+    "batteryCriticalThreshold": 5,
+    "batteryWarningThreshold": 20,
     "cpuCriticalThreshold": 90,
     "cpuPollingInterval": 1000,
     "cpuWarningThreshold": 80,

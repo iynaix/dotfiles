@@ -186,12 +186,11 @@
       # https://github.com/nix-community/home-manager/blob/master/modules/misc/xdg-user-dirs.nix
       hj.xdg.config.files = {
         "user-dirs.conf".text = "enabled=False";
-        "user-dirs.dirs".text =
-          let
-            # For some reason, these need to be wrapped with quotes to be valid.
-            wrapped = lib.mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
-          in
-          lib.generators.toKeyValue { } wrapped;
+        "user-dirs.dirs" = {
+          generator = lib.generators.toKeyValue { };
+          # For some reason, these need to be wrapped with quotes to be valid.
+          value = lib.mapAttrs (_: value: ''"${value}"'') xdg-user-dirs;
+        };
       };
 
       # pj cannot be implemented as script as it needs to change the directory of the shell

@@ -141,51 +141,59 @@
         in
         {
           config.files = {
-            "noctalia/settings.json".text =
+            "noctalia/settings.json" = {
+              generator = lib.strings.toJSON;
               # create settings by applying reducers
-              config.custom.programs.noctalia.settingsReducers
-              |> lib.foldl' (curr: reducer: reducer curr) defaultSettings
-              |> lib.strings.toJSON;
-            "noctalia/plugins.json".text = lib.strings.toJSON {
-              sources = [
-                {
-                  enabled = true;
-                  name = "Official Noctalia Plugins";
-                  url = official;
-                }
-                {
-                  enabled = true;
-                  name = "Iynaix's Noctalia Plugins";
-                  url = my-plugins;
-                }
-              ];
-              states = {
-                # official plugins
-                kaomoji-provider = {
-                  enabled = true;
-                  sourceUrl = official;
+              value =
+                config.custom.programs.noctalia.settingsReducers
+                |> lib.foldl' (curr: reducer: reducer curr) defaultSettings;
+            };
+            "noctalia/plugins.json" = {
+              generator = lib.strings.toJSON;
+              value = {
+                sources = [
+                  {
+                    enabled = true;
+                    name = "Official Noctalia Plugins";
+                    url = official;
+                  }
+                  {
+                    enabled = true;
+                    name = "Iynaix's Noctalia Plugins";
+                    url = my-plugins;
+                  }
+                ];
+                states = {
+                  # official plugins
+                  kaomoji-provider = {
+                    enabled = true;
+                    sourceUrl = official;
+                  };
+                  screen-recorder = {
+                    enabled = true;
+                    sourceUrl = official;
+                  };
+                  timer = {
+                    enabled = true;
+                    sourceUrl = official;
+                  };
+                  # third party plugins
+                  "${my-plugins-hash}:projects-provider" = {
+                    enabled = true;
+                    sourceUrl = my-plugins;
+                  };
                 };
-                screen-recorder = {
-                  enabled = true;
-                  sourceUrl = official;
-                };
-                timer = {
-                  enabled = true;
-                  sourceUrl = official;
-                };
-                # third party plugins
-                "${my-plugins-hash}:projects-provider" = {
-                  enabled = true;
-                  sourceUrl = my-plugins;
-                };
+                version = 2;
               };
-              version = 2;
             };
           };
           cache.files = {
-            "noctalia/plugins/${my-plugins-hash}:projects-provider-settings.json".text = lib.strings.toJSON {
-              projectDir = "~/projects";
-              openCommand = "codium %s";
+            "noctalia/plugins/${my-plugins-hash}:projects-provider-settings.json" = {
+              generator = lib.strings.toJSON;
+              value = {
+                projectDir = "~/projects";
+                openCommand = "codium %s";
+              };
             };
           };
         };
