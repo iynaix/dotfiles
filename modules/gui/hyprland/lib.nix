@@ -149,21 +149,22 @@ in
             map (p: "hyprctl plugin load ${mkEntry p}") config.plugins;
         }
         config.settings
-        # source the hyprland config at the default location
-        { source = "~/.config/hypr/hyprland.conf"; }
       ];
-      checkedHyprlandConf = config.pkgs.writeTextFile {
-        name = "checked-hyprland.conf";
-        text = hyprlandConfText;
-        # validate hyprland config, filter out source to non-existent file
-        # can be removed when the PR is merged:
-        # https://github.com/hyprwm/Hyprland/pull/12286
-        checkPhase = ''
-          export XDG_RUNTIME_DIR=$(mktemp -d)
-          grep -v '^source' "$out" > config_without_source.conf
-          ${lib.getExe config.package} --verify-config -c config_without_source.conf
-        '';
-      };
+      # validate hyprland config, filter out source to non-existent file
+      # can be removed when the PR is merged:
+      # https://github.com/hyprwm/Hyprland/pull/12286
+      checkedHyprlandConf = config.pkgs.runCommand "check-hyprland-conf" { } ''
+        # write $out with source directives
+        cat > "$out" <<'EOF'
+        ${hyprlandConfText}
+        source=~/.config/hypr/hyprland.conf
+        EOF
+
+        # filter out the source directives for validation, the nix sandbox won't have those files
+        export XDG_RUNTIME_DIR=$(mktemp -d)
+        grep -v '^source' "$out" > config_without_source.conf
+        ${lib.getExe config.package} --verify-config -c config_without_source.conf
+      '';
     in
     {
       options = hyprlandOptions // {

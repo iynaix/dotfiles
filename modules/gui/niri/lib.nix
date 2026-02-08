@@ -230,13 +230,13 @@ in
         (toNiriSpawnAtStartup cfg.spawn-at-startup)
         cfg.config
       ];
-      checkedNiriConf = config.pkgs.writeTextFile {
-        name = "niri.kdl";
-        text = niriConf;
-        checkPhase = ''
-          ${lib.getExe config.package} validate -c $out
-        '';
-      };
+      checkedNiriConf = config.pkgs.runCommand "check-niri-conf" { } ''
+        # write $out with source directives
+        cat > "$out" <<'EOF'
+        ${niriConf}
+        EOF
+        ${lib.getExe config.package} validate -c $out
+      '';
     in
     {
       options = {
