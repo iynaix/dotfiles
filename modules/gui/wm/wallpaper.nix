@@ -12,7 +12,7 @@
 
         # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
         custom.programs.niri = {
-          settings.config = lib.concatMapStringsSep "\n" (
+          settings.window-rules = map (
             mon:
             let
               targetPercent = 0.3;
@@ -20,14 +20,12 @@
               # 16:9 ratio
               height = builtins.floor (width / 16.0 * 9.0);
             in
-            /* kdl */ ''
-              window-rule {
-                  match title="^wallpaper-selector-${mon.name}$"
-                  default-column-width { fixed ${toString width}; }
-                  default-window-height { fixed ${toString height}; }
-                  open-floating true
-              }
-            ''
+            {
+              matches = [ { title = "^wallpaper-selector-${mon.name}$"; } ];
+              default-column-width.fixed = width;
+              default-window-height.fixed = height;
+              open-floating = true;
+            }
           ) config.custom.hardware.monitors;
         };
 

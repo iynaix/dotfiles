@@ -141,18 +141,18 @@
 
         # fake dimaround, see:
         # https://github.com/YaLTeR/niri/discussions/1806
-        niri.settings.config = /* kdl */ ''
-          layer-rule {
-              match namespace="^rofi$"
-              shadow {
-                  on
-                  // overwritten by wallpaper script later
-                  spread 1024
-                  draw-behind-window true
-                  color "0000009A"
-              }
+        niri.settings.layer-rules = [
+          {
+            matches = [ { namespace = "^rofi$"; } ];
+            shadow = {
+              on = null;
+              # overwritten by wallpaper script later
+              spread = 1024;
+              draw-behind-window = true;
+              color = "0000009A";
+            };
           }
-        '';
+        ];
 
         noctalia.colors.templates = {
           # default launcher

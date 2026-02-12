@@ -10,16 +10,21 @@
           |> lib.filter (startup: startup.enable)
           |> map (startup: {
             spawn-at-startup = [ startup.spawn ];
-            config = # kdl
-              lib.mkIf (startup.app-id != null || startup.title != null) ''
-                window-rule {
-                    match ${lib.optionalString (startup.app-id != null) ''app-id="^${startup.app-id}$"''} ${
-                      lib.optionalString (startup.title != null) ''title="^${startup.title}$"''
-                    } at-startup=true
-                    open-on-workspace "${toString startup.workspace}"
-                    ${startup.niriArgs}
-                }
-              '';
+            window-rules = lib.optional (startup.app-id != null || startup.title != null) (
+              {
+                matches = [
+                  (
+                    {
+                      at-startup = true;
+                    }
+                    // (lib.optionalAttrs (startup.app-id != null) { inherit (startup) app-id; })
+                    // (lib.optionalAttrs (startup.title != null) { inherit (startup) title; })
+                  )
+                ];
+                open-on-workspace = toString startup.workspace;
+              }
+              // startup.niriArgs
+            );
           })
         )
         ++ [

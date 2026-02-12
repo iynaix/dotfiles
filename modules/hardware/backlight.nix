@@ -19,7 +19,7 @@
               "set"
               "5%-"
             ];
-            parameters = {
+            _attrs = {
               allow-when-locked = true;
             };
           };
@@ -29,7 +29,7 @@
               "set"
               "+5%"
             ];
-            parameters = {
+            _attrs = {
               allow-when-locked = true;
             };
           };

@@ -85,8 +85,8 @@
               "tile" # layout
               mon.transform
               mon.scale
-              mon.positionX
-              mon.positionY
+              mon.x
+              mon.y
               mon.width
               mon.height
               mon.refreshRate

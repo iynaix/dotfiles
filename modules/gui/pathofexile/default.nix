@@ -63,25 +63,29 @@
           ];
         };
 
-        niri.settings.config = /* kdl */ ''
-          // poe1 / poe2
-          window-rule {
-              match title="^Path of Exile( 2)?$"
-              match app-id="^steam_app_(238960|2694490)$"
+        niri.settings.window-rules = [
+          # poe1 / poe2
+          {
+            matches = [
+              { title = "^Path of Exile( 2)?$"; }
+              { app-id = "^steam_app_(238960|2694490)$"; }
+            ];
 
-              open-on-workspace "5"
-              open-fullscreen true
+            open-on-workspace = "5";
+            open-fullscreen = true;
           }
 
-          // Trade Tools (Awakened PoE Trade / Exiled Exchange 2)
-          window-rule {
-              match title="^Awakened PoE Trade$"
-              match title="^Exiled Exchange 2$"
+          # Trade Tools (Awakened PoE Trade / Exiled Exchange 2)
+          {
+            matches = [
+              { title = "^Awakened PoE Trade$"; }
+              { title = "^Exiled Exchange 2$"; }
+            ];
 
-              open-floating true
-              open-focused true
+            open-floating = true;
+            open-focused = true;
           }
-        '';
+        ];
       };
 
       custom.persist = {

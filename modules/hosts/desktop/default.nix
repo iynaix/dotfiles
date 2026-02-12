@@ -105,8 +105,8 @@
               # niri / mango wants this to be exact down to the decimals
               refreshRate = "174.963";
               vrr = false;
-              positionX = 1440;
-              positionY = 1080;
+              x = 1440;
+              y = 1080;
               workspaces = [
                 1
                 2
@@ -123,8 +123,8 @@
               name = "DP-2";
               width = 2560;
               height = 1440;
-              positionX = 0;
-              positionY = 728;
+              x = 0;
+              y = 728;
               transform = 1;
               workspaces = [
                 6
@@ -137,8 +137,8 @@
               name = "HDMI-A-1";
               width = 3840;
               height = 2160;
-              positionX = 1754;
-              positionY = 0;
+              x = 1754;
+              y = 0;
               scale = 2.0;
               workspaces = [
                 8
@@ -152,8 +152,8 @@
             #   name = "DP-3";
             #   width = 2256;
             #   height = 1504;
-            #   positionX = 4880;
-            #   positionY = 1080;
+            #   x = 4880;
+            #   y = 1080;
             #   scale = 1.5666666666666666; # 47/30
             #   transform = 3;
             #   workspaces = [

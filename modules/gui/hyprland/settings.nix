@@ -15,7 +15,7 @@
             {
               output = d.name;
               mode = "${toString d.width}x${toString d.height}@${toString d.refreshRate}";
-              position = "${toString d.positionX}x${toString d.positionY}";
+              position = "${toString d.x}x${toString d.y}";
               inherit (d) scale transform vrr;
             }
             // d.extraHyprlandConfig

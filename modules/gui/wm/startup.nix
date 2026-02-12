@@ -29,12 +29,12 @@
                   default = 60;
                   description = "Refresh rate of the display";
                 };
-                positionX = lib.mkOption {
+                x = lib.mkOption {
                   type = lib.types.int;
                   default = 0;
                   description = "Position x coordinate of the display";
                 };
-                positionY = lib.mkOption {
+                y = lib.mkOption {
                   type = lib.types.int;
                   default = 0;
                   description = "Position y coordinate of the display";
@@ -107,9 +107,9 @@
                   default = null;
                 };
                 niriArgs = lib.mkOption {
-                  type = lib.types.lines;
+                  type = lib.types.attrs;
                   description = "Extra arguments for niri window rules";
-                  default = "";
+                  default = { };
                 };
               };
             })
@@ -180,9 +180,9 @@
               "--class=${app-id}"
             ];
             workspace = 7;
-            niriArgs = /* kdl */ ''
-              open-maximized true
-            '';
+            niriArgs = {
+              open-maximized = true;
+            };
           }
 
           # librewolf for discord
@@ -190,9 +190,9 @@
             app-id = "librewolf";
             spawn = [ "librewolf" ];
             workspace = 9;
-            niriArgs = /* kdl */ ''
-              open-maximized true
-            '';
+            niriArgs = {
+              open-maximized = true;
+            };
           }
 
           # download related

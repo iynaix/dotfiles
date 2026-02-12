@@ -1,24 +1,53 @@
-{ lib, self, ... }:
+{ lib, inputs, ... }:
 {
+  flake.nixosModules.core =
+    { pkgs, ... }:
+    {
+      options.custom = {
+        programs.niri = {
+          settings = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = (pkgs.formats.json { }).type;
+              # strings don't merge by default
+              options.extraConfig = lib.mkOption {
+                type = lib.types.lines;
+                default = "";
+                description = "Additional configuration lines.";
+              };
+            };
+            description = "Niri settings, see https://github.com/Lassulus/wrappers/blob/main/modules/niri/module.nix for available options";
+          };
+        };
+      };
+    };
+
   flake.nixosModules.wm =
     { config, pkgs, ... }:
     let
       # source = (self.libCustom.nvFetcherSources pkgs).niri;
-      niriWrapped = self.wrapperModules.niri.apply {
+      niriWrapped = inputs.wrappers.wrapperModules.niri.apply {
         inherit pkgs;
-        package = pkgs.niri.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [
-            (pkgs.fetchpatch {
-              url = "https://github.com/YaLTeR/niri/commit/7a237e519c69ec493851ffac169abb3aa917a7b3.patch";
-              hash = "sha256-svv8YOrDR45qHbKM8GCAp5tkJbFBefE8z1GftxyOZlA=";
-            })
-            # unmerged PR to fix this
-            # https://github.com/YaLTeR/niri/pull/3004
-            ./transparent-fullscreen.patch
-          ];
+        package = lib.mkForce (
+          pkgs.niri.overrideAttrs (o: {
+            patches = (o.patches or [ ]) ++ [
+              (pkgs.fetchpatch {
+                url = "https://github.com/YaLTeR/niri/commit/7a237e519c69ec493851ffac169abb3aa917a7b3.patch";
+                hash = "sha256-svv8YOrDR45qHbKM8GCAp5tkJbFBefE8z1GftxyOZlA=";
+              })
+              # load-config-file --path
+              (pkgs.fetchpatch {
+                url = "https://github.com/niri-wm/niri/commit/549148d27779d024255a84535b42b947f1c2a113.patch";
+                hash = "sha256-MxcOgLz8LDatlLICFFt/PVGtyvLrqc4P/YhvawZXhFA=";
+                excludes = [ "docs/wiki/Integrating-niri.md" ];
+              })
+              # unmerged PR to fix this
+              # https://github.com/YaLTeR/niri/pull/3004
+              ./transparent-fullscreen.patch
+            ];
 
-          doCheck = false; # faster builds
-        });
+            doCheck = false; # faster builds
+          })
+        );
 
         inherit (config.custom.programs.niri) settings;
       };

@@ -101,11 +101,11 @@
             "Mod+Shift+Ctrl+x".spawn = [ lockCmd ];
           };
 
-          config = /* kdl */ ''
-            switch-events {
-                lid-open { spawn "${lockCmd}"; }
-            }
-          '';
+          switch-events = {
+            lid-open = {
+              spawn = lockCmd;
+            };
+          };
         };
 
         mango.settings = {
