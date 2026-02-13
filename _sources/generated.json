@@ -58,12 +58,12 @@
             "name": null,
             "owner": "DreamMaoMao",
             "repo": "mangowc",
-            "rev": "0.12.1",
-            "sha256": "sha256-Py8gfpkp+oYAnaCiFGytyLkxTd1DqFr/NH3DUma8meI=",
+            "rev": "0.12.2",
+            "sha256": "sha256-B70RXGpG2sH6WuP4XFdijgsZm39LEFIh0h/5E0r99W4=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     "mpv-cut": {
         "cargoLock": null,

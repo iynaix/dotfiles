@@ -164,6 +164,7 @@
             dither = "fruit";
 
             sub-auto = "fuzzy";
+            sub-pos = 100;
             # some settings fixing VOB/PGS subtitles (creating blur & changing yellow subs to gray)
             sub-gauss = "1.0";
             sub-gray = true;

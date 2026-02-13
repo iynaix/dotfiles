@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   flake.nixosModules.core =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.constants) isLaptop user;
     in
@@ -35,23 +35,6 @@
         {
           services.gnome.gnome-keyring.enable = true;
           security.pam.services.login.enableGnomeKeyring = true;
-        }
-
-        # WM agnostic polkit authentication agent
-        {
-          systemd.user.services.polkit-gnome = {
-            wantedBy = [ "graphical-session.target" ];
-
-            unitConfig = {
-              Description = "GNOME PolicyKit Agent";
-              After = [ "graphical-session.target" ];
-              PartOf = [ "graphical-session.target" ];
-            };
-
-            serviceConfig = {
-              ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-            };
-          };
         }
 
         {

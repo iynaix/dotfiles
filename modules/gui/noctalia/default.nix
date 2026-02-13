@@ -49,11 +49,35 @@
             ${lib.getExe noctalia-shell} ipc call "$@"
           '';
         };
+
+      # required for the polkit plugin
+      quickshell-unstable =
+        assert lib.assertMsg (lib.versionOlder pkgs.quickshell.version "0.2.2")
+          "quickshell updated; remove quickshell-unstable override";
+        pkgs.quickshell.overrideAttrs (o: {
+          src = pkgs.fetchFromGitHub {
+            owner = "quickshell-mirror";
+            repo = "quickshell";
+            rev = "dacfa9de829ac7cb173825f593236bf2c21f637e";
+            hash = "sha256-ngXnN5YXu+f45+QGYNN/VEBMQmcBCYGRCqwaK8cxY1s=";
+          };
+
+          # from the quickshell flake
+          buildInputs = (o.buildInputs or [ ]) ++ [
+            pkgs.polkit
+            pkgs.glib
+          ];
+
+          cmakeFlags = (o.cmakeFlags or [ ]) ++ [
+            (lib.cmakeBool "SERVICE_POLKIT" true)
+          ];
+        });
     in
     {
       packages = rec {
         noctalia-shell' =
           (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+            quickshell = quickshell-unstable;
             calendarSupport = true;
           }).overrideAttrs
             {
@@ -62,7 +86,7 @@
                 # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
                 ./plugin-settings-location.patch
                 # battery and volume widgets that use the primary color instead of white
-                # ./mprimary-bar-widgets.patch
+                ./mprimary-bar-widgets.patch
                 # remove transparency from zathura template
                 ./zathura-transparency.patch
               ];
@@ -78,6 +102,16 @@
               '';
             };
         noctalia-ipc = pkgs.callPackage drv { noctalia-shell = noctalia-shell'; };
+        noctalia-copy = pkgs.writeShellApplication {
+          name = "noctalia-copy";
+          runtimeInputs = with pkgs; [
+            jq
+            wl-clipboard
+          ];
+          text = /* sh */ ''
+            noctalia-shell ipc call state all | jq -S '.settings' | wl-copy
+          '';
+        };
         noctalia-diff = pkgs.writeShellApplication {
           name = "noctalia-diff";
           runtimeInputs = with pkgs; [
@@ -177,6 +211,10 @@
                     enabled = true;
                     sourceUrl = official;
                   };
+                  polkit-agent = {
+                    enabled = true;
+                    sourceUrl = official;
+                  };
                   # third party plugins
                   "${my-plugins-hash}:projects-provider" = {
                     enabled = true;
@@ -264,6 +302,7 @@
         noctalia-shell-reload
       ]
       ++ (with pkgs.custom; [
+        noctalia-copy
         noctalia-ipc
         noctalia-diff
       ]);

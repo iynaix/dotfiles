@@ -338,6 +338,7 @@
   "notifications": {
     "backgroundOpacity": 1,
     "criticalUrgencyDuration": 15,
+    "density": "default",
     "enableBatteryToast": true,
     "enableKeyboardLayoutToast": true,
     "enableMediaToast": false,
@@ -509,7 +510,7 @@
     "networkPanelView": "wifi",
     "panelBackgroundOpacity": 0.5,
     "panelsAttachedToBar": true,
-    "settingsPanelMode": "centered",
+    "settingsPanelMode": "window",
     "tooltipsEnabled": true,
     "wifiDetailsViewMode": "grid"
   },

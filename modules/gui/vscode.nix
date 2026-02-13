@@ -9,7 +9,6 @@
           with pkgs.vscode-extensions;
           [
             aaron-bond.better-comments
-            bbenoist.nix
             bradlc.vscode-tailwindcss
             christian-kohler.npm-intellisense
             dbaeumer.vscode-eslint

@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.12.1";
+    version = "0.12.2";
     src = fetchFromGitHub {
       owner = "DreamMaoMao";
       repo = "mangowc";
-      rev = "0.12.1";
+      rev = "0.12.2";
       fetchSubmodules = false;
-      sha256 = "sha256-Py8gfpkp+oYAnaCiFGytyLkxTd1DqFr/NH3DUma8meI=";
+      sha256 = "sha256-B70RXGpG2sH6WuP4XFdijgsZm39LEFIh0h/5E0r99W4=";
     };
   };
   mpv-cut = {
