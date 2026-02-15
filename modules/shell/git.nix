@@ -10,6 +10,7 @@
       gitignores = [
         ".direnv"
         ".devenv"
+        ".envrc"
         ".jj"
         "node_modules"
       ];

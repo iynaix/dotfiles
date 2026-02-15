@@ -2,6 +2,7 @@ result
 result-bin
 result-man
 target
+!.envrc
 .devenv
 .direnv
 .vscode

@@ -3,7 +3,7 @@
   flake.nixosModules.host-desktop =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) isVm user;
+      inherit (config.custom.constants) isVm;
       # fetch wallpapers from pixiv for user
       pixiv = pkgs.writeShellApplication {
         name = "pixiv";
@@ -190,10 +190,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        displayManager = {
-          autoLogin.user = user;
-          defaultSession = "niri";
-        };
+        displayManager.defaultSession = "niri";
 
         pipewire = {
           wireplumber.extraConfig = {

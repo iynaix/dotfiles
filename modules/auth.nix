@@ -79,6 +79,8 @@
 
         {
           services.displayManager = {
+            autoLogin.user = user;
+
             # scrolling is nicer for laptop with a smaller screen
             defaultSession = lib.mkDefault (if isLaptop then "niri" else "hyprland");
 

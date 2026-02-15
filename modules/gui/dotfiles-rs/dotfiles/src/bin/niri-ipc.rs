@@ -381,16 +381,18 @@ fn handle_window_opened_or_changed(
 
                     // switch to new workspace
                     socket
+                        .send(Request::Action(Action::FocusWindow { id: window.id }))
+                        .expect("failed to send FocusWindow")
+                        .ok();
+
+                    std::thread::sleep(Duration::from_millis(100));
+                    socket
                         .send(Request::Action(Action::FocusWorkspace {
                             reference: WorkspaceReferenceArg::Id(wksp_id),
                         }))
                         .expect("failed to send FocusWorkspace")
                         .ok();
 
-                    socket
-                        .send(Request::Action(Action::FocusWindow { id: window.id }))
-                        .expect("failed to send FocusWindow")
-                        .ok();
                 }
                 break;
             }
