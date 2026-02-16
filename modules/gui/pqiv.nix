@@ -102,6 +102,7 @@ in
                 c { command(nomacs $1) }
                 w { command(wallpaper $1) }
                 m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in") }
+                <Control>m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_crop") }
               '';
             }).wrapper;
         })

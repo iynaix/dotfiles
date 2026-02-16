@@ -128,7 +128,7 @@
               desktopName = "Transmission Remote";
               genericName = "BitTorrent Client";
               icon = "transmission";
-              exec = ''transmission-remote -a "%U"'';
+              exec = "transmission-remote -a %U";
             }
           ))
           (lib.hiPrio pkgs.makeDesktopItem {

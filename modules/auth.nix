@@ -3,7 +3,7 @@
   flake.nixosModules.core =
     { config, ... }:
     let
-      inherit (config.custom.constants) isLaptop user;
+      inherit (config.custom.constants) user;
     in
     {
       config = lib.mkMerge [
@@ -82,7 +82,7 @@
             autoLogin.user = user;
 
             # scrolling is nicer for laptop with a smaller screen
-            defaultSession = lib.mkDefault (if isLaptop then "niri" else "hyprland");
+            defaultSession = lib.mkDefault "niri";
 
             ly = {
               enable = true;

@@ -32,15 +32,15 @@
         docker
         # syncoid
         virtualisation
+
+        ### specialisations
+        specialisation-tty
+        specialisation-niri
+        # specialisation-hyprland
+        # specialisation-mango
       ];
 
       custom = {
-        specialisation = {
-          niri.enable = true;
-          hyprland.enable = true;
-          mango.enable = true;
-        };
-
         hardware = {
           monitors = [
             {

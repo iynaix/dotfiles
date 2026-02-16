@@ -2,8 +2,13 @@
   description = "iynaix's dotfiles managed via NixOS and home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+
+    # channel urls are faster and more reliable than github -.-
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
+    nixpkgs-stable.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
 
     # patch nixpkgs to use unmerged PRs
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";

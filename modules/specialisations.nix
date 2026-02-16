@@ -2,10 +2,6 @@
 {
   flake.nixosModules.core =
     { config, ... }:
-    let
-      cfg = config.custom.specialisation;
-    in
-    # NOTE: specialisation options are defined in home-manager/default.nix
     {
       options.custom = {
         specialisation = {
@@ -25,49 +21,55 @@
         environment.sessionVariables = {
           __SPECIALISATION = config.custom.specialisation.current;
         };
-
-        specialisation = {
-          # boot into a tty without a DE / WM
-          tty = {
-            configuration = {
-              custom = {
-                specialisation.current = "tty";
-              };
-
-              services.displayManager.ly.enable = lib.mkForce false;
-            };
-          };
-
-          hyprland = lib.mkIf cfg.hyprland.enable {
-            configuration = {
-              custom = {
-                specialisation.current = "hyprland";
-              };
-
-              services.displayManager.defaultSession = lib.mkForce "hyprland";
-            };
-          };
-
-          niri = lib.mkIf cfg.niri.enable {
-            configuration = {
-              custom = {
-                specialisation.current = "niri";
-              };
-
-              services.displayManager.defaultSession = lib.mkForce "niri";
-            };
-          };
-
-          mango = lib.mkIf cfg.mango.enable {
-            configuration = {
-              custom = {
-                specialisation.current = "mango";
-              };
-
-              services.displayManager.defaultSession = lib.mkForce "mango";
-            };
-          };
-        };
       };
     };
+
+  flake.nixosModules.specialisation-tty = {
+    # boot into a tty without a DE / WM
+    specialisation.tty = {
+      configuration = {
+        custom = {
+          specialisation.current = "tty";
+        };
+
+        services.displayManager.ly.enable = lib.mkForce false;
+      };
+    };
+  };
+
+  flake.nixosModules.specialisation-hyprland = {
+    specialisation.hyprland = {
+      configuration = {
+        custom = {
+          specialisation.current = "hyprland";
+        };
+
+        services.displayManager.defaultSession = lib.mkForce "hyprland";
+      };
+    };
+  };
+
+  flake.nixosModules.specialisation-niri = {
+    specialisation.niri = {
+      configuration = {
+        custom = {
+          specialisation.current = "niri";
+        };
+
+        services.displayManager.defaultSession = lib.mkForce "niri";
+      };
+    };
+  };
+
+  flake.nixosModules.specialisation-mango = {
+    specialisation.mango = {
+      configuration = {
+        custom = {
+          specialisation.current = "mango";
+        };
+
+        services.displayManager.defaultSession = lib.mkForce "mango";
+      };
+    };
+  };
 }

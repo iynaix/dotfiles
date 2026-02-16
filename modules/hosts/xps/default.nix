@@ -31,6 +31,12 @@
         # docker
         # syncoid
         # virtualisation
+
+        ### specialisations
+        specialisation-tty
+        specialisation-niri
+        # specialisation-hyprland
+        # specialisation-mango
       ];
 
       custom = {

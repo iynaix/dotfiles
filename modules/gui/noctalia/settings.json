@@ -72,7 +72,6 @@
           "labelMode": "name",
           "occupiedColor": "secondary",
           "pillSize": 0.6,
-          "reverseScroll": false,
           "showApplications": false,
           "showBadge": true,
           "showLabelsOnlyWhenOccupied": true,
@@ -267,6 +266,9 @@
       "keyLeft": [
         "Left"
       ],
+      "keyRemove": [
+        "Del"
+      ],
       "keyRight": [
         "Right"
       ],
@@ -282,6 +284,7 @@
     "lockScreenMonitors": [],
     "lockScreenTint": 0,
     "radiusRatio": 1,
+    "reverseScroll": false,
     "scaleRatio": 1,
     "screenRadiusRatio": 1,
     "shadowDirection": "bottom_right",
@@ -319,10 +322,12 @@
     "weatherShowEffects": false
   },
   "network": {
+    "airplaneModeEnabled": false,
     "bluetoothDetailsViewMode": "grid",
     "bluetoothHideUnnamedDevices": false,
     "bluetoothRssiPollIntervalMs": 10000,
     "bluetoothRssiPollingEnabled": false,
+    "disableDiscoverability": false,
     "wifiDetailsViewMode": "grid",
     "wifiEnabled": false
   },
@@ -430,31 +435,26 @@
         "keybind": "4"
       }
     ],
-    "showHeader": false
+    "showHeader": false,
+    "showKeybinds": true
   },
   "settingsVersion": 53,
   "systemMonitor": {
     "batteryCriticalThreshold": 5,
     "batteryWarningThreshold": 20,
     "cpuCriticalThreshold": 90,
-    "cpuPollingInterval": 1000,
     "cpuWarningThreshold": 80,
     "criticalColor": "",
     "diskAvailCriticalThreshold": 10,
     "diskAvailWarningThreshold": 20,
     "diskCriticalThreshold": 90,
-    "diskPollingInterval": 3000,
     "diskWarningThreshold": 80,
     "enableDgpuMonitoring": false,
     "externalMonitor": "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor",
     "gpuCriticalThreshold": 90,
-    "gpuPollingInterval": 3000,
     "gpuWarningThreshold": 80,
-    "loadAvgPollingInterval": 3000,
     "memCriticalThreshold": 90,
-    "memPollingInterval": 1000,
     "memWarningThreshold": 80,
-    "networkPollingInterval": 1000,
     "swapCriticalThreshold": 90,
     "swapWarningThreshold": 80,
     "tempCriticalThreshold": 90,
