@@ -105,8 +105,8 @@
               };
             };
           };
+          optimise.automatic = true;
           settings = {
-            auto-optimise-store = true; # Optimise symlinks
             # re-evaluate on every rebuild instead of "cached failure of attribute" error
             # eval-cache = false;
             flake-registry = ""; # don't use the global flake registry, define everything explicitly

@@ -125,24 +125,6 @@
             )
             |> lib.listToAttrs;
 
-          # create workspaces config
-          workspaces =
-            config.custom.hardware.monitors
-            |> self.libCustom.mapWorkspaces (
-              {
-                workspace,
-                monitor,
-                ...
-              }:
-              {
-                name = toString workspace;
-                value = {
-                  open-on-output = monitor.name;
-                };
-              }
-            )
-            |> lib.listToAttrs;
-
           input = {
             keyboard = {
               xkb = {
@@ -228,9 +210,25 @@
           };
 
           # final include right at the end of the file
-          extraConfig = lib.mkAfter ''
-            include optional=true "${config.hj.xdg.config.directory}/niri/config.kdl";
-          '';
+          extraConfig = lib.mkMerge [
+            # don't use the workspaces key in setting as attrset keys are unordered and it becomes 1, 10, 2, 3...
+            (
+              config.custom.hardware.monitors
+              |> self.libCustom.mapWorkspaces (
+                {
+                  workspace,
+                  monitor,
+                  ...
+                }:
+                ''workspace "${toString workspace}" { open-on-output "${monitor.name}"; }''
+              )
+              |> lib.concatLines
+            )
+            # always source original config.kdl at the end
+            (lib.mkAfter ''
+              include optional=true "${config.hj.xdg.config.directory}/niri/config.kdl";
+            '')
+          ];
         };
       };
     };

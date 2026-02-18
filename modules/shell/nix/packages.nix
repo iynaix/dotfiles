@@ -315,6 +315,17 @@
         '';
       };
 
+      nix-eval-flamegraph = pkgs.writeShellApplication {
+        name = "nix-eval-flamegraph";
+        runtimeInputs = [ pkgs.inferno ];
+        text = /* sh */ ''
+          nix eval .#nixosConfigurations."''${1:-${host}}".config.system.build.toplevel --impure --eval-profiler flamegraph --eval-profiler-frequency 9999
+          mv nix.profile /tmp/nix.profile
+          inferno-flamegraph --width 10000 < /tmp/nix.profile > /tmp/nix-flamegraph.svg
+          helium /tmp/nix-flamegraph.svg
+        '';
+      };
+
       # nixpkgs activity summary
       # from https://github.com/NixOS/nixpkgs/issues/321665
       nixpkgs-commits = pkgs.writeShellApplication {
@@ -368,16 +379,6 @@
             complete -c nbuild-iso -f -a '(_nbuild_iso)'
         '';
       };
-
-      # list all installed packages
-      nix-list-packages = pkgs.writeShellApplication {
-        name = "nix-list-packages";
-        text =
-          let
-            allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
-          in
-          ''sort -ui <<< "${lib.concatLines allPkgs}"'';
-      };
     in
     {
       nixpkgs.overlays = [
@@ -409,7 +410,7 @@
           nixpkgs-commits
           nbuild-iso
           nix-eval-time
-          nix-list-packages
+          nix-eval-flamegraph
         ]
         ++ (with pkgs.custom; [
           nattr
@@ -419,6 +420,14 @@
           nlocate-lib
           ndepends
         ]);
+
+      custom.programs.print-config =
+        let
+          allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
+        in
+        {
+          pkgs = ''sort -ui <<< "${lib.concatLines allPkgs}"'';
+        };
 
       custom.persist = {
         home = {

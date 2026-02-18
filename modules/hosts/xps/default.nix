@@ -33,8 +33,8 @@
         # virtualisation
 
         ### specialisations
-        specialisation-tty
-        specialisation-niri
+        # specialisation-tty
+        # specialisation-niri
         # specialisation-hyprland
         # specialisation-mango
       ];

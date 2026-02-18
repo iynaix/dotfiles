@@ -227,6 +227,7 @@
     "colorizeIcons": false,
     "deadOpacity": 0.6,
     "displayMode": "auto_hide",
+    "dockType": "floating",
     "enabled": false,
     "floatingRatio": 1,
     "inactiveIndicators": false,
@@ -235,6 +236,8 @@
     "pinnedApps": [],
     "pinnedStatic": false,
     "position": "bottom",
+    "showFrameIndicator": true,
+    "sitOnFrame": false,
     "size": 1
   },
   "general": {
@@ -342,10 +345,12 @@
   },
   "notifications": {
     "backgroundOpacity": 1,
+    "clearDismissed": true,
     "criticalUrgencyDuration": 15,
-    "density": "default",
+    "density": "compact",
     "enableBatteryToast": true,
     "enableKeyboardLayoutToast": true,
+    "enableMarkdown": true,
     "enableMediaToast": false,
     "enabled": true,
     "location": "top_right",
@@ -433,6 +438,13 @@
         "countdownEnabled": true,
         "enabled": true,
         "keybind": "4"
+      },
+      {
+        "action": "rebootToUefi",
+        "command": "",
+        "countdownEnabled": true,
+        "enabled": true,
+        "keybind": "5"
       }
     ],
     "showHeader": false,

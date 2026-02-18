@@ -166,7 +166,7 @@
           };
         };
 
-        hj.xdg.state.files."impermanence.txt".text =
+        custom.programs.print-config =
           let
             getDirPath = prefix: d: "${prefix}${d.dirPath}/";
             getFilePath = prefix: f: "${prefix}${f.filePath}";
@@ -181,7 +181,9 @@
               map (getFilePath "/persist") (persistCfg.files ++ persistCfg.users.${user}.files)
               ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
           in
-          (allDirectories ++ allFiles) |> lib.unique |> lib.sort lib.lessThan |> lib.concatLines;
+          {
+            impermanence = ''sort -ui <<< "${lib.concatLines (allDirectories ++ allFiles)}"'';
+          };
       };
     };
 }
