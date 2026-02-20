@@ -356,7 +356,7 @@
       ];
     in
     {
-      packages.mpv' = inputs.wrappers.lib.wrapPackage {
+      packages.mpv = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.mpv.override { inherit (mpvConfig) scripts; };
         flags = {
@@ -381,7 +381,7 @@
 
         nixpkgs.overlays = [
           (_: _prev: {
-            mpv = pkgs.custom.mpv';
+            mpv = pkgs.custom.mpv;
           })
         ];
 

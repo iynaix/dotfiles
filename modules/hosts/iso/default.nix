@@ -46,15 +46,15 @@ let
                 ]
                 ++ (with pkgs.custom; [
                   # custom packages
-                  bat'
-                  batman'
-                  btop'
-                  eza'
-                  eza-tree'
+                  bat
+                  batman
+                  btop
+                  eza
+                  eza-tree
                   moor
                   neovim-iynaix
-                  ripgrep'
-                  yazi'
+                  ripgrep
+                  yazi
                 ])
                 ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ ghostty ];
 

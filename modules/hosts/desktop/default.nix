@@ -1,4 +1,4 @@
-{ lib, ... }@topLevel:
+{ lib, ... }@top:
 {
   flake.nixosModules.host-desktop =
     { config, pkgs, ... }:
@@ -59,7 +59,7 @@
       };
     in
     {
-      imports = with topLevel.config.flake.nixosModules; [
+      imports = with top.config.flake.nixosModules; [
         gui
         wm
 

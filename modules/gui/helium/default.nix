@@ -1,19 +1,17 @@
+{ lib, self, ... }:
 {
-  inputs,
-  lib,
-  ...
-}:
-{
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages.helium = pkgs.callPackage ./_package.nix {
+        sources = self.libCustom.nvFetcherSources pkgs;
+      };
+    };
+
   flake.nixosModules.gui =
     { pkgs, ... }:
     let
-      # fix chromium based browsers crashing on monitor change:
-      # https://github.com/brave/brave-browser/issues/49862
-      heliumPkg = inputs.wrappers.lib.wrapPackage {
-        inherit pkgs;
-        package = pkgs.custom.helium;
-        flagSeparator = "=";
-      };
+      heliumPkg = pkgs.custom.helium;
     in
     {
       programs.chromium = {

@@ -87,7 +87,7 @@
         '';
     in
     {
-      packages.tmux' = inputs.wrappers.lib.wrapPackage {
+      packages.tmux = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.tmux;
         flags = {
@@ -101,7 +101,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          tmux = pkgs.custom.tmux';
+          tmux = pkgs.custom.tmux;
         })
       ];
 

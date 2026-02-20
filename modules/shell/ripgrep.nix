@@ -18,7 +18,7 @@
       '';
     in
     {
-      packages.ripgrep' = inputs.wrappers.lib.wrapPackage {
+      packages.ripgrep = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.ripgrep;
         flags = {
@@ -33,7 +33,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          ripgrep = pkgs.custom.ripgrep';
+          ripgrep = pkgs.custom.ripgrep;
         })
       ];
 

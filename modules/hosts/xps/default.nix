@@ -1,9 +1,9 @@
-{ lib, ... }@topLevel:
+{ lib, ... }@top:
 {
   flake.nixosModules.host-xps =
     { pkgs, ... }:
     {
-      imports = with topLevel.config.flake.nixosModules; [
+      imports = with top.config.flake.nixosModules; [
         gui
         wm
 

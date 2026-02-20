@@ -1,6 +1,6 @@
-topLevel: {
+top: {
   flake.nixosModules.laptop = {
-    imports = with topLevel.config.flake.nixosModules; [
+    imports = with top.config.flake.nixosModules; [
       backlight
       bluetooth
       keyd

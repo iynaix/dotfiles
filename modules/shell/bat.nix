@@ -8,7 +8,7 @@
     { pkgs, ... }:
     {
       packages = {
-        bat' = inputs.wrappers.lib.wrapPackage {
+        bat = inputs.wrappers.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.bat;
           flags = {
@@ -17,7 +17,7 @@
           };
         };
         # batman with completions
-        batman' = pkgs.bat-extras.batman.overrideAttrs (o: {
+        batman = pkgs.bat-extras.batman.overrideAttrs (o: {
           postInstall =
             (o.postInstall or "")
             # sh
@@ -43,13 +43,13 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          bat = pkgs.custom.bat';
+          bat = pkgs.custom.bat;
         })
       ];
 
       environment.systemPackages = [
         pkgs.bat # overlay-ed above
-        pkgs.custom.batman'
+        pkgs.custom.batman
       ];
 
       programs = {

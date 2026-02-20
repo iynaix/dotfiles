@@ -56,7 +56,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.zathura' = (self.wrapperModules.zathura.apply { inherit pkgs; }).wrapper;
+      packages.zathura = (self.wrapperModules.zathura.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.core = {

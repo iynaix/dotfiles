@@ -133,7 +133,13 @@
         # browsing forwards and backwards in time through snapshots
         # https://github.com/iynaix/time-travel.yazi
         {
-          plugins.time-travel = sources.yazi-time-travel.src;
+          plugins.time-travel = pkgs.fetchFromGitHub {
+            owner = "iynaix";
+            repo = "time-travel.yazi";
+            rev = "aaec6e26e525bd146354a5137ec40f1f23257a4e";
+            hash = "sha256-/+KiuGUox763dMQvHl1l3+Ci3vL8NwRuKNu9pi3gjyE=";
+          };
+
           settings = {
             keymap.mgr.prepend_keymap = [
               {
@@ -247,7 +253,7 @@
       ];
     in
     {
-      packages.yazi' =
+      packages.yazi =
         (pkgs.yazi.override {
           inherit (baseYaziConf) initLua plugins settings;
           extraPackages = with pkgs; [
@@ -292,13 +298,13 @@
 
       nixpkgs.overlays =
         let
-          inherit (pkgs.custom) yazi';
+          inherit (pkgs.custom) yazi;
         in
         [
           (_: _prev: {
             # set dynamic flavor from noctalia
-            yazi = yazi'.override {
-              settings = lib.recursiveUpdate yazi'.passthru.settings {
+            yazi = yazi.override {
+              settings = lib.recursiveUpdate yazi.passthru.settings {
                 theme.flavor = {
                   dark = "noctalia";
                   light = "noctalia";

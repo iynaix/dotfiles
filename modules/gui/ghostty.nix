@@ -109,7 +109,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.ghostty' = (self.wrapperModules.ghostty.apply { inherit pkgs; }).wrapper;
+      packages.ghostty = (self.wrapperModules.ghostty.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.gui =

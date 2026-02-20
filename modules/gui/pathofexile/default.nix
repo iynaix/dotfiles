@@ -1,4 +1,4 @@
-{ self, ... }@topLevel:
+{ self, ... }@top:
 {
   flake.nixosModules.path-of-building =
     { pkgs, ... }:
@@ -33,7 +33,7 @@
   flake.nixosModules.path-of-exile =
     { pkgs, ... }:
     {
-      imports = with topLevel.config.flake.nixosModules; [
+      imports = with top.config.flake.nixosModules; [
         path-of-building
         steam
       ];

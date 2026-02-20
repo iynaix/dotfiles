@@ -87,7 +87,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.pqiv' = (self.wrapperModules.pqiv.apply { inherit pkgs; }).wrapper;
+      packages.pqiv = (self.wrapperModules.pqiv.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.gui =

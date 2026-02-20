@@ -93,7 +93,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.btop' = (self.wrapperModules.btop.apply { inherit pkgs; }).wrapper;
+      packages.btop = (self.wrapperModules.btop.apply { inherit pkgs; }).wrapper;
     };
 
   flake.nixosModules.core =

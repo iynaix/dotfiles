@@ -8,7 +8,7 @@
     { pkgs, ... }:
     {
       packages = {
-        eza' = inputs.wrappers.lib.wrapPackage {
+        eza = inputs.wrappers.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.eza;
           flags = {
@@ -19,7 +19,7 @@
             "--hyperlink" = true;
           };
         };
-        eza-tree' = pkgs.writeShellApplication {
+        eza-tree = pkgs.writeShellApplication {
           name = "tree";
           runtimeInputs = [ pkgs.eza ];
           text = /* sh */ ''
@@ -53,7 +53,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          eza = pkgs.custom.eza';
+          eza = pkgs.custom.eza;
         })
       ];
 
@@ -69,7 +69,7 @@
 
         systemPackages = [
           pkgs.eza # overlay-ed above
-          pkgs.custom.eza-tree'
+          pkgs.custom.eza-tree
         ];
       };
 

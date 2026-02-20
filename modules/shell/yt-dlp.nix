@@ -15,7 +15,7 @@ in
       source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
     in
     {
-      packages.yt-dlp' = inputs.wrappers.lib.wrapPackage {
+      packages.yt-dlp = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.yt-dlp.overrideAttrs source;
         flags = {
@@ -38,7 +38,7 @@ in
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          yt-dlp = pkgs.custom.yt-dlp';
+          yt-dlp = pkgs.custom.yt-dlp;
         })
       ];
 

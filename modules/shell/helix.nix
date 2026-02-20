@@ -9,7 +9,7 @@
       };
     in
     {
-      packages.helix' = inputs.wrappers.lib.wrapPackage {
+      packages.helix = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.helix;
         flags = {
@@ -23,7 +23,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          helix = pkgs.custom.helix';
+          helix = pkgs.custom.helix;
         })
       ];
 
