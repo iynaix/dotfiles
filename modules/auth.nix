@@ -68,7 +68,7 @@
             };
             home = {
               directories = [
-                ".pki"
+                ".pki" # chromium recreates this directory, so it can't be moved to $XDG_DATA_HOME/.pki
                 ".ssh"
                 ".local/share/.gnupg"
                 ".local/share/keyrings"
@@ -88,6 +88,7 @@
               enable = true;
               settings = {
                 bigclock = "en";
+                session_log = "${config.hj.xdg.data.directory}/ly-session.log";
               };
             };
           };

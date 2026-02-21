@@ -3,6 +3,7 @@
   flake.nixosModules.wm =
     { config, ... }:
     let
+      inherit (config.custom.constants) dots projects;
       inherit (config.custom.hardware) monitors;
       termExec =
         cmd:
@@ -63,12 +64,12 @@
             "Mod+period".spawn = [
               "focus-or-run"
               "dotfiles - VSCodium"
-              "codium ${config.hj.directory}/projects/dotfiles"
+              "codium ${dots}"
             ];
             "Mod+Shift+period".spawn = [
               "focus-or-run"
               "nixpkgs - VSCodium"
-              "codium ${config.hj.directory}/projects/nixpkgs"
+              "codium ${projects}/nixpkgs"
             ];
 
             # exit niri

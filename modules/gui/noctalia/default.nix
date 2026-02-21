@@ -229,7 +229,7 @@
             "noctalia/plugins/${my-plugins-hash}:projects-provider-settings.json" = {
               generator = lib.strings.toJSON;
               value = {
-                projectDir = "~/projects";
+                projectDir = config.custom.constants.projects;
                 openCommand = "codium %s";
               };
             };

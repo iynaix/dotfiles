@@ -47,7 +47,7 @@
       wallfacer = pkgs.custom.writeShellApplicationCompletions {
         name = "wallfacer";
         text = /* sh */ ''
-          direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
+          direnv-cargo-run "${config.custom.constants.projects}/wallfacer" "$@"
         '';
         # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
         completions.fish = /* fish */ ''

@@ -35,7 +35,6 @@
     {
       imports = with top.config.flake.nixosModules; [
         path-of-building
-        steam
       ];
 
       # NOTE: POE is installed through steam

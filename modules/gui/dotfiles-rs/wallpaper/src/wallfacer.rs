@@ -12,6 +12,11 @@ struct Wallfacer {
 impl Wallfacer {
     pub fn new() -> Self {
         let wallfacer_dir = full_path("~/projects/wallfacer");
+        let wallfacer_dir = PathBuf::from("/persist").join(
+            wallfacer_dir
+                .strip_prefix("/")
+                .expect("could not strip prefix from wallfacer directory"),
+        );
 
         let mut cmd = Command::new("direnv");
 

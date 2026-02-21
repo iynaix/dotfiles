@@ -3,7 +3,7 @@
   flake.nixosModules.bittorrent =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) user;
+      inherit (config.custom.constants) projects user;
       persistHome = "/persist${config.hj.directory}";
       downloadDir = "/media/IRONWOLF22/Downloads";
       pendingDir = "${downloadDir}/pending";
@@ -12,7 +12,7 @@
         name = "renamer";
         runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
         text = /* sh */ ''
-          direnv-cargo-run "${persistHome}/projects/renamer" "$@"
+          direnv-cargo-run "${projects}/renamer" "$@"
         '';
       };
     in

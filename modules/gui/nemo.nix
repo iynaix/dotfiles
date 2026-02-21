@@ -3,7 +3,7 @@
   flake.nixosModules.gui =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) host;
+      inherit (config.custom.constants) host projects dots;
     in
     {
       environment.systemPackages = with pkgs; [
@@ -88,10 +88,10 @@
 
         gtk.bookmarks = [
           "${config.hj.directory}/Downloads"
-          "${config.hj.directory}/projects"
-          "${config.hj.directory}/projects/dotfiles"
-          "${config.hj.directory}/projects/nixpkgs"
-          "${config.hj.directory}/projects/coinfc Work"
+          projects
+          dots
+          "${projects}/nixpkgs"
+          "${projects}/coinfc Work"
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]

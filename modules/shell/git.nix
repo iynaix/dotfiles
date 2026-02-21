@@ -1,11 +1,7 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.core =
-    {
-      config,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     let
       gitignores = [
         ".direnv"
@@ -234,7 +230,7 @@
       {
         programs.git.config = {
           maintenance = {
-            repo = "/persist${config.hj.directory}/projects/nixpkgs";
+            repo = "${config.custom.constants.projects}/nixpkgs";
           };
         };
       }

@@ -3,13 +3,13 @@
   flake.nixosModules.host-desktop =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) isVm;
+      inherit (config.custom.constants) projects isVm;
       # fetch wallpapers from pixiv for user
       pixiv = pkgs.writeShellApplication {
         name = "pixiv";
         runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
         text = /* sh */ ''
-          direnv-cargo-run "/persist${config.hj.directory}/projects/pixiv" "$@"
+          direnv-cargo-run "${projects}/pixiv" "$@"
         '';
       };
 
@@ -41,10 +41,8 @@
               friendly_name="Speakers"
           fi
 
-          echo "TARGET DEVICE: $target_device"
-
           # Get the sink ID for the target device
-          sink_id=$(wpctl status | grep -A 20 "Sinks:" | grep "$target_device" | awk '{print $2}' | grep -oP '[0-9]+' | head -1)
+          sink_id=$(wpctl status | grep -A 20 "Sinks:" | grep "$target_device" | awk '{print $2}' | grep -oP '[0-9]+' | head -1 || true)
 
           if [ -z "$sink_id" ]; then
               noctalia-ipc toast send "{\"title\": \"Unable to switch to $friendly_name\", \"type\": \"warning\"}"

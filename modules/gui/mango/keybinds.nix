@@ -3,6 +3,7 @@
   flake.nixosModules.wm =
     { config, pkgs, ... }:
     let
+      inherit (config.custom.constants) dots projects;
       termExec = cmd: "ghostty -e ${lib.concatStringsSep " " cmd}";
     in
     {
@@ -44,8 +45,8 @@
           "$mod+Shift, v, spawn, noctalia-ipc plugin:projects toggle"
 
           # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
-          "$mod, period, spawn, codium ${config.hj.directory}/projects/dotfiles"
-          "$mod+SHIFT, period, spawn, codium ${config.hj.directory}/projects/nixpkgs"
+          "$mod, period, spawn, codium ${dots}"
+          "$mod+SHIFT, period, spawn, codium ${projects}/nixpkgs"
 
           # exit mango
           "ALT, F4, quit,"

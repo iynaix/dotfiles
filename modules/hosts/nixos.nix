@@ -19,18 +19,17 @@ let
 
       modules = [
         {
-          config.custom.constants = {
+          config.custom.constants = rec {
             inherit host isVm user;
             isLaptop = host == "xps" || host == "framework";
-            dots = "/persist/home/${user}/projects/dotfiles";
+            projects = "/persist/home/${user}/projects";
+            dots = "${projects}/dotfiles";
           };
         }
         config.flake.nixosModules."host-${host}"
         config.flake.nixosModules.core
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index
-        # alias for hjem
-        (inputs.nixpkgs.lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
         inputs.noctalia.nixosModules.default
         inputs.impermanence.nixosModules.impermanence
         inputs.sops-nix.nixosModules.sops

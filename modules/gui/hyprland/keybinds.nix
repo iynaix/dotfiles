@@ -3,6 +3,7 @@
   flake.nixosModules.wm =
     { config, ... }:
     let
+      inherit (config.custom.constants) dots projects;
       inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";
       qtile_like = config.custom.programs.hyprland.qtile;
@@ -19,8 +20,8 @@
           "$mod_SHIFT, w, exec, helium --incognito"
           "$mod, v, exec, ${termExec "nvim"}"
           "$mod_SHIFT, v, exec, noctalia-ipc plugin:projects toggle"
-          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${config.hj.directory}/projects/dotfiles"''
-          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${config.hj.directory}/projects/nixpkgs"''
+          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${dots}"''
+          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${projects}/nixpkgs"''
 
           # exit hyprland
           "ALT, F4, exit,"

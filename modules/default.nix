@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 {
   # this section is intentionally commented out, do not delete
   # perSystem =
@@ -8,7 +8,7 @@
   #   };
 
   flake.nixosModules.core =
-    { config, pkgs, ... }:
+    { config, ... }:
     {
       options.custom = {
         symlinks = lib.mkOption {
@@ -23,15 +23,9 @@
         programs.dconf.enable = true;
         services.gvfs.enable = true;
 
-        hjem = {
-          # thanks for not fucking wasting my time
-          clobberByDefault = true;
-          linker = inputs.hjem.packages.${pkgs.stdenv.hostPlatform.system}.smfh;
-        };
-
         # create symlink to dotfiles from /etc/nixos
         custom.symlinks = {
-          "/etc/nixos" = "/persist${config.hj.directory}/projects/dotfiles";
+          "/etc/nixos" = config.custom.constants.dots;
         };
 
         # create symlinks

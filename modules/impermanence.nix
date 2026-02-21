@@ -142,7 +142,6 @@
                   "Desktop"
                   "Documents"
                   "Pictures"
-                  "projects"
                 ]
                 ++ lib.optionals (host != "desktop") [
                   "Downloads"

@@ -79,8 +79,7 @@
   flake.nixosModules.core =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) dots;
-      proj_dir = "/persist${config.hj.directory}/projects";
+      inherit (config.custom.constants) dots projects;
       homeDir = config.hj.directory;
       xdg-user-dirs = {
         # xdg user dirs
@@ -122,7 +121,6 @@
           mime = "xdg-mime query filetype";
           mkdir = "mkdir -p";
           mount = "mount --mkdir";
-          np = "cd ${proj_dir}/nixpkgs";
           open = "xdg-open";
           py = "python";
           sl = "ls";
@@ -178,6 +176,9 @@
           XDG_CONFIG_HOME = config.hj.xdg.config.directory;
           XDG_DATA_HOME = config.hj.xdg.data.directory;
           XDG_STATE_HOME = config.hj.xdg.state.directory;
+
+          # stop libX11 from polluting $HOME with .compose-cache
+          XCOMPOSECACHE = "${config.hj.xdg.cache.directory}/xcompose";
         }
         // xdg-user-dirs;
       };
@@ -197,27 +198,27 @@
       programs = {
         bash.shellInit = /* sh */ ''
           function pj() {
-              cd ${proj_dir}
+              cd ${projects}
               if [[ $# -eq 1 ]]; then
                 cd "$1";
               fi
           }
           _pj() {
-              ( cd ${proj_dir}; printf "%s\n" "$2"* )
+              ( cd ${projects}; printf "%s\n" "$2"* )
           }
           complete -o nospace -C _pj pj
         '';
 
         fish.shellInit = /* fish */ ''
           function pj
-            cd ${proj_dir}
+            cd ${projects}
             if test (count $argv) -eq 1
               cd $argv[1]
             end
           end
 
           function _pj
-              find ${proj_dir} -maxdepth 1 -type d -exec basename {} \;
+              find ${projects} -maxdepth 1 -type d -exec basename {} \;
           end
           complete -c pj -f -a "(_pj)"
         '';
