@@ -44,21 +44,6 @@
         nix-ld.enable = true;
       };
 
-      # execute shebangs that assume hardcoded shell paths
-      services.envfs.enable = true;
-      system = {
-        # envfs sets usrbinenv activation script to "" with lib.mkForce
-        activationScripts.usrbinenv = lib.mkOverride (50 - 1) ''
-          if [ ! -d "/usr/bin" ]; then
-            mkdir -p /usr/bin
-            chmod 0755 /usr/bin
-          fi
-        '';
-
-        # make a symlink of flake within the generation (e.g. /run/current-system/src)
-        systemBuilderCommands = "ln -s ${self.sourceInfo.outPath} $out/src";
-      };
-
       # i dgaf
       nixpkgs.config.allowUnfree = true;
 
@@ -137,13 +122,14 @@
       documentation = {
         enable = true;
         doc.enable = true;
-        man.enable = true;
+        man = {
+          enable = true;
+          # enable man-db cache for fish to be able to find manpages
+          # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
+          generateCaches = true;
+        };
         dev.enable = false;
       };
-
-      # enable man-db cache for fish to be able to find manpages
-      # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
-      documentation.man.generateCaches = true;
 
       system = {
         # better nixos generation label
@@ -152,6 +138,9 @@
           (lib.sort (x: y: x < y) config.system.nixos.tags)
           ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
         );
+
+        # make a symlink of flake within the generation (e.g. /run/current-system/src)
+        systemBuilderCommands = "ln -s ${self.sourceInfo.outPath} $out/src";
       };
 
       systemd.tmpfiles.rules = [
