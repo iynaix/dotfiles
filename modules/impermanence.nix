@@ -25,29 +25,30 @@
     in
     {
       options.custom = {
+        # passthru types.anything and let impermanence do the type checking
         persist = {
           root = {
             directories = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
+              type = lib.types.listOf lib.types.anything;
               default = [ ];
               apply = assertNoHomeDirs;
               description = "Directories to persist in root filesystem";
             };
             files = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
+              type = lib.types.listOf lib.types.anything;
               default = [ ];
               apply = assertNoHomeDirs;
               description = "Files to persist in root filesystem";
             };
             cache = {
               directories = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+                type = lib.types.listOf lib.types.anything;
                 default = [ ];
                 apply = assertNoHomeDirs;
                 description = "Directories to persist, but not to snapshot";
               };
               files = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+                type = lib.types.listOf lib.types.anything;
                 default = [ ];
                 apply = assertNoHomeDirs;
                 description = "Files to persist, but not to snapshot";
@@ -56,23 +57,23 @@
           };
           home = {
             directories = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
+              type = lib.types.listOf lib.types.anything;
               default = [ ];
               description = "Directories to persist in home directory";
             };
             files = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
+              type = lib.types.listOf lib.types.anything;
               default = [ ];
               description = "Files to persist in home directory";
             };
             cache = {
               directories = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+                type = lib.types.listOf lib.types.anything;
                 default = [ ];
                 description = "Directories to persist, but not to snapshot";
               };
               files = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+                type = lib.types.listOf lib.types.anything;
                 default = [ ];
                 description = "Files to persist, but not to snapshot";
               };

@@ -50,7 +50,7 @@
                   # there are only 9 tags
                   "tags:${
                     toString (if startup.workspace == 10 then 8 else startup.workspace)
-                  },monitor:${monitorForWorkspace startup.workspace}"
+                  },monitor:${monitorForWorkspace startup.workspace},atstartup:1"
                 ]
                 ++ (lib.optional (startup.app-id != null) "appid:${startup.app-id}")
                 ++ (lib.optional (startup.title != null) "title:${startup.title}")

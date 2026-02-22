@@ -41,7 +41,20 @@
     {
       programs.mangowc = {
         enable = true;
-        package = pkgs.mangowc.overrideAttrs (_: (self.libCustom.nvFetcherSources pkgs).mango);
+        package = pkgs.mangowc.overrideAttrs (
+          o:
+          (self.libCustom.nvFetcherSources pkgs).mango
+          // {
+            patches = (o.patches or [ ]) ++ [
+              # adds niri inspired atstartup rule:
+              # https://github.com/DreamMaoMao/mangowc/pull/654
+              (pkgs.fetchurl {
+                url = "https://github.com/DreamMaoMao/mangowc/pull/654/commits/3ebed9cba7f218088c640e0eda8f92d49c3a0351.patch";
+                hash = "sha256-9csC9PUT4e5HyZiNYnGvIIJh5djADO7WZQr8dVOZWXE=";
+              })
+            ];
+          }
+        );
       };
 
       # write the settings to home directory
@@ -79,17 +92,14 @@
           monitorrule = map (
             mon:
             lib.concatMapStringsSep "," toString [
-              mon.name
-              0.5 # mfact
-              1 # nmaster
-              "tile" # layout
-              mon.transform
-              mon.scale
-              mon.x
-              mon.y
-              mon.width
-              mon.height
-              mon.refreshRate
+              "name:${mon.name}"
+              "rr:${toString mon.transform}"
+              "scale:${toString mon.scale}"
+              "x:${toString mon.x}"
+              "y:${toString mon.y}"
+              "width:${toString mon.width}"
+              "height:${toString mon.height}"
+              "refresh:${toString mon.refreshRate}"
             ]
           ) config.custom.hardware.monitors;
 
@@ -102,6 +112,8 @@
                   "id:${toString wksp}"
                   "monitor_name:${mon.name}"
                   "layout_name:${if mon.isVertical then "vertical_tile" else "tile"}"
+                  "mfact:0.5"
+                  "nmaster:1"
                 ]
               ) (lib.range 1 9)
             ) config.custom.hardware.monitors
