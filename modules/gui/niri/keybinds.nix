@@ -124,10 +124,10 @@
             "Mod+K".focus-window-or-workspace-up = null;
             "Mod+L".focus-column-or-monitor-right = null;
 
-            "Mod+Shift+H".move-column-left = null;
+            "Mod+Shift+H".move-column-left-or-to-monitor-left = null;
             "Mod+Shift+J".move-window-down-or-to-workspace-down = null;
             "Mod+Shift+K".move-window-up-or-to-workspace-up = null;
-            "Mod+Shift+L".move-column-right = null;
+            "Mod+Shift+L".move-column-right-or-to-monitor-right = null;
 
             "Mod+Home".focus-column-first = null;
             "Mod+End".focus-column-last = null;

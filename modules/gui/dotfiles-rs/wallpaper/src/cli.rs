@@ -46,13 +46,13 @@ pub struct SearchArgs {
         short,
         long,
         name = "TOP",
-        default_value = "50",
+        default_value = "100",
         help = "Number of top results to display"
     )]
     pub top: u32,
 
-    #[arg(name = "QUERY", help = "Search query")]
-    pub query: String,
+    #[arg(name = "QUERY", trailing_var_arg = true, help = "Search query")]
+    pub query: Vec<String>,
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
