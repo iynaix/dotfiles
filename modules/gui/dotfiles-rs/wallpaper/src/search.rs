@@ -19,7 +19,6 @@ pub fn search(args: SearchArgs) {
     };
 
     let query = args.query;
-    dbg!(&query);
     let mut cmd = execute::command_args!("rclip", "--filepath-only");
 
     cmd.current_dir(wall_dir);

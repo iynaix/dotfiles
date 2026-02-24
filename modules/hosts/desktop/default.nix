@@ -112,10 +112,7 @@
                 4
                 5
               ];
-              extraHyprlandConfig = {
-                # supports_hdr = 1;
-                bitdepth = 10;
-              };
+              hdr = false; # toggle to use hdr
             }
             {
               name = "DP-2";
@@ -188,7 +185,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        displayManager.defaultSession = "niri";
+        # displayManager.defaultSession = "hyprland";
 
         pipewire = {
           wireplumber.extraConfig = {

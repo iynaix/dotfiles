@@ -4,6 +4,7 @@
     { config, ... }:
     let
       inherit (config.custom.constants) host isVm;
+      hasHdr = lib.any (d: d.hdr) config.custom.hardware.monitors;
     in
     {
       custom.programs.hyprland = {
@@ -18,7 +19,10 @@
               position = "${toString d.x}x${toString d.y}";
               inherit (d) scale transform vrr;
             }
-            // d.extraHyprlandConfig
+            // (lib.optionalAttrs d.hdr {
+              bitdepth = 10;
+              cm = "hdredid";
+            })
           ) config.custom.hardware.monitors;
 
           input = {
@@ -121,13 +125,9 @@
 
           # HDR related settings
           render = {
-            cm_enabled = false;
-            #   cm_auto_hdr = 1;
+            cm_enabled = hasHdr;
+            cm_auto_hdr = 2;
           };
-
-          # experimental = {
-          #   xx_color_management_v4 = true;
-          # };
 
           ecosystem = {
             no_update_news = true;
