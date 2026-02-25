@@ -65,12 +65,6 @@
         inherit dots host;
         specialisation = config.custom.specialisation.current;
       };
-      # nixos-rebuild boot
-      nsbt = pkgs.writeShellApplication {
-        name = "nsbt";
-        runtimeInputs = [ nsw ];
-        text = /* sh */ ''nsw boot "$@"'';
-      };
       # nixos-rebuild build
       nsb = pkgs.writeShellApplication {
         name = "nsb";
@@ -85,6 +79,13 @@
         ];
         text = /* sh */ ''nsw test "$@"'';
       };
+      # nixos-rebuild boot
+      nsbt = pkgs.writeShellApplication {
+        name = "nsbt";
+        runtimeInputs = [ nsw ];
+        text = /* sh */ ''nsw boot "$@"'';
+      };
+      # nixos-rebuild dry-run
       # update all nvfetcher overlays and packages
       nv-update = pkgs.writeShellApplication {
         name = "nv-update";

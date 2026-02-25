@@ -32,7 +32,7 @@
           "$mod, a, exec, noctalia-ipc bar toggle"
 
           # restart noctalia
-          "$mod_SHIFT, a, exec, noctalia-shell-reload"
+          "$mod_SHIFT, a, exec, noctalia-reload"
 
           # clipboard history
           "$mod_CTRL, v, exec, noctalia-ipc launcher clipboard"

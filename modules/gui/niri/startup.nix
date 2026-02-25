@@ -44,7 +44,7 @@
       );
 
       systemd.user = {
-        # ly -> niri.service -> niri-session.service -> noctalia-shell.service etc
+        # ly -> niri.service -> niri-session.service -> startupServices
         targets.niri-session = {
           wantedBy = [ "niri.service" ];
 

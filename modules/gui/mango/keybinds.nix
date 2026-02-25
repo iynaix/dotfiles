@@ -56,7 +56,7 @@
           "$mod, a, spawn, noctalia-ipc bar toggle"
 
           # restart noctalia
-          "$mod+SHIFT, a, spawn, noctalia-shell-reload"
+          "$mod+SHIFT, a, spawn, noctalia-reload"
 
           # clipboard history
           "$mod+CTRL, v, spawn, noctalia-ipc launcher clipboard"

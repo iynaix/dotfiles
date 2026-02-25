@@ -24,21 +24,21 @@
   };
   helium = {
     pname = "helium";
-    version = "0.9.3.1";
+    version = "0.9.4.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.9.3.1/helium-0.9.3.1-x86_64.AppImage";
-      sha256 = "sha256-wUmFmfZPWSvPzArbegegQpY1CFu/XAguqPQpINDE2qY=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.9.4.1/helium-0.9.4.1-x86_64.AppImage";
+      sha256 = "sha256-N5gdWuxOrIudJx/4nYo4/SKSxakpTFvL4zzByv6Cnug=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.12.3";
+    version = "0.12.4";
     src = fetchFromGitHub {
       owner = "DreamMaoMao";
       repo = "mangowc";
-      rev = "0.12.3";
+      rev = "0.12.4";
       fetchSubmodules = false;
-      sha256 = "sha256-cuOOgfufbGv0QIrRD6bAzaHiYXt32wxwt2Tzi+jAmwg=";
+      sha256 = "sha256-2OGskhPYjNkQDyA89RvtFTXXskuopwDqYArBmBUnFc4=";
     };
   };
   mpv-cut = {

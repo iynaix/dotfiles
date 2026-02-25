@@ -71,11 +71,22 @@ in
 
             package = lib.mkOption {
               type = lib.types.package;
-              default = pkgs.tokyonight-gtk-theme.override {
-                colorVariants = [ "dark" ];
-                sizeVariants = [ "compact" ];
-                themeVariants = [ "all" ];
-              };
+              default =
+                (pkgs.tokyonight-gtk-theme.override {
+                  colorVariants = [ "dark" ];
+                  sizeVariants = [ "compact" ];
+                  themeVariants = [ "all" ];
+                }).overrideAttrs
+                  (o: {
+                    # make it impossible to have a light theme XD
+                    postInstall = (o.postInstall or "") + ''
+                      rm -rf $out/share/themes/*Light*
+
+                      for theme in "$out"/share/themes/*Dark*; do
+                        ln -s "$theme" "''${theme/Dark/Light}";
+                      done
+                    '';
+                  });
               description = "Package providing the theme.";
             };
 

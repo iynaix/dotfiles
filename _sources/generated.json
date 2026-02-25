@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-wUmFmfZPWSvPzArbegegQpY1CFu/XAguqPQpINDE2qY=",
+            "sha256": "sha256-N5gdWuxOrIudJx/4nYo4/SKSxakpTFvL4zzByv6Cnug=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.9.3.1/helium-0.9.3.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.9.4.1/helium-0.9.4.1-x86_64.AppImage"
         },
-        "version": "0.9.3.1"
+        "version": "0.9.4.1"
     },
     "mango": {
         "cargoLock": null,
@@ -58,12 +58,12 @@
             "name": null,
             "owner": "DreamMaoMao",
             "repo": "mangowc",
-            "rev": "0.12.3",
-            "sha256": "sha256-cuOOgfufbGv0QIrRD6bAzaHiYXt32wxwt2Tzi+jAmwg=",
+            "rev": "0.12.4",
+            "sha256": "sha256-2OGskhPYjNkQDyA89RvtFTXXskuopwDqYArBmBUnFc4=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.12.3"
+        "version": "0.12.4"
     },
     "mpv-cut": {
         "cargoLock": null,

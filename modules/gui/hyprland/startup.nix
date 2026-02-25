@@ -26,7 +26,7 @@
       };
 
       systemd.user = {
-        # ly -> hyprland-start -> exec-once hyprland-session.service -> noctalia-shell etc
+        # ly -> hyprland-start -> exec-once hyprland-session.service -> startupServices
         # so the environment will be properly set
         targets.hyprland-session = {
           unitConfig = {

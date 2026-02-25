@@ -89,7 +89,7 @@
 
             # restart noctalia
             "Mod+Shift+A".spawn = [
-              "noctalia-shell-reload"
+              "noctalia-reload"
             ];
 
             # clipboard history

@@ -27,7 +27,7 @@
 
             # invalid json, no instances running, so start noctalia-shell
             if [[ ! "$RAW_OUTPUT" == "["* ]]; then
-              systemctl --user restart noctalia-shell
+              ${lib.getExe noctalia-shell}
               exit
             fi
 
@@ -41,43 +41,19 @@
 
             # different instance, kill previous instances
             if [[ ! "$NOCTALIA_PATH" =~ ${noctalia-shell} ]]; then
-              killall .quickshell-wrapper
-              systemctl --user restart noctalia-shell
+              killall .qs-wrapped
+              ${lib.getExe noctalia-shell}
               sleep 2
             fi
 
             ${lib.getExe noctalia-shell} ipc call "$@"
           '';
         };
-
-      # required for the polkit plugin
-      quickshell-unstable =
-        assert lib.assertMsg (lib.versionOlder pkgs.quickshell.version "0.2.2")
-          "quickshell updated; remove quickshell-unstable override";
-        pkgs.quickshell.overrideAttrs (o: {
-          src = pkgs.fetchFromGitHub {
-            owner = "quickshell-mirror";
-            repo = "quickshell";
-            rev = "dacfa9de829ac7cb173825f593236bf2c21f637e";
-            hash = "sha256-ngXnN5YXu+f45+QGYNN/VEBMQmcBCYGRCqwaK8cxY1s=";
-          };
-
-          # from the quickshell flake
-          buildInputs = (o.buildInputs or [ ]) ++ [
-            pkgs.polkit
-            pkgs.glib
-          ];
-
-          cmakeFlags = (o.cmakeFlags or [ ]) ++ [
-            (lib.cmakeBool "SERVICE_POLKIT" true)
-          ];
-        });
     in
     {
       packages = rec {
         noctalia-shell' =
           (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-            quickshell = quickshell-unstable;
             calendarSupport = true;
           }).overrideAttrs
             {
@@ -153,10 +129,26 @@
       inherit (config.custom.constants) isLaptop;
       # settings.json is the desktop copy of gui-settings.json without any modifications
       defaultSettings = builtins.fromJSON (builtins.readFile ./settings.json);
-      noctalia-shell-reload = pkgs.writeShellApplication {
-        name = "noctalia-shell-reload";
+      noctalia-reload = pkgs.writeShellApplication {
+        name = "noctalia-reload";
         text = /* sh */ ''
-          systemctl --user restart noctalia-shell
+          killall .qs-wrapped || true
+          noctalia-shell
+        '';
+      };
+      noctalia-start = pkgs.writeShellApplication {
+        name = "noctalia-start";
+        runtimeInputs = [
+          pkgs.noctalia-shell
+          pkgs.custom.noctalia-ipc # needed for wallpaper
+          config.custom.programs.dotfiles-rs
+        ];
+        text = /* sh */ ''
+          noctalia-shell &> /tmp/noctalia.log &
+          sleep 3
+          # hide on laptop screens to save space
+          ${lib.optionalString isLaptop "noctalia-shell ipc call bar hide"}
+          wallpaper
         '';
       };
     in
@@ -236,62 +228,24 @@
           };
         };
 
-      # custom noctalia service that starts after the WM is ready
-      # don't use flake's systemd service, it's very buggy :(
-      systemd.user.services = {
-        noctalia-shell = {
-          description = "Noctalia Shell - Wayland desktop shell";
-          documentation = [ "https://docs.noctalia.dev/docs" ];
-          partOf = [ "graphical-session.target" ];
-          # this shit doesn't work because nixos doesn't properly restart user services
-          # https://github.com/NixOS/nixpkgs/issues/246611#issuecomment-3342453760
-          restartTriggers = [ pkgs.noctalia-shell ];
+      custom = {
+        # start noctalia after the WM is ready
+        startup = lib.mkBefore [
+          {
+            spawn = [ (lib.getExe noctalia-start) ];
+          }
+        ];
 
-          # fix runtime deps when starting noctalia-shell from systemd
-          # https://github.com/noctalia-dev/noctalia-shell/pull/418
-          environment = {
-            PATH = lib.mkForce "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
-            # fix missing app icons:
-            # https://docs.noctalia.dev/getting-started/faq/#configuration
-            QT_QPA_PLATFORMTHEME = "gtk3";
+        programs = {
+          # setup blur for hyprland
+          hyprland.settings = {
+            layerrule = [
+              "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
+            ];
           };
 
-          serviceConfig = {
-            ExecStart = lib.getExe pkgs.noctalia-shell;
-            Restart = "on-failure";
-          };
-        };
-
-        # run wallpaper after noctalia-shell starts
-        wallpaper = {
-          wantedBy = [ "noctalia-shell.service" ];
-
-          unitConfig = {
-            Description = "Set the wallpapers";
-            After = [ "noctalia-shell.service" ];
-          };
-
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 3";
-            ExecStart = lib.getExe (
-              pkgs.writeShellApplication {
-                name = "wallpaper-startup";
-                runtimeInputs = [
-                  pkgs.noctalia-shell
-                  pkgs.custom.noctalia-ipc # needed for wallpaper
-                  config.custom.programs.dotfiles-rs
-                ];
-                text = ''
-                  # hide on laptop screens to save space
-                  ${lib.optionalString isLaptop "noctalia-shell ipc call bar hide"}
-                  wallpaper
-                '';
-              }
-            );
-            # ensures systemd considers it "active" even after the script finishes
-            # this prevents it from restarting again when noctalia-shell restarts after boot
-            RemainAfterExit = "yes";
+          print-config = {
+            noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings"'';
           };
         };
       };
@@ -299,29 +253,14 @@
       environment.systemPackages = [
         pkgs.noctalia-shell
         pkgs.gpu-screen-recorder # screen recorder plugin
-        noctalia-shell-reload
+        noctalia-reload
+        noctalia-start
       ]
       ++ (with pkgs.custom; [
         noctalia-copy
         noctalia-ipc
         noctalia-diff
       ]);
-
-      # start after WM initializes
-      custom.startupServices = [ "noctalia-shell.service" ];
-
-      custom.programs = {
-        # setup blur for hyprland
-        hyprland.settings = {
-          layerrule = [
-            "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
-          ];
-        };
-
-        print-config = {
-          noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings"'';
-        };
-      };
 
       custom.persist = {
         home = {

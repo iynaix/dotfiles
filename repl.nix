@@ -37,7 +37,7 @@ in
   inherit (flake.nixosConfigurations.${host}) pkgs;
   c = flake.nixosConfigurations.${host}.config;
   config = c;
-  o = c.custom;
+  co = c.custom;
 
   # your code here
 }
