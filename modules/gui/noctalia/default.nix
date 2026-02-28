@@ -41,7 +41,7 @@
 
             # different instance, kill previous instances
             if [[ ! "$NOCTALIA_PATH" =~ ${noctalia-shell} ]]; then
-              killall .qs-wrapped
+              killall .quickshell-wra || true
               ${lib.getExe noctalia-shell}
               sleep 2
             fi
@@ -56,13 +56,13 @@
           (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
             calendarSupport = true;
           }).overrideAttrs
-            {
+            (o: {
               patches = [
                 ./face-aware-crop.patch
                 # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
                 ./plugin-settings-location.patch
                 # battery and volume widgets that use the primary color instead of white
-                ./mprimary-bar-widgets.patch
+                ./mprimary-battery.patch
                 # remove transparency from zathura template
                 ./zathura-transparency.patch
               ];
@@ -76,7 +76,15 @@
                 substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
                   --replace-fail "showLocation: false" "showLocation: true"
               '';
-            };
+
+              # fix missing app icons:
+              # https://docs.noctalia.dev/getting-started/faq/#configuration
+              preFixup = (o.preFixup or "") + /* sh */ ''
+                qtWrapperArgs+=(
+                  --set QT_QPA_PLATFORMTHEME gtk3
+                )
+              '';
+            });
         noctalia-ipc = pkgs.callPackage drv { noctalia-shell = noctalia-shell'; };
         noctalia-copy = pkgs.writeShellApplication {
           name = "noctalia-copy";
@@ -132,7 +140,7 @@
       noctalia-reload = pkgs.writeShellApplication {
         name = "noctalia-reload";
         text = /* sh */ ''
-          killall .qs-wrapped || true
+          killall .quickshell-wra || true
           noctalia-shell
         '';
       };
@@ -144,7 +152,7 @@
           config.custom.programs.dotfiles-rs
         ];
         text = /* sh */ ''
-          noctalia-shell &> /tmp/noctalia.log &
+          noctalia-shell &
           sleep 3
           # hide on laptop screens to save space
           ${lib.optionalString isLaptop "noctalia-shell ipc call bar hide"}

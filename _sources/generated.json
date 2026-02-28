@@ -56,14 +56,14 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "owner": "DreamMaoMao",
-            "repo": "mangowc",
-            "rev": "0.12.4",
-            "sha256": "sha256-2OGskhPYjNkQDyA89RvtFTXXskuopwDqYArBmBUnFc4=",
+            "owner": "mangowm",
+            "repo": "mango",
+            "rev": "0.12.5",
+            "sha256": "sha256-kZF47c8eVlAWkUDzAcH7d+6Cks+YdhQDH1A0X0v7DBo=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.12.4"
+        "version": "0.12.5"
     },
     "mpv-cut": {
         "cargoLock": null,
@@ -214,7 +214,7 @@
     },
     "yazi-plugins": {
         "cargoLock": null,
-        "date": "2026-02-21",
+        "date": "2026-02-27",
         "extract": null,
         "name": "yazi-plugins",
         "passthru": null,
@@ -226,12 +226,12 @@
             "name": null,
             "owner": "yazi-rs",
             "repo": "plugins",
-            "rev": "b224ddfb4bb6a9b438ac00ccb607b0eb517207d2",
-            "sha256": "sha256-hn6oEFCLhACPh8T/qoPVHbX8Npsjd1EDXsZlm9SzIII=",
+            "rev": "196281844b8cbcac658a59013e4805300c2d6126",
+            "sha256": "sha256-pAkBlodci4Yf+CTjhGuNtgLOTMNquty7xP0/HSeoLzE=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "b224ddfb4bb6a9b438ac00ccb607b0eb517207d2"
+        "version": "196281844b8cbcac658a59013e4805300c2d6126"
     },
     "yazi-time-travel": {
         "cargoLock": null,

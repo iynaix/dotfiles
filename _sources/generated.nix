@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.12.4";
+    version = "0.12.5";
     src = fetchFromGitHub {
-      owner = "DreamMaoMao";
-      repo = "mangowc";
-      rev = "0.12.4";
+      owner = "mangowm";
+      repo = "mango";
+      rev = "0.12.5";
       fetchSubmodules = false;
-      sha256 = "sha256-2OGskhPYjNkQDyA89RvtFTXXskuopwDqYArBmBUnFc4=";
+      sha256 = "sha256-kZF47c8eVlAWkUDzAcH7d+6Cks+YdhQDH1A0X0v7DBo=";
     };
   };
   mpv-cut = {
@@ -126,15 +126,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "b224ddfb4bb6a9b438ac00ccb607b0eb517207d2";
+    version = "196281844b8cbcac658a59013e4805300c2d6126";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "b224ddfb4bb6a9b438ac00ccb607b0eb517207d2";
+      rev = "196281844b8cbcac658a59013e4805300c2d6126";
       fetchSubmodules = false;
-      sha256 = "sha256-hn6oEFCLhACPh8T/qoPVHbX8Npsjd1EDXsZlm9SzIII=";
+      sha256 = "sha256-pAkBlodci4Yf+CTjhGuNtgLOTMNquty7xP0/HSeoLzE=";
     };
-    date = "2026-02-21";
+    date = "2026-02-27";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

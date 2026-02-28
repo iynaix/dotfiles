@@ -37,6 +37,8 @@
           "dneaehbmnbhcippjikoajpoabadpodje"
           # React Dev Tools
           "fmkadmapgofadopljbjfkapdkoienihi"
+          # Redirector
+          "lioaeidejmlpffbndjhaameocfldlhin"
           # Reddit Enhancement Suite
           "kbmfpngjjgdllneeigpgjifpgocmfgmb"
           # Return YouTube Dislike

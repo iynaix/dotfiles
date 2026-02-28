@@ -1,13 +1,13 @@
 diff --git a/Modules/Bar/Widgets/Battery.qml b/Modules/Bar/Widgets/Battery.qml
-index 1975de53..f42eb936 100644
+index 3a0a29cdb..f22b668b7 100644
 --- a/Modules/Bar/Widgets/Battery.qml
 +++ b/Modules/Bar/Widgets/Battery.qml
-@@ -228,7 +228,7 @@ Item {
+@@ -238,7 +238,7 @@ Item {
      forceOpen: root.isReady && root.displayMode === "icon-always"
      forceClose: root.displayMode === "icon-only" || !root.isReady
      customBackgroundColor: root.isCharging ? Color.mPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mError : "transparent")
 -    customTextIconColor: root.isCharging ? Color.mOnPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mOnError : "transparent")
 +    customTextIconColor: root.isCharging ? Color.mOnPrimary : ((root.isLowBattery || root.isCriticalBattery) ? Color.mOnError : Color.mPrimary)
-     tooltipText: root.tooltipContent
- 
-     onClicked: openBatteryPanel()
+     tooltipText: !getBatteryPanel()?.isPanelOpen ? root.tooltipContent : ""
+     onClicked: toggleBatteryPanel()
+     onRightClicked: PanelService.showContextMenu(contextMenu, pill, screen)
