@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     # enable for niri-ipc git
-    # allowBuiltinFetchGit = true;
+    allowBuiltinFetchGit = true;
   };
 
   # create files for shell autocomplete

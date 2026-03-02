@@ -7,7 +7,7 @@ version = "0.1.0"
 edition = "2024"
 
 [workspace.dependencies]
-chrono = "0.4.43"
+chrono = "0.4.44"
 clap = { version = "4.5.60", features = ["derive", "string"] }
 clap_complete = { version = "4.5.66", features = ["unstable-dynamic"] }
 common = { path = "common" }
@@ -19,7 +19,7 @@ fastrand = "2.3.0"
 hyprland = "0.4.0-beta.3"
 image = "0.25.9"
 itertools = "0.14.0"
-niri-ipc = "25.11.0"
+niri-ipc = { git = "https://github.com/niri-wm/niri.git", branch = "wip/branch" }
 regex = "1.12.3"
 rexiv2 = "0.10.0"
 serde = { version = "1.0.228", features = ["derive"] }
