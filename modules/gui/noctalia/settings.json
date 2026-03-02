@@ -53,8 +53,11 @@
     "marginHorizontal": 5,
     "marginVertical": 5,
     "monitors": [],
+    "mouseWheelAction": "workspace",
+    "mouseWheelWrap": true,
     "outerCorners": false,
     "position": "top",
+    "reverseScroll": false,
     "screenOverrides": [],
     "showCapsule": false,
     "showOnWorkspaceSwitch": true,
@@ -183,6 +186,7 @@
       }
     ],
     "diskPath": "/",
+    "openAtMouseOnBarRightClick": true,
     "position": "close_to_bar_button",
     "shortcuts": {
       "left": [
@@ -242,6 +246,9 @@
     "groupContextMenuMode": "extended",
     "groupIndicatorStyle": "dots",
     "inactiveIndicators": false,
+    "indicatorColor": "primary",
+    "indicatorOpacity": 0.6,
+    "indicatorThickness": 3,
     "launcherIconColor": "none",
     "launcherPosition": "end",
     "monitors": [],
@@ -249,7 +256,7 @@
     "pinnedApps": [],
     "pinnedStatic": false,
     "position": "bottom",
-    "showFrameIndicator": true,
+    "showDockIndicator": false,
     "showLauncherIcon": false,
     "sitOnFrame": false,
     "size": 1
@@ -276,7 +283,8 @@
         "Down"
       ],
       "keyEnter": [
-        "Return"
+        "Return",
+        "Enter"
       ],
       "keyEscape": [
         "Esc"
@@ -330,9 +338,15 @@
     "customCommands": "[]",
     "enabled": true,
     "fadeDuration": 5,
-    "lockTimeout": 300,
+    "lockCommand": "",
+    "lockTimeout": 0,
+    "resumeLockCommand": "",
+    "resumeScreenOffCommand": "",
+    "resumeSuspendCommand": "",
+    "screenOffCommand": "",
     "screenOffTimeout": 300,
-    "suspendTimeout": 300
+    "suspendCommand": "",
+    "suspendTimeout": 0
   },
   "location": {
     "analogClockInCalendar": false,
@@ -475,7 +489,7 @@
     "showHeader": false,
     "showKeybinds": true
   },
-  "settingsVersion": 53,
+  "settingsVersion": 54,
   "systemMonitor": {
     "batteryCriticalThreshold": 5,
     "batteryWarningThreshold": 20,

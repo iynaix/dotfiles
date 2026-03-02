@@ -144,12 +144,8 @@
         niri.settings.layer-rules = [
           {
             matches = [ { namespace = "^rofi$"; } ];
-            shadow = {
-              on = null;
-              # overwritten by wallpaper script later
-              spread = 1024;
-              draw-behind-window = true;
-              color = "0000009A";
+            background-effect = {
+              blur = true;
             };
           }
         ];

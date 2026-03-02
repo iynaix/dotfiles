@@ -149,6 +149,14 @@
             disable-power-key-handling = null;
           };
 
+          blur = {
+            on = null;
+            passes = 2;
+            offset = 1;
+            noise = 0.02;
+            saturation = 1.5;
+          };
+
           prefer-no-csd = null;
 
           gestures = {

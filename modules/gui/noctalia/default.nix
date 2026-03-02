@@ -252,6 +252,29 @@
             ];
           };
 
+          niri.settings = {
+            # bar blur
+            layer-rules = [
+              {
+                matches = [ { namespace = "^noctalia-background-.*$"; } ];
+                background-effect = {
+                  blur = true;
+                };
+              }
+            ];
+
+            # settings window blur
+            window-rules = [
+              {
+                matches = [ { app-id = "^dev.noctalia.noctalia-qs$"; } ];
+
+                background-effect = {
+                  blur = true;
+                };
+              }
+            ];
+          };
+
           print-config = {
             noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings"'';
           };
