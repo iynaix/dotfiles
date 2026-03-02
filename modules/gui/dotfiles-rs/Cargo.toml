@@ -19,7 +19,7 @@ fastrand = "2.3.0"
 hyprland = "0.4.0-beta.3"
 image = "0.25.9"
 itertools = "0.14.0"
-niri-ipc = { git = "https://github.com/niri-wm/niri.git", branch = "wip/branch" }
+niri-ipc = { git = "https://github.com/niri-wm/niri.git", rev = "refs/pull/3483/head" }
 regex = "1.12.3"
 rexiv2 = "0.10.0"
 serde = { version = "1.0.228", features = ["derive"] }

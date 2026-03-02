@@ -12,6 +12,15 @@
           inherit pkgs;
           # remove the uwsm session
           package = pkgs.hyprland.overrideAttrs (o: {
+            patches = [
+              # black cursor on vertical monitor
+              # https://github.com/hyprwm/Hyprland/discussions/13391
+              (pkgs.fetchpatch {
+                url = "https://github.com/hyprwm/Hyprland/commit/6b2c08d3e89b1cb6f9e609664915236bbe5115da.patch";
+                hash = "sha256-N2zj/txbkqBAeEyUpRoUQVzNfrhpJmSfYkV/DDCeIsE=";
+              })
+            ];
+
             passthru = o.passthru // {
               providedSessions = [ "hyprland" ];
             };
@@ -46,7 +55,7 @@
       programs.hyprland = {
         enable =
           assert (
-            lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.54") "hyprland updated, sync with hyprnstack?"
+            lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.55") "hyprland updated, sync with hyprnstack?"
           );
           true;
         package = hyprlandWrapped.wrapper;
