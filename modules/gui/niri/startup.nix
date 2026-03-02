@@ -69,6 +69,7 @@
 
           serviceConfig = {
             ExecStart = lib.getExe' config.custom.programs.dotfiles-rs "niri-ipc";
+            RestartSec = 1;
             Restart = "on-failure";
           };
         };

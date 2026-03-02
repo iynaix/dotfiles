@@ -116,7 +116,6 @@
           crate = "cargo";
           dots = "cd ${dots}";
           isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
-          less = "moor";
           man = "batman";
           mime = "xdg-mime query filetype";
           mkdir = "mkdir -p";
@@ -144,7 +143,6 @@
             htop
             jq
             killall
-            moor
             procs # better ps
             (lib.hiPrio procps) # for uptime
             sd # better sed
@@ -167,9 +165,6 @@
           TERMINAL = "ghostty";
           EDITOR = "nvim";
           VISUAL = "nvim";
-          PAGER = "moor --quit-if-one-screen";
-          SYSTEMD_PAGER = "moor --quit-if-one-screen";
-          SYSTEMD_PAGERSECURE = "1";
           NIXPKGS_ALLOW_UNFREE = "1";
           # xdg
           XDG_CACHE_HOME = config.hj.xdg.cache.directory;

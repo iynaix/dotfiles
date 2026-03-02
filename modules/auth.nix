@@ -85,9 +85,14 @@
               enable = true;
               settings = {
                 bigclock = "en";
+                save = false; # don't use previous successful session
                 session_log = "${config.hj.xdg.data.directory}/ly-session.log";
               };
             };
+          };
+
+          custom.programs.print-config = {
+            ly = /* sh */ ''cat "/etc/ly/config.ini"'';
           };
 
           # block other ttys from autologin when bypassed from lockscreen
