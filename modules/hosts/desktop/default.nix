@@ -162,8 +162,6 @@
         lock.enable = false;
 
         programs = {
-          hyprnstack.enable = false;
-
           btop.extraSettings = {
             custom_gpu_name0 = "AMD Radeon RX 9070XT";
           };

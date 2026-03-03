@@ -1,5 +1,5 @@
 diff --git a/src/layout/tile.rs b/src/layout/tile.rs
-index 3db76772..ba85c0cf 100644
+index 15de6bd..17e8b0a 100644
 --- a/src/layout/tile.rs
 +++ b/src/layout/tile.rs
 @@ -197,7 +197,7 @@ impl<W: LayoutElement> Tile<W> {
@@ -8,6 +8,6 @@ index 3db76772..ba85c0cf 100644
              sizing_mode,
 -            fullscreen_backdrop: SolidColorBuffer::new((0., 0.), [0., 0., 0., 1.]),
 +            fullscreen_backdrop: SolidColorBuffer::new((0., 0.), [0., 0., 0., 0.]),
-             background_effect: BackgroundEffect::new(),
+             background_effect: BackgroundEffect::new(options.blur),
              restore_to_floating: false,
              floating_window_size: None,

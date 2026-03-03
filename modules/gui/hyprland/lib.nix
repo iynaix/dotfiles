@@ -187,10 +187,7 @@ in
 
   flake.nixosModules.core = {
     options.custom = {
-      programs = {
-        hyprland = hyprlandOptions;
-        hyprnstack.enable = lib.mkEnableOption "hyprnstack";
-      };
+      programs.hyprland = hyprlandOptions;
     };
   };
 }

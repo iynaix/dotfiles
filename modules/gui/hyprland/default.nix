@@ -53,11 +53,7 @@
       };
 
       programs.hyprland = {
-        enable =
-          assert (
-            lib.assertMsg (lib.versionOlder config.programs.hyprland.package.version "0.55") "hyprland updated, sync with hyprnstack?"
-          );
-          true;
+        enable = true;
         package = hyprlandWrapped.wrapper;
       };
 

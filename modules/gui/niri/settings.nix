@@ -4,18 +4,20 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) host;
+      gap = if host == "desktop" then 8 else 4;
+      strut = gap + 12;
     in
     {
       custom.programs = {
         niri.settings = {
           layout = {
-            gaps = if host == "desktop" then 8 else 4;
+            gaps = gap;
 
             struts = {
-              left = 20;
-              right = 20;
-              top = 8;
-              bottom = 8;
+              left = strut;
+              right = strut;
+              top = gap;
+              bottom = gap;
             };
             focus-ring = {
               width = 2;

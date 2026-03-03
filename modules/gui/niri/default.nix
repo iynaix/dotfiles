@@ -33,7 +33,7 @@
         package =
           assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12") "update niri-ipc in dotfiles-rs";
           (lib.mkForce (
-            pkgs.niri.overrideAttrs (_o: rec {
+            pkgs.niri.overrideAttrs (o: rec {
               src = pkgs.fetchFromGitHub {
                 owner = "niri-wm";
                 repo = "niri";
@@ -54,11 +54,11 @@
                 allowBuiltinFetchGit = true;
               };
 
-              # patches = (o.patches or [ ]) ++ [
-              #   # unmerged PR to fix this
-              #   # https://github.com/YaLTeR/niri/pull/3004
-              #   ./transparent-fullscreen.patch
-              # ];
+              patches = (o.patches or [ ]) ++ [
+                # unmerged PR to fix this
+                # https://github.com/YaLTeR/niri/pull/3004
+                ./transparent-fullscreen.patch
+              ];
 
               doCheck = false; # faster builds
             })

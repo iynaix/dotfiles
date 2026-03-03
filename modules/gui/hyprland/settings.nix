@@ -5,6 +5,9 @@
     let
       inherit (config.custom.constants) host isVm;
       hasHdr = lib.any (d: d.hdr) config.custom.hardware.monitors;
+      gap = if host == "desktop" then 8 else 4;
+      strut = gap + 12;
+      defaultLayout = "scrolling";
     in
     {
       custom.programs.hyprland = {
@@ -37,16 +40,16 @@
 
           "$mod" = if isVm then "ALT" else "SUPER";
 
-          general =
-            let
-              gap = if host == "desktop" then 8 else 4;
-            in
-            {
-              gaps_in = gap;
-              gaps_out = gap;
-              border_size = 2;
-              layout = lib.mkDefault "master";
-            };
+          general = {
+            gaps_in = 4;
+            gaps_out =
+              if defaultLayout == "scrolling" then
+                "${toString gap},${toString strut},${toString gap},${toString strut}" # css order
+              else
+                gap;
+            border_size = 2;
+            layout = defaultLayout;
+          };
 
           decoration = {
             rounding = 4;
@@ -106,6 +109,10 @@
             smart_resizing = true;
           };
 
+          scrolling = {
+            fullscreen_on_one_column = true;
+          };
+
           binds = {
             workspace_back_and_forth = true;
           };
@@ -149,16 +156,30 @@
           gestures = {
             gesture = [ "3, horizontal, workspace" ];
           };
-        }
-        //
-          # bind workspaces to monitors, don't bother if there is only one monitor
-          lib.optionalAttrs (lib.length config.custom.hardware.monitors > 1) {
-            workspace = self.libCustom.mapWorkspaces (
-              { workspace, monitor, ... }:
-              "${workspace},monitor:${monitor.name}"
-              + lib.optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
-            ) config.custom.hardware.monitors;
-          };
+
+          # workspace layouts
+          workspace = self.libCustom.mapWorkspaces (
+            { monitor, workspace, ... }:
+            let
+              params = [
+                workspace
+                "persistent:true"
+                (
+                  if defaultLayout == "scrolling" then
+                    "layoutopt:direction:${if monitor.isVertical then "down" else "right"}"
+                  else
+                    "layoutopt:orientation:${if monitor.isVertical then "top" else "left"}"
+                )
+              ]
+              # bind workspace to monitors, don't bother if there is only one monitor
+              ++ lib.optional (lib.length config.custom.hardware.monitors > 1) (
+                "monitor:${monitor.name}"
+                + lib.optionalString (workspace == toString monitor.defaultWorkspace) ",default:true"
+              );
+            in
+            lib.concatStringsSep "," params
+          ) config.custom.hardware.monitors;
+        };
       };
     };
 }
