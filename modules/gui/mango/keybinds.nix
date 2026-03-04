@@ -1,6 +1,6 @@
 { lib, self, ... }:
 {
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) dots projects;

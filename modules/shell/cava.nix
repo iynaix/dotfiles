@@ -1,6 +1,6 @@
 { self, ... }:
 {
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.cava ];

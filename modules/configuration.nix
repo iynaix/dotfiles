@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     # leftovers from initial configuration.nix
     { config, pkgs, ... }:
     let

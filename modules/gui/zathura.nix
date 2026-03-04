@@ -59,13 +59,13 @@ in
       packages.zathura = (self.wrapperModules.zathura.apply { inherit pkgs; }).wrapper;
     };
 
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       programs.zathura = zathuraOptions;
     };
   };
 
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { config, pkgs, ... }:
     let
       noctaliaColors = "${config.hj.xdg.config.directory}/zathura/noctaliarc";

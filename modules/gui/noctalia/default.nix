@@ -112,7 +112,7 @@
       };
     };
 
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       programs.noctalia = {
         # reducer functions are used instead of plain attrsets, as attrsets cannot be merged together to override
@@ -131,7 +131,7 @@
     };
   };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isLaptop;

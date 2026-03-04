@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.fzf ];

@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { pkgs, ... }:
     {
       environment = {

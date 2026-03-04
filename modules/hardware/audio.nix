@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) host;

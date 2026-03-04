@@ -18,7 +18,7 @@
       };
     };
 
-  flake.nixosModules.programs_helix =
+  flake.modules.nixos.programs_helix =
     { pkgs, ... }:
     {
       nixpkgs.overlays = [

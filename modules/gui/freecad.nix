@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.programs_freecad =
+  flake.modules.nixos.programs_freecad =
     { pkgs, ... }:
     {
       environment.systemPackages = [

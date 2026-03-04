@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       startup = lib.mkOption {
         description = "Programs to run on startup";
@@ -53,7 +53,7 @@
 
   };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     # generic functionality for all WMs
     { config, pkgs, ... }:
     let

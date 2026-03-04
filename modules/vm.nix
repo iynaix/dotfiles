@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.services_virtualisation =
+  flake.modules.nixos.services_virtualisation =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) user;

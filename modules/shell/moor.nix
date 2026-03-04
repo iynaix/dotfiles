@@ -15,7 +15,7 @@
       };
     };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     {
       nixpkgs.overlays = [

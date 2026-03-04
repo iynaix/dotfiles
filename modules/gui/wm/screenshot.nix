@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
 {
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       focal = inputs.focal.packages.${pkgs.stdenv.hostPlatform.system}.default;

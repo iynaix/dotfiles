@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.services_bittorrent =
+  flake.modules.nixos.services_bittorrent =
     {
       config,
       pkgs,

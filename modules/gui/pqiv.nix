@@ -90,7 +90,7 @@ in
       packages.pqiv = (self.wrapperModules.pqiv.apply { inherit pkgs; }).wrapper;
     };
 
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { config, pkgs, ... }:
     {
       nixpkgs.overlays = [

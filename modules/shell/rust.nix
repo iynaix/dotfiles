@@ -24,7 +24,7 @@
       };
     };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
       xdgDataHome = config.hj.xdg.data.directory;

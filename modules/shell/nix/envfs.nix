@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, ... }:
     {
       # execute shebangs that assume hardcoded shell paths

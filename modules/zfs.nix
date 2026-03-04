@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm;
@@ -125,7 +125,7 @@
     };
 
   # setup zfs event daemon for email notifications
-  flake.nixosModules.zfs-zed =
+  flake.modules.nixos.zfs-zed =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) user;

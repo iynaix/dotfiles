@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     {
       options.custom = {
@@ -8,7 +8,7 @@
       };
     };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     {
       custom.programs = {

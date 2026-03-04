@@ -96,7 +96,7 @@ in
       packages.btop = (self.wrapperModules.btop.apply { inherit pkgs; }).wrapper;
     };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) host;

@@ -19,7 +19,7 @@
       packages.distro-grub-themes-nixos = pkgs.callPackage drv { };
     };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     {
       # Bootloader.

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       # copied from home-manger's hypland module, since mango config is similar to hyprlang
       programs.mango.settings = lib.mkOption {
@@ -33,7 +33,7 @@
     };
   };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) dots isVm;

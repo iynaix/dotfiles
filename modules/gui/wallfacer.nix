@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.programs_wallfacer =
+  flake.modules.nixos.programs_wallfacer =
     { config, pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };

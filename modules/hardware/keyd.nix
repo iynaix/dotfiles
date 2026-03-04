@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.hardware_keyd = {
+  flake.modules.nixos.hardware_keyd = {
     services.keyd = {
       enable = true;
       keyboards.default = {

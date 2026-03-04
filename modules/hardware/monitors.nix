@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       hardware.monitors = lib.mkOption {
         description = "Config for monitors";

@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };
@@ -20,7 +20,7 @@
       };
     };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };

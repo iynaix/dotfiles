@@ -79,7 +79,7 @@ in
     }
   );
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     {
       options.custom = {
@@ -112,7 +112,7 @@ in
       packages.ghostty = (self.wrapperModules.ghostty.apply { inherit pkgs; }).wrapper;
     };
 
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { config, pkgs, ... }:
     {
       nixpkgs.overlays = [

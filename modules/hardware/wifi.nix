@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.hardware_wifi = {
+  flake.modules.nixos.hardware_wifi = {
     custom.programs.noctalia.settingsReducers = [
       # enable wifi
       (prev: lib.recursiveUpdate prev { network.wifiEnabled = true; })

@@ -1,6 +1,6 @@
 top: {
-  flake.nixosModules.hardware_laptop = {
-    imports = with top.config.flake.nixosModules; [
+  flake.modules.nixos.hardware_laptop = {
+    imports = with top.config.flake.modules.nixos; [
       hardware_backlight
       hardware_bluetooth
       hardware_keyd

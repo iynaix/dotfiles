@@ -45,7 +45,7 @@
       };
     };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     {
       config,
       pkgs,

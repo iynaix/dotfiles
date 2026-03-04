@@ -1,6 +1,6 @@
 { self, ... }:
 {
-  flake.nixosModules.programs_path-of-building =
+  flake.modules.nixos.programs_path-of-building =
     { pkgs, ... }:
     let
       source = (self.libCustom.nvFetcherSources pkgs).rusty-path-of-building;

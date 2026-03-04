@@ -128,7 +128,7 @@
       };
     };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
       tomlFormat = pkgs.formats.toml { };

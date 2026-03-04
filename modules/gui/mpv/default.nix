@@ -366,7 +366,7 @@
       };
     };
 
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { pkgs, ... }:
     lib.mkMerge [
       {

@@ -85,7 +85,7 @@
       };
     };
 
-    nixosModules.core = _: {
+    modules.nixos.core = _: {
       nixpkgs.overlays = [
         self.overlays.pkgsCustom
         self.overlays.nixpkgsStable

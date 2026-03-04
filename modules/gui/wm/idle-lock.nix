@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, ... }:
     {
       options.custom = {
@@ -10,7 +10,7 @@
       };
     };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isLaptop;

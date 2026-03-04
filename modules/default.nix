@@ -7,7 +7,7 @@
   #     packages.g1 = pkgs.callPackage ./_package.nix { };
   #   };
 
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { config, ... }:
     {
       options.custom = {

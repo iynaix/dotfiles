@@ -185,7 +185,7 @@ in
     }
   );
 
-  flake.nixosModules.core = {
+  flake.modules.nixos.core = {
     options.custom = {
       programs.hyprland = hyprlandOptions;
     };

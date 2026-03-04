@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.programs_zoom =
+  flake.modules.nixos.programs_zoom =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.zoom-us ];

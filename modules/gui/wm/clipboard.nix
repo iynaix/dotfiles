@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { pkgs, ... }:
     let
       extraOptionsStr = lib.escapeShellArgs [

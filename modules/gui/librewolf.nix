@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) host user;

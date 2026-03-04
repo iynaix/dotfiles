@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.programs_vlc =
+  flake.modules.nixos.programs_vlc =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.vlc ];

@@ -1,6 +1,6 @@
 {
   # for calendar events
-  flake.nixosModules.wm = {
+  flake.modules.nixos.wm = {
     services.gnome.evolution-data-server.enable = true;
 
     custom.persist = {

@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     let
       mkdirenv = pkgs.writeShellApplication {

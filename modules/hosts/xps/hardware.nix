@@ -2,7 +2,7 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-  flake.nixosModules.host_xps =
+  flake.modules.nixos.host_xps =
     {
       config,
       lib,

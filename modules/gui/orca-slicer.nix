@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.programs_orca-slicer =
+  flake.modules.nixos.programs_orca-slicer =
     { pkgs, ... }:
     {
       environment.systemPackages = [

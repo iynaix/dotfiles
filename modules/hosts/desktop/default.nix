@@ -1,6 +1,6 @@
 { lib, ... }@top:
 {
-  flake.nixosModules.host_desktop =
+  flake.modules.nixos.host_desktop =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) projects isVm;
@@ -57,7 +57,7 @@
       };
     in
     {
-      imports = with top.config.flake.nixosModules; [
+      imports = with top.config.flake.modules.nixos; [
         gui
         wm
 

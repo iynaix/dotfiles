@@ -8,7 +8,7 @@
       };
     };
 
-  flake.nixosModules.gui =
+  flake.modules.nixos.gui =
     { pkgs, ... }:
     let
       heliumPkg = pkgs.custom.helium;

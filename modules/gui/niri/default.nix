@@ -4,7 +4,7 @@
   ...
 }:
 {
-  flake.nixosModules.core =
+  flake.modules.nixos.core =
     { pkgs, ... }:
     {
       options.custom = {
@@ -25,7 +25,7 @@
       };
     };
 
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       niriWrapped = inputs.wrappers.wrapperModules.niri.apply {

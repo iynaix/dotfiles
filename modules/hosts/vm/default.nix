@@ -1,9 +1,9 @@
 { lib, ... }@top:
 {
-  flake.nixosModules.host_vm =
+  flake.modules.nixos.host_vm =
     { pkgs, ... }:
     {
-      imports = with top.config.flake.nixosModules; [
+      imports = with top.config.flake.modules.nixos; [
         gui
         wm
 

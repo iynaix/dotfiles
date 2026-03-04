@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.wm =
+  flake.modules.nixos.wm =
     { config, ... }:
     {
       # generate startup rules, god i hate having to use rules for startup
