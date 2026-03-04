@@ -31,7 +31,8 @@
       niriWrapped = inputs.wrappers.wrapperModules.niri.apply {
         inherit pkgs;
         package =
-          assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12") "update niri-ipc in dotfiles-rs";
+          assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12")
+            "update niri-ipc in dotfiles-rs, focal to use mainline niri-ipc";
           (lib.mkForce (
             pkgs.niri.overrideAttrs (o: rec {
               src = pkgs.fetchFromGitHub {

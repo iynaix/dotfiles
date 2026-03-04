@@ -24,6 +24,8 @@ pub fn dedupe() {
         cmd.arg("--directories").arg(&walls_in);
     }
 
+    cmd.args(["--max-difference", "0", "--hash-size", "64"]);
+
     cmd.stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .execute_output()

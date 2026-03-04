@@ -71,7 +71,7 @@
         programs_subtitles
         programs_vlc
         programs_wallfacer
-        programs_zed-editor
+        # programs_zed-editor
         # programs_zoom
 
         hardware_amdgpu

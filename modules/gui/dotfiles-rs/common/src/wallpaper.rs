@@ -112,11 +112,10 @@ pub fn reload() {
     });
 
     // reload noctalia-shell
-    execute::command_args!("systemctl", "restart", "--user", "noctalia-shell")
+    let child = execute::command_args!("noctalia-reload")
         .spawn()
-        .unwrap_or_else(|_| panic!("failed to restart noctalia-shell"))
-        .wait()
-        .expect("failed to wait for noctalia-shell restart");
+        .expect("failed to reload noctalia");
+    drop(child); // don't wait
 }
 
 pub fn random_from_dir<P>(dir: P) -> String

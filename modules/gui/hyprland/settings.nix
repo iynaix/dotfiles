@@ -24,7 +24,7 @@
             }
             // (lib.optionalAttrs d.hdr {
               bitdepth = 10;
-              cm = "hdredid";
+              cm = "auto";
             })
           ) config.custom.hardware.monitors;
 
