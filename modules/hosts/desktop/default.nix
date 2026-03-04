@@ -62,7 +62,6 @@
         wm
 
         ### programs
-        # deadbeef  # swift is currently broken
         freecad
         # helix
         orca-slicer
@@ -73,6 +72,7 @@
         subtitles
         vlc
         wallfacer
+        zed-editor
         # zoom
 
         ### hardware
@@ -112,7 +112,7 @@
                 4
                 5
               ];
-              hdr = false; # toggle to use hdr
+              hdr = true; # toggle to use hdr
             }
             {
               name = "DP-2";

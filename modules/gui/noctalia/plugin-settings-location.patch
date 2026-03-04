@@ -13,14 +13,14 @@ index 36b25ebe..5773f579 100644
 --- a/Services/Noctalia/PluginRegistry.qml
 +++ b/Services/Noctalia/PluginRegistry.qml
 @@ -552,7 +552,7 @@ Singleton {
- 
+
    // Get plugin settings file path
    function getPluginSettingsFile(pluginId) {
 -    return getPluginDir(pluginId) + "/settings.json";
-+    return Settings.cacheDir + "plugins" + "/" + pluginId + "-settings.json";
++    return Settings.configDir + "plugin_settings" + "/" + pluginId + "-settings.json";
    }
- 
+
    // Validate manifest
--- 
+--
 2.52.0
 

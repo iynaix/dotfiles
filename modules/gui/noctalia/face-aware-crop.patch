@@ -1,8 +1,8 @@
 diff --git a/Services/UI/ImageCacheService.qml b/Services/UI/ImageCacheService.qml
-index c09fc614..cb70c58d 100644
+index 661c19e43..91eb83911 100644
 --- a/Services/UI/ImageCacheService.qml
 +++ b/Services/UI/ImageCacheService.qml
-@@ -270,7 +270,7 @@ Singleton {
+@@ -362,7 +362,7 @@ Singleton {
      const dstEsc = outputPath.replace(/'/g, "'\\''");
  
      // Use Lanczos filter for high-quality downscaling, subtle unsharp mask, and PNG for lossless output
@@ -11,11 +11,11 @@ index c09fc614..cb70c58d 100644
  
      runProcess(command, cacheKey, outputPath, sourcePath);
    }
-@@ -283,7 +283,7 @@ Singleton {
+@@ -375,7 +375,7 @@ Singleton {
      const dstEsc = outputPath.replace(/'/g, "'\\''");
  
-     // Use Lanczos filter for high-quality downscaling, subtle unsharp mask, and PNG for lossless output
--    const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '${width}x${height}^' -unsharp 0x0.5 '${dstEsc}'`;
+     // Use Lanczos filter for high-quality downscaling and PNG for lossless output
+-    const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '${width}x${height}^' '${dstEsc}'`;
 +    const command = `wallpaper resize --size ${width}x${height} '${srcEsc}' '${dstEsc}'`;
  
      runProcess(command, cacheKey, outputPath, sourcePath);

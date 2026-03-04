@@ -126,7 +126,7 @@ pub enum WallpaperSubcommand {
 
     #[command(
         name = "dedupe",
-        visible_aliases = ["czkawka", "unique", "uniq"],
+        visible_aliases = ["unique", "uniq"],
         about = "Runs czkawka to show duplicate wallpapers"
     )]
     Dedupe,

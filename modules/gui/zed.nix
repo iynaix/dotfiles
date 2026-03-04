@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.gui =
+  flake.nixosModules.zed-editor =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.zed-editor ];

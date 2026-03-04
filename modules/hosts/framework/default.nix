@@ -8,7 +8,6 @@
         wm
 
         ### programs
-        # deadbeef
         freecad
         # helix
         # orca-slicer
@@ -19,6 +18,7 @@
         # subtitles
         # vlc
         wallfacer
+        zed-editor
         # zoom
 
         ### hardware
