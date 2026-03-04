@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.backlight =
+  flake.nixosModules.hardware_backlight =
     { pkgs, ... }:
     {
       environment.systemPackages = [

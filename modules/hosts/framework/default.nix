@@ -1,43 +1,39 @@
 { lib, ... }@top:
 {
-  flake.nixosModules.host-framework =
+  flake.nixosModules.host_framework =
     { pkgs, ... }:
     {
       imports = with top.config.flake.nixosModules; [
         gui
         wm
 
-        ### programs
-        freecad
-        # helix
-        # orca-slicer
-        # obs-studio
-        path-of-building
-        # path-of-exile
-        # steam
-        # subtitles
-        # vlc
-        wallfacer
-        zed-editor
-        # zoom
+        programs_freecad
+        # programs_helix
+        # programs_orca-slicer
+        # programs_obs-studio
+        programs_path-of-building
+        # programs_path-of-exile
+        # programs_steam
+        # programs_subtitles
+        # programs_vlc
+        programs_wallfacer
+        programs_zed-editor
+        # programs_zoom
 
-        ### hardware
-        amdgpu
-        bluetooth
-        # qmk
-        laptop
+        hardware_amdgpu
+        hardware_bluetooth
+        # hardware_qmk
+        hardware_laptop
 
-        ### services
-        # bittorrent
-        docker
-        # syncoid
-        virtualisation
+        # services_bittorrent
+        services_docker
+        # services_syncoid
+        services_virtualisation
 
-        ### specialisations
-        # specialisation-tty
-        # specialisation-niri
-        # specialisation-hyprland
-        # specialisation-mango
+        # specialisations_tty
+        # specialisations_niri
+        # specialisations_hyprland
+        # specialisations_mango
       ];
 
       custom = {

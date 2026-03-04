@@ -26,7 +26,7 @@ let
             dots = "${projects}/dotfiles";
           };
         }
-        config.flake.nixosModules."host-${host}"
+        config.flake.nixosModules."host_${host}"
         config.flake.nixosModules.core
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index

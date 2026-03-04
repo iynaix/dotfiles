@@ -1,10 +1,10 @@
 top: {
-  flake.nixosModules.laptop = {
+  flake.nixosModules.hardware_laptop = {
     imports = with top.config.flake.nixosModules; [
-      backlight
-      bluetooth
-      keyd
-      wifi
+      hardware_backlight
+      hardware_bluetooth
+      hardware_keyd
+      hardware_wifi
     ];
 
     # scrolling is nice for laptop with a smaller screen

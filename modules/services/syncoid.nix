@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.syncoid =
+  flake.nixosModules.services_syncoid =
     { config, ... }:
     let
       inherit (config.custom.constants) user;

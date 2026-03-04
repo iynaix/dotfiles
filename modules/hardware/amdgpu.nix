@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.amdgpu =
+  flake.nixosModules.hardware_amdgpu =
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [

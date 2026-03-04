@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.host-desktop =
+  flake.nixosModules.host_desktop =
     { config, lib, ... }:
     let
       hgst10 = "/media/HGST10";

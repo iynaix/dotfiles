@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.bittorrent =
+  flake.nixosModules.services_bittorrent =
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) projects user;

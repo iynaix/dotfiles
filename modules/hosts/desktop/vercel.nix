@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.nixosModules.host-desktop =
+  flake.nixosModules.host_desktop =
     {
       config,
       pkgs,

@@ -22,7 +22,7 @@
       packages.ai-subs = pkgs.callPackage aiSubsDrv { };
     };
 
-  flake.nixosModules.subtitles =
+  flake.nixosModules.programs_subtitles =
     { pkgs, ... }:
     lib.mkMerge [
       # subliminal

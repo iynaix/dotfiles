@@ -1,36 +1,33 @@
 { lib, ... }@top:
 {
-  flake.nixosModules.host-vm =
+  flake.nixosModules.host_vm =
     { pkgs, ... }:
     {
       imports = with top.config.flake.nixosModules; [
         gui
         wm
 
-        ### programs
-        # freecad
-        # helix
-        # orca-slicer
-        # obs-studio
-        # path-of-building
-        # path-of-exile
-        # steam
-        # subtitles
-        # vlc
-        # wallfacer
-        # zed-editor
-        # zoom
+        # programs_freecad
+        # programs_helix
+        # programs_orca-slicer
+        # programs_obs-studio
+        # programs_path-of-building
+        # programs_path-of-exile
+        # programs_steam
+        # programs_subtitles
+        # programs_vlc
+        # programs_wallfacer
+        # programs_zed-editor
+        # programs_zoom
 
-        ### hardware
-        # amdgpu
-        # qmk
-        # laptop
+        # programs_amdgpu
+        # programs_qmk
+        # programs_laptop
 
-        ### services
-        # bittorrent
-        # docker
-        # syncoid
-        # virtualisation
+        # services_bittorrent
+        # services_docker
+        # services_syncoid
+        # services_virtualisation
       ];
 
       custom = {

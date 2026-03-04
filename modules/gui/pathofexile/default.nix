@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.path-of-exile =
+  flake.nixosModules.programs_path-of-exile =
     { pkgs, ... }:
     {
       # NOTE: POE is installed through steam

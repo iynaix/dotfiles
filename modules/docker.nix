@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.docker =
+  flake.nixosModules.services_docker =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.distrobox ];

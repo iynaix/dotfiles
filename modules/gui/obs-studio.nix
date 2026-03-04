@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.obs-studio = {
+  flake.nixosModules.programs_obs-studio = {
     programs.obs-studio.enable = true;
 
     custom.persist = {

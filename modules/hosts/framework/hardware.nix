@@ -3,7 +3,7 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-  flake.nixosModules.host-framework =
+  flake.nixosModules.host_framework =
     {
       config,
       lib,

@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.steam =
+  flake.nixosModules.programs_steam =
     { config, pkgs, ... }:
     {
       programs.steam = {

@@ -2,7 +2,7 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-  flake.nixosModules.host-vm =
+  flake.nixosModules.host_vm =
     {
       config,
       lib,

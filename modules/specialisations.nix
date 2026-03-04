@@ -24,7 +24,7 @@
       };
     };
 
-  flake.nixosModules.specialisation-tty = {
+  flake.nixosModules.specialisations_tty = {
     # boot into a tty without a DE / WM
     specialisation.tty = {
       configuration = {
@@ -37,7 +37,7 @@
     };
   };
 
-  flake.nixosModules.specialisation-hyprland = {
+  flake.nixosModules.specialisations_hyprland = {
     specialisation.hyprland = {
       configuration = {
         custom = {
@@ -49,7 +49,7 @@
     };
   };
 
-  flake.nixosModules.specialisation-niri = {
+  flake.nixosModules.specialisations_niri = {
     specialisation.niri = {
       configuration = {
         custom = {
@@ -61,7 +61,7 @@
     };
   };
 
-  flake.nixosModules.specialisation-mango = {
+  flake.nixosModules.specialisations_mango = {
     specialisation.mango = {
       configuration = {
         custom = {

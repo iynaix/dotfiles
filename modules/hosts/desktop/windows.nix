@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.host-desktop = {
+  flake.nixosModules.host_desktop = {
     # dual boot
     boot = {
       loader.grub = {
