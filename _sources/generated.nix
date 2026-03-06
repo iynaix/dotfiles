@@ -8,10 +8,10 @@
 {
   awakened-poe-trade = {
     pname = "awakened-poe-trade";
-    version = "3.27.106";
+    version = "3.28.102";
     src = fetchurl {
-      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.27.106/Awakened-PoE-Trade-3.27.106.AppImage";
-      sha256 = "sha256-8L5Szn0KYfUMaTe+yyhJV1YZspmJCSlXSHXLPoiRhjE=";
+      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.102/Awakened-PoE-Trade-3.28.102.AppImage";
+      sha256 = "sha256-tej1rjkrpAXmQ8ZzvlAuxHkMGAuRpPqg1TlBoWhorIE=";
     };
   };
   exiled-exchange-2 = {
@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.9.4.1";
+    version = "0.10.1.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.9.4.1/helium-0.9.4.1-x86_64.AppImage";
-      sha256 = "sha256-N5gdWuxOrIudJx/4nYo4/SKSxakpTFvL4zzByv6Cnug=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.1.1/helium-0.10.1.1-x86_64.AppImage";
+      sha256 = "sha256-c9eBukRn6BIHb23bt/P+gRLjHa/Gf405rxkSC5qPjyA=";
     };
   };
   mango = {
@@ -101,6 +101,18 @@
     };
     date = "2019-01-24";
   };
+  niri = {
+    pname = "niri";
+    version = "5393902dd22e9d540438ee178775f1e488eea724";
+    src = fetchFromGitHub {
+      owner = "YaLTeR";
+      repo = "niri";
+      rev = "5393902dd22e9d540438ee178775f1e488eea724";
+      fetchSubmodules = false;
+      sha256 = "sha256-pFh7J2fBqsZvZrD26zfOj30qTM8+7PLZsNSLX+VOcUA=";
+    };
+    date = "2026-03-07";
+  };
   rofi-themes = {
     pname = "rofi-themes";
     version = "093c1a79f58daab358199c4246de50357e5bf462";
@@ -115,13 +127,13 @@
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";
-    version = "v0.2.10";
+    version = "v0.2.13";
     src = fetchFromGitHub {
       owner = "meehl";
       repo = "rusty-path-of-building";
-      rev = "v0.2.10";
+      rev = "v0.2.13";
       fetchSubmodules = false;
-      sha256 = "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=";
+      sha256 = "sha256-4lxMQfENucDaDZov82iZD5DMgksLuJ/2nXUKYYf/m/w=";
     };
   };
   yazi-plugins = {
@@ -150,13 +162,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2026.02.21";
+    version = "2026.03.03";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2026.02.21";
+      rev = "2026.03.03";
       fetchSubmodules = false;
-      sha256 = "sha256-r9I/zLyqGPeIzsHsLxJcfnLC3jpuyKMyX1UaMoM08jk=";
+      sha256 = "sha256-BPZzMT1IrZvgva/m5tYMaDYoUaP3VmpmcYeOUOwuoUY=";
     };
   };
 }

@@ -108,7 +108,7 @@
                 4
                 5
               ];
-              hdr = true; # toggle to use hdr
+              hdr = false; # toggle to use hdr
             }
             {
               name = "DP-2";
@@ -179,7 +179,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        # displayManager.defaultSession = "hyprland";
+        displayManager.defaultSession = "hyprland";
 
         pipewire = {
           wireplumber.extraConfig = {

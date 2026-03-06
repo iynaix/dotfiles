@@ -26,7 +26,7 @@
             "match:class (steam_app_(238960|2694490)), tag +poe"
             "match:initial_class (steam_app_(238960|2694490)), tag +poe"
             # poe1 / poe2 rules
-            "match:tag poe, workspace 5, fullscreen on"
+            "match:tag poe, workspace 5, fullscreen on, idle_inhibit always"
             # woke poe1 / poe2 trade
             "match:title (Awakened PoE Trade), tag +apt"
             "match:title (Exiled Exchange 2), tag +apt"

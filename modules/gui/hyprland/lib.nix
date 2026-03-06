@@ -132,12 +132,6 @@ in
       ];
       # don't use lib.mkMerge as the order is important
       hyprlandConfText = lib.concatMapStrings (attrs: toHyprconf { inherit attrs importantPrefixes; }) [
-        # systemd activation blurb
-        {
-          exec-once = [
-            "${lib.getExe' config.pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart hyprland-session.target"
-          ];
-        }
         # handle the plugins, loaded before the settings, implementation from home-manager:
         # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
         {

@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  self,
   ...
 }:
 {
@@ -28,41 +29,43 @@
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
+      source = (self.libCustom.nvFetcherSources pkgs).niri;
       niriWrapped = inputs.wrappers.wrapperModules.niri.apply {
         inherit pkgs;
         package =
           assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12")
             "update niri-ipc in dotfiles-rs, focal to use mainline niri-ipc";
           (lib.mkForce (
-            pkgs.niri.overrideAttrs (o: rec {
-              src = pkgs.fetchFromGitHub {
-                owner = "niri-wm";
-                repo = "niri";
-                rev = "c837d944f0cc08580ee86574dd0c3a68ca9379a4";
-                hash = "sha256-nSrfHwbjg8/Rfx5pqDqU8bL5IWh99MsvxfjNZYxqEFw=";
-              };
+            pkgs.niri.overrideAttrs (
+              o:
+              (
+                source
+                // {
+                  inherit (o) version; # needed for annoying version check
 
-              postPatch = ''
-                patchShebangs resources/niri-session
-                substituteInPlace resources/niri.service \
-                  --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
-              '';
+                  postPatch = ''
+                    patchShebangs resources/niri-session
+                    substituteInPlace resources/niri.service \
+                      --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
+                  '';
 
-              # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
-              # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-              cargoDeps = pkgs.rustPlatform.importCargoLock {
-                lockFile = "${src}/Cargo.lock";
-                allowBuiltinFetchGit = true;
-              };
+                  # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
+                  # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
+                  cargoDeps = pkgs.rustPlatform.importCargoLock {
+                    lockFile = "${source.src}/Cargo.lock";
+                    allowBuiltinFetchGit = true;
+                  };
 
-              patches = (o.patches or [ ]) ++ [
-                # unmerged PR to fix this
-                # https://github.com/YaLTeR/niri/pull/3004
-                ./transparent-fullscreen.patch
-              ];
+                  patches = (o.patches or [ ]) ++ [
+                    # unmerged PR to fix this
+                    # https://github.com/YaLTeR/niri/pull/3004
+                    ./transparent-fullscreen.patch
+                  ];
 
-              doCheck = false; # faster builds
-            })
+                  doCheck = false; # faster builds
+                }
+              )
+            )
           ));
 
         inherit (config.custom.programs.niri) settings;

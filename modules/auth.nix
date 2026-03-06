@@ -65,7 +65,7 @@
             };
             home = {
               directories = [
-                ".pki" # chromium recreates this directory, so it can't be moved to $XDG_DATA_HOME/.pki
+                # ".pki" # chromium recreates this directory, so it can't be moved to $XDG_DATA_HOME/.pki
                 ".ssh"
                 ".local/share/.gnupg"
                 ".local/share/keyrings"

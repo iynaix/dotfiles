@@ -141,6 +141,8 @@
         name = "noctalia-reload";
         text = /* sh */ ''
           killall .quickshell-wra || true
+          # prevent "already running" error
+          sleep 0.2
           noctalia-shell
         '';
       };
