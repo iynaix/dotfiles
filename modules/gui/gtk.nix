@@ -11,7 +11,6 @@ let
     Teal = "#118c74";
     Yellow = "#8c6c3e";
   };
-  defaultAccent = "Default";
 in
 {
   flake.modules.nixos.core =
@@ -97,22 +96,6 @@ in
             };
           };
 
-          iconTheme = {
-            package = lib.mkOption {
-              type = lib.types.package;
-              default = pkgs.custom.tela-dynamic-icon-theme.override {
-                colors = accents;
-              };
-              description = "Package providing the icon theme.";
-            };
-
-            name = lib.mkOption {
-              type = lib.types.str;
-              default = "Tela-${defaultAccent}-dark";
-              description = "The name of the icon theme within the package.";
-            };
-          };
-
           cursor = {
             package = lib.mkOption {
               type = lib.types.package;
@@ -140,6 +123,10 @@ in
     { config, pkgs, ... }:
     let
       gtkCfg = config.custom.gtk;
+      iconTheme = {
+        package = pkgs.tela-icon-theme;
+        name = "Tela-blue-dark";
+      };
       toIni = lib.generators.toINI {
         mkKeyValue =
           key: value:
@@ -163,7 +150,7 @@ in
       };
       gtkSharedSettings = {
         gtk-theme-name = gtkCfg.theme.name;
-        gtk-icon-theme-name = gtkCfg.iconTheme.name;
+        gtk-icon-theme-name = iconTheme.name;
         gtk-font-name = "${gtkCfg.font.name} 10";
       };
       toGtk2File =
@@ -232,7 +219,7 @@ in
                   cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
                   font-name = "${gtkCfg.font.name} 10";
                   gtk-theme = gtkCfg.theme.name;
-                  icon-theme = gtkCfg.iconTheme.name;
+                  icon-theme = iconTheme.name;
                   # disable middle click paste
                   gtk-enable-primary-paste = false;
                 };
@@ -271,12 +258,7 @@ in
         };
 
         "gtk-icon-theme" = {
-          colors_to_compare = lib.mapAttrsToList (name: value: {
-            name = "Tela-${name}-dark";
-            color = value;
-          }) config.custom.gtk.theme.accents;
-          compare_to = "{{colors.primary.default.hex}}";
-          post_hook = ''dconf write "/org/gnome/desktop/interface/icon-theme" "'{{closest_color}}'"'';
+          post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{colors.primary.default.hex}}"'';
           # dummy values so noctalia doesn't complain
           input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
           output_path = "/dev/null";
