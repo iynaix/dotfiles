@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-c9eBukRn6BIHb23bt/P+gRLjHa/Gf405rxkSC5qPjyA=",
+            "sha256": "sha256-JjNtf5UoGIQ8fkHqsWAERmKRLc3FKIr11fnoRhuZCSQ=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.10.1.1/helium-0.10.1.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.10.4.1/helium-0.10.4.1-x86_64.AppImage"
         },
-        "version": "0.10.1.1"
+        "version": "0.10.4.1"
     },
     "mango": {
         "cargoLock": null,
@@ -289,11 +289,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2026.03.03",
-            "sha256": "sha256-BPZzMT1IrZvgva/m5tYMaDYoUaP3VmpmcYeOUOwuoUY=",
+            "rev": "2026.03.13",
+            "sha256": "sha256-Sx5otasIqQW8n37cVqGI9j6biwMcEMIboLcyC1dkexk=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2026.03.03"
+        "version": "2026.03.13"
     }
 }

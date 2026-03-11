@@ -1,17 +1,4 @@
 { lib, ... }:
-let
-  accents = {
-    Default = "#2e7de9";
-    Green = "#387068";
-    Grey = "#414868";
-    Orange = "#b15c00";
-    Pink = "#d20065";
-    Purple = "#7847bd";
-    Red = "#f52a65";
-    Teal = "#118c74";
-    Yellow = "#8c6c3e";
-  };
-in
 {
   flake.modules.nixos.core =
     { config, pkgs, ... }:
@@ -61,72 +48,14 @@ in
             };
           };
 
-          theme = {
-            accents = lib.mkOption {
-              type = lib.types.attrs;
-              default = accents;
-              description = "GTK theme accents colors";
-            };
-
-            package = lib.mkOption {
-              type = lib.types.package;
-              default =
-                (pkgs.tokyonight-gtk-theme.override {
-                  colorVariants = [ "dark" ];
-                  sizeVariants = [ "compact" ];
-                  themeVariants = [ "all" ];
-                }).overrideAttrs
-                  (o: {
-                    # make it impossible to have a light theme XD
-                    postInstall = (o.postInstall or "") + ''
-                      rm -rf $out/share/themes/*Light*
-
-                      for theme in "$out"/share/themes/*Dark*; do
-                        ln -s "$theme" "''${theme/Dark/Light}";
-                      done
-                    '';
-                  });
-              description = "Package providing the theme.";
-            };
-
-            name = lib.mkOption {
-              type = lib.types.str;
-              default = "Tokyonight-Dark-Compact";
-              description = "The name of the theme within the package.";
-            };
-          };
-
-          cursor = {
-            package = lib.mkOption {
-              type = lib.types.package;
-              default = pkgs.simp1e-cursors;
-              description = "Package providing the cursor theme.";
-            };
-
-            name = lib.mkOption {
-              type = lib.types.str;
-              default = "Simp1e-Tokyo-Night";
-              description = "The cursor name within the package.";
-            };
-
-            size = lib.mkOption {
-              type = lib.types.int;
-              default = 28;
-              description = "The cursor size.";
-            };
-          };
         };
       };
     };
 
   flake.modules.nixos.gui =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       gtkCfg = config.custom.gtk;
-      iconTheme = {
-        package = pkgs.tela-icon-theme;
-        name = "Tela-blue-dark";
-      };
       toIni = lib.generators.toINI {
         mkKeyValue =
           key: value:
@@ -135,38 +64,11 @@ in
           in
           "${lib.escape [ "=" ] key}=${value'}";
       };
-      defaultIndexThemePackage = pkgs.writeTextFile {
-        name = "index.theme";
-        destination = "/share/icons/default/index.theme";
-        # Set name in icons theme, for compatibility with AwesomeWM etc. See:
-        # https://github.com/nix-community/home-manager/issues/2081
-        # https://wiki.archlinux.org/title/Cursor_themes#XDG_specification
-        text = ''
-          [Icon Theme]
-          Name=Default
-          Comment=Default Cursor Theme
-          Inherits=${gtkCfg.cursor.name}
-        '';
-      };
-      gtkSharedSettings = {
-        gtk-theme-name = gtkCfg.theme.name;
-        gtk-icon-theme-name = iconTheme.name;
-        gtk-font-name = "${gtkCfg.font.name} 10";
-      };
-      toGtk2File =
-        key: value:
-        let
-          value' =
-            if lib.isBool value then
-              (if value then "true" else "false")
-            else if lib.isString value then
-              "\"${value}\""
-            else
-              toString value;
-        in
-        "${key} = ${value'}";
       gtkIni = toIni {
-        Settings = gtkSharedSettings // {
+        Settings = {
+          gtk-theme-name = gtkCfg.theme.name;
+          gtk-icon-theme-name = config.custom.gtk.iconTheme.name;
+          gtk-font-name = "${gtkCfg.font.name} 10";
           gtk-application-prefer-dark-theme = 1;
           gtk-error-bell = 0;
         };
@@ -177,22 +79,16 @@ in
         etc = {
           "xdg/gtk-3.0/settings.ini".text = gtkIni;
           "xdg/gtk-4.0/settings.ini".text = gtkIni;
-          "xdg/gtk-2.0/gtkrc".text = lib.concatLines (lib.mapAttrsToList toGtk2File gtkSharedSettings);
+          "xdg/gtk-2.0/gtkrc".text = ''
+            gtk-font-name = "${gtkCfg.font.name} 10";
+            gtk-icon-theme-name = "${config.custom.gtk.iconTheme.name}";
+            gtk-theme-name = "${gtkCfg.theme.name}";
+          '';
         };
 
         sessionVariables = {
           GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
-          XCURSOR_SIZE = gtkCfg.cursor.size;
-          XCURSOR_THEME = gtkCfg.cursor.name;
-          HYPRCURSOR_SIZE = gtkCfg.cursor.size;
-          HYPRCURSOR_THEME = gtkCfg.cursor.name;
         };
-
-        systemPackages = with gtkCfg; [
-          theme.package
-          iconTheme.package
-          cursor.package
-        ];
       };
 
       fonts.packages = [
@@ -213,13 +109,12 @@ in
                 };
                 # gtk related settings
                 "org/gnome/desktop/interface" = {
-                  # set dark theme for gtk 4
-                  color-scheme = "prefer-dark";
+                  color-scheme = "prefer-dark"; # set dark theme for gtk 4
                   cursor-theme = gtkCfg.cursor.name;
                   cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
                   font-name = "${gtkCfg.font.name} 10";
                   gtk-theme = gtkCfg.theme.name;
-                  icon-theme = iconTheme.name;
+                  icon-theme = gtkCfg.iconTheme.name;
                   # disable middle click paste
                   gtk-enable-primary-paste = false;
                 };
@@ -230,39 +125,11 @@ in
         ];
       };
 
-      # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
       hj.xdg = {
         # use per user settings
         config.files."gtk-3.0/bookmarks".text = lib.concatMapStringsSep "\n" (
           b: "file://${b}"
         ) gtkCfg.bookmarks;
-
-        data.files = {
-          "icons/default/index.theme".source = "${defaultIndexThemePackage}/share/icons/default/index.theme";
-          "icons/${gtkCfg.cursor.name}".source = "${gtkCfg.cursor.package}/share/icons/${gtkCfg.cursor.name}";
-        };
-      };
-
-      custom.programs.noctalia.colors.templates = {
-        # use dynamic gtk theme and icon theme
-        "gtk-theme" = {
-          colors_to_compare = lib.mapAttrsToList (name: value: {
-            name = if name == "Default" then "Tokyonight-Dark-Compact" else "Tokyonight-${name}-Dark-Compact";
-            color = value;
-          }) config.custom.gtk.theme.accents;
-          compare_to = "{{colors.primary.default.hex}}";
-          post_hook = ''dconf write "/org/gnome/desktop/interface/gtk-theme" "'{{closest_color}}'"'';
-          # dummy values so noctalia doesn't complain
-          input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
-          output_path = "/dev/null";
-        };
-
-        "gtk-icon-theme" = {
-          post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{colors.primary.default.hex}}"'';
-          # dummy values so noctalia doesn't complain
-          input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
-          output_path = "/dev/null";
-        };
       };
     };
 }

@@ -29,9 +29,13 @@
           hypr-log = "hyprctl rollinglog --follow";
         };
 
-        variables = lib.mkIf (host == "vm" || host == "vm-hyprland") {
+        variables = {
+          HYPRCURSOR_SIZE = config.custom.gtk.cursor.size;
+          HYPRCURSOR_THEME = config.custom.gtk.cursor.name;
+        }
+        // (lib.optionalAttrs (host == "vm" || host == "vm-hyprland") {
           WLR_RENDERER_ALLOW_SOFTWARE = "1";
-        };
+        });
       };
 
       xdg.portal = {

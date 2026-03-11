@@ -156,6 +156,7 @@
           gcaam = "git add --all && git commit --amend";
           gcam = "git commit --amend";
           gco = "git checkout";
+          gclone-shallow = "git clone --depth 1";
           gcp = "git cherry-pick";
           gdiff = "git diff --no-ext-diff";
           gl = "git pull";

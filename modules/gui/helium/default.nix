@@ -23,17 +23,12 @@
           "kdplapeciagkkjoignnkfpbfkebcfbpb"
           # Awesome Screen Recorder & Screenshot
           "nlipoenfbbikpbjkfpfillcgkoblgpmj"
-          # Better PathOfExile Trading
-          "fhlinfpmdlijegjlpgedcmglkakaghnk"
           # Bitwarden
           "nngceckbapebfimnlniiiahkandclblb"
           # Dark Reader
           "eimadpbcbfnmbkopoojfekhnkhdbieeh"
           # JSON Viewer
           "gbmdgpbipfallnflgajpaliibnhdgobh"
-          # Looty
-          # "ajfbflclpnpbjkfibijekgcombcgehbi"
-          # Old Reddit Redirect
           "dneaehbmnbhcippjikoajpoabadpodje"
           # React Dev Tools
           "fmkadmapgofadopljbjfkapdkoienihi"
@@ -49,8 +44,6 @@
           "mnjggcdmjocbbbhaepdhchncahnbgone"
           # Tokyo Night Storm
           "pgbjifpikialeahbdendkjioeafbmfkn"
-          # uBlock Origin (already preinstalled)
-          # "cjpalhdlnbpafiamejdnhcphjbkeiagm"
           # Video Speed Controller
           "nffaoalbilbmmfgbnbgppjihopabppdk"
           # YouTube Auto HD + FPS

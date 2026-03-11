@@ -16,6 +16,17 @@
         exiled-exchange-2
       ];
 
+      # helium extensions
+      programs.chromium.extensions = [
+        # Better PathOfExile Trading
+        "fhlinfpmdlijegjlpgedcmglkakaghnk"
+        # Path of Exile Trade - Fuzzy Search
+        "mkbkmkampdnnbehdldipgjhbablkmfba"
+        # Looty
+        # "ajfbflclpnpbjkfibijekgcombcgehbi"
+        # Old Reddit Redirect
+      ];
+
       custom.programs = {
         hyprland.settings = {
           # NOTE: multiple rules so they are OR-ed

@@ -100,13 +100,12 @@
           name = "noctalia-diff";
           runtimeInputs = with pkgs; [
             jq
-            colordiff
+            json-diff
           ];
           text = /* sh */ ''
-            diff -u \
+            json-diff \
               <(jq -S . "''${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/settings.json") \
-              <(noctalia-shell ipc call state all | jq -S '.settings') \
-              | colordiff --nobanner
+              <(noctalia-shell ipc call state all | jq -S '.settings')
           '';
         };
       };
