@@ -70,11 +70,11 @@
         "smfh": "smfh"
       },
       "locked": {
-        "lastModified": 1773021298,
-        "narHash": "sha256-erwV+kMqRX/KhopMRq1B0MuyAGip4OkDG1nVJdW0nv8=",
+        "lastModified": 1773176535,
+        "narHash": "sha256-SxJl+VllncXrqOv045TulgPHZSEiow7ItsA7GLcJq48=",
         "owner": "feel-co",
         "repo": "hjem",
-        "rev": "f484cac67cfaa6329e1d1fe00be57929ae744b25",
+        "rev": "0290776d1418a475b785c1eacc91f655d11f331b",
         "type": "github"
       },
       "original": {
@@ -263,11 +263,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1772822230,
-        "narHash": "sha256-uKkU4cS3lkh3zlnUf+QRX6zd5LHOM0mrqhEvZ5fqqHM=",
-        "rev": "71caefce12ba78d84fe618cf61644dce01cf3a96",
+        "lastModified": 1773068389,
+        "narHash": "sha256-SXjlcLSLN5akUflU1ium1b+h2SoKi+hZzk9YuXn/VYg=",
+        "rev": "44bae273f9f82d480273bab26f5c50de3724f52f",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/25.11/nixos-25.11.7198.71caefce12ba/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/25.11/nixos-25.11.7346.44bae273f9f8/nixexprs.tar.xz"
       },
       "original": {
         "type": "tarball",
@@ -282,11 +282,11 @@
         "noctalia-qs": "noctalia-qs"
       },
       "locked": {
-        "lastModified": 1773115433,
-        "narHash": "sha256-HFAf46oF74JfCSaDmdyjE7nyoW5mtyjb6fAsXaCAO58=",
+        "lastModified": 1773191031,
+        "narHash": "sha256-Jd2gPCiRneROVwEzxpmHND2ymkV8lKW4s7cOpYfED0k=",
         "owner": "noctalia-dev",
         "repo": "noctalia-shell",
-        "rev": "7bb88e69194779d701e9927dd1edabaab082887d",
+        "rev": "719fd7ba70fef1eb2651fff83e06a511c969d34a",
         "type": "github"
       },
       "original": {
@@ -332,11 +332,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772875143,
-        "narHash": "sha256-ENBRe7vCCp/SIG2WRKI2pyAxwnrc9CPuwZ4CtMu4KU4=",
+        "lastModified": 1773176554,
+        "narHash": "sha256-i7lgK73pvk5ClHgfVEeIiHFM1S2kjeCF2uvODf2oKlE=",
         "owner": "notashelf",
         "repo": "nvf",
-        "rev": "6681e33727409d4ccfa687de981b594110a735d6",
+        "rev": "d057f50cc4ce26d5f8a43cd8ea16a0ac7805b228",
         "type": "github"
       },
       "original": {

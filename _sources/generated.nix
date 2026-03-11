@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.12.5";
+    version = "0.12.6";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.12.5";
+      rev = "0.12.6";
       fetchSubmodules = false;
-      sha256 = "sha256-kZF47c8eVlAWkUDzAcH7d+6Cks+YdhQDH1A0X0v7DBo=";
+      sha256 = "sha256-MXCXjnGPE+wagrHR8cxGTDhJO4xYp+aBQPApV3JG9XY=";
     };
   };
   mpv-cut = {
@@ -103,15 +103,15 @@
   };
   niri = {
     pname = "niri";
-    version = "5393902dd22e9d540438ee178775f1e488eea724";
+    version = "4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "5393902dd22e9d540438ee178775f1e488eea724";
+      rev = "4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
       fetchSubmodules = false;
-      sha256 = "sha256-pFh7J2fBqsZvZrD26zfOj30qTM8+7PLZsNSLX+VOcUA=";
+      sha256 = "sha256-ZiGGjRL2H67GcL6BvZV99khW++aHpJ2NA4n71qZiJ9A=";
     };
-    date = "2026-03-07";
+    date = "2026-03-10";
   };
   rofi-themes = {
     pname = "rofi-themes";

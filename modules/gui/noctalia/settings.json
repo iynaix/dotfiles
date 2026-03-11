@@ -26,9 +26,9 @@
     "viewMode": "list"
   },
   "audio": {
-    "cavaFrameRate": 30,
     "mprisBlacklist": [],
     "preferredPlayer": "",
+    "spectrumFrameRate": 30,
     "visualizerType": "linear",
     "volumeFeedback": false,
     "volumeFeedbackSoundFile": "",
@@ -45,6 +45,7 @@
     "contentPadding": 2,
     "density": "compact",
     "displayMode": "always_visible",
+    "enableExclusionZoneInset": true,
     "floating": false,
     "fontScale": 1,
     "frameRadius": 12,
@@ -52,12 +53,18 @@
     "hideOnOverview": true,
     "marginHorizontal": 5,
     "marginVertical": 5,
+    "middleClickAction": "none",
+    "middleClickCommand": "",
+    "middleClickFollowMouse": false,
     "monitors": [],
     "mouseWheelAction": "workspace",
     "mouseWheelWrap": true,
     "outerCorners": false,
     "position": "top",
     "reverseScroll": false,
+    "rightClickAction": "controlCenter",
+    "rightClickCommand": "",
+    "rightClickFollowMouse": true,
     "screenOverrides": [],
     "showCapsule": false,
     "showOnWorkspaceSwitch": true,
@@ -73,6 +80,7 @@
           "enableScrollWheel": true,
           "focusedColor": "primary",
           "followFocusedScreen": false,
+          "fontWeight": "bold",
           "groupedBorderOpacity": 1,
           "hideUnoccupied": false,
           "iconScale": 0.8,
@@ -153,7 +161,7 @@
     "generationMethod": "tonal-spot",
     "manualSunrise": "06:30",
     "manualSunset": "18:30",
-    "monitorForColors": "",
+    "monitorForColors": "DP-1",
     "predefinedScheme": "Tokyo Night",
     "schedulingMode": "off",
     "useWallpaperColors": true
@@ -186,7 +194,6 @@
       }
     ],
     "diskPath": "/",
-    "openAtMouseOnBarRightClick": true,
     "position": "close_to_bar_button",
     "shortcuts": {
       "left": [
@@ -229,6 +236,7 @@
   "desktopWidgets": {
     "enabled": false,
     "gridSnap": false,
+    "gridSnapScale": false,
     "monitorWidgets": [],
     "overviewEnabled": true
   },
@@ -273,6 +281,7 @@
     "clockStyle": "digital",
     "compactLockScreen": true,
     "dimmerOpacity": 0.2,
+    "enableBlurBehind": true,
     "enableLockScreenCountdown": true,
     "enableLockScreenMediaControls": false,
     "enableShadows": true,
@@ -364,6 +373,7 @@
   },
   "network": {
     "airplaneModeEnabled": false,
+    "bluetoothAutoConnect": true,
     "bluetoothDetailsViewMode": "grid",
     "bluetoothHideUnnamedDevices": false,
     "bluetoothRssiPollIntervalMs": 10000,
@@ -381,6 +391,10 @@
     "manualSunrise": "06:30",
     "manualSunset": "18:30",
     "nightTemp": "4000"
+  },
+  "noctaliaPerformance": {
+    "disableDesktopWidgets": true,
+    "disableWallpaper": true
   },
   "notifications": {
     "backgroundOpacity": 1,
@@ -489,7 +503,7 @@
     "showHeader": false,
     "showKeybinds": true
   },
-  "settingsVersion": 54,
+  "settingsVersion": 57,
   "systemMonitor": {
     "batteryCriticalThreshold": 5,
     "batteryWarningThreshold": 20,
@@ -558,9 +572,11 @@
     "fontFixedScale": 1,
     "panelBackgroundOpacity": 0.5,
     "panelsAttachedToBar": true,
+    "scrollbarAlwaysVisible": true,
     "settingsPanelMode": "window",
     "settingsPanelSideBarCardStyle": false,
-    "tooltipsEnabled": true
+    "tooltipsEnabled": true,
+    "translucentWidgets": false
   },
   "wallpaper": {
     "automationEnabled": false,

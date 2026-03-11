@@ -1,4 +1,3 @@
-# patches to be applied to nixpkgs
 {
   flake.modules.nixos.core =
     { pkgs, ... }:
@@ -7,9 +6,12 @@
         enable = true;
 
         settings.patches = [
-          # orca-slicer 2.3.2-dev
-          # https://github.com/NixOS/nixpkgs/pull/480799
-          ./orca-slicer-2.3.2.patch
+          # orca-slicer: 2.3.1 -> 2.3.2
+          # https://github.com/NixOS/nixpkgs/pull/495746
+          (pkgs.fetchpatch {
+            url = "https://github.com/NixOS/nixpkgs/commit/c02a96a7e821e20ae008f41c940effae799d5359.patch";
+            hash = "sha256-9VlOhHD2oM6X+xwVBSeQanD5syWHbIN2nH5tyHkdHJ8=";
+          })
 
           # awakened poe trade command line args
           # https://github.com/NixOS/nixpkgs/pull/496108
