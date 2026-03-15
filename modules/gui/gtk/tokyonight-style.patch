@@ -1,15 +1,13 @@
 diff --git a/themes/src/sass/gtk/_common-3.0.scss b/themes/src/sass/gtk/_common-3.0.scss
-index 4148a1b4..913ab08d 100644
+index 4148a1b4..896398ee 100644
 --- a/themes/src/sass/gtk/_common-3.0.scss
 +++ b/themes/src/sass/gtk/_common-3.0.scss
-@@ -43,8 +43,8 @@
- }
+@@ -44,7 +44,7 @@
 
  %selected_items_indicator {
--	color: on($indicator);
+ 	color: on($indicator);
 -	background-color: $indicator;
-+  color: if($theme == "pink", rgba($white, 0.95), on($indicator));
-+  background-color: $primary;
++	background-color: $primary;
  }
 
  %linked {

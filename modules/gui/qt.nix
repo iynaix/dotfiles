@@ -72,17 +72,12 @@
         let
           defaultFont = "${config.custom.gtk.font.name},${toString config.custom.gtk.font.size}";
           createQtctConf = filename: font: {
-            colors_to_compare = lib.mapAttrsToList (name: value: {
-              name = "Tela-${name}-dark";
-              color = value;
-            }) config.custom.gtk.theme.accents;
-            compare_to = "{{colors.primary.default.hex}}";
             # dummy values so noctalia doesn't complain
             input_path = pkgs.writeText filename (
               lib.generators.toINI { } {
                 Appearance = {
                   custom_palette = false;
-                  icon_theme = "{{ closest_color }}";
+                  icon_theme = "Tela-{{ colors.primary.default.hex_stripped }}";
                   standard_dialogs = "xdgdesktopportal";
                   style = "kvantum";
                 };

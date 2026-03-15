@@ -41,11 +41,6 @@
         nitch = prev.nitch.overrideAttrs (o: {
           patches = (o.patches or [ ]) ++ [ ./patches/nitch-nix-pkgs-count.patch ];
         });
-
-        # fix some ugly styling for nemo in tokyonight
-        tokyonight-gtk-theme = prev.tokyonight-gtk-theme.overrideAttrs (o: {
-          patches = (o.patches or [ ]) ++ [ ./patches/tokyonight-style.patch ];
-        });
       };
 
       # writeShellApplication with support for completions

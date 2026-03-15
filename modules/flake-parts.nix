@@ -23,6 +23,7 @@
         config.allowUnfree = true;
         overlays = [
           self.overlays.pkgsCustom
+          self.overlays.pkgsPatches
           self.overlays.writeShellApplicationCompletions
         ];
       };

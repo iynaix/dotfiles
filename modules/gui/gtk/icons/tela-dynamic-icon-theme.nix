@@ -38,11 +38,14 @@
               ];
               text = /* sh */ ''
                 if [[ -z "''${1:-}" ]]; then
-                    echo "ERROR: No hex color provided."
+                    echo "ERROR: A hex color is required. (e.g. #FFFFFF)"
                     exit 1
                 fi
 
-                THEME_DIR="/tmp/Tela-$1"
+                # strip the leading #
+                THEME_NAME="Tela-''${1#\#}"
+                THEME_DIR="/tmp/$THEME_NAME"
+
                 # uncomment for debugging
                 # rm -rf "$THEME_DIR"
 
@@ -59,8 +62,9 @@
                   done
                 fi
 
-                ln -sfn "$THEME_DIR" "$HOME/.local/share/icons/$1"
-                dconf write "/org/gnome/desktop/interface/icon-theme" "'$1'"
+                mkdir -p "$HOME/.local/share/icons"
+                ln -sfn "$THEME_DIR" "$HOME/.local/share/icons/$THEME_NAME"
+                dconf write "/org/gnome/desktop/interface/icon-theme" "'$THEME_NAME'"
               '';
             };
         };
@@ -113,7 +117,7 @@
       # set dynamic icon theme with noctalia
       custom.programs.noctalia.colors.templates = {
         "gtk-icon-theme" = {
-          post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{colors.primary.default.hex}}"'';
+          post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
           # dummy values so noctalia doesn't complain
           input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
           output_path = "/dev/null";
