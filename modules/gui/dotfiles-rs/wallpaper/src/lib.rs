@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::path::PathBuf;
 
 use common::{full_path, wallpaper};
 
@@ -8,9 +8,11 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) {
         return;
     }
 
-    let mut history: HashMap<_, _> = wallpaper::history().into_iter().collect();
-    // insert or update timestamp
-    history.insert(wallpaper, chrono::Local::now().into());
+    let mut history: Vec<(_, _)> = wallpaper::history().into_iter().collect();
+    // insert or update timestamp if wallpaper wasn't the last 3 shown
+    if history.iter().take(3).any(|(path, _)| path == &wallpaper) {
+        history.insert(0, (wallpaper, chrono::Local::now().into()));
+    }
 
     // update the history csv
     let history_csv = full_path("~/Pictures/wallpapers_history.csv");

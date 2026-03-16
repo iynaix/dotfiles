@@ -8,7 +8,9 @@
     "customLaunchPrefixEnabled": false,
     "density": "default",
     "enableClipPreview": true,
+    "enableClipboardChips": true,
     "enableClipboardHistory": true,
+    "enableClipboardSmartIcons": true,
     "enableSessionSearch": true,
     "enableSettingsSearch": true,
     "enableWindowsSearch": true,
@@ -22,7 +24,6 @@
     "showIconBackground": false,
     "sortByMostUsed": true,
     "terminalCommand": "ghostty -e",
-    "useApp2Unit": false,
     "viewMode": "list"
   },
   "audio": {
@@ -89,6 +90,7 @@
           "occupiedColor": "secondary",
           "pillSize": 0.6,
           "showApplications": false,
+          "showApplicationsHover": false,
           "showBadge": true,
           "showLabelsOnlyWhenOccupied": true,
           "unfocusedIconsOpacity": 1
@@ -333,6 +335,7 @@
     "telemetryEnabled": false
   },
   "hooks": {
+    "colorGeneration": "",
     "darkModeChange": "",
     "enabled": false,
     "performanceModeDisabled": "",
@@ -441,7 +444,8 @@
     "overlayLayer": true
   },
   "plugins": {
-    "autoUpdate": true
+    "autoUpdate": true,
+    "notifyUpdates": true
   },
   "sessionMenu": {
     "countdownDuration": 3000,
@@ -503,7 +507,7 @@
     "showHeader": false,
     "showKeybinds": true
   },
-  "settingsVersion": 57,
+  "settingsVersion": 59,
   "systemMonitor": {
     "batteryCriticalThreshold": 5,
     "batteryWarningThreshold": 20,
@@ -600,7 +604,14 @@
     "sortOrder": "random",
     "transitionDuration": 1500,
     "transitionEdgeSmoothness": 0.05,
-    "transitionType": "random",
+    "transitionType": [
+      "fade",
+      "disc",
+      "stripes",
+      "wipe",
+      "pixelate",
+      "honeycomb"
+    ],
     "useSolidColor": false,
     "useWallhaven": false,
     "viewMode": "single",

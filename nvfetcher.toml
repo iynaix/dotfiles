@@ -26,25 +26,13 @@ fetch.github = "YaLTeR/niri"
 src.github_tag = "mangowm/mango"
 fetch.github = "mangowm/mango"
 
-[mpv-cut]
-src.git = "https://github.com/familyfriendlymikey/mpv-cut"
-fetch.github = "familyfriendlymikey/mpv-cut"
-
 [mpv-deletefile]
 src.git = "https://github.com/zenyd/mpv-scripts"
 fetch.github = "zenyd/mpv-scripts"
 
-[mpv-nextfile]
-src.git = "https://github.com/jonniek/mpv-nextfile"
-fetch.github = "jonniek/mpv-nextfile"
-
 [mpv-sub-select]
 src.git = "https://github.com/CogentRedTester/mpv-sub-select"
 fetch.github = "CogentRedTester/mpv-sub-select"
-
-[mpv-subsearch]
-src.git = "https://github.com/kelciour/mpv-scripts"
-fetch.github = "kelciour/mpv-scripts"
 
 [rofi-themes]
 src.git = "https://github.com/adi1090x/rofi"

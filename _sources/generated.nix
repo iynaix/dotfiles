@@ -24,34 +24,22 @@
   };
   helium = {
     pname = "helium";
-    version = "0.10.4.1";
+    version = "0.10.5.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.4.1/helium-0.10.4.1-x86_64.AppImage";
-      sha256 = "sha256-JjNtf5UoGIQ8fkHqsWAERmKRLc3FKIr11fnoRhuZCSQ=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.5.1/helium-0.10.5.1-x86_64.AppImage";
+      sha256 = "sha256-c/ea8C1XjTkBo0/ujGHEbKWyCmRMxyuiuOzAO9AMf1o=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.12.6";
+    version = "0.12.7";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.12.6";
+      rev = "0.12.7";
       fetchSubmodules = false;
-      sha256 = "sha256-MXCXjnGPE+wagrHR8cxGTDhJO4xYp+aBQPApV3JG9XY=";
+      sha256 = "sha256-dkqs7Bk3099dLGY6x9/Mp6lpieFJ8tKAe6wr59CknMc=";
     };
-  };
-  mpv-cut = {
-    pname = "mpv-cut";
-    version = "3b18f1161ffb2ff822c88cb97e099772d4b3c26d";
-    src = fetchFromGitHub {
-      owner = "familyfriendlymikey";
-      repo = "mpv-cut";
-      rev = "3b18f1161ffb2ff822c88cb97e099772d4b3c26d";
-      fetchSubmodules = false;
-      sha256 = "sha256-c4NHJM1qeXXBz8oyGUzS9QiAzRYiNKjmArM1K0Q2Xo0=";
-    };
-    date = "2023-11-22";
   };
   mpv-deletefile = {
     pname = "mpv-deletefile";
@@ -65,18 +53,6 @@
     };
     date = "2025-12-06";
   };
-  mpv-nextfile = {
-    pname = "mpv-nextfile";
-    version = "b8f7a4d6224876bf26724a9313a36e84d9ecfd81";
-    src = fetchFromGitHub {
-      owner = "jonniek";
-      repo = "mpv-nextfile";
-      rev = "b8f7a4d6224876bf26724a9313a36e84d9ecfd81";
-      fetchSubmodules = false;
-      sha256 = "sha256-Ad98iUbumhsudGwHcYEVTV6ye6KHj5fHAx8q90UQ2QM=";
-    };
-    date = "2023-08-09";
-  };
   mpv-sub-select = {
     pname = "mpv-sub-select";
     version = "26d24a0fd1d69988eaedda6056a2c87d0a55b6cb";
@@ -89,29 +65,17 @@
     };
     date = "2025-04-04";
   };
-  mpv-subsearch = {
-    pname = "mpv-subsearch";
-    version = "9a5cda4fc8f0896cec27dca60a32251009c0e9c5";
-    src = fetchFromGitHub {
-      owner = "kelciour";
-      repo = "mpv-scripts";
-      rev = "9a5cda4fc8f0896cec27dca60a32251009c0e9c5";
-      fetchSubmodules = false;
-      sha256 = "sha256-BRyKJeXWFhsCDKTUNKsp+yqYpP9mzbaZMviUFXyA308=";
-    };
-    date = "2019-01-24";
-  };
   niri = {
     pname = "niri";
-    version = "4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
+    version = "92c168f56d6653c4899222c235fdd6467c1c351b";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
+      rev = "92c168f56d6653c4899222c235fdd6467c1c351b";
       fetchSubmodules = false;
-      sha256 = "sha256-ZiGGjRL2H67GcL6BvZV99khW++aHpJ2NA4n71qZiJ9A=";
+      sha256 = "sha256-q3NwYzd/qxcCr2m37uQCnc5BHvC3hsJ4fK5KN5aNSGc=";
     };
-    date = "2026-03-10";
+    date = "2026-03-15";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -127,13 +91,13 @@
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";
-    version = "v0.2.13";
+    version = "v0.2.14";
     src = fetchFromGitHub {
       owner = "meehl";
       repo = "rusty-path-of-building";
-      rev = "v0.2.13";
+      rev = "v0.2.14";
       fetchSubmodules = false;
-      sha256 = "sha256-4lxMQfENucDaDZov82iZD5DMgksLuJ/2nXUKYYf/m/w=";
+      sha256 = "sha256-rgXxy1r4ZyFFG5BiodogeHnCcppw79xzb0MsQDZxL4E=";
     };
   };
   yazi-plugins = {
