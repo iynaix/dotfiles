@@ -8,10 +8,10 @@
 {
   awakened-poe-trade = {
     pname = "awakened-poe-trade";
-    version = "3.28.102";
+    version = "3.28.103";
     src = fetchurl {
-      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.102/Awakened-PoE-Trade-3.28.102.AppImage";
-      sha256 = "sha256-tej1rjkrpAXmQ8ZzvlAuxHkMGAuRpPqg1TlBoWhorIE=";
+      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.103/Awakened-PoE-Trade-3.28.103.AppImage";
+      sha256 = "sha256-p/XDWnE9lm/LwT3r/lhQWtEJ3YoaGRFd4Rv7RbdDIeg=";
     };
   };
   exiled-exchange-2 = {
@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.10.5.1";
+    version = "0.10.6.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.5.1/helium-0.10.5.1-x86_64.AppImage";
-      sha256 = "sha256-c/ea8C1XjTkBo0/ujGHEbKWyCmRMxyuiuOzAO9AMf1o=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.6.1/helium-0.10.6.1-x86_64.AppImage";
+      sha256 = "sha256-6xqNRaP3aqitEseexRVEEjKkJClC0j1HHZoRGQanhSk=";
     };
   };
   mango = {
@@ -67,15 +67,15 @@
   };
   niri = {
     pname = "niri";
-    version = "92c168f56d6653c4899222c235fdd6467c1c351b";
+    version = "581b5be093b983a9a2911c5f45e6bda2e87fe574";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "92c168f56d6653c4899222c235fdd6467c1c351b";
+      rev = "581b5be093b983a9a2911c5f45e6bda2e87fe574";
       fetchSubmodules = false;
-      sha256 = "sha256-q3NwYzd/qxcCr2m37uQCnc5BHvC3hsJ4fK5KN5aNSGc=";
+      sha256 = "sha256-KIbF/TPvHu4oH9qQlUNDBAzpMuo8ptek6Wbxrz61SA4=";
     };
-    date = "2026-03-15";
+    date = "2026-03-20";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -126,13 +126,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2026.03.13";
+    version = "2026.03.17";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2026.03.13";
+      rev = "2026.03.17";
       fetchSubmodules = false;
-      sha256 = "sha256-Sx5otasIqQW8n37cVqGI9j6biwMcEMIboLcyC1dkexk=";
+      sha256 = "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=";
     };
   };
 }

@@ -13,8 +13,9 @@ appimageTools.wrapType2 (
   source
   // {
     nativeBuildInputs = [ makeWrapper ];
-    extraInstallCommands = ''
+    extraInstallCommands = /* sh */ ''
       wrapProgram $out/bin/${pname} \
+          --set-default XDG_DATA_HOME "$HOME/.local/share" \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
       install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications

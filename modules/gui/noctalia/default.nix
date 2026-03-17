@@ -23,7 +23,7 @@
             jq
           ];
           text = /* sh */ ''
-            RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
+            RAW_OUTPUT=$(noctalia-shell list --json 2>/dev/null)
 
             # invalid json, no instances running, so start noctalia-shell
             if [[ ! "$RAW_OUTPUT" == "["* ]]; then
@@ -31,7 +31,7 @@
               exit
             fi
 
-            NOCTALIA_PATH=$(noctalia-shell list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
+            NOCTALIA_PATH=$(noctalia-shell list --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
 
             # using dev version, don't kill the shell
             if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
@@ -124,7 +124,7 @@
             }
           );
           default = [ ];
-          description = "Reducers that will be applied to a copy of desktop's gui-settings.json";
+          description = "Reducers that will be applied to a copy of desktop's settings.json";
         };
       };
     };

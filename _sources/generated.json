@@ -8,11 +8,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-tej1rjkrpAXmQ8ZzvlAuxHkMGAuRpPqg1TlBoWhorIE=",
+            "sha256": "sha256-p/XDWnE9lm/LwT3r/lhQWtEJ3YoaGRFd4Rv7RbdDIeg=",
             "type": "url",
-            "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.102/Awakened-PoE-Trade-3.28.102.AppImage"
+            "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.103/Awakened-PoE-Trade-3.28.103.AppImage"
         },
-        "version": "3.28.102"
+        "version": "3.28.103"
     },
     "exiled-exchange-2": {
         "cargoLock": null,
@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-c/ea8C1XjTkBo0/ujGHEbKWyCmRMxyuiuOzAO9AMf1o=",
+            "sha256": "sha256-6xqNRaP3aqitEseexRVEEjKkJClC0j1HHZoRGQanhSk=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.10.5.1/helium-0.10.5.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.10.6.1/helium-0.10.6.1-x86_64.AppImage"
         },
-        "version": "0.10.5.1"
+        "version": "0.10.6.1"
     },
     "mango": {
         "cargoLock": null,
@@ -109,7 +109,7 @@
     },
     "niri": {
         "cargoLock": null,
-        "date": "2026-03-15",
+        "date": "2026-03-20",
         "extract": null,
         "name": "niri",
         "passthru": null,
@@ -121,12 +121,12 @@
             "name": null,
             "owner": "YaLTeR",
             "repo": "niri",
-            "rev": "92c168f56d6653c4899222c235fdd6467c1c351b",
-            "sha256": "sha256-q3NwYzd/qxcCr2m37uQCnc5BHvC3hsJ4fK5KN5aNSGc=",
+            "rev": "581b5be093b983a9a2911c5f45e6bda2e87fe574",
+            "sha256": "sha256-KIbF/TPvHu4oH9qQlUNDBAzpMuo8ptek6Wbxrz61SA4=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "92c168f56d6653c4899222c235fdd6467c1c351b"
+        "version": "581b5be093b983a9a2911c5f45e6bda2e87fe574"
     },
     "rofi-themes": {
         "cargoLock": null,
@@ -226,11 +226,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2026.03.13",
-            "sha256": "sha256-Sx5otasIqQW8n37cVqGI9j6biwMcEMIboLcyC1dkexk=",
+            "rev": "2026.03.17",
+            "sha256": "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2026.03.13"
+        "version": "2026.03.17"
     }
 }

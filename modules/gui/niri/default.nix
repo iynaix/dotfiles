@@ -89,6 +89,26 @@
         useNautilus = false;
       };
 
+      # restart niri with new settings on rebuild
+      system.userActivationScripts = {
+        niri-reload-config = {
+          text = lib.getExe (
+            pkgs.writeShellApplication {
+              name = "niri-reload-config";
+              runtimeInputs = [
+                config.programs.niri.package
+                pkgs.procps
+              ];
+              text = ''
+                if pgrep -x "niri" > /dev/null; then
+                  niri msg action load-config-file --path "${niriWrapped.env."NIRI_CONFIG"}"
+                fi
+              '';
+            }
+          );
+        };
+      };
+
       xdg.portal = {
         config = {
           niri = {
