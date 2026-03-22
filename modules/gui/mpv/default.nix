@@ -395,9 +395,9 @@
             mpvDir = pkgs.mpv.flags."--config-dir";
           in
           {
-            mpv = /* sh */ ''cat "${mpvDir}/mpv.conf"'';
-            mpv-input = /* sh */ ''cat "${mpvDir}/input.conf"'';
-            mpv-plugins = /* sh */ "cat ${mpvDir}/script-opts/*";
+            mpv = /* sh */ ''moor "${mpvDir}/mpv.conf"'';
+            mpv-input = /* sh */ ''moor "${mpvDir}/input.conf"'';
+            mpv-plugins = /* sh */ "moor ${mpvDir}/script-opts/*";
           };
 
         custom.persist = {

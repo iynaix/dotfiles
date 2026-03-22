@@ -92,7 +92,7 @@ in
       };
 
       custom.programs.print-config = {
-        zathura = /* sh */ ''cat "${pkgs.zathura.flags."--config-dir"}/zathurarc" "${noctaliaColors}"'';
+        zathura = /* sh */ ''moor "${pkgs.zathura.flags."--config-dir"}/zathurarc" "${noctaliaColors}"'';
       };
     };
 }

@@ -182,7 +182,7 @@
               ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
           in
           {
-            impermanence = ''sort -ui <<< "${lib.concatLines (allDirectories ++ allFiles)}"'';
+            impermanence = ''sort -ui <<< "${lib.concatLines (allDirectories ++ allFiles)}" | moor'';
           };
       };
     };

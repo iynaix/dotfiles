@@ -60,7 +60,7 @@
       };
 
       custom.programs.print-config = {
-        bat = /* sh */ ''cat "${lib.getExe pkgs.bat}"'';
+        bat = /* sh */ ''moor --lang sh "${lib.getExe pkgs.bat}"'';
       };
     };
 }

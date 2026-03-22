@@ -92,7 +92,7 @@
           };
 
           custom.programs.print-config = {
-            ly = /* sh */ ''cat "/etc/ly/config.ini"'';
+            ly = /* sh */ ''moor "/etc/ly/config.ini"'';
           };
 
           # block other ttys from autologin when bypassed from lockscreen

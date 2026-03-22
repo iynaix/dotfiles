@@ -57,7 +57,7 @@ in
       };
 
       custom.programs.print-config = {
-        yt-dlp = /* sh */ ''cat "${lib.getExe pkgs.yt-dlp}"'';
+        yt-dlp = /* sh */ ''moor --lang sh "${lib.getExe pkgs.yt-dlp}"'';
       };
     };
 }

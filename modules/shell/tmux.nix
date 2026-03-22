@@ -110,7 +110,7 @@
       ];
 
       custom.programs.print-config = {
-        tmux = /* sh */ ''cat "${pkgs.tmux.flags."-f"}"'';
+        tmux = /* sh */ ''moor "${pkgs.tmux.flags."-f"}"'';
       };
     };
 }

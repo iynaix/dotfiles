@@ -34,7 +34,7 @@
       ];
 
       custom.programs.print-config = {
-        jujutsu = /* sh */ ''cat "${toString jujutsuToml}"'';
+        jujutsu = /* sh */ ''moor --lang toml "${toString jujutsuToml}"'';
       };
     };
 }

@@ -277,7 +277,7 @@
           };
 
           print-config = {
-            noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings"'';
+            noctalia = /* sh */ ''noctalia-shell ipc call state all | ${lib.getExe pkgs.jq} -S ".settings" | moor'';
           };
         };
       };

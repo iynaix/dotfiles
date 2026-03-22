@@ -379,6 +379,17 @@
             complete -c nbuild-iso -f -a '(_nbuild_iso)'
         '';
       };
+      # list all packages
+      pkgs-list = pkgs.writeShellApplication {
+        name = "pkgs-list";
+        text =
+          let
+            allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
+          in
+          /* sh */ ''
+            sort -ui <<< "${lib.concatLines allPkgs}";
+          '';
+      };
     in
     {
       nixpkgs.overlays = [
@@ -411,6 +422,7 @@
           nbuild-iso
           nix-eval-time
           nix-eval-flamegraph
+          pkgs-list
         ]
         ++ (with pkgs.custom; [
           nattr
@@ -420,14 +432,6 @@
           nlocate-lib
           ndepends
         ]);
-
-      custom.programs.print-config =
-        let
-          allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
-        in
-        {
-          pkgs = ''sort -ui <<< "${lib.concatLines allPkgs}"'';
-        };
 
       custom.persist = {
         home = {

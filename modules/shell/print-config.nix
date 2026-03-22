@@ -26,6 +26,7 @@
           ) cmds;
           print-config = pkgs.custom.writeShellApplicationCompletions {
             name = "print-config";
+            runtimeInputs = [ pkgs.moor ];
             text = /* sh */ ''
               if [ -z "''${1-}" ]; then
                   echo "Usage: print-config [PROGRAM]"
@@ -67,7 +68,16 @@
         {
           environment.systemPackages = [
             print-config
-          ];
+          ]
+          # add a `PROGRAM-config` command for each program
+          ++ (lib.mapAttrsToList (
+            prog: cmd:
+            pkgs.writeShellApplication {
+              name = "${prog}-config";
+              runtimeInputs = [ pkgs.moor ];
+              text = cmd;
+            }
+          ) config.custom.programs.print-config);
         };
     };
 }

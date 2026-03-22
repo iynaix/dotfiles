@@ -121,7 +121,7 @@ in
       };
 
       custom.programs.print-config = {
-        pqiv = /* sh */ ''cat "${pkgs.pqiv.env.PQIVRC_PATH}"'';
+        pqiv = /* sh */ ''moor "${pkgs.pqiv.env.PQIVRC_PATH}"'';
       };
 
       custom.persist = {

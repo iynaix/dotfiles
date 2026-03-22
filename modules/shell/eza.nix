@@ -74,7 +74,7 @@
       };
 
       custom.programs.print-config = {
-        eza = /* sh */ ''cat "${lib.getExe pkgs.eza}"'';
+        eza = /* sh */ ''moor --lang sh "${lib.getExe pkgs.eza}"'';
       };
     };
 }

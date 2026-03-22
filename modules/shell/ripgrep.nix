@@ -43,7 +43,7 @@
 
       custom.programs.print-config =
         let
-          cmd = /* sh */ ''cat "${lib.getExe pkgs.ripgrep}"'';
+          cmd = /* sh */ ''moor --lang sh "${lib.getExe pkgs.ripgrep}"'';
         in
         {
           rg = cmd;

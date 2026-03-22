@@ -9,7 +9,7 @@
         flags = {
           "--quit-if-one-screen" = true;
           "--no-linenumbers" = true;
-          "--no-statusbar" = true;
+          "--statusbar" = "bold";
           "-terminal-fg" = true;
         };
       };
@@ -41,7 +41,7 @@
       };
 
       custom.programs.print-config = {
-        moor = /* sh */ ''cat "${lib.getExe pkgs.moor}"'';
+        moor = /* sh */ ''moor --lang sh "${lib.getExe pkgs.moor}"'';
       };
     };
 }

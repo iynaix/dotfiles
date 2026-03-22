@@ -80,9 +80,9 @@
         };
       };
 
-      custom.programs.print-config = {
-        neovim = /* sh */ "nvf-print-config";
-        nvf = /* sh */ "nvf-print-config";
+      custom.programs.print-config = rec {
+        neovim = /* sh */ "nvf-print-config | moor --lang lua";
+        nvf = neovim;
       };
 
       custom.persist = {

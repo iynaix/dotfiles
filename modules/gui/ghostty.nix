@@ -151,7 +151,7 @@ in
         };
 
         print-config = {
-          ghostty = /* sh */ ''cat "${pkgs.ghostty.flags."--config-file"}"'';
+          ghostty = /* sh */ ''moor --lang ini "${pkgs.ghostty.flags."--config-file"}"'';
         };
 
         niri.settings.window-rules = [

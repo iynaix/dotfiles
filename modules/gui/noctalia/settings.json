@@ -30,6 +30,7 @@
     "mprisBlacklist": [],
     "preferredPlayer": "",
     "spectrumFrameRate": 30,
+    "spectrumMirrored": false,
     "visualizerType": "linear",
     "volumeFeedback": false,
     "volumeFeedbackSoundFile": "",

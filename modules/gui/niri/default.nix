@@ -123,7 +123,7 @@
         };
 
         print-config = {
-          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}"'';
+          niri = /* sh */ ''moor "${niriWrapped.env."NIRI_CONFIG"}"'';
         };
       };
     };

@@ -32,7 +32,7 @@
       ];
 
       custom.programs.print-config = {
-        helix = /* sh */ ''cat "${pkgs.helix.flags."--config"}"'';
+        helix = /* sh */ ''moor "${pkgs.helix.flags."--config"}"'';
       };
     };
 }

@@ -335,7 +335,7 @@
           catYaziPath = path: /* sh */ ''
             YAZI_PATH=$(grep "export YAZI_CONFIG_HOME=" '${lib.getExe pkgs.yazi}' | cut -d"'" -f2)
 
-            cat "$YAZI_PATH/${path}"
+            moor "$YAZI_PATH/${path}"
           '';
         in
         {
