@@ -19,6 +19,9 @@ pub fn backup(args: BackupArgs) {
     .execute_output()
     .expect("failed to backup wallpapers");
 
+    // generate noctalia thumbnails
+    crate::crop::thumbnails(&crate::cli::ThumbnailArgs { force: false });
+
     // update rclip database
     execute::command_args!("rclip", "--filepath-only", "cat")
         .current_dir(wallpaper::dir())
@@ -51,7 +54,16 @@ pub fn remote(args: RemoteArgs) {
     // backup to default location before syncing with remote
     backup(BackupArgs { target: None });
 
+    // sync wallpapers
     rsync(&wallpaper::dir(), &user, &remote_host).expect("failed to sync wallpapers");
+
+    // sync noctalia thumbnails
+    rsync(
+        &full_path("~/.cache/noctalia/images/wallpapers/thumbnails"),
+        &user,
+        &remote_host,
+    )
+    .expect("failed to sync thumbnails");
 
     // sync rclip database
     let rclip_db = dirs::data_dir()

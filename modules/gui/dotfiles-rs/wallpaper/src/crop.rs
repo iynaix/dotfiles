@@ -1,10 +1,20 @@
-use common::wallpaper::{Geometry, WallInfo};
+use std::{collections::HashSet, path::PathBuf};
+
+use ::wallpaper::write_wallpaper_history;
+use common::{
+    full_path,
+    wallpaper::{self, Geometry, WallInfo, filter_images},
+};
 use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer, images::Image};
 use image::{ImageEncoder, ImageReader, codecs::png::PngEncoder};
 use itertools::Itertools;
-use wallpaper::write_wallpaper_history;
+use rayon::prelude::*;
+use sha2::Digest;
 
-use crate::{cli::CropArgs, metadata::aspect_ratio};
+use crate::{
+    cli::{CropArgs, ThumbnailArgs},
+    metadata::aspect_ratio,
+};
 
 /// parse an aspect ratio, e.g. 9x16
 fn parse_aspect(aspect: &str) -> (u32, u32) {
@@ -133,4 +143,57 @@ pub fn crop(args: &CropArgs) {
 
     // save to history
     write_wallpaper_history(args.input.clone());
+}
+
+/// generates thumbnails for noctalia's wallpaper selector
+pub fn thumbnails(args: &ThumbnailArgs) {
+    let thumbnail_cache_dir = full_path("~/.cache/noctalia/images/wallpapers/thumbnails");
+    let generated: HashSet<_> = filter_images(wallpaper::dir())
+        .collect_vec()
+        .par_iter()
+        .map(|wall| {
+            // get the modification time or unknown
+            let mtime = std::fs::metadata(wall)
+                .and_then(|m| m.modified())
+                .map_or_else(
+                    |_| "unknown".to_string(),
+                    |time| {
+                        time.duration_since(std::time::SystemTime::UNIX_EPOCH)
+                            .map_or_else(
+                                |_| "unknown".to_string(),
+                                |elapsed| elapsed.as_secs().to_string(),
+                            )
+                    },
+                );
+            let hash_str = format!("{wall}@384x384@{mtime}");
+            let thumbnail_path = thumbnail_cache_dir.join(format!(
+                "{:x}.png",
+                sha2::Sha256::digest(hash_str.as_bytes())
+            ));
+
+            if !thumbnail_path.exists() || args.force {
+                // generate the thumbnail
+                println!("{wall:?} => {}", thumbnail_path.display());
+
+                crop(&CropArgs {
+                    input: wall.into(),
+                    output: thumbnail_path.clone(),
+                    size: "384x384".to_string(),
+                });
+            }
+
+            thumbnail_path
+        })
+        .collect();
+
+    for thumbnail in filter_images(thumbnail_cache_dir) {
+        let thumbnail = PathBuf::from(thumbnail);
+        if !generated.contains(&thumbnail) {
+            println!("Removing stale thumbnail: {}", thumbnail.display());
+
+            std::fs::remove_file(&thumbnail).unwrap_or_else(|_| {
+                eprintln!("rm failed: {}", thumbnail.display());
+            });
+        }
+    }
 }

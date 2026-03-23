@@ -24,4 +24,4 @@ wallust_themes = "1.1.0"
 [build-dependencies]
 clap.workspace = true
 clap_complete.workspace = true
-clap_mangen = "0.2.31"
+clap_mangen = "0.2.33"

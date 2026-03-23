@@ -23,11 +23,13 @@ niri-ipc.workspace = true
 regex.workspace = true
 rexiv2.workspace = true
 serde.workspace = true
-toml = "1.0.3"
+rayon = "1.11.0"
+sha2 = "0.10.9"
+toml = "1.0.7"
 whoami = "2.1.1"
 
 [build-dependencies]
 clap.workspace = true
 clap_complete.workspace = true
-clap_mangen = "0.2.31"
+clap_mangen = "0.2.33"
 serde.workspace = true

@@ -122,7 +122,6 @@ fn main() {
             WallpaperSubcommand::Rm => {
                 wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
             }
-            WallpaperSubcommand::Crop(args) => crop::crop(&args),
             WallpaperSubcommand::History => pqiv::show_history(),
             WallpaperSubcommand::Select => pqiv::show_pqiv(),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
@@ -131,6 +130,8 @@ fn main() {
             WallpaperSubcommand::Search(args) => search::search(args),
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),
+            WallpaperSubcommand::Crop(args) => crop::crop(&args),
+            WallpaperSubcommand::Thumbnails(args) => crop::thumbnails(&args),
             WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
             WallpaperSubcommand::Reload => {} // handled later
         }

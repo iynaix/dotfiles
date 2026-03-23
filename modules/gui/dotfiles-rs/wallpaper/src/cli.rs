@@ -14,7 +14,7 @@ pub struct CropArgs {
         short,
         long,
         name = "size",
-        help = "Target size of the cropped wallpaper"
+        help = "Target size of the cropped wallpaper, e.g. (1920x1080)"
     )]
     pub size: String,
 
@@ -31,6 +31,17 @@ pub struct CropArgs {
         help = "Output file to write cropped wallpaper to",
     )]
     pub output: PathBuf,
+}
+
+#[derive(Args, Debug, PartialEq, Eq)]
+pub struct ThumbnailArgs {
+    #[arg(
+        short,
+        long,
+        default_value = "false",
+        help = "Force generation even if thumbnail already exists"
+    )]
+    pub force: bool,
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
@@ -167,6 +178,12 @@ pub enum WallpaperSubcommand {
         about = "Crop a wallpaper to a specific size"
     )]
     Crop(CropArgs),
+
+    #[command(
+        name = "thumbnails",
+        about = "Generate thumbnails for the wallpapers for noctalia's wallpaper selector"
+    )]
+    Thumbnails(ThumbnailArgs),
 
     #[command(
         name = "metadata",

@@ -597,7 +597,7 @@
     "overviewBlur": 0.4,
     "overviewEnabled": true,
     "overviewTint": 0.6,
-    "panelPosition": "follow_bar",
+    "panelPosition": "center",
     "randomIntervalSec": 300,
     "setWallpaperOnAllMonitors": true,
     "showHiddenFiles": false,

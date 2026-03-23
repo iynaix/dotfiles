@@ -67,15 +67,15 @@
   };
   niri = {
     pname = "niri";
-    version = "581b5be093b983a9a2911c5f45e6bda2e87fe574";
+    version = "d06dd4b9e60fa07120c217aa095f3ed8caac99f2";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "581b5be093b983a9a2911c5f45e6bda2e87fe574";
+      rev = "d06dd4b9e60fa07120c217aa095f3ed8caac99f2";
       fetchSubmodules = false;
-      sha256 = "sha256-KIbF/TPvHu4oH9qQlUNDBAzpMuo8ptek6Wbxrz61SA4=";
+      sha256 = "sha256-L/Ldq9G41Mj8WjWTuC+rePvWIx1A/tHdFpLbQmtrMSA=";
     };
-    date = "2026-03-20";
+    date = "2026-03-22";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -91,13 +91,13 @@
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";
-    version = "v0.2.14";
+    version = "v0.2.15";
     src = fetchFromGitHub {
       owner = "meehl";
       repo = "rusty-path-of-building";
-      rev = "v0.2.14";
+      rev = "v0.2.15";
       fetchSubmodules = false;
-      sha256 = "sha256-rgXxy1r4ZyFFG5BiodogeHnCcppw79xzb0MsQDZxL4E=";
+      sha256 = "sha256-YhCJkyzWVZ1BEux85qyTHlyLS/LaotMoe+tGwwd9EOI=";
     };
   };
   yazi-plugins = {
