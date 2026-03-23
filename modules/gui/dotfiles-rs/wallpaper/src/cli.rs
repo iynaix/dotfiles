@@ -133,7 +133,7 @@ pub enum WallpaperSubcommand {
         visible_aliases = ["selector", "rofi", "pqiv"],
         about = "Show wallpaper selector with pqiv"
     )]
-    Select,
+    Select(WallpaperFilterArgs),
 
     #[command(
         name = "dedupe",
@@ -192,6 +192,21 @@ pub enum WallpaperSubcommand {
     Metadata(MetadataArgs),
 }
 
+#[derive(Args, Debug, PartialEq, Eq)]
+pub struct WallpaperFilterArgs {
+    #[arg(long, action, help = "Filter wallpapers with no faces", aliases = ["sfw"])]
+    pub no_faces: bool,
+
+    #[arg(long, action, help = "Filter wallpapers with a single face", visible_aliases = ["single"])]
+    pub single_face: bool,
+
+    #[arg(long, action, help = "filter wallpapers with multiple faces", visible_aliases = ["multiple", "multi"])]
+    pub multiple_faces: bool,
+
+    #[arg(long, action, help = "Filter wallpapers with number of faces")]
+    pub faces: Option<u32>,
+}
+
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 #[command(
@@ -216,6 +231,9 @@ pub struct WallpaperArgs {
 
     #[arg(long, action, help = "Do not resize or set wallpaper")]
     pub skip_wallpaper: bool,
+
+    #[command(flatten)]
+    pub filter_args: WallpaperFilterArgs,
 
     // optional image to use, uses a random one otherwise
     #[arg(

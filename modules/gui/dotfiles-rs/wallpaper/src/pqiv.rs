@@ -1,4 +1,8 @@
-use common::{is_hyprland, is_niri, wallpaper};
+use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
+use common::{
+    is_hyprland, is_niri,
+    wallpaper::{self, filter_images},
+};
 use execute::Execute;
 use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
@@ -31,16 +35,16 @@ fn niri_window_title() -> String {
 }
 
 #[allow(clippy::module_name_repetitions)]
-pub fn show_pqiv() {
-    let wall_dir = wallpaper::dir();
-    let wall_dir = wall_dir.to_str().expect("invalid wallpaper dir");
+pub fn show_pqiv(args: &WallpaperFilterArgs) {
+    let images = filter_images(wallpaper::dir()).collect_vec();
+    let images = filter_images_by_faces(&images, args);
 
     if is_hyprland() {
         // hyprland allows setting rules while spawning
         let pqiv = format!(
-            "{} pqiv --shuffle '{}'",
+            "{} pqiv --shuffle {}",
             pqiv_hyprland_float_rule(),
-            &wall_dir
+            images.iter().map(|img| format!("'{img}'")).join(" ")
         );
 
         {
@@ -63,7 +67,7 @@ pub fn show_pqiv() {
             niri_window_title()
         )
         .env("GDK_BACKEND", "wayland")
-        .arg(wall_dir)
+        .args(images)
         .execute()
         .expect("failed to execute pqiv");
     }

@@ -52,7 +52,7 @@
           # Set as default
           wpctl set-default "$sink_id"
 
-          noctalia-ipc toast send "{\"title\": \"Switched audio output to $friendly_name\"}"
+          noctalia-ipc toast send "{\"title\": \"Switched audio to $friendly_name\"}"
         '';
       };
     in

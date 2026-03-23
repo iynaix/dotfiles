@@ -1,21 +1,23 @@
-use ::wallpaper::write_wallpaper_history;
 use clap::{CommandFactory, Parser};
 use clap_complete::{Shell, generate};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
-use common::wallpaper;
+use common::{
+    full_path,
+    wallpaper::{self, WallInfo},
+};
 use std::{
     io::{Read, Write},
     path::PathBuf,
 };
 
-pub mod backup;
-pub mod cli;
-pub mod crop;
-pub mod dedupe;
-pub mod metadata;
+mod backup;
+mod cli;
+mod crop;
+mod dedupe;
+mod metadata;
 pub mod pqiv;
-pub mod search;
-pub mod wallfacer;
+mod search;
+mod wallfacer;
 
 fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
     match image_or_dir {
@@ -90,6 +92,72 @@ fn wallpaper_rm(wallpaper: &str) {
     }
 }
 
+pub fn write_wallpaper_history(wallpaper: PathBuf) {
+    // not a wallpaper from the wallpapers dir
+    if wallpaper.parent() != Some(&wallpaper::dir()) {
+        return;
+    }
+
+    let mut history: Vec<(_, _)> = wallpaper::history().into_iter().collect();
+    // insert or update timestamp if wallpaper wasn't the last 3 shown
+    if history.iter().take(3).any(|(path, _)| path == &wallpaper) {
+        history.insert(0, (wallpaper, chrono::Local::now().into()));
+    }
+
+    // update the history csv
+    let history_csv = full_path("~/Pictures/wallpapers_history.csv");
+    let writer = std::io::BufWriter::new(
+        std::fs::File::create(history_csv).expect("could not create wallpapers_history.csv"),
+    );
+    let mut wtr = csv::WriterBuilder::new()
+        .has_headers(false)
+        .from_writer(writer);
+
+    for (path, dt) in &history {
+        let filename = path
+            .file_name()
+            .expect("could not get timestamp filename")
+            .to_str()
+            .expect("could not convert filename to str");
+
+        let row = [
+            filename,
+            &dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+        ];
+
+        wtr.write_record(row)
+            .unwrap_or_else(|_| panic!("could not write {row:?}"));
+    }
+    wtr.flush().expect("could not flush wallpapers_history.csv");
+}
+
+pub fn filter_images_by_faces(
+    images: &[String],
+    face_args: &cli::WallpaperFilterArgs,
+) -> Vec<String> {
+    images
+        .iter()
+        .filter(|img| {
+            let faces = WallInfo::new_from_file(img).faces.len();
+
+            if face_args.no_faces && faces != 0 {
+                return false;
+            }
+
+            if face_args.single_face && faces != 1 {
+                return false;
+            }
+
+            if face_args.multiple_faces && faces < 2 {
+                return false;
+            }
+
+            true
+        })
+        .cloned()
+        .collect()
+}
+
 fn main() {
     let args = WallpaperArgs::parse();
 
@@ -123,7 +191,7 @@ fn main() {
                 wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
             }
             WallpaperSubcommand::History => pqiv::show_history(),
-            WallpaperSubcommand::Select => pqiv::show_pqiv(),
+            WallpaperSubcommand::Select(args) => pqiv::show_pqiv(&args),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
             WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
             WallpaperSubcommand::Add(args) => wallfacer::add(args),

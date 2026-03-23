@@ -123,7 +123,8 @@
         };
 
         print-config = {
-          niri = /* sh */ ''moor "${niriWrapped.env."NIRI_CONFIG"}"'';
+          # use cat as kdlfmt tries to write the file in the nix store
+          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
         };
       };
     };

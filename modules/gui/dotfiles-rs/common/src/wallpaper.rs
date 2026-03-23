@@ -144,6 +144,7 @@ const fn gcd(mut a: u32, mut b: u32) -> u32 {
     a
 }
 
+#[derive(Debug, Clone)]
 pub struct Geometry {
     pub w: f64,
     pub h: f64,
@@ -151,9 +152,32 @@ pub struct Geometry {
     pub y: f64,
 }
 
+impl TryFrom<&str> for Geometry {
+    type Error = Box<dyn std::error::Error>;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        let geometry = s
+            .split(['x', '+'])
+            .flat_map(str::parse::<f64>)
+            .collect_vec();
+
+        if geometry.len() != 4 {
+            return Err("Invalid geometry format: expected wxh+x+y".into());
+        }
+
+        Ok(Self {
+            w: geometry[0],
+            h: geometry[1],
+            x: geometry[2],
+            y: geometry[3],
+        })
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct WallInfo {
     pub path: PathBuf,
+    pub faces: Vec<Geometry>,
     pub geometries: HashMap<String, String>,
 }
 
@@ -164,21 +188,42 @@ impl WallInfo {
     {
         let meta = Metadata::new_from_path(img.as_ref()).expect("could not init new metadata");
 
+        let mut faces = Vec::new();
         let mut crops = HashMap::new();
 
         for tag in meta.get_xmp_tags().expect("unable to read xmp tags") {
-            if tag.starts_with("Xmp.wallfacer.crop.") {
-                let aspect = tag
-                    .strip_prefix("Xmp.wallfacer.crop.")
-                    .expect("could not strip crop prefix");
-                let geom = meta.get_tag_string(&tag).expect("could not get crop tag");
+            match tag.as_str() {
+                "Xmp.wallfacer.faces" => {
+                    let face_str = meta.get_tag_string(&tag).expect("could not get faces tag");
 
-                crops.insert(aspect.to_string(), geom);
+                    // empty faces are written as "[]" as rexiv2 seems to return the value of
+                    // the next Xmp field, which is wrong
+                    if face_str != "[]" {
+                        faces = face_str
+                            .split(',')
+                            .map(|face| {
+                                face.try_into().unwrap_or_else(|_| {
+                                    panic!("could not convert face {face} into string")
+                                })
+                            })
+                            .collect();
+                    }
+                }
+                tag if tag.starts_with("Xmp.wallfacer.crop.") => {
+                    let aspect = tag
+                        .strip_prefix("Xmp.wallfacer.crop.")
+                        .expect("could not strip crop prefix");
+                    let geom = meta.get_tag_string(tag).expect("could not get crop tag");
+
+                    crops.insert(aspect.to_string(), geom);
+                }
+                _ => {}
             }
         }
 
         Self {
             path: img.as_ref().to_path_buf(),
+            faces,
             geometries: crops,
         }
     }

@@ -110,6 +110,13 @@
             substituters = [
               "https://nix-community.cachix.org"
             ];
+
+            # various flake caches
+            extra-substituters = [ "https://noctalia.cachix.org" ];
+            extra-trusted-public-keys = [
+              "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+            ];
+
             # allow building and pushing of laptop config from desktop
             trusted-users = [ user ];
             trusted-public-keys = [

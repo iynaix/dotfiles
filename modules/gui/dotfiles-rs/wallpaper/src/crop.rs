@@ -1,6 +1,5 @@
 use std::{collections::HashSet, path::PathBuf};
 
-use ::wallpaper::write_wallpaper_history;
 use common::{
     full_path,
     wallpaper::{self, Geometry, WallInfo, filter_images},
@@ -14,6 +13,7 @@ use sha2::Digest;
 use crate::{
     cli::{CropArgs, ThumbnailArgs},
     metadata::aspect_ratio,
+    write_wallpaper_history,
 };
 
 /// parse an aspect ratio, e.g. 9x16

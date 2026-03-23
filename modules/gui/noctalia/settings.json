@@ -200,6 +200,9 @@
     "shortcuts": {
       "left": [
         {
+          "id": "WallpaperSelector"
+        },
+        {
           "id": "Network"
         },
         {

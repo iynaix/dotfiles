@@ -163,12 +163,12 @@
             "name": null,
             "owner": "meehl",
             "repo": "rusty-path-of-building",
-            "rev": "v0.2.15",
-            "sha256": "sha256-YhCJkyzWVZ1BEux85qyTHlyLS/LaotMoe+tGwwd9EOI=",
+            "rev": "v0.2.16",
+            "sha256": "sha256-2pXT9Wyn49sGHDqjlmlCRUyIIAEERAKNK6cDTUwwjGM=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v0.2.15"
+        "version": "v0.2.16"
     },
     "yazi-plugins": {
         "cargoLock": null,
