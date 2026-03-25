@@ -126,7 +126,7 @@ pub enum WallpaperSubcommand {
     Reload,
 
     #[command(name = "history", about = "Show wallpaper history selector with pqiv")]
-    History,
+    History(WallpaperFilterArgs),
 
     #[command(
         name = "select",

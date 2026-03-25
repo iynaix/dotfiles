@@ -36,16 +36,24 @@ fn niri_window_title() -> String {
 
 #[allow(clippy::module_name_repetitions)]
 pub fn show_pqiv(args: &WallpaperFilterArgs) {
-    let images = filter_images(wallpaper::dir()).collect_vec();
-    let images = filter_images_by_faces(&images, args);
+    let has_filters =
+        args.no_faces || args.single_face || args.multiple_faces || args.faces.is_some();
 
     if is_hyprland() {
+        let img_arg = if has_filters {
+            let images = filter_images(wallpaper::dir()).collect_vec();
+            filter_images_by_faces(&images, args)
+                .map(|img| format!("'{img}'"))
+                .join(" ")
+        } else {
+            wallpaper::dir()
+                .to_str()
+                .expect("could not convert wallpaper dir to str")
+                .to_string()
+        };
+
         // hyprland allows setting rules while spawning
-        let pqiv = format!(
-            "{} pqiv --shuffle {}",
-            pqiv_hyprland_float_rule(),
-            images.iter().map(|img| format!("'{img}'")).join(" ")
-        );
+        let pqiv = format!("{} pqiv --shuffle {}", pqiv_hyprland_float_rule(), img_arg);
 
         {
             hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
@@ -57,7 +65,7 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
 
         // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
         // so it doesn't resize on initial spawn via a keybind
-        execute::command_args!(
+        let mut cmd = execute::command_args!(
             "pqiv",
             "--shuffle",
             // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
@@ -65,15 +73,22 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
             "f { nop() }",
             "--window-title",
             niri_window_title()
-        )
-        .env("GDK_BACKEND", "wayland")
-        .args(images)
-        .execute()
-        .expect("failed to execute pqiv");
+        );
+
+        cmd.env("GDK_BACKEND", "wayland");
+
+        if has_filters {
+            let images = filter_images(wallpaper::dir()).collect_vec();
+            cmd.args(filter_images_by_faces(&images, args))
+        } else {
+            cmd.arg(wallpaper::dir())
+        };
+
+        cmd.execute().expect("failed to execute pqiv");
     }
 }
 
-pub fn show_history() {
+pub fn show_history(args: &WallpaperFilterArgs) {
     let history = wallpaper::history();
     let history = history
         .iter()
@@ -81,22 +96,25 @@ pub fn show_history() {
         .map(|(path, _)| path)
         .collect_vec();
 
-    if is_hyprland() {
-        let history = history
+    let has_filters =
+        args.no_faces || args.single_face || args.multiple_faces || args.faces.is_some();
+
+    let history = if has_filters {
+        filter_images_by_faces(&history, args).collect_vec()
+    } else {
+        history
             .iter()
-            .map(|p| format!("'{}'", p.display()))
+            .map(|p| p.display().to_string())
             .collect_vec()
-            .join(" ");
-        let pqiv = format!("{} pqiv {}", pqiv_hyprland_float_rule(), history);
+    };
+
+    if is_hyprland() {
+        let history_arg = history.iter().map(|p| format!("'{p}'")).join(" ");
+        let pqiv = format!("{} pqiv {}", pqiv_hyprland_float_rule(), history_arg);
         hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
     }
 
     if is_niri() {
-        let history = history
-            .iter()
-            .map(|p| p.display().to_string())
-            .collect_vec();
-
         execute::command_args!(
             "pqiv",
             // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling

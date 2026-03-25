@@ -269,6 +269,7 @@
               {
                 matches = [ { app-id = "^dev.noctalia.noctalia-qs$"; } ];
 
+                geometry-corner-radius = 18;
                 background-effect = {
                   blur = true;
                 };

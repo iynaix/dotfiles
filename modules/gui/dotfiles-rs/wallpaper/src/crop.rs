@@ -2,6 +2,7 @@ use std::{collections::HashSet, path::PathBuf};
 
 use common::{
     full_path,
+    nixjson::NixJson,
     wallpaper::{self, Geometry, WallInfo, filter_images},
 };
 use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer, images::Image};

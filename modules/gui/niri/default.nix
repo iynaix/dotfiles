@@ -79,10 +79,6 @@
       };
 
       # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
-      # the workspaces are name W1, W2, etc as simply naming them as "1", "2", etc
-      # causes waybar to just coerce them back into numbers, so workspaces end up being a
-      # weird sequence of numbers and indexes on any monitor that isn't the first, e.g.
-      # 6 7 3
       programs.niri = {
         enable = true;
         package = niriWrapped.wrapper;

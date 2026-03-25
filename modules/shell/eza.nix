@@ -60,6 +60,7 @@
       environment = {
         shellAliases = {
           t = "tree";
+          cls = "command ls";
           ls = "eza";
           ll = "eza -l";
           la = "eza -a";

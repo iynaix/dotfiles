@@ -6,13 +6,6 @@
         enable = true;
 
         settings.patches = [
-          # orca-slicer: 2.3.1 -> 2.3.2 (already merged)
-          # https://github.com/NixOS/nixpkgs/pull/495746
-          (pkgs.fetchpatch {
-            url = "https://github.com/NixOS/nixpkgs/pull/495746.patch";
-            hash = "sha256-Lc4jggJQMIydnK4u87B6p599tPFYiZZ6xkVfW9Gc7+s=";
-          })
-
           # awakened poe trade command line args
           # https://github.com/NixOS/nixpkgs/pull/496108
           (pkgs.fetchpatch {

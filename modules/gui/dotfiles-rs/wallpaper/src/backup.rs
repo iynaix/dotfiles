@@ -19,6 +19,13 @@ pub fn backup(args: BackupArgs) {
     .execute_output()
     .expect("failed to backup wallpapers");
 
+    // backup wallpaper history
+    std::fs::copy(
+        full_path("~/Pictures/wallpapers_history.csv"),
+        target.join("wallpapers_history.csv"),
+    )
+    .expect("failed to backup wallpaper history");
+
     // generate noctalia thumbnails
     crate::crop::thumbnails(&crate::cli::ThumbnailArgs { force: false });
 
@@ -28,7 +35,7 @@ pub fn backup(args: BackupArgs) {
         .stdout(Stdio::null())
         .execute_output()
         // don't care about it erroring out
-        .ok();
+        .expect("failed to update rclip database");
 }
 
 fn rsync(

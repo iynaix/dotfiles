@@ -7,7 +7,7 @@ use common::{
 };
 use std::{
     io::{Read, Write},
-    path::PathBuf,
+    path::{Path, PathBuf},
 };
 
 mod backup;
@@ -100,9 +100,11 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) {
 
     let mut history: Vec<(_, _)> = wallpaper::history().into_iter().collect();
     // insert or update timestamp if wallpaper wasn't the last 3 shown
-    if history.iter().take(3).any(|(path, _)| path == &wallpaper) {
+    if history.iter().take(3).all(|(path, _)| path != &wallpaper) {
         history.insert(0, (wallpaper, chrono::Local::now().into()));
     }
+    // dedup by path, wallpaper writes an entry for each monitor
+    history.dedup_by(|a, b| a.0 == b.0);
 
     // update the history csv
     let history_csv = full_path("~/Pictures/wallpapers_history.csv");
@@ -131,14 +133,17 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) {
     wtr.flush().expect("could not flush wallpapers_history.csv");
 }
 
-pub fn filter_images_by_faces(
-    images: &[String],
+pub fn filter_images_by_faces<P>(
+    images: &[P],
     face_args: &cli::WallpaperFilterArgs,
-) -> Vec<String> {
+) -> impl Iterator<Item = String>
+where
+    P: AsRef<Path> + std::clone::Clone,
+{
     images
         .iter()
         .filter(|img| {
-            let faces = WallInfo::new_from_file(img).faces.len();
+            let faces = WallInfo::new_from_file(img.as_ref()).faces.len();
 
             if face_args.no_faces && faces != 0 {
                 return false;
@@ -154,8 +159,12 @@ pub fn filter_images_by_faces(
 
             true
         })
-        .cloned()
-        .collect()
+        .map(|img| {
+            img.as_ref()
+                .to_str()
+                .expect("could not convert path to str")
+                .to_string()
+        })
 }
 
 fn main() {
@@ -190,7 +199,7 @@ fn main() {
             WallpaperSubcommand::Rm => {
                 wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
             }
-            WallpaperSubcommand::History => pqiv::show_history(),
+            WallpaperSubcommand::History(args) => pqiv::show_history(&args),
             WallpaperSubcommand::Select(args) => pqiv::show_pqiv(&args),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
             WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
