@@ -121,7 +121,7 @@
         };
 
         print-config = {
-          mango = /* sh */ ''moor "${config.hj.xdg.config.directory}/mango/config.conf" "${dots}/modules/gui/mango/mango.conf"'';
+          mango = /* sh */ ''cat "${config.hj.xdg.config.directory}/mango/config.conf" "${dots}/modules/gui/mango/mango.conf" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';
         };
       };
     };

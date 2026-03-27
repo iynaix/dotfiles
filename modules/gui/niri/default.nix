@@ -120,7 +120,7 @@
 
         print-config = {
           # use cat as kdlfmt tries to write the file in the nix store
-          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
+          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
         };
       };
     };

@@ -248,6 +248,10 @@
         programs = {
           # setup blur for hyprland
           hyprland.settings = {
+            windowrule = [
+              "match:class dev.noctalia.noctalia-qs, rounding 20"
+            ];
+
             layerrule = [
               "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
             ];
@@ -269,7 +273,7 @@
               {
                 matches = [ { app-id = "^dev.noctalia.noctalia-qs$"; } ];
 
-                geometry-corner-radius = 18;
+                geometry-corner-radius = 20;
                 background-effect = {
                   blur = true;
                 };

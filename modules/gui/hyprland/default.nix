@@ -53,7 +53,9 @@
       };
 
       custom.programs.print-config = {
-        hyprland = /* sh */ ''moor "${hyprlandWrapped.flags."--config"}"'';
+        hyprland = /* sh */ ''cat "${
+          hyprlandWrapped.flags."--config"
+        }" "${config.hj.xdg.config.directory}/hypr/hyprland.conf" "${config.hj.xdg.config.directory}/hypr/noctalia-colors.conf" | moor'';
       };
 
       custom.persist = {
