@@ -16,10 +16,12 @@
             pkgs = prev;
             package = prev.gh;
             env.GH_CONFIG_DIR = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
-            preHook = ''
-              GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
-              export GITHUB_TOKEN
-            '';
+            runShell = [
+              /* sh */ ''
+                GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
+                export GITHUB_TOKEN
+              ''
+            ];
           };
         })
       ];

@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   self,
   ...
@@ -17,8 +16,8 @@ let
   };
 in
 {
-  flake.wrapperModules.zathura = inputs.wrappers.lib.wrapModule (
-    { config, ... }:
+  flake.wrappers.zathura =
+    { config, wlib, ... }:
     let
       zathuraConf = config.pkgs.writeTextFile {
         name = "zathurarc";
@@ -44,19 +43,20 @@ in
       };
     in
     {
+      imports = [ wlib.modules.default ];
+
       options = zathuraOptions;
 
       config.package = lib.mkDefault config.pkgs.zathura;
       config.flags = {
         "--config-dir" = toString zathuraConf;
       };
-    }
-  );
+    };
 
   perSystem =
     { pkgs, ... }:
     {
-      packages.zathura = (self.wrapperModules.zathura.apply { inherit pkgs; }).wrapper;
+      packages.zathura = (self.wrappers.zathura.apply { inherit pkgs; }).wrapper;
     };
 
   flake.modules.nixos.core = {
@@ -74,7 +74,7 @@ in
       nixpkgs.overlays = [
         (_: prev: {
           zathura =
-            (self.wrapperModules.zathura.apply {
+            (self.wrappers.zathura.apply {
               pkgs = prev;
               extraSettings = ''
                 include ${noctaliaColors}
@@ -92,7 +92,9 @@ in
       };
 
       custom.programs.print-config = {
-        zathura = /* sh */ ''cat "${pkgs.zathura.flags."--config-dir"}/zathurarc" "${noctaliaColors}" | moor'';
+        zathura = /* sh */ ''cat "${
+          pkgs.zathura.configuration.flags."--config-dir".data
+        }/zathurarc" "${noctaliaColors}" | moor'';
       };
     };
 }

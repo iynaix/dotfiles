@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   self,
   ...
@@ -32,7 +31,7 @@ let
   };
 in
 {
-  flake.wrapperModules.pqiv = inputs.wrappers.lib.wrapModule (
+  flake.wrappers.pqiv =
     { config, wlib, ... }:
     let
       pqivConf = ''
@@ -70,6 +69,8 @@ in
       '';
     in
     {
+      imports = [ wlib.modules.default ];
+
       options = pqivOptions // {
         pqivrc = lib.mkOption {
           type = wlib.types.file config.pkgs;
@@ -80,14 +81,13 @@ in
 
       config.package = lib.mkDefault config.pkgs.pqiv;
       config.env.PQIVRC_PATH = toString config.pqivrc.path;
-    }
-  );
+    };
 
   # expose generic pqiv package without local paths
   perSystem =
     { pkgs, ... }:
     {
-      packages.pqiv = (self.wrapperModules.pqiv.apply { inherit pkgs; }).wrapper;
+      packages.pqiv = (self.wrappers.pqiv.apply { inherit pkgs; }).wrapper;
     };
 
   flake.modules.nixos.gui =
@@ -96,7 +96,7 @@ in
       nixpkgs.overlays = [
         (_: prev: {
           pqiv =
-            (self.wrapperModules.pqiv.apply {
+            (self.wrappers.pqiv.apply {
               pkgs = prev;
               keybindings = ''
                 c { command(nomacs $1) }
@@ -121,7 +121,7 @@ in
       };
 
       custom.programs.print-config = {
-        pqiv = /* sh */ ''moor "${pkgs.pqiv.env.PQIVRC_PATH}"'';
+        pqiv = /* sh */ ''moor "${pkgs.pqiv.configuration.env.PQIVRC_PATH.data}"'';
       };
 
       custom.persist = {

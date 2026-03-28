@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   self,
   ...
@@ -37,7 +36,7 @@ let
     };
 in
 {
-  flake.wrapperModules.ghostty = inputs.wrappers.lib.wrapModule (
+  flake.wrappers.ghostty =
     { config, wlib, ... }:
     let
       # adapted from home-manager:
@@ -62,6 +61,8 @@ in
       };
     in
     {
+      imports = [ wlib.modules.default ];
+
       options = (mkGhosttyOptions config.pkgs) // {
         "ghostty.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
@@ -76,8 +77,7 @@ in
         "--config-file" = toString config."ghostty.conf".path;
       };
       config.flagSeparator = "=";
-    }
-  );
+    };
 
   flake.modules.nixos.core =
     { config, pkgs, ... }:
@@ -109,7 +109,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.ghostty = (self.wrapperModules.ghostty.apply { inherit pkgs; }).wrapper;
+      packages.ghostty = (self.wrappers.ghostty.apply { inherit pkgs; }).wrapper;
     };
 
   flake.modules.nixos.gui =
@@ -118,7 +118,7 @@ in
       nixpkgs.overlays = [
         (_: prev: {
           ghostty =
-            (self.wrapperModules.ghostty.apply {
+            (self.wrappers.ghostty.apply {
               pkgs = prev;
               extraSettings = {
                 # set as default interactive shell, also set $SHELL for nix shell to pick up
@@ -152,7 +152,7 @@ in
 
         print-config = {
           ghostty = /* sh */ ''cat "${
-            pkgs.ghostty.flags."--config-file"
+            pkgs.ghostty.configuration.flags."--config-file".data
           }" "${config.hj.xdg.config.directory}/ghostty/config" | moor --lang ini'';
         };
 

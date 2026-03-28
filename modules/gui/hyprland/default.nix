@@ -7,16 +7,13 @@
       ...
     }:
     let
-      hyprlandWrapped = self.wrapperModules.hyprland.apply (
+      hyprlandWrapped = self.wrappers.hyprland.apply (
         {
           inherit pkgs;
           # remove the uwsm session
-          package = pkgs.hyprland.overrideAttrs (o: {
-            passthru = o.passthru // {
-              providedSessions = [ "hyprland" ];
-            };
-          });
+          package = pkgs.hyprland;
           filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
+          passthru.providedSessions = [ "hyprland" ];
         }
         // config.custom.programs.hyprland
       );
@@ -54,8 +51,8 @@
 
       custom.programs.print-config = {
         hyprland = /* sh */ ''cat "${
-          hyprlandWrapped.flags."--config"
-        }" "${config.hj.xdg.config.directory}/hypr/hyprland.conf" "${config.hj.xdg.config.directory}/hypr/noctalia-colors.conf" | moor'';
+          hyprlandWrapped.flags."--config".data
+        }" "${config.hj.xdg.config.directory}/hypr/hyprland.conf" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.conf" | moor'';
       };
 
       custom.persist = {

@@ -30,7 +30,7 @@
     { config, pkgs, ... }:
     let
       source = (self.libCustom.nvFetcherSources pkgs).niri;
-      niriWrapped = inputs.wrappers.wrapperModules.niri.apply {
+      niriWrapped = inputs.wrappers.wrappers.niri.apply {
         inherit pkgs;
         package =
           assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12")
@@ -97,7 +97,7 @@
               ];
               text = ''
                 if pgrep -x "niri" > /dev/null; then
-                  niri msg action load-config-file --path "${niriWrapped.env."NIRI_CONFIG"}"
+                  niri msg action load-config-file --path "${niriWrapped.constructFiles.generatedConfig.outPath}"
                 fi
               '';
             }
@@ -120,7 +120,7 @@
 
         print-config = {
           # use cat as kdlfmt tries to write the file in the nix store
-          niri = /* sh */ ''cat "${niriWrapped.env."NIRI_CONFIG"}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
+          niri = /* sh */ ''cat "${niriWrapped.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
         };
       };
     };

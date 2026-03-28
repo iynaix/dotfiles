@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 let
   # copied from home-manager:
   # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
@@ -117,7 +117,7 @@ in
     };
   };
 
-  flake.wrapperModules.hyprland = inputs.wrappers.lib.wrapModule (
+  flake.wrappers.hyprland =
     {
       config,
       wlib,
@@ -161,6 +161,8 @@ in
       '';
     in
     {
+      imports = [ wlib.modules.default ];
+
       options = hyprlandOptions // {
         "hyprland.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
@@ -176,8 +178,7 @@ in
       config.flags = {
         "--config" = toString config."hyprland.conf".path;
       };
-    }
-  );
+    };
 
   flake.modules.nixos.core = {
     options.custom = {

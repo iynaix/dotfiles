@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   self,
   ...
@@ -37,7 +36,7 @@ let
   };
 in
 {
-  flake.wrapperModules.btop = inputs.wrappers.lib.wrapModule (
+  flake.wrappers.btop =
     { config, wlib, ... }:
     let
       toBtopConf = lib.generators.toKeyValue {
@@ -69,6 +68,8 @@ in
       };
     in
     {
+      imports = [ wlib.modules.default ];
+
       options = btopOptions // {
         "btop.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
@@ -86,14 +87,13 @@ in
       config.flags = {
         "--config" = toString config."btop.conf".path;
       };
-    }
-  );
+    };
 
   # expose generic btop package without disks set
   perSystem =
     { pkgs, ... }:
     {
-      packages.btop = (self.wrapperModules.btop.apply { inherit pkgs; }).wrapper;
+      packages.btop = (self.wrappers.btop.apply { inherit pkgs; }).wrapper;
     };
 
   flake.modules.nixos.core =
@@ -118,7 +118,7 @@ in
           (_: prev: {
             # overlay so that security wrappers for xps can pick it up
             btop =
-              (self.wrapperModules.btop.apply {
+              (self.wrappers.btop.apply {
                 pkgs = prev;
                 rocmSupport = host == "desktop" || host == "framework";
                 extraSettings = {
@@ -142,7 +142,7 @@ in
         ];
 
         custom.programs.print-config = {
-          btop = /* sh */ ''moor --lang ini "${pkgs.btop.flags."--config"}"'';
+          btop = /* sh */ ''moor --lang ini "${pkgs.btop.configuration.flags."--config".data}"'';
         };
       };
     };

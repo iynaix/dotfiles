@@ -5,7 +5,10 @@
   ...
 }:
 {
-  imports = [ inputs.flake-parts.flakeModules.modules ];
+  imports = [
+    inputs.flake-parts.flakeModules.modules
+    inputs.wrappers.flakeModules.wrappers
+  ];
 
   systems = [
     # systems for which you want to build the `perSystem` attributes
@@ -42,12 +45,6 @@
         type = lib.types.anything;
         default = [ ];
         description = "Patches to be applied onto nixpkgs";
-      };
-
-      wrapperModules = lib.mkOption {
-        type = lib.types.attrs;
-        default = { };
-        description = "Wrapper modules";
       };
 
       libCustom = lib.mkOption {
