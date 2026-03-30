@@ -21,7 +21,7 @@
             # `niri msg action do-something`.
 
             # show hotkey overlay
-            # "Mod+Shift+Slash".show-hotkey-overlay = null;
+            # "Mod+Shift+Slash".show-hotkey-overlay = _: {};
 
             "Mod+Return".spawn = [ "ghostty" ];
             "Mod+Shift+Return".spawn = [
@@ -29,10 +29,12 @@
               "launcher"
               "toggle"
             ];
-            "Mod+BackSpace" = {
-              close-window = null;
-              _attrs = {
+            "Mod+BackSpace" = _: {
+              props = {
                 repeat = false;
+              };
+              content = {
+                close-window = _: { };
               };
             };
 
@@ -73,7 +75,7 @@
             ];
 
             # exit niri
-            "Alt+F4".quit = null;
+            "Alt+F4".quit = _: { };
             "Ctrl+Alt+Delete".spawn = [
               "noctalia-ipc"
               "sessionMenu"
@@ -112,43 +114,45 @@
             # Open/close the Overview: a zoomed-out view of workspaces and windows.
             # You can also move the mouse into the top-left hot corner,
             # or do a four-finger swipe up on a touchpad.
-            "Mod+O" = {
-              toggle-overview = null;
-              _attrs = {
+            "Mod+O" = _: {
+              props = {
                 repeat = false;
+              };
+              content = {
+                toggle-overview = _: { };
               };
             };
 
-            "Mod+H".focus-column-or-monitor-left = null;
-            "Mod+J".focus-window-or-workspace-down = null;
-            "Mod+K".focus-window-or-workspace-up = null;
-            "Mod+L".focus-column-or-monitor-right = null;
+            "Mod+H".focus-column-or-monitor-left = _: { };
+            "Mod+J".focus-window-or-workspace-down = _: { };
+            "Mod+K".focus-window-or-workspace-up = _: { };
+            "Mod+L".focus-column-or-monitor-right = _: { };
 
-            "Mod+Shift+H".move-column-left-or-to-monitor-left = null;
-            "Mod+Shift+J".move-window-down-or-to-workspace-down = null;
-            "Mod+Shift+K".move-window-up-or-to-workspace-up = null;
-            "Mod+Shift+L".move-column-right-or-to-monitor-right = null;
+            "Mod+Shift+H".move-column-left-or-to-monitor-left = _: { };
+            "Mod+Shift+J".move-window-down-or-to-workspace-down = _: { };
+            "Mod+Shift+K".move-window-up-or-to-workspace-up = _: { };
+            "Mod+Shift+L".move-column-right-or-to-monitor-right = _: { };
 
-            "Mod+Home".focus-column-first = null;
-            "Mod+End".focus-column-last = null;
-            "Mod+Shift+Home".move-column-to-first = null;
-            "Mod+Shift+End".move-column-to-last = null;
+            "Mod+Home".focus-column-first = _: { };
+            "Mod+End".focus-column-last = _: { };
+            "Mod+Shift+Home".move-column-to-first = _: { };
+            "Mod+Shift+End".move-column-to-last = _: { };
 
-            "Mod+Left".focus-monitor-left = null;
-            "Mod+Down".focus-monitor-down = null;
-            "Mod+Up".focus-monitor-up = null;
-            "Mod+Right".focus-monitor-right = null;
+            "Mod+Left".focus-monitor-left = _: { };
+            "Mod+Down".focus-monitor-down = _: { };
+            "Mod+Up".focus-monitor-up = _: { };
+            "Mod+Right".focus-monitor-right = _: { };
 
-            "Mod+Shift+Left".move-column-to-monitor-left = null;
-            "Mod+Shift+Down".move-column-to-monitor-down = null;
-            "Mod+Shift+Up".move-column-to-monitor-up = null;
-            "Mod+Shift+Right".move-column-to-monitor-right = null;
+            "Mod+Shift+Left".move-column-to-monitor-left = _: { };
+            "Mod+Shift+Down".move-column-to-monitor-down = _: { };
+            "Mod+Shift+Up".move-column-to-monitor-up = _: { };
+            "Mod+Shift+Right".move-column-to-monitor-right = _: { };
 
             # toggle between prev and current windows
-            "Mod+grave".focus-window-previous = null;
+            "Mod+grave".focus-window-previous = _: { };
 
             # Switches focus between the current and the previous workspace.
-            "Mod+Tab".focus-workspace-previous = null;
+            "Mod+Tab".focus-workspace-previous = _: { };
 
             # picture in picture mode
             "Mod+P".spawn = [ "wm-pip" ];
@@ -156,34 +160,34 @@
             # The following binds move the focused window in and out of a column.
             # If the window is alone, they will consume it into the nearby column to the side.
             # If the window is already in a column, they will expel it out.
-            "Mod+BracketLeft".consume-or-expel-window-left = null;
-            "Mod+BracketRight".consume-or-expel-window-right = null;
+            "Mod+BracketLeft".consume-or-expel-window-left = _: { };
+            "Mod+BracketRight".consume-or-expel-window-right = _: { };
 
-            "Mod+R".switch-preset-column-width = null;
-            "Mod+Shift+R".switch-preset-window-height = null;
+            "Mod+R".switch-preset-column-width = _: { };
+            "Mod+Shift+R".switch-preset-window-height = _: { };
             "Mod+Ctrl+R".spawn = [
               (lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
             ];
             # full maximize
-            "Mod+Z".maximize-column = null;
-            "Mod+F".fullscreen-window = null;
+            "Mod+Z".maximize-column = _: { };
+            "Mod+F".fullscreen-window = _: { };
             # Expand the focused column to space not taken up by other fully visible columns.
             # Makes the column"fill the rest of the space".
-            "Mod+Shift+F".expand-column-to-available-width = null;
+            "Mod+Shift+F".expand-column-to-available-width = _: { };
 
-            "Mod+C".center-column = null;
+            "Mod+C".center-column = _: { };
 
             # Center all fully visible columns on screen.
-            "Mod+Ctrl+C".center-visible-columns = null;
+            "Mod+Ctrl+C".center-visible-columns = _: { };
 
             # Move the focused window between the floating and the tiling layout.
-            "Mod+G".toggle-window-floating = null;
-            # "Mod+Shift+V".switch-focus-between-floating-and-tiling = null;
+            "Mod+G".toggle-window-floating = _: { };
+            # "Mod+Shift+V".switch-focus-between-floating-and-tiling = _: {};
 
             # Toggle tabbed column display mode.
             # Windows in this column will appear as vertical tabs,
             # rather than stacked on top of each other.
-            "Mod+T".toggle-column-tabbed-display = null;
+            "Mod+T".toggle-column-tabbed-display = _: { };
 
             "Mod+Apostrophe".spawn = [
               "wallpaper"
@@ -196,54 +200,64 @@
             ];
 
             # audio
-            "XF86AudioLowerVolume" = {
-              spawn = [
-                "pamixer"
-                "-d"
-                "5"
-              ];
-              _attrs = {
+            "XF86AudioLowerVolume" = _: {
+              props = {
                 allow-when-locked = true;
               };
-            };
-            "XF86AudioRaiseVolume" = {
-              spawn = [
-                "pamixer"
-                "-i"
-                "5"
-              ];
-              _attrs = {
-                allow-when-locked = true;
+              content = {
+                spawn = [
+                  "pamixer"
+                  "-d"
+                  "5"
+                ];
               };
             };
-            "XF86AudioMute" = {
-              spawn = [
-                "pamixer"
-                "-t"
-              ];
-              _attrs = {
+            "XF86AudioRaiseVolume" = _: {
+              props = {
                 allow-when-locked = true;
+              };
+              content = {
+                spawn = [
+                  "pamixer"
+                  "-i"
+                  "5"
+                ];
+              };
+            };
+            "XF86AudioMute" = _: {
+              props = {
+                allow-when-locked = true;
+              };
+              content = {
+                spawn = [
+                  "pamixer"
+                  "-t"
+                ];
               };
             };
 
             # mouse bindings
 
             # having Mod + Scroll up / Down is impossible to control with trackball, so require Shift for workspaces
-            "Mod+Shift+WheelScrollDown" = {
-              focus-workspace-down = null;
-              _attrs = {
+            "Mod+Shift+WheelScrollDown" = _: {
+              props = {
                 cooldown-ms = 150;
               };
+              content = {
+                focus-workspace-down = _: { };
+              };
             };
-            "Mod+Shift+WheelScrollUp" = {
-              focus-workspace-up = null;
-              _attrs = {
+            "Mod+Shift+WheelScrollUp" = _: {
+              props = {
                 cooldown-ms = 150;
+              };
+              content = {
+                focus-workspace-up = _: { };
               };
             };
 
-            "Mod+WheelScrollRight".focus-column-right-or-first = null;
-            "Mod+WheelScrollLeft".focus-column-left-or-last = null;
+            "Mod+WheelScrollRight".focus-column-right-or-first = _: { };
+            "Mod+WheelScrollLeft".focus-column-left-or-last = _: { };
           }
           # named workspace setup, dynamic workspaces are urgh
           // lib.mergeAttrsList (

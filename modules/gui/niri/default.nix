@@ -5,32 +5,60 @@
   ...
 }:
 {
-  flake.modules.nixos.core =
-    { pkgs, ... }:
-    {
-      options.custom = {
-        programs.niri = {
-          settings = lib.mkOption {
-            type = lib.types.submodule {
-              freeformType = (pkgs.formats.json { }).type;
-              # strings don't merge by default
-              options.extraConfig = lib.mkOption {
-                type = lib.types.lines;
+  flake.modules.nixos.core = {
+    options.custom = {
+      programs.niri = {
+        # copied from nix-wrapper-modules
+        settings = lib.mkOption {
+          default = { };
+          type = lib.types.submodule {
+            freeformType = lib.types.attrs;
+            options = {
+              binds = lib.mkOption {
+                default = { };
+                type = lib.types.attrs;
+              };
+              layout = lib.mkOption {
+                default = { };
+                type = lib.types.attrs;
+              };
+              spawn-at-startup = lib.mkOption {
+                default = [ ];
+                type = lib.types.listOf (lib.types.either lib.types.str (lib.types.listOf lib.types.str));
+              };
+              window-rules = lib.mkOption {
+                default = [ ];
+                type = lib.types.listOf lib.types.attrs;
+              };
+              layer-rules = lib.mkOption {
+                default = [ ];
+                type = lib.types.listOf lib.types.attrs;
+              };
+              workspaces = lib.mkOption {
+                default = { };
+                type = lib.types.attrsOf (lib.types.nullOr lib.types.anything);
+              };
+              outputs = lib.mkOption {
+                default = { };
+                type = lib.types.attrs;
+              };
+              # change to lines to allow merging
+              extraConfig = lib.mkOption {
                 default = "";
-                description = "Additional configuration lines.";
+                type = lib.types.lines;
               };
             };
-            description = "Niri settings, see https://github.com/Lassulus/wrappers/blob/main/modules/niri/module.nix for available options";
           };
         };
       };
     };
+  };
 
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
       source = (self.libCustom.nvFetcherSources pkgs).niri;
-      niriWrapped = inputs.wrappers.wrappers.niri.apply {
+      niri' = inputs.wrappers.wrappers.niri.wrap {
         inherit pkgs;
         package =
           assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12")
@@ -68,6 +96,8 @@
             )
           ));
 
+        v2-settings = true;
+
         inherit (config.custom.programs.niri) settings;
       };
     in
@@ -81,7 +111,7 @@
       # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
       programs.niri = {
         enable = true;
-        package = niriWrapped.wrapper;
+        package = niri';
         useNautilus = false;
       };
 
@@ -92,12 +122,12 @@
             pkgs.writeShellApplication {
               name = "niri-reload-config";
               runtimeInputs = [
-                config.programs.niri.package
+                niri'
                 pkgs.procps
               ];
               text = ''
                 if pgrep -x "niri" > /dev/null; then
-                  niri msg action load-config-file --path "${niriWrapped.constructFiles.generatedConfig.outPath}"
+                  niri msg action load-config-file --path "${niri'.configuration.constructFiles.generatedConfig.outPath}"
                 fi
               '';
             }
@@ -120,7 +150,7 @@
 
         print-config = {
           # use cat as kdlfmt tries to write the file in the nix store
-          niri = /* sh */ ''cat "${niriWrapped.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
+          niri = /* sh */ ''cat "${niri'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
         };
       };
     };
