@@ -394,14 +394,14 @@
     {
       nixpkgs.overlays = [
         (_: prev: {
-          nix-init' = inputs.wrappers.lib.wrapPackage {
+          nix-init = inputs.wrappers.lib.wrapPackage {
             pkgs = prev;
             package = prev.nix-init;
             flags = {
               "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
             };
           };
-          nixpkgs-review' = prev.nixpkgs-review.override { withNom = true; };
+          nixpkgs-review = prev.nixpkgs-review.override { withNom = true; };
         })
       ];
 

@@ -15,20 +15,20 @@ in
       source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
     in
     {
-      packages.yt-dlp = inputs.wrappers.lib.wrapPackage {
+      packages.yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {
         inherit pkgs;
         package = pkgs.yt-dlp.overrideAttrs source;
-        flags = {
-          "--add-metadata" = true;
-          "--format" = mkFormat 720;
-          "--no-mtime" = true;
-          "--output" = "%(title)s.%(ext)s";
-          "--sponsorblock-mark" = "all";
-          "--windows-filenames" = true;
+        settings = {
+          add-metadata = true;
+          format = mkFormat 720;
+          no-mtime = true;
+          output = "%(title)s.%(ext)s";
+          sponsorblock-mark = "all";
+          windows-filenames = true;
           # youtube causing 403 errors
           # https://github.com/yt-dlp/yt-dlp/issues/15712#issuecomment-3808702603
           # PR: https://github.com/yt-dlp/yt-dlp/pull/15726
-          "--extractor-args" = "youtube:player_client=default,-android_sdkless";
+          extractor-args = "youtube:player_client=default,-android_sdkless";
         };
       };
     };

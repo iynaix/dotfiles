@@ -143,23 +143,6 @@
             ];
             workspace = 8;
           }
-          /*
-            # fix gparted "cannot open display: :0" error
-            {
-              spawn = [
-                (lib.getExe pkgs.xorg.xhost)
-                "+local:${user}"
-              ];
-            }
-
-            # fix Authorization required, but no authorization protocol specified error
-            {
-              spawn = [
-                (lib.getExe pkgs.xorg.xhost)
-                "si:localuser:root"
-              ];
-            }
-          */
         ];
       };
     };

@@ -115,7 +115,7 @@
         lock.enable = false;
 
         programs = {
-          btop.extraSettings = {
+          btop.settings = {
             custom_gpu_name0 = "AMD Radeon RX 9070XT";
           };
         };

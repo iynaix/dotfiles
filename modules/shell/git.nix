@@ -200,7 +200,7 @@
       {
         nixpkgs.overlays = [
           (_: prev: {
-            difftastic' = inputs.wrappers.lib.wrapPackage {
+            difftastic = inputs.wrappers.lib.wrapPackage {
               pkgs = prev;
               package = prev.difftastic;
               flags = {

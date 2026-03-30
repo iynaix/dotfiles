@@ -87,7 +87,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.pqiv = (self.wrappers.pqiv.apply { inherit pkgs; }).wrapper;
+      packages.pqiv = self.wrappers.pqiv.wrap { inherit pkgs; };
     };
 
   flake.modules.nixos.gui =
@@ -95,16 +95,15 @@ in
     {
       nixpkgs.overlays = [
         (_: prev: {
-          pqiv =
-            (self.wrappers.pqiv.apply {
-              pkgs = prev;
-              keybindings = ''
-                c { command(nomacs $1) }
-                w { command(wallpaper $1) }
-                m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in") }
-                <Control>m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_crop") }
-              '';
-            }).wrapper;
+          pqiv = self.wrappers.pqiv.wrap {
+            pkgs = prev;
+            keybindings = ''
+              c { command(nomacs $1) }
+              w { command(wallpaper $1) }
+              m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_in") }
+              <Control>m { command(mv $1 "${config.hj.directory}/Pictures/wallpapers_crop") }
+            '';
+          };
         })
       ];
 

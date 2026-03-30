@@ -30,7 +30,6 @@
             pkief.material-icon-theme
             prisma.prisma
             rust-lang.rust-analyzer
-            sumneko.lua
             supermaven.supermaven
             tamasfe.even-better-toml
             usernamehw.errorlens

@@ -109,7 +109,7 @@ in
   perSystem =
     { pkgs, ... }:
     {
-      packages.ghostty = (self.wrappers.ghostty.apply { inherit pkgs; }).wrapper;
+      packages.ghostty = self.wrappers.ghostty.wrap { inherit pkgs; };
     };
 
   flake.modules.nixos.gui =
@@ -117,20 +117,19 @@ in
     {
       nixpkgs.overlays = [
         (_: prev: {
-          ghostty =
-            (self.wrappers.ghostty.apply {
-              pkgs = prev;
-              extraSettings = {
-                # set as default interactive shell, also set $SHELL for nix shell to pick up
-                command = "SHELL=${lib.getExe pkgs.fish} fish";
-                font-family = config.custom.fonts.monospace;
-                font-feature = "zero";
-                font-style = "Medium";
-                # load dynamically generated colors by noctalia
-                config-file = "?${config.hj.xdg.config.directory}/ghostty/themes/noctalia";
-              }
-              // config.custom.programs.ghostty.extraSettings;
-            }).wrapper;
+          ghostty = self.wrappers.ghostty.wrap {
+            pkgs = prev;
+            extraSettings = {
+              # set as default interactive shell, also set $SHELL for nix shell to pick up
+              command = "SHELL=${lib.getExe pkgs.fish} fish";
+              font-family = config.custom.fonts.monospace;
+              font-feature = "zero";
+              font-style = "Medium";
+              # load dynamically generated colors by noctalia
+              config-file = "?${config.hj.xdg.config.directory}/ghostty/themes/noctalia";
+            }
+            // config.custom.programs.ghostty.extraSettings;
+          };
         })
       ];
 

@@ -58,7 +58,7 @@
     "middleClickCommand": "",
     "middleClickFollowMouse": false,
     "monitors": [],
-    "mouseWheelAction": "workspace",
+    "mouseWheelAction": "volume",
     "mouseWheelWrap": true,
     "outerCorners": false,
     "position": "top",
@@ -121,7 +121,7 @@
           "displayMode": "alwaysShow",
           "iconColor": "primary",
           "id": "Volume",
-          "middleClickCommand": "toggle-speaker",
+          "middleClickCommand": "/nix/store/j22dyqjaqgrfvbxklv41vmrb94hss745-toggle-speaker/bin/toggle-speaker",
           "textColor": "primary"
         },
         {
@@ -166,6 +166,7 @@
     "monitorForColors": "DP-1",
     "predefinedScheme": "Tokyo Night",
     "schedulingMode": "off",
+    "syncGsettings": true,
     "useWallpaperColors": true
   },
   "controlCenter": {
@@ -337,6 +338,7 @@
     "showHibernateOnLockScreen": false,
     "showScreenCorners": false,
     "showSessionButtonsOnLockScreen": true,
+    "smoothScrollEnabled": true,
     "telemetryEnabled": false
   },
   "hooks": {
@@ -367,6 +369,7 @@
   },
   "location": {
     "analogClockInCalendar": false,
+    "autoLocate": false,
     "firstDayOfWeek": 1,
     "hideWeatherCityName": false,
     "hideWeatherTimezone": false,
@@ -377,10 +380,10 @@
     "use12hourFormat": false,
     "useFahrenheit": false,
     "weatherEnabled": true,
-    "weatherShowEffects": false
+    "weatherShowEffects": false,
+    "weatherTaliaMascotAlways": false
   },
   "network": {
-    "airplaneModeEnabled": false,
     "bluetoothAutoConnect": true,
     "bluetoothDetailsViewMode": "grid",
     "bluetoothHideUnnamedDevices": false,
@@ -388,8 +391,7 @@
     "bluetoothRssiPollingEnabled": false,
     "disableDiscoverability": false,
     "networkPanelView": "wifi",
-    "wifiDetailsViewMode": "grid",
-    "wifiEnabled": false
+    "wifiDetailsViewMode": "grid"
   },
   "nightLight": {
     "autoSchedule": true,
@@ -596,6 +598,7 @@
     "fillColor": "#000000",
     "fillMode": "crop",
     "hideWallpaperFilenames": true,
+    "linkLightAndDarkWallpapers": true,
     "monitorDirectories": [],
     "overviewBlur": 0.4,
     "overviewEnabled": true,
@@ -617,6 +620,7 @@
       "pixelate",
       "honeycomb"
     ],
+    "useOriginalImages": false,
     "useSolidColor": false,
     "useWallhaven": false,
     "viewMode": "single",

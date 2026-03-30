@@ -7,7 +7,7 @@
       ...
     }:
     let
-      hyprlandWrapped = self.wrappers.hyprland.apply (
+      hyprland' = self.wrappers.hyprland.wrap (
         {
           inherit pkgs;
           # remove the uwsm session
@@ -46,12 +46,12 @@
 
       programs.hyprland = {
         enable = true;
-        package = hyprlandWrapped.wrapper;
+        package = hyprland';
       };
 
       custom.programs.print-config = {
         hyprland = /* sh */ ''cat "${
-          hyprlandWrapped.flags."--config".data
+          hyprland'.configuration.flags."--config".data
         }" "${config.hj.xdg.config.directory}/hypr/hyprland.conf" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.conf" | moor'';
       };
 

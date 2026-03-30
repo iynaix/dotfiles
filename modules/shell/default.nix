@@ -69,7 +69,10 @@
             runtimeInputs = with pkgs; [
               custom.nwhich
             ];
-            text = /* sh */ ''yazi "$(dirname "$(dirname "$(nwhich "$1")")")"'';
+            text = /* sh */ ''
+              path=$(nwhich "$1")
+              yazi "''${path%/*/*}"
+            '';
           }
           // binariesCompletion "ynwhich"
         );

@@ -60,7 +60,7 @@
         };
 
         programs = {
-          btop.extraSettings = {
+          btop.settings = {
             custom_gpu_name0 = "Intel HD Graphics 5500";
           };
         };

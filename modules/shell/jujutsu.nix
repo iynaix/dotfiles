@@ -2,28 +2,20 @@
 {
   flake.modules.nixos.core =
     { pkgs, ... }:
-    let
-      tomlFormat = pkgs.formats.toml { };
-      jujutsuConf = {
-        user = {
-          name = "iynaix";
-          email = "iynaix@gmail.com";
-        };
-        template-aliases = {
-          "format_short_id(id)" = "id.shortest()";
-        };
-      };
-      jujutsuToml = tomlFormat.generate "config.toml" jujutsuConf;
-    in
     {
       nixpkgs.overlays = [
         (_: prev: {
           # doesn't make sense to expose with user details
-          jujutsu' = inputs.wrappers.lib.wrapPackage {
+          jujutsu = inputs.wrappers.wrappers.jujutsu.wrap {
             pkgs = prev;
-            package = prev.jujutsu;
-            flags = {
-              "--config-file" = toString jujutsuToml;
+            settings = {
+              user = {
+                name = "iynaix";
+                email = "iynaix@gmail.com";
+              };
+              template-aliases = {
+                "format_short_id(id)" = "id.shortest()";
+              };
             };
           };
         })
@@ -34,7 +26,7 @@
       ];
 
       custom.programs.print-config = {
-        jujutsu = /* sh */ ''moor --lang toml "${toString jujutsuToml}"'';
+        jj = /* sh */ ''moor --lang toml "${pkgs.jujutsu.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

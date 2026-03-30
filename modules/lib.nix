@@ -46,6 +46,6 @@
           value
       ) rhs);
 
-    recursiveMergeAttrsList = attrsets: lib.foldl' recursiveMergeAttrs { } attrsets;
+    recursiveMergeAttrsList = lib.foldl' recursiveMergeAttrs { };
   };
 }

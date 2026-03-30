@@ -47,7 +47,6 @@
         in
         {
           rg = cmd;
-          ripgrep = cmd;
         };
     };
 }

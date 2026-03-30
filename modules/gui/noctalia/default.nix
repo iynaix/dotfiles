@@ -225,9 +225,7 @@
                 version = 2;
               };
             };
-          };
-          cache.files = {
-            "noctalia/plugins/${my-plugins-hash}:projects-provider-settings.json" = {
+            "noctalia/plugin_settings/${my-plugins-hash}:projects-provider-settings.json" = {
               generator = lib.strings.toJSON;
               value = {
                 projectDir = config.custom.constants.projects;

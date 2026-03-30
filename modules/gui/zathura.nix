@@ -1,69 +1,35 @@
 {
-  lib,
-  self,
+  inputs,
   ...
 }:
 let
-  zathuraOptions = {
-    extraSettings = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        Extra settings to add to {file}`zathurarc` file.
-        See <https://man.archlinux.org/man/zathurarc.5> for options.
-      '';
+  baseZathuraConf = {
+    mappings = {
+      "D" = "toggle_page_mode";
+      "J" = "zoom out";
+      "K" = "zoom in";
+      "R" = "rotate";
+      "d" = "scroll half-down";
+      "i" = "recolor";
+      "p" = "print";
+      "r" = "reload";
+      "u" = "scroll half-up";
+    };
+    settings = {
+      "adjust-open" = "best-fit";
+      "page-padding" = 1;
+      "recolor" = true;
+      "statusbar-h-padding" = 0;
+      "statusbar-v-padding" = 0;
     };
   };
 in
 {
-  flake.wrappers.zathura =
-    { config, wlib, ... }:
-    let
-      zathuraConf = config.pkgs.writeTextFile {
-        name = "zathurarc";
-        destination = "/zathurarc"; # zathura expects a directory
-        text = ''
-          set adjust-open	"best-fit"
-          set page-padding	"1"
-          set recolor	"true"
-          set statusbar-h-padding	"0"
-          set statusbar-v-padding	"0"
-          map D   toggle_page_mode
-          map J   zoom out
-          map K   zoom in
-          map R   rotate
-          map d   scroll half-down
-          map i   recolor
-          map p   print
-          map r   reload
-          map u   scroll half-up
-
-          ${config.extraSettings}
-        '';
-      };
-    in
-    {
-      imports = [ wlib.modules.default ];
-
-      options = zathuraOptions;
-
-      config.package = lib.mkDefault config.pkgs.zathura;
-      config.flags = {
-        "--config-dir" = toString zathuraConf;
-      };
-    };
-
   perSystem =
     { pkgs, ... }:
     {
-      packages.zathura = (self.wrappers.zathura.apply { inherit pkgs; }).wrapper;
+      packages.zathura = inputs.wrappers.wrappers.zathura.wrap ({ inherit pkgs; } // baseZathuraConf);
     };
-
-  flake.modules.nixos.core = {
-    options.custom = {
-      programs.zathura = zathuraOptions;
-    };
-  };
 
   flake.modules.nixos.gui =
     { config, pkgs, ... }:
@@ -73,13 +39,12 @@ in
     {
       nixpkgs.overlays = [
         (_: prev: {
-          zathura =
-            (self.wrappers.zathura.apply {
-              pkgs = prev;
-              extraSettings = ''
-                include ${noctaliaColors}
-              '';
-            }).wrapper;
+          zathura = inputs.wrappers.wrappers.zathura.wrap {
+            pkgs = prev;
+            extraSettings = ''
+              include "${noctaliaColors}"
+            '';
+          };
         })
       ];
 

@@ -123,60 +123,69 @@ in
       wlib,
       ...
     }:
-    let
-      importantPrefixes = [
-        "$"
-        "bezier"
-        "name"
-        "output"
-      ];
-      # don't use lib.mkMerge as the order is important
-      hyprlandConfText = lib.concatMapStrings (attrs: toHyprconf { inherit attrs importantPrefixes; }) [
-        # handle the plugins, loaded before the settings, implementation from home-manager:
-        # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
-        {
-          "exec-once" =
-            let
-              mkEntry =
-                entry: if lib.types.package.check entry then "${entry}/lib/lib${entry.pname}.so" else entry;
-            in
-            map (p: "hyprctl plugin load ${mkEntry p}") config.plugins;
-        }
-        config.settings
-      ];
-      # validate hyprland config, filter out source to non-existent file
-      # can be removed when the PR is merged:
-      # https://github.com/hyprwm/Hyprland/pull/12286
-      checkedHyprlandConf = config.pkgs.runCommand "check-hyprland-conf" { } ''
-        # write $out with source directives
-        cat > "$out" <<'EOF'
-        ${hyprlandConfText}
-        source=~/.config/hypr/hyprland.conf
-        EOF
-
-        # filter out the source directives for validation, the nix sandbox won't have those files
-        export XDG_RUNTIME_DIR=$(mktemp -d)
-        grep -v '^source' "$out" > config_without_source.conf
-        ${lib.getExe config.package} --verify-config -c config_without_source.conf
-      '';
-    in
     {
       imports = [ wlib.modules.default ];
 
       options = hyprlandOptions // {
         "hyprland.conf" = lib.mkOption {
           type = wlib.types.file config.pkgs;
-          default.path = checkedHyprlandConf;
+          default.path = config.constructFiles.generatedConfig.path;
+          default.content = "";
           visible = false;
         };
       };
 
       config.package = lib.mkDefault config.pkgs;
+
+      config.constructFiles.generatedConfig = {
+        relPath = "hyprland.conf";
+        # don't use lib.mkMerge as the order is important
+        content =
+          lib.concatMapStrings
+            (
+              attrs:
+              toHyprconf {
+                inherit attrs;
+                importantPrefixes = [
+                  "$"
+                  "bezier"
+                  "name"
+                  "output"
+                ];
+              }
+            )
+            [
+              # handle the plugins, loaded before the settings, implementation from home-manager:
+              # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
+              {
+                "exec-once" =
+                  let
+                    mkEntry =
+                      entry: if lib.types.package.check entry then "${entry}/lib/lib${entry.pname}.so" else entry;
+                  in
+                  map (p: "hyprctl plugin load ${mkEntry p}") config.plugins;
+              }
+              config.settings
+            ];
+      };
+
+      # validate hyprland config, filter out source to non-existent file
+      # can be removed when the PR is merged:
+      # https://github.com/hyprwm/Hyprland/pull/12286
+      config.drv.installPhase = /* sh */ ''
+        runHook preInstall
+        # filter out the source directives for validation, the nix sandbox won't have those files
+        export XDG_RUNTIME_DIR=$(mktemp -d)
+        grep -v '^source' "${config.constructFiles.generatedConfig.path}" > config_without_source.conf
+        ${lib.getExe config.package} --verify-config -c config_without_source.conf
+        runHook postInstall
+      '';
+
       config.filesToPatch = [
         "share/wayland-sessions/*.desktop"
       ];
       config.flags = {
-        "--config" = toString config."hyprland.conf".path;
+        "--config" = config."hyprland.conf".path;
       };
     };
 

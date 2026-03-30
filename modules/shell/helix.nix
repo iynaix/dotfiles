@@ -2,18 +2,12 @@
 {
   perSystem =
     { pkgs, ... }:
-    let
-      tomlFormat = pkgs.formats.toml { };
-      helixConf = {
-        theme = "tokyonight";
-      };
-    in
     {
-      packages.helix = inputs.wrappers.lib.wrapPackage {
+      packages.helix = inputs.wrappers.wrappers.helix.wrap {
         inherit pkgs;
         package = pkgs.helix;
-        flags = {
-          "--config" = tomlFormat.generate "config.toml" helixConf;
+        settings = {
+          theme = "tokyonight";
         };
       };
     };
@@ -32,7 +26,7 @@
       ];
 
       custom.programs.print-config = {
-        helix = /* sh */ ''moor "${pkgs.helix.configuration.flags."--config"}".data'';
+        helix = /* sh */ ''moor "${pkgs.helix.configuration.constructFiles.config.outPath}"'';
       };
     };
 }
