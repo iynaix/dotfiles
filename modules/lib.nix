@@ -42,6 +42,8 @@
           recursiveMergeAttrs lhs.${name} value
         else if (lib.hasAttr name lhs && lib.isList value && lib.isList lhs.${name}) then
           lhs.${name} ++ value
+        else if (lib.hasAttr name lhs && lib.isString value && lib.isString lhs.${name}) then
+          lhs.${name} + value
         else
           value
       ) rhs);
