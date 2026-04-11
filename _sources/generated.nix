@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.10.9.1";
+    version = "0.11.1.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.10.9.1/helium-0.10.9.1-x86_64.AppImage";
-      sha256 = "sha256-FMO4gB2zOjhgmjfE/T0XdDb0NMDKsQFuzy/Org1iD48=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.11.1.1/helium-0.11.1.1-x86_64.AppImage";
+      sha256 = "sha256-Nfi8qjj7YOujsf8nLm3Mu+oh/R642Wy/nnc0ToolpW0=";
     };
   };
   mango = {
@@ -67,15 +67,15 @@
   };
   niri = {
     pname = "niri";
-    version = "8bb271153260acdb2f78f1ef874da9b8b13f607a";
+    version = "8cc8756bea3987c6bf13a3693a5c4acbfa896c34";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "8bb271153260acdb2f78f1ef874da9b8b13f607a";
+      rev = "8cc8756bea3987c6bf13a3693a5c4acbfa896c34";
       fetchSubmodules = false;
-      sha256 = "sha256-nFScVrzNWXSbovyZOT5r5dgeHxgSGyksfRXbFD/tbqM=";
+      sha256 = "sha256-ZHLgS5kvYRJd6jHsCjlKhvRyUZZQS4fDLipDXxsVlv0=";
     };
-    date = "2026-04-08";
+    date = "2026-04-12";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -102,15 +102,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "43c69783a674108472eadd5c1b81a3c4d9ff78b5";
+    version = "babfd0f6144aedcc7af11852ce962b989d052898";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "43c69783a674108472eadd5c1b81a3c4d9ff78b5";
+      rev = "babfd0f6144aedcc7af11852ce962b989d052898";
       fetchSubmodules = false;
-      sha256 = "sha256-gV9z3nniapKx3i+FP3MazGkusbwiyTgphP/JxrWVmKw=";
+      sha256 = "sha256-y/UnRuZ2QytCdtGhxkbVvaGXglpqwufaUddXOzs7fzo=";
     };
-    date = "2026-04-08";
+    date = "2026-04-11";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

@@ -139,17 +139,6 @@
           ];
         };
 
-        # fake dimaround, see:
-        # https://github.com/YaLTeR/niri/discussions/1806
-        niri.settings.layer-rules = [
-          {
-            matches = [ { namespace = "^rofi$"; } ];
-            background-effect = {
-              blur = true;
-            };
-          }
-        ];
-
         noctalia.colors.templates = {
           # default launcher
           "rofi.rasi" = {

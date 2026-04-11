@@ -76,8 +76,9 @@
             }
 
             /* nemo selected item rename highlight color */
-            treeview entry.flat, treeview entry selection {
-              color: $2
+            treeview entry selection {
+              color: #ffffff;
+              background-color: $2;
             }
             EOF
             fi

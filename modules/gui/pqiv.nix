@@ -83,13 +83,6 @@ in
       config.env.PQIVRC_PATH = toString config.pqivrc.path;
     };
 
-  # expose generic pqiv package without local paths
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.pqiv = self.wrappers.pqiv.wrap { inherit pkgs; };
-    };
-
   flake.modules.nixos.gui =
     { config, pkgs, ... }:
     {

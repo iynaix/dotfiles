@@ -135,7 +135,7 @@ in
         };
       };
 
-      config.package = lib.mkDefault config.pkgs;
+      config.package = lib.mkDefault config.pkgs.hyprland;
 
       config.constructFiles.generatedConfig = {
         relPath = "hyprland.conf";

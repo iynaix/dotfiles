@@ -106,12 +106,6 @@ in
       };
     };
 
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.ghostty = self.wrappers.ghostty.wrap { inherit pkgs; };
-    };
-
   flake.modules.nixos.gui =
     { config, pkgs, ... }:
     {

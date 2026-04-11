@@ -53,7 +53,7 @@
     in
     {
       packages = rec {
-        noctalia-shell' =
+        noctalia-shell =
           (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
             calendarSupport = true;
           }).overrideAttrs
@@ -86,7 +86,7 @@
                 )
               '';
             });
-        noctalia-ipc = pkgs.callPackage drv { noctalia-shell = noctalia-shell'; };
+        noctalia-ipc = pkgs.callPackage drv { inherit noctalia-shell; };
         noctalia-copy = pkgs.writeShellApplication {
           name = "noctalia-copy";
           runtimeInputs = with pkgs; [
@@ -165,7 +165,7 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          noctalia-shell = pkgs.custom.noctalia-shell';
+          inherit (pkgs.custom) noctalia-shell;
         })
       ];
 
@@ -257,16 +257,6 @@
           };
 
           niri.settings = {
-            # bar blur
-            layer-rules = [
-              {
-                matches = [ { namespace = "^noctalia-background-.*$"; } ];
-                background-effect = {
-                  blur = true;
-                };
-              }
-            ];
-
             # settings window blur
             window-rules = [
               {

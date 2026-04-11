@@ -125,7 +125,8 @@ fn handle_horizontal_monitor(
     initial_window: Option<&Window>,
     mon: &Output,
 ) {
-    let max_cols = if mon.is_ultrawide() { 3 } else { 2 };
+    // let max_cols = if mon.is_ultrawide() { 3 } else { 2 };
+    let max_cols = 2;
 
     if columns.len() > max_cols {
         return;
