@@ -87,8 +87,8 @@ impl NixMonitor {
         let hash_str = format!("{img}@{dimensions}@{mtime}");
 
         image_cache_dir.join(format!(
-            "{:x}.png",
-            sha2::Sha256::digest(hash_str.as_bytes())
+            "{}.png",
+            hex::encode(sha2::Sha256::digest(hash_str.as_bytes()))
         ))
     }
 }

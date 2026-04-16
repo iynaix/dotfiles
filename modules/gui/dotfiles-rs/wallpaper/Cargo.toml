@@ -16,6 +16,7 @@ dirs.workspace = true
 execute.workspace = true
 fast_image_resize.workspace = true
 fastrand.workspace = true
+hex.workspace = true
 hyprland.workspace = true
 image.workspace = true
 itertools.workspace = true
@@ -23,13 +24,13 @@ niri-ipc.workspace = true
 regex.workspace = true
 rexiv2.workspace = true
 serde.workspace = true
-rayon = "1.11.0"
-sha2 = "0.10.9"
-toml = "1.0.7"
+rayon.workspace = true
+sha2.workspace = true
+toml = "1.1.2"
 whoami = "2.1.1"
 
 [build-dependencies]
 clap.workspace = true
 clap_complete.workspace = true
-clap_mangen = "0.2.33"
+clap_mangen = "0.3.0"
 serde.workspace = true

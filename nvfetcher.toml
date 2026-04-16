@@ -18,7 +18,6 @@ fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/hel
 
 [niri]
 src.git = "https://github.com/YaLTeR/niri"
-src.branch = "wip/branch"
 fetch.github = "YaLTeR/niri"
 
 [mango]

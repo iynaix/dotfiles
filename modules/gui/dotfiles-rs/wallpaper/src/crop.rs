@@ -2,7 +2,6 @@ use std::{collections::HashSet, path::PathBuf};
 
 use common::{
     full_path,
-    nixjson::NixJson,
     wallpaper::{self, Geometry, WallInfo, filter_images},
 };
 use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer, images::Image};
@@ -168,8 +167,8 @@ pub fn thumbnails(args: &ThumbnailArgs) {
                 );
             let hash_str = format!("{wall}@384x384@{mtime}");
             let thumbnail_path = thumbnail_cache_dir.join(format!(
-                "{:x}.png",
-                sha2::Sha256::digest(hash_str.as_bytes())
+                "{}.png",
+                hex::encode(sha2::Sha256::digest(hash_str.as_bytes()))
             ));
 
             if !thumbnail_path.exists() || args.force {
