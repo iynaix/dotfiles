@@ -16,7 +16,7 @@
       inherit (config.custom.constants) isLaptop;
       lock = pkgs.writeShellApplication {
         name = "lock";
-        runtimeInputs = [ pkgs.custom.noctalia-ipc ];
+        runtimeInputs = [ pkgs.noctalia-shell ];
         text = /* sh */ ''
           ${lib.optionalString config.custom.lock.enable "noctalia-ipc sessionMenu lockAndSuspend"}
           noctalia-ipc monitors off

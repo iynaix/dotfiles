@@ -57,22 +57,25 @@ in
         nixpkgs.overlays = [
           (_: prev: {
             # overlay so that security wrappers for xps can pick it up
-            btop = inputs.wrappers.wrappers.btop.wrap {
-              pkgs = prev;
+            btop = pkgs.custom.btop.wrap {
               package = prev.btop.override {
                 rocmSupport = host == "desktop" || host == "framework";
               };
-              settings = baseBtopConf // {
-                color_theme = "noctalia";
-                disks_filter = lib.concatStringsSep " " (
-                  [
-                    "/"
-                    "/boot"
-                    "/persist"
-                  ]
-                  ++ config.custom.programs.btop.disks
-                );
-              };
+              settings = lib.mkForce (
+                baseBtopConf
+                // {
+                  color_theme = "noctalia";
+                  disks_filter = lib.concatStringsSep " " (
+                    [
+                      "/"
+                      "/boot"
+                      "/persist"
+                    ]
+                    ++ config.custom.programs.btop.disks
+                  );
+                }
+                // config.custom.programs.btop.settings
+              );
             };
           })
         ];

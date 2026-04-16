@@ -26,6 +26,10 @@
                 default = [ ];
                 type = lib.types.listOf (lib.types.either lib.types.str (lib.types.listOf lib.types.str));
               };
+              spawn-sh-at-startup = lib.mkOption {
+                default = [ ];
+                type = lib.types.listOf lib.types.str;
+              };
               window-rules = lib.mkOption {
                 default = [ ];
                 type = lib.types.listOf lib.types.attrs;

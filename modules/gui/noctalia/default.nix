@@ -3,112 +3,145 @@
   lib,
   ...
 }:
+let
+  baseNoctaliaSettings = builtins.fromJSON (builtins.readFile ./settings.json);
+in
 {
   perSystem =
     { pkgs, ... }:
-    let
-      drv =
-        {
-          lib,
-          noctalia-shell,
-          writeShellApplication,
-          killall,
-          jq,
-        }:
-        # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
-        writeShellApplication {
-          name = "noctalia-ipc";
-          runtimeInputs = [
-            inputs.noctalia.inputs.noctalia-qs.packages.${pkgs.stdenv.hostPlatform.system}.default
-            killall
-            jq
-          ];
-          text = /* sh */ ''
-            RAW_OUTPUT=$(qs list --all --json 2>/dev/null)
-
-            # invalid json, no instances running, so start noctalia-shell
-            if [[ ! "$RAW_OUTPUT" == "["* ]]; then
-              ${lib.getExe noctalia-shell}
-              exit
-            fi
-
-            NOCTALIA_PATH=$(qs list --all --json | jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")')
-
-            # using dev version, don't kill the shell
-            if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
-              "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
-              exit
-            fi
-
-            # different instance, kill previous instances
-            if [[ ! "$NOCTALIA_PATH" =~ ${noctalia-shell} ]]; then
-              killall .quickshell-wra || true
-              ${lib.getExe noctalia-shell}
-              sleep 2
-            fi
-
-            ${lib.getExe noctalia-shell} ipc call "$@"
-          '';
-        };
-    in
     {
-      packages = rec {
-        noctalia-shell =
-          (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-            calendarSupport = true;
-          }).overrideAttrs
-            (o: {
-              patches = [
-                ./face-aware-crop.patch
-                # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
-                ./plugin-settings-location.patch
-                # battery and volume widgets that use the primary color instead of white
-                ./mprimary-battery.patch
-                # remove transparency from zathura template
-                ./zathura-transparency.patch
-              ];
+      packages = {
+        noctalia-shell = inputs.wrappers.wrappers.noctalia-shell.wrap (
+          { config, ... }:
+          {
+            inherit pkgs;
+            package =
+              (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+                calendarSupport = true;
+              }).overrideAttrs
+                (o: {
+                  patches = [
+                    ./face-aware-crop.patch
+                    # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory
+                    ./plugin-settings-location.patch
+                    # battery and volume widgets that use the primary color instead of white
+                    ./mprimary-battery.patch
+                    # remove transparency from zathura template
+                    ./zathura-transparency.patch
+                  ];
 
-              postPatch = /* sh */ ''
-                # don't want to add python3 to the global path
-                substituteInPlace Services/Theming/TemplateProcessor.qml \
-                  --replace-fail "python3" "${lib.getExe pkgs.python3}"
+                  postPatch = /* sh */ ''
+                    # don't want to add python3 to the global path
+                    substituteInPlace Services/Theming/TemplateProcessor.qml \
+                      --replace-fail "python3" "${lib.getExe pkgs.python3}"
 
-                # show location on weather card in clock panel
-                substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
-                  --replace-fail "showLocation: false" "showLocation: true"
-              '';
+                    # show location on weather card in clock panel
+                    substituteInPlace Modules/Panels/Clock/ClockPanel.qml \
+                      --replace-fail "showLocation: false" "showLocation: true"
+                  '';
 
-              # fix missing app icons:
-              # https://docs.noctalia.dev/getting-started/faq/#configuration
-              preFixup = (o.preFixup or "") + /* sh */ ''
-                qtWrapperArgs+=(
-                  --set QT_QPA_PLATFORMTHEME gtk3
-                )
-              '';
-            });
-        noctalia-ipc = pkgs.callPackage drv { inherit noctalia-shell; };
-        noctalia-copy = pkgs.writeShellApplication {
-          name = "noctalia-copy";
-          runtimeInputs = with pkgs; [
-            jq
-            wl-clipboard
-          ];
-          text = /* sh */ ''
-            noctalia-shell ipc call state all | jq -S '.settings' | wl-copy
-          '';
-        };
-        noctalia-diff = pkgs.writeShellApplication {
-          name = "noctalia-diff";
-          runtimeInputs = with pkgs; [
-            jq
-            json-diff
-          ];
-          text = /* sh */ ''
-            json-diff \
-              <(jq -S . "''${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/settings.json") \
-              <(noctalia-shell ipc call state all | jq -S '.settings')
-          '';
-        };
+                  # fix missing app icons:
+                  # https://docs.noctalia.dev/getting-started/faq/#configuration
+                  preFixup = (o.preFixup or "") + /* sh */ ''
+                    qtWrapperArgs+=(
+                      --set QT_QPA_PLATFORMTHEME gtk3
+                    )
+                  '';
+                });
+            # default json settings for desktop
+            settings = baseNoctaliaSettings;
+            autoCopyConfig = false; # don't copy config on startup
+            enableDumpScript = false; # dumps config as nix, not needed
+            # for screen recorder plugin
+            extraPackages = [ pkgs.gpu-screen-recorder ];
+
+            constructFiles =
+              let
+                # creates a binary using writeShellApplication suitable for constructFiles from nix-wrapper-modules
+                # greatly reducing the boilerplate
+                # takes the same arguments as writeShellApplication
+                constructFilesShellApplication = args: {
+                  key = args.name;
+                  relPath = "bin/${args.name}";
+                  builder = ''mkdir -p "$(dirname "$2")" && cp "$1" "$2" && chmod +x "$2"'';
+                  content = (pkgs.writeShellApplication args).text;
+                };
+                settingsJsonPath = "${config.configPlaceholder}/settings.json";
+                binaryPath = config.wrapperPaths.placeholder;
+              in
+              {
+                noctalia-copy = constructFilesShellApplication {
+                  name = "noctalia-copy";
+                  runtimeInputs = with pkgs; [
+                    jq
+                    wl-clipboard
+                  ];
+                  text = /* sh */ ''
+                    noctalia-ipc state all | jq -S '.settings' | wl-copy
+                  '';
+                };
+
+                noctalia-diff = constructFilesShellApplication {
+                  name = "noctalia-diff";
+                  runtimeInputs = with pkgs; [
+                    jq
+                    json-diff
+                  ];
+                  text = /* sh */ ''
+                    json-diff \
+                      <(jq -S . "${settingsJsonPath}") \
+                      <(noctalia-ipc state all | jq -S '.settings')
+                  '';
+                };
+
+                # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
+                noctalia-ipc = constructFilesShellApplication {
+                  name = "noctalia-ipc";
+                  runtimeInputs = [
+                    inputs.noctalia.inputs.noctalia-qs.packages.${pkgs.stdenv.hostPlatform.system}.default
+                    pkgs.killall
+                    pkgs.jq
+                  ];
+                  text = /* sh */ ''
+                    RAW_OUTPUT=$(qs list --all --json 2>/dev/null)
+
+                    # invalid json, no instances running, so start noctalia-shell
+                    if [[ ! "$RAW_OUTPUT" == "["* ]]; then
+                      ${binaryPath}
+                      exit
+                    fi
+
+                    NOCTALIA_PATH=$(jq -r '.[] | .config_path | sub("/share/noctalia-shell/shell.qml$"; "")' <<<"$RAW_OUTPUT")
+
+                    # using dev version, don't kill the shell
+                    if [[ "$NOCTALIA_PATH" =~ "_dirty" ]]; then
+                      "$NOCTALIA_PATH/bin/noctalia-shell" ipc call "$@"
+                      exit
+                    fi
+
+                    # different instance, kill previous instances
+                    if [[ ! "$NOCTALIA_PATH" =~ "${toString config.package}" ]]; then
+                      killall .quickshell-wra || true
+                      ${binaryPath}
+                      sleep 2
+                    fi
+
+                    ${binaryPath} ipc call "$@"
+                  '';
+                };
+
+                noctalia-reload = constructFilesShellApplication {
+                  name = "noctalia-reload";
+                  text = /* sh */ ''
+                    killall .quickshell-wra || true
+                    # prevent "already running" error
+                    sleep 0.2
+                    noctalia-shell
+                  '';
+                };
+              };
+          }
+        );
       };
     };
 
@@ -135,22 +168,10 @@
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isLaptop;
-      # settings.json is the desktop copy of gui-settings.json without any modifications
-      defaultSettings = builtins.fromJSON (builtins.readFile ./settings.json);
-      noctalia-reload = pkgs.writeShellApplication {
-        name = "noctalia-reload";
-        text = /* sh */ ''
-          killall .quickshell-wra || true
-          # prevent "already running" error
-          sleep 0.2
-          noctalia-shell
-        '';
-      };
       noctalia-start = pkgs.writeShellApplication {
         name = "noctalia-start";
         runtimeInputs = [
           pkgs.noctalia-shell
-          pkgs.custom.noctalia-ipc # needed for wallpaper
           config.custom.programs.dotfiles-rs
         ];
         text = /* sh */ ''
@@ -165,7 +186,13 @@
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          inherit (pkgs.custom) noctalia-shell;
+          noctalia-shell = pkgs.custom.noctalia-shell.wrap {
+            # apply reducers to default settings
+            settings = lib.mkForce (
+              config.custom.programs.noctalia.settingsReducers
+              |> lib.foldl' (curr: reducer: reducer curr) baseNoctaliaSettings
+            );
+          };
         })
       ];
 
@@ -177,13 +204,6 @@
         in
         {
           config.files = {
-            "noctalia/settings.json" = {
-              generator = lib.strings.toJSON;
-              # create settings by applying reducers
-              value =
-                config.custom.programs.noctalia.settingsReducers
-                |> lib.foldl' (curr: reducer: reducer curr) defaultSettings;
-            };
             "noctalia/plugins.json" = {
               generator = lib.strings.toJSON;
               value = {
@@ -229,7 +249,10 @@
             "noctalia/plugin_settings/${my-plugins-hash}:projects-provider-settings.json" = {
               generator = lib.strings.toJSON;
               value = {
-                projectDir = config.custom.constants.projects;
+                projectDirs = [
+                  config.custom.constants.projects
+                  "/tmp"
+                ];
                 openCommand = "codium %s";
               };
             };
@@ -277,16 +300,9 @@
       };
 
       environment.systemPackages = [
-        pkgs.noctalia-shell
-        pkgs.gpu-screen-recorder # screen recorder plugin
-        noctalia-reload
+        pkgs.noctalia-shell # overlay-ed above
         noctalia-start
-      ]
-      ++ (with pkgs.custom; [
-        noctalia-copy
-        noctalia-ipc
-        noctalia-diff
-      ]);
+      ];
 
       custom.persist = {
         home = {

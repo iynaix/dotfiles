@@ -14,7 +14,7 @@
       custom.programs = {
         dotfiles-rs = pkgs.custom.dotfiles-rs.override {
           inherit (pkgs) pqiv;
-          extraPackages = [ pkgs.custom.noctalia-ipc ];
+          extraPackages = [ pkgs.noctalia-shell ];
         };
       };
 

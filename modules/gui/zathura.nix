@@ -37,11 +37,10 @@ in
     in
     {
       nixpkgs.overlays = [
-        (_: prev: {
-          zathura = inputs.wrappers.wrappers.zathura.wrap (
+        (_: _prev: {
+          zathura = pkgs.custom.zathura.wrap (
             baseZathuraConf
             // {
-              pkgs = prev;
               extraSettings = ''
                 include "${noctaliaColors}"
               '';
