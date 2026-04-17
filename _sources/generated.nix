@@ -67,15 +67,15 @@
   };
   niri = {
     pname = "niri";
-    version = "71d7fa9a61ef56d2afa1fd5523089b96c1c5fc0f";
+    version = "82d4c7569e731379284e0653dcdadb8f17cceec7";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "71d7fa9a61ef56d2afa1fd5523089b96c1c5fc0f";
+      rev = "82d4c7569e731379284e0653dcdadb8f17cceec7";
       fetchSubmodules = false;
-      sha256 = "sha256-D5ME/gcvzCqr2pqd8iw3Nx7v31CBdQLt5iFfF0PZKDw=";
+      sha256 = "sha256-MH7ieeYawsCAjGkoHFZfUDZXplEOiFgSpx2pGr5RK3c=";
     };
-    date = "2026-04-15";
+    date = "2026-04-16";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -102,15 +102,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "06b192110efe5c3338cacd490490906b639d73ea";
+    version = "442d9080da7524c8e58e10c610b832538c87464d";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "06b192110efe5c3338cacd490490906b639d73ea";
+      rev = "442d9080da7524c8e58e10c610b832538c87464d";
       fetchSubmodules = false;
-      sha256 = "sha256-fFVTxl9fgRJ0p0b55CfKfj0buKeWpbl8RBmXPawQNWE=";
+      sha256 = "sha256-5WxCUf/Lv3wms7IPgkK0lJuJhIPa1E46obOFASS8eZU=";
     };
-    date = "2026-04-15";
+    date = "2026-04-16";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

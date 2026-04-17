@@ -138,6 +138,9 @@
             sub-scale-by-window = true;
             sub-scale-with-window = false;
 
+            # circumvent subtitle or OSD bad positioning when watch later options are used
+            watch-later-options-remove = "sub-pos,osd-margin-y";
+
             screenshot-directory = "~/Pictures/Screenshots";
 
             slang = "en,eng,english";
@@ -170,16 +173,26 @@
           };
 
           configDir."script-opts/modernz.conf".content = renderScriptOptions {
-            window_top_bar = false;
-            greenandgrumpy = true;
-            jump_buttons = false;
-            speed_button = true;
-            ontop_button = false; # pin button
             chapter_skip_buttons = true;
-            track_nextprev_buttons = false;
+            fullscreen_button = false;
+            greenandgrumpy = true; # disable santa hat in december
+            hidetimeout = 1000;
             hover_effect_color = "#7F7F7F"; # 50% gray
-            seekbarfg_color = "#FFFFFF";
+            info_button = false;
+            jump_buttons = false;
+            loop_button = false;
+            nibble_color = "#7F7F7F"; # 50% gray
+            nibbles_top = false;
+            ontop_button = false; # pin button
+            playlist_button = false;
+            screenshot_button = false;
             seekbarbg_color = "#7F7F7F"; # 50% gray
+            seekbarfg_color = "#FFFFFF";
+            speed_button = true;
+            sub_margins = false; # don't raise subtitles over OSC
+            track_nextprev_buttons = false;
+            volume_control = false;
+            window_top_bar = false;
           };
         }
 
