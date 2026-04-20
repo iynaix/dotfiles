@@ -67,7 +67,7 @@
         ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
 
       # NOTE: the custom function is used to be able
-      mpvConfig = self.libCustom.recursiveMergeAttrsList [
+      mpvConfig = self.libCustom.recursiveMergeAttrsAndStringsList [
         {
           "mpv.input".content = renderBindings {
             MBTN_LEFT = "cycle pause";
@@ -137,9 +137,6 @@
             sub-font-size = 45;
             sub-scale-by-window = true;
             sub-scale-with-window = false;
-
-            # circumvent subtitle or OSD bad positioning when watch later options are used
-            watch-later-options-remove = "sub-pos,osd-margin-y";
 
             screenshot-directory = "~/Pictures/Screenshots";
 
@@ -370,12 +367,10 @@
 
       custom.programs.print-config =
         let
-          mpvDir = pkgs.mpv.configuration.flags."--config-dir".data;
+          mpvDir = dirOf pkgs.mpv.configuration.constructFiles.generatedConfig;
         in
         {
-          mpv = /* sh */ ''moor "${mpvDir}/mpv.conf"'';
-          mpv-input = /* sh */ ''moor "${mpvDir}/input.conf"'';
-          mpv-plugins = /* sh */ "moor ${mpvDir}/script-opts/*";
+          mpv = /* sh */ ''cat "${mpvDir}/mpv.conf" "${mpvDir}/input.conf" "${mpvDir}/script-opts/"*.conf | moor'';
         };
 
       custom.persist = {

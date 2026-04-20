@@ -149,7 +149,7 @@
         enable = true;
         extensions.crates-nvim.enable = false;
       };
-      ts = {
+      typescript = {
         enable = true;
         extensions.ts-error-translator.enable = true;
         # lsp.server = "denols"; # enable for deno?

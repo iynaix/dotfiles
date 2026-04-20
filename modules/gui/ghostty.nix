@@ -55,7 +55,7 @@ in
         copy-on-select = "clipboard";
         cursor-style = "bar";
         font-size = 10;
-        window-decoration = false;
+        window-decoration = "none";
         window-padding-x = 12;
         window-padding-y = 12;
       };

@@ -1,4 +1,8 @@
-{ lib, self, ... }:
+{
+  inputs,
+  self,
+  ...
+}:
 {
   perSystem =
     { pkgs, ... }:
@@ -14,10 +18,15 @@
             git = "${sources.yazi-plugins.src}/git.yazi";
           };
 
-          initLua = pkgs.writeText "init.lua" /* lua */ ''
-            require("full-border"):setup({ type = ui.Border.ROUNDED })
-            require("git"):setup()
-          '';
+          constructFiles = {
+            init = {
+              relPath = "yazi-config/init.lua";
+              content = /* lua */ ''
+                require("full-border"):setup({ type = ui.Border.ROUNDED })
+                require("git"):setup()
+              '';
+            };
+          };
 
           settings = {
             yazi = {
@@ -253,19 +262,16 @@
       ];
     in
     {
-      packages.yazi =
-        (pkgs.yazi.override {
-          inherit (baseYaziConf) initLua plugins settings;
+      packages.yazi = inputs.wrappers.wrappers.yazi.wrap (
+        baseYaziConf
+        // {
+          inherit pkgs;
           extraPackages = with pkgs; [
             unar
             exiftool
           ];
-        }).overrideAttrs
-          {
-            passthru = {
-              inherit (baseYaziConf) settings;
-            };
-          };
+        }
+      );
     };
 
   flake.modules.nixos.core =
@@ -296,27 +302,23 @@
         '';
       };
 
-      nixpkgs.overlays =
-        let
-          inherit (pkgs.custom) yazi;
-        in
-        [
-          (_: _prev: {
-            # set dynamic flavor from noctalia
-            yazi = yazi.override {
-              settings = lib.recursiveUpdate yazi.passthru.settings {
-                theme.flavor = {
-                  dark = "noctalia";
-                  light = "noctalia";
-                };
-              };
-
-              flavors = {
-                noctalia = "${config.hj.xdg.config.directory}/yazi/flavors/noctalia.yazi";
+      nixpkgs.overlays = [
+        (_: _prev: {
+          # set dynamic flavor from noctalia
+          yazi = pkgs.custom.yazi.wrap {
+            settings = {
+              theme.flavor = {
+                dark = "noctalia";
+                light = "noctalia";
               };
             };
-          })
-        ];
+
+            flavors = {
+              noctalia = "${config.hj.xdg.config.directory}/yazi/flavors/noctalia.yazi";
+            };
+          };
+        })
+      ];
 
       environment = {
         systemPackages = [
@@ -329,12 +331,12 @@
         };
       };
 
-      custom.programs.print-config = {
-        yazi = /* sh */ ''
-          YAZI_PATH=$(grep "export YAZI_CONFIG_HOME=" '${lib.getExe pkgs.yazi}' | cut -d"'" -f2)
-
-          cat "$YAZI_PATH/yazi.toml" "$YAZI_PATH/theme.toml" "$YAZI_PATH/keymap.toml" | moor --lang toml
-        '';
-      };
+      custom.programs.print-config =
+        let
+          yaziDir = dirOf pkgs.yazi.configuration.constructFiles.yazi;
+        in
+        {
+          yazi = /* sh */ ''cat "${yaziDir}/yazi.toml" "${yaziDir}/theme.toml" "${yaziDir}/keymap.toml" | moor --lang toml'';
+        };
     };
 }

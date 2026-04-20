@@ -42,12 +42,28 @@
           recursiveMergeAttrs lhs.${name} value
         else if (lib.hasAttr name lhs && lib.isList value && lib.isList lhs.${name}) then
           lhs.${name} ++ value
+        else
+          value
+      ) rhs);
+
+    recursiveMergeAttrsList = lib.foldl' recursiveMergeAttrs { };
+
+    recursiveMergeAttrsAndStrings =
+      lhs: rhs:
+      lhs
+      // rhs
+      // (lib.mapAttrs (
+        name: value:
+        if (lib.hasAttr name lhs && lib.isAttrs value && lib.isAttrs lhs.${name}) then
+          recursiveMergeAttrsAndStrings lhs.${name} value
+        else if (lib.hasAttr name lhs && lib.isList value && lib.isList lhs.${name}) then
+          lhs.${name} ++ value
         else if (lib.hasAttr name lhs && lib.isString value && lib.isString lhs.${name}) then
           lhs.${name} + value
         else
           value
       ) rhs);
 
-    recursiveMergeAttrsList = lib.foldl' recursiveMergeAttrs { };
+    recursiveMergeAttrsAndStringsList = lib.foldl' recursiveMergeAttrsAndStrings { };
   };
 }

@@ -37,7 +37,9 @@ in
   inherit (flake.nixosConfigurations.${host}) pkgs;
   c = flake.nixosConfigurations.${host}.config;
   config = c;
-  co = c.custom;
+
+  # package alias for exposed packages
+  packages = self.packages.${pkgs.stdenv.hostPlatform.system};
 
   # your code here
 }
