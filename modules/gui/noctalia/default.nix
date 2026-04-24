@@ -48,10 +48,30 @@ in
                     )
                   '';
                 });
-            # default json settings for desktop
-            settings = baseNoctaliaSettings;
+
+            settings =
+              [
+                # don't expose toggle-speaker
+                (
+                  prev:
+                  lib.recursiveUpdate prev {
+                    bar.widgets.right = map (
+                      widget:
+                      if widget.id == "Volume" then
+                        widget // { middleClickCommand = "pwvucontrol || pavucontrol"; }
+                      else
+                        widget
+                    ) prev.bar.widgets.right;
+                  }
+                )
+                # don't set monitorForColors
+                (prev: lib.recursiveUpdate prev { colorSchemes.monitorForColors = ""; })
+              ]
+              |> lib.foldl' (curr: reducer: reducer curr) baseNoctaliaSettings;
+
             autoCopyConfig = false; # don't copy config on startup
             enableDumpScript = false; # dumps config as nix, not needed
+
             # for screen recorder plugin
             extraPackages = [ pkgs.gpu-screen-recorder ];
 

@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.12.8";
+    version = "0.12.9";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.12.8";
+      rev = "0.12.9";
       fetchSubmodules = false;
-      sha256 = "sha256-k9qFn9I+eeAq1kBfw6QRLRMDb6sIV+pgd5zpKNoc1ck=";
+      sha256 = "sha256-RP7eVqbnQ/uNCXh0HH8SXRIerMlkyHco+wpI9oxon0U=";
     };
   };
   mpv-deletefile = {
@@ -67,15 +67,15 @@
   };
   niri = {
     pname = "niri";
-    version = "e9c182a13c1d12762351ec01ce0ec711d41b0337";
+    version = "74d2b18603366b98ec9045ecf4a632422f472365";
     src = fetchFromGitHub {
       owner = "YaLTeR";
       repo = "niri";
-      rev = "e9c182a13c1d12762351ec01ce0ec711d41b0337";
+      rev = "74d2b18603366b98ec9045ecf4a632422f472365";
       fetchSubmodules = false;
-      sha256 = "sha256-nnv27JD0FOOqs1Hh67kydXFzZoEu8e0QyMf0R9AXaIw=";
+      sha256 = "sha256-mSxfoEs7DiDhMCBzprI/1K7UXzMISuGq0b7T06LVJXE=";
     };
-    date = "2026-04-20";
+    date = "2026-04-22";
   };
   rofi-themes = {
     pname = "rofi-themes";
@@ -102,15 +102,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "442d9080da7524c8e58e10c610b832538c87464d";
+    version = "ac82af3e10f9a32cecd9f87ac64b3f9de7c7aea7";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "442d9080da7524c8e58e10c610b832538c87464d";
+      rev = "ac82af3e10f9a32cecd9f87ac64b3f9de7c7aea7";
       fetchSubmodules = false;
-      sha256 = "sha256-5WxCUf/Lv3wms7IPgkK0lJuJhIPa1E46obOFASS8eZU=";
+      sha256 = "sha256-svc7I2E+tVMEUWUvIS6i3oTGfLq13eaI61T0c1MQ8qQ=";
     };
-    date = "2026-04-16";
+    date = "2026-04-23";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";
