@@ -17,9 +17,7 @@
 
           bin="$(basename "$dir")"
 
-          pushd "$dir" > /dev/null
           direnv exec "$dir" cargo run --release --bin "$bin" --manifest-path "$dir/Cargo.toml" -- "$@"
-          popd > /dev/null
         '';
       };
     };

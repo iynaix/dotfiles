@@ -24,12 +24,8 @@
     {
       # Bootloader.
       boot = {
-        initrd = {
-          # enable stage-1 bootloader
-          systemd.enable = true;
-          # always allow booting from usb
-          availableKernelModules = [ "uas" ];
-        };
+        # always allow booting from usb
+        initrd.availableKernelModules = [ "uas" ];
         loader = {
           efi = {
             canTouchEfiVariables = true;

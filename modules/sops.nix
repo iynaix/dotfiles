@@ -42,7 +42,7 @@
     in
     {
       sops = {
-        # to edit secrets file, run "sops hosts/secrets.json"
+        # to edit secrets file, run "sops modules/hosts/secrets.json"
         defaultSopsFile = ./hosts/secrets.json;
         useSystemdActivation = true;
 

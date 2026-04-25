@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }:
 {
@@ -61,44 +60,21 @@
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
-      source = (self.libCustom.nvFetcherSources pkgs).niri;
       niri' = inputs.wrappers.wrappers.niri.wrap {
         inherit pkgs;
-        package =
-          assert lib.assertMsg (lib.versionOlder pkgs.niri.version "25.12")
-            "update niri-ipc in dotfiles-rs, focal to use mainline niri-ipc";
-          (lib.mkForce (
-            pkgs.niri.overrideAttrs (
-              o:
-              (
-                source
-                // {
-                  inherit (o) version; # needed for annoying version check
+        package = lib.mkForce (
+          pkgs.niri.overrideAttrs (o: {
+            # inherit (o) version; # needed for annoying version check
 
-                  postPatch = ''
-                    patchShebangs resources/niri-session
-                    substituteInPlace resources/niri.service \
-                      --replace-fail 'ExecStart=niri' "ExecStart=$out/bin/niri"
-                  '';
+            patches = (o.patches or [ ]) ++ [
+              # unmerged PR to fix this
+              # https://github.com/YaLTeR/niri/pull/3004
+              ./transparent-fullscreen.patch
+            ];
 
-                  # creating an overlay for buildRustPackage overlay (NOTE: this is an IFD)
-                  # https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
-                  cargoDeps = pkgs.rustPlatform.importCargoLock {
-                    lockFile = "${source.src}/Cargo.lock";
-                    allowBuiltinFetchGit = true;
-                  };
-
-                  patches = (o.patches or [ ]) ++ [
-                    # unmerged PR to fix this
-                    # https://github.com/YaLTeR/niri/pull/3004
-                    ./transparent-fullscreen.patch
-                  ];
-
-                  doCheck = false; # faster builds
-                }
-              )
-            )
-          ));
+            doCheck = false; # faster builds
+          })
+        );
 
         v2-settings = true;
 
@@ -117,6 +93,17 @@
         enable = true;
         package = niri';
         useNautilus = false;
+      };
+
+      # don't kick me out of the session on rebuild
+      systemd.user.units."niri.service" = {
+        # add to the existing service, as drop-in so it doesn't generate the other sections
+        overrideStrategy = "asDropin";
+        text = ''
+          [Service]
+          X-StopIfChanged=false
+          X-RestartIfChanged=false
+        '';
       };
 
       # restart niri with new settings on rebuild

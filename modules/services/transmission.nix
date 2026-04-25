@@ -12,7 +12,9 @@
         name = "renamer";
         runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
         text = /* sh */ ''
+          pushd ${projects}/renamer
           direnv-cargo-run "${projects}/renamer" "$@"
+          popd
         '';
       };
     in

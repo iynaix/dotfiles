@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.11.4.1";
+    version = "0.11.6.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.11.4.1/helium-0.11.4.1-x86_64.AppImage";
-      sha256 = "sha256-EavHZuleVkgD4J+gcUQ2ZgGHjvWXzdamUh7r42bUkas=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.11.6.1/helium-0.11.6.1-x86_64.AppImage";
+      sha256 = "sha256-NvsSVeKr82ME8oPupU8Oyh9IbYerxAWJ5vRjvj4WyLo=";
     };
   };
   mango = {
@@ -64,18 +64,6 @@
       sha256 = "sha256-+eVga4b7KIBnfrtmlgq/0HNjQVS3SK6YWVXCPvOeOOc=";
     };
     date = "2025-04-04";
-  };
-  niri = {
-    pname = "niri";
-    version = "9438f59e2b9d8deb6fcec5922f8aca18162b673c";
-    src = fetchFromGitHub {
-      owner = "YaLTeR";
-      repo = "niri";
-      rev = "9438f59e2b9d8deb6fcec5922f8aca18162b673c";
-      fetchSubmodules = false;
-      sha256 = "sha256-EeAwmrvONsovL2qPwKGXF2xGhbo7MySesY3fW2pNLpM=";
-    };
-    date = "2026-04-24";
   };
   rofi-themes = {
     pname = "rofi-themes";
