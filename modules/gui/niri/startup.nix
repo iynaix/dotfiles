@@ -72,6 +72,10 @@
             RestartSec = 1;
             Restart = "on-failure";
           };
+
+          restartTriggers = [
+            config.programs.niri.package
+          ];
         };
       };
 

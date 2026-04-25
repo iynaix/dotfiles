@@ -55,6 +55,10 @@
             RestartSec = 1;
             Restart = "on-failure";
           };
+
+          restartTriggers = [
+            config.programs.hyprland.package
+          ];
         };
       };
 

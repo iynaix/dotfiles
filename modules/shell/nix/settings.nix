@@ -39,6 +39,7 @@
         };
 
         nix-index.enable = true;
+        command-not-found.enable = false;
 
         # run unpatched binaries on nixos
         nix-ld.enable = true;
