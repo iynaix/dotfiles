@@ -44,6 +44,26 @@
         inherit nattr;
         ynattr = pkgs.callPackage ynattrDrv { };
 
+        statix =
+          assert lib.assertMsg (lib.versionOlder pkgs.statix.version "0.5.9") "remove statix override";
+          pkgs.statix.overrideAttrs (
+            final: _prev: {
+              src = pkgs.fetchFromGitHub {
+                owner = "oppiliappan";
+                repo = "statix";
+                rev = "e9df54ce918457f151d2e71993edeca1a7af0132";
+                hash = "sha256-duH6Il124g+CdYX+HCqOGnpJxyxOCgWYcrcK0CBnA2M=";
+              };
+
+              cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+                inherit (final) src;
+                hash = "sha256-IeVGsrTXqmXbKRbJlBDv02fJ+rPRjwuF354/jZKRK/M=";
+              };
+
+              doInstallCheck = false; # checks `--version` which still says 0.5.8
+            }
+          );
+
         # creates a file with the symlink contents and renames the original symlink to .orig
         nsymlink = pkgs.writeShellApplication {
           name = "nsymlink";
@@ -394,6 +414,7 @@
     {
       nixpkgs.overlays = [
         (_: prev: {
+          inherit (pkgs.custom) statix;
           nix-init = inputs.wrappers.lib.wrapPackage {
             pkgs = prev;
             package = prev.nix-init;

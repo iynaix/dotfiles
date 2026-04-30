@@ -64,7 +64,7 @@
         inherit pkgs;
         package = lib.mkForce (
           pkgs.niri.overrideAttrs (o: {
-            # inherit (o) version; # needed for annoying version check
+            doInstallCheck = false; # disable annoying version check
 
             patches = (o.patches or [ ]) ++ [
               # unmerged PR to fix this

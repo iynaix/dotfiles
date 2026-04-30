@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-NvsSVeKr82ME8oPupU8Oyh9IbYerxAWJ5vRjvj4WyLo=",
+            "sha256": "sha256-qzc135IP5F2btxtOMUGMz+0azJhYL9KI0lcPG2KjcxU=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.11.6.1/helium-0.11.6.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.11.7.1/helium-0.11.7.1-x86_64.AppImage"
         },
-        "version": "0.11.6.1"
+        "version": "0.11.7.1"
     },
     "mango": {
         "cargoLock": null,
@@ -109,7 +109,7 @@
     },
     "rofi-themes": {
         "cargoLock": null,
-        "date": "2025-07-26",
+        "date": "2026-04-30",
         "extract": null,
         "name": "rofi-themes",
         "passthru": null,
@@ -121,12 +121,12 @@
             "name": null,
             "owner": "adi1090x",
             "repo": "rofi",
-            "rev": "093c1a79f58daab358199c4246de50357e5bf462",
-            "sha256": "sha256-iUX0Quae06tGd7gDgXZo1B3KYgPHU+ADPBrowHlv02A=",
+            "rev": "b0bfe927531e365f009d01810c26878c003f7cb8",
+            "sha256": "sha256-pM183MHOMuKJyLgthozM1MRsmhBM25VQgWc7CmLL2HI=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "093c1a79f58daab358199c4246de50357e5bf462"
+        "version": "b0bfe927531e365f009d01810c26878c003f7cb8"
     },
     "rusty-path-of-building": {
         "cargoLock": null,

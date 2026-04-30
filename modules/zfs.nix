@@ -8,16 +8,19 @@
     # NOTE: zfs datasets are created via install.sh
     {
       boot = {
-        kernelPackages = pkgs.linuxPackages_xanmod_latest;
+        kernelPackages =
+          assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")
+            "zfs 2.4.2 supports kernel 7.0 or greater";
+          pkgs.linuxPackages_xanmod;
         # lock xanmod version
         # kernelPackages =
-        #   assert lib.assertMsg (versionOlder pkgs.zfs_unstable.version "2.3")
-        #     "zfs 2.3 supports kernel 6.11 or greater";
+        # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")
+        #   "zfs 2.4.2 supports kernel 7.0 or greater";
         #   pkgs.linuxPackagesFor (
         #     pkgs.linux_xanmod_latest.override {
         #       argsOverride = rec {
         #         version = "6.10.11";
-        #         modDirVersion = versions.pad 3 "${version}-xanmod1";
+        #         modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
         #         src = pkgs.fetchFromGitHub {
         #           owner = "xanmod";
         #           repo = "linux";
@@ -36,6 +39,7 @@
               "/dev/disk/by-id"
             else
               "/dev/disk/by-partuuid";
+          forceImportRoot = false; # new default in 26.11
 
           package = pkgs.zfs_unstable;
         };

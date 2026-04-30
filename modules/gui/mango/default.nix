@@ -37,7 +37,7 @@
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) dots isVm;
+      inherit (config.custom.constants) isVm;
       mangowc' = inputs.wrappers.wrappers.mangowc.wrap {
         inherit pkgs;
         package = pkgs.mangowc.overrideAttrs (
@@ -67,7 +67,6 @@
         enable = true;
         package = mangowc'.wrap {
           configFile.content = ''
-            source-optional=${dots}/modules/gui/mango/mango.conf
             source-optional=${config.hj.xdg.config.directory}/mango/noctalia.conf
           '';
         };
@@ -75,7 +74,7 @@
 
       custom.programs = {
         print-config = {
-          mango = /* sh */ ''cat "${config.programs.mangowc.package.configuration.constructFiles.generatedConfig.outPath}" "${dots}/modules/gui/mango/mango.conf" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';
+          mango = /* sh */ ''cat "${config.programs.mangowc.package.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';
         };
       };
     };
