@@ -95,37 +95,6 @@
         useNautilus = false;
       };
 
-      # don't kick me out of the session on rebuild
-      systemd.user.units."niri.service" = {
-        # add to the existing service, as drop-in so it doesn't generate the other sections
-        overrideStrategy = "asDropin";
-        text = ''
-          [Service]
-          X-StopIfChanged=false
-          X-RestartIfChanged=false
-        '';
-      };
-
-      # restart niri with new settings on rebuild
-      system.userActivationScripts = {
-        niri-reload-config = {
-          text = lib.getExe (
-            pkgs.writeShellApplication {
-              name = "niri-reload-config";
-              runtimeInputs = [
-                niri'
-                pkgs.procps
-              ];
-              text = ''
-                if pgrep -x "niri" > /dev/null; then
-                  niri msg action load-config-file --path "${niri'.configuration.constructFiles.generatedConfig.outPath}"
-                fi
-              '';
-            }
-          );
-        };
-      };
-
       xdg.portal = {
         config = {
           niri = {
