@@ -21,10 +21,10 @@ let
   };
 in
 {
-  # expose generic btop package without disks set
   perSystem =
     { pkgs, ... }:
     {
+      # expose generic btop package without disks set
       packages.btop = inputs.wrappers.wrappers.btop.wrap {
         inherit pkgs;
         settings = baseBtopConf;
@@ -85,7 +85,7 @@ in
         ];
 
         custom.programs.print-config = {
-          btop = /* sh */ ''moor --lang ini "${pkgs.btop.configuration.flags."--config".data}"'';
+          btop = /* sh */ ''moor --lang ini "${pkgs.btop.configuration.constructFiles.generatedConfig.outPath}"'';
         };
       };
     };

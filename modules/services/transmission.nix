@@ -131,6 +131,7 @@
               genericName = "BitTorrent Client";
               icon = "transmission";
               exec = "transmission-remote -a %U";
+              mimeTypes = [ "x-scheme-handler/magnet" ];
             }
           ))
           (lib.hiPrio pkgs.makeDesktopItem {
@@ -142,11 +143,6 @@
           })
           renamer
         ];
-
-        # xdg handler for magnet links
-        xdg.mime.defaultApplications = {
-          "x-scheme-handler/magnet" = "transmission.desktop";
-        };
 
         custom = {
           persist.home.directories = [

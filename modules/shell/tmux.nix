@@ -85,7 +85,7 @@
       ];
 
       custom.programs.print-config = {
-        tmux = /* sh */ ''moor "${pkgs.tmux.configuration.flags."-f".data}"'';
+        tmux = /* sh */ ''moor "${pkgs.tmux.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

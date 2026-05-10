@@ -1,13 +1,12 @@
-{ self, ... }:
+{ inputs, ... }:
 {
-  flake.modules.nixos.gui =
+  perSystem =
     { pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.cava ];
-
-      hj.xdg.config.files."cava/config" = {
-        generator = self.libCustom.generators.toQuotedINI;
-        value = {
+      # expose generic btop package without disks set
+      packages.cava = inputs.wrappers.wrappers.cava.wrap {
+        inherit pkgs;
+        settings = {
           general = {
             # Smoothing mode. Can be 'normal', 'scientific' or 'waves'.
             mode = "normal";
@@ -113,6 +112,22 @@
             theme = "noctalia";
           };
         };
+      };
+    };
+
+  flake.modules.nixos.gui =
+    { pkgs, ... }:
+    {
+      nixpkgs.overlays = [
+        (_: _prev: {
+          inherit (pkgs.custom) cava;
+        })
+      ];
+
+      environment.systemPackages = [ pkgs.cava ];
+
+      custom.programs.print-config = {
+        cava = /* sh */ ''moor --lang ini "${pkgs.cava.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

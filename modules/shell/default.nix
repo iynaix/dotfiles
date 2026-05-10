@@ -91,6 +91,7 @@
         XDG_DOWNLOAD_DIR = "${homeDir}/Downloads";
         XDG_MUSIC_DIR = "${homeDir}/Music";
         XDG_PICTURES_DIR = "${homeDir}/Pictures";
+        XDG_PROJECTS_DIR = "${homeDir}/projects";
         XDG_PUBLICSHARE_DIR = "${homeDir}/Public";
         XDG_TEMPLATES_DIR = "${homeDir}/Templates";
         XDG_VIDEOS_DIR = "${homeDir}/Videos";
