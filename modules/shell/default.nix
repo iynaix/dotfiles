@@ -96,7 +96,7 @@
         XDG_TEMPLATES_DIR = "${homeDir}/Templates";
         XDG_VIDEOS_DIR = "${homeDir}/Videos";
       };
-      # mkdir then c
+      # mkdir then change to directory
       md = pkgs.writeShellApplication {
         name = "md";
         text = /* sh */ ''[[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"'';
@@ -124,7 +124,10 @@
           mime = "xdg-mime query filetype";
           mkdir = "mkdir -p";
           mount = "mount --mkdir";
+          mv = "mv -i";
           open = "xdg-open";
+          ping = "ping -c 5";
+          rm = "rm -I";
           py = "python";
           sl = "ls";
           w = "watch -cn1 -x cat";

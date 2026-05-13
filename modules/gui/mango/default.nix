@@ -49,7 +49,7 @@
               # https://github.com/DreamMaoMao/mangowc/pull/654
               (pkgs.fetchurl {
                 url = "https://github.com/mangowm/mango/commit/b1cf48fb81fa4a8ab7121e8ac93f433b20c607c0.patch";
-                hash = "sha256-mEC2Vkn4IuSGXCPPRQ0lzY5sBxk+BFDbygKD2XY7pgs=";
+                hash = "sha256-r+WAK+Ww9StvXskcgp+OdmuawAGtRNCdK6521m+RYGU=";
               })
             ];
           }
