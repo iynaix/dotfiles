@@ -5,7 +5,7 @@ This config is intended to be used with NixOS.
 ## Features
 
 - Multiple NixOS configurations, including desktop, laptops and VM
-- Persistence via impermanence (both `/` and `/home`)
+- Persistence via preservation (both `/` and `/home`)
 - Automatic ZFS snapshots with rotation
 - Flexible NixOS config via feature flags
 - sops-nix for managing secrets

@@ -124,54 +124,58 @@
         ];
 
         # setup persistence
-        environment.persistence = {
-          "/persist" = {
-            hideMounts = true;
-            files = lib.unique cfg.root.files;
-            directories = lib.unique (
-              [
-                "/var/log" # systemd journal is stored in /var/log/journal
-                "/var/lib/nixos" # for persisting user uids and gids
-              ]
-              ++ cfg.root.directories
-            );
+        preservation = {
+          enable = true;
 
-            users.${user} = {
-              files = lib.unique cfg.home.files;
+          preserveAt = {
+            "/persist" = {
+              commonMountOptions = [ "x-gvfs-hide" ];
+              files = lib.unique cfg.root.files;
               directories = lib.unique (
                 [
-                  "Desktop"
-                  "Documents"
-                  "Pictures"
+                  "/var/log" # systemd journal is stored in /var/log/journal
+                  "/var/lib/nixos" # for persisting user uids and gids
                 ]
-                ++ lib.optionals (host != "desktop") [
-                  "Downloads"
-                ]
-                ++ cfg.home.directories
+                ++ cfg.root.directories
               );
+
+              users.${user} = {
+                files = lib.unique cfg.home.files;
+                directories = lib.unique (
+                  [
+                    "Desktop"
+                    "Documents"
+                    "Pictures"
+                  ]
+                  ++ lib.optionals (host != "desktop") [
+                    "Downloads"
+                  ]
+                  ++ cfg.home.directories
+                );
+              };
             };
-          };
 
-          # cache are files that should be persisted, but not to snapshot
-          # e.g. npm, cargo cache etc, that could always be redownloaded
-          "/cache" = {
-            hideMounts = true;
-            files = lib.unique cfg.root.cache.files;
-            directories = [ "/var/lib/systemd/coredump" ] ++ lib.unique cfg.root.cache.directories;
+            # cache are files that should be persisted, but not to snapshot
+            # e.g. npm, cargo cache etc, that could always be redownloaded
+            "/cache" = {
+              commonMountOptions = [ "x-gvfs-hide" ];
+              files = lib.unique cfg.root.cache.files;
+              directories = [ "/var/lib/systemd/coredump" ] ++ lib.unique cfg.root.cache.directories;
 
-            users.${user} = {
-              files = lib.unique cfg.home.cache.files;
-              directories = lib.unique cfg.home.cache.directories;
+              users.${user} = {
+                files = lib.unique cfg.home.cache.files;
+                directories = lib.unique cfg.home.cache.directories;
+              };
             };
           };
         };
 
         custom.programs.print-config =
           let
-            getDirPath = prefix: d: "${prefix}${d.dirPath}/";
-            getFilePath = prefix: f: "${prefix}${f.filePath}";
-            persistCfg = config.environment.persistence."/persist";
-            persistCacheCfg = config.environment.persistence."/cache";
+            getDirPath = prefix: d: "${prefix}${d.directory}/";
+            getFilePath = prefix: f: "${prefix}${f.file}";
+            persistCfg = config.preservation.preserveAt."/persist";
+            persistCacheCfg = config.preservation.preserveAt."/cache";
             allDirectories =
               map (getDirPath "/persist") (persistCfg.directories ++ persistCfg.users.${user}.directories)
               ++ map (getDirPath "/cache") (

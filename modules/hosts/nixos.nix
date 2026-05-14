@@ -31,7 +31,7 @@ let
         inputs.hjem.nixosModules.default
         inputs.nix-index-database.nixosModules.nix-index
         inputs.noctalia.nixosModules.default
-        inputs.impermanence.nixosModules.impermanence
+        inputs.preservation.nixosModules.default
         inputs.sops-nix.nixosModules.sops
         extraConfig
       ];
