@@ -8,10 +8,7 @@
     # NOTE: zfs datasets are created via install.sh
     {
       boot = {
-        kernelPackages =
-          assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")
-            "zfs 2.4.2 supports kernel 7.0 or greater";
-          pkgs.linuxPackages_xanmod;
+        kernelPackages = pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
         # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")
@@ -112,12 +109,25 @@
       services.sanoid = {
         enable = true;
 
-        datasets = {
-          "zroot/persist" = {
+        templates = {
+          persist = {
             hourly = 50;
             daily = 15;
             weekly = 3;
             monthly = 1;
+          };
+
+          media = {
+            hourly = 3;
+            daily = 10;
+            weekly = 2;
+            monthly = 0;
+          };
+        };
+
+        datasets = {
+          "zroot/persist" = {
+            useTemplate = [ "persist" ];
           };
         };
       };

@@ -29,13 +29,6 @@ fn mirror_monitors(new_mon: &str) {
 }
 
 fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
-    let is_nstack = hyprland::keyword::Keyword::get("general:layout")
-        .expect("unable to get hyprland layout")
-        .value
-        .to_string()
-        .as_str()
-        == "nstack";
-
     let nix_info_monitors = NixJson::load().monitors;
 
     for (mon_name, wksps) in workspaces {
@@ -55,11 +48,7 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
                 )
                 .ok();
 
-                hyprland::keyword::Keyword::set(
-                    "workspace",
-                    nix_info_mon.layoutopts(*wksp, is_nstack),
-                )
-                .ok();
+                hyprland::keyword::Keyword::set("workspace", nix_info_mon.layoutopts(*wksp)).ok();
             }
         }
     }

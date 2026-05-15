@@ -16,29 +16,29 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.14.0";
+    version = "0.15.0";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.14.0/Exiled-Exchange-2-0.14.0.AppImage";
-      sha256 = "sha256-weW+urAFexy3jCih3hmHmBR3PkhLLFxG7Bq3e+EAI2U=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.0/Exiled-Exchange-2-0.15.0.AppImage";
+      sha256 = "sha256-THhGsptgZ90WU/ZXVWR/P5wV24uAFM5OGUgBUAhywMs=";
     };
   };
   helium = {
     pname = "helium";
-    version = "0.12.2.1";
+    version = "0.12.3.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.12.2.1/helium-0.12.2.1-x86_64.AppImage";
-      sha256 = "sha256-6bQuymGyoyusl4t9/z9K2udXH6hL8XNaqvUSlb0XxV0=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.12.3.1/helium-0.12.3.1-x86_64.AppImage";
+      sha256 = "sha256-VnOhzhAulvFNBB/0AD1d+K/TzfFL9Zwtk/vcm5vWl+I=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.12.9";
+    version = "0.13.0";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.12.9";
+      rev = "0.13.0";
       fetchSubmodules = false;
-      sha256 = "sha256-RP7eVqbnQ/uNCXh0HH8SXRIerMlkyHco+wpI9oxon0U=";
+      sha256 = "sha256-RBQfeTM8J0AWE+A7vYSIYt0fuLS1kNYZYoocNjKDAeo=";
     };
   };
   mpv-deletefile = {
@@ -90,15 +90,15 @@
   };
   yazi-plugins = {
     pname = "yazi-plugins";
-    version = "ac82af3e10f9a32cecd9f87ac64b3f9de7c7aea7";
+    version = "5d5c4803dd12bab4e4f19d606f8db0c871e6bec5";
     src = fetchFromGitHub {
       owner = "yazi-rs";
       repo = "plugins";
-      rev = "ac82af3e10f9a32cecd9f87ac64b3f9de7c7aea7";
+      rev = "5d5c4803dd12bab4e4f19d606f8db0c871e6bec5";
       fetchSubmodules = false;
-      sha256 = "sha256-svc7I2E+tVMEUWUvIS6i3oTGfLq13eaI61T0c1MQ8qQ=";
+      sha256 = "sha256-cZlnrlgv8+SFeNgIW69q//i/apcpvAv41q5W8bJwVaI=";
     };
-    date = "2026-04-23";
+    date = "2026-05-14";
   };
   yazi-time-travel = {
     pname = "yazi-time-travel";

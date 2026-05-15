@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{MIN_ULTRAWIDE_RATIO, full_path, json};
+use crate::{full_path, json};
 use serde::Deserialize;
 use sha2::Digest;
 
@@ -35,28 +35,16 @@ impl NixMonitor {
         }
     }
 
-    /// generate hyprnnstack layoutopts for a workspace
-    pub fn layoutopts(&self, workspace: i32, is_nstack: bool) -> String {
+    pub fn layoutopts(&self, workspace: i32) -> String {
         let mut opts = vec![workspace.to_string()];
 
         let is_vertical = self.transform % 2 == 1;
-        let is_ultrawide = f64::from(self.width) / f64::from(self.height) > MIN_ULTRAWIDE_RATIO;
 
         let orientation = format!(
-            "layoutopt:{prefix}orientation:{orientation}",
-            prefix = if is_nstack { "nstack-" } else { "" },
+            "layoutopt:orientation:{orientation}",
             orientation = if is_vertical { "top" } else { "left" }
         );
         opts.push(orientation);
-
-        if is_nstack {
-            let stacks = if is_ultrawide || is_vertical { 3 } else { 2 };
-            opts.push(format!("layoutopt:nstack-stacks:{stacks}"));
-        }
-
-        if is_nstack && !is_ultrawide {
-            opts.push("layoutopt:nstack-mfact:0.0".to_string());
-        }
 
         opts.join(",")
     }

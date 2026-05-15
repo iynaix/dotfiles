@@ -27,15 +27,6 @@
     lib.mkMerge [
       # subliminal
       {
-        # TODO: remove once hyperpyyaml is updated for ruamel-yaml >= 0.19
-        # use whisper-ctranslate2 from stable because hyperpyyaml (an indirect dependency) has a hard
-        # dependency on an older version of ruamel-yaml
-        nixpkgs.overlays = [
-          (_: _prev: {
-            inherit (pkgs.stable) whisper-ctranslate2;
-          })
-        ];
-
         environment = {
           systemPackages = [
             pkgs.python3Packages.subliminal

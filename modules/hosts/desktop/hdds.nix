@@ -9,16 +9,10 @@
       services.sanoid = {
         datasets = {
           "zfs-hgst10-1/media" = {
-            hourly = 3;
-            daily = 10;
-            weekly = 2;
-            monthly = 0;
+            useTemplate = [ "media" ];
           };
           "zfs-ironwolf22-1/media" = {
-            hourly = 3;
-            daily = 10;
-            weekly = 2;
-            monthly = 0;
+            useTemplate = [ "media" ];
           };
         };
       };

@@ -9,6 +9,7 @@
     {
       packages.tmux = inputs.wrappers.wrappers.tmux.wrap {
         inherit pkgs;
+        sourceSensible = true; # tmux sensible plugin
         prefix = "C-Space";
         terminal = "tmux-256color";
 

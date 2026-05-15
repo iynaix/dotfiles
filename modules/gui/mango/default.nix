@@ -4,6 +4,55 @@
   self,
   ...
 }:
+let
+  # copied from home-manager:
+  # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
+  toMangoConf =
+    {
+      attrs,
+      indentLevel ? 0,
+      importantPrefixes ? [ "$" ],
+    }:
+    let
+      initialIndent = lib.concatStrings (lib.replicate indentLevel "  ");
+
+      toMangoConf' =
+        indent: attrs:
+        let
+          sections = lib.filterAttrs (_n: v: lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v)) attrs;
+
+          mkSection =
+            n: attrs:
+            if lib.isList attrs then
+              (lib.concatMapStringsSep "\n" (a: mkSection n a) attrs)
+            else
+              ''
+                ${indent}${n} {
+                ${toMangoConf' "  ${indent}" attrs}${indent}}
+              '';
+
+          mkFields = lib.generators.toKeyValue {
+            listsAsDuplicateKeys = true;
+            inherit indent;
+          };
+
+          allFields = lib.filterAttrs (
+            _n: v: !(lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v))
+          ) attrs;
+
+          isImportantField =
+            n: _: lib.foldl (acc: prev: if lib.hasPrefix prev n then true else acc) false importantPrefixes;
+
+          importantFields = lib.filterAttrs isImportantField allFields;
+
+          fields = removeAttrs allFields (lib.mapAttrsToList (n: _: n) importantFields);
+        in
+        mkFields importantFields
+        + lib.concatStringsSep "\n" (lib.mapAttrsToList mkSection sections)
+        + mkFields fields;
+    in
+    toMangoConf' initialIndent attrs;
+in
 {
   flake.modules.nixos.core = {
     options.custom = {
@@ -54,12 +103,10 @@
             ];
           }
         );
-        configFile.content = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (
-          self.libCustom.generators.toHyprconf {
-            attrs = config.custom.programs.mango.settings;
-            importantPrefixes = [ "monitorrule" ];
-          }
-        );
+        configFile.content = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (toMangoConf {
+          attrs = config.custom.programs.mango.settings;
+          importantPrefixes = [ "monitorrule" ];
+        });
       };
     in
     {
