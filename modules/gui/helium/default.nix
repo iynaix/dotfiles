@@ -73,16 +73,24 @@
       };
 
       custom.programs = {
-        hyprland.settings.windowrule = [
-          # do not idle while watching videos
-          "match:class helium, idle_inhibit fullscreen"
-          "match:class helium, match:title (.*)(YouTube)(.*), idle_inhibit focus"
-          # float save dialogs
-          # save as
-          "match:initial_class helium, match:initial_title ^(Save File)$, float on, size <50% <50%"
-          # save image
-          "match:initial_class helium, match:initial_title (.*)(wants to save)$, float on, size <50% <50%"
-        ];
+        hyprland.luaText = /* lua */ ''
+          -- do not idle while watching videos
+          hl.window_rule({ match = { class = "helium" }, idle_inhibit = "fullscreen" })
+          hl.window_rule({ match = { class = "helium", title = ".*(YouTube).*" }, idle_inhibit = "focus" })
+          -- float save dialogs
+          -- save as
+          hl.window_rule({
+          	match = { initial_class = "helium", initial_title = "^(Save File)$" },
+          	float = true,
+          	size = "<50% <50%",
+          })
+          -- save image
+          hl.window_rule({
+          	match = { initial_class = "helium", initial_title = ".*(wants to save)$" },
+          	float = true,
+          	size = "<50% <50%",
+          })
+        '';
       };
 
       custom.persist = {

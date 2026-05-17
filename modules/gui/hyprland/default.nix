@@ -50,7 +50,7 @@
       };
 
       custom.programs.print-config = {
-        hyprland = /* sh */ ''cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/hypr/hyprland.conf" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.conf" | moor'';
+        hyprland = /* sh */ ''cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.lua" | moor --lang lua'';
       };
 
       custom.persist = {

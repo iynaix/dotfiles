@@ -13,7 +13,6 @@
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
     let
-      inherit (config.custom.constants) isLaptop;
       lock = pkgs.writeShellApplication {
         name = "lock";
         runtimeInputs = [ pkgs.noctalia-shell ];
@@ -43,12 +42,12 @@
           )
         ];
 
-        hyprland.settings = {
-          bind = [ "$mod_SHIFT_CTRL, x, exec, ${lib.getExe lock}" ];
+        # handle laptop lid on the WMs
+        hyprland.luaText = /* lua */ ''
+          hl.bind(mod .. " + SHIFT + CTRL + x", hl.dsp.exec_cmd("${lib.getExe lock}"))
 
-          # handle laptop lid
-          bindl = lib.mkIf isLaptop [ ",switch:Lid Switch, exec, ${lib.getExe lock}" ];
-        };
+          hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("${lib.getExe lock}"), { locked = true })
+        '';
 
         niri.settings = {
           binds = {

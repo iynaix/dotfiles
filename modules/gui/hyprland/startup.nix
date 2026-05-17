@@ -3,27 +3,33 @@
   flake.modules.nixos.wm =
     { config, ... }:
     {
-      custom.programs.hyprland.settings = {
-        exec-once = [
-          # stop fucking with my cursors
-          "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"
-          "hyprctl dispatch workspace 1"
-        ]
-        # generate from startup options
-        ++ map (
-          {
-            enable,
-            spawn,
-            workspace,
-            ...
-          }:
-          let
-            rules = lib.optionalString (workspace != null) "[workspace ${toString workspace} silent]";
-            exec = lib.concatStringsSep " " spawn;
-          in
-          lib.optionalString enable "${rules} ${exec}"
-        ) config.custom.startup;
-      };
+      custom.programs.hyprland.luaText =
+        let
+          cmds =
+            # stop fucking with my cursors
+            [
+              "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"
+              "hyprctl dispatch workspace 1"
+            ]
+            ++ map (
+              {
+                enable,
+                spawn,
+                workspace,
+                ...
+              }:
+              let
+                rules = lib.optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+                exec = lib.concatStringsSep " " spawn;
+              in
+              lib.optionalString enable "${rules} ${exec}"
+            ) config.custom.startup;
+        in
+        /* lua */ ''
+          hl.on("hyprland.start", function ()
+            ${lib.concatMapStringsSep "\n" (cmd: ''hl.exec_cmd("${cmd}")'') cmds}
+          end)
+        '';
 
       systemd.user = {
         # ly -> hyprland-start -> exec-once hyprland-session.service -> startupServices

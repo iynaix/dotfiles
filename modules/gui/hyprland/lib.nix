@@ -1,122 +1,14 @@
 { lib, ... }:
 let
-  # copied from home-manager:
-  # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
-  toHyprconf =
-    {
-      attrs,
-      indentLevel ? 0,
-      importantPrefixes ? [ "$" ],
-    }:
-    let
-      initialIndent = lib.concatStrings (lib.replicate indentLevel "  ");
-
-      toHyprconf' =
-        indent: attrs:
-        let
-          sections = lib.filterAttrs (_n: v: lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v)) attrs;
-
-          mkSection =
-            n: attrs:
-            if lib.isList attrs then
-              (lib.concatMapStringsSep "\n" (a: mkSection n a) attrs)
-            else
-              ''
-                ${indent}${n} {
-                ${toHyprconf' "  ${indent}" attrs}${indent}}
-              '';
-
-          mkFields = lib.generators.toKeyValue {
-            listsAsDuplicateKeys = true;
-            inherit indent;
-          };
-
-          allFields = lib.filterAttrs (
-            _n: v: !(lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v))
-          ) attrs;
-
-          isImportantField =
-            n: _: lib.foldl (acc: prev: if lib.hasPrefix prev n then true else acc) false importantPrefixes;
-
-          importantFields = lib.filterAttrs isImportantField allFields;
-
-          fields = removeAttrs allFields (lib.mapAttrsToList (n: _: n) importantFields);
-        in
-        mkFields importantFields
-        + lib.concatStringsSep "\n" (lib.mapAttrsToList mkSection sections)
-        + mkFields fields;
-    in
-    toHyprconf' initialIndent attrs;
-
-  # hyprland settings type, copied from home-manager:
-  # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
-  hyprlandSettingsType = lib.mkOption {
-    type =
-      let
-        valueType =
-          lib.types.nullOr (
-            lib.types.oneOf [
-              lib.types.bool
-              lib.types.int
-              lib.types.float
-              lib.types.str
-              lib.types.path
-              (lib.types.attrsOf valueType)
-              (lib.types.listOf valueType)
-            ]
-          )
-          // {
-            description = "Hyprland configuration value";
-          };
-      in
-      valueType;
-    default = { };
-    description = ''
-      Hyprland configuration written in Nix. Entries with the same key
-      should be written as lists. Variables' and colors' names should be
-      quoted. See <https://wiki.hypr.land> for more examples.
-    '';
-    example = lib.literalExpression ''
-      {
-        decoration = {
-          shadow_offset = "0 5";
-          "col.shadow" = "rgba(00000099)";
-        };
-
-        "$mod" = "SUPER";
-
-        bindm = [
-          # mouse movements
-          "$mod, mouse:272, movewindow"
-          "$mod, mouse:273, resizewindow"
-          "$mod ALT, mouse:272, resizewindow"
-        ];
-      }
-    '';
-  };
   hyprlandOptions = {
-    plugins = lib.mkOption {
-      type = lib.types.listOf (lib.types.either lib.types.package lib.types.path);
-      default = [ ];
-      description = ''
-        List of Hyprland plugins to use. Can either be packages or
-        absolute plugin paths.
-      '';
+    luaText = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = "Hyprland lua config";
     };
-    qtile = lib.mkEnableOption "qtile like behavior for workspaces";
-    settings = hyprlandSettingsType;
   };
 in
 {
-  flake.libCustom = {
-    generators = {
-      inherit toHyprconf;
-    };
-    types = {
-      inherit hyprlandSettingsType;
-    };
-  };
-
   flake.wrappers.hyprland =
     {
       config,
@@ -127,7 +19,7 @@ in
       imports = [ wlib.modules.default ];
 
       options = hyprlandOptions // {
-        "hyprland.conf" = lib.mkOption {
+        "hyprland.lua" = lib.mkOption {
           type = wlib.types.file config.pkgs;
           default.path = config.constructFiles.generatedConfig.path;
           default.content = "";
@@ -138,35 +30,8 @@ in
       config.package = lib.mkDefault config.pkgs.hyprland;
 
       config.constructFiles.generatedConfig = {
-        relPath = "hyprland.conf";
-        # don't use lib.mkMerge as the order is important
-        content =
-          lib.concatMapStrings
-            (
-              attrs:
-              toHyprconf {
-                inherit attrs;
-                importantPrefixes = [
-                  "$"
-                  "bezier"
-                  "name"
-                  "output"
-                ];
-              }
-            )
-            [
-              # handle the plugins, loaded before the settings, implementation from home-manager:
-              # https://github.com/nix-community/home-manager/blob/master/modules/services/window-managers/hyprland.nix
-              {
-                "exec-once" =
-                  let
-                    mkEntry =
-                      entry: if lib.types.package.check entry then "${entry}/lib/lib${entry.pname}.so" else entry;
-                  in
-                  map (p: "hyprctl plugin load ${mkEntry p}") config.plugins;
-              }
-              config.settings
-            ];
+        relPath = "hyprland.lua";
+        content = config.luaText;
       };
 
       # validate hyprland config, filter out source to non-existent file
@@ -176,8 +41,7 @@ in
         runHook preInstall
         # filter out the source directives for validation, the nix sandbox won't have those files
         export XDG_RUNTIME_DIR=$(mktemp -d)
-        grep -v '^source' "${config.constructFiles.generatedConfig.path}" > config_without_source.conf
-        ${lib.getExe config.package} --verify-config -c config_without_source.conf
+        ${lib.getExe config.package} --verify-config -c "${config.constructFiles.generatedConfig.path}"
         runHook postInstall
       '';
 
@@ -185,7 +49,7 @@ in
         "share/wayland-sessions/*.desktop"
       ];
       config.flags = {
-        "--config" = config."hyprland.conf".path;
+        "--config" = config.constructFiles.generatedConfig.path;
       };
     };
 

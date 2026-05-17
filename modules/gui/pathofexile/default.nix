@@ -28,23 +28,21 @@
       ];
 
       custom.programs = {
-        hyprland.settings = {
-          # NOTE: multiple rules so they are OR-ed
-          windowrule = [
-            # poe1 / poe2
-            "match:title (Path of Exile( 2)?), tag +poe"
-            "match:initial_title (Path of Exile( 2)?), tag +poe"
-            "match:class (steam_app_(238960|2694490)), tag +poe"
-            "match:initial_class (steam_app_(238960|2694490)), tag +poe"
-            # poe1 / poe2 rules
-            "match:tag poe, workspace 5, fullscreen on, idle_inhibit always"
-            # woke poe1 / poe2 trade
-            "match:title (Awakened PoE Trade), tag +apt"
-            "match:title (Exiled Exchange 2), tag +apt"
-            # "match:tag apt, float on, no_blur on, no_shadow on, no_focus on, render_unfocused on, border_size 0"
-            "match:tag apt, float on, no_blur on, no_shadow on, border_size 0"
-          ];
-        };
+        hyprland.luaText = /* lua */ ''
+          -- poe1 / poe2
+          hl.window_rule({ match = { title = "Path of Exile( 2)?" }, tag = "+poe" })
+          hl.window_rule({ match = { initial_title = "Path of Exile( 2)?" }, tag = "+poe" })
+          hl.window_rule({ match = { class = "steam_app_(238960|2694490)" }, tag = "+poe" })
+          hl.window_rule({ match = { initial_class = "steam_app_(238960|2694490)" }, tag = "+poe" })
+
+          -- poe1 / poe2 rules
+          hl.window_rule({ match = { tag = "poe" }, workspace = "5", fullscreen = true, idle_inhibit = "always" })
+
+          -- woke poe1 / poe2 trade
+          hl.window_rule({ match = { title = "Awakened PoE Trade" }, tag = "+apt" })
+          hl.window_rule({ match = { title = "Exiled Exchange 2" }, tag = "+apt" })
+          hl.window_rule({ match = { tag = "apt" }, float = true, no_blur = true, no_shadow = true, border_size = 0 })
+        '';
 
         niri.settings.window-rules = [
           # poe1 / poe2

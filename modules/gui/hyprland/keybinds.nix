@@ -1,149 +1,114 @@
-{ lib, self, ... }:
 {
   flake.modules.nixos.wm =
     { config, ... }:
     let
       inherit (config.custom.constants) dots projects;
-      inherit (config.custom.hardware) monitors;
       termExec = cmd: "ghostty -e ${cmd}";
-      qtile_like = config.custom.programs.hyprland.qtile;
     in
     {
-      custom.programs.hyprland.settings = {
-        bind = [
-          "$mod, Return, exec, ghostty"
-          "$mod_SHIFT, Return, exec, noctalia-ipc launcher toggle"
-          "$mod, BackSpace, killactive,"
-          "$mod, e, exec, nemo ${config.hj.directory}/Downloads"
-          "$mod_SHIFT, e, exec, ${termExec "yazi ${config.hj.directory}/Downloads}"}"
-          "$mod, w, exec, helium"
-          "$mod_SHIFT, w, exec, helium --incognito"
-          "$mod, v, exec, ${termExec "nvim"}"
-          "$mod_SHIFT, v, exec, noctalia-ipc plugin:projects toggle"
-          ''$mod, period, exec, focus-or-run "dotfiles - VSCodium" "codium ${dots}"''
-          ''$mod_SHIFT, period, exec, focus-or-run "nixpkgs - VSCodium" "codium ${projects}/nixpkgs"''
+      custom.programs.hyprland.luaText = /* lua */ ''
+        -- programs
+        hl.bind(mod .. " + Return", hl.dsp.exec_cmd("ghostty"))
+        hl.bind(mod .. " + SHIFT + Return", hl.dsp.exec_cmd("noctalia-ipc launcher toggle"))
+        hl.bind(mod .. " + e", hl.dsp.exec_cmd("nemo ${config.hj.directory}/Downloads"))
+        hl.bind(mod .. " + SHIFT + e", hl.dsp.exec_cmd("${termExec "yazi ${config.hj.directory}/Downloads"}"))
+        hl.bind(mod .. " + w", hl.dsp.exec_cmd("helium"))
+        hl.bind(mod .. " + SHIFT + w", hl.dsp.exec_cmd("helium --incognito"))
+        hl.bind(mod .. " + v", hl.dsp.exec_cmd("${termExec "nvim"}"))
+        hl.bind(mod .. " + SHIFT + v", hl.dsp.exec_cmd("noctalia-ipc plugin:projects toggle"))
+        hl.bind(
+          mod .. " + period",
+          hl.dsp.exec_cmd('focus-or-run "dotfiles - VSCodium" "codium ${dots}"')
+        )
+        hl.bind(
+          mod .. " + SHIFT + period",
+          hl.dsp.exec_cmd('focus-or-run "nixpkgs - VSCodium" "codium ${projects}/nixpkgs"')
+        )
 
-          # exit hyprland
-          "ALT, F4, exit,"
+        -- noctalia bar
+        hl.bind(mod .. " + a", hl.dsp.exec_cmd("noctalia-ipc bar toggle"))
+        hl.bind(mod .. " + SHIFT + a", hl.dsp.exec_cmd("noctalia-reload"))
 
-          "CTRL_ALT, Delete, exec, noctalia-ipc sessionMenu toggle"
+        -- clipboard history
+        hl.bind(mod .. " + CTRL + v", hl.dsp.exec_cmd("noctalia-ipc launcher clipboard"))
 
-          # toggle the bar
-          "$mod, a, exec, noctalia-ipc bar toggle"
+        -- notification history
+        hl.bind(mod .. " + n", hl.dsp.exec_cmd("noctalia-ipc notifications toggleHistory"))
 
-          # restart noctalia
-          "$mod_SHIFT, a, exec, noctalia-reload"
+        -- wallpaper
+        hl.bind(mod .. " + apostrophe", hl.dsp.exec_cmd("wallpaper select"))
+        hl.bind("ALT + apostrophe", hl.dsp.exec_cmd("wallpaper history"))
 
-          # clipboard history
-          "$mod_CTRL, v, exec, noctalia-ipc launcher clipboard"
+        -- reset monitors
+        hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("hypr-monitors"))
 
-          # notification history
-          "$mod, n, exec, noctalia-ipc notifications toggleHistory"
+        -- exit / reboot
+        hl.bind("ALT + F4", hl.dsp.exit())
+        hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("noctalia-ipc sessionMenu toggle"))
 
-          # reset monitors
-          "CTRL_SHIFT, Escape, exec, hypr-monitors"
+        -- moving between windows
+        hl.bind(mod .. " + h", hl.dsp.focus({ direction = "l"}))
+        hl.bind(mod .. " + l", hl.dsp.focus({ direction = "r"}))
+        hl.bind(mod .. " + j", hl.dsp.focus({ direction = "u"}))
+        hl.bind(mod .. " + k", hl.dsp.focus({ direction = "d"}))
 
-          "$mod, h, movefocus, l"
-          "$mod, l, movefocus, r"
-          "$mod, j, movefocus, u"
-          "$mod, k, movefocus, d"
+        hl.bind(mod .. " + SHIFT + h", hl.dsp.window.move({ direction = "l" }))
+        hl.bind(mod .. " + SHIFT + l", hl.dsp.window.move({ direction = "r" }))
+        hl.bind(mod .. " + SHIFT + k", hl.dsp.window.move({ direction = "u" }))
+        hl.bind(mod .. " + SHIFT + j", hl.dsp.window.move({ direction = "d" }))
 
-          "$mod_SHIFT, h, movewindow, l"
-          "$mod_SHIFT, l, movewindow, r"
-          "$mod_SHIFT, k, movewindow, u"
-          "$mod_SHIFT, j, movewindow, d"
+        -- workspace switching / moving
+        for i = 1, 10 do
+          local key = i % 10 -- 10 maps to key 0
+          hl.bind(mod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
+          hl.bind(mod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
+        end
 
-          "$mod, b, layoutmsg, swapwithmaster"
+        -- focus the previous / next workspace in the current monitor (DE style)
+        hl.bind(mod .. " + Left", hl.dsp.focus({ workspace = "m-1" }))
+        hl.bind(mod .. " + Right", hl.dsp.focus({ workspace = "m+1" }))
 
-          # focus the previous / next workspace in the current monitor (DE style)
-          "$mod, Left, workspace, m-1"
-          "$mod, Right, workspace, m+1"
+        -- window management
+        hl.bind(mod .. " + BackSpace", hl.dsp.window.kill())
+        hl.bind(mod .. " + z", hl.dsp.window.fullscreen({ type = "maximize" })) -- monocle
+        hl.bind(mod .. " + f", hl.dsp.window.fullscreen({ type = "fullscreen" })) -- fullscreen
+        hl.bind(mod .. " + SHIFT + f", hl.dsp.window.fullscreen_state({ client = -1, internal = 2 })) -- fakefullscreen
+        hl.bind(mod .. " + g", hl.dsp.window.float({ action = "toggle" }))
+        hl.bind(mod .. " + s", hl.dsp.window.pin())
+        hl.bind(mod .. " + grave", hl.dsp.focus({ last = true }))
 
-          # monocle mode
-          "$mod, z, fullscreen, 1"
+        -- cycle windows (classic alt tab in a workspace)
+        hl.bind("ALT + Tab", hl.dsp.window.cycle_next({ next = true }))
+        hl.bind("ALT + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }))
 
-          # fullscreen
-          "$mod, f, fullscreen, 0"
-          # "$mod_SHIFT, f, fakefullscreen"
-          "$mod_SHIFT, f, fullscreenstate, -1 2"
+        -- cycle between windows of the same class
+        hl.bind("CTRL + ALT + Tab", hl.dsp.exec_cmd("wm-same-class next"))
+        hl.bind("CTRL + ALT + SHIFT + Tab", hl.dsp.exec_cmd("wm-same-class prev"))
 
-          # floating
-          "$mod, g, togglefloating"
+        -- picture in picture mode
+        hl.bind(mod .. " + p", hl.dsp.exec_cmd("wm-pip"))
 
-          # sticky
-          "$mod, s, pin"
+        -- monitor focus / move to monitor
+        hl.bind(mod .. " + Tab", hl.dsp.focus({ monitor = "+1" }))
+        hl.bind(mod .. " + SHIFT + Tab", hl.dsp.window.move({ monitor = "+1" }))
 
-          # focus next / previous monitor
-          "$mod, Tab, focusmonitor, +1"
-          # move to next / previous monitor
-          "$mod_SHIFT, Tab, movewindow, mon:+1"
+        -- master layout
+        hl.bind(mod .. " + b", hl.dsp.layout("swapwithmaster"))
+        hl.bind(mod .. " + m", hl.dsp.layout("addmaster"))
+        hl.bind(mod .. " + SHIFT + m", hl.dsp.layout("removemaster"))
 
-          # classic alt tab in a workspace
-          "ALT, Tab, cyclenext"
-          "ALT_SHIFT, Tab, cyclenext, prev"
+        -- move/resize windows with mouse
+        hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+        hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-          # toggle between prev and current windows
-          "$mod, grave, focuscurrentorlast"
+        -- scroll workspaces with mouse wheel
+        hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+        hl.bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
-          # switches to the next / previous window of the same class
-          "CTRL_ALT, Tab, exec, wm-same-class next"
-          "CTRL_ALT_SHIFT, Tab, exec, wm-same-class prev"
-
-          # picture in picture mode
-          "$mod, p, exec, wm-pip"
-
-          # add / remove master windows
-          "$mod, m, layoutmsg, addmaster"
-          "$mod_SHIFT, m, layoutmsg, removemaster"
-
-          # rotate via switching master orientation
-          # "$mod, r, layoutmsg, orientationcycle left top"
-
-          # Scroll through existing workspaces with mainMod + scroll
-          "$mod, mouse_down, workspace, e+1"
-          "$mod, mouse_up, workspace, e-1"
-
-          # switching wallpapers or themes
-          "$mod, apostrophe, exec, wallpaper select"
-          # "$mod_SHIFT, apostrophe, exec, rofi-wallust-theme"
-          "ALT, apostrophe, exec, wallpaper history"
-
-          # special keys
-          # "XF86AudioPlay, mpvctl playpause"
-
-          # audio
-          ",XF86AudioLowerVolume, exec, pamixer -d 5"
-          ",XF86AudioRaiseVolume, exec, pamixer -i 5"
-          ",XF86AudioMute, exec, pamixer -t"
-        ]
-        # workspace keybinds
-        ++ (lib.flatten (
-          (self.libCustom.mapWorkspaces (
-            { workspace, key, ... }:
-            if qtile_like then
-              [
-                # Switch workspaces with mainMod + [0-9]
-                "$mod, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
-                # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
-                "$mod_SHIFT, ${key}, focusworkspaceoncurrentmonitor, ${workspace}"
-              ]
-            else
-              [
-                # Switch workspaces with mainMod + [0-9]
-                "$mod, ${key}, workspace, ${workspace}"
-                # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                "$mod_SHIFT, ${key}, movetoworkspace, ${workspace}"
-              ]
-          ))
-            monitors
-        ));
-
-        # Move/resize windows with mainMod + LMB/RMB and dragging
-        bindm = [
-          "$mod, mouse:272, movewindow"
-          "$mod, mouse:273, resizewindow"
-        ];
-      };
+        -- audio
+        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5"))
+        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5"))
+        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"))
+      '';
     };
 }

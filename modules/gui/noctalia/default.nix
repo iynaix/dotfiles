@@ -286,15 +286,11 @@ in
 
         programs = {
           # setup blur for hyprland
-          hyprland.settings = {
-            windowrule = [
-              "match:class dev.noctalia.noctalia-qs, rounding 20"
-            ];
+          hyprland.luaText = /* lua */ ''
+            hl.window_rule({ match = { class = "dev.noctalia.noctalia-qs" }, rounding = 20 })
 
-            layerrule = [
-              "match:namespace noctalia-background-.*$, ignore_alpha 0.5, blur on"
-            ];
-          };
+            hl.layer_rule({ match = { namespace = "noctalia-background-.*" }, ignore_alpha = 0.5, blur = true })
+          '';
 
           niri.settings = {
             # settings window blur

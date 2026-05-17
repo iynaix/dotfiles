@@ -354,12 +354,12 @@
     { pkgs, ... }:
     {
       custom.programs = {
-        hyprland.settings.windowrule = [
-          # do not idle while watching videos
-          "match:class mpv, idle_inhibit focus"
-          # fix mpv-dynamic-crop unmaximizing the window
-          "match:class mpv, suppress_event maximize"
-        ];
+        hyprland.luaText = /* lua */ ''
+          -- do not idle while watching videos
+          hl.window_rule({ match = { class = "mpv" }, idle_inhibit = "focus" })
+          -- fix mpv-dynamic-crop unmaximizing the window
+          hl.window_rule({ match = { class = "mpv" }, suppress_event = "maximize" })
+        '';
       };
 
       nixpkgs.overlays = [

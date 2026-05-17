@@ -30,14 +30,12 @@
       };
 
       custom.programs = {
-        hyprland.settings = {
-          bind = [
-            "$mod, backslash, exec, focal image --area selection --no-notify --no-save --no-rounded-windows"
-            "$mod_SHIFT, backslash, exec, focal image --edit swappy --rofi --no-rounded-windows"
-            "$mod_CTRL, backslash, exec, focal image --area selection --ocr"
-            "ALT, backslash, exec, focal video --rofi --no-rounded-windows"
-          ];
-        };
+        hyprland.luaText = /* lua */ ''
+          hl.bind(mod .. " + backslash", hl.dsp.exec_cmd("focal image --area selection --no-notify --no-save --no-rounded-windows"))
+          hl.bind(mod .. " + SHIFT + backslash", hl.dsp.exec_cmd("focal image --edit swappy --rofi --no-rounded-windows"))
+          hl.bind(mod .. " + CTRL + backslash", hl.dsp.exec_cmd("focal image --area selection --ocr"))
+          hl.bind("ALT + backslash", hl.dsp.exec_cmd("focal video --rofi --no-rounded-windows"))
+        '';
 
         niri.settings = {
           binds = {

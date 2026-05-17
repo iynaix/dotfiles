@@ -8,10 +8,10 @@
       ];
 
       custom.programs = {
-        hyprland.settings.bind = [
-          ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
-          ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
-        ];
+        hyprland.luaText = /* lua */ ''
+          hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"))
+          hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set +5%"))
+        '';
 
         niri.settings.binds = {
           "XF86MonBrightnessDown" = _: {
