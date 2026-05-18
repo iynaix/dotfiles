@@ -77,13 +77,16 @@
           fsType = "zfs";
         };
 
-        # by default, /tmp is not a tmpfs on nixos as some build artifacts can be stored there
-        # when using / as a small tmpfs for impermanence, /tmp can then easily run out of space,
-        # so create a dataset for /tmp to prevent this
-        # /tmp is cleared on boot via `boot.tmp.cleanOnBoot = true;`
+        # create a 5GB tmpfs for /tmp, separate from "/" to keep root small
         "/tmp" = {
-          device = "zroot/tmp";
-          fsType = "zfs";
+          device = "tmpfs";
+          fsType = "tmpfs";
+          options = [
+            "defaults"
+            # NOTE: this is the max, it is not pre-allocated
+            "size=5G"
+            "mode=755"
+          ];
         };
 
         "/persist" = {

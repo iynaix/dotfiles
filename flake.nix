@@ -63,7 +63,7 @@
     };
 
     focal = {
-      url = "github:iynaix/focal/blur";
+      url = "github:iynaix/focal";
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";

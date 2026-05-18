@@ -24,7 +24,6 @@ The *entire* disk will be formatted with a 1GB boot partition
 The following ZFS datasets will be created:
     - zroot/root (mounted at / with blank snapshot)
     - zroot/nix (mounted at /nix)
-    - zroot/tmp (mounted at /tmp)
     - zroot/persist (mounted at /persist)
     - zroot/cache (mounted at /cache)
 
@@ -172,10 +171,6 @@ sudo mount --mkdir "$BOOTDISK" /mnt/boot
 echo "Creating /nix"
 sudo zfs create -o mountpoint=legacy zroot/nix
 sudo mount --mkdir -t zfs zroot/nix /mnt/nix
-
-echo "Creating /tmp"
-sudo zfs create -o mountpoint=legacy zroot/tmp
-sudo mount --mkdir -t zfs zroot/tmp /mnt/tmp
 
 echo "Creating /cache"
 sudo zfs create -o mountpoint=legacy zroot/cache

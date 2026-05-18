@@ -83,9 +83,6 @@
       };
 
       config = {
-        # clear /tmp on boot, since it's a zfs dataset
-        boot.tmp.cleanOnBoot = true;
-
         # root and home on tmpfs
         fileSystems."/" = lib.mkForce {
           device = "tmpfs";
