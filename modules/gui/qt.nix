@@ -54,9 +54,9 @@
         };
 
         systemPackages = with pkgs; [
-          qt6Packages.qt6ct
-          qt6Packages.qtstyleplugin-kvantum
-          qt6Packages.qtwayland
+          kdePackages.qt6ct
+          kdePackages.qtstyleplugin-kvantum
+          kdePackages.qtwayland
         ];
       };
 
@@ -91,9 +91,9 @@
           };
         in
         {
-          "qt5ct.conf" = createQtctConf "qt5ct.conf" ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
+          "qt5ct.conf" = createQtctConf "qt5ct/qt5ct.conf" ''"${defaultFont},-1,5,50,0,0,0,0,0"'';
           "qt6ct.conf" =
-            createQtctConf "qt6ct.conf" ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
+            createQtctConf "qt6ct/qt6ct.conf" ''"${defaultFont},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular"'';
         };
 
       hj.xdg.config.files = {
@@ -107,6 +107,11 @@
             General.theme = "Kvantum-Tokyo-Night";
           };
         };
+
+        "kdeglobals".text = ''
+          [UiSettings]
+          ColorScheme=Kvantum-Tokyo-Night
+        '';
       };
     };
 }

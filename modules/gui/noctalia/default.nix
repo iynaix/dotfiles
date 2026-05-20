@@ -71,7 +71,7 @@ in
           enableDumpScript = false; # dumps config as nix, not needed
 
           # for screen recorder plugin
-          extraPackages = [ pkgs.gpu-screen-recorder ];
+          runtimePkgs = [ pkgs.gpu-screen-recorder ];
 
           constructFiles =
             let

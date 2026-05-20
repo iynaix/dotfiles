@@ -206,7 +206,7 @@
         baseYaziConf
         // {
           inherit pkgs;
-          extraPackages = with pkgs; [
+          runtimePkgs = with pkgs; [
             unar
             exiftool
           ];
