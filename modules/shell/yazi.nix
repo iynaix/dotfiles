@@ -7,16 +7,9 @@
   perSystem =
     { pkgs, ... }:
     let
-      sources = self.libCustom.nvFetcherSources pkgs;
-      mkYaziPlugin = name: text: {
-        "${name}" = toString (pkgs.writeTextDir "${name}.yazi/main.lua" text) + "/${name}.yazi";
-      };
       baseYaziConf = self.libCustom.recursiveMergeAttrsList [
         {
-          plugins = {
-            full-border = "${sources.yazi-plugins.src}/full-border.yazi";
-            git = "${sources.yazi-plugins.src}/git.yazi";
-          };
+          plugins = { inherit (pkgs.yaziPlugins) full-border git; };
 
           constructFiles = {
             init = {
@@ -180,17 +173,8 @@
         }
 
         # smart-enter: enter for directory, open for file
-        # https://yazi-rs.github.io/docs/tips/#smart-enter
         {
-          plugins = mkYaziPlugin "smart-enter" ''
-            --- @sync entry
-            return {
-            	entry = function()
-                local h = cx.active.current.hovered
-                ya.manager_emit(h and h.cha.is_dir and "enter" or "open", { hovered = true })
-              end,
-            }
-          '';
+          plugins = { inherit (pkgs.yaziPlugins) smart-enter; };
           settings = {
             keymap.mgr.prepend_keymap = [
               {
@@ -203,23 +187,8 @@
         }
 
         # smart-paste: paste files without entering the directory
-        # https://yazi-rs.github.io/docs/tips/#smart-enter
         {
-          plugins = mkYaziPlugin "smart-paste" ''
-            --- @sync entry
-            return {
-              entry = function()
-                local h = cx.active.current.hovered
-                if h and h.cha.is_dir then
-                  ya.manager_emit("enter", {})
-                  ya.manager_emit("paste", {})
-                  ya.manager_emit("leave", {})
-                else
-                  ya.manager_emit("paste", {})
-                end
-              end,
-            }
-          '';
+          plugins = { inherit (pkgs.yaziPlugins) smart-paste; };
           settings = {
             keymap.mgr.prepend_keymap = [
               {
@@ -230,35 +199,6 @@
             ];
           };
         }
-
-        # arrow: file navigation wraparound
-        {
-          plugins = mkYaziPlugin "arrow" ''
-            --- @sync entry
-            return {
-              entry = function(_, job)
-                local current = cx.active.current
-                local new = (current.cursor + job.args[1]) % #current.files
-                ya.manager_emit("arrow", { new - current.cursor })
-              end,
-            }
-          '';
-          settings = {
-            keymap.mgr.prepend_keymap = [
-              {
-                on = "k";
-                run = "plugin arrow -1";
-              }
-              {
-                on = "j";
-                run = "plugin arrow 1";
-              }
-            ];
-          };
-        }
-
-        # folder specific rules?
-        # https://yazi-rs.github.io/docs/tips/#folder-rules
       ];
     in
     {

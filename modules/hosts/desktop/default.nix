@@ -9,9 +9,9 @@
         name = "pixiv";
         runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
         text = /* sh */ ''
-          pushd ${projects}/pixiv
+          pushd ${projects}/pixiv > /dev/null
           direnv-cargo-run "${projects}/pixiv" "$@"
-          popd
+          popd > /dev/null
         '';
       };
     in

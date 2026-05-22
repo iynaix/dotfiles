@@ -37,10 +37,6 @@ fetch.github = "CogentRedTester/mpv-sub-select"
 src.git = "https://github.com/adi1090x/rofi"
 fetch.github = "adi1090x/rofi"
 
-[yazi-plugins]
-src.git = "https://github.com/yazi-rs/plugins"
-fetch.github = "yazi-rs/plugins"
-
 [yazi-time-travel]
 src.git = "https://github.com/iynaix/time-travel.yazi"
 fetch.github = "iynaix/time-travel.yazi"

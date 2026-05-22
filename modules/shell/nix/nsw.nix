@@ -120,8 +120,14 @@
       nsw-remote = pkgs.writeShellApplication {
         name = "nsw-remote";
         text = /* sh */ ''
+          if [ -z "$1" ] || [ -z "$2" ]; then
+              echo "Error: Missing required arguments."
+              echo "Usage: $0 HOST_IP FLAKE_HOST"
+              exit 1
+          fi
+
           pushd ${dots} > /dev/null
-          nixos-rebuild switch --target-host "root@''${1:-framework}" --flake ".#''${2:-framework}"
+          nixos-rebuild switch --target-host "root@$1" --flake ".#$2"
           popd > /dev/null
         '';
       };
