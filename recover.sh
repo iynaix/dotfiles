@@ -79,9 +79,9 @@ read -rp "Enter git rev for flake (default: main): " git_rev
 echo "Re-installing NixOS"
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
-    sudo nixos-install --no-root-password --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
+    sudo nixos-install --no-root-password --option extra-experimental-features "pipe-operators" --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
 else
-    sudo nixos-install --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
+    sudo nixos-install --option extra-experimental-features "pipe-operators" --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
 fi
 
 echo "Installation complete. It is now safe to reboot."
