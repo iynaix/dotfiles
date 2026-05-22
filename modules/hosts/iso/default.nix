@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  self,
   ...
 }:
 let
@@ -44,7 +45,8 @@ let
                       "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                 ]
-                ++ (with pkgs.custom; [
+                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ ghostty ]
+                ++ (with self.packages.${pkgs.stdenv.hostPlatform.system}; [
                   # custom packages
                   bat
                   batman
@@ -55,8 +57,7 @@ let
                   neovim-iynaix
                   ripgrep
                   yazi
-                ])
-                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ ghostty ];
+                ]);
 
               variables = {
                 EDITOR = "nvim";
@@ -80,7 +81,7 @@ let
               };
 
               # set dark theme for kde, adapted from plasma-manager
-              etc."xdg/autostart/plasma-dark-mode.desktop" = lib.mkIf (lib.hasInfix "plasma" isoPath) {
+              etc."xdg/autostart/plasma-dark-mode.desktop" = {
                 source = pkgs.makeDesktopItem {
                   name = "plasma-dark-mode";
                   desktopName = "Plasma Dark Mode";
@@ -93,6 +94,21 @@ let
                   };
                 };
               };
+            };
+
+            systemd.user.services.init-plasma-darkmode = lib.mkIf (lib.hasInfix "plasma" isoPath) {
+              description = "Apply Breeze Dark theme on Plasma startup";
+              wantedBy = [ "graphical-session.target" ];
+              partOf = [ "graphical-session.target" ];
+
+              # Ensure plasma-apply tools are available in the path
+              path = [ pkgs.kdePackages.plasma-workspace ];
+
+              script = ''
+                sleep 2
+                plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+                plasma-apply-desktoptheme breeze-dark
+              '';
             };
 
             # use nmtui instead of wpa_supplicant for minimal iso
@@ -118,6 +134,9 @@ let
               # bye bye nano
               nano.enable = false;
             };
+
+            # bye bye xterm
+            services.xserver.excludePackages = [ pkgs.xterm ];
 
             # enable SSH in the boot process.
             services.openssh = {
@@ -173,8 +192,7 @@ in
 {
   flake.nixosConfigurations = {
     kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
-    minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal";
-    kde-iso-unstable = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma6";
-    minimal-iso-unstable = mkIso inputs.nixpkgs "installation-cd-minimal";
+    minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal-combined";
+    cosmic-iso = mkIso inputs.nixpkgs-unstable "installation-cd-calamares-cosmic";
   };
 }
