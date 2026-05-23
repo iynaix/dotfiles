@@ -73,7 +73,7 @@
       };
 
       custom.programs = {
-        hyprland.luaText = /* lua */ ''
+        hyprland.settings = /* lua */ ''
           -- do not idle while watching videos
           hl.window_rule({ match = { class = "helium" }, idle_inhibit = "fullscreen" })
           hl.window_rule({ match = { class = "helium", title = ".*(YouTube).*" }, idle_inhibit = "focus" })

@@ -91,7 +91,6 @@
           projects
           dots
           "${projects}/nixpkgs"
-          "${projects}/coinfc Work"
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]

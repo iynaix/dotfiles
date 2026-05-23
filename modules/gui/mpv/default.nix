@@ -77,6 +77,7 @@
             LEFT = "no-osd seek -10";
             UP = "no-osd seek -60";
             DOWN = "no-osd seek 60";
+            i = "script-binding stats/display-stats-toggle";
             l = "no-osd seek  10";
             h = "no-osd seek -10";
             j = "no-osd seek  -60";
@@ -354,7 +355,7 @@
     { pkgs, ... }:
     {
       custom.programs = {
-        hyprland.luaText = /* lua */ ''
+        hyprland.settings = /* lua */ ''
           -- do not idle while watching videos
           hl.window_rule({ match = { class = "mpv" }, idle_inhibit = "focus" })
           -- fix mpv-dynamic-crop unmaximizing the window

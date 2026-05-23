@@ -77,10 +77,18 @@
                     config.custom.programs.dotfiles-rs
                   ];
                   text = ''
-                    helium --profile-directory=Default &
-                    sleep 1; helium --incognito &
-                    # no-op if not niri
-                    sleep 5; niri-resize-workspace 1
+                    if [[ $XDG_CURRENT_DESKTOP == "Hyprland" ]]; then
+                      hyprctl dispatch 'hl.dsp.exec_cmd("helium --profile-directory=Default")'
+                      sleep 1
+                      hyprctl dispatch 'hl.dsp.exec_cmd("helium --incognito")'
+                    else
+                      helium --profile-directory=Default &
+                      sleep 1; helium --incognito &
+                    fi
+
+                    if [[ $XDG_CURRENT_DESKTOP == "niri" ]]; then
+                      sleep 5; niri-resize-workspace 1
+                    fi
                   '';
                 }
               ))

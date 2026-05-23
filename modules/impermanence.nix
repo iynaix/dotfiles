@@ -7,7 +7,11 @@
       cfg = config.custom.persist;
       assertNoHomeDirs =
         paths:
-        assert (lib.assertMsg (!lib.any (lib.hasPrefix "/home") paths) "/home used in a root persist!");
+        assert (
+          lib.assertMsg (
+            !lib.any (p: lib.hasPrefix "/home/" (if lib.isAttrs p then p.file else p)) paths
+          ) "/home used in a root persist!"
+        );
         paths;
       # show all files stored on tmpfs, useful for finding files to persist
       show-tmpfs = pkgs.writeShellApplication {

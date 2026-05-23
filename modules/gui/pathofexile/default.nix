@@ -28,7 +28,7 @@
       ];
 
       custom.programs = {
-        hyprland.luaText = /* lua */ ''
+        hyprland.settings = /* lua */ ''
           -- poe1 / poe2
           hl.window_rule({ match = { title = "Path of Exile( 2)?" }, tag = "+poe" })
           hl.window_rule({ match = { initial_title = "Path of Exile( 2)?" }, tag = "+poe" })

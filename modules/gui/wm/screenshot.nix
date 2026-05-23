@@ -30,7 +30,7 @@
       };
 
       custom.programs = {
-        hyprland.luaText = /* lua */ ''
+        hyprland.settings = /* lua */ ''
           hl.bind(mod .. " + backslash", hl.dsp.exec_cmd("focal image --area selection --no-notify --no-save --no-rounded-windows"))
           hl.bind(mod .. " + SHIFT + backslash", hl.dsp.exec_cmd("focal image --edit swappy --rofi --no-rounded-windows"))
           hl.bind(mod .. " + CTRL + backslash", hl.dsp.exec_cmd("focal image --area selection --ocr"))

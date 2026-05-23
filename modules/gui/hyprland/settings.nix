@@ -11,7 +11,7 @@
     in
     {
       custom.programs.hyprland = {
-        luaText = lib.mkMerge [
+        settings = lib.mkMerge [
           # define variables at top of file
           (lib.mkBefore /* lua */ ''
             local mod = "${if isVm then "ALT" else "SUPER"}"
@@ -174,8 +174,12 @@
             |> lib.concatMapStringsSep "\n" (params: "hl.workspace_rule(${toLua params})")
           )
 
-          # include noctalia colors if available
           (lib.mkAfter /* lua */ ''
+            -- include hyprland.lua if available
+            local p = os.getenv("HOME") .. "/.config/hypr/hyprland.lua"
+            if io.open(p, "r") then dofile(p) end
+
+            -- include noctalia colors if available
             local p = os.getenv("HOME") .. "/.config/hypr/noctalia/noctalia-colors.lua"
             if io.open(p, "r") then dofile(p) end
           '')

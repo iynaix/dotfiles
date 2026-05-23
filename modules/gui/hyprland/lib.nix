@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   hyprlandOptions = {
-    luaText = lib.mkOption {
+    settings = lib.mkOption {
       type = lib.types.lines;
       default = "";
       description = "Hyprland lua config";
@@ -31,7 +31,7 @@ in
 
       config.constructFiles.generatedConfig = {
         relPath = "hyprland.lua";
-        content = config.luaText;
+        content = config.settings;
       };
 
       # validate hyprland config, filter out source to non-existent file

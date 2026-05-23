@@ -6,7 +6,7 @@
       termExec = cmd: "ghostty -e ${cmd}";
     in
     {
-      custom.programs.hyprland.luaText = /* lua */ ''
+      custom.programs.hyprland.settings = /* lua */ ''
         -- programs
         hl.bind(mod .. " + Return", hl.dsp.exec_cmd("ghostty"))
         hl.bind(mod .. " + SHIFT + Return", hl.dsp.exec_cmd("noctalia-ipc launcher toggle"))
@@ -69,7 +69,7 @@
         hl.bind(mod .. " + Right", hl.dsp.focus({ workspace = "m+1" }))
 
         -- window management
-        hl.bind(mod .. " + BackSpace", hl.dsp.window.kill())
+        hl.bind(mod .. " + BackSpace", hl.dsp.window.close(), { repeating = false })
         hl.bind(mod .. " + z", hl.dsp.window.fullscreen({ type = "maximize" })) -- monocle
         hl.bind(mod .. " + f", hl.dsp.window.fullscreen({ type = "fullscreen" })) -- fullscreen
         hl.bind(mod .. " + SHIFT + f", hl.dsp.window.fullscreen_state({ client = -1, internal = 2 })) -- fakefullscreen
@@ -106,9 +106,9 @@
         hl.bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
         -- audio
-        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5"))
-        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5"))
-        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"))
+        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5"), { locked = true })
+        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5"), { locked = true })
+        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"), { locked = true })
       '';
     };
 }

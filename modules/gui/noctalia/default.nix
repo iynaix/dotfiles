@@ -286,7 +286,7 @@ in
 
         programs = {
           # setup blur for hyprland
-          hyprland.luaText = /* lua */ ''
+          hyprland.settings = /* lua */ ''
             hl.window_rule({ match = { class = "dev.noctalia.noctalia-qs" }, rounding = 20 })
 
             hl.layer_rule({ match = { namespace = "noctalia-background-.*" }, ignore_alpha = 0.5, blur = true })

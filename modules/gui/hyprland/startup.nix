@@ -3,13 +3,13 @@
   flake.modules.nixos.wm =
     { config, ... }:
     {
-      custom.programs.hyprland.luaText =
+      custom.programs.hyprland.settings =
         let
           cmds =
             # stop fucking with my cursors
             [
-              "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"
-              "hyprctl dispatch workspace 1"
+              ''"hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"''
+              ''"hyprctl dispatch workspace 1"''
             ]
             ++ map (
               {
@@ -19,15 +19,15 @@
                 ...
               }:
               let
-                rules = lib.optionalString (workspace != null) "[workspace ${toString workspace} silent]";
+                rules = lib.optionalString (workspace != null) '', { workspace = "${toString workspace} silent" }'';
                 exec = lib.concatStringsSep " " spawn;
               in
-              lib.optionalString enable "${rules} ${exec}"
+              lib.optionalString enable ''"${exec}" ${rules}''
             ) config.custom.startup;
         in
         /* lua */ ''
           hl.on("hyprland.start", function ()
-            ${lib.concatMapStringsSep "\n" (cmd: ''hl.exec_cmd("${cmd}")'') cmds}
+            ${lib.concatMapStringsSep "\n" (cmd: "hl.exec_cmd(${cmd})") cmds}
           end)
         '';
 

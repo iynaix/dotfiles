@@ -138,7 +138,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        # displayManager.defaultSession = "hyprland";
+        displayManager.defaultSession = "hyprland";
 
         pipewire = {
           wireplumber.extraConfig = {

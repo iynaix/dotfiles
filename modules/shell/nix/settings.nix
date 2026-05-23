@@ -162,6 +162,12 @@
       ];
 
       custom.persist = {
+        root = {
+          cache.directories = [
+            "/var/cache/man/nixos-mandb"
+            "/var/cache/man/nixos-manpages"
+          ];
+        };
         home = {
           cache.directories = [
             ".cache/nix"

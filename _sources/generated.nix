@@ -79,13 +79,13 @@
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";
-    version = "v0.2.16";
+    version = "v0.2.17";
     src = fetchFromGitHub {
       owner = "meehl";
       repo = "rusty-path-of-building";
-      rev = "v0.2.16";
+      rev = "v0.2.17";
       fetchSubmodules = false;
-      sha256 = "sha256-2pXT9Wyn49sGHDqjlmlCRUyIIAEERAKNK6cDTUwwjGM=";
+      sha256 = "sha256-Yfx81we74Ovt7RitEYH8Ez3cPykU75tteM7wqiIs63U=";
     };
   };
   yazi-time-travel = {
