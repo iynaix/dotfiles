@@ -4,10 +4,9 @@ use dotfiles::{
     cli::{Direction, WmSameClassArgs},
     generate_completions,
 };
-use hyprland::dispatch;
+use execute::Execute;
 use hyprland::{
     data::{Client, Clients},
-    dispatch::WindowIdentifier::Address,
     shared::{HyprData, HyprDataActiveOptional},
 };
 use itertools::Itertools;
@@ -19,7 +18,7 @@ where
 {
     let new_idx = match direction {
         Direction::Next => (active_idx + 1) % matching.len(),
-        Direction::Prev => (active_idx - 1 + matching.len()) % matching.len(),
+        Direction::Prev => (active_idx + matching.len() - 1) % matching.len(),
     };
 
     matching[new_idx].clone()
@@ -57,7 +56,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let target = target_window(active_idx, &matching_windows, &direction);
 
-        dispatch!(FocusWindow, Address(target.clone()))?;
+        let lua_dispatch = format!(r#"hl.dsp.focus({{ window = "address:{target}" }})"#);
+        execute::command_args!("hyprctl", "dispatch", lua_dispatch)
+            .execute()
+            .expect("failed to execute pqiv");
     }
 
     Ok(())

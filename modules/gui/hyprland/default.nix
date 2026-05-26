@@ -38,7 +38,10 @@
       xdg.portal = {
         config = {
           hyprland = {
-            default = "hyprland";
+            default = [
+              "hyprland"
+              "gtk"
+            ];
             "org.freedesktop.impl.portal.FileChooser" = "gtk";
           };
         };

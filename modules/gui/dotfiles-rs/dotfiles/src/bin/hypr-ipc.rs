@@ -55,8 +55,8 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 
     // check if oled
     if monitor_for_workspace(wksp)
-        .filter(|mon| mon.description.contains("AW3423DW"))
-        .is_none()
+        .as_ref()
+        .is_none_or(|mon| !mon.description.contains("AW3423DW"))
     {
         return;
     }

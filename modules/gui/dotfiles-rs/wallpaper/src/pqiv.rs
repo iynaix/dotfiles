@@ -18,7 +18,11 @@ fn pqiv_hyprland_float_rule() -> String {
     // target 16: 9 aspect ratio
     let height = width / 16.0 * 9.0;
 
-    format!("[float;size {} {};center]", width.floor(), height.floor())
+    format!(
+        r#"{{ float = true, center = true, size = "{} {}" }}"#,
+        width.floor(),
+        height.floor()
+    )
 }
 
 fn niri_window_title() -> String {
@@ -53,16 +57,17 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
         };
 
         // hyprland allows setting rules while spawning
-        let pqiv = format!("{} pqiv --shuffle {}", pqiv_hyprland_float_rule(), img_arg);
+        let lua_dispatch = format!(
+            r#"hl.dsp.exec_cmd("pqiv --shuffle {img_arg}", {})"#,
+            pqiv_hyprland_float_rule()
+        );
 
-        {
-            hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
-        }
+        execute::command_args!("hyprctl", "dispatch", lua_dispatch)
+            .execute()
+            .expect("failed to execute pqiv");
     }
 
     if is_niri() {
-        use execute::Execute;
-
         // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
         // so it doesn't resize on initial spawn via a keybind
         let mut cmd = execute::command_args!(
@@ -110,8 +115,17 @@ pub fn show_history(args: &WallpaperFilterArgs) {
 
     if is_hyprland() {
         let history_arg = history.iter().map(|p| format!("'{p}'")).join(" ");
-        let pqiv = format!("{} pqiv {}", pqiv_hyprland_float_rule(), history_arg);
-        hyprland::dispatch!(Exec, &pqiv).expect("failed to execute pqiv");
+
+        // hyprland allows setting rules while spawning
+        let lua_dispatch = format!(
+            r#"hl.dsp.exec_cmd("pqiv {}", {})"#,
+            history_arg,
+            pqiv_hyprland_float_rule()
+        );
+
+        execute::command_args!("hyprctl", "dispatch", lua_dispatch)
+            .execute()
+            .expect("failed to execute pqiv");
     }
 
     if is_niri() {

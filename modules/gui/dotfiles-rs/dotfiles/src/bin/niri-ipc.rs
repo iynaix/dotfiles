@@ -434,10 +434,10 @@ fn main() {
 
                             handle_workspaces_changed(&workspaces, &nix_info_monitors);
                         }
-                        Event::OverviewOpenedOrClosed { is_open: _ } => {
-                            if !first_overview_event_skipped {
-                                first_overview_event_skipped = true;
-                            }
+                        Event::OverviewOpenedOrClosed { is_open: _ }
+                            if !first_overview_event_skipped =>
+                        {
+                            first_overview_event_skipped = true;
                         }
                         Event::WindowOpenedOrChanged { window } => {
                             handle_window_opened_or_changed(&window, &prev_windows, &state);

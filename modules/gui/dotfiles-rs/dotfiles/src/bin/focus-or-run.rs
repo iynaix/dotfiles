@@ -1,7 +1,8 @@
 use clap::Parser;
 use common::{is_hyprland, is_niri};
 use dotfiles::cli::FocusOrRunArgs;
-use hyprland::{data::Clients, dispatch, dispatch::WindowIdentifier::Address, shared::HyprData};
+use execute::Execute;
+use hyprland::{data::Clients, shared::HyprData};
 use niri_ipc::{Action, Request, Response, socket::Socket};
 
 fn main() {
@@ -12,7 +13,16 @@ fn main() {
 
         for client in clients {
             if client.title.contains(&args.title) {
-                dispatch!(FocusWindow, Address(client.address)).expect("failed to focus window");
+                execute::command_args!(
+                    "hyprctl",
+                    "dispatch",
+                    format!(
+                        r#"hl.dsp.focus({{ window = "address:{}" }})"#,
+                        client.address
+                    )
+                )
+                .execute()
+                .expect("failed to focus window");
                 return;
             }
         }

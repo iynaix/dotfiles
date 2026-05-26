@@ -27,7 +27,7 @@ serde.workspace = true
 rayon.workspace = true
 sha2.workspace = true
 toml = "1.1.2"
-whoami = "2.1.1"
+whoami = "2.1.2"
 
 [build-dependencies]
 clap.workspace = true

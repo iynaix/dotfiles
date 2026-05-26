@@ -1,3 +1,4 @@
+use execute::Execute;
 use std::{collections::HashMap, time::Duration};
 
 use crate::{
@@ -40,13 +41,12 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
         for wksp in wksps {
             {
                 // note it can error if the workspace is empty and hasnt been created yet
-                use hyprland::dispatch::{MonitorIdentifier, WorkspaceIdentifier};
-                hyprland::dispatch!(
-                    MoveWorkspaceToMonitor,
-                    WorkspaceIdentifier::Id(*wksp),
-                    MonitorIdentifier::Name(mon_name)
-                )
-                .ok();
+                let lua_dispatch = format!(
+                    r#"hl.dsp.workspace.move({{ workspace = "{wksp}", monitor = "{mon_name}" }})"#
+                );
+                execute::command_args!("hyprctl", "dispatch", lua_dispatch)
+                    .execute()
+                    .ok();
 
                 hyprland::keyword::Keyword::set("workspace", nix_info_mon.layoutopts(*wksp)).ok();
             }

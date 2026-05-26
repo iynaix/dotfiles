@@ -1,11 +1,10 @@
 use common::{is_hyprland, is_niri};
+use execute::Execute;
 
 fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     use common::vertical_dimensions;
-    use hyprland::dispatch;
     use hyprland::{
         data::{Client, Monitor},
-        dispatch::{Dispatch, DispatchType, Position},
         shared::{HyprDataActive, HyprDataActiveOptional},
     };
 
@@ -22,8 +21,8 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     // } else {
     //     DispatchType::ToggleFullscreen(FullscreenType::NoParam)
     // })?;
-    dispatch!(ToggleFloating, None)?;
-    Dispatch::call(DispatchType::TogglePin)?;
+    execute::command_args!("hyprctl", "dispatch", "hl.dsp.window.float()").execute()?;
+    execute::command_args!("hyprctl", "dispatch", "hl.dsp.window.pin()").execute()?;
 
     // if activewindow.floating {
     //     dispatch!(ToggleFullscreen(FullscreenType::Real))?;
@@ -31,10 +30,8 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     if !active.floating {
         const PADDING: u32 = 30; // target distance from corner of screen
 
-        dispatch!(
-            ResizeActive,
-            Position::Exact(target_w as i16, target_h as i16,)
-        )?;
+        let lua_dispatch = format!("hl.dsp.window.resize({{ x = {target_w}, y = {target_h} }})");
+        execute::command_args!("hyprctl", "dispatch", lua_dispatch).execute()?;
 
         let activewindow = Client::get_active()?.expect("no active window");
 
@@ -45,8 +42,9 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
         let delta_x = mon_right - PADDING - target_w as u32 - activewindow.at.0 as u32;
         let delta_y = mon_bottom - PADDING - target_h as u32 - activewindow.at.1 as u32;
 
-        dispatch!(MoveActive, Position::Delta(delta_x as i16, delta_y as i16))
-            .expect("failed to move active window");
+        let lua_dispatch =
+            format!("hl.dsp.window.move({{ relative = true, x = {delta_x}, y = {delta_y} }})");
+        execute::command_args!("hyprctl", "dispatch", lua_dispatch).execute()?;
     }
 
     Ok(())

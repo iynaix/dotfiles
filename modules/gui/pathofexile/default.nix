@@ -31,12 +31,10 @@
         hyprland.settings = /* lua */ ''
           -- poe1 / poe2
           hl.window_rule({ match = { title = "Path of Exile( 2)?" }, tag = "+poe" })
-          hl.window_rule({ match = { initial_title = "Path of Exile( 2)?" }, tag = "+poe" })
           hl.window_rule({ match = { class = "steam_app_(238960|2694490)" }, tag = "+poe" })
-          hl.window_rule({ match = { initial_class = "steam_app_(238960|2694490)" }, tag = "+poe" })
 
           -- poe1 / poe2 rules
-          hl.window_rule({ match = { tag = "poe" }, workspace = "5", fullscreen = true, idle_inhibit = "always" })
+          hl.window_rule({ match = { tag = "poe" }, workspace = "5", fullscreen = true, fullscreen_state = "0 2", idle_inhibit = "always" })
 
           -- woke poe1 / poe2 trade
           hl.window_rule({ match = { title = "Awakened PoE Trade" }, tag = "+apt" })
