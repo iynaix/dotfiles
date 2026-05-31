@@ -16,10 +16,10 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.15.0";
+    version = "0.15.2";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.0/Exiled-Exchange-2-0.15.0.AppImage";
-      sha256 = "sha256-THhGsptgZ90WU/ZXVWR/P5wV24uAFM5OGUgBUAhywMs=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.2/Exiled-Exchange-2-0.15.2.AppImage";
+      sha256 = "sha256-LNXiVZvPIrPbrmpiS4g+iBGi0+Jn2lott8fsy+uJnfw=";
     };
   };
   helium = {
@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.13.1";
+    version = "0.14.0";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.13.1";
+      rev = "0.14.0";
       fetchSubmodules = false;
-      sha256 = "sha256-HohogY2Ec/JyACrQzGtG2GL7D4K5b0Mg5gBBlJXW/2s=";
+      sha256 = "sha256-DQ9uQJUBBkE9+Fk38vv4/dz9VztD++z8QEYG6supFic=";
     };
   };
   mpv-deletefile = {
@@ -79,13 +79,13 @@
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";
-    version = "v0.2.17";
+    version = "v0.2.18";
     src = fetchFromGitHub {
       owner = "meehl";
       repo = "rusty-path-of-building";
-      rev = "v0.2.17";
+      rev = "v0.2.18";
       fetchSubmodules = false;
-      sha256 = "sha256-Yfx81we74Ovt7RitEYH8Ez3cPykU75tteM7wqiIs63U=";
+      sha256 = "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=";
     };
   };
   yazi-time-travel = {

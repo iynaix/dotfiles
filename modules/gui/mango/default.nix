@@ -97,10 +97,15 @@ in
               # adds niri inspired atstartup rule:
               # https://github.com/DreamMaoMao/mangowc/pull/654
               (pkgs.fetchurl {
-                url = "https://github.com/mangowm/mango/commit/b1cf48fb81fa4a8ab7121e8ac93f433b20c607c0.patch";
-                hash = "sha256-r+WAK+Ww9StvXskcgp+OdmuawAGtRNCdK6521m+RYGU=";
+                url = "https://github.com/mangowm/mango/commit/2f536e87544be01b83f9338acf64c1332a792ab2.patch";
+                hash = "sha256-X9UJQ4ryZUqxdQUjjJPg/XJKHXnl34xu2ZvgDSxHBj8=";
               })
             ];
+
+            buildInputs =
+              assert lib.assertMsg (lib.versionOlder pkgs.mangowc.version "0.14.0")
+                "remove mangowc cjson buildInputs override";
+              (o.buildInputs or [ ]) ++ [ pkgs.cjson ];
           }
         );
         configFile.content = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (toMangoConf {

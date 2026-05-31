@@ -1,4 +1,3 @@
-{ self, ... }:
 {
   perSystem =
     { pkgs, ... }:
@@ -61,8 +60,7 @@
               sops
               cachix
               deadnix
-              # use statix with pipe operator support
-              self.packages.${pkgs.stdenv.hostPlatform.system}.statix
+              statix
               nil
               nixd
               nixfmt

@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-THhGsptgZ90WU/ZXVWR/P5wV24uAFM5OGUgBUAhywMs=",
+            "sha256": "sha256-LNXiVZvPIrPbrmpiS4g+iBGi0+Jn2lott8fsy+uJnfw=",
             "type": "url",
-            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.0/Exiled-Exchange-2-0.15.0.AppImage"
+            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.2/Exiled-Exchange-2-0.15.2.AppImage"
         },
-        "version": "0.15.0"
+        "version": "0.15.2"
     },
     "helium": {
         "cargoLock": null,
@@ -58,12 +58,12 @@
             "name": null,
             "owner": "mangowm",
             "repo": "mango",
-            "rev": "0.13.1",
-            "sha256": "sha256-HohogY2Ec/JyACrQzGtG2GL7D4K5b0Mg5gBBlJXW/2s=",
+            "rev": "0.14.0",
+            "sha256": "sha256-DQ9uQJUBBkE9+Fk38vv4/dz9VztD++z8QEYG6supFic=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.13.1"
+        "version": "0.14.0"
     },
     "mpv-deletefile": {
         "cargoLock": null,
@@ -142,12 +142,12 @@
             "name": null,
             "owner": "meehl",
             "repo": "rusty-path-of-building",
-            "rev": "v0.2.17",
-            "sha256": "sha256-Yfx81we74Ovt7RitEYH8Ez3cPykU75tteM7wqiIs63U=",
+            "rev": "v0.2.18",
+            "sha256": "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v0.2.17"
+        "version": "v0.2.18"
     },
     "yazi-time-travel": {
         "cargoLock": null,
