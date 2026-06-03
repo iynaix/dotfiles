@@ -187,6 +187,8 @@
             # nibbles_top = false;
             nibbles_style = "bar";
             ontop_button = false; # pin button
+            osc_on_seek = false;
+            osc_on_start = false;
             playlist_button = false;
             screenshot_button = false;
             seekbar_height = "small";

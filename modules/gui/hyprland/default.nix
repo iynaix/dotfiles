@@ -11,7 +11,14 @@
         {
           inherit pkgs;
           # remove the uwsm session
-          package = pkgs.hyprland;
+          package = pkgs.hyprland.overrideAttrs (o: {
+            patches = (o.patches or [ ]) ++ [
+              (pkgs.fetchpatch {
+                url = "https://github.com/hyprwm/Hyprland/pull/14897.patch";
+                hash = "sha256-54azRNuiWige+j638Ijjaq17DMAV5E7Q2ufy5q1gGUw=";
+              })
+            ];
+          });
           filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
           passthru.providedSessions = [ "hyprland" ];
         }

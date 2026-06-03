@@ -3,17 +3,20 @@
   flake.modules.nixos.programs_path-of-exile =
     { pkgs, ... }:
     let
-      source = (self.libCustom.nvFetcherSources pkgs).awakened-poe-trade;
-      # don't expose in perSystem as it requires a patched nixpkgs
-      awakened-poe-trade' =
-        (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
-          source;
+      sources = self.libCustom.nvFetcherSources pkgs;
     in
     {
       # NOTE: POE is installed through steam
-      environment.systemPackages = with pkgs.custom; [
-        awakened-poe-trade'
-        exiled-exchange-2
+      environment.systemPackages = [
+        # don't expose in perSystem as it requires a patched nixpkgs
+        ((pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
+          sources.awakened-poe-trade
+        )
+        (
+          (pkgs.custom.exiled-exchange-2.override { commandLineArgs = [ "--ozone-platform=x11" ]; })
+          .overrideAttrs
+          sources.exiled-exchange-2
+        )
       ];
 
       # helium extensions

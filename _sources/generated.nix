@@ -16,29 +16,29 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.15.2";
+    version = "0.15.4";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.2/Exiled-Exchange-2-0.15.2.AppImage";
-      sha256 = "sha256-LNXiVZvPIrPbrmpiS4g+iBGi0+Jn2lott8fsy+uJnfw=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.4/Exiled-Exchange-2-0.15.4.AppImage";
+      sha256 = "sha256-VhcqK7wDuS18N70cUpNfegP8evBLwblJvm1wS70ANP4=";
     };
   };
   helium = {
     pname = "helium";
-    version = "0.12.5.1";
+    version = "0.13.1.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.12.5.1/helium-0.12.5.1-x86_64.AppImage";
-      sha256 = "sha256-uUZauNralX6katmnO9VDLEs+d+HIhkjkeV36Dw2eUmM=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.1.1/helium-0.13.1.1-x86_64.AppImage";
+      sha256 = "sha256-ZAU+IHSuKu8KiqtgK+fe914C/y7KToVWzC+drqdk+ZM=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.14.0";
+    version = "0.14.2";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.14.0";
+      rev = "0.14.2";
       fetchSubmodules = false;
-      sha256 = "sha256-DQ9uQJUBBkE9+Fk38vv4/dz9VztD++z8QEYG6supFic=";
+      sha256 = "sha256-5hv9HjWafU9i83HBYVEZDJbOIDM5WdKx9TpI87PwhP8=";
     };
   };
   mpv-deletefile = {
@@ -67,15 +67,15 @@
   };
   rofi-themes = {
     pname = "rofi-themes";
-    version = "b0bfe927531e365f009d01810c26878c003f7cb8";
+    version = "512a585fff6da5b2a90e5948059b062516ddb2e7";
     src = fetchFromGitHub {
       owner = "adi1090x";
       repo = "rofi";
-      rev = "b0bfe927531e365f009d01810c26878c003f7cb8";
+      rev = "512a585fff6da5b2a90e5948059b062516ddb2e7";
       fetchSubmodules = false;
-      sha256 = "sha256-pM183MHOMuKJyLgthozM1MRsmhBM25VQgWc7CmLL2HI=";
+      sha256 = "sha256-iUX0Quae06tGd7gDgXZo1B3KYgPHU+ADPBrowHlv02A=";
     };
-    date = "2026-04-30";
+    date = "2026-05-31";
   };
   rusty-path-of-building = {
     pname = "rusty-path-of-building";

@@ -140,8 +140,8 @@ in
                   # different instance, kill previous instances
                   if [[ ! "$NOCTALIA_PATH" =~ "${toString wrapperArgs.config.package}" ]]; then
                     killall .quickshell-wra || true
-                    ${binaryPath}
-                    sleep 2
+                    ${binaryPath} &
+                    sleep 3
                   fi
 
                   ${binaryPath} ipc call "$@"

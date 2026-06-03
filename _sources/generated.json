@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-LNXiVZvPIrPbrmpiS4g+iBGi0+Jn2lott8fsy+uJnfw=",
+            "sha256": "sha256-VhcqK7wDuS18N70cUpNfegP8evBLwblJvm1wS70ANP4=",
             "type": "url",
-            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.2/Exiled-Exchange-2-0.15.2.AppImage"
+            "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.4/Exiled-Exchange-2-0.15.4.AppImage"
         },
-        "version": "0.15.2"
+        "version": "0.15.4"
     },
     "helium": {
         "cargoLock": null,
@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-uUZauNralX6katmnO9VDLEs+d+HIhkjkeV36Dw2eUmM=",
+            "sha256": "sha256-ZAU+IHSuKu8KiqtgK+fe914C/y7KToVWzC+drqdk+ZM=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.12.5.1/helium-0.12.5.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.13.1.1/helium-0.13.1.1-x86_64.AppImage"
         },
-        "version": "0.12.5.1"
+        "version": "0.13.1.1"
     },
     "mango": {
         "cargoLock": null,
@@ -58,12 +58,12 @@
             "name": null,
             "owner": "mangowm",
             "repo": "mango",
-            "rev": "0.14.0",
-            "sha256": "sha256-DQ9uQJUBBkE9+Fk38vv4/dz9VztD++z8QEYG6supFic=",
+            "rev": "0.14.2",
+            "sha256": "sha256-5hv9HjWafU9i83HBYVEZDJbOIDM5WdKx9TpI87PwhP8=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.14.0"
+        "version": "0.14.2"
     },
     "mpv-deletefile": {
         "cargoLock": null,
@@ -109,7 +109,7 @@
     },
     "rofi-themes": {
         "cargoLock": null,
-        "date": "2026-04-30",
+        "date": "2026-05-31",
         "extract": null,
         "name": "rofi-themes",
         "passthru": null,
@@ -121,12 +121,12 @@
             "name": null,
             "owner": "adi1090x",
             "repo": "rofi",
-            "rev": "b0bfe927531e365f009d01810c26878c003f7cb8",
-            "sha256": "sha256-pM183MHOMuKJyLgthozM1MRsmhBM25VQgWc7CmLL2HI=",
+            "rev": "512a585fff6da5b2a90e5948059b062516ddb2e7",
+            "sha256": "sha256-iUX0Quae06tGd7gDgXZo1B3KYgPHU+ADPBrowHlv02A=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "b0bfe927531e365f009d01810c26878c003f7cb8"
+        "version": "512a585fff6da5b2a90e5948059b062516ddb2e7"
     },
     "rusty-path-of-building": {
         "cargoLock": null,

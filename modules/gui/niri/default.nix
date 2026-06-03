@@ -76,8 +76,6 @@
           })
         );
 
-        v2-settings = true;
-
         inherit (config.custom.programs.niri) settings;
       };
     in
