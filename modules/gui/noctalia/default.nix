@@ -14,7 +14,7 @@ in
         noctalia-shell = inputs.wrappers.wrappers.noctalia-shell.wrap (wrapperArgs: {
           inherit pkgs;
           package =
-            (inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+            (pkgs.noctalia-shell.override {
               calendarSupport = true;
             }).overrideAttrs
               (o: {
@@ -49,7 +49,6 @@ in
 
           settings =
             [
-              # don't expose toggle-speaker
               (
                 prev:
                 lib.recursiveUpdate prev {
@@ -115,13 +114,12 @@ in
               # wrapped noctalia ipc to automatically kill outdated instances of noctalia-shell and restart
               noctalia-ipc = constructFilesShellApplication {
                 name = "noctalia-ipc";
-                runtimeInputs = [
-                  inputs.noctalia.inputs.noctalia-qs.packages.${pkgs.stdenv.hostPlatform.system}.default
-                  pkgs.killall
-                  pkgs.jq
+                runtimeInputs = with pkgs; [
+                  killall
+                  jq
                 ];
                 text = /* sh */ ''
-                  RAW_OUTPUT=$(qs list --all --json 2>/dev/null)
+                  RAW_OUTPUT=$(noctalia-shell list --all --json 2>/dev/null)
 
                   # invalid json, no instances running, so start noctalia-shell
                   if [[ ! "$RAW_OUTPUT" == "["* ]]; then
