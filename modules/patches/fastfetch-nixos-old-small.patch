@@ -1,7 +1,7 @@
-diff --git a/src/logo/ascii/nixos_old_small.txt b/src/logo/ascii/nixos_old_small.txt
+diff --git a/src/logo/ascii/n/nixos_old_small.txt b/src/logo/ascii/n/nixos_old_small.txt
 index f6af0a69..482edf42 100644
---- a/src/logo/ascii/nixos_old_small.txt
-+++ b/src/logo/ascii/nixos_old_small.txt
+--- a/src/logo/ascii/n/nixos_old_small.txt
++++ b/src/logo/ascii/n/nixos_old_small.txt
 @@ -1,7 +1,10 @@
 -$1  \\  $2\\ //
 -$1 ==\\__$2\\/ $1//

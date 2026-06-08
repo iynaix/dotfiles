@@ -22,6 +22,9 @@ let
             boot.loader.grub.memtest86.enable = true;
             isoImage.makeBiosBootable = true;
 
+            # silence warning for 25.11
+            boot.zfs.forceImportRoot = false;
+
             environment = {
               systemPackages =
                 with pkgs;
@@ -112,7 +115,7 @@ let
             };
 
             # use nmtui instead of wpa_supplicant for minimal iso
-            networking.wireless.enable = false;
+            # networking.wireless.enable = false;
             networking.networkmanager.enable = true;
 
             # update greeting for iso to suggest networkmanager

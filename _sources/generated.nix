@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.13.1.1";
+    version = "0.13.3.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.1.1/helium-0.13.1.1-x86_64.AppImage";
-      sha256 = "sha256-ZAU+IHSuKu8KiqtgK+fe914C/y7KToVWzC+drqdk+ZM=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.3.1/helium-0.13.3.1-x86_64.AppImage";
+      sha256 = "sha256-RS+Sn42V+HjCw41N1zayMVIqlgH+i2B2IdVJwBPmw00=";
     };
   };
   mango = {
@@ -102,13 +102,13 @@
   };
   yt-dlp = {
     pname = "yt-dlp";
-    version = "2026.03.17";
+    version = "2026.06.09";
     src = fetchFromGitHub {
       owner = "yt-dlp";
       repo = "yt-dlp";
-      rev = "2026.03.17";
+      rev = "2026.06.09";
       fetchSubmodules = false;
-      sha256 = "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=";
+      sha256 = "sha256-ykqTDPzKKIWRGSQmw2esCRKyYqDZKXRYDeba888tkDU=";
     };
   };
 }

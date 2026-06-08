@@ -84,4 +84,7 @@ else
     sudo nixos-install --option extra-experimental-features "pipe-operators" --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
 fi
 
+# mark zroot as clean
+sudo zpool export zroot
+
 echo "Installation complete. It is now safe to reboot."

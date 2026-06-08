@@ -122,7 +122,7 @@
           "displayMode": "alwaysShow",
           "iconColor": "primary",
           "id": "Volume",
-          "middleClickCommand": "/nix/store/j22dyqjaqgrfvbxklv41vmrb94hss745-toggle-speaker/bin/toggle-speaker",
+          "middleClickCommand": "toggle-speaker",
           "textColor": "primary"
         },
         {

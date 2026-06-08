@@ -29,7 +29,7 @@ in
     {
       packages.yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {
         inherit pkgs;
-        package = pkgs.yt-dlp.overrideAttrs source;
+        package = lib.mkForce (pkgs.yt-dlp.overrideAttrs source);
         settings = baseYtdlpSettings;
       };
     };

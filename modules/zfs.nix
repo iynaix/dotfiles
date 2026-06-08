@@ -36,9 +36,10 @@
               "/dev/disk/by-id"
             else
               "/dev/disk/by-partuuid";
-          forceImportRoot = false; # new default in 26.11
 
           package = pkgs.zfs_unstable;
+
+          forceImportRoot = false;
         };
       };
 
