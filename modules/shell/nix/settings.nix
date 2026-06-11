@@ -50,7 +50,8 @@
 
       nix =
         let
-          nixPath = lib.mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
+          flakes = lib.filterAttrs (_: input: lib.isType "flake" input) inputs;
+          nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes;
           registry = lib.mapAttrs (_: flake: { inherit flake; }) inputs;
         in
         {
@@ -124,7 +125,13 @@
               "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
             ];
           };
+          extraOptions = ''
+            !include ${config.sops.secrets.nix_extra_config.path}
+          '';
         };
+
+      # setup github auth token for nix to use
+      sops.secrets.nix_extra_config.owner = user;
 
       # never going to read html docs locally
       documentation = {
