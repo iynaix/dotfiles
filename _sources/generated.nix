@@ -16,10 +16,10 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.15.4";
+    version = "0.15.5";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.4/Exiled-Exchange-2-0.15.4.AppImage";
-      sha256 = "sha256-VhcqK7wDuS18N70cUpNfegP8evBLwblJvm1wS70ANP4=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.5/Exiled-Exchange-2-0.15.5.AppImage";
+      sha256 = "sha256-Wt9I56yHLQ5XDnlo+OMdzTxfqq7/rkq4BGG9bxEbzOY=";
     };
   };
   helium = {
