@@ -1,16 +1,21 @@
-{
-  flake.modules.nixos.programs_orca-slicer =
+{ inputs, ... }: {
+  perSystem =
     { pkgs, ... }:
     {
-      environment.systemPackages = [
-        (pkgs.symlinkJoin {
-          name = "orca-slicer";
-          paths = [
-            pkgs.orca-slicer
-            # associate step files with orca-slicer
-            (pkgs.writeTextFile {
-              name = "model-step.xml";
-              text = /* xml */ ''
+      packages = {
+        orca-slicer = inputs.wrappers.lib.wrapPackage {
+          inherit pkgs;
+          package = pkgs.orca-slicer;
+          # use glew without EGL so orca-slicer doesn't have no preview
+          # https://github.com/maximousblk/nyx/commit/6e1a814388e33a57cefe26f1643fbc35edff9086
+          # https://github.com/NixOS/nixpkgs/issues/513195
+          env.LD_PRELOAD = "${(pkgs.glew.override { enableEGL = false; }).out}/lib/libGLEW.so.2.3";
+
+          constructFiles = {
+            # associate .step files with orca-slicer
+            step-mime = {
+              relPath = "/share/mime/packages/model-step.xml";
+              content = /* xml */ ''
                 <?xml version="1.0" encoding="UTF-8"?>
                 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
                     <mime-type type="model/step">
@@ -20,12 +25,23 @@
                     </mime-type>
                 </mime-info>
               '';
-              executable = true;
-              destination = "/share/mime/packages/model-step.xml";
-            })
-          ];
-          meta.mainProgram = "orca-slicer";
+            };
+          };
+        };
+      };
+    };
+
+  flake.modules.nixos.programs_orca-slicer =
+    { pkgs, ... }:
+    {
+      nixpkgs.overlays = [
+        (_: _prev: {
+          inherit (pkgs.custom) orca-slicer;
         })
+      ];
+
+      environment.systemPackages = [
+        pkgs.orca-slicer # overlay-ed above
       ];
 
       xdg = {

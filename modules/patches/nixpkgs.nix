@@ -39,13 +39,6 @@
             url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
             hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
           })
-
-          # fix orca-slicer viewport due to glew
-          # https://github.com/NixOS/nixpkgs/pull/530580/files
-          (pkgs.fetchpatch {
-            url = "https://github.com/NixOS/nixpkgs/commit/96add13bce8f664b92eeb528f56b2b7717d9de11.patch";
-            hash = "sha256-KGjB47ZPhIHUyLM9HgOkSRxuKYw17GOn6P0AERlQoOA=";
-          })
         ];
       };
     };
