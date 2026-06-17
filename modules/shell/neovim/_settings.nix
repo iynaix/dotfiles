@@ -213,6 +213,7 @@
       smartcolumn.enable = true;
     };
     utility = {
+      direnv.enable = true;
       motion.leap.enable = true;
       # preview.markdownPreview.enable
       surround.enable = true;

@@ -1,5 +1,4 @@
 {
-  lib,
   inputs,
   ...
 }:
@@ -30,24 +29,6 @@
       customNeovim = pkgs.custom.neovim-iynaix.override {
         inherit dots host;
       };
-      nvim-direnv = pkgs.writeShellApplication {
-        name = "nvim-direnv";
-        runtimeInputs = [ pkgs.direnv ];
-        text = /* sh */ ''
-          if ! direnv exec "$(dirname "$1")" nvim "$@"; then
-              nvim "$@"
-          fi
-        '';
-      };
-      nvim-desktop-entry = pkgs.makeDesktopItem {
-        name = "Neovim";
-        desktopName = "Neovim";
-        genericName = "Text Editor";
-        icon = "nvim";
-        terminal = true;
-        # load direnv before opening nvim
-        exec = ''${lib.getExe nvim-direnv} "%F"'';
-      };
     in
     {
       environment = {
@@ -59,9 +40,6 @@
 
         systemPackages = [
           customNeovim
-          nvim-direnv
-          # add the new desktop entry
-          (lib.hiPrio nvim-desktop-entry)
         ];
       };
 
@@ -83,6 +61,7 @@
       custom.programs.print-config = rec {
         neovim = /* sh */ "nvf-print-config | moor --lang lua";
         nvf = neovim;
+        nvim = neovim;
       };
 
       custom.persist = {

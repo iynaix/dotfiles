@@ -10,10 +10,8 @@
       hyprland' = self.wrappers.hyprland.wrap (
         {
           inherit pkgs;
-          # remove the uwsm session
           package = pkgs.hyprland;
-          filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
-          passthru.providedSessions = [ "hyprland" ];
+          inherit (pkgs.hyprland) passthru;
         }
         // config.custom.programs.hyprland
       );
@@ -50,6 +48,7 @@
       programs.hyprland = {
         enable = true;
         package = hyprland';
+        withUWSM = true;
       };
 
       custom.programs.print-config = {

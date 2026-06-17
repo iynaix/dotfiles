@@ -38,8 +38,8 @@
               "${config.hj.directory}/Downloads"
             ]
           }"
-          "$mod, w, spawn, helium"
-          "$mod+Shift, w, spawn, helium --incognito"
+          "$mod, w, spawn, helium --profile-directory=Default"
+          "$mod+Shift, w, spawn, helium --profile-directory=Default --incognito"
 
           "$mod, v, spawn, ${termExec [ "nvim" ]}"
           "$mod+Shift, v, spawn, noctalia-ipc plugin:projects toggle"

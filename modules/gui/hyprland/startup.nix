@@ -5,30 +5,38 @@
     {
       custom.programs.hyprland.settings =
         let
-          cmds =
+          mkExecCmd =
+            {
+              cmd,
+              rules ? { },
+            }:
+            ''hl.exec_cmd("${cmd}", {${
+              rules |> lib.mapAttrsToList (k: v: ''${k} = "${toString v}"'') |> lib.concatStringsSep ", "
+            }})'';
+          cmds = [
             # stop fucking with my cursors
-            [
-              ''"hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"''
-              ''"hyprctl dispatch workspace 1"''
-            ]
-            ++ map (
-              {
-                enable,
-                spawn,
-                workspace,
-                ...
-              }:
-              let
-                rules = lib.optionalString (workspace != null) '', { workspace = "${toString workspace} silent" }'';
-                exec = lib.concatStringsSep " " spawn;
-              in
-              lib.optionalString enable ''"${exec}" ${rules}''
-            ) config.custom.startup;
+            { cmd = "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"; }
+            { cmd = "hyprctl dispatch workspace 1"; }
+          ]
+
+          ++ (
+            config.custom.startup
+            |> lib.filter (startup: startup.enable)
+            |> map (
+              { spawn, workspace, ... }: {
+                cmd = spawn;
+                rules = lib.optionalAttrs (workspace != null) { workspace = "${toString workspace} silent"; };
+              }
+            )
+          );
         in
         /* lua */ ''
           hl.on("hyprland.start", function ()
-            ${lib.concatMapStringsSep "\n" (cmd: "hl.exec_cmd(${cmd})") cmds}
+            ${lib.concatMapStringsSep "\n" mkExecCmd cmds}
           end)
+
+          -- extra rules for startup
+          hl.window_rule({ match = { class = "helium", title = ".*Discord.*" }, workspace = "9" })
         '';
 
       systemd.user = {

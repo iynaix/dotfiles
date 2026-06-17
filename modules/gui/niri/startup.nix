@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   flake.modules.nixos.wm =
-    { config, ... }:
+    { config, pkgs, ... }:
     {
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = lib.mkMerge (
@@ -9,7 +9,7 @@
           config.custom.startup
           |> lib.filter (startup: startup.enable)
           |> map (startup: {
-            spawn-at-startup = [ startup.spawn ];
+            spawn-sh-at-startup = [ startup.spawn ];
             window-rules = lib.optional (startup.app-id != null || startup.title != null) (
               {
                 matches = [
@@ -30,15 +30,25 @@
         ++ [
           # focus default workspace for each monitor
           {
-            spawn-at-startup = lib.mkAfter (
-              map (mon: [
-                "niri"
-                "msg"
-                "action"
-                "focus-workspace"
-                "${toString mon.defaultWorkspace}"
-              ]) (lib.reverseList config.custom.hardware.monitors)
+            spawn-sh-at-startup = lib.mkAfter (
+              map (mon: "niri msg action focus-workspace ${toString mon.defaultWorkspace}") (
+                lib.reverseList config.custom.hardware.monitors
+              )
             );
+          }
+
+          # resize the browsers after startup
+          {
+            spawn-sh-at-startup = lib.mkOrder 2000 [
+              (lib.getExe (
+                pkgs.writeShellApplication {
+                  name = "niri-initial";
+                  text = ''
+                    sleep 5; niri-resize-workspace 1
+                  '';
+                }
+              ))
+            ];
           }
         ]
       );

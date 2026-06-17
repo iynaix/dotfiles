@@ -16,29 +16,29 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.15.5";
+    version = "0.15.8";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.5/Exiled-Exchange-2-0.15.5.AppImage";
-      sha256 = "sha256-Wt9I56yHLQ5XDnlo+OMdzTxfqq7/rkq4BGG9bxEbzOY=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.8/Exiled-Exchange-2-0.15.8.AppImage";
+      sha256 = "sha256-xmEvKJkRFJokzOa/6qRqT4+QKfnfjIoAfqP+oDqyxH8=";
     };
   };
   helium = {
     pname = "helium";
-    version = "0.13.3.1";
+    version = "0.13.4.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.3.1/helium-0.13.3.1-x86_64.AppImage";
-      sha256 = "sha256-RS+Sn42V+HjCw41N1zayMVIqlgH+i2B2IdVJwBPmw00=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.4.1/helium-0.13.4.1-x86_64.AppImage";
+      sha256 = "sha256-z23up+T6bj6F+cQslmI92bEksIAw1OQHRIrmQSaaxY8=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.14.2";
+    version = "0.14.4";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.14.2";
+      rev = "0.14.4";
       fetchSubmodules = false;
-      sha256 = "sha256-5hv9HjWafU9i83HBYVEZDJbOIDM5WdKx9TpI87PwhP8=";
+      sha256 = "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=";
     };
   };
   mpv-deletefile = {

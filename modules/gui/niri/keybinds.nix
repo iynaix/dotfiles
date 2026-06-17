@@ -50,12 +50,12 @@
             "Mod+W".spawn = [
               "sh"
               "-c"
-              "helium &"
+              "helium --profile-directory=Default &"
             ];
             "Mod+Shift+W".spawn = [
               "sh"
               "-c"
-              "helium --incognito &"
+              "helium --profile-directory=Default --incognito &"
             ];
             "Mod+V".spawn = termExec [ "nvim" ];
             "Mod+Shift+V".spawn = [

@@ -23,7 +23,7 @@
                   default = null;
                 };
                 spawn = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
+                  type = lib.types.str;
                   description = "Command to execute";
                   default = null;
                 };
@@ -55,7 +55,7 @@
 
   flake.modules.nixos.wm =
     # generic functionality for all WMs
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.constants) host;
       # ensure setting terminal title using --title or exec with -e works
@@ -64,29 +64,21 @@
         "ghostty";
     in
     {
+      # use uwsm to prevent race conditions with initializing dbus, otherwise native
+      # notifications will not work on helium
+      programs.uwsm.enable = true;
+
       custom = {
         startup = [
           {
             app-id = "helium";
-            spawn = [
-              (lib.getExe (
-                pkgs.writeShellApplication {
-                  name = "init-helium";
-                  runtimeInputs = [
-                    pkgs.custom.helium
-                    config.custom.programs.dotfiles-rs
-                  ];
-                  text = ''
-                    helium --profile-directory=Default &
-                    sleep 1; helium --incognito &
+            spawn = "uwsm app -- helium --profile-directory=Default";
+            workspace = 1;
+          }
 
-                    if [[ $XDG_CURRENT_DESKTOP == "niri" ]]; then
-                      sleep 5; niri-resize-workspace 1
-                    fi
-                  '';
-                }
-              ))
-            ];
+          {
+            app-id = "helium";
+            spawn = "uwsm app -- helium --profile-directory=Default --incognito";
             workspace = 1;
           }
 
@@ -94,7 +86,7 @@
           {
             app-id = "nemo";
             # NOTE: nemo seems ignore --class and --name flags?
-            spawn = [ "nemo" ];
+            spawn = "nemo";
             workspace = 4;
           }
 
@@ -103,20 +95,19 @@
           # https://github.com/ghostty-org/ghostty/discussions/8804
           rec {
             app-id = "${config.custom.programs.terminal.app-id}-vertical";
-            spawn = [
-              termExe
-              "--class=${app-id}"
-            ];
+            spawn = "${termExe} --class=${app-id}";
             workspace = 7;
             niriArgs = {
               open-maximized = true;
             };
           }
 
-          # librewolf for discord
+          # discord and other chats
           {
-            app-id = "librewolf";
-            spawn = [ "librewolf" ];
+            app-id = "helium";
+            title = ".*Discord.*";
+            # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
+            spawn = "uwsm app -- helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat ";
             workspace = 9;
             niriArgs = {
               open-maximized = true;
@@ -127,22 +118,13 @@
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-dl";
-            spawn = [
-              termExe
-              "--class=${app-id}"
-            ];
+            spawn = "${termExe} --class=${app-id}";
             workspace = 8;
           }
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
-            spawn = [
-              termExe
-              "--class=${app-id}"
-              "-e"
-              "nvim"
-              "${config.hj.directory}/Desktop/yt.txt"
-            ];
+            spawn = "${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
             workspace = 8;
           }
         ];

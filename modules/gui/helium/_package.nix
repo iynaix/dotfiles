@@ -3,6 +3,7 @@
   lib,
   appimageTools,
   makeWrapper,
+  flags ? [ ],
 }:
 let
   pname = "helium";
@@ -16,7 +17,8 @@ appimageTools.wrapType2 (
     extraInstallCommands = /* sh */ ''
       wrapProgram $out/bin/${pname} \
           --set-default XDG_DATA_HOME "$HOME/.local/share" \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+          ${lib.concatMapStringsSep " \\\n" (f: "--add-flags \"${f}\"") flags}
 
       install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/${pname}.desktop \

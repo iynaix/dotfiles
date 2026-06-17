@@ -125,12 +125,7 @@
         # disable networkmanager software wifi switch on startup, so noctalia doesn't toggle it back on when syncing state
         startup = [
           {
-            spawn = [
-              "nmcli"
-              "radio"
-              "wifi"
-              "off"
-            ];
+            spawn = "nmcli radio wifi off";
           }
         ];
       };
@@ -138,7 +133,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        displayManager.defaultSession = "hyprland";
+        displayManager.defaultSession = "hyprland-uwsm";
 
         pipewire = {
           wireplumber.extraConfig = {

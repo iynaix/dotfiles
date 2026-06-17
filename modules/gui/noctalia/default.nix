@@ -278,7 +278,7 @@ in
         # start noctalia after the WM is ready
         startup = lib.mkBefore [
           {
-            spawn = [ (lib.getExe noctalia-start) ];
+            spawn = lib.getExe noctalia-start;
           }
         ];
 

@@ -12,8 +12,8 @@
         hl.bind(mod .. " + SHIFT + Return", hl.dsp.exec_cmd("noctalia-ipc launcher toggle"))
         hl.bind(mod .. " + e", hl.dsp.exec_cmd("nemo ${config.hj.directory}/Downloads"))
         hl.bind(mod .. " + SHIFT + e", hl.dsp.exec_cmd("${termExec "yazi ${config.hj.directory}/Downloads"}"))
-        hl.bind(mod .. " + w", hl.dsp.exec_cmd("helium"))
-        hl.bind(mod .. " + SHIFT + w", hl.dsp.exec_cmd("helium --incognito"))
+        hl.bind(mod .. " + w", hl.dsp.exec_cmd("helium --profile-directory=Default"))
+        hl.bind(mod .. " + SHIFT + w", hl.dsp.exec_cmd("helium --profile-directory=Default --incognito"))
         hl.bind(mod .. " + v", hl.dsp.exec_cmd("${termExec "nvim"}"))
         hl.bind(mod .. " + SHIFT + v", hl.dsp.exec_cmd("noctalia-ipc plugin:projects toggle"))
         hl.bind(

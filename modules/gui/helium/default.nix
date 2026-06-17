@@ -1,18 +1,23 @@
-{ lib, self, ... }:
+{
+  lib,
+  self,
+  ...
+}:
 {
   perSystem =
     { pkgs, ... }:
     {
       packages.helium = pkgs.callPackage ./_package.nix {
         sources = self.libCustom.nvFetcherSources pkgs;
+        flags = [
+          "--restore-last-session"
+          "--hide-crash-restore-bubble"
+        ];
       };
     };
 
   flake.modules.nixos.gui =
     { pkgs, ... }:
-    let
-      heliumPkg = pkgs.custom.helium;
-    in
     {
       programs.chromium = {
         # NOTE: programs.chromium.enable does not install any package!, it only creates policy files
@@ -55,12 +60,12 @@
 
       environment = {
         sessionVariables = {
-          DEFAULT_BROWSER = lib.getExe heliumPkg;
-          BROWSER = lib.getExe heliumPkg;
+          DEFAULT_BROWSER = lib.getExe pkgs.custom.helium;
+          BROWSER = lib.getExe pkgs.custom.helium;
         };
 
         systemPackages = [
-          heliumPkg
+          pkgs.custom.helium
         ];
       };
 
