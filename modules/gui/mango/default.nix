@@ -97,8 +97,8 @@ in
               # adds niri inspired atstartup rule:
               # https://github.com/DreamMaoMao/mangowc/pull/654
               (pkgs.fetchurl {
-                url = "https://github.com/mangowm/mango/commit/2f536e87544be01b83f9338acf64c1332a792ab2.patch";
-                hash = "sha256-X9UJQ4ryZUqxdQUjjJPg/XJKHXnl34xu2ZvgDSxHBj8=";
+                url = "https://github.com/mangowm/mango/commit/46a5d4445b1e5f4e27a340f47ec31a55ca922ba9.patch";
+                hash = "sha256-HT8jdfvlQKV35lyzaISfBUAIDy0PUGNOhdiTo9LB0+0=";
               })
             ];
 

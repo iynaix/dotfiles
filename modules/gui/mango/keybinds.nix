@@ -11,15 +11,15 @@
         (writeShellApplication {
           name = "mango-focus-workspace";
           text = ''
-            mmsg -d "focusmon,$1"
-            mmsg -d "view,$2"
+            mmsg dispatch "focusmon,$1"
+            mmsg dispatch "view,$2"
           '';
         })
         (writeShellApplication {
           name = "mango-move-to-workspace";
           text = ''
-            mmsg -d "tagmon,$1"
-            mmsg -d "tag,$2"
+            mmsg dispatch "tagmon,$1"
+            mmsg dispatch "tag,$2"
           '';
         })
       ];
