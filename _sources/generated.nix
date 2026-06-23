@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.13.4.1";
+    version = "0.13.6.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.4.1/helium-0.13.4.1-x86_64.AppImage";
-      sha256 = "sha256-z23up+T6bj6F+cQslmI92bEksIAw1OQHRIrmQSaaxY8=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.13.6.1/helium-0.13.6.1-x86_64.AppImage";
+      sha256 = "sha256-ZcZo/vFXWrZjuPjIt2MYbsxs4LU7NvpB3I6mrPzAJjE=";
     };
   };
   mango = {

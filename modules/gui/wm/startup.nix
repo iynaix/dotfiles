@@ -105,7 +105,7 @@
           # discord and other chats
           {
             app-id = "helium";
-            title = ".*Discord.*";
+            title = ".*(Discord|WhatsApp|Flood).*";
             # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
             spawn = "uwsm app -- helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat ";
             workspace = 9;

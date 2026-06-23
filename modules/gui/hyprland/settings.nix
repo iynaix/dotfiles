@@ -17,8 +17,7 @@
             local mod = "${if isVm then "ALT" else "SUPER"}"
           '')
 
-          /* lua */
-          ''
+          /* lua */ ''
             hl.config({
             	animations = {
             		enabled = ${lib.boolToString (!isVm)},

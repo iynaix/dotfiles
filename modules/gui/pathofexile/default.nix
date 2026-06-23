@@ -27,7 +27,6 @@
         "mkbkmkampdnnbehdldipgjhbablkmfba"
         # Looty
         # "ajfbflclpnpbjkfibijekgcombcgehbi"
-        # Old Reddit Redirect
       ];
 
       custom.programs = {

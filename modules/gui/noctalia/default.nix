@@ -18,6 +18,14 @@ in
               calendarSupport = true;
             }).overrideAttrs
               (o: {
+                # use the final commit of the legacy-v4 branch, needed for hyprland lua template
+                src = pkgs.fetchFromGitHub {
+                  owner = "noctalia-dev";
+                  repo = "noctalia-shell";
+                  rev = "f816591afc2f2f606d1f0cf70b51e95c04a7a8aa";
+                  hash = "sha256-2oJuPyt+4dd+ZzO7TFqpmkSAAYpRg9SF4eV8kJGl6Tk=";
+                };
+
                 patches = [
                   ./face-aware-crop.patch
                   # write plugin settings to ~/.cache/noctalia instead so git doesn't fail to clone to a non-empty directory

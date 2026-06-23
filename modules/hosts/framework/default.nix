@@ -71,11 +71,7 @@
         # don't blind me on startup
         startup = [
           {
-            spawn = [
-              (lib.getExe pkgs.brightnessctl)
-              "s"
-              "20%"
-            ];
+            spawn = "${lib.getExe pkgs.brightnessctl} s 20%";
           }
         ];
       };

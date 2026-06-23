@@ -98,14 +98,9 @@ in
               # https://github.com/DreamMaoMao/mangowc/pull/654
               (pkgs.fetchurl {
                 url = "https://github.com/mangowm/mango/commit/46a5d4445b1e5f4e27a340f47ec31a55ca922ba9.patch";
-                hash = "sha256-HT8jdfvlQKV35lyzaISfBUAIDy0PUGNOhdiTo9LB0+0=";
+                hash = "sha256-flyNWQN+AREpzsG9rh5ndlNYISYLI/gKdmGXgYpdshQ=";
               })
             ];
-
-            buildInputs =
-              assert lib.assertMsg (lib.versionOlder pkgs.mangowc.version "0.14.0")
-                "remove mangowc cjson buildInputs override";
-              (o.buildInputs or [ ]) ++ [ pkgs.cjson ];
           }
         );
         configFile.content = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (toMangoConf {

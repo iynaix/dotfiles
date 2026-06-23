@@ -5,18 +5,16 @@
     {
       custom.programs.hyprland.settings =
         let
+          toLua = lib.generators.toLua { };
           mkExecCmd =
             {
               cmd,
               rules ? { },
             }:
-            ''hl.exec_cmd("${cmd}", {${
-              rules |> lib.mapAttrsToList (k: v: ''${k} = "${toString v}"'') |> lib.concatStringsSep ", "
-            }})'';
+            ''hl.exec_cmd("${cmd}", ${toLua rules})'';
           cmds = [
             # stop fucking with my cursors
             { cmd = "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"; }
-            { cmd = "hyprctl dispatch workspace 1"; }
           ]
 
           ++ (
@@ -28,7 +26,12 @@
                 rules = lib.optionalAttrs (workspace != null) { workspace = "${toString workspace} silent"; };
               }
             )
-          );
+          )
+
+          # focus default workspace for each monitor
+          ++ (map (mon: {
+            cmd = "hyprctl dispatch hl.dsp.focus({ workspace = ${toString mon.defaultWorkspace} })";
+          }) (lib.reverseList config.custom.hardware.monitors));
         in
         /* lua */ ''
           hl.on("hyprland.start", function ()
@@ -36,7 +39,7 @@
           end)
 
           -- extra rules for startup
-          hl.window_rule({ match = { class = "helium", title = ".*Discord.*" }, workspace = "9" })
+          hl.window_rule({ match = { class = "helium", title = ".*(Discord|WhatsApp|Flood).*" }, workspace = "9" })
         '';
 
       systemd.user = {

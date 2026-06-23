@@ -34,7 +34,8 @@
           "eimadpbcbfnmbkopoojfekhnkhdbieeh"
           # JSON Viewer
           "gbmdgpbipfallnflgajpaliibnhdgobh"
-          "dneaehbmnbhcippjikoajpoabadpodje"
+          # Old Reddit Redirect
+          # "dneaehbmnbhcippjikoajpoabadpodje"
           # React Dev Tools
           "fmkadmapgofadopljbjfkapdkoienihi"
           # Redirector
