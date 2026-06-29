@@ -37,6 +37,17 @@
           security.pam.services.login.enableGnomeKeyring = true;
         }
 
+        # use run0 for suo
+        {
+          security = {
+            sudo.enable = false;
+            run0 = {
+              enable = true;
+              sudo-shim.enable = true;
+            };
+          };
+        }
+
         {
           security = {
             polkit.enable = true;
