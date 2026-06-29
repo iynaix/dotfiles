@@ -39,7 +39,6 @@ in
       # https://github.com/hyprwm/Hyprland/pull/12286
       config.drv.installPhase = /* sh */ ''
         runHook preInstall
-        # filter out the source directives for validation, the nix sandbox won't have those files
         export XDG_RUNTIME_DIR=$(mktemp -d)
         ${lib.getExe config.package} --verify-config -c "${config.constructFiles.generatedConfig.path}"
         runHook postInstall

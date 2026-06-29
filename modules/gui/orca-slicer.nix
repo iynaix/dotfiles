@@ -6,10 +6,6 @@
         orca-slicer = inputs.wrappers.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.orca-slicer;
-          # use glew without EGL so orca-slicer doesn't have no preview
-          # https://github.com/maximousblk/nyx/commit/6e1a814388e33a57cefe26f1643fbc35edff9086
-          # https://github.com/NixOS/nixpkgs/issues/513195
-          env.LD_PRELOAD = "${(pkgs.glew.override { enableEGL = false; }).out}/lib/libGLEW.so.2.3";
 
           constructFiles = {
             # associate .step files with orca-slicer

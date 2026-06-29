@@ -11,7 +11,9 @@
         {
           inherit pkgs;
           package = pkgs.hyprland;
-          inherit (pkgs.hyprland) passthru;
+          # remove the uwsm session
+          filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
+          passthru.providedSessions = [ "hyprland" ];
         }
         // config.custom.programs.hyprland
       );
@@ -48,11 +50,13 @@
       programs.hyprland = {
         enable = true;
         package = hyprland';
-        withUWSM = true;
       };
 
       custom.programs.print-config = {
-        hyprland = /* sh */ ''cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.lua" | moor --lang lua'';
+        hyprland = /* sh */ ''
+          cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/hypr/noctalia/noctalia-colors.lua" | \
+            ${lib.getExe pkgs.stylua} --indent-type Spaces --indent-width 2 - | \
+            moor --lang lua'';
       };
 
       custom.persist = {

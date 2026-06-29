@@ -37,6 +37,11 @@
                   description = "Extra arguments for niri window rules";
                   default = { };
                 };
+                hyprlandArgs = lib.mkOption {
+                  type = lib.types.attrs;
+                  description = "Extra arguments for hyprland window rules";
+                  default = { };
+                };
               };
             })
           ]
@@ -64,21 +69,17 @@
         "ghostty";
     in
     {
-      # use uwsm to prevent race conditions with initializing dbus, otherwise native
-      # notifications will not work on helium
-      programs.uwsm.enable = true;
-
       custom = {
         startup = [
           {
             app-id = "helium";
-            spawn = "uwsm app -- helium --profile-directory=Default";
+            spawn = "sleep 2; helium --profile-directory=Default";
             workspace = 1;
           }
 
           {
             app-id = "helium";
-            spawn = "uwsm app -- helium --profile-directory=Default --incognito";
+            spawn = "sleep 2; helium --profile-directory=Default --incognito";
             workspace = 1;
           }
 
@@ -103,14 +104,17 @@
           }
 
           # discord and other chats
-          {
-            app-id = "helium";
+          rec {
+            app-id = "(helium|helium-chat)";
             title = ".*(Discord|WhatsApp|Flood).*";
             # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
-            spawn = "uwsm app -- helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat ";
+            spawn = "sleep 2; helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat";
             workspace = 9;
             niriArgs = {
               open-maximized = true;
+            };
+            hyprlandArgs = {
+              initial_title = title;
             };
           }
 

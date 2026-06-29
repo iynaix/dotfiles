@@ -6,41 +6,43 @@
       custom.programs.hyprland.settings =
         let
           toLua = lib.generators.toLua { };
-          mkExecCmd =
+          mkStartupCmd =
             {
-              cmd,
-              rules ? { },
+              enable ? true,
+              spawn,
+              workspace ? null,
+              hyprlandArgs ? { },
+              ...
             }:
-            ''hl.exec_cmd("${cmd}", ${toLua rules})'';
-          cmds = [
-            # stop fucking with my cursors
-            { cmd = "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"; }
-          ]
+            let
+              wksp = lib.optionalAttrs (workspace != null) {
+                workspace = "${toString workspace} silent";
+              };
+            in
+            lib.optionalString enable ''
+              hl.on("hyprland.start", function ()
+                hl.exec_cmd("${spawn}", ${toLua wksp})
+              end)
 
-          ++ (
-            config.custom.startup
-            |> lib.filter (startup: startup.enable)
-            |> map (
-              { spawn, workspace, ... }: {
-                cmd = spawn;
-                rules = lib.optionalAttrs (workspace != null) { workspace = "${toString workspace} silent"; };
-              }
-            )
-          )
-
-          # focus default workspace for each monitor
-          ++ (map (mon: {
-            cmd = "hyprctl dispatch hl.dsp.focus({ workspace = ${toString mon.defaultWorkspace} })";
-          }) (lib.reverseList config.custom.hardware.monitors));
+              ${lib.optionalString (hyprlandArgs != { }) ''
+                hl.window_rule(${toLua ({ match = hyprlandArgs; } // wksp)})
+              ''}
+            '';
         in
-        /* lua */ ''
-          hl.on("hyprland.start", function ()
-            ${lib.concatMapStringsSep "\n" mkExecCmd cmds}
-          end)
-
-          -- extra rules for startup
-          hl.window_rule({ match = { class = "helium", title = ".*(Discord|WhatsApp|Flood).*" }, workspace = "9" })
-        '';
+        (
+          [
+            # stop fucking with my cursors
+            { spawn = "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"; }
+          ]
+          ++ config.custom.startup
+          ++
+            # focus default workspace for each monitor
+            (map (mon: {
+              spawn = "hyprctl dispatch hl.dsp.focus({ workspace = ${toString mon.defaultWorkspace} })";
+            }) (lib.reverseList config.custom.hardware.monitors))
+        )
+        |> map mkStartupCmd
+        |> lib.concatLines;
 
       systemd.user = {
         # ly -> hyprland-start -> exec-once hyprland-session.service -> startupServices
