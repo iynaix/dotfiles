@@ -8,7 +8,8 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  inherit (flake.inputs.nixpkgs) lib;
+  inputs = (import ./.tack) { };
+  inherit (inputs.nixpkgs) lib;
 in
 (
   flake.nixosConfigurations
@@ -28,9 +29,12 @@ in
   |> lib.mergeAttrsList
 )
 // rec {
-  inherit lib;
-  inherit (flake) inputs;
-  inherit flake host user;
+  inherit
+    flake
+    host
+    lib
+    user
+    ;
   self = flake;
 
   # default host

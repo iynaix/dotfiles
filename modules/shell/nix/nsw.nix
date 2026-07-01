@@ -104,13 +104,14 @@
       upd8 = pkgs.writeShellApplication {
         name = "upd8";
         runtimeInputs = [
+          config.programs.tack.package
           pkgs.nvfetcher
           nsw
           nv-update
         ];
         text = /* sh */ ''
           pushd ${dots} > /dev/null
-          nix flake update
+          tack update
           nv-update
           nsw "$@"
           popd > /dev/null

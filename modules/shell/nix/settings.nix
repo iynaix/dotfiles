@@ -26,7 +26,6 @@
 
         shellAliases = {
           nfl = "nix flake lock";
-          nfu = "nix flake update";
           nsh = "nix-shell --command fish -p";
           nshp = "nix-shell --pure --command fish -p";
         };
@@ -52,7 +51,7 @@
         let
           flakes = lib.filterAttrs (_: input: lib.isType "flake" input) inputs;
           nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes;
-          registry = lib.mapAttrs (_: flake: { inherit flake; }) inputs;
+          registry = lib.mapAttrs (_: flake: { inherit flake; }) (removeAttrs inputs [ "__functor" ]);
         in
         {
           channel.enable = false;

@@ -187,6 +187,19 @@
         '';
       };
 
+      # update nix flake with tack / nix
+      nfu = pkgs.writeShellApplication {
+        name = "nfu";
+        runtimeInputs = [ config.programs.tack.package ];
+        text = /* sh */ ''
+          if [ -d ".tack" ]; then
+              tack update
+          else
+              nix flake update
+          fi
+        '';
+      };
+
       # nix garbage collection
       ngc = pkgs.writeShellApplication {
         name = "ngc";
@@ -413,6 +426,7 @@
           nixpkgs-review # overlay-ed above
         ]
         ++ [
+          nfu
           ngeneration
           ngc
           nrepl

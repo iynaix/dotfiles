@@ -1,0 +1,69 @@
+# tack pins
+# edit by hand or with tack add / rm / alias
+# nix reads pins.lock.json
+# this file drives tack update
+
+# shorturl schemes
+# scheme rest expands rest into {path}
+[shorturls]
+# gh = "github:{path}"
+
+# all_follow maps input names to the top-level pin they follow
+# opt out per-input with exclude_follow
+[all_follow]
+nixpkgs = "nixpkgs"
+systems = "systems"
+flake-parts = "flake-parts"
+
+# inputs.<name> fields
+#   url             required, shorturl ok, ?rev=<sha> pins an exact commit
+#   type            flake (default), fetch, or fixed
+#   flake           legacy false means type = "fetch"
+#   follows         { child = "pin" } override map
+#   exclude_follow  all_follow names to skip
+#   dir             subdir holding flake.nix
+#   submodules      fetch git submodules
+#   unpack          fixed-only tarball or file
+# channel urls are faster and more reliable than github -.-
+[inputs.nixpkgs]
+url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
+
+[inputs.nixpkgs-stable]
+url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.xz"
+
+# patch nixpkgs to use unmerged PRs
+[inputs.nixpkgs-patcher]
+url = "github:gepbird/nixpkgs-patcher"
+
+[inputs.flake-parts]
+url = "github:hercules-ci/flake-parts"
+
+[inputs.systems]
+url = "github:nix-systems/default"
+
+[inputs.hjem]
+url = "github:feel-co/hjem"
+
+[inputs.wrappers]
+url = "github:BirdeeHub/nix-wrapper-modules"
+
+[inputs.nixos-hardware]
+url = "github:NixOS/nixos-hardware"
+
+[inputs.preservation]
+url = "github:nix-community/preservation"
+
+[inputs.sops-nix]
+url = "github:Mic92/sops-nix"
+
+[inputs.nix-index-database]
+url = "github:nix-community/nix-index-database"
+
+[inputs.nvf]
+url = "github:notashelf/nvf"
+
+[inputs.wfetch]
+url = "github:iynaix/wfetch"
+
+[inputs.focal]
+url = "github:iynaix/focal"
