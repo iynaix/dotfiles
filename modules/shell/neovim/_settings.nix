@@ -122,6 +122,7 @@
       # luasnip
 
       bash.enable = true;
+      clang.enable = true;
       html.enable = true;
       lua.enable = true;
       markdown = {
@@ -199,12 +200,37 @@
     };
     telescope = {
       enable = true;
+      extensions = [
+        {
+          name = "live_grep_args";
+          packages = [ pkgs.vimPlugins.telescope-live-grep-args-nvim ];
+        }
+      ];
       mappings = {
         buffers = "<leader>fb";
         findFiles = "<leader>ff";
         gitBranches = "<leader>gb";
         gitStatus = "<leader>gs";
-        liveGrep = "<leader>/";
+        # liveGrep = "<leader>/";
+      };
+      setupOpts = {
+        extensions = {
+          live_grep_args = {
+            auto_quoting = true;
+            additional_args = [
+              "--smart-case"
+              "--hidden"
+            ];
+            mappings = lib.mkLuaInline ''
+              {
+                i = {
+                  ["<C-k>"] = require("telescope-live-grep-args.actions").quote_prompt(),
+                  ["<C-w>"] = require("telescope-live-grep-args.actions").quote_prompt({ postfix = ' --word-regexp' }),
+                },
+              }
+            '';
+          };
+        };
       };
     };
     treesitter.autotagHtml = true;

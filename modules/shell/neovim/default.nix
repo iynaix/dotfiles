@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   ...
 }:
 {
@@ -59,7 +60,7 @@
       };
 
       custom.programs.print-config = rec {
-        neovim = /* sh */ "nvf-print-config | moor --lang lua";
+        neovim = /* sh */ "nvf-print-config | ${lib.getExe pkgs.stylua} --indent-type Spaces --indent-width 2 - | moor --lang lua";
         nvf = neovim;
         nvim = neovim;
       };
