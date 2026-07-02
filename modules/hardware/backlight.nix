@@ -19,11 +19,7 @@
               allow-when-locked = true;
             };
             content = {
-              spawn = [
-                "brightnessctl"
-                "set"
-                "5%-"
-              ];
+              spawn-sh = "brightnessctl set 5%-";
             };
           };
           "XF86MonBrightnessUp" = _: {
@@ -31,11 +27,7 @@
               allow-when-locked = true;
             };
             content = {
-              spawn = [
-                "brightnessctl"
-                "set"
-                "+5%"
-              ];
+              spawn-sh = "brightnessctl set +5%";
             };
           };
         };

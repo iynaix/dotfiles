@@ -14,7 +14,7 @@
         hl.bind(mod .. " + SHIFT + e", hl.dsp.exec_cmd("${termExec "yazi ${config.hj.directory}/Downloads"}"))
         hl.bind(mod .. " + w", hl.dsp.exec_cmd("helium --profile-directory=Default"))
         hl.bind(mod .. " + SHIFT + w", hl.dsp.exec_cmd("helium --profile-directory=Default --incognito"))
-        hl.bind(mod .. " + v", hl.dsp.exec_cmd("${termExec "nvim"}"))
+        hl.bind(mod .. " + v", hl.dsp.exec_cmd("emacsclient -c"))
         hl.bind(mod .. " + SHIFT + v", hl.dsp.exec_cmd("noctalia-ipc plugin:projects toggle"))
         hl.bind(
           mod .. " + period",

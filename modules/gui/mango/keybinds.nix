@@ -41,7 +41,7 @@
           "$mod, w, spawn, helium --profile-directory=Default"
           "$mod+Shift, w, spawn, helium --profile-directory=Default --incognito"
 
-          "$mod, v, spawn, ${termExec [ "nvim" ]}"
+          "$mod, v, spawn, emacsclient -c"
           "$mod+Shift, v, spawn, noctalia-ipc plugin:projects toggle"
 
           # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented

@@ -44,25 +44,9 @@
                 show-pointer = false;
               };
             };
-            "Mod+Shift+backslash".spawn = [
-              "focal"
-              "image"
-              # "--edit"
-              # "swappy"
-              "--rofi"
-            ];
-            # "Mod+Ctrl+backslash".spawn = [
-            #   "focal"
-            #   "image"
-            #   "--area"
-            #   "selection"
-            #   "--ocr"
-            # ];
-            "Alt+backslash".spawn = [
-              "focal"
-              "video"
-              "--rofi"
-            ];
+            "Mod+Shift+backslash".spawn-sh = "focal image --rofi";
+            "Mod+Ctrl+backslash".spawn-sh = "focal image --area selection --ocr";
+            "Alt+backslash".spawn-sh = "focal video --rofi";
           };
         };
 

@@ -5,30 +5,17 @@
     let
       inherit (config.custom.constants) dots projects;
       inherit (config.custom.hardware) monitors;
-      termExec =
-        cmd:
-        [
-          "ghostty"
-          "-e"
-        ]
-        ++ (lib.flatten cmd);
+      termExec = cmd: "ghostty -e ${cmd}";
     in
     {
       custom = {
         programs.niri.settings = {
           binds = {
-            # Most actions that you can bind here can also be invoked programmatically with
-            # `niri msg action do-something`.
-
             # show hotkey overlay
             # "Mod+Shift+Slash".show-hotkey-overlay = _: {};
 
-            "Mod+Return".spawn = [ "ghostty" ];
-            "Mod+Shift+Return".spawn = [
-              "noctalia-ipc"
-              "launcher"
-              "toggle"
-            ];
+            "Mod+Return".spawn-sh = "ghostty";
+            "Mod+Shift+Return".spawn-sh = "noctalia-ipc launcher toggle";
             "Mod+BackSpace" = _: {
               props = {
                 repeat = false;
@@ -38,75 +25,31 @@
               };
             };
 
-            "Mod+E".spawn = [
-              "nemo"
-              "${config.hj.directory}/Downloads"
-            ];
-            "Mod+Shift+E".spawn = termExec [
-              "yazi"
-              "${config.hj.directory}/Downloads"
-            ];
+            "Mod+E".spawn-sh = "nemo ${config.hj.directory}/Downloads";
+            "Mod+Shift+E".spawn-sh = termExec "yazi ${config.hj.directory}/Downloads";
             # background process to workaround a race condition that causes helium to only open sometimes
-            "Mod+W".spawn = [
-              "sh"
-              "-c"
-              "helium --profile-directory=Default &"
-            ];
-            "Mod+Shift+W".spawn = [
-              "sh"
-              "-c"
-              "helium --profile-directory=Default --incognito &"
-            ];
-            "Mod+V".spawn = termExec [ "nvim" ];
-            "Mod+Shift+V".spawn = [
-              "noctalia-ipc"
-              "plugin:projects"
-              "toggle"
-            ];
-            "Mod+period".spawn = [
-              "focus-or-run"
-              "dotfiles - VSCodium"
-              "codium ${dots}"
-            ];
-            "Mod+Shift+period".spawn = [
-              "focus-or-run"
-              "nixpkgs - VSCodium"
-              "codium ${projects}/nixpkgs"
-            ];
+            "Mod+W".spawn-sh = "helium --profile-directory=Default &";
+            "Mod+Shift+W".spawn-sh = "helium --profile-directory=Default --incognito &";
+            "Mod+V".spawn-sh = "emacsclient -c";
+            "Mod+Shift+V".spawn-sh = "noctalia-ipc plugin:projects toggle";
+            "Mod+period".spawn-sh = ''focus-or-run "dotfiles - VSCodium" "codium ${dots}"'';
+            "Mod+Shift+period".spawn = ''focus-or-run "nixpkgs - VSCodium" "codium ${projects}/nixpkgs"'';
 
             # exit niri
             "Alt+F4".quit = _: { };
-            "Ctrl+Alt+Delete".spawn = [
-              "noctalia-ipc"
-              "sessionMenu"
-              "toggle"
-            ];
+            "Ctrl+Alt+Delete".spawn-sh = "noctalia-ipc sessionMenu toggle";
 
             # toggle the bar
-            "Mod+A".spawn = [
-              "noctalia-ipc"
-              "bar"
-              "toggle"
-            ];
+            "Mod+A".spawn-sh = "noctalia-ipc bar toggle";
 
             # restart noctalia
-            "Mod+Shift+A".spawn = [
-              "noctalia-reload"
-            ];
+            "Mod+Shift+A".spawn-sh = "noctalia-reload";
 
             # clipboard history
-            "Mod+Ctrl+V".spawn = [
-              "noctalia-ipc"
-              "launcher"
-              "clipboard"
-            ];
+            "Mod+Ctrl+V".spawn-sh = "noctalia-ipc launcher clipboard";
 
             # notification history
-            "Mod+N".spawn = [
-              "noctalia-ipc"
-              "notifications"
-              "toggleHistory"
-            ];
+            "Mod+N".spawn-sh = "noctalia-ipc notifications toggleHistory";
 
             # TODO: reset monitors?
             # "CTRL_SHIFT, Escape, exec, niri-monitors"
@@ -155,7 +98,7 @@
             "Mod+Tab".focus-workspace-previous = _: { };
 
             # picture in picture mode
-            "Mod+P".spawn = [ "wm-pip" ];
+            "Mod+P".spawn-sh = "wm-pip";
 
             # The following binds move the focused window in and out of a column.
             # If the window is alone, they will consume it into the nearby column to the side.
@@ -165,9 +108,7 @@
 
             "Mod+R".switch-preset-column-width = _: { };
             "Mod+Shift+R".switch-preset-window-height = _: { };
-            "Mod+Ctrl+R".spawn = [
-              (lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace")
-            ];
+            "Mod+Ctrl+R".spawn-sh = lib.getExe' config.custom.programs.dotfiles-rs "niri-resize-workspace";
             # full maximize
             "Mod+Z".maximize-column = _: { };
             "Mod+F".fullscreen-window = _: { };
@@ -189,15 +130,9 @@
             # rather than stacked on top of each other.
             "Mod+T".toggle-column-tabbed-display = _: { };
 
-            "Mod+Apostrophe".spawn = [
-              "wallpaper"
-              "rofi"
-            ];
-            # "Mod+Shift+Apostrophe".spawn = [ "rofi-wallust-theme" ];
-            "Alt+Apostrophe".spawn = [
-              "wallpaper"
-              "history"
-            ];
+            "Mod+Apostrophe".spawn = "wallpaper rofi";
+            # "Mod+Shift+Apostrophe".spawn-sh = "rofi-wallust-theme";
+            "Alt+Apostrophe".spawn = "wallpaper history";
 
             # audio
             "XF86AudioLowerVolume" = _: {
@@ -205,11 +140,7 @@
                 allow-when-locked = true;
               };
               content = {
-                spawn = [
-                  "pamixer"
-                  "-d"
-                  "5"
-                ];
+                spawn-sh = "pamixer -d 5";
               };
             };
             "XF86AudioRaiseVolume" = _: {
@@ -217,11 +148,7 @@
                 allow-when-locked = true;
               };
               content = {
-                spawn = [
-                  "pamixer"
-                  "-i"
-                  "5"
-                ];
+                spawn-sh = "pamixer -i 5";
               };
             };
             "XF86AudioMute" = _: {
@@ -229,10 +156,7 @@
                 allow-when-locked = true;
               };
               content = {
-                spawn = [
-                  "pamixer"
-                  "-t"
-                ];
+                spawn-sh = "pamixer -t";
               };
             };
 

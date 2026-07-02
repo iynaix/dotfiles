@@ -49,9 +49,9 @@
                     -d '{"entity_id": "switch.dac"}' \
                     "http://$(cat ${config.sops.secrets.home_assistant_host.path})/api/services/homeassistant/turn_on"
 
-                  # poll sink ID for up to 8 seconds (40 attempts * 0.2s)
+                  # poll sink ID for up to 5 seconds (25 attempts * 0.2s)
                   count=0
-                  max_attempts=40
+                  max_attempts=25
                   while [ $count -lt $max_attempts ]; do
                       sleep 0.2
                       sink_id=$(get_sink_id)

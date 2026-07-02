@@ -51,9 +51,7 @@
 
         niri.settings = {
           binds = {
-            "Mod+Shift+Ctrl+x".spawn = [
-              (lib.getExe lock)
-            ];
+            "Mod+Shift+Ctrl+x".spawn = lib.getExe lock;
           };
 
           switch-events = {
