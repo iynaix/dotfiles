@@ -60,15 +60,34 @@
 
   flake.modules.nixos.wm =
     # generic functionality for all WMs
-    { config, ... }:
+    { config, pkgs, ... }:
     let
       inherit (config.custom.constants) host;
+      helium-chat = pkgs.writeShellApplication {
+        name = "helium-chat";
+        runtimeInputs = [ pkgs.custom.helium ];
+        text = /* sh */ ''
+          helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat
+        '';
+      };
       # ensure setting terminal title using --title or exec with -e works
       termExe =
         assert config.custom.programs.terminal.package.pname == "ghostty";
         "ghostty";
     in
     {
+      # add desktop entry for helium-chat as well
+      environment.systemPackages = [
+        helium-chat
+        (pkgs.makeDesktopItem {
+          name = "Helium (Chat)";
+          desktopName = "Helium (Chat)";
+          genericName = "Web Browser";
+          icon = "internet-chat";
+          exec = lib.getExe helium-chat;
+        })
+      ];
+
       custom = {
         startup = [
           {
@@ -108,7 +127,7 @@
             app-id = "(helium|helium-chat)";
             title = ".*(Discord|WhatsApp|Flood).*";
             # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
-            spawn = "sleep 2; helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat";
+            spawn = "sleep 2; helium-chat";
             workspace = 9;
             niriArgs = {
               open-maximized = true;

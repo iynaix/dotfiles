@@ -89,7 +89,7 @@ in
       inherit (config.custom.constants) isVm;
       mangowc' = inputs.wrappers.wrappers.mangowc.wrap {
         inherit pkgs;
-        package = pkgs.mangowc.overrideAttrs (
+        package = pkgs.mango.overrideAttrs (
           o:
           (self.libCustom.nvFetcherSources pkgs).mango
           // {
