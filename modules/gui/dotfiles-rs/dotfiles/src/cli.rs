@@ -127,3 +127,13 @@ pub struct FocusOrRunArgs {
     #[arg(index = 2, help = "Command to execute if the window is not found")]
     pub command: String,
 }
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "emacs-launcher",
+    about = "Focus emacs and launch elisp command"
+)]
+pub struct EmacsLauncherArgs {
+    #[arg(help = "Elisp command")]
+    pub elisp: String,
+}

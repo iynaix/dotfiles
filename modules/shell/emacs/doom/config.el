@@ -74,6 +74,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(setq projectile-project-search-path '("/persist/home/iynaix/projects/"))
+
 ;; Tab styling
 (setq centaur-tabs-set-bar 'under)
 
@@ -82,3 +84,9 @@
 
 ;; Ctrl+Q for visual block
 (map! :nv "C-q" #'evil-visual-block)
+
+(defun my/open-project (path)
+  (interactive "DProject: ")
+  (require 'projectile)
+  (projectile-switch-project-by-name path)
+  (projectile-find-file))

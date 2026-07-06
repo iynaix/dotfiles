@@ -184,11 +184,11 @@
             "name": null,
             "owner": "yt-dlp",
             "repo": "yt-dlp",
-            "rev": "2026.06.09",
-            "sha256": "sha256-ykqTDPzKKIWRGSQmw2esCRKyYqDZKXRYDeba888tkDU=",
+            "rev": "2026.07.04",
+            "sha256": "sha256-+oHcVylLXFJTRR6jXF6IXvgntXJz0tRdtnwTruRPkoc=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "2026.06.09"
+        "version": "2026.07.04"
     }
 }
