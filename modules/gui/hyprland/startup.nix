@@ -34,7 +34,7 @@
             # stop fucking with my cursors
             { spawn = "hyprctl setcursor ${"Simp1e-Tokyo-Night"} ${toString 28}"; }
           ]
-          ++ config.custom.startup
+          ++ config.custom.wm.startup
           ++
             # focus default workspace for each monitor
             (map (mon: {
@@ -52,8 +52,8 @@
             Description = "Hyprland compositor session";
             BindsTo = [ "graphical-session.target" ];
             # start the other services here after the WM has already started (push vs pull)
-            Wants = [ "graphical-session-pre.target" ] ++ config.custom.startupServices;
-            Before = config.custom.startupServices;
+            Wants = [ "graphical-session-pre.target" ] ++ config.custom.wm.startupServices;
+            Before = config.custom.wm.startupServices;
             After = [ "graphical-session-pre.target" ];
           };
         };
@@ -82,6 +82,6 @@
       };
 
       # start after WM initializes
-      custom.startupServices = [ "hypr-ipc.service" ];
+      custom.wm.startupServices = [ "hypr-ipc.service" ];
     };
 }

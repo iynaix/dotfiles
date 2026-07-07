@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   flake.modules.nixos.core = {
-    options.custom = {
+    options.custom.wm = {
       startup = lib.mkOption {
         description = "Programs to run on startup";
         type = lib.types.listOf (
@@ -55,7 +55,6 @@
         default = [ ];
       };
     };
-
   };
 
   flake.modules.nixos.wm =
@@ -89,7 +88,7 @@
       ];
 
       custom = {
-        startup = [
+        wm.startup = [
           {
             app-id = "helium";
             spawn = "sleep 2; helium --profile-directory=Default";

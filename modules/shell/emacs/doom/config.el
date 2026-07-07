@@ -81,10 +81,13 @@
 
 ;; Exclude autosave and other doom related stuff from recent files
 (after! recentf
-  (add-to-list 'recentf-exclude "~/.config/emacs/"))
+  (add-to-list 'recentf-exclude "~/.config/emacs/")
+  (add-to-list 'recentf-exclude "/tmp")
+  )
 
-;; Tab styling
-(setq centaur-tabs-set-bar 'under)
+;; Disambiguate tabs using directory
+(setq uniquify-separator "/")
+(setq uniquify-buffer-name-style 'forward)
 
 ;; Ctrl+S to save
 (map! :nvi "C-s" #'save-buffer)

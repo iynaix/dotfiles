@@ -19,8 +19,8 @@
             Description = "mango compositor session";
             BindsTo = [ "graphical-session.target" ];
             # start the other services here after the WM has already started (push vs pull)
-            Wants = [ "graphical-session-pre.target" ] ++ config.custom.startupServices;
-            Before = config.custom.startupServices;
+            Wants = [ "graphical-session-pre.target" ] ++ config.custom.wm.startupServices;
+            Before = config.custom.wm.startupServices;
             After = [ "graphical-session-pre.target" ];
           };
         };
@@ -32,11 +32,13 @@
           exec-once = [
             "${lib.getExe' pkgs.dbus "dbus-update-activation-environment"} --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user restart mango-session.target"
           ]
-          ++ (config.custom.startup |> lib.filter (startup: startup.enable) |> map (startup: startup.spawn));
+          ++ (
+            config.custom.wm.startup |> lib.filter (startup: startup.enable) |> map (startup: startup.spawn)
+          );
 
           # create rules to open the programs on the initial workspaces
           windowrule =
-            config.custom.startup
+            config.custom.wm.startup
             |> lib.filter (startup: startup.enable)
             |> lib.filter (startup: startup.app-id != null || startup.title != null)
             |> map (

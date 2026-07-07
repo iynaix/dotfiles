@@ -69,7 +69,7 @@
         };
 
         # don't blind me on startup
-        startup = [
+        wm.startup = [
           {
             spawn = "${lib.getExe pkgs.brightnessctl} s 20%";
           }

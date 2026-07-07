@@ -29,34 +29,23 @@
         };
       };
 
-      custom.programs = {
-        hyprland.settings = /* lua */ ''
-          hl.bind(mod .. " + backslash", hl.dsp.exec_cmd("focal image --area selection --no-notify --no-save --no-rounded-windows"))
-          hl.bind(mod .. " + SHIFT + backslash", hl.dsp.exec_cmd("focal image --edit swappy --rofi --no-rounded-windows"))
-          hl.bind(mod .. " + CTRL + backslash", hl.dsp.exec_cmd("focal image --area selection --ocr"))
-          hl.bind("ALT + backslash", hl.dsp.exec_cmd("focal video --rofi --no-rounded-windows"))
-        '';
+      custom = {
+        wm.binds = {
+          "Mod+backslash".spawn = "focal image --area selection --no-notify --no-save --no-rounded-windows";
+          "Mod+Shift+backslash".spawn = "focal image --rofi";
+          "Mod+Ctrl+backslash".spawn = "focal image --area selection --ocr";
+          "Alt+backslash".spawn = "focal video --rofi";
+        };
 
-        niri.settings = {
-          binds = {
-            "Mod+backslash".screenshot = _: {
+        programs.niri.settings.binds = {
+          # use the built in niri screenshot
+          "Mod+backslash" = lib.mkForce {
+            screenshot = _: {
               props = {
                 show-pointer = false;
               };
             };
-            "Mod+Shift+backslash".spawn-sh = "focal image --rofi";
-            "Mod+Ctrl+backslash".spawn-sh = "focal image --area selection --ocr";
-            "Alt+backslash".spawn-sh = "focal video --rofi";
           };
-        };
-
-        mango.settings = {
-          bind = [
-            "$mod, backslash, spawn, focal image --area selection --no-notify --no-save --no-rounded-windows"
-            "$mod+SHIFT, backslash, spawn, focal image --edit swappy --rofi --no-rounded-windows"
-            "$mod+CTRL, backslash, spawn, focal image --area selection --ocr"
-            "ALT, backslash, spawn, focal video --rofi --no-rounded-windows"
-          ];
         };
       };
     };

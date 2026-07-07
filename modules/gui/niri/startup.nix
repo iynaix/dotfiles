@@ -6,7 +6,7 @@
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = lib.mkMerge (
         (
-          config.custom.startup
+          config.custom.wm.startup
           |> lib.filter (startup: startup.enable)
           |> map (startup: {
             spawn-sh-at-startup = [ startup.spawn ];
@@ -62,8 +62,8 @@
             Description = "Niri compositor session";
             BindsTo = [ "niri.service" ];
             # start the other services here after the WM has already started (push vs pull)
-            Wants = [ "niri.service" ] ++ config.custom.startupServices;
-            Before = config.custom.startupServices;
+            Wants = [ "niri.service" ] ++ config.custom.wm.startupServices;
+            Before = config.custom.wm.startupServices;
             After = [ "niri.service" ];
           };
         };
@@ -90,6 +90,6 @@
       };
 
       # start after WM initializes
-      custom.startupServices = [ "niri-ipc.service" ];
+      custom.wm.startupServices = [ "niri-ipc.service" ];
     };
 }

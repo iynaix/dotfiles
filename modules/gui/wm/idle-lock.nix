@@ -28,41 +28,40 @@
       ];
 
       # lock on idle
-      custom.programs = {
-        # disable suspend and lockscreen if host doesn't lock
-        noctalia.settingsReducers = lib.mkIf (!config.custom.lock.enable) [
-          (
-            prev:
-            lib.recursiveUpdate prev {
-              idle = {
-                lockTimeout = 0;
-                suspendTimeout = 0;
-              };
-            }
-          )
-        ];
+      custom = {
+        programs = {
+          # disable suspend and lockscreen if host doesn't lock
+          noctalia.settingsReducers = lib.mkIf (!config.custom.lock.enable) [
+            (
+              prev:
+              lib.recursiveUpdate prev {
+                idle = {
+                  lockTimeout = 0;
+                  suspendTimeout = 0;
+                };
+              }
+            )
+          ];
 
-        # handle laptop lid on the WMs
-        hyprland.settings = /* lua */ ''
-          hl.bind(mod .. " + SHIFT + CTRL + x", hl.dsp.exec_cmd("${lib.getExe lock}"))
+          # handle laptop lid on the WMs
+          hyprland.settings = /* lua */ ''
+            hl.bind(mod .. " + SHIFT + CTRL + x", hl.dsp.exec_cmd("${lib.getExe lock}"))
 
-          hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("${lib.getExe lock}"), { locked = true })
-        '';
+            hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("${lib.getExe lock}"), { locked = true })
+          '';
 
-        niri.settings = {
-          binds = {
-            "Mod+Shift+Ctrl+x".spawn = lib.getExe lock;
-          };
-
-          switch-events = {
+          niri.settings.switch-events = {
             lid-open = {
               spawn = lib.getExe lock;
             };
           };
+
+          mango.settings.bind = [ "$mod+SHIFT+CTRL, x, spawn, ${lib.getExe lock}" ];
         };
 
-        mango.settings = {
-          bind = [ "$mod+SHIFT+CTRL, x, spawn, ${lib.getExe lock}" ];
+        # manual lock keybind
+        wm.binds = {
+          "Mod+Shift+Ctrl+x".spawn = lib.getExe lock;
         };
       };
     };

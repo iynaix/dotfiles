@@ -2,10 +2,6 @@
 {
   flake.modules.nixos.wm =
     { config, pkgs, ... }:
-    let
-      inherit (config.custom.constants) dots projects;
-      termExec = cmd: "ghostty -e ${lib.concatStringsSep " " cmd}";
-    in
     {
       environment.systemPackages = with pkgs; [
         (writeShellApplication {
@@ -25,87 +21,64 @@
       ];
 
       custom.programs.mango.settings = {
-        bind = [
-          "$mod, Return, spawn, ghostty"
-          "$mod+SHIFT, Return, spawn, noctalia-ipc launcher toggle"
-
-          "$mod, BackSpace, killclient, "
-
-          "$mod, e, spawn, nemo ${config.hj.directory}/Downloads"
-          "$mod+Shift, e, spawn, ${
-            termExec [
-              "yazi"
-              "${config.hj.directory}/Downloads"
-            ]
-          }"
-          "$mod, w, spawn, helium --profile-directory=Default"
-          "$mod+Shift, w, spawn, helium --profile-directory=Default --incognito"
-
-          "$mod, v, spawn, emacsclient -c"
-          "$mod+Shift, v, spawn, noctalia-ipc plugin:projects toggle"
-
-          # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
-          "$mod, period, spawn, codium ${dots}"
-          "$mod+SHIFT, period, spawn, codium ${projects}/nixpkgs"
-
-          # exit mango
-          "ALT, F4, quit,"
-          "CTRL+ALT, Delete, spawn, noctalia-ipc sessionMenu toggle"
-
-          # toggle the bar
-          "$mod, a, spawn, noctalia-ipc bar toggle"
-
-          # restart noctalia
-          "$mod+SHIFT, a, spawn, noctalia-reload"
-
-          # clipboard history
-          "$mod+CTRL, v, spawn, noctalia-ipc launcher clipboard"
-
-          # notification history
-          "$mod, n, spawn, noctalia-ipc notifications toggleHistory"
-
-          # fullscreen
-          "$mod, f, togglefullscreen,"
-
-          # sticky
-          "$mod, g, togglefloating"
-
-          # sticky
-          "$mod, s, toggleglobal"
-
-          # switch layout
-          "$mod+SHIFT, n, switch_layout"
-
-          "$mod, o, toggleoverview"
-
-          # audio
-          "NONE, XF86AudioLowerVolume, spawn, pamixer -d 5"
-          "NONE, XF86AudioRaiseVolume, spawn, pamixer -i 5"
-          "NONE, XF86AudioMute, spawn, pamixer -t"
-        ]
-        ++
-          # tag keybinds, switch to monitor first before switching tag
-          lib.flatten (
-            (self.libCustom.mapWorkspaces (
-              {
-                monitor,
-                workspace,
-                key,
-                ...
-              }:
+        bind =
+          (
+            # handle shared keybinds across WMs
+            config.custom.wm.binds
+            |> lib.mapAttrsToList (
+              keys: args:
               let
-                # there are only 9 tags
-                wksp = if workspace == "10" then "8" else workspace;
+                keyArr = keys |> lib.replaceString "Mod" "$mod" |> lib.splitString "+";
+                mods = if (lib.length keyArr > 1) then lib.concatStringsSep "+" (lib.init keyArr) else "NONE";
               in
-              [
-                # Switch workspaces with $mod + [0-9]
-                "$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${wksp}"
-                # Move active window to a workspace with $mod + SHIFT + [0-9]
-                "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${wksp}"
-              ]
-            ))
-              config.custom.hardware.monitors
-          );
+              "${mods}, ${lib.last keyArr}, spawn, ${args.spawn}"
+            )
+          )
+          ++ [
+            "$mod, BackSpace, killclient, "
+
+            # TODO: mango doesn't expose window title data, so focus-or-run cannot currently be implemented
+
+            # exit mango
+            "ALT, F4, quit,"
+
+            # fullscreen
+            "$mod, f, togglefullscreen,"
+
+            # sticky
+            "$mod, g, togglefloating"
+
+            # sticky
+            "$mod, s, toggleglobal"
+
+            # switch layout
+            "$mod+SHIFT, n, switch_layout"
+
+            "$mod, o, toggleoverview"
+          ]
+          ++
+            # tag keybinds, switch to monitor first before switching tag
+            lib.flatten (
+              (self.libCustom.mapWorkspaces (
+                {
+                  monitor,
+                  workspace,
+                  key,
+                  ...
+                }:
+                let
+                  # there are only 9 tags
+                  wksp = if workspace == "10" then "8" else workspace;
+                in
+                [
+                  # Switch workspaces with $mod + [0-9]
+                  "$mod, ${key}, spawn, mango-focus-workspace ${monitor.name} ${wksp}"
+                  # Move active window to a workspace with $mod + SHIFT + [0-9]
+                  "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${wksp}"
+                ]
+              ))
+                config.custom.hardware.monitors
+            );
       };
     };
 }

@@ -23,14 +23,6 @@
     "narHash": "sha256-so1hIImuLtTKTVUokJ/6C2D2b2D4znCx+/PAjMSAnpw=",
     "lastModified": 1782267080
   },
-  "nix-doom-emacs-unstraightened": {
-    "type": "github",
-    "owner": "marienz",
-    "repo": "nix-doom-emacs-unstraightened",
-    "rev": "1d122450adecd567d21ace6a46334e0c409a020e",
-    "narHash": "sha256-l1xCEgpUPiMYFlrmp2MdOO13kEX2JaoDmIaWulUlO2s=",
-    "lastModified": 1783160885
-  },
   "nix-index-database": {
     "type": "github",
     "owner": "nix-community",
@@ -43,9 +35,9 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "a9cf7546a938c737b079e738de73934a13de9784",
-    "narHash": "sha256-a7+T6QSeowynwZ1ZJJbP8T8ntAytvrui8kFGJmIZt2c=",
-    "lastModified": 1782562157
+    "rev": "662bd6e312d2c8b212e32cb377abaee190749320",
+    "narHash": "sha256-E+3MIMvKuo9k+K+qLQ9YXzsBzkgHuyVLnsEbN2DFfuc=",
+    "lastModified": 1783370751
   },
   "nixpkgs": {
     "type": "tarball",
@@ -63,17 +55,17 @@
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.3869.95ca1e203c07/nixexprs.tar.xz",
-    "rev": "95ca1e203c0750115fd4a6f17d5a245dfe6b1edd",
-    "narHash": "sha256-Q80uZ1R+Y0g0kNfzGG8AcbvNkgYlnwJ3ubunAuIDUIQ="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.4193.a50de1b7d8a5/nixexprs.tar.xz",
+    "rev": "a50de1b7d8a586adc18d2395c19de7d6058e6030",
+    "narHash": "sha256-H9+N+GFtsbVC8ZniHliChM7ndizxtqVZs6bnGOLM3WQ="
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "11985bb991c885e4e47df6bea8fa8d03fc6ba2ab",
-    "narHash": "sha256-TR9M4Gl/ibvrpLsheOlaNQRam6fzfNq9Mthw/j6ZniU=",
-    "lastModified": 1783065377
+    "rev": "5bd50f1b71686715737537fd363281b0b0123085",
+    "narHash": "sha256-kw1sJ6WONc6lin/L81sB90fEtR9kxj/HN6RO++92vSI=",
+    "lastModified": 1783282377
   },
   "preservation": {
     "type": "github",
@@ -87,9 +79,9 @@
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "1ebd41717762d837d5115f7108522c29cdb00fbb",
-    "narHash": "sha256-vSLKc7m34/g5xH4dwmNZSqxc5OcHeE3qiG3EIz6bJKs=",
-    "lastModified": 1783104586
+    "rev": "f1406619a3884cd5c47992a70b8b35c9c0fcb4c9",
+    "narHash": "sha256-aCWC8ngycU7OdJrU2+Je3qf+1a2ykuBvpPhZT/9tXMc=",
+    "lastModified": 1783174389
   },
   "systems": {
     "type": "github",
