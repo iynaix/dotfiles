@@ -159,6 +159,7 @@
           gclone-shallow = "git clone --depth 1";
           gcp = "git cherry-pick";
           gdiff = "git diff --no-ext-diff";
+          gg = "git status -s -b && echo && git log | head -n 1";
           gl = "git pull";
           glg = "git log";
           gm = "git merge";
@@ -171,7 +172,6 @@
           gr = "cd $(git rev-parse - -show-toplevel)"; # cd back to root
           grh = "git reset --hard";
           gri = "git rebase --interactive";
-          gst = "git status -s -b && echo && git log | head -n 1";
           gsub = "git submodule update --init --recursive";
           # access github page for the repo we are currently in
           github = "open `git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'`";

@@ -42,7 +42,6 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
 ;; settings. E.g.
@@ -74,7 +73,15 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq projectile-project-search-path '("/persist/home/iynaix/projects/"))
+;; Project dirs
+(setq projectile-project-search-path
+      (mapcar #'substitute-env-vars
+              '("$XDG_PROJECTS_DIR/"
+                "/tmp")))
+
+;; Exclude autosave and other doom related stuff from recent files
+(after! recentf
+  (add-to-list 'recentf-exclude "~/.config/emacs/"))
 
 ;; Tab styling
 (setq centaur-tabs-set-bar 'under)
@@ -84,9 +91,3 @@
 
 ;; Ctrl+Q for visual block
 (map! :nv "C-q" #'evil-visual-block)
-
-(defun my/open-project (path)
-  (interactive "DProject: ")
-  (require 'projectile)
-  (projectile-switch-project-by-name path)
-  (projectile-find-file))

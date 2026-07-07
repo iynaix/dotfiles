@@ -5,8 +5,8 @@
     {
       packages =
         let
-          dir_bg = "blue";
-          accent_style = "bg:${dir_bg} fg:black";
+          accent_bg = "blue";
+          accent_style = "bg:${accent_bg} fg:black";
           # divine orb style :)
           important_style = "bg:white fg:bold #ff0000";
         in
@@ -19,19 +19,12 @@
                 # begin left format
                 "$username"
                 "$hostname"
-                "$directory[](${dir_bg}) "
+                "$directory(${accent_bg}) "
                 "$git_branch"
                 "$git_state"
                 "$git_status"
                 "$nix_shell"
-                # end left format
-                "$fill"
-                # begin right format
-                "[](${dir_bg})"
-                "[ ](${accent_style})"
-                "$cmd_duration"
-                # end right format
-                "$line_break"
+                " "
                 "$character"
               ];
 
@@ -74,22 +67,9 @@
                 untracked = "​";
               };
               nix_shell = {
-                format = "[$symbol]($style)";
+                format = "[$symbol]($style) ";
                 symbol = "";
                 style = "bright-magenta";
-              };
-              fill = {
-                symbol = " ";
-              };
-              line_break = {
-                disabled = false;
-              };
-              cmd_duration = {
-                format = "[ $duration ]($style)";
-                disabled = false;
-                min_time = 0;
-                show_milliseconds = false;
-                style = accent_style;
               };
             };
           };
