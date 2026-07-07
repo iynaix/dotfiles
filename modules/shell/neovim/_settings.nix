@@ -208,7 +208,7 @@
       ];
       mappings = {
         buffers = "<leader>fb";
-        findFiles = "<leader>ff";
+        findFiles = "<leader><space>";
         gitBranches = "<leader>gb";
         gitStatus = "<leader>gs";
         # liveGrep = "<leader>/";

@@ -12,14 +12,14 @@
               toLua = lib.generators.toLua { };
               withMod =
                 if lib.hasPrefix "Mod+" keys then
-                  (lib.replaceString "Mod+" "mod .. ' + " keys) + "'"
+                  (lib.replaceString "Mod+" "mod .. \" + " keys) + "\""
                 else
-                  "'${keys}'";
+                  "\"${keys}\"";
               finalKeys =
                 lib.replaceStrings [ "Shift" "Ctrl" "Alt" "Super" "+" ] [ "SHIFT" "CTRL" "ALT" "SUPER" " + " ]
                   withMod;
             in
-            "hl.bind(${finalKeys}, hl.dsp.exec_cmd(\'${args.spawn}\'), ${toLua args.hyprlandArgs})"
+            "hl.bind(${finalKeys}, hl.dsp.exec_cmd([[${args.spawn}]]), ${toLua args.hyprlandArgs})"
           )
           |> lib.concatLines
         )
@@ -29,7 +29,6 @@
 
           -- exit / reboot
           hl.bind("ALT + F4", hl.dsp.exit())
-          hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("noctalia-ipc sessionMenu toggle"))
 
           -- moving between windows
           hl.bind(mod .. " + h", hl.dsp.focus({ direction = "l"}))

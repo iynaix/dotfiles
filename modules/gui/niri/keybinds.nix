@@ -45,7 +45,6 @@
 
               # exit niri
               "Alt+F4".quit = _: { };
-              "Ctrl+Alt+Delete".spawn-sh = "noctalia-ipc sessionMenu toggle";
 
               # toggle the bar
               "Mod+A".spawn-sh = "noctalia-ipc bar toggle";

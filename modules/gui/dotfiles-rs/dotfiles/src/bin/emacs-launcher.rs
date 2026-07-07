@@ -6,9 +6,13 @@ use hyprland::{data::Clients, shared::HyprData};
 use niri_ipc::{Action, Request, Response, socket::Socket};
 use std::process::Command;
 
-fn execute_emacs_command(command: &str) -> Result<(), String> {
+fn execute_emacs_command(elisp: &str) -> Result<(), String> {
     Command::new("emacsclient")
-        .args(["-n", "-e", command])
+        .args([
+            "-n",
+            "-e",
+            &format!(r#"(progn (select-frame-set-input-focus (selected-frame)) {elisp})"#),
+        ])
         .status()
         .map_err(|e| e.to_string())
         .and_then(|status| {
@@ -65,7 +69,7 @@ fn main() -> Result<(), String> {
         }
     }
 
-    std::thread::sleep(std::time::Duration::from_millis(500));
+    // std::thread::sleep(std::time::Duration::from_millis(500));
 
     execute_emacs_command(&args.elisp)
 }

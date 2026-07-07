@@ -31,6 +31,7 @@
     let
       inherit (config.custom.constants) dots projects;
       termExec = cmd: "ghostty -e ${cmd}";
+      emacsExec = elisp: "emacs-launcher ${elisp}";
     in
     {
       custom.wm.binds = {
@@ -46,9 +47,11 @@
 
         "Mod+V".spawn = "emacsclient -c";
         # "Mod+Shift+V".spawn = "noctalia-ipc plugin:projects toggle";
+        "Mod+Shift+V".spawn =
+          emacsExec "(projectile-discover-projects-in-search-path) (projectile-switch-project)";
 
-        "Mod+period".spawn = ''focus-or-run "dotfiles - VSCodium" "codium ${dots}"'';
-        "Mod+Shift+period".spawn = ''focus-or-run "nixpkgs - VSCodium" "codium ${projects}/nixpkgs"'';
+        "Mod+period".spawn = emacsExec ''(projectile-find-file-in-directory "${dots}")'';
+        "Mod+Shift+period".spawn = emacsExec ''(projectile-find-file-in-directory "${projects}/nixpkgs")'';
 
         "Ctrl+Alt+Delete".spawn = "noctalia-ipc sessionMenu toggle";
 

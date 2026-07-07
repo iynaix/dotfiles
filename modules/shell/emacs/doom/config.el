@@ -94,3 +94,14 @@
 
 ;; Ctrl+Q for visual block
 (map! :nv "C-q" #'evil-visual-block)
+
+;; Use edition 2024 for rustfmt
+(after! apheleia
+  ;; https://github.com/radian-software/apheleia/issues/278
+  (setf (alist-get 'rustfmt  apheleia-formatters)
+        '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
+
+;; Stop bothering me with code actions
+(setq eglot-code-action-indications '(left-fringe))
+
+(global-eldoc-mode -1)

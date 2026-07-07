@@ -123,7 +123,7 @@
 
           # discord and other chats
           rec {
-            app-id = "(helium|helium-chat)";
+            app-id = "helium.*";
             title = ".*(Discord|WhatsApp|Flood).*";
             # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
             spawn = "sleep 2; helium-chat";

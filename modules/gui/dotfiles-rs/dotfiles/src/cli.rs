@@ -134,6 +134,6 @@ pub struct FocusOrRunArgs {
     about = "Focus emacs and launch elisp command"
 )]
 pub struct EmacsLauncherArgs {
-    #[arg(help = "Elisp command")]
+    #[arg(help = "Elisp command, will be nested in a progn")]
     pub elisp: String,
 }
