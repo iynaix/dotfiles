@@ -24,6 +24,7 @@ niri-ipc.workspace = true
 regex.workspace = true
 rexiv2.workspace = true
 serde.workspace = true
+serde_json.workspace = true
 rayon.workspace = true
 sha2.workspace = true
 toml = "1.1.2"

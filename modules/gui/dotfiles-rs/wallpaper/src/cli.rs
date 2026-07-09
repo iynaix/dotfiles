@@ -9,6 +9,11 @@ pub struct BackupArgs {
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
+#[command(group(
+    ArgGroup::new("target")
+        .required(true)
+        .args(["size", "monitor"]),
+))]
 pub struct CropArgs {
     #[arg(
         short,
@@ -16,7 +21,15 @@ pub struct CropArgs {
         name = "size",
         help = "Target size of the cropped wallpaper, e.g. (1920x1080)"
     )]
-    pub size: String,
+    pub size: Option<String>,
+
+    #[arg(
+        short,
+        long,
+        name = "monitor",
+        help = "Target monitor id to crop for, e.g. DP-1"
+    )]
+    pub monitor: Option<String>,
 
     #[arg(
         value_hint = clap::ValueHint::FilePath,

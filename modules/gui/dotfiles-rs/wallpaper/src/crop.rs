@@ -1,4 +1,7 @@
-use std::{collections::HashSet, path::PathBuf};
+use execute::Execute;
+use serde::Deserialize;
+
+use std::{collections::HashSet, path::PathBuf, process::Stdio};
 
 use common::{
     full_path,
@@ -15,6 +18,22 @@ use crate::{
     metadata::aspect_ratio,
     write_wallpaper_history,
 };
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WlrMonitor {
+    pub name: String,
+    pub modes: Vec<WlrMode>,
+    pub transform: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WlrMode {
+    pub width: u32,
+    pub height: u32,
+    pub current: bool,
+}
 
 /// parse an aspect ratio, e.g. 9x16
 fn parse_aspect(aspect: &str) -> (u32, u32) {
@@ -103,9 +122,44 @@ fn crop_geometry(
     default_crop
 }
 
+fn monitor_dimensions_from_name(mon_name: &str) -> (u32, u32) {
+    let wlr_cmd = execute::command_args!("wlr-randr", "--json")
+        .stdout(Stdio::piped())
+        .execute_output()
+        .expect("failed to run wlr-randr");
+    let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
+    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json).expect("failed to parse json");
+
+    let dimensions = monitors
+        .iter()
+        .find(|mon| mon.name == mon_name)
+        .and_then(|mon| {
+            mon.modes.iter().find(|mode| mode.current).map(|mode| {
+                if mon.transform.contains("90") || mon.transform.contains("270") {
+                    (mode.height, mode.width)
+                } else {
+                    (mode.width, mode.height)
+                }
+            })
+        })
+        .unwrap_or_else(|| {
+            eprintln!("Invalid monitor identifier {mon_name}");
+            std::process::exit(1);
+        });
+    dimensions
+}
+
 /// uses crop info from wallpaper xmp metadata
 pub fn crop(args: &CropArgs) {
-    let (mon_w, mon_h) = parse_aspect(&args.size);
+    let (mon_w, mon_h) = if let Some(size) = &args.size {
+        parse_aspect(size)
+    } else if let Some(monitor) = &args.monitor {
+        monitor_dimensions_from_name(monitor)
+    } else {
+        eprintln!("Either --size / --monitor are required.");
+        std::process::exit(1);
+    };
+
     let wall_info = WallInfo::new_from_file(&args.input);
 
     let img = ImageReader::open(&args.input)
@@ -178,7 +232,8 @@ pub fn thumbnails(args: &ThumbnailArgs) {
                 crop(&CropArgs {
                     input: wall.into(),
                     output: thumbnail_path.clone(),
-                    size: "384x384".to_string(),
+                    size: Some("384x384".to_string()),
+                    monitor: None,
                 });
             }
 
