@@ -76,18 +76,17 @@
 ;; Project dirs
 (setq projectile-project-search-path
       (mapcar #'substitute-env-vars
-              '("$XDG_PROJECTS_DIR/"
+              '("$XDG_PROJECTS_DIR"
                 "/tmp")))
+
+;; Tab styling
+(setq centaur-tabs-set-bar 'under)
 
 ;; Exclude autosave and other doom related stuff from recent files
 (after! recentf
   (add-to-list 'recentf-exclude "~/.config/emacs/")
   (add-to-list 'recentf-exclude "/tmp")
   )
-
-;; Disambiguate tabs using directory
-(setq uniquify-separator "/")
-(setq uniquify-buffer-name-style 'forward)
 
 ;; Ctrl+S to save
 (map! :nvi "C-s" #'save-buffer)

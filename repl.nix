@@ -32,6 +32,7 @@ in
   inherit
     flake
     host
+    inputs
     lib
     user
     ;

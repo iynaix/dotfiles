@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 {
   flake.modules.nixos.core =
     { config, pkgs, ... }:
@@ -28,6 +28,10 @@
       };
     in
     {
+      imports = [
+        inputs.preservation.nixosModules.default
+      ];
+
       options.custom = {
         # passthru types.anything and let impermanence do the type checking
         persist = {

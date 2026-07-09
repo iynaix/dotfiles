@@ -63,9 +63,9 @@
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "a6f93c1e49d40246635ba30a8b79c21aae1cb0bc",
-    "narHash": "sha256-t8f/HFUfZC8SOllCFWXgbMKnWipdqoJNmplsn56s6EQ=",
-    "lastModified": 1783457578
+    "rev": "84af0c160f0c1c83179809277124f6dc4712b2b3",
+    "narHash": "sha256-IgOE1Dh70GnGPWvrwiwUZkmzJURKM40oru0vvRPSu/M=",
+    "lastModified": 1783551490
   },
   "preservation": {
     "type": "github",
