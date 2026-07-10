@@ -15,7 +15,7 @@
     let
       lock = pkgs.writeShellApplication {
         name = "lock";
-        runtimeInputs = [ pkgs.noctalia-shell ];
+        runtimeInputs = [ pkgs.noctalia ];
         text = /* sh */ ''
           ${lib.optionalString config.custom.lock.enable "noctalia msg session lock-and-suspend"}
           noctalia msg dpms-off

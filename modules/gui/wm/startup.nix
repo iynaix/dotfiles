@@ -101,6 +101,16 @@
             workspace = 1;
           }
 
+          # emacs
+          {
+            app-id = "emacs";
+            spawn = "emacsclient -c";
+            workspace = 2;
+            niriArgs = {
+              open-maximized = true;
+            };
+          }
+
           # file manager
           {
             app-id = "nemo";
@@ -114,7 +124,7 @@
           # https://github.com/ghostty-org/ghostty/discussions/8804
           rec {
             app-id = "${config.custom.programs.terminal.app-id}-vertical";
-            spawn = "${termExe} --class=${app-id}";
+            spawn = "sleep 2; ${termExe} --class=${app-id}";
             workspace = 7;
             niriArgs = {
               open-maximized = true;
@@ -140,13 +150,13 @@
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-dl";
-            spawn = "${termExe} --class=${app-id}";
+            spawn = "sleep 2; ${termExe} --class=${app-id}";
             workspace = 8;
           }
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
-            spawn = "${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
+            spawn = "sleep 2; ${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
             workspace = 8;
           }
         ];

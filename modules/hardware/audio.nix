@@ -65,14 +65,14 @@
 
               # still not found after 5s, bail
               if [ -z "$sink_id" ]; then
-                  noctalia-ipc toast send "{\"title\": \"Unable to switch to $friendly_name\", \"type\": \"warning\"}"
+                  noctalia msg notification-show "{\"summary\": \"Unable to switch to $friendly_name\", \"icon\": \"alert-circle\"}"
                   exit 1
               fi
 
               # set as new audio device
               wpctl set-default "$sink_id"
 
-              noctalia-ipc toast send "{\"title\": \"Switched audio to $friendly_name\"}"
+              noctalia msg notification-show "{\"summary\": \"Switched audio to $friendly_name\", \"icon\": \"music\"}"
             ''
           else
             /* sh */ ''

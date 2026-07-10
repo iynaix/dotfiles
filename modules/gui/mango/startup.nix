@@ -13,7 +13,7 @@
     in
     {
       systemd.user.targets = {
-        # ly -> mango -> noctalia-shell etc
+        # ly -> mango -> noctalia etc
         mango-session = {
           unitConfig = {
             Description = "mango compositor session";

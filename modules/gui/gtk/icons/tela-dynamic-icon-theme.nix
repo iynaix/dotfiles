@@ -115,7 +115,7 @@
       ];
 
       # set dynamic icon theme with noctalia
-      custom.programs.noctalia.colors.templates = {
+      custom.programs.noctalia.colors = {
         "gtk-icon-theme" = {
           post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
           # dummy values so noctalia doesn't complain

@@ -32,7 +32,7 @@
       ];
 
       custom.programs = {
-        noctalia.colors.templates = {
+        noctalia.colors = {
           wfetch = {
             # dummy values so noctalia doesn't complain
             input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";

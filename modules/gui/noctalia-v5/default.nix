@@ -50,7 +50,7 @@
       noctalia-start = pkgs.writeShellApplication {
         name = "noctalia-start";
         runtimeInputs = [
-          pkgs.noctalia-shell
+          pkgs.noctalia
           config.custom.programs.dotfiles-rs
         ];
         text = /* sh */ ''
@@ -61,20 +61,37 @@
           wallpaper
         '';
       };
+      noctalia-reload = pkgs.writeShellApplication {
+        name = "noctalia-reload";
+        text = /* sh */ ''
+          killall noctalia || true
+          # prevent "already running" error
+          sleep 0.2
+          noctalia &
+        '';
+      };
     in
     {
-      environment.systemPackages = [
-        pkgs.custom.noctalia
+      nixpkgs.overlays = [
+        (_: _prev: {
+          inherit (pkgs.custom) noctalia;
+        })
       ];
 
-      hj.xdg.config.files = {
-        "noctalia/settings.toml".source = ./settings.toml;
-        "noctalia/user-templates.toml" = {
-          generator = tomlFormat.generate "user-template.toml";
-          value = {
-            config = { };
-          }
-          // config.custom.programs.noctalia.colors;
+      environment.systemPackages = [
+        pkgs.noctalia # overlay-ed above
+        noctalia-reload
+      ];
+
+      hj.xdg = {
+        config.files = {
+          "noctalia/settings.toml".source = ./settings.toml;
+          "noctalia/user-templates.toml" = {
+            generator = tomlFormat.generate "user-template.toml";
+            value = {
+              theme.templates.user = config.custom.programs.noctalia.colors;
+            };
+          };
         };
       };
 
@@ -85,6 +102,14 @@
             spawn = lib.getExe noctalia-start;
           }
         ];
+
+        persist = {
+          home = {
+            directories = [
+              ".local/state/noctalia"
+            ];
+          };
+        };
       };
     };
 }

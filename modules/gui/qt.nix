@@ -68,7 +68,7 @@
       };
 
       # use dynamic theme for qt5ct.conf and qt6ct.conf
-      custom.programs.noctalia.colors.templates =
+      custom.programs.noctalia.colors =
         let
           defaultFont = "${config.custom.gtk.font.name},${toString config.custom.gtk.font.size}";
           createQtctConf = filename: font: {

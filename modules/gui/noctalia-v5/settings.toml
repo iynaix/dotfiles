@@ -1,6 +1,6 @@
 [bar.default]
-background_opacity = 0.4999999888241291
-capsule_thickness = 0.74999998696148396
+background_opacity = 0.5
+capsule_thickness = 0.75
 center = ["workspaces"]
 end = ["battery", "volume", "clock"]
 margin_edge = 0
@@ -11,23 +11,92 @@ start = ["control-center"]
 thickness = 30
 widget_spacing = 16
 
+[control_center]
+sidebar_section = "none"
+
+[desktop_widgets]
+enabled = false
+
+[idle]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+
+[idle.behavior.lock]
+action = "lock"
+enabled = false
+timeout = 600.0
+
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = false
+timeout = 600.0
+
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = false
+timeout = 600.0
+
 [location]
 auto_locate = true
+
+[lockscreen]
+fingerprint = false
 
 [lockscreen_widgets.grid]
 cell_size = 16
 major_interval = 4
 visible = true
 
+[notification]
+scale = 0.9
+show_actions = false
+show_app_name = false
+
 [shell]
-font_family = "Geist Medium"
 avatar_path = "/home/iynaix/.face"
+font_family = "Geist Medium"
+password_style = "random"
+polkit_agent = true
 
 [shell.panel]
 open_near_click_control_center = true
 session_placement = "floating"
 session_position = "center"
 transparency_mode = "glass"
+
+[[shell.session.actions]]
+action = "shutdown"
+countdown_seconds = 0.0
+enabled = true
+shortcut = "1"
+variant = "destructive"
+
+[[shell.session.actions]]
+action = "reboot"
+countdown_seconds = 0.0
+enabled = true
+shortcut = "2"
+variant = "default"
+
+[[shell.session.actions]]
+action = "lock"
+countdown_seconds = 0.0
+enabled = false
+shortcut = "5"
+variant = "default"
+
+[[shell.session.actions]]
+action = "logout"
+countdown_seconds = 0.0
+enabled = true
+shortcut = "3"
+variant = "default"
+
+[[shell.session.actions]]
+action = "lock_and_suspend"
+countdown_seconds = 0.0
+enabled = true
+shortcut = "4"
+variant = "default"
 
 [theme]
 source = "wallpaper"
@@ -36,8 +105,9 @@ source = "wallpaper"
 builtin_ids = [ "btop", "cava", "ghostty", "hyprland", "mango", "niri" ]
 community_ids = [ "yazi", "zathura" ]
 
-[wallpaper.default]
-path = "/home/iynaix/Pictures/Wallpapers/noctalia.webp"
+[widget.battery]
+color = "primary"
+icon_color = "primary"
 
 [widget.clock]
 color = "primary"
@@ -54,19 +124,16 @@ icon_color = "primary"
 
 [widget.volume]
 color = "primary"
+scroll_step = 1
 
 [widget.workspaces]
 display = "name"
 enabled = true
+font_family = "Liberation Sans"
+font_weight = 700
 labels_only_when_occupied = true
 pill_scale = 0.80000000000000004
 
-[widget.battery]
-color = "primary"
-icon_color = "primary"
-
-[control_center]
-sidebar_section = "none"
 [[control_center.shortcuts]]
 type = "wifi"
 [[control_center.shortcuts]]
@@ -74,8 +141,4 @@ type = "bluetooth"
 [[control_center.shortcuts]]
 type = "caffeine"
 [[control_center.shortcuts]]
-type = "power_profile"
-[[control_center.shortcuts]]
 type = "notification"
-[[control_center.shortcuts]]
-type = "wallpaper"

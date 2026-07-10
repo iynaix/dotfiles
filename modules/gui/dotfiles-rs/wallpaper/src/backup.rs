@@ -61,14 +61,6 @@ pub fn remote(args: RemoteArgs) {
     // sync wallpapers
     rsync(&wallpaper::dir(), &user, &remote_host).expect("failed to sync wallpapers");
 
-    // sync noctalia thumbnails
-    rsync(
-        &full_path("~/.cache/noctalia/images/wallpapers/thumbnails"),
-        &user,
-        &remote_host,
-    )
-    .expect("failed to sync thumbnails");
-
     // sync rclip database
     let rclip_db = dirs::data_dir()
         .expect("unable to get $XDG_DATA_HOME")

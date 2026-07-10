@@ -134,7 +134,7 @@
           hl.window_rule({ match = { class = "Rofi" }, float = true, center = true, rounding = 12, dim_around = true })
         '';
 
-        noctalia.colors.templates = {
+        noctalia.colors = {
           # default launcher
           "rofi.rasi" = {
             input_path = patchRasi "rofi.rasi" launcherPath ''

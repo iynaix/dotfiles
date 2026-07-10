@@ -71,7 +71,7 @@ where
 
 /// reloads the wallpaper
 pub fn reload() {
-    // reload noctalia-shell
+    // reload noctalia
     let child = execute::command_args!("noctalia-reload")
         .spawn()
         .expect("failed to reload noctalia");
