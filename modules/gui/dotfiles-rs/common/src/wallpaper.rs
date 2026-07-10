@@ -1,14 +1,10 @@
-use execute::Execute;
 use itertools::Itertools;
-use rayon::prelude::*;
 use rexiv2::Metadata;
-use serde::Deserialize;
 
-use crate::{full_path, nixjson::NixJson, wallpaper};
+use crate::{full_path, nixjson::NixJson};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
-    process::Stdio,
 };
 
 pub fn dir() -> PathBuf {
@@ -50,67 +46,31 @@ pub fn set<P>(wallpaper: P)
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
-    #[derive(Debug, Deserialize)]
-    #[serde(rename_all = "camelCase")]
-    pub struct WlrMonitor {
-        pub enabled: bool,
-        pub name: String,
-    }
+    let wallpaper = wallpaper
+        .as_ref()
+        .to_str()
+        .expect("could not convert wallpaper path to str")
+        .to_string();
 
     // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
     std::fs::write(
         dirs::runtime_dir()
             .expect("could not get $XDG_RUNTIME_DIR")
             .join("current_wallpaper"),
-        wallpaper
-            .as_ref()
-            .to_str()
-            .expect("could not convert wallpaper path to str"),
+        &wallpaper,
     )
     .ok();
 
-    // set the wallpaper with cropping
-    // set the wallpaper per monitor, use wlr-randr so it is wm agnostic
-    let wlr_cmd = execute::command_args!("wlr-randr", "--json")
-        .stdout(Stdio::piped())
-        .execute_output()
-        .expect("failed to run wlr-randr");
-    let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
-    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json).expect("failed to parse json");
-
-    let wallpaper = wallpaper
-        .as_ref()
-        .to_str()
-        .expect("could not convert wallpaper path to str")
-        .to_string();
-    monitors
-        .par_iter()
-        .filter(|mon| mon.enabled)
-        .for_each(|mon| {
-            execute::command_args!("noctalia-ipc", "wallpaper", "set")
-                .arg(&wallpaper)
-                .arg(&mon.name)
-                .spawn()
-                .unwrap_or_else(|_| panic!("failed to set wallpaper: {wallpaper}"))
-                .wait()
-                .expect("failed to wait for noctalia wallpaper set");
-        });
+    execute::command_args!("noctalia", "msg", "wallpaper-set")
+        .arg(&wallpaper)
+        .spawn()
+        .unwrap_or_else(|_| panic!("failed to set wallpaper: {wallpaper}"))
+        .wait()
+        .expect("failed to wait for noctalia wallpaper set");
 }
 
 /// reloads the wallpaper
 pub fn reload() {
-    let Some(img) = wallpaper::current() else {
-        eprintln!("Unable to get current wallpaper");
-        return;
-    };
-
-    // remove the cache files for the current wallpaper
-    NixJson::load().monitors.iter().for_each(|mon| {
-        let cache_path = mon.noctalia_wallpaper_cache_path(&img);
-        // don't care if it errors
-        std::fs::remove_file(&cache_path).ok();
-    });
-
     // reload noctalia-shell
     let child = execute::command_args!("noctalia-reload")
         .spawn()

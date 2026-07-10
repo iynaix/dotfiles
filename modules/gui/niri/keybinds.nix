@@ -46,18 +46,6 @@
               # exit niri
               "Alt+F4".quit = _: { };
 
-              # toggle the bar
-              "Mod+A".spawn-sh = "noctalia-ipc bar toggle";
-
-              # restart noctalia
-              "Mod+Shift+A".spawn-sh = "noctalia-reload";
-
-              # clipboard history
-              "Mod+Ctrl+V".spawn-sh = "noctalia-ipc launcher clipboard";
-
-              # notification history
-              "Mod+N".spawn-sh = "noctalia-ipc notifications toggleHistory";
-
               # TODO: reset monitors?
               # "CTRL_SHIFT, Escape, exec, niri-monitors"
 

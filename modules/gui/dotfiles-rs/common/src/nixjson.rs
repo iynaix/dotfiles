@@ -1,8 +1,5 @@
-use std::path::PathBuf;
-
 use crate::{full_path, json};
 use serde::Deserialize;
-use sha2::Digest;
 
 #[derive(Clone, Default, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -47,37 +44,6 @@ impl NixMonitor {
         opts.push(orientation);
 
         opts.join(",")
-    }
-
-    /// get the noctalia image cache path for the given image
-    pub fn noctalia_wallpaper_cache_path(&self, img: &str) -> PathBuf {
-        let image_cache_dir = full_path("~/.cache/noctalia/images/wallpapers/large");
-
-        // get the modification time or unknown
-        let mtime = std::fs::metadata(img)
-            .and_then(|m| m.modified())
-            .map_or_else(
-                |_| "unknown".to_string(),
-                |time| {
-                    time.duration_since(std::time::SystemTime::UNIX_EPOCH)
-                        .map_or_else(
-                            |_| "unknown".to_string(),
-                            |elapsed| elapsed.as_secs().to_string(),
-                        )
-                },
-            );
-
-        let dimensions = if self.transform % 2 == 1 {
-            format!("{}x{}", self.height, self.width)
-        } else {
-            format!("{}x{}", self.width, self.height)
-        };
-        let hash_str = format!("{img}@{dimensions}@{mtime}");
-
-        image_cache_dir.join(format!(
-            "{}.png",
-            hex::encode(sha2::Sha256::digest(hash_str.as_bytes()))
-        ))
     }
 }
 

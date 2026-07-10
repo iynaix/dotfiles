@@ -1,23 +1,14 @@
 use execute::Execute;
 use serde::Deserialize;
 
-use std::{collections::HashSet, path::PathBuf, process::Stdio};
+use std::process::Stdio;
 
-use common::{
-    full_path,
-    wallpaper::{self, Geometry, WallInfo, filter_images},
-};
+use common::wallpaper::{Geometry, WallInfo};
 use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer, images::Image};
 use image::{ImageEncoder, ImageReader, codecs::png::PngEncoder};
 use itertools::Itertools;
-use rayon::prelude::*;
-use sha2::Digest;
 
-use crate::{
-    cli::{CropArgs, ThumbnailArgs},
-    metadata::aspect_ratio,
-    write_wallpaper_history,
-};
+use crate::{cli::CropArgs, metadata::aspect_ratio, write_wallpaper_history};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -197,58 +188,4 @@ pub fn crop(args: &CropArgs) {
 
     // save to history
     write_wallpaper_history(args.input.clone());
-}
-
-/// generates thumbnails for noctalia's wallpaper selector
-pub fn thumbnails(args: &ThumbnailArgs) {
-    let thumbnail_cache_dir = full_path("~/.cache/noctalia/images/wallpapers/thumbnails");
-    let generated: HashSet<_> = filter_images(wallpaper::dir())
-        .collect_vec()
-        .par_iter()
-        .map(|wall| {
-            // get the modification time or unknown
-            let mtime = std::fs::metadata(wall)
-                .and_then(|m| m.modified())
-                .map_or_else(
-                    |_| "unknown".to_string(),
-                    |time| {
-                        time.duration_since(std::time::SystemTime::UNIX_EPOCH)
-                            .map_or_else(
-                                |_| "unknown".to_string(),
-                                |elapsed| elapsed.as_secs().to_string(),
-                            )
-                    },
-                );
-            let hash_str = format!("{wall}@384x384@{mtime}");
-            let thumbnail_path = thumbnail_cache_dir.join(format!(
-                "{}.png",
-                hex::encode(sha2::Sha256::digest(hash_str.as_bytes()))
-            ));
-
-            if !thumbnail_path.exists() || args.force {
-                // generate the thumbnail
-                println!("{wall:?} => {}", thumbnail_path.display());
-
-                crop(&CropArgs {
-                    input: wall.into(),
-                    output: thumbnail_path.clone(),
-                    size: Some("384x384".to_string()),
-                    monitor: None,
-                });
-            }
-
-            thumbnail_path
-        })
-        .collect();
-
-    for thumbnail in filter_images(thumbnail_cache_dir) {
-        let thumbnail = PathBuf::from(thumbnail);
-        if !generated.contains(&thumbnail) {
-            println!("Removing stale thumbnail: {}", thumbnail.display());
-
-            std::fs::remove_file(&thumbnail).unwrap_or_else(|_| {
-                eprintln!("rm failed: {}", thumbnail.display());
-            });
-        }
-    }
 }

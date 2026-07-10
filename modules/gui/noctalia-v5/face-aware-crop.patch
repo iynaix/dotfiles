@@ -1,0 +1,30 @@
+diff --git a/src/config/config_overrides.cpp b/src/config/config_overrides.cpp
+index ee7e5accc..19dbc9904 100644
+--- a/src/config/config_overrides.cpp
++++ b/src/config/config_overrides.cpp
+@@ -1614,11 +1614,21 @@ bool ConfigService::renameOverrideTable(
+ }
+ 
+ std::string ConfigService::getWallpaperPath(const std::string& connectorName) const {
+-  auto it = m_monitorWallpaperPaths.find(connectorName);
+-  if (it != m_monitorWallpaperPaths.end()) {
+-    return it->second;
++  // files must not already exist on disk to be used by noctalia
++  std::filesystem::path inputPath(m_defaultWallpaperPath);
++  std::string outputPath = "/tmp/" + inputPath.stem().string() + "__" + connectorName + ".png";
++
++  // resize wallpaper with face aware crop, return the resized image
++  std::string cmd =
++      "wallpaper resize --monitor \"" + connectorName + "\" \"" + m_defaultWallpaperPath + "\" \"" + outputPath + "\"";
++
++  int result = std::system(cmd.c_str());
++  if (result != 0) {
++    kLog.error("Error cropping {} for {}", m_defaultWallpaperPath, connectorName);
++    return m_defaultWallpaperPath;
+   }
+-  return m_defaultWallpaperPath;
++
++  return outputPath;
+ }
+ 
+ std::string ConfigService::getDefaultWallpaperPath() const { return m_defaultWallpaperPath; }

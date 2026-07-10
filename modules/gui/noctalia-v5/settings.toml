@@ -1,0 +1,81 @@
+[bar.default]
+background_opacity = 0.4999999888241291
+capsule_thickness = 0.74999998696148396
+center = ["workspaces"]
+end = ["battery", "volume", "clock"]
+margin_edge = 0
+margin_ends = 0
+padding = 13
+radius = 0
+start = ["control-center"]
+thickness = 30
+widget_spacing = 16
+
+[location]
+auto_locate = true
+
+[lockscreen_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
+
+[shell]
+font_family = "Geist Medium"
+avatar_path = "/home/iynaix/.face"
+
+[shell.panel]
+open_near_click_control_center = true
+session_placement = "floating"
+session_position = "center"
+transparency_mode = "glass"
+
+[theme]
+source = "wallpaper"
+
+[theme.templates]
+builtin_ids = [ "btop", "cava", "ghostty", "hyprland", "mango", "niri" ]
+community_ids = [ "yazi", "zathura" ]
+
+[wallpaper.default]
+path = "/home/iynaix/Pictures/Wallpapers/noctalia.webp"
+
+[widget.clock]
+color = "primary"
+
+[widget.control-center]
+custom_image = "/persist/home/iynaix/projects/noctalia/assets/images/distros/nixos.svg"
+custom_image_colorize = true
+glyph = ""
+
+[widget.session]
+custom_image = "/persist/home/iynaix/projects/noctalia/assets/images/distros/nixos.svg"
+glyph = ""
+icon_color = "primary"
+
+[widget.volume]
+color = "primary"
+
+[widget.workspaces]
+display = "name"
+enabled = true
+labels_only_when_occupied = true
+pill_scale = 0.80000000000000004
+
+[widget.battery]
+color = "primary"
+icon_color = "primary"
+
+[control_center]
+sidebar_section = "none"
+[[control_center.shortcuts]]
+type = "wifi"
+[[control_center.shortcuts]]
+type = "bluetooth"
+[[control_center.shortcuts]]
+type = "caffeine"
+[[control_center.shortcuts]]
+type = "power_profile"
+[[control_center.shortcuts]]
+type = "notification"
+[[control_center.shortcuts]]
+type = "wallpaper"

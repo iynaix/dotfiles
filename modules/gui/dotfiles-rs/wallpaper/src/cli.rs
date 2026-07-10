@@ -47,17 +47,6 @@ pub struct CropArgs {
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
-pub struct ThumbnailArgs {
-    #[arg(
-        short,
-        long,
-        default_value = "false",
-        help = "Force generation even if thumbnail already exists"
-    )]
-    pub force: bool,
-}
-
-#[derive(Args, Debug, PartialEq, Eq)]
 pub struct RemoteArgs {
     #[arg(name = "REMOTE", help = "Hostname of remote machine")]
     pub hostname: Option<String>,
@@ -191,12 +180,6 @@ pub enum WallpaperSubcommand {
         about = "Crop a wallpaper to a specific size"
     )]
     Crop(CropArgs),
-
-    #[command(
-        name = "thumbnails",
-        about = "Generate thumbnails for the wallpapers for noctalia's wallpaper selector"
-    )]
-    Thumbnails(ThumbnailArgs),
 
     #[command(
         name = "metadata",

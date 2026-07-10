@@ -67,3 +67,6 @@ url = "github:iynaix/wfetch"
 
 [inputs.focal]
 url = "github:iynaix/focal"
+
+[inputs.noctalia]
+url = "github:noctalia-dev/noctalia"

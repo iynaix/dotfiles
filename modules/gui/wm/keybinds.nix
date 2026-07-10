@@ -36,7 +36,7 @@
     {
       custom.wm.binds = {
         "Mod+Return".spawn = "ghostty";
-        "Mod+Shift+Return".spawn = "noctalia-ipc launcher toggle";
+        "Mod+Shift+Return".spawn = "noctalia msg panel-toggle launcher";
 
         "Mod+E".spawn = "nemo ${config.hj.directory}/Downloads";
         "Mod+Shift+E".spawn = termExec "yazi ${config.hj.directory}/Downloads";
@@ -46,26 +46,25 @@
         "Mod+Shift+W".spawn = "helium --profile-directory=Default --incognito &";
 
         "Mod+V".spawn = "emacsclient -c";
-        # "Mod+Shift+V".spawn = "noctalia-ipc plugin:projects toggle";
         "Mod+Shift+V".spawn =
           emacsExec "(projectile-discover-projects-in-search-path) (projectile-switch-project)";
 
         "Mod+period".spawn = emacsExec ''(projectile-find-file-in-directory "${dots}")'';
         "Mod+Shift+period".spawn = emacsExec ''(projectile-find-file-in-directory "${projects}/nixpkgs")'';
 
-        "Ctrl+Alt+Delete".spawn = "noctalia-ipc sessionMenu toggle";
+        "Ctrl+Alt+Delete".spawn = "noctalia msg panel-toggle session";
 
         # toggle the bar
-        "Mod+A".spawn = "noctalia-ipc bar toggle";
+        "Mod+A".spawn = "noctalia msg bar-toggle";
 
         # restart noctalia
         "Mod+Shift+A".spawn = "noctalia-reload";
 
         # clipboard history
-        "Mod+Ctrl+V".spawn = "noctalia-ipc launcher clipboard";
+        "Mod+Ctrl+V".spawn = "noctalia msg panel-toggle clipboard";
 
         # notification history
-        "Mod+N".spawn = "noctalia-ipc notifications toggleHistory";
+        "Mod+N".spawn = "noctalia msg panel-toggle control-center notifications";
 
         # picture in picture mode
         "Mod+P".spawn = "wm-pip";

@@ -208,7 +208,6 @@ fn main() {
             WallpaperSubcommand::Backup(args) => backup::backup(args),
             WallpaperSubcommand::Remote(args) => backup::remote(args),
             WallpaperSubcommand::Crop(args) => crop::crop(&args),
-            WallpaperSubcommand::Thumbnails(args) => crop::thumbnails(&args),
             WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
             WallpaperSubcommand::Reload => {} // handled later
         }

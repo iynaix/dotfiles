@@ -26,9 +26,6 @@ pub fn backup(args: BackupArgs) {
     )
     .expect("failed to backup wallpaper history");
 
-    // generate noctalia thumbnails
-    crate::crop::thumbnails(&crate::cli::ThumbnailArgs { force: false });
-
     // update rclip database
     execute::command_args!("rclip", "--filepath-only", "cat")
         .current_dir(wallpaper::dir())

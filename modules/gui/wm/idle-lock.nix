@@ -17,8 +17,8 @@
         name = "lock";
         runtimeInputs = [ pkgs.noctalia-shell ];
         text = /* sh */ ''
-          ${lib.optionalString config.custom.lock.enable "noctalia-ipc sessionMenu lockAndSuspend"}
-          noctalia-ipc monitors off
+          ${lib.optionalString config.custom.lock.enable "noctalia msg session lock-and-suspend"}
+          noctalia msg dpms-off
         '';
       };
     in
