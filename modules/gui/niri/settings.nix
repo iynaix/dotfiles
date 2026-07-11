@@ -80,14 +80,6 @@
             always-center-single-column = _: { };
           };
 
-          # use blurred overview from noctalia
-          layer-rules = [
-            {
-              matches = [ { namespace = "^noctalia-overview*"; } ];
-              place-within-backdrop = true;
-            }
-          ];
-
           window-rules = [
             {
               draw-border-with-background = false;

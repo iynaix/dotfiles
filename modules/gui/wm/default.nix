@@ -19,5 +19,19 @@
       };
 
       hj.files.".face".source = ../../avatar.png;
+
+      custom = {
+        programs.print-config = {
+          wm = /* sh */ ''
+            if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
+                hyprland-config
+            elif [ "$XDG_CURRENT_DESKTOP" == "niri" ]; then
+                niri-config
+            elif [ "$XDG_CURRENT_DESKTOP" == "mango" ]; then
+                mango-config
+            fi
+          '';
+        };
+      };
     };
 }

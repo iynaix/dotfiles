@@ -1,3 +1,6 @@
+[backdrop]
+enabled = true
+
 [bar.default]
 background_opacity = 0.5
 capsule_thickness = 0.75
@@ -10,6 +13,11 @@ radius = 0
 start = ["control-center"]
 thickness = 30
 widget_spacing = 16
+
+[bar.default.dead_zone]
+middle_command = "toggle-speaker"
+scroll_down_command = "noctalia msg volume-down 1"
+scroll_up_command = "noctalia msg volume-up 1"
 
 [control_center]
 sidebar_section = "none"
@@ -42,11 +50,20 @@ scale = 0.9
 show_actions = false
 show_app_name = false
 
+[osd.kinds]
+media = false
+
 [shell]
 avatar_path = "/home/iynaix/.face"
 font_family = "Geist Medium"
+niri_overview_type_to_launch_enabled = true
 password_style = "random"
 polkit_agent = true
+
+[shell.launcher]
+categories = false
+session_search = true
+sort_by_usage = false
 
 [shell.panel]
 open_near_click_control_center = true
