@@ -31,17 +31,19 @@
       custom = {
         programs = {
           # disable suspend and lockscreen if host doesn't lock
-          noctalia.settingsReducers = lib.mkIf (!config.custom.lock.enable) [
-            (
-              prev:
-              lib.recursiveUpdate prev {
-                idle = {
-                  lockTimeout = 0;
-                  suspendTimeout = 0;
-                };
-              }
-            )
-          ];
+          noctalia.settings = {
+            idle.behavior.lock-and-suspend = {
+              action = "lock_and_suspend";
+              enabled = config.custom.lock.enable;
+              timeout = 5 * 60.0;
+            };
+
+            idle.behavior.screen-off = {
+              action = "lock_and_screen_off";
+              enabled = true;
+              timeout = 5 * 60.0;
+            };
+          };
 
           # handle laptop lid on the WMs
           hyprland.settings = /* lua */ ''

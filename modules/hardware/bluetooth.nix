@@ -26,24 +26,12 @@
         };
       };
 
-      custom.programs.noctalia.settingsReducers = [
+      custom.programs.noctalia.settings = {
         # add bluetooth shortcut after network
-        (
-          prev:
-          lib.recursiveUpdate prev {
-            controlCenter.shortcuts.left = lib.concatMap (
-              shortcut:
-              if shortcut.id == "Network" then
-                [
-                  shortcut
-                  { id = "Bluetooth"; }
-                ]
-              else
-                [ shortcut ]
-            ) prev.controlCenter.shortcuts.left;
-          }
-        )
-      ];
+        control_center.shortcuts = [
+          (lib.mkOrder 200 { type = "bluetooth"; })
+        ];
+      };
 
       custom.persist = {
         root.directories = [ "/var/lib/bluetooth" ];

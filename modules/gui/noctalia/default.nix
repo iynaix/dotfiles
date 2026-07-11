@@ -27,16 +27,20 @@
             '';
           };
 
-          # TODO: REMOVE ME!!!
-          settingsReducers = lib.mkOption {
-            type = lib.types.listOf (
-              lib.mkOptionType {
-                name = "noctalia-settings-reducer";
-                check = lib.isFunction;
-              }
-            );
-            default = [ ];
-            description = "Reducers that will be applied to a copy of desktop's settings.json";
+          settings = lib.mkOption {
+            inherit (tomlFormat) type;
+            default = { };
+            example = lib.literalExpression ''
+              control_center.shortcuts = [
+                  { type = "wifi"; }
+                  { type = "bluetooth"; }
+                  { type = "caffeine"; }
+                  { type = "notification"; }
+              ];
+            '';
+            description = ''
+              Configuration for noctalia, this will be added as a separate `host.toml` file
+            '';
           };
         };
       };
@@ -85,7 +89,11 @@
 
       hj.xdg = {
         config.files = {
-          "noctalia/settings.toml".source = ./settings.toml;
+          "noctalia/config.toml".source = ./settings.toml;
+          "noctalia/host.toml" = {
+            generator = tomlFormat.generate "host.toml";
+            value = config.custom.programs.noctalia.settings;
+          };
           "noctalia/user-templates.toml" = {
             generator = tomlFormat.generate "user-template.toml";
             value = {
@@ -102,6 +110,14 @@
             spawn = lib.getExe noctalia-start;
           }
         ];
+
+        # base control center shortcuts across all hosts
+        programs.noctalia.settings = {
+          control_center.shortcuts = [
+            { type = "caffeine"; } # idle inhibit
+            { type = "notification"; } # DND
+          ];
+        };
 
         persist = {
           home = {

@@ -120,6 +120,14 @@
           btop.settings = {
             custom_gpu_name0 = "AMD Radeon RX 9070XT";
           };
+
+          noctalia.settings = {
+            control_center.hidden_tabs = [
+              "monitor"
+              "network"
+              "power"
+            ];
+          };
         };
 
         # disable networkmanager software wifi switch on startup, so noctalia doesn't toggle it back on when syncing state

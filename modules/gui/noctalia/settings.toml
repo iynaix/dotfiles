@@ -20,21 +20,6 @@ enabled = false
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
 
-[idle.behavior.lock]
-action = "lock"
-enabled = false
-timeout = 600.0
-
-[idle.behavior.lock-and-suspend]
-action = "lock_and_suspend"
-enabled = false
-timeout = 600.0
-
-[idle.behavior.screen-off]
-action = "screen_off"
-enabled = false
-timeout = 600.0
-
 [location]
 auto_locate = true
 
@@ -113,12 +98,12 @@ icon_color = "primary"
 color = "primary"
 
 [widget.control-center]
-custom_image = "/persist/home/iynaix/projects/noctalia/assets/images/distros/nixos.svg"
+custom_image = "/persist/home/iynaix/projects/dotfiles/modules/gui/gtk/icons/nix.svg"
 custom_image_colorize = true
 glyph = ""
 
 [widget.session]
-custom_image = "/persist/home/iynaix/projects/noctalia/assets/images/distros/nixos.svg"
+custom_image = "/persist/home/iynaix/projects/dotfiles/modules/gui/gtk/icons/nix.svg"
 glyph = ""
 icon_color = "primary"
 
@@ -132,13 +117,4 @@ enabled = true
 font_family = "Liberation Sans"
 font_weight = 700
 labels_only_when_occupied = true
-pill_scale = 0.80000000000000004
-
-[[control_center.shortcuts]]
-type = "wifi"
-[[control_center.shortcuts]]
-type = "bluetooth"
-[[control_center.shortcuts]]
-type = "caffeine"
-[[control_center.shortcuts]]
-type = "notification"
+pill_scale = 0.8

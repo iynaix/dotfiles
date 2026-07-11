@@ -21,7 +21,6 @@
         # programs_zoom
 
         hardware_amdgpu
-        hardware_bluetooth
         # hardware_qmk
         hardware_laptop
 
