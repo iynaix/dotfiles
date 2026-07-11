@@ -25,9 +25,15 @@ auto_locate = true
 
 [lockscreen]
 fingerprint = false
+blur_intensity = 0.0
+tint_intensity = 0.3
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
 
 [lockscreen_widgets.grid]
-cell_size = 16
+cell_size = 64
 major_interval = 4
 visible = true
 
