@@ -7,12 +7,12 @@ use niri_ipc::{Action, Request, Response, socket::Socket};
 use std::process::Command;
 
 fn execute_emacs_command(elisp: &str) -> Result<(), String> {
+    let cmd = format!(r#"(progn (select-frame-set-input-focus (selected-frame)) {elisp})"#);
+
+    println!("{cmd}");
+
     Command::new("emacsclient")
-        .args([
-            "-n",
-            "-e",
-            &format!(r#"(progn (select-frame-set-input-focus (selected-frame)) {elisp})"#),
-        ])
+        .args(["-n", "-e", &cmd])
         .status()
         .map_err(|e| e.to_string())
         .and_then(|status| {
@@ -69,7 +69,7 @@ fn main() -> Result<(), String> {
         }
     }
 
-    // std::thread::sleep(std::time::Duration::from_millis(500));
+    std::thread::sleep(std::time::Duration::from_millis(500));
 
     execute_emacs_command(&args.elisp)
 }

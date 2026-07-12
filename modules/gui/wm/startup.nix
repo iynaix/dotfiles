@@ -66,7 +66,7 @@
         name = "helium-chat";
         runtimeInputs = [ pkgs.custom.helium ];
         text = /* sh */ ''
-          helium --profile-directory=Chat --class=helium-chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat
+          helium --profile-directory=Chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat
         '';
       };
       # ensure setting terminal title using --title or exec with -e works
@@ -109,6 +109,9 @@
             niriArgs = {
               open-maximized = true;
             };
+            hyprlandArgs = {
+              initial_class = "emacs";
+            };
           }
 
           # file manager
@@ -133,7 +136,7 @@
 
           # discord and other chats
           rec {
-            app-id = "helium.*";
+            app-id = "helium";
             title = ".*(Discord|WhatsApp|Flood).*";
             # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
             spawn = "sleep 2; helium-chat";

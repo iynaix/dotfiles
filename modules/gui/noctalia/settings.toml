@@ -56,6 +56,9 @@ scale = 0.9
 show_actions = false
 show_app_name = false
 
+[osd]
+position = "top_right"
+
 [osd.kinds]
 media = false
 

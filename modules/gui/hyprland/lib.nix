@@ -34,9 +34,7 @@ in
         content = config.settings;
       };
 
-      # validate hyprland config, filter out source to non-existent file
-      # can be removed when the PR is merged:
-      # https://github.com/hyprwm/Hyprland/pull/12286
+      # validate hyprland config
       config.drv.installPhase = /* sh */ ''
         runHook preInstall
         export XDG_RUNTIME_DIR=$(mktemp -d)

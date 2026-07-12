@@ -39,6 +39,14 @@
             url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
             hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
           })
+
+          # build zfs for linux 7.1, no issues according to a core dev
+          # https://github.com/openzfs/zfs/issues/18760#issuecomment-4919127088
+          ./zfs_unstable-linux-7_1.patch
+
+          # mango 15 requires scenefx 0.5
+          # https://github.com/NixOS/nixpkgs/pull/539969
+          ./mango_15.patch
         ];
       };
     };

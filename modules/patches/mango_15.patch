@@ -1,0 +1,373 @@
+From 53f7fa3fe934c4b50716b17e544057a98c1fa0eb Mon Sep 17 00:00:00 2001
+From: yvnth <yvnth@users.noreply.github.com>
+Date: Thu, 9 Jul 2026 20:09:43 +0530
+Subject: [PATCH 1/5] scenefx: split into scenefx_0_4 and scenefx_0_5
+
+---
+ pkgs/by-name/sc/scenefx/package.nix           |  72 -------------
+ .../development/libraries/scenefx/default.nix | 100 ++++++++++++++++++
+ pkgs/top-level/all-packages.nix               |   5 +
+ 3 files changed, 105 insertions(+), 72 deletions(-)
+ delete mode 100644 pkgs/by-name/sc/scenefx/package.nix
+ create mode 100644 pkgs/development/libraries/scenefx/default.nix
+
+diff --git a/pkgs/by-name/sc/scenefx/package.nix b/pkgs/by-name/sc/scenefx/package.nix
+deleted file mode 100644
+index 0b0466ea1f43e..0000000000000
+--- a/pkgs/by-name/sc/scenefx/package.nix
++++ /dev/null
+@@ -1,72 +0,0 @@
+-{
+-  lib,
+-  stdenv,
+-  fetchFromGitHub,
+-  meson,
+-  ninja,
+-  wlroots_0_19,
+-  scdoc,
+-  pkg-config,
+-  wayland,
+-  libdrm,
+-  libxkbcommon,
+-  pixman,
+-  wayland-protocols,
+-  libGL,
+-  libgbm,
+-  libxcb,
+-  libxcb-wm,
+-  validatePkgConfig,
+-  testers,
+-  wayland-scanner,
+-}:
+-
+-stdenv.mkDerivation (finalAttrs: {
+-  pname = "scenefx";
+-  version = "0.4.1";
+-
+-  src = fetchFromGitHub {
+-    owner = "wlrfx";
+-    repo = "scenefx";
+-    tag = finalAttrs.version;
+-    hash = "sha256-XD5EcquaHBg5spsN06fPHAjVCb1vOMM7oxmjZZ/PxIE=";
+-  };
+-
+-  strictDeps = true;
+-
+-  depsBuildBuild = [ pkg-config ];
+-
+-  nativeBuildInputs = [
+-    meson
+-    ninja
+-    pkg-config
+-    scdoc
+-    validatePkgConfig
+-    wayland-scanner
+-  ];
+-
+-  buildInputs = [
+-    libdrm
+-    libGL
+-    libxkbcommon
+-    libgbm
+-    libxcb
+-    libxcb-wm
+-    pixman
+-    wayland
+-    wayland-protocols
+-    wlroots_0_19
+-  ];
+-
+-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+-
+-  meta = {
+-    description = "Drop-in replacement for the wlroots scene API that allows wayland compositors to render surfaces with eye-candy effects";
+-    homepage = "https://github.com/wlrfx/scenefx";
+-    license = lib.licenses.mit;
+-    maintainers = [ ];
+-    mainProgram = "scenefx";
+-    pkgConfigModules = [ "scenefx" ];
+-    platforms = lib.platforms.all;
+-  };
+-})
+diff --git a/pkgs/development/libraries/scenefx/default.nix b/pkgs/development/libraries/scenefx/default.nix
+new file mode 100644
+index 0000000000000..7a53a97b3baf4
+--- /dev/null
++++ b/pkgs/development/libraries/scenefx/default.nix
+@@ -0,0 +1,100 @@
++{
++  lib,
++  stdenv,
++  fetchFromGitHub,
++  meson,
++  ninja,
++  wlroots_0_19,
++  wlroots_0_20,
++  scdoc,
++  pkg-config,
++  wayland,
++  libdrm,
++  libxkbcommon,
++  pixman,
++  wayland-protocols,
++  libGL,
++  libgbm,
++  libxcb,
++  libxcb-wm,
++  lcms2,
++  validatePkgConfig,
++  testers,
++  wayland-scanner,
++}:
++
++let
++  generic =
++    {
++      version,
++      hash,
++      wlroots,
++      extraBuildInputs ? [ ],
++    }:
++    stdenv.mkDerivation (finalAttrs: {
++      __structuredAttrs = true;
++      pname = "scenefx";
++      inherit version;
++
++      src = fetchFromGitHub {
++        owner = "wlrfx";
++        repo = "scenefx";
++        tag = finalAttrs.version;
++        inherit hash;
++      };
++
++      strictDeps = true;
++      depsBuildBuild = [ pkg-config ];
++
++      nativeBuildInputs = [
++        meson
++        ninja
++        pkg-config
++        scdoc
++        validatePkgConfig
++        wayland-scanner
++      ];
++
++      buildInputs = [
++        libdrm
++        libGL
++        libxkbcommon
++        libgbm
++        libxcb
++        libxcb-wm
++        pixman
++        wayland
++        wayland-protocols
++        wlroots
++      ]
++      ++ extraBuildInputs;
++
++      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
++
++      meta = {
++        description = "Drop-in replacement for the wlroots scene API that allows wayland compositors to render surfaces with eye-candy effects";
++        homepage = "https://github.com/wlrfx/scenefx";
++        changelog = "https://github.com/wlrfx/scenefx/releases/tag/${finalAttrs.version}";
++        license = lib.licenses.mit;
++        maintainers = [ ];
++        mainProgram = "scenefx";
++        pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
++        platforms = lib.platforms.all;
++      };
++    });
++
++in
++{
++  scenefx_0_4 = generic {
++    version = "0.4.1";
++    hash = "sha256-XD5EcquaHBg5spsN06fPHAjVCb1vOMM7oxmjZZ/PxIE=";
++    wlroots = wlroots_0_19;
++  };
++
++  scenefx_0_5 = generic {
++    version = "0.5";
++    hash = "sha256-vUjLG6eubEhJJVa9LPygIcVmNoHwYbSUTJcWEcbxnU4=";
++    wlroots = wlroots_0_20;
++    extraBuildInputs = [ lcms2 ];
++  };
++}
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index 07a3a5087eec5..c715aedd4b9e7 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -8897,6 +8897,11 @@ with pkgs;
+     wlroots_0_20
+     ;
+ 
++  inherit (callPackages ../development/libraries/scenefx { })
++    scenefx_0_4
++    scenefx_0_5
++    ;
++
+   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
+ 
+   ikiwiki = callPackage ../applications/misc/ikiwiki {
+
+From c96ab775f812eec8d68d7d641ff6e84e0d81bacc Mon Sep 17 00:00:00 2001
+From: yvnth <yvnth@users.noreply.github.com>
+Date: Thu, 9 Jul 2026 20:09:54 +0530
+Subject: [PATCH 2/5] mango: 0.14.4 -> 0.15.2
+
+---
+ pkgs/by-name/ma/mango/package.nix | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/pkgs/by-name/ma/mango/package.nix b/pkgs/by-name/ma/mango/package.nix
+index 775bf111216a0..0b9cfbf6103f1 100644
+--- a/pkgs/by-name/ma/mango/package.nix
++++ b/pkgs/by-name/ma/mango/package.nix
+@@ -1,10 +1,11 @@
+ {
+   cjson,
+   lib,
+-  libx11,
++  libdrm,
+   libinput,
+   libxcb,
+   libxkbcommon,
++  pango,
+   pcre2,
+   pixman,
+   pkg-config,
+@@ -18,21 +19,21 @@
+   enableXWayland ? true,
+   meson,
+   ninja,
+-  scenefx,
+-  wlroots_0_19,
++  scenefx_0_5,
++  wlroots_0_20,
+   libGL,
+ }:
+ stdenv.mkDerivation (finalAttrs: {
+   __structuredAttrs = true;
+   strictDeps = true;
+   pname = "mango";
+-  version = "0.14.4";
++  version = "0.15.2";
+ 
+   src = fetchFromGitHub {
+     owner = "mangowm";
+     repo = "mango";
+     tag = finalAttrs.version;
+-    hash = "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=";
++    hash = "sha256-yYYtJZBUWdZmMQ1knD/avgjJr80G3Tz8zKMMYfxXR7E=";
+   };
+ 
+   nativeBuildInputs = [
+@@ -44,19 +45,20 @@ stdenv.mkDerivation (finalAttrs: {
+ 
+   buildInputs = [
+     cjson
++    libdrm
+     libinput
+-    libxcb
+     libxkbcommon
++    pango
+     pcre2
+     pixman
+     wayland
+     wayland-protocols
+-    wlroots_0_19
+-    scenefx
++    wlroots_0_20
++    scenefx_0_5
+     libGL
+   ]
+   ++ lib.optionals enableXWayland [
+-    libx11
++    libxcb
+     libxcb-wm
+     xwayland
+   ];
+
+From 23d2e8c2250266dd495c70b9988e0da89bb6f049 Mon Sep 17 00:00:00 2001
+From: yvnth <yvnth@users.noreply.github.com>
+Date: Thu, 9 Jul 2026 20:10:04 +0530
+Subject: [PATCH 3/5] swayfx-unwrapped: use scenefx_0_4
+
+---
+ pkgs/by-name/sw/swayfx-unwrapped/package.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/by-name/sw/swayfx-unwrapped/package.nix b/pkgs/by-name/sw/swayfx-unwrapped/package.nix
+index 3fda6fd4c8979..5d460d379065a 100644
+--- a/pkgs/by-name/sw/swayfx-unwrapped/package.nix
++++ b/pkgs/by-name/sw/swayfx-unwrapped/package.nix
+@@ -22,7 +22,7 @@
+   json_c,
+   libevdev,
+   scdoc,
+-  scenefx,
++  scenefx_0_4,
+   wayland-scanner,
+   libxcb-wm,
+   wlroots_0_19,
+@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
+     libxkbcommon
+     pango
+     pcre2
+-    scenefx
++    scenefx_0_4
+     wayland
+     wayland-protocols
+     (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
+
+From 452f888fae5cb1468c25e84d34bc58f8573e9646 Mon Sep 17 00:00:00 2001
+From: yvnth <yvnth@users.noreply.github.com>
+Date: Thu, 9 Jul 2026 20:11:54 +0530
+Subject: [PATCH 4/5] scenefx: add swarsel and yvnth as maintainers
+
+---
+ pkgs/development/libraries/scenefx/default.nix | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/pkgs/development/libraries/scenefx/default.nix b/pkgs/development/libraries/scenefx/default.nix
+index 7a53a97b3baf4..b6ecb7a9c080a 100644
+--- a/pkgs/development/libraries/scenefx/default.nix
++++ b/pkgs/development/libraries/scenefx/default.nix
+@@ -76,7 +76,11 @@ let
+         homepage = "https://github.com/wlrfx/scenefx";
+         changelog = "https://github.com/wlrfx/scenefx/releases/tag/${finalAttrs.version}";
+         license = lib.licenses.mit;
+-        maintainers = [ ];
++        maintainers = with lib.maintainers; [
++          swarsel
++          yvnth
++        ];
++
+         mainProgram = "scenefx";
+         pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
+         platforms = lib.platforms.all;
+
+From 7bae4ec8e7c5405e8e0652bebe46368c003dae56 Mon Sep 17 00:00:00 2001
+From: yvnth <yvnth@users.noreply.github.com>
+Date: Fri, 10 Jul 2026 13:19:15 +0530
+Subject: [PATCH 5/5] top-level/aliases: mangowc: throw -> warnAlias
+
+---
+ pkgs/top-level/aliases.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkgs/top-level/aliases.nix b/pkgs/top-level/aliases.nix
+index c514f87d803f4..ca83323f0b368 100644
+--- a/pkgs/top-level/aliases.nix
++++ b/pkgs/top-level/aliases.nix
+@@ -1481,7 +1481,7 @@ mapAliases {
+   mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
+   makeOverridable = warnAlias "'makeOverridable' has been removed from pkgs, use `lib.makeOverridable` instead" lib.makeOverridable; # Added 2025-10-30
+   manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
+-  mangowc = throw "'mangowc' has been renamed to 'mango'"; # Added 2026-06-23
++  mangowc = warnAlias "'mangowc' has been renamed to 'mango'" mango; # Added 2026-06-23
+   manrope = throw "'manrope' has been removed because its source has been pulled"; # Added 2025-12-20
+   mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
+   marwaita-manjaro = throw "'marwaita-manjaro' has been renamed to/replaced by 'marwaita-teal'"; # Converted to throw 2025-10-27

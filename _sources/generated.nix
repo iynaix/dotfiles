@@ -32,13 +32,13 @@
   };
   mango = {
     pname = "mango";
-    version = "0.14.4";
+    version = "0.15.2";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.14.4";
+      rev = "0.15.2";
       fetchSubmodules = false;
-      sha256 = "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=";
+      sha256 = "sha256-yYYtJZBUWdZmMQ1knD/avgjJr80G3Tz8zKMMYfxXR7E=";
     };
   };
   mpv-deletefile = {

@@ -27,7 +27,7 @@
             (o: {
               patches = (o.patches or [ ]) ++ [ ./tokyonight-style.patch ];
 
-              # make it impossible to have a light theme XD
+              # fuck light themes XD
               postInstall = (o.postInstall or "") + ''
                 rm -rf $out/share/themes/*Light*
 

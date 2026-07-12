@@ -1,0 +1,25 @@
+From 2627acac273da951fb7bfeb9a04050dd02d53515 Mon Sep 17 00:00:00 2001
+From: Lin Xianyi <iynaix@gmail.com>
+Date: Sat, 11 Jul 2026 15:11:08 +0800
+Subject: [PATCH] zfs_unstable: support kernel 7.1
+
+---
+ pkgs/os-specific/linux/zfs/unstable.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pkgs/os-specific/linux/zfs/unstable.nix b/pkgs/os-specific/linux/zfs/unstable.nix
+index dfc43de1c33e..67d7c023d13e 100644
+--- a/pkgs/os-specific/linux/zfs/unstable.nix
++++ b/pkgs/os-specific/linux/zfs/unstable.nix
+@@ -12,6 +12,8 @@ callPackage ./generic.nix args {
+   kernelMinSupportedMajorMinor = "4.18";
+   kernelMaxSupportedMajorMinor = "7.0";
+ 
++  enableUnsupportedExperimentalKernel = true;
++
+   # this package should point to a version / git revision compatible with the latest kernel release
+   # IMPORTANT: Always use a tagged release candidate or commits from the
+   # zfs-<version>-staging branch, because this is tested by the OpenZFS
+-- 
+2.54.0
+

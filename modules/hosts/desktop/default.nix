@@ -20,7 +20,7 @@
         gui
         wm
 
-        programs_freecad
+        # programs_freecad
         # programs_helix
         programs_orca-slicer
         programs_obs-studio

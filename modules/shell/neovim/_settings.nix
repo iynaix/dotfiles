@@ -172,6 +172,7 @@
       servers.nixd = {
         settings.options = lib.mkIf (dots != null) {
           nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
+          nixpkgs.expr = "(import \"${dots}/.tack\").nixpkgs";
         };
       };
     };

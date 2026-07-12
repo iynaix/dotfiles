@@ -58,12 +58,12 @@
             "name": null,
             "owner": "mangowm",
             "repo": "mango",
-            "rev": "0.14.4",
-            "sha256": "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=",
+            "rev": "0.15.2",
+            "sha256": "sha256-yYYtJZBUWdZmMQ1knD/avgjJr80G3Tz8zKMMYfxXR7E=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "0.14.4"
+        "version": "0.15.2"
     },
     "mpv-deletefile": {
         "cargoLock": null,

@@ -31,7 +31,7 @@
     let
       inherit (config.custom.constants) dots projects;
       termExec = cmd: "ghostty -e ${cmd}";
-      emacsExec = elisp: "emacs-launcher ${elisp}";
+      emacsExec = elisp: "emacs-launcher '${elisp}'";
     in
     {
       custom.wm.binds = {
