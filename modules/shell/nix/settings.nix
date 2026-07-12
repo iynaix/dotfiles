@@ -55,7 +55,11 @@
         nix =
           let
             flakes = lib.filterAttrs (_: input: lib.isType "flake" input) inputs;
-            nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes;
+            nixPath = lib.mapAttrsToList (
+              n: _:
+              # use patched nixpkgs on filesystem
+              if (n == "nixpkgs") then "${n}=${config.nixpkgs-patcher.patchedNixpkgs}" else "${n}=flake:${n}"
+            ) flakes;
             registry = lib.mapAttrs (_: flake: { inherit flake; }) (removeAttrs inputs [ "__functor" ]);
           in
           {

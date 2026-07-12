@@ -6,6 +6,11 @@
         patches = (o.patches or [ ]) ++ [
           ./face-aware-crop.patch
         ];
+
+        postFixup =
+          lib.replaceString ''wrapProgram $out/bin/noctalia \''
+            ''wrapProgram $out/bin/noctalia --set QT_QPA_PLATFORMTHEME gtk3 \''
+            (o.postFixup or "");
       });
     };
   };
@@ -69,6 +74,7 @@
         name = "noctalia-reload";
         text = /* sh */ ''
           killall noctalia || true
+          killall .noctalia-wrapper || true
           # prevent "already running" error
           sleep 0.2
           noctalia &

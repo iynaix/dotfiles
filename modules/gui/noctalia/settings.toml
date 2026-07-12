@@ -19,6 +19,12 @@ middle_command = "toggle-speaker"
 scroll_down_command = "noctalia msg volume-down 1"
 scroll_up_command = "noctalia msg volume-up 1"
 
+[calendar]
+enabled = true
+
+[calendar.account.default]
+type = "google"
+
 [control_center]
 sidebar_section = "none"
 

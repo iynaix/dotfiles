@@ -22,7 +22,11 @@
 ;; accept. For example:
 ;;
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Geist Regular" :size 13))
+      doom-variable-pitch-font (font-spec :family "Geist Regular" :size 13)
+
+      ;; use nerd fonts from nixos
+      nerd-icons-font-names '("SymbolsNerdFontMono-Regular.ttf")
+      )
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -40,7 +44,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory
+      (concat (getenv "XDG_PROJECTS_DIR") "/dotfiles/"))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
@@ -73,6 +78,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; Use posix compliant shell, from doom doctor
+(setq shell-file-name (executable-find "bash"))
+
 ;; Project dirs
 (setq projectile-project-search-path
       (mapcar #'substitute-env-vars
@@ -100,7 +108,12 @@
   (setf (alist-get 'rustfmt  apheleia-formatters)
         '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
 
-;; Stop bothering me with code actions
-(setq eglot-code-action-indications '(left-fringe))
+;; Lsp mode settings
+(setq lsp-enable-symbol-highlighting nil)
 
-(global-eldoc-mode -1)
+;; Use nixd
+(let ((dotfiles-path (concat (getenv "XDG_PROJECTS_DIR") "/dotfiles/")))
+  (setq lsp-nix-nixd-server-path "nixd"
+        lsp-nix-nixd-formatting-command [ "nixfmt" ]
+        lsp-nix-nixd-nixpkgs-expr (format "(import \"%s/.tack\").nixpkgs" dotfiles-path)
+        lsp-nix-nixd-nixos-options-expr (format "(builtins.getFlake \"%s\").nixosConfigurations.desktop.options" dotfiles-path)))

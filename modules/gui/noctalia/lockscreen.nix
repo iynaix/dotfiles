@@ -81,7 +81,7 @@
             };
           }
         )
-        |> lib.foldl' (acc: set: acc // set) { }; # merge
+        |> lib.mergeAttrsList;
     in
     {
       custom.programs.noctalia.settings = lib.mkAfter {

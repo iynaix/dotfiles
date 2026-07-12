@@ -25,6 +25,12 @@
         ]);
       };
 
+      # emacs fallback fonts
+      fonts.packages = with pkgs; [
+        nerd-fonts.symbols-only
+        symbola
+      ];
+
       # add doom to path
       environment = {
         sessionVariables = {

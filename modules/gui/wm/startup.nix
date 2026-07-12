@@ -104,7 +104,7 @@
           # emacs
           {
             app-id = "emacs";
-            spawn = "emacsclient -c";
+            spawn = "sleep 2; emacsclient -c";
             workspace = 2;
             niriArgs = {
               open-maximized = true;
