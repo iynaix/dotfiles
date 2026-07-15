@@ -89,32 +89,8 @@
     {
       environment = {
         shellAliases = {
-          ":e" = "nvim";
-          ":q" = "exit";
-          ":wq" = "exit";
-          c = "clear";
-          cat = "bat";
-          ccat = "command cat";
-          cp = "cp -ri";
-          crate = "cargo";
           dots = "cd ${dots}";
-          isodate = ''date -u "+%Y-%m-%dT%H:%M:%SZ"'';
-          man = "batman";
-          mime = "xdg-mime query filetype";
-          mkdir = "mkdir -p";
-          mount = "mount --mkdir";
-          mv = "mv -i";
-          open = "xdg-open";
-          ping = "ping -c 5";
-          rm = "rm -I";
-          py = "python";
-          sl = "ls";
-          w = "watch -cn1 -x cat";
           coinfc = "pj coinfc";
-
-          # cd aliases
-          ".." = "cd ..";
-          "..." = "cd ../..";
         };
 
         systemPackages =

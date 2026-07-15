@@ -7,7 +7,7 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages = {
+      packages = rec {
         bat = inputs.wrappers.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.bat;
@@ -15,7 +15,20 @@
             "--theme" = "base16";
             "--style" = "grid";
           };
+
+          runtimePkgs = [
+            batman
+          ];
+
+          # TODO: re-enable when https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 is merged
+          # passthru.abbreviations = {
+          #   "--help" = {
+          #     expansion = "--help | bat --plain --language=help";
+          #     position = "anywhere";
+          #   };
+          # };
         };
+
         # batman with completions
         batman = pkgs.bat-extras.batman.overrideAttrs (o: {
           postInstall =
@@ -51,13 +64,6 @@
         pkgs.bat # overlay-ed above
         pkgs.custom.batman
       ];
-
-      programs = {
-        # manually add the abbr so it doesn't get mangled by nix
-        fish.interactiveShellInit = /* fish */ ''
-          abbr -a --position anywhere -- --help '--help | bat --plain --language=help'
-        '';
-      };
 
       custom.programs.print-config = {
         bat = /* sh */ ''moor --lang sh "${lib.getExe pkgs.bat}"'';

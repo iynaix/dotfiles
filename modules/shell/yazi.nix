@@ -210,6 +210,10 @@
             unar
             exiftool
           ];
+          passthru.shellAliases = {
+            lf = "yazi";
+            y = "yazi";
+          };
         }
       );
     };
@@ -248,17 +252,6 @@
           };
         })
       ];
-
-      environment = {
-        systemPackages = [
-          pkgs.yazi # overlay-ed above
-        ];
-
-        shellAliases = {
-          lf = "yazi";
-          y = "yazi";
-        };
-      };
 
       custom.programs.print-config =
         let

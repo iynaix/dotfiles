@@ -7,7 +7,7 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages = {
+      packages = rec {
         eza = inputs.wrappers.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.eza;
@@ -21,7 +21,6 @@
           };
           passthru = {
             shellAliases = {
-              t = "tree";
               cls = "command ls";
               ls = "eza";
               ll = "eza -l";
@@ -33,7 +32,7 @@
         };
         eza-tree = pkgs.writeShellApplication {
           name = "tree";
-          runtimeInputs = [ pkgs.eza ];
+          runtimeInputs = [ eza ];
           text = /* sh */ ''
             # Get all arguments except the last one
             args=("''${@:1:$#-1}")
@@ -67,18 +66,7 @@
       environment = {
         shellAliases = {
           t = "tree";
-          cls = "command ls";
-          ls = "eza";
-          ll = "eza -l";
-          la = "eza -a";
-          lt = "eza --tree";
-          lla = "eza -la";
         };
-
-        systemPackages = [
-          pkgs.eza # overlay-ed above
-          pkgs.custom.eza-tree
-        ];
       };
 
       custom.programs.print-config = {

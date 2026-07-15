@@ -12,6 +12,9 @@
           "--statusbar" = "bold";
           "-terminal-fg" = true;
         };
+        passthru.shellAliases = {
+          less = "moor";
+        };
       };
     };
 
@@ -25,14 +28,6 @@
       ];
 
       environment = {
-        shellAliases = {
-          less = "moor";
-        };
-
-        systemPackages = [
-          pkgs.moor # overlay-ed above
-        ];
-
         variables = {
           PAGER = "moor";
           SYSTEMD_PAGER = "moor";

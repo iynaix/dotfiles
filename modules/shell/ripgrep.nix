@@ -41,12 +41,9 @@
         pkgs.ripgrep # overlay-ed above
       ];
 
-      custom.programs.print-config =
-        let
-          cmd = /* sh */ ''moor --lang sh "${lib.getExe pkgs.ripgrep}"'';
-        in
-        {
-          rg = cmd;
-        };
+      custom.programs.print-config = rec {
+        rg = /* sh */ ''moor --lang sh "${lib.getExe pkgs.ripgrep}"'';
+        ripgrep = rg;
+      };
     };
 }

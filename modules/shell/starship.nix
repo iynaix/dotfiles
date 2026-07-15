@@ -85,32 +85,7 @@
         })
       ];
 
-      # NOTE: starship is overlay-ed above
-      environment.systemPackages = [
-        pkgs.starship
-      ];
-
-      programs = {
-        fish = {
-          # fix starship prompt to only have newlines after the first command
-          # https://github.com/starship/starship/issues/560#issuecomment-1465630645
-          promptInit = /* fish */ ''
-            if test "$TERM" != dumb
-              # not sure why this needs to be explicitly set, but wrapping alone does not seem sufficient
-              starship init fish | source
-              enable_transience
-            end
-
-            function prompt_newline --on-event fish_postexec
-              echo ""
-            end
-
-            function starship_transient_prompt_func
-              starship module character
-            end
-          '';
-        };
-      };
+      # NOTE: starship is initialized in the fish wrapper
 
       custom.programs.print-config = {
         starship = /* sh */ "moor ${pkgs.starship.configuration.constructFiles."starship.toml"}";

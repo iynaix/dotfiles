@@ -1,15 +1,122 @@
 { inputs, lib, ... }:
 {
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages = rec {
+        difftastic = inputs.wrappers.lib.wrapPackage {
+          inherit pkgs;
+          package = pkgs.difftastic;
+          flags = {
+            "--background" = "dark";
+          };
+        };
+
+        git = inputs.wrappers.wrappers.git.wrap (
+          let
+            gitignores = [
+              ".direnv"
+              ".devenv"
+              ".envrc"
+              ".jj"
+              "node_modules"
+            ];
+          in
+          {
+            inherit pkgs;
+            settings = {
+              init = {
+                defaultBranch = "main";
+              };
+              alias = {
+                # blame with ignore whitespace and track movement across all commits
+                blame = "blame -w -C -C -C";
+                diff = "diff --word-diff";
+              };
+              branch = {
+                master = {
+                  merge = "refs/heads/master";
+                };
+                main = {
+                  merge = "refs/heads/main";
+                };
+                sort = "-committerdate";
+              };
+              core = {
+                excludesFile = pkgs.writeText ".gitignore" (lib.concatStringsSep "\n" gitignores);
+              };
+              diff = {
+                tool = "difftastic";
+                colorMoved = "default";
+              };
+              difftool = {
+                difftastic = {
+                  cmd = "difft $LOCAL $REMOTE";
+                };
+              };
+              format = {
+                pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
+              };
+              merge = {
+                conflictstyle = "diff3";
+              };
+              pull = {
+                rebase = true;
+              };
+              push = {
+                default = "simple";
+              };
+              # reuse record resolution: git automatically resolves conflicts using the recorded resolution
+              rerere = {
+                enabled = true;
+                autoUpdate = true;
+              };
+            };
+
+            passthru.shellAliases = {
+              dt = "difftastic";
+              lg = "lazygit";
+              gaa = "git add --all";
+              gb = "git branch";
+              gbrd = "git push origin -d";
+              gcaam = "git add --all && git commit --amend";
+              gcam = "git commit --amend";
+              gco = "git checkout";
+              gclone-shallow = "git clone --depth 1";
+              gcp = "git cherry-pick";
+              gdiff = "git diff --no-ext-diff";
+              gg = "git status -s -b && echo && git log | head -n 1";
+              gl = "git pull";
+              glg = "git log";
+              gm = "git merge";
+              gp = "git push";
+              fgp = "git push --force-with-lease";
+              glc = "git pull origin (git branch --show-current)";
+              gpc = "git push origin (git branch --show-current)";
+              fgpc = "git push origin --force-with-lease (git branch --show-current)";
+              gpatch = "git diff --no-ext-diff";
+              gr = "cd (git rev-parse - -show-toplevel)"; # cd back to root
+              grh = "git reset --hard";
+              gri = "git rebase --interactive";
+              gsub = "git submodule update --init --recursive";
+              # access github page for the repo we are currently in
+              github = "open (git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git')";
+              # cleanup leftover files from merges
+              mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
+            };
+          }
+        );
+
+        runtimePkgs = [
+          difftastic
+          pkgs.lazygit
+        ];
+      };
+    };
+
   flake.modules.nixos.core =
     { config, pkgs, ... }:
     let
-      gitignores = [
-        ".direnv"
-        ".devenv"
-        ".envrc"
-        ".jj"
-        "node_modules"
-      ];
       # checkout main / master, whichever exists
       gmain = pkgs.writeShellApplication {
         name = "gmain";
@@ -80,151 +187,52 @@
         '';
       };
     in
-    lib.mkMerge [
-      {
-        programs = {
-          git = {
-            enable = true;
-
-            config = {
-              init = {
-                defaultBranch = "main";
-              };
-              alias = {
-                # blame with ignore whitespace and track movement across all commits
-                blame = "blame -w -C -C -C";
-                diff = "diff --word-diff";
-              };
-              branch = {
-                master = {
-                  merge = "refs/heads/master";
-                };
-                main = {
-                  merge = "refs/heads/main";
-                };
-                sort = "-committerdate";
-              };
-              core = {
-                excludesFile = pkgs.writeText ".gitignore" (lib.concatStringsSep "\n" gitignores);
-              };
+    {
+      programs = {
+        git = {
+          enable = true;
+          package = pkgs.custom.git.wrap {
+            settings = {
               diff = {
                 guitool = "code";
-                colorMoved = "default";
-              };
-              format = {
-                pretty = "format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset";
-              };
-              merge = {
-                conflictstyle = "diff3";
-              };
-              pull = {
-                rebase = true;
-              };
-              push = {
-                default = "simple";
-              };
-              # reuse record resolution: git automatically resolves conflicts using the recorded resolution
-              rerere = {
-                enabled = true;
-                autoUpdate = true;
               };
               user = {
                 name = "Lin Xianyi";
                 email = "iynaix@gmail.com";
               };
-            };
-          };
-
-          lazygit.enable = true;
-        };
-
-        environment.shellAliases = {
-          dt = "difftastic";
-          lg = "lazygit";
-          gaa = "git add --all";
-          gb = "git branch";
-          gbrd = "git push origin -d";
-          gcaam = "git add --all && git commit --amend";
-          gcam = "git commit --amend";
-          gco = "git checkout";
-          gclone-shallow = "git clone --depth 1";
-          gcp = "git cherry-pick";
-          gdiff = "git diff --no-ext-diff";
-          gg = "git status -s -b && echo && git log | head -n 1";
-          gl = "git pull";
-          glg = "git log";
-          gm = "git merge";
-          gp = "git push";
-          fgp = "git push --force-with-lease";
-          glc = ''git pull origin "$(git rev-parse --abbrev-ref HEAD)"'';
-          gpc = ''git push origin "$(git rev-parse --abbrev-ref HEAD)"'';
-          fgpc = ''git push origin --force-with-lease "$(git rev-parse --abbrev-ref HEAD)"'';
-          gpatch = "git diff --no-ext-diff";
-          gr = "cd $(git rev-parse - -show-toplevel)"; # cd back to root
-          grh = "git reset --hard";
-          gri = "git rebase --interactive";
-          gsub = "git submodule update --init --recursive";
-          # access github page for the repo we are currently in
-          github = "open `git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git'`";
-          # cleanup leftover files from merges
-          mergeclean = "find . -type f -name '*.orig' -exec rm -f {} ;";
-        };
-
-        # extra git functions
-        environment.systemPackages = [
-          gmain
-          gbc
-          grd
-          grg
-          gsync
-        ];
-
-        custom.persist = {
-          home.directories = [
-            ".config/lazygit"
-            ".config/gitbutler"
-          ];
-        };
-      }
-
-      # difftastic
-      {
-        nixpkgs.overlays = [
-          (_: prev: {
-            difftastic = inputs.wrappers.lib.wrapPackage {
-              pkgs = prev;
-              package = prev.difftastic;
-              flags = {
-                "--background" = "dark";
+              # git maintenance for large repos
+              # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
+              maintenance = {
+                repo = "${config.custom.constants.projects}/nixpkgs";
               };
             };
-          })
-        ];
-
-        environment.systemPackages = [
-          pkgs.difftastic # overlay-ed above
-        ];
-
-        programs.git.config = {
-          diff = {
-            tool = "difftastic";
-          };
-          difftool = {
-            difftastic = {
-              cmd = "difft $LOCAL $REMOTE";
-            };
           };
         };
-      }
+      };
 
-      # git maintenance for large repos
-      # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
-      {
-        programs.git.config = {
-          maintenance = {
-            repo = "${config.custom.constants.projects}/nixpkgs";
-          };
-        };
-      }
-    ];
+      nixpkgs.overlays = [
+        (_: _prev: {
+          # NOTE: git is not overwritten here as it will cause infinite recursion:
+          # https://birdeehub.github.io/nix-wrapper-modules/wrapperModules/git.html#overview
+          inherit (pkgs.custom) difftastic;
+        })
+      ];
+
+      # extra git functions
+      environment.systemPackages = [
+        pkgs.difftastic # overlay-ed above
+        gmain
+        gbc
+        grd
+        grg
+        gsync
+      ];
+
+      custom.persist = {
+        home.directories = [
+          ".config/lazygit"
+          ".config/gitbutler"
+        ];
+      };
+    };
 }

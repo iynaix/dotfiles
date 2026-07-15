@@ -33,12 +33,6 @@
     in
     {
       environment = {
-        shellAliases = {
-          nano = "nvim";
-          neovim = "nvim";
-          v = "nvim";
-        };
-
         systemPackages = [
           customNeovim
         ];
