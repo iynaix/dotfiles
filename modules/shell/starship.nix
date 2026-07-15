@@ -91,14 +91,6 @@
       ];
 
       programs = {
-        bash = {
-          promptInit = /* sh */ ''
-            if [[ $TERM != "dumb" ]]; then
-              eval "$(starship init bash)"
-            fi
-          '';
-        };
-
         fish = {
           # fix starship prompt to only have newlines after the first command
           # https://github.com/starship/starship/issues/560#issuecomment-1465630645

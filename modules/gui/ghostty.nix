@@ -114,8 +114,6 @@ in
           ghostty = self.wrappers.ghostty.wrap {
             pkgs = prev;
             extraSettings = {
-              # set as default interactive shell, also set $SHELL for nix shell to pick up
-              command = "SHELL=${lib.getExe pkgs.fish} fish";
               font-family = config.custom.fonts.monospace;
               font-feature = "zero";
               font-style = "Medium";

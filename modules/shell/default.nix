@@ -4,27 +4,6 @@
     { pkgs, ... }:
     let
       binariesCompletion = binaryName: {
-        completions.bash = /* sh */ ''
-          _complete_path_binaries()
-          {
-              local cur prev words cword
-              _init_completion || return
-
-              local IFS=:
-              local binaries=()
-              for path in $PATH; do
-                  for bin in "$path"/*; do
-                      if [[ -x "$bin" && -f "$bin" ]]; then
-                          binaries+=("$(basename "$bin")")
-                      fi
-                  done
-              done
-
-              COMPREPLY=($(compgen -W "''${binaries[*]}" -- "$cur"))
-          }
-
-          complete -F _complete_path_binaries ${binaryName}
-        '';
         completions.fish = /* fish */ ''
           function __complete_path_binaries
               for path in $PATH
@@ -198,19 +177,6 @@
 
       # pj cannot be implemented as script as it needs to change the directory of the shell
       programs = {
-        bash.shellInit = /* sh */ ''
-          function pj() {
-              cd ${projects}
-              if [[ $# -eq 1 ]]; then
-                cd "$1";
-              fi
-          }
-          _pj() {
-              ( cd ${projects}; printf "%s\n" "$2"* )
-          }
-          complete -o nospace -C _pj pj
-        '';
-
         fish.shellInit = /* fish */ ''
           function pj
             cd ${projects}

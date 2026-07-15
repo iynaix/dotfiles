@@ -47,15 +47,6 @@
 
           complete -c grd -f -a '(__git_remote_branches)'
         '';
-        completions.bash = /* sh */ ''
-          __git_remote_branches() {
-              git branch --no-color -r 2>/dev/null | \
-              sed -e 's/^..//' -e 's/^origin\///' | \
-              grep -vE 'HEAD|^main$|^master$'
-          }
-
-          complete -F __git_remote_branches grd
-        '';
       };
       # searches git history, can never remember this stupid thing
       # 2nd argument is target path and subsequent arguments are passed through

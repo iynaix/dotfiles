@@ -162,18 +162,6 @@
             fi
           fi
         '';
-        completions.bash = /* sh */ ''
-          _ngeneration() {
-              local profile_dir="/nix/var/nix/profiles"
-              local profiles=$(command ls -1 "$profile_dir" | \
-                  grep -E '^system-[0-9]+-link$' | \
-                  sed -E 's/^system-([0-9]+)-link$/\1/' | \
-                  sort -rnu)
-              COMPREPLY=($(compgen -W "$profiles" -- "''${COMP_WORDS[COMP_CWORD]}"))
-          }
-
-          complete -F _ngeneration ngeneration
-        '';
         completions.fish = /* fish */ ''
           function _ngeneration
               set -l profile_dir "/nix/var/nix/profiles"

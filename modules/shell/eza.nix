@@ -16,7 +16,19 @@
             "--group-directories-first" = true;
             "--header" = true;
             "--octal-permissions" = true;
+            "--no-permissions" = true;
             "--hyperlink" = true;
+          };
+          passthru = {
+            shellAliases = {
+              t = "tree";
+              cls = "command ls";
+              ls = "eza";
+              ll = "eza -l";
+              la = "eza -a";
+              lt = "eza --tree";
+              lla = "eza -la";
+            };
           };
         };
         eza-tree = pkgs.writeShellApplication {

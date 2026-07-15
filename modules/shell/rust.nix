@@ -37,7 +37,6 @@
           fi;
         '';
         completions.fish = "complete -c crb -f -a '(__cargo_bins)'";
-        completions.bash = "complete -F __cargo_bins crb";
       };
       crrb = pkgs.custom.writeShellApplicationCompletions {
         name = "crrb";
@@ -49,7 +48,6 @@
           fi;
         '';
         completions.fish = "complete -c crrb -f -a '(__cargo_bins)'";
-        completions.bash = "complete -F __cargo_bins crrb";
       };
     in
     {
@@ -70,13 +68,6 @@
 
       # add the custom cargo bin completions for both bash and fish
       programs = {
-        bash.shellInit = /* sh */ ''
-          __cargo_bins() {
-            local bins
-            bins=$(cargo run --bin 2>&1 | sed 's/^\s\+//')
-            COMPREPLY=("''${bins}")
-          }
-        '';
         fish.shellInit = /* fish */ ''
           function __cargo_bins
               cargo run --bin 2>&1 | string replace -rf '^\s+' ""
