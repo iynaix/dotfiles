@@ -63,7 +63,7 @@
               statix
               nil
               nixd
-              nixfmt
+              nixfmt-rs
               pre-commit
               cargo-edit
               crb

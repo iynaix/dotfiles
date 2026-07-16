@@ -24,7 +24,7 @@
             nix-tree
             nix-update
             nixd
-            nixfmt
+            nixfmt-rs
             nixpkgs-review
             nvfetcher
           ];

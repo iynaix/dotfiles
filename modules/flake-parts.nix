@@ -35,7 +35,7 @@
       # initialize the pkgs for perSystem to be the patched nixpkgs
       _module.args = { inherit pkgs; };
 
-      formatter = pkgs.nixfmt;
+      formatter = pkgs.nixfmt-rs;
     };
 
   flake = {
