@@ -132,7 +132,7 @@ in
                 # fix starship prompt to only have newlines after the first command
                 # https://github.com/starship/starship/issues/560#issuecomment-2409922650
                 function prompt_newline --on-event fish_postexec
-                    echo
+                    echo ""
                 end
 
                 function starship_transient_prompt_func
