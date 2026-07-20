@@ -65,6 +65,7 @@
       helium-chat = pkgs.writeShellApplication {
         name = "helium-chat";
         runtimeInputs = [ pkgs.custom.helium ];
+        # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
         text = /* sh */ ''
           helium --profile-directory=Chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat
         '';
@@ -75,6 +76,8 @@
         "ghostty";
     in
     {
+      programs.uwsm.enable = true;
+
       # add desktop entry for helium-chat as well
       environment.systemPackages = [
         helium-chat
@@ -91,26 +94,23 @@
         wm.startup = [
           {
             app-id = "helium";
-            spawn = "sleep 2; helium --profile-directory=Default";
+            spawn = "uwsm app -- helium --profile-directory=Default";
             workspace = 1;
           }
 
           {
             app-id = "helium";
-            spawn = "sleep 2; helium --profile-directory=Default --incognito";
+            spawn = "uwsm app -- helium --profile-directory=Default --incognito";
             workspace = 1;
           }
 
           # emacs
           {
             app-id = "emacs";
-            spawn = "sleep 2; emacsclient -c";
+            spawn = "uwsm app -- emacsclient -c";
             workspace = 2;
             niriArgs = {
               open-maximized = true;
-            };
-            hyprlandArgs = {
-              initial_class = "emacs";
             };
           }
 
@@ -127,7 +127,7 @@
           # https://github.com/ghostty-org/ghostty/discussions/8804
           rec {
             app-id = "${config.custom.programs.terminal.app-id}-vertical";
-            spawn = "sleep 2; ${termExe} --class=${app-id}";
+            spawn = "uwsm app -- ${termExe} --class=${app-id}";
             workspace = 7;
             niriArgs = {
               open-maximized = true;
@@ -135,11 +135,12 @@
           }
 
           # discord and other chats
+          # does not currently work on niri, using raw regexes fixes it
+          # https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
           rec {
             app-id = "helium";
             title = ".*(Discord|WhatsApp|Flood).*";
-            # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
-            spawn = "sleep 2; helium-chat";
+            spawn = "uwsm app -- helium-chat";
             workspace = 9;
             niriArgs = {
               open-maximized = true;
@@ -153,13 +154,13 @@
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-dl";
-            spawn = "sleep 2; ${termExe} --class=${app-id}";
+            spawn = "uwsm app -- ${termExe} --class=${app-id}";
             workspace = 8;
           }
           rec {
             enable = host == "desktop";
             app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
-            spawn = "sleep 2; ${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
+            spawn = "uwsm app -- ${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
             workspace = 8;
           }
         ];

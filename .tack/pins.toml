@@ -24,6 +24,7 @@ flake-parts = "flake-parts"
 #   dir             subdir holding flake.nix
 #   submodules      fetch git submodules
 #   unpack          fixed-only tarball or file
+
 # channel urls are faster and more reliable than github -.-
 [inputs.nixpkgs]
 url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"

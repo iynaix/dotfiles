@@ -153,7 +153,7 @@
 
           blur = {
             on = _: { };
-            passes = 2;
+            passes = 3;
             offset = 1;
             noise = 0.02;
             saturation = 1.5;
@@ -229,6 +229,7 @@
 
           # final include right at the end of the file
           extraConfig = lib.mkMerge [
+            # NOTE: named workspaces are used, because dynamic workspaces are just... urgh
             # don't use the workspaces key in setting as attrset keys are unordered and it becomes 1, 10, 2, 3...
             (
               config.custom.hardware.monitors

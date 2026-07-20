@@ -31,7 +31,7 @@
           # focus default workspace for each monitor
           {
             spawn-sh-at-startup = lib.mkAfter (
-              map (mon: "niri msg action focus-workspace ${toString mon.defaultWorkspace}") (
+              map (mon: "sleep 0.5; niri msg action focus-workspace ${toString mon.defaultWorkspace}") (
                 lib.reverseList config.custom.hardware.monitors
               )
             );
@@ -54,20 +54,6 @@
       );
 
       systemd.user = {
-        # ly -> niri.service -> niri-session.service -> startupServices
-        targets.niri-session = {
-          wantedBy = [ "niri.service" ];
-
-          unitConfig = {
-            Description = "Niri compositor session";
-            BindsTo = [ "niri.service" ];
-            # start the other services here after the WM has already started (push vs pull)
-            Wants = [ "niri.service" ] ++ config.custom.wm.startupServices;
-            Before = config.custom.wm.startupServices;
-            After = [ "niri.service" ];
-          };
-        };
-
         # listen to events from niri, done as a service so it will restart from nixos-rebuild
         services.niri-ipc = {
           wantedBy = [ "graphical-session.target" ];

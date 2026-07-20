@@ -125,6 +125,7 @@
             control_center.hidden_tabs = [
               "monitor"
               "network"
+              "bluetooth"
               "power"
             ];
           };
@@ -141,7 +142,7 @@
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
 
       services = {
-        displayManager.defaultSession = "hyprland";
+        displayManager.defaultSession = "hyprland-uwsm";
 
         pipewire = {
           wireplumber.extraConfig = {

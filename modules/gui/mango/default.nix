@@ -119,6 +119,14 @@ in
         };
       };
 
+      programs.uwsm.waylandCompositors = {
+        mango = {
+          prettyName = "Mango";
+          comment = "Mango compositor managed by UWSM";
+          binPath = "/run/current-system/sw/bin/mango";
+        };
+      };
+
       custom.programs = {
         print-config = {
           mango = /* sh */ ''cat "${config.programs.mangowc.package.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';

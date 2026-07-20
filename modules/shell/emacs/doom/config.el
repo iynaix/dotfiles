@@ -111,6 +111,10 @@
 ;; Lsp mode settings
 (setq lsp-enable-symbol-highlighting nil)
 
+;; Do not watch files in nixpkgs for performance reasons
+(after! lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]nixpkgs[/\\\\]"))
+
 ;; Use nixd
 (let ((dotfiles-path (concat (getenv "XDG_PROJECTS_DIR") "/dotfiles/")))
   (setq lsp-nix-nixd-server-path "nixd"

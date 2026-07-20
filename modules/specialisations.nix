@@ -44,7 +44,7 @@
           specialisation.current = "hyprland";
         };
 
-        services.displayManager.defaultSession = lib.mkForce "hyprland";
+        services.displayManager.defaultSession = lib.mkForce "hyprland-uwsm";
       };
     };
   };

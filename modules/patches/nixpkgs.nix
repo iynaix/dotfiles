@@ -46,7 +46,17 @@
 
           # mango 15 requires scenefx 0.5
           # https://github.com/NixOS/nixpkgs/pull/539969
-          ./mango_15.patch
+          # use fetchurl as files are renamed, fetchpatch breaks the application of the patch
+          (pkgs.fetchurl {
+            url = "https://github.com/NixOS/nixpkgs/compare/53f7fa3fe934c4b50716b17e544057a98c1fa0eb~1..60a465634381dccfbd76cb50903bfb1734f3c9bf.patch";
+            hash = "sha256-42Fl/kXl963Rj7Fd9oo+/muIz2quMBTb5k75YcwK5co=";
+          })
+
+          # hyprland 0.56 (requires hyprutils patch above)
+          (pkgs.fetchurl {
+            url = "https://github.com/NixOS/nixpkgs/compare/035c487b7684e4a4f556462274c056f29b47d03e~1..2fc6f2ca6944dda22abe736cbd8e93c45fde5be2.patch";
+            hash = "sha256-Qh8ArHN02VsmWa+IBRG3/qSwboTmB5ZMSXNcwf3CzsA=";
+          })
         ];
       };
     };

@@ -1,14 +1,24 @@
+From 7da705824708b81e0b26a2f6d5a3376bd08e5c17 Mon Sep 17 00:00:00 2001
+From: Lin Xianyi <iynaix@gmail.com>
+Date: Thu, 9 Jul 2026 18:33:13 +0800
+Subject: [PATCH] Add support for face-aware crop per monitor
+
+---
+ src/config/config_overrides.cpp | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
 diff --git a/src/config/config_overrides.cpp b/src/config/config_overrides.cpp
-index ee7e5accc..19dbc9904 100644
+index b87defb7b..658ba1a69 100644
 --- a/src/config/config_overrides.cpp
 +++ b/src/config/config_overrides.cpp
-@@ -1614,11 +1614,21 @@ bool ConfigService::renameOverrideTable(
- }
- 
- std::string ConfigService::getWallpaperPath(const std::string& connectorName) const {
+@@ -1836,11 +1836,22 @@ std::string ConfigService::getWallpaperPath(const std::string& connectorName) co
+   if (const std::string bundled = firstRunWallpaperPath(); !bundled.empty()) {
+     return bundled;
+   }
 -  auto it = m_monitorWallpaperPaths.find(connectorName);
 -  if (it != m_monitorWallpaperPaths.end()) {
 -    return it->second;
++
 +  // files must not already exist on disk to be used by noctalia
 +  std::filesystem::path inputPath(m_defaultWallpaperPath);
 +  std::string outputPath = "/tmp/" + inputPath.stem().string() + "__" + connectorName + ".png";
@@ -27,4 +37,7 @@ index ee7e5accc..19dbc9904 100644
 +  return outputPath;
  }
  
- std::string ConfigService::getDefaultWallpaperPath() const { return m_defaultWallpaperPath; }
+ std::string ConfigService::getDefaultWallpaperPath() const {
+-- 
+2.54.0
+

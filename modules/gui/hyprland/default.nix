@@ -8,12 +8,10 @@
     }:
     let
       hyprland' = self.wrappers.hyprland.wrap (
-        {
+        rec {
           inherit pkgs;
           package = pkgs.hyprland;
-          # remove the uwsm session
-          filesToExclude = [ "share/wayland-sessions/hyprland-uwsm.desktop" ];
-          passthru.providedSessions = [ "hyprland" ];
+          inherit (package) passthru;
         }
         // config.custom.programs.hyprland
       );
@@ -21,10 +19,6 @@
     in
     {
       environment = {
-        shellAliases = {
-          hypr-log = "hyprctl rollinglog --follow";
-        };
-
         variables = {
           HYPRCURSOR_SIZE = config.custom.gtk.cursor.size;
           HYPRCURSOR_THEME = config.custom.gtk.cursor.name;
@@ -49,6 +43,7 @@
       programs.hyprland = {
         enable = true;
         package = hyprland';
+        withUWSM = true;
       };
 
       custom.programs.print-config = {

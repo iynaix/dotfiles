@@ -80,6 +80,22 @@
           noctalia &
         '';
       };
+      # removes all settings set by the gui
+      noctalia-clean = pkgs.writeShellApplication {
+        name = "noctalia-clean";
+        runtimeInputs = [
+          pkgs.jq
+          pkgs.yj
+          noctalia-reload
+        ];
+        text = /* sh */ ''
+          yj -tj <"$XDG_STATE_HOME/noctalia/settings.toml" | jq '
+            with_entries(
+              select(.key == "config_version" or .key == "wallpaper")
+            )
+          ' | yj -jt
+        '';
+      };
     in
     {
       nixpkgs.overlays = [
@@ -91,6 +107,7 @@
       environment.systemPackages = [
         pkgs.noctalia # overlay-ed above
         noctalia-reload
+        noctalia-clean
       ];
 
       hj.xdg = {
