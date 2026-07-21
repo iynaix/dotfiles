@@ -124,7 +124,7 @@
           ];
 
         variables = {
-          TERMINAL = "ghostty";
+          TERMINAL = "kitty";
           EDITOR = "nvim";
           VISUAL = "nvim";
           NIXPKGS_ALLOW_UNFREE = "1";

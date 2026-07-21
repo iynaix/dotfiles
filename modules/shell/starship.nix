@@ -6,7 +6,6 @@
       packages =
         let
           accent_bg = "blue";
-          accent_style = "bg:${accent_bg} fg:black";
           # divine orb style :)
           important_style = "bg:white fg:bold #ff0000";
         in
@@ -44,7 +43,7 @@
               };
               directory = {
                 format = "[ $path ]($style)";
-                style = accent_style;
+                style = "bold bg:${accent_bg} fg:black";
               };
               git_branch = {
                 symbol = "";

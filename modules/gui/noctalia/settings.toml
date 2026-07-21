@@ -119,7 +119,7 @@ variant = "default"
 source = "wallpaper"
 
 [theme.templates]
-builtin_ids = [ "btop", "cava", "ghostty", "hyprland", "mango", "niri" ]
+builtin_ids = [ "btop", "cava", "kitty", "hyprland", "mango", "niri" ]
 community_ids = [ "yazi", "zathura" ]
 
 [widget.battery]

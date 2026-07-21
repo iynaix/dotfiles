@@ -71,9 +71,7 @@
         '';
       };
       # ensure setting terminal title using --title or exec with -e works
-      termExe =
-        assert config.custom.programs.terminal.package.pname == "ghostty";
-        "ghostty";
+      termExe = "kitty";
     in
     {
       programs.uwsm.enable = true;
@@ -123,8 +121,6 @@
           }
 
           # terminal
-          # NOTE: use --class instead of --title to fix ghostty not properly setting initialTitle:
-          # https://github.com/ghostty-org/ghostty/discussions/8804
           rec {
             app-id = "${config.custom.programs.terminal.app-id}-vertical";
             spawn = "uwsm app -- ${termExe} --class=${app-id}";

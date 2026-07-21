@@ -48,7 +48,9 @@ let
                       "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                 ]
-                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [ ghostty ]
+                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [
+                  self.packages.${pkgs.stdenv.hostPlatform.system}.kitty
+                ]
                 ++ (with self.packages.${pkgs.stdenv.hostPlatform.system}; [
                   # custom packages
                   bat

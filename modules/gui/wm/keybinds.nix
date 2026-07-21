@@ -30,12 +30,12 @@
     { config, ... }:
     let
       inherit (config.custom.constants) dots projects;
-      termExec = cmd: "ghostty -e ${cmd}";
+      termExec = cmd: "kitty ${cmd}";
       emacsExec = elisp: "emacs-launcher '${elisp}'";
     in
     {
       custom.wm.binds = {
-        "Mod+Return".spawn = "ghostty";
+        "Mod+Return".spawn = "kitty";
         "Mod+Shift+Return".spawn = "noctalia msg panel-toggle launcher";
 
         "Mod+E".spawn = "nemo ${config.hj.directory}/Downloads";

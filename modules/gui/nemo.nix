@@ -36,11 +36,11 @@
       };
 
       # add a custom "open in terminal" option to the context menu
-      hj.xdg.data.files."nemo/actions/open-in-ghostty.nemo_action".text = ''
+      hj.xdg.data.files."nemo/actions/open-in-kitty.nemo_action".text = ''
         [Nemo Action]
         Name=Open in Terminal
         Comment=Open a terminal in this location
-        Exec=ghostty --working-directory=%F
+        Exec=kitty --directory=%F
         Icon-Name=utilities-terminal
         Selection=Any
         Extensions=dir;
