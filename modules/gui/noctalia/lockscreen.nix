@@ -76,7 +76,6 @@
                 show_caps_lock = true;
                 show_keyboard_layout = false;
                 show_login_button = false;
-                show_password_hint = false;
               };
             };
           }

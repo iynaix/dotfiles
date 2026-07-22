@@ -39,6 +39,10 @@
         programs = {
           nh = {
             enable = true;
+            clean = {
+              enable = true;
+              extraArgs = "--keep-since 5d --keep 5";
+            };
             flake = dots;
           };
 
@@ -66,12 +70,6 @@
             channel.enable = false;
             # required for nix-shell -p to work
             inherit nixPath;
-            gc = {
-              # Automatic garbage collection
-              automatic = true;
-              dates = "daily";
-              options = "--delete-older-than 7d";
-            };
             # package = pkgs.lixPackageSets.latest.lix;
             package = pkgs.nixVersions.latest;
             registry = registry // {

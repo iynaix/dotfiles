@@ -96,6 +96,12 @@
           desktop = "kitty.desktop";
         };
 
+        kitty.settings = {
+          bold_font = "JetBrainsMono Nerd Font Bold";
+          italic_font = "JetBrainsMono Nerd Font Italic";
+          bold_italic_font = "JetBrainsMono Nerd Font Bold Italic";
+        };
+
         print-config = {
           kitty = /* sh */ ''
             cat "${pkgs.kitty.configuration.constructFiles.kittyConfig.outPath}" \

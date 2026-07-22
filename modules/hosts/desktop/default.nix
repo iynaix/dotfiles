@@ -20,14 +20,14 @@
         gui
         wm
 
-        # programs_freecad
+        programs_freecad
         # programs_helix
         programs_orca-slicer
         programs_obs-studio
         programs_path-of-building
         programs_path-of-exile
         programs_steam
-        programs_subtitles
+        # programs_subtitles
         programs_vlc
         programs_wallfacer
         # programs_zed-editor

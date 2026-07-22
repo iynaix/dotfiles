@@ -8,10 +8,10 @@
 {
   awakened-poe-trade = {
     pname = "awakened-poe-trade";
-    version = "3.28.103";
+    version = "3.29.102";
     src = fetchurl {
-      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.28.103/Awakened-PoE-Trade-3.28.103.AppImage";
-      sha256 = "sha256-p/XDWnE9lm/LwT3r/lhQWtEJ3YoaGRFd4Rv7RbdDIeg=";
+      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.29.102/Awakened-PoE-Trade-3.29.102.AppImage";
+      sha256 = "sha256-mjtdM8tEi+Gvf3B4gopEEqlNfp89+J4w1Jy+dyWtig8=";
     };
   };
   exiled-exchange-2 = {
@@ -24,21 +24,21 @@
   };
   helium = {
     pname = "helium";
-    version = "0.14.7.1";
+    version = "0.14.9.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.14.7.1/helium-0.14.7.1-x86_64.AppImage";
-      sha256 = "sha256-JPsCvue71hlyS9woHsauX5xM/2PUJ+n8VEjOFquUDno=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.14.9.1/helium-0.14.9.1-x86_64.AppImage";
+      sha256 = "sha256-cuQiMGhOPjE7ixuZiFGpRuGF9SdVcNPYUXSXhjZBLKQ=";
     };
   };
   mango = {
     pname = "mango";
-    version = "0.15.4";
+    version = "0.15.5";
     src = fetchFromGitHub {
       owner = "mangowm";
       repo = "mango";
-      rev = "0.15.4";
+      rev = "0.15.5";
       fetchSubmodules = false;
-      sha256 = "sha256-f5l8fsEqaX37sw4tAXpKQ4D3MOfrSQyulAvmUJgkqh8=";
+      sha256 = "sha256-dg2cRIOPqjW/Q+5NLS8OWfIyVsRoGZT1Dji8SSVnpmE=";
     };
   };
   mpv-deletefile = {

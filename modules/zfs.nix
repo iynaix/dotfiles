@@ -8,7 +8,10 @@
     # NOTE: zfs datasets are created via install.sh
     {
       boot = {
-        kernelPackages = pkgs.linuxPackages_xanmod_latest;
+        kernelPackages =
+          assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
+            "zfs patch for kernel is no longer needed";
+          pkgs.linuxPackages_xanmod_latest;
         # lock xanmod version
         # kernelPackages =
         # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")

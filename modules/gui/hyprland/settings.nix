@@ -174,13 +174,14 @@
           )
 
           (lib.mkAfter /* lua */ ''
-            -- include hyprland.lua if available
-            local p = os.getenv("HOME") .. "/.config/hypr/hyprland.lua"
-            if io.open(p, "r") then dofile(p) end
-
             -- include noctalia colors if available
-            local p = os.getenv("HOME") .. "/.config/hypr/noctalia/noctalia-colors.lua"
-            if io.open(p, "r") then dofile(p) end
+            local p = os.getenv("HOME") .. "/.config/hypr/noctalia.lua"
+            local status, result = pcall(dofile, p)
+            if not status then
+                print("failed to load " .. p .. ", error:" .. tostring(value))
+            else
+                result.apply_theme()
+            end
           '')
         ];
       };

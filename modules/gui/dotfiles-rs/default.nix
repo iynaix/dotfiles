@@ -13,7 +13,7 @@
     {
       custom.programs = {
         dotfiles-rs = pkgs.custom.dotfiles-rs.override {
-          inherit (pkgs) pqiv;
+          inherit (pkgs) pqiv rclip;
           extraPackages = [ pkgs.noctalia ];
         };
       };

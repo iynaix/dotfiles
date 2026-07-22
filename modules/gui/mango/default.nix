@@ -87,7 +87,7 @@ in
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm;
-      mangowc' = inputs.wrappers.wrappers.mangowc.wrap {
+      mango' = inputs.wrappers.wrappers.mango.wrap {
         inherit pkgs;
         package = pkgs.mango.overrideAttrs (
           o:
@@ -95,7 +95,7 @@ in
           // {
             patches = (o.patches or [ ]) ++ [
               # adds niri inspired atstartup rule:
-              # https://github.com/DreamMaoMao/mangowc/pull/654
+              # https://github.com/mangowm/mango/pull/654
               (pkgs.fetchurl {
                 url = "https://github.com/mangowm/mango/commit/46a5d4445b1e5f4e27a340f47ec31a55ca922ba9.patch";
                 hash = "sha256-flyNWQN+AREpzsG9rh5ndlNYISYLI/gKdmGXgYpdshQ=";
@@ -110,9 +110,9 @@ in
       };
     in
     {
-      programs.mangowc = {
+      programs.mango = {
         enable = true;
-        package = mangowc'.wrap {
+        package = mango'.wrap {
           configFile.content = ''
             source-optional=${config.hj.xdg.config.directory}/mango/noctalia.conf
           '';
@@ -129,7 +129,7 @@ in
 
       custom.programs = {
         print-config = {
-          mango = /* sh */ ''cat "${config.programs.mangowc.package.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';
+          mango = /* sh */ ''cat "${config.programs.mango.package.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/mango/noctalia.conf" | moor'';
         };
       };
     };

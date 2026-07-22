@@ -14,10 +14,9 @@ start = ["control-center"]
 thickness = 30
 widget_spacing = 16
 
-[bar.default.dead_zone]
-middle_command = "toggle-speaker"
-scroll_down_command = "noctalia msg volume-down 1"
-scroll_up_command = "noctalia msg volume-up 1"
+[bar.default.dead_zone.actions]
+scroll_down = "volume-down 1"
+scroll_up = "volume-up 1"
 
 [calendar]
 enabled = true
@@ -71,8 +70,13 @@ polkit_agent = true
 
 [shell.launcher]
 categories = false
-session_search = true
 sort_by_usage = false
+
+[shell.launcher.providers.session]
+global = true
+
+[shell.launcher.providers.wallpaper]
+global = true
 
 [shell.panel]
 open_near_click_control_center = true
@@ -141,7 +145,11 @@ icon_color = "primary"
 
 [widget.volume]
 color = "primary"
-scroll_step = 1
+
+[widget.volume.actions]
+middle = "exec toggle-speaker"
+scroll_down = "volume-down 1"
+scroll_up = "volume-up 1"
 
 [widget.workspaces]
 display = "name"

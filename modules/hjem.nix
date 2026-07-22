@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.modules.nixos.core =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       inherit (config.custom.constants) user;
     in
@@ -16,7 +16,6 @@
         hjem = {
           # thanks for not fucking wasting my time
           clobberByDefault = true;
-          linker = inputs.hjem.packages.${pkgs.stdenv.hostPlatform.system}.smfh;
         };
       };
     };
