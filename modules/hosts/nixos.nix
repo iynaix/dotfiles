@@ -12,10 +12,8 @@ let
       user ? "iynaix",
       extraConfig ? { },
     }:
-    inputs.nixpkgs-patcher.lib.nixosSystem {
+    inputs.nixpkgs.lib.nixosSystem {
       inherit system;
-
-      nixpkgsPatcher.inputs = inputs; # for nixpkgs-patcher to patch
 
       modules = [
         {

@@ -45,14 +45,6 @@
     "rev": "0954f7ee2f6bb3dc7d4e3d0d8bcb8fd4bde4cfc5",
     "narHash": "sha256-JfsUqyQ4MGL0SvJNPFikXYlUdXg0xMzBdjwTPawZSl4="
   },
-  "nixpkgs-patcher": {
-    "type": "github",
-    "owner": "gepbird",
-    "repo": "nixpkgs-patcher",
-    "rev": "d2abed2b94b7955e05b4e2e8a9b8ac45597ecf94",
-    "narHash": "sha256-ZRlWPq2Qms6KbesJrj7cUe2GN7s8BZISfp9ZbrCi2x0=",
-    "lastModified": 1781789965
-  },
   "nixpkgs-stable": {
     "type": "tarball",
     "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.6282.2f5a153c270b/nixexprs.tar.xz",

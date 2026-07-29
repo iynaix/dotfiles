@@ -87,7 +87,7 @@ in
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm;
-      mango' = inputs.wrappers.wrappers.mango.wrap {
+      mango' = inputs.wrappers.wrappers.mangowc.wrap {
         inherit pkgs;
         package = pkgs.mango.overrideAttrs (
           o:
