@@ -5,7 +5,6 @@
   applyPatches,
   ...
 }:
-
 let
   # This logic is largely copied from nix itself, see
   # <https://github.com/NixOS/nix/blob/2.29.0/src/libflake/call-flake.nix>.
@@ -19,7 +18,6 @@ let
     let
       flake = import (src + "/flake.nix");
       outPath = toString src;
-
       # I'm not sure what to do with `sourceInfo`. It normally comes from the
       # lockfile [0]. Copying the old value feels wrong.
       # I'm going to opt to leave it unset until something goes wrong.
@@ -28,9 +26,7 @@ let
       sourceInfo = {
         inherit outPath;
       };
-
       outputs = flake.outputs (inputs // { self = result; });
-
       result =
         outputs
         // sourceInfo
@@ -46,14 +42,14 @@ let
   patchInputs =
     {
       unpatchedInputs,
-      patchSpecByInputName,
+      patchesByInputName,
     }:
     lib.mapAttrs (
       name: unpatchedInput:
       patchInput {
         inherit name;
         inherit unpatchedInput;
-        patchSpec = patchSpecByInputName.${name} or { };
+        patches = patchesByInputName.${name} or [ ];
       }
     ) unpatchedInputs;
 
@@ -61,42 +57,27 @@ let
     {
       name,
       unpatchedInput,
-      patchSpec,
+      patches,
     }:
-    let
-      patchSpecByInputName = patchSpec.inputs or { };
-      patches = patchSpec.patches or [ ];
-
-      patchedInputs = patchInputs {
-        unpatchedInputs = unpatchedInput.inputs;
-        inherit patchSpecByInputName;
-      };
-
-      patchedSrc =
-        if patches == [ ] then
-          unpatchedInput
-        else
-          applyPatches {
-            name = "${name}-patched";
-            inherit patches;
-            src = unpatchedInput;
-          };
-    in
-    if patchSpecByInputName == { } && patches == [ ] then
+    if patches == [ ] then
       unpatchedInput
     else
       importFlake {
-        src = patchedSrc;
-        inputs = patchedInputs;
+        src = applyPatches {
+          name = "${name}-patched";
+          inherit patches;
+          src = unpatchedInput;
+        };
+        inherit (unpatchedInput) inputs;
       };
 in
-
 {
   inherit fetchpatch fetchurl;
+
   patch =
-    unpatchedInputs: patchSpecByInputName:
+    unpatchedInputs: patchesByInputName:
     patchInputs {
       inherit unpatchedInputs;
-      inherit patchSpecByInputName;
+      inherit patchesByInputName;
     };
 }
