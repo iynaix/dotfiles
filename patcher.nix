@@ -1,3 +1,12 @@
+# Adapted from flake-input-patcher:
+# https://github.com/jfly/flake-input-patcher/blob/3e30fd3bbf9ead4863d06c61407654a9be815fc9/lib-deprecated.nix
+#
+# flake-input-patcher reads flake.lock, which tack does not use.
+#
+# Trying to use the deprecated patchV1 that does not read the lockfile
+# results in a giant annoying warning.
+#
+# Using the follows-without-lockfile-abandoned branch causes infinite recursion.
 {
   lib,
   fetchpatch,
