@@ -17,8 +17,8 @@
                     {
                       at-startup = true;
                     }
-                    // (lib.optionalAttrs (startup.app-id != null) { inherit (startup) app-id; })
-                    // (lib.optionalAttrs (startup.title != null) { inherit (startup) title; })
+                    // (lib.optionalAttrs (startup.app-id != null) { app-id._raw = startup.app-id; })
+                    // (lib.optionalAttrs (startup.title != null) { title._raw = startup.title; })
                   )
                 ];
                 open-on-workspace = toString startup.workspace;

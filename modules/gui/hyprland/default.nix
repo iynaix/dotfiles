@@ -1,5 +1,17 @@
-{ lib, self, ... }:
+{ inputs, lib, ... }:
 {
+  flake.modules.nixos.core = {
+    options.custom = {
+      programs.hyprland = {
+        settings = lib.mkOption {
+          type = lib.types.lines;
+          default = "";
+          description = "Hyprland lua config";
+        };
+      };
+    };
+  };
+
   flake.modules.nixos.wm =
     {
       config,
@@ -7,14 +19,14 @@
       ...
     }:
     let
-      hyprland' = self.wrappers.hyprland.wrap (
-        rec {
-          inherit pkgs;
-          package = pkgs.hyprland;
-          inherit (package) passthru;
-        }
-        // config.custom.programs.hyprland
-      );
+      # NOTE: hyprland wrapper module has not been merged upstream:
+      # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
+      hyprland' = inputs.wrappers.wrappers.hyprland.wrap rec {
+        inherit pkgs;
+        package = pkgs.hyprland;
+        inherit (package) passthru;
+        configFile = config.custom.programs.hyprland.settings;
+      };
       inherit (config.custom.constants) host;
     in
     {

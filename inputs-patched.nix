@@ -29,4 +29,35 @@ patcher.patch unpatchedInputs {
       hash = "sha256-J5G0mnBB8uVAZAqJ8v2PzRovA6kCM0wOxMFp7YttyGI=";
     })
   ];
+
+  wrappers = [
+    # support literal regex props for niri kdl
+    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
+    (patcher.fetchpatch {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa6d6ed733f6ab9c16cb16cefab8ea1bb7ac68d2.patch";
+      hash = "sha256-vJodXTWo++ukNWgBVfb2+XbTMoTfee0U3Q7Vur32LzM=";
+    })
+
+    # fix fish abbreviation generation, command default
+    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/583
+    (patcher.fetchurl {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/compare/c0988332083951d97f808212554dfef7456c6a91~1..3eaadc1bf0dac4b0e70ac638022dc13cff980b41.patch";
+      hash = "sha256-mlAnlW45vJ4YmiD4IS1ehWC8k/S02DBsLUZ0TTJ/fRQ=";
+    })
+
+    # reload mango config after rebuild
+    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/577
+    (patcher.fetchpatch {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/bfb0227977e1f5d77ed0ded496951fc317d7ed7e.patch";
+      hash = "sha256-FsntoBr32EXmBdHvICisRMcWMzxqTXYCyviyFHDbYPg=";
+    })
+
+    # hyprland module
+    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
+    (patcher.fetchpatch {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa67e918488fedaec413316a8e3db8040a632e3a.patch";
+      hash = "sha256-muNSLW2wCF0k/PbcfgRElxC1uY3YWwL8LqrwGorjeGk=";
+    })
+
+  ];
 }

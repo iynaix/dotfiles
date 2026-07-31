@@ -1,18 +1,4 @@
 { inputs, lib, ... }:
-let
-  # position defaults to anywhere for some strange reason?
-  # TODO: remove when https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 is merged
-  fix-completion-position = lib.mapAttrs (
-    _k: v:
-    if lib.isString v then
-      {
-        expansion = v;
-        position = "command";
-      }
-    else
-      v
-  );
-in
 {
   perSystem =
     { pkgs, self', ... }:
@@ -53,46 +39,45 @@ in
                 pkgs.zoxide
               ];
 
+            # NOTE: this relies on https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 being patched in
             # create the shell abbrs from passthru.shellAliases in runtimePkgs
-            abbreviations = fix-completion-position (
-              {
-                ":e" = "nvim";
-                ":q" = "exit";
-                ":wq" = "exit";
-                c = "clear";
-                cat = "bat";
-                ccat = "command cat";
-                cp = "cp -ri";
-                crate = "cargo";
-                isodate = "date -u '+%Y-%m-%dT%H:%M:%SZ'";
-                man = "batman";
-                mime = "xdg-mime query filetype";
-                mkdir = "mkdir -p";
-                mount = "mount --mkdir";
-                mv = "mv -i";
-                nano = "nvim";
-                neovim = "nvim";
-                open = "xdg-open";
-                ping = "ping -c 5";
-                py = "python";
-                rm = "rm -I";
-                sl = "ls";
-                v = "nvim";
-                w = "watch -cn1 -x cat";
+            abbreviations = {
+              ":e" = "nvim";
+              ":q" = "exit";
+              ":wq" = "exit";
+              c = "clear";
+              cat = "bat";
+              ccat = "command cat";
+              cp = "cp -ri";
+              crate = "cargo";
+              isodate = "date -u '+%Y-%m-%dT%H:%M:%SZ'";
+              man = "batman";
+              mime = "xdg-mime query filetype";
+              mkdir = "mkdir -p";
+              mount = "mount --mkdir";
+              mv = "mv -i";
+              nano = "nvim";
+              neovim = "nvim";
+              open = "xdg-open";
+              ping = "ping -c 5";
+              py = "python";
+              rm = "rm -I";
+              sl = "ls";
+              v = "nvim";
+              w = "watch -cn1 -x cat";
 
-                # zoxide included in runtimePkgs
-                z = "zoxide query -i";
+              # zoxide included in runtimePkgs
+              z = "zoxide query -i";
 
-                # cd aliases
-                ".." = "cd ..";
-                "..." = "cd ../..";
-              }
-              # extract the shellAliases and abbrs from each runtimePkg
-              // (
-                runtimePkgs
-                |> map (p: (p.passthru.shellAliases or { }) // (p.passthru.abbreviations or { }))
-                |> lib.mergeAttrsList
-              )
+              # cd aliases
+              ".." = "cd ..";
+              "..." = "cd ../..";
+            }
+            # extract the shellAliases and abbrs from each runtimePkg
+            // (
+              runtimePkgs
+              |> map (p: (p.passthru.shellAliases or { }) // (p.passthru.abbreviations or { }))
+              |> lib.mergeAttrsList
             );
 
             plugins = [
@@ -139,10 +124,6 @@ in
                     # tput cuu1
                     starship module character
                 end
-
-                # abbreviation expansion is broken for --help, remove when
-                # https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 is merged
-                abbr --add  --position anywhere    -- --help "--help | bat --plain --language=help"
               end
             '';
           };
@@ -180,6 +161,10 @@ in
         # install fish completions for fish
         # https://github.com/nix-community/home-manager/pull/2408
         pathsToLink = [ "/share/fish" ];
+      };
+
+      custom.programs.print-config = {
+        fish = /* sh */ "moor ${pkgs.fish.configuration.constructFiles.generatedConfig.outPath}";
       };
 
       custom.persist = {

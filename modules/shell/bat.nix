@@ -20,13 +20,13 @@
             batman
           ];
 
-          # TODO: re-enable when https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 is merged
-          # passthru.abbreviations = {
-          #   "--help" = {
-          #     expansion = "--help | bat --plain --language=help";
-          #     position = "anywhere";
-          #   };
-          # };
+          # NOTE: requires https://github.com/BirdeeHub/nix-wrapper-modules/pull/583 to be merged!
+          passthru.abbreviations = {
+            "--help" = {
+              expansion = "--help | bat --plain --language=help";
+              position = "anywhere";
+            };
+          };
         };
 
         # batman with completions
