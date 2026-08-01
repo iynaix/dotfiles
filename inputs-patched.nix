@@ -21,13 +21,6 @@ patcher.patch unpatchedInputs {
     # build zfs for linux 7.1, no issues according to a core dev
     # https://github.com/openzfs/zfs/issues/18760#issuecomment-4919127088
     ./patches/zfs_unstable-linux-7_1.patch
-
-    # rclip 3.2.4
-    # https://github.com/NixOS/nixpkgs/pull/545144
-    (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/db91871f276c5250dcfed88e413b6e469271e71a.patch";
-      hash = "sha256-J5G0mnBB8uVAZAqJ8v2PzRovA6kCM0wOxMFp7YttyGI=";
-    })
   ];
 
   wrappers = [

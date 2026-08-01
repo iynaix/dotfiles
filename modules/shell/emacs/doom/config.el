@@ -102,6 +102,9 @@
 ;; Ctrl+Q for visual block
 (map! :nv "C-q" #'evil-visual-block)
 
+;; Remove commit message too long style check
+(setq git-commit-style-convention-checks (remq 'overlong-summary-line git-commit-style-convention-checks))
+
 ;; Use edition 2024 for rustfmt
 (after! apheleia
   ;; https://github.com/radian-software/apheleia/issues/278
