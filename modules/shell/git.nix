@@ -24,6 +24,10 @@
           in
           {
             inherit pkgs;
+            runtimePkgs = [
+              difftastic
+              pkgs.lazygit
+            ];
             settings = {
               init = {
                 defaultBranch = "main";
@@ -106,11 +110,6 @@
             };
           }
         );
-
-        runtimePkgs = [
-          difftastic
-          pkgs.lazygit
-        ];
       };
     };
 

@@ -103,7 +103,9 @@
 (map! :nv "C-q" #'evil-visual-block)
 
 ;; Remove commit message too long style check
-(setq git-commit-style-convention-checks (remq 'overlong-summary-line git-commit-style-convention-checks))
+(with-eval-after-load 'git-commit
+  (setq git-commit-style-convention-checks
+        (remove 'overlong-summary-line git-commit-style-convention-checks)))
 
 ;; Use edition 2024 for rustfmt
 (after! apheleia

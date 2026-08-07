@@ -103,21 +103,26 @@ in
             ];
           }
         );
-        configFile.content = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER") (toMangoConf {
-          attrs = config.custom.programs.mango.settings;
-          importantPrefixes = [ "monitorrule" ];
-        });
+        configFile.content =
+          lib.concatLines [
+            (toMangoConf {
+              importantPrefixes = [ "monitorrule" ];
+              attrs = config.custom.programs.mango.settings;
+            })
+            "source-optional = ${config.hj.xdg.config.directory}/mango/noctalia.conf"
+          ]
+          |> lib.replaceString "$mod" (if isVm then "ALT" else "SUPER");
       };
     in
     {
       programs.mango = {
         enable = true;
-        package = mango'.wrap {
-          configFile.content = ''
-            source-optional=${config.hj.xdg.config.directory}/mango/noctalia.conf
-          '';
-        };
+        package = mango';
       };
+
+      # expose reload service to systemd
+      # https://github.com/BirdeeHub/nix-wrapper-modules/pull/577#issuecomment-5209190628
+      systemd.packages = [ config.programs.mango.package ];
 
       programs.uwsm.waylandCompositors = {
         mango = {

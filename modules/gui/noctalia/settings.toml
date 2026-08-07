@@ -84,6 +84,12 @@ session_placement = "floating"
 session_position = "center"
 transparency_mode = "glass"
 
+[shell.screenshot]
+confirm_region = true
+directory = "/home/iynaix/Pictures/Screenshots"
+filename_pattern = "%Y-%m-%dT%H:%M:%S%z"
+remember_last_region = true
+
 [[shell.session.actions]]
 action = "shutdown"
 countdown_seconds = 0.0
@@ -152,8 +158,8 @@ scroll_down = "volume-down 1"
 scroll_up = "volume-up 1"
 
 [widget.workspaces]
-display = "name"
 enabled = true
+label_source = "name"
 font_family = "Liberation Sans"
 font_weight = 700
 labels_only_when_occupied = true

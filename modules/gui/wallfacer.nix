@@ -6,7 +6,7 @@
       wallpapers_dir = "${config.hj.directory}/Pictures/Wallpapers";
       wallfacerConf = tomlFormat.generate "wallfacer.toml" {
         wallpapers_path = wallpapers_dir;
-        min_width = 3840; # 4k width
+        min_width = 5120; # 5k2k width
         min_height = 2880; # lg dualup height
         show_faces = true;
 

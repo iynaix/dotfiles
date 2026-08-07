@@ -75,7 +75,11 @@ let
         src = applyPatches {
           name = "${name}-patched";
           inherit patches;
-          src = unpatchedInput;
+          # use builtins.path to handle local `url = path:/PATH` format
+          src = builtins.path {
+            path = unpatchedInput;
+            name = "source";
+          };
         };
         inherit (unpatchedInput) inputs;
       };

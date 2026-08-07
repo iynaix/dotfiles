@@ -6,6 +6,7 @@
       imports = with top.config.flake.modules.nixos; [
         gui
         wm
+        plasma
 
         # programs_freecad
         # programs_helix
@@ -52,7 +53,6 @@
             }
           ];
         };
-        wm = "plasma";
       };
 
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;

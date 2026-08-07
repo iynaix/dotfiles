@@ -1,10 +1,12 @@
+{ lib, ... }:
 {
   flake.modules.nixos.plasma =
     { pkgs, ... }:
     {
       services = {
-        xserver.enable = true;
-        xserver.desktopManager.plasma6.enable = true;
+        desktopManager.plasma6.enable = true;
+
+        displayManager.defaultSession = lib.mkForce "plasma";
       };
 
       # set dark theme, adapted from plasma-manager
