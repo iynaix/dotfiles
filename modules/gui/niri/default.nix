@@ -7,52 +7,8 @@
   flake.modules.nixos.core = {
     options.custom = {
       programs.niri = {
-        # copied from nix-wrapper-modules
-        settings = lib.mkOption {
-          default = { };
-          type = lib.types.submodule {
-            freeformType = lib.types.attrs;
-            options = {
-              binds = lib.mkOption {
-                default = { };
-                type = lib.types.attrs;
-              };
-              layout = lib.mkOption {
-                default = { };
-                type = lib.types.attrs;
-              };
-              spawn-at-startup = lib.mkOption {
-                default = [ ];
-                type = lib.types.listOf (lib.types.either lib.types.str (lib.types.listOf lib.types.str));
-              };
-              spawn-sh-at-startup = lib.mkOption {
-                default = [ ];
-                type = lib.types.listOf lib.types.str;
-              };
-              window-rules = lib.mkOption {
-                default = [ ];
-                type = lib.types.listOf lib.types.attrs;
-              };
-              layer-rules = lib.mkOption {
-                default = [ ];
-                type = lib.types.listOf lib.types.attrs;
-              };
-              workspaces = lib.mkOption {
-                default = { };
-                type = lib.types.attrsOf (lib.types.nullOr lib.types.anything);
-              };
-              outputs = lib.mkOption {
-                default = { };
-                type = lib.types.attrs;
-              };
-              # change to lines to allow merging
-              extraConfig = lib.mkOption {
-                default = "";
-                type = lib.types.lines;
-              };
-            };
-          };
-        };
+        # use the option from the niri wrapper module
+        inherit (inputs.wrappers.wrappers.niri.wrapperOptions) settings;
       };
     };
   };

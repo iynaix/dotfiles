@@ -41,12 +41,6 @@
   flake = {
     # expose top level flake options
     options = {
-      patches = lib.mkOption {
-        type = lib.types.anything;
-        default = [ ];
-        description = "Patches to be applied onto nixpkgs";
-      };
-
       libCustom = lib.mkOption {
         type = lib.types.attrsOf lib.types.anything;
         default = { };

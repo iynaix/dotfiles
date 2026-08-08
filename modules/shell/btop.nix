@@ -39,10 +39,8 @@ in
     {
       options.custom = {
         programs.btop = {
-          settings = lib.mkOption {
-            type = lib.types.submodule { freeformType = lib.types.attrs; };
-            description = "Btop settings, See https://github.com/aristocratos/btop#configurability for available options";
-          };
+          # use the option from the niri wrapper module
+          inherit (inputs.wrappers.wrappers.btop.wrapperOptions) settings;
 
           # convenience option to add disks to btop
           disks = lib.mkOption {

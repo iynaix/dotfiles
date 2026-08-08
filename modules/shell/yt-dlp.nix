@@ -39,11 +39,8 @@ in
     {
       options.custom = {
         programs.yt-dlp = {
-          settings = lib.mkOption {
-            type = lib.types.attrs;
-            default = { };
-            description = "Settings to wrap with the yt-dlp package";
-          };
+          # use the option from the yt-dlp wrapper module
+          inherit (inputs.wrappers.wrappers.yt-dlp.wrapperOptions) settings;
         };
       };
 

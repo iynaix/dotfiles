@@ -1,4 +1,5 @@
-{ inputs, lib, ... }: {
+{ inputs, lib, ... }:
+{
   perSystem =
     { pkgs, ... }:
     {
@@ -42,14 +43,8 @@
         };
 
         programs.kitty = {
-          settings = lib.mkOption {
-            type = lib.types.attrs;
-            default = { };
-            description = ''
-              Key/value pairs written into `kitty.conf`.
-              See <https://sw.kovidgoyal.net/kitty/conf.html>.
-            '';
-          };
+          # use the option from the kitty wrapper module
+          inherit (inputs.wrappers.wrappers.kitty.wrapperOptions) settings;
         };
       };
     };

@@ -4,81 +4,12 @@
   self,
   ...
 }:
-let
-  # copied from home-manager:
-  # https://github.com/nix-community/home-manager/blob/master/modules/lib/generators.nix
-  toMangoConf =
-    {
-      attrs,
-      indentLevel ? 0,
-      importantPrefixes ? [ "$" ],
-    }:
-    let
-      initialIndent = lib.concatStrings (lib.replicate indentLevel "  ");
-
-      toMangoConf' =
-        indent: attrs:
-        let
-          sections = lib.filterAttrs (_n: v: lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v)) attrs;
-
-          mkSection =
-            n: attrs:
-            if lib.isList attrs then
-              (lib.concatMapStringsSep "\n" (a: mkSection n a) attrs)
-            else
-              ''
-                ${indent}${n} {
-                ${toMangoConf' "  ${indent}" attrs}${indent}}
-              '';
-
-          mkFields = lib.generators.toKeyValue {
-            listsAsDuplicateKeys = true;
-            inherit indent;
-          };
-
-          allFields = lib.filterAttrs (
-            _n: v: !(lib.isAttrs v || (lib.isList v && lib.all lib.isAttrs v))
-          ) attrs;
-
-          isImportantField =
-            n: _: lib.foldl (acc: prev: if lib.hasPrefix prev n then true else acc) false importantPrefixes;
-
-          importantFields = lib.filterAttrs isImportantField allFields;
-
-          fields = removeAttrs allFields (lib.mapAttrsToList (n: _: n) importantFields);
-        in
-        mkFields importantFields
-        + lib.concatStringsSep "\n" (lib.mapAttrsToList mkSection sections)
-        + mkFields fields;
-    in
-    toMangoConf' initialIndent attrs;
-in
 {
   flake.modules.nixos.core = {
     options.custom = {
-      # copied from home-manger's hypland module, since mango config is similar to hyprlang
-      programs.mango.settings = lib.mkOption {
-        type =
-          let
-            valueType =
-              lib.types.nullOr (
-                lib.types.oneOf [
-                  lib.types.bool
-                  lib.types.int
-                  lib.types.float
-                  lib.types.str
-                  lib.types.path
-                  (lib.types.attrsOf valueType)
-                  (lib.types.listOf valueType)
-                ]
-              )
-              // {
-                description = "Mango configuration value";
-              };
-          in
-          valueType;
-        default = { };
-        description = "Mango configuration settings.";
+      programs.mango = {
+        # use the option from the mango wrapper module
+        inherit (inputs.wrappers.wrappers.mangowc.wrapperOptions) settings;
       };
     };
   };
@@ -87,6 +18,9 @@ in
     { config, pkgs, ... }:
     let
       inherit (config.custom.constants) isVm;
+      # use ALT when used in a VM
+      mkMangoBind = lib.replaceString "$mod" (if isVm then "ALT" else "SUPER");
+      mangoSettings = config.custom.programs.mango.settings;
       mango' = inputs.wrappers.wrappers.mangowc.wrap {
         inherit pkgs;
         package = pkgs.mango.overrideAttrs (
@@ -103,15 +37,17 @@ in
             ];
           }
         );
-        configFile.content =
-          lib.concatLines [
-            (toMangoConf {
-              importantPrefixes = [ "monitorrule" ];
-              attrs = config.custom.programs.mango.settings;
-            })
-            "source-optional = ${config.hj.xdg.config.directory}/mango/noctalia.conf"
-          ]
-          |> lib.replaceString "$mod" (if isVm then "ALT" else "SUPER");
+
+        topPrefixes = [ "monitorrule" ];
+        bottomPrefixes = [
+          "source"
+          "source-optional"
+        ];
+        settings = mangoSettings // {
+          bind = map mkMangoBind (mangoSettings.bind or [ ]);
+          mousebind = map mkMangoBind (mangoSettings.mousebind or [ ]);
+          source-optional = "${config.hj.xdg.config.directory}/mango/noctalia.conf";
+        };
       };
     in
     {

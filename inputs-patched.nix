@@ -24,6 +24,9 @@ patcher.patch unpatchedInputs {
   ];
 
   wrappers = [
+    # expose options used to build each wrapped package
+    ./patches/nix-wrappers-expose-options.patch
+
     # support literal regex props for niri kdl
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
     (patcher.fetchpatch {

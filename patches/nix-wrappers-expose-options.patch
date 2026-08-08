@@ -1,0 +1,17 @@
+diff --git a/modules/makeWrapper/module.nix b/modules/makeWrapper/module.nix
+index 3a9e89c..1988832 100644
+--- a/modules/makeWrapper/module.nix
++++ b/modules/makeWrapper/module.nix
+@@ -594,6 +594,12 @@ let
+           Which means `wlib.escapeShellArgWithEnv` may prove to be a useful substitute!
+         '';
+       };
++      options.${optionalAttribute "wrapperOptions"} = lib.mkOption {
++        type = lib.types.anything;
++        readOnly = true;
++        default = options;
++        description = "The options provided by the wrapper module";
++      };
+       options.${optionalAttribute "wrapperImplementation"} = lib.mkOption {
+         type = lib.types.enum [
+           "nix"

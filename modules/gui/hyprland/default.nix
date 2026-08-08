@@ -3,11 +3,8 @@
   flake.modules.nixos.core = {
     options.custom = {
       programs.hyprland = {
-        settings = lib.mkOption {
-          type = lib.types.lines;
-          default = "";
-          description = "Hyprland lua config";
-        };
+        # use the option from the hyprland wrapper module
+        settings = inputs.wrappers.wrappers.hyprland.wrapperOptions.configFile;
       };
     };
   };
