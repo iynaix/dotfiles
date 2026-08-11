@@ -32,6 +32,9 @@ url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
 [inputs.nixpkgs-stable]
 url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.xz"
 
+[inputs.multiverse]
+url = "github:fzakaria/nixpkgs-multiverse"
+
 [inputs.flake-parts]
 url = "github:hercules-ci/flake-parts"
 
@@ -64,6 +67,3 @@ url = "github:iynaix/wfetch"
 
 [inputs.focal]
 url = "github:iynaix/focal"
-
-[inputs.noctalia]
-url = "github:noctalia-dev/noctalia"

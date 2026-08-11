@@ -27,7 +27,7 @@
         programs_path-of-building
         programs_path-of-exile
         programs_steam
-        # programs_subtitles
+        programs_subtitles
         programs_vlc
         programs_wallfacer
         # programs_zed-editor

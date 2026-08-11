@@ -1,19 +1,22 @@
-{ inputs, lib, ... }: {
-  perSystem = { pkgs, ... }: {
-    packages = {
-      # TODO: wrapper for noctalia v5
-      noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (o: {
-        patches = (o.patches or [ ]) ++ [
-          ./face-aware-crop.patch
-        ];
+{ lib, ... }:
+{
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages = {
+        # TODO: wrapper for noctalia v5
+        noctalia = pkgs.noctalia.overrideAttrs (o: {
+          patches = (o.patches or [ ]) ++ [
+            ./face-aware-crop.patch
+          ];
 
-        postFixup =
-          lib.replaceString ''wrapProgram $out/bin/noctalia \''
-            ''wrapProgram $out/bin/noctalia --set QT_QPA_PLATFORMTHEME gtk3 \''
-            (o.postFixup or "");
-      });
+          postFixup =
+            lib.replaceString ''wrapProgram $out/bin/noctalia \''
+              ''wrapProgram $out/bin/noctalia --set QT_QPA_PLATFORMTHEME gtk3 \''
+              (o.postFixup or "");
+        });
+      };
     };
-  };
 
   flake.modules.nixos.core =
     { pkgs, ... }:

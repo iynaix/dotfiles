@@ -1,23 +1,29 @@
 { self, ... }:
 {
-  flake.modules.nixos.programs_path-of-building =
+  perSystem =
     { pkgs, ... }:
     let
       source = (self.libCustom.nvFetcherSources pkgs).rusty-path-of-building;
     in
     {
+      # use latest version
+      packages.path-of-building = pkgs.rusty-path-of-building.overrideAttrs (
+        source
+        // {
+          cargoDeps = pkgs.rustPlatform.importCargoLock {
+            lockFile = source.src + "/Cargo.lock";
+            allowBuiltinFetchGit = true;
+          };
+        }
+      );
+    };
+
+  flake.modules.nixos.programs_path-of-building =
+    { pkgs, ... }:
+    {
       # covers both poe1 and poe2
       environment.systemPackages = [
-        # use latest version
-        (pkgs.rusty-path-of-building.overrideAttrs (
-          source
-          // {
-            cargoDeps = pkgs.rustPlatform.importCargoLock {
-              lockFile = source.src + "/Cargo.lock";
-              allowBuiltinFetchGit = true;
-            };
-          }
-        ))
+        pkgs.custom.path-of-building
       ];
 
       custom.persist = {
