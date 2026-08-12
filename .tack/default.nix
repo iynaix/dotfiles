@@ -88,7 +88,7 @@ let
             fetchTree node;
 
       fetchFixed =
-        name: entry:
+        { name, entry }:
         let
           raw = derivation {
             inherit name;
@@ -109,10 +109,23 @@ let
         in
         if (entry.unpack or "file") == "tarball" then unpacked.outPath + "/" + name else raw.outPath;
 
-      resolveSpec = upLock: spec: if isList spec then walkPath upLock upLock.root spec else spec;
+      resolveSpec =
+        { upLock, spec }:
+        if isList spec then
+          walkPath {
+            inherit upLock;
+            nodeName = upLock.root;
+            path = spec;
+          }
+        else
+          spec;
 
       walkPath =
-        upLock: nodeName: path:
+        {
+          upLock,
+          nodeName,
+          path,
+        }:
         if path == [ ] then
           nodeName
         else if !(upLock.nodes ? ${nodeName}) then
@@ -125,7 +138,14 @@ let
           if !(inputs ? ${key}) then
             throw "tack: follows path dead-end: node '${nodeName}' has no input '${key}'"
           else
-            walkPath upLock (resolveSpec upLock inputs.${key}) (tail path);
+            walkPath {
+              inherit upLock;
+              nodeName = resolveSpec {
+                inherit upLock;
+                spec = inputs.${key};
+              };
+              path = tail path;
+            };
 
       followsFor =
         pin:
@@ -144,7 +164,7 @@ let
       # follows key is `flake:name`, `tack:name`, or bare `name`
       # project onto one side, rekeyed to bare names
       followsForSide =
-        side: follows:
+        { side, follows }:
         listToAttrs (
           concatMap (
             key:
@@ -171,7 +191,13 @@ let
         );
 
       mkCallerInputs =
-        upLock: nodeName: rawInputs: levelFollows: deepFollows:
+        {
+          upLock,
+          nodeName,
+          rawInputs,
+          levelFollows,
+          deepFollows,
+        }:
         let
           resolved = resolveFollows levelFollows;
         in
@@ -183,18 +209,34 @@ let
                 ref =
                   (upLock.nodes.${nodeName}.inputs or { }).${n}
                     or (throw "tack: input '${n}' declared but not in flake.lock node '${nodeName}'");
-                childName = resolveSpec upLock ref;
+                childName = resolveSpec {
+                  inherit upLock;
+                  spec = ref;
+                };
                 childNode = upLock.nodes.${childName};
                 childSrc = fetchTree childNode.locked;
               in
-              if childNode.flake or true then evalTransitive upLock childName childSrc deepFollows else childSrc
+              if childNode.flake or true then
+                evalTransitive {
+                  inherit upLock;
+                  nodeName = childName;
+                  sourceInfo = childSrc;
+                  follows = deepFollows;
+                }
+              else
+                childSrc
             else
               throw "tack: no flake.lock; cannot resolve input '${n}'"
           )
         ) rawInputs;
 
       mkFlakeResult =
-        sourceInfo: flakeDir: callerInputs: outputs:
+        {
+          sourceInfo,
+          flakeDir,
+          callerInputs,
+          outputs,
+        }:
         outputs
         // sourceInfo
         // {
@@ -205,7 +247,14 @@ let
         };
 
       evalFlake =
-        sourceInfo: flakeDir: upLock: nodeName: levelFollows: deepFollows:
+        {
+          sourceInfo,
+          flakeDir,
+          upLock,
+          nodeName,
+          levelFollows,
+          deepFollows,
+        }:
         let
           raw = import (flakeDir + "/flake.nix");
 
@@ -216,12 +265,22 @@ let
           # project follows onto each side, keep only names that side has
           # bare follow reaches both; `flake:`/`tack:` reaches just one
           tackOverrides = resolveFollows (
-            intersectAttrs (upPins.inputs or { }) (followsForSide "tack" levelFollows)
+            intersectAttrs (upPins.inputs or { }) (followsForSide {
+              side = "tack";
+              follows = levelFollows;
+            })
           );
-          flakeLevel = intersectAttrs (raw.inputs or { }) (followsForSide "flake" levelFollows);
+          flakeLevel = intersectAttrs (raw.inputs or { }) (followsForSide {
+            side = "flake";
+            follows = levelFollows;
+          });
 
           # deep follows pass down raw, so each descendant re-projects per side
-          callerInputs = mkCallerInputs upLock nodeName (raw.inputs or { }) flakeLevel deepFollows;
+          callerInputs = mkCallerInputs {
+            inherit upLock nodeName deepFollows;
+            rawInputs = raw.inputs or { };
+            levelFollows = flakeLevel;
+          };
 
           # upstream declares its outputs forward tackOverrides; a closed `{ self }:`
           # would throw on the extra kwarg, so forward only when declared
@@ -233,7 +292,14 @@ let
 
           result =
             let
-              base = mkFlakeResult sourceInfo flakeDir callerInputs outputs;
+              base = mkFlakeResult {
+                inherit
+                  sourceInfo
+                  flakeDir
+                  callerInputs
+                  outputs
+                  ;
+              };
             in
             if hasTack && tackOverrides != { } && !supportsOverrides then
               trace "tack: ${flakeDir}: not marked recomposable (set [tack] recomposable = true); overrides will not reach upstream" base
@@ -243,11 +309,21 @@ let
         result;
 
       evalTransitive =
-        upLock: nodeName: sourceInfo: follows:
-        evalFlake sourceInfo sourceInfo.outPath upLock nodeName follows follows;
+        {
+          upLock,
+          nodeName,
+          sourceInfo,
+          follows,
+        }:
+        evalFlake {
+          inherit upLock nodeName sourceInfo;
+          flakeDir = sourceInfo.outPath;
+          levelFollows = follows;
+          deepFollows = follows;
+        };
 
       evalTopFlake =
-        sourceInfo: pin:
+        { sourceInfo, pin }:
         let
           flakeDir = sourceInfo.outPath + (if pin ? dir then "/" + pin.dir else "");
           upLockPath = flakeDir + "/flake.lock";
@@ -255,10 +331,19 @@ let
           rootNode = if upLock != null then upLock.root else null;
           f = followsFor pin;
         in
-        evalFlake sourceInfo flakeDir upLock rootNode f.level f.deep;
+        evalFlake {
+          inherit sourceInfo flakeDir upLock;
+          nodeName = rootNode;
+          levelFollows = f.level;
+          deepFollows = f.deep;
+        };
 
       evalFetch =
-        sourceInfo: pin: subdir:
+        {
+          sourceInfo,
+          pin,
+          subdir,
+        }:
         let
           path = sourceInfo.outPath + subdir;
           tackPinsPath = path + "/.tack/pins.toml";
@@ -267,11 +352,13 @@ let
           f = followsFor pin;
           # a fetch drill-in is tack-only
           tackOverrides = resolveFollows (
-            intersectAttrs (upPins.inputs or { }) (followsForSide "tack" f.level)
+            intersectAttrs (upPins.inputs or { }) (followsForSide {
+              side = "tack";
+              follows = f.level;
+            })
           );
         in
-        # a fetch pin is a source tree (path); hand back resolved inputs only when
-        # there are overrides to push into the upstream's .tack
+        # only override tack files within a `fetch`, since there's no flake.lock
         if hasTack && tackOverrides != { } then
           let
             upstream = import (path + "/.tack");
@@ -285,23 +372,29 @@ let
           path;
 
       loadPin =
-        name: pin:
+        { name, pin }:
         let
           pinType = pin.type or (if pin.flake or true then "flake" else "fetch");
           subdir = if pin ? dir then "/" + pin.dir else "";
         in
         if pinType == "fixed" then
-          fetchFixed name lock.${name}
+          fetchFixed {
+            inherit name;
+            entry = lock.${name};
+          }
         else
           let
             sourceInfo = fetchPin name;
           in
-          if pinType == "flake" then evalTopFlake sourceInfo pin else evalFetch sourceInfo pin subdir;
+          if pinType == "flake" then
+            evalTopFlake { inherit sourceInfo pin; }
+          else
+            evalFetch { inherit sourceInfo pin subdir; };
 
       declared = pins.inputs or { };
 
-      # undeclared lock entries are auto-dedup synthetics only when referenced as
-      # [all_follow] targets; stale locks from hand-edits are ignored (tack rm to clean)
+      # undeclared lock entries are synthesised into toplevels by auto-dedup
+      # only when referenced as [all_follow] targets
       autoTargets = listToAttrs (
         map (target: {
           name = target;
@@ -314,10 +407,16 @@ let
         let
           sourceInfo = fetchPin name;
         in
-        if pathExists (sourceInfo.outPath + "/flake.nix") then evalTopFlake sourceInfo { } else sourceInfo;
+        if pathExists (sourceInfo.outPath + "/flake.nix") then
+          evalTopFlake {
+            inherit sourceInfo;
+            pin = { };
+          }
+        else
+          sourceInfo;
 
       self =
-        (mapAttrs loadPin declared)
+        (mapAttrs (name: pin: loadPin { inherit name pin; }) declared)
         // listToAttrs (
           map (name: {
             inherit name;

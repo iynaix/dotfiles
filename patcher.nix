@@ -23,7 +23,11 @@ let
   #     IFD like we're doing here.
   #  2. We need to load the flake with the given (possibly patched) inputs.
   importFlake =
-    { src, inputs }:
+    {
+      src,
+      inputs,
+      sourceInfo ? { },
+    }:
     let
       flake = import (src + "/flake.nix");
       outPath = toString src;
@@ -32,17 +36,16 @@ let
       # I'm going to opt to leave it unset until something goes wrong.
       #
       # [0]: https://github.com/NixOS/nix/blob/2.29.0/src/libflake/call-flake.nix#L52-L63
-      sourceInfo = {
+      finalSourceInfo = sourceInfo // {
         inherit outPath;
       };
       outputs = flake.outputs (inputs // { self = result; });
       result =
         outputs
-        // sourceInfo
+        // finalSourceInfo
         // {
-          inherit inputs;
-          inherit outputs;
-          inherit sourceInfo;
+          inherit inputs outputs;
+          sourceInfo = finalSourceInfo;
           _type = "flake";
         };
     in
@@ -82,6 +85,7 @@ let
           };
         };
         inherit (unpatchedInput) inputs;
+        sourceInfo = unpatchedInput.sourceInfo or { };
       };
 in
 {
