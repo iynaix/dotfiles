@@ -2,9 +2,9 @@
   description = "iynaix's dotfiles";
 
   outputs =
-    { self, ... }@args:
+    { self, ... }:
     let
-      inputs = import ./inputs-patched.nix args;
+      inputs = import ./nix/tamal { };
 
       inherit (inputs.nixpkgs.lib.fileset) toList fileFilter;
       import-tree =

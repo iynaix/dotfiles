@@ -60,7 +60,7 @@
           "id": "statix",
           "language": "system",
           "name": "statix",
-          "pass_filenames": true,
+          "pass_filenames": false,
           "require_serial": false,
           "stages": [
             "pre-commit"

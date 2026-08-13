@@ -1,1 +1,2 @@
+ignore = ["nix/tamal"]
 disabled = ["repeated_keys"]
