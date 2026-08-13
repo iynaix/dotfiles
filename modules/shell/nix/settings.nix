@@ -26,6 +26,7 @@
             nixd
             nixfmt-rs
             nixpkgs-review
+            nixtamal
             nvfetcher
           ];
 

@@ -1,0 +1,48 @@
+// ┏┓╻+╻ ╱┏┳┓┏┓┏┳┓┏┓╻
+// ┃┃┃┃┗━┓╹┃╹┣┫┃┃┃┣┫┃   Read the manpage:
+// ╹┗┛╹╱ ╹ ╹ ╹╹╹ ╹╹╹┗┛  $ man nixtamal-manifest
+version "1.2.0"
+patches {
+    /* nixpkgs */
+
+    // awakened poe trade command line args
+    // https://github.com/NixOS/nixpkgs/pull/496108
+    awakened-poe-trade-cli-args "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
+
+    // build zfs for linux 7.1, no issues according to a core dev
+    // https://github.com/openzfs/zfs/issues/18760#issuecomment-4919127088
+    zfs-kernel-7_1 "./patches/zfs_unstable-linux-7_1.patch"
+
+    /* wrappers */
+
+    // expose options used to build each wrapped package
+    expose-options "./patches/nix-wrappers-expose-options.patch"
+
+    // support literal regex props for niri kdl
+    // https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
+    niri-kdl-literal-regex "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa6d6ed733f6ab9c16cb16cefab8ea1bb7ac68d2.patch"
+
+    // fix fish abbreviation generation, command default
+    // https://github.com/BirdeeHub/nix-wrapper-modules/pull/583
+    fix-fish-abbrs "https://github.com/BirdeeHub/nix-wrapper-modules/compare/c0988332083951d97f808212554dfef7456c6a91~1..3eaadc1bf0dac4b0e70ac638022dc13cff980b41.patch"
+
+    // https://github.com/BirdeeHub/nix-wrapper-modules/pull/577
+    reload-mango-config "https://github.com/BirdeeHub/nix-wrapper-modules/commit/bfb0227977e1f5d77ed0ded496951fc317d7ed7e.patch"
+
+    // https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
+    hyprland-module "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa67e918488fedaec413316a8e3db8040a632e3a.patch"
+}
+inputs {
+	nixpkgs {
+		archive {
+			url "https://github.com/NixOS/nixpkgs/archive/{{fresh_value}}.tar.gz"
+		}
+		hash algorithm=SHA-256
+		fresh-cmd {
+			$ git ls-remote "https://github.com/NixOS/nixpkgs.git" --refs "refs/heads/nixos-unstable"
+			| cut -f1
+		}
+
+        patches "awakened-poe-trade-cli-args" "zfs-kernel-7_1"
+	}
+}

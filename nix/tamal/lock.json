@@ -1,0 +1,9 @@
+{"v":"1.2.0"
+,"i":{
+"nixpkgs":{"sn":"nixpkgs-src","kd":[1,{"ft":0,"ur":"https://github.com/NixOS/nixpkgs/archive/2fcb964de67fcf60b43471c55d5d99e61a9ccb5a.tar.gz","ms":[]}],"ha":{"al":0,"vl":"sha256-RzPPiWeUtuvymnpuEWsdtzli5w4kjZs49FqEs3/1u+I="},"fv":"2fcb964de67fcf60b43471c55d5d99e61a9ccb5a","ps":["awakened-poe-trade-cli-args"]}
+}
+,"p":{
+"awakened-poe-trade-cli-args":{"ur":"https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch","ha":{"al":0,"vl":"sha256-58+yVZ9KzSeB+epoVGbYvARNbTFfWX1KdDtpjhvSlbo="}}
+,"literal-regex":{"ur":"https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa6d6ed733f6ab9c16cb16cefab8ea1bb7ac68d2.patch","ha":{"al":0,"vl":"sha256-nw5qMG/AMOq351AgzIeAQYRvOipSL8ZcOBe5RwuNdpE="}}
+}
+}
