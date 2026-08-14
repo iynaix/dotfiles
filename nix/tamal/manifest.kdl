@@ -79,6 +79,20 @@ inputs {
         }
     }
 
+    with-inputs {
+        git {
+            repository "https://github.com/denful/with-inputs"
+            branch "main"
+        }
+    }
+
+    call-flake {
+        git {
+            repository "https://github.com/divnix/call-flake"
+            branch "main"
+        }
+    }
+
     hjem {
         git {
             repository "https://github.com/feel-co/hjem"
