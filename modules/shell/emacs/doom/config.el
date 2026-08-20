@@ -78,6 +78,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; :s///g by default
+(setq evil-ex-substitute-global t)
+
 ;; Use posix compliant shell, from doom doctor
 (setq shell-file-name (executable-find "bash"))
 

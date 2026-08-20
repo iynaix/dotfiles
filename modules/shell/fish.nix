@@ -124,6 +124,10 @@
                     # tput cuu1
                     starship module character
                 end
+
+                # abbr requires a function, so add manually
+                function last_hist_item; echo $history[1]; end
+                abbr --add !! --position anywhere --function last_hist_item
               end
             '';
           };

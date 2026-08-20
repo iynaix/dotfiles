@@ -67,7 +67,7 @@
       custom.programs = {
         print-config = {
           # use cat as kdlfmt tries to write the file in the nix store
-          niri = /* sh */ ''cat "${niri'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | ${lib.getExe pkgs.kdlfmt} format - | moor --lang kdl'';
+          niri = /* sh */ ''cat "${niri'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/niri/config.kdl" "${config.hj.xdg.config.directory}/niri/noctalia.kdl" | moor --lang kdl'';
         };
       };
     };

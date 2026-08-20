@@ -17,8 +17,12 @@
                     {
                       at-startup = true;
                     }
-                    // (lib.optionalAttrs (startup.app-id != null) { app-id._raw = startup.app-id; })
-                    // (lib.optionalAttrs (startup.title != null) { title._raw = startup.title; })
+                    // (lib.optionalAttrs (startup.app-id != null) {
+                      app-id = _: { custom = ''r#"${startup.app-id}"#''; };
+                    })
+                    // (lib.optionalAttrs (startup.title != null) {
+                      title = _: { custom = ''r#"${startup.title}"#''; };
+                    })
                   )
                 ];
                 open-on-workspace = toString startup.workspace;

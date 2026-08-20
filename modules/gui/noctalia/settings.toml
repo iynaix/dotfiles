@@ -75,9 +75,6 @@ sort_by_usage = false
 [shell.launcher.providers.session]
 global = true
 
-[shell.launcher.providers.wallpaper]
-global = true
-
 [shell.panel]
 open_near_click_control_center = true
 session_placement = "floating"

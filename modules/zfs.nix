@@ -43,16 +43,7 @@
           package =
             assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
               "zfs patch for kernel is no longer needed";
-            pkgs.zfs_unstable.overrideAttrs (o: {
-              patches = (o.patches or [ ]) ++ [
-                # memory corruption on linux 7.1
-                # https://github.com/openzfs/zfs/pull/18715
-                (pkgs.fetchpatch {
-                  url = "https://github.com/openzfs/zfs/commit/223b8bc446851e5e796e5446ac24d03bbf468f43.patch";
-                  hash = "sha256-I29A+NLYLzy7cMC8FQpBdSYbjFu/kscgTW8mAauPVf4=";
-                })
-              ];
-            });
+            pkgs.zfs_unstable;
 
           forceImportRoot = false;
         };

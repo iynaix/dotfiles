@@ -27,13 +27,6 @@ patcher.patch unpatchedInputs {
     # expose options used to build each wrapped package
     ./patches/nix-wrappers-expose-options.patch
 
-    # support literal regex props for niri kdl
-    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
-    (patcher.fetchpatch {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa6d6ed733f6ab9c16cb16cefab8ea1bb7ac68d2.patch";
-      hash = "sha256-vJodXTWo++ukNWgBVfb2+XbTMoTfee0U3Q7Vur32LzM=";
-    })
-
     # fix fish abbreviation generation, command default
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/583
     (patcher.fetchurl {
