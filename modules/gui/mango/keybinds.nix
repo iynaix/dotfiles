@@ -1,7 +1,14 @@
-{ lib, self, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      lib,
+      libCustom,
+      pkgs,
+      ...
+    }:
     {
       environment.systemPackages = with pkgs; [
         (writeShellApplication {
@@ -59,7 +66,7 @@
           ++
             # tag keybinds, switch to monitor first before switching tag
             lib.flatten (
-              (self.libCustom.mapWorkspaces (
+              (libCustom.mapWorkspaces (
                 {
                   monitor,
                   workspace,

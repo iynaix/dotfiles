@@ -1,10 +1,9 @@
-{ inputs, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     {
       # expose generic btop package without disks set
-      packages.cava = inputs.wrappers.wrappers.cava.wrap {
+      cava = inputs.wrappers.wrappers.cava.wrap {
         inherit pkgs;
         settings = {
           general = {
@@ -115,7 +114,7 @@
       };
     };
 
-  flake.modules.nixos.gui =
+  config =
     { pkgs, ... }:
     {
       nixpkgs.overlays = [

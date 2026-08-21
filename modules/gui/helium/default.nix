@@ -1,14 +1,9 @@
 {
-  lib,
-  self,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     {
-      packages.helium = pkgs.callPackage ./_package.nix {
-        sources = self.libCustom.nvFetcherSources pkgs;
+      helium = pkgs.callPackage ./_package.nix {
+        sources = libCustom.nvFetcherSources pkgs;
         flags = [
           "--restore-last-session"
           "--hide-crash-restore-bubble"
@@ -16,8 +11,10 @@
       };
     };
 
-  flake.modules.nixos.gui =
-    { pkgs, ... }:
+  tags = [ "gui" ];
+
+  config =
+    { lib, pkgs, ... }:
     {
       programs.chromium = {
         # NOTE: programs.chromium.enable does not install any package!, it only creates policy files
@@ -32,6 +29,8 @@
           "nngceckbapebfimnlniiiahkandclblb"
           # Dark Reader
           "eimadpbcbfnmbkopoojfekhnkhdbieeh"
+          # Refined Github
+          "hlepfoohegkhhmjieoechaddaejaokhf"
           # JSON Viewer
           "gbmdgpbipfallnflgajpaliibnhdgobh"
           # Old Reddit Redirect

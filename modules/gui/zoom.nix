@@ -1,5 +1,11 @@
 {
-  flake.modules.nixos.programs_zoom =
+  enabled = false;
+  hosts = [
+    "desktop"
+    "framework"
+  ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.zoom-us ];

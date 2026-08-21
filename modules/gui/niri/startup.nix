@@ -1,7 +1,13 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       # generate startup rules, god i hate having to use rules for startup
       custom.programs.niri.settings = lib.mkMerge (

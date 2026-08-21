@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.programs_freecad =
+  hosts = [ "desktop" ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [

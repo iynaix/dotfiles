@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -52,18 +51,25 @@
         };
     in
     {
-      packages.nsw = pkgs.callPackage drv { };
+      nsw = pkgs.callPackage drv { };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      host,
+      lib,
+      pkgs,
+      ...
+    }:
     let
-      inherit (config.custom.constants) dots host;
+      dots = "${config.hj.directory}/projects/dotfiles";
+
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw = pkgs.custom.nsw.override {
         name = "nsw";
         inherit dots host;
-        specialisation = config.custom.specialisation.current;
+        # specialisation = config.custom.specialisation.current;
       };
       # nixos-rebuild build
       nsb = pkgs.writeShellApplication {
@@ -75,7 +81,9 @@
       nst = pkgs.writeShellApplication {
         name = "nst";
         runtimeInputs = [
-          (nsw.override { specialisation = config.custom.specialisation.current; })
+          (nsw.override {
+            specialisation = config.custom.specialisation.current;
+          })
         ];
         text = /* sh */ ''nsw test "$@"'';
       };

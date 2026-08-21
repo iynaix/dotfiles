@@ -1,7 +1,6 @@
-{ self, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     let
       drv =
         {
@@ -40,12 +39,14 @@
         );
     in
     {
-      packages.rofi-themes = pkgs.callPackage drv {
-        sources = self.libCustom.nvFetcherSources pkgs;
+      rofi-themes = pkgs.callPackage drv {
+        sources = libCustom.nvFetcherSources pkgs;
       };
     };
 
-  flake.modules.nixos.wm =
+  tags = [ "wm" ];
+
+  config =
     {
       config,
       pkgs,

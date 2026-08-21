@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.gui =
+  tags = [ "gui" ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.libreoffice ];

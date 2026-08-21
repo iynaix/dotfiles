@@ -1,13 +1,13 @@
 {
-  inputs,
-  self,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    {
+      inputs,
+      pkgs,
+      libCustom,
+      ...
+    }:
     let
-      baseYaziConf = self.libCustom.recursiveMergeAttrsList [
+      baseYaziConf = libCustom.recursiveMergeAttrsList [
         {
           plugins = { inherit (pkgs.yaziPlugins) full-border git; };
 
@@ -202,7 +202,7 @@
       ];
     in
     {
-      packages.yazi = inputs.wrappers.wrappers.yazi.wrap (
+      yazi = inputs.wrappers.wrappers.yazi.wrap (
         baseYaziConf
         // {
           inherit pkgs;
@@ -218,7 +218,7 @@
       );
     };
 
-  flake.modules.nixos.core =
+  config =
     { config, pkgs, ... }:
     {
       # shell integrations

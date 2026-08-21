@@ -1,9 +1,16 @@
-{ lib, ... }@top:
 {
-  flake.modules.nixos.host_desktop =
-    { config, pkgs, ... }:
+  hosts = [ "desktop" ];
+
+  config =
+    {
+      lib,
+      pkgs,
+      tags,
+      user,
+      ...
+    }:
     let
-      inherit (config.custom.constants) projects isVm;
+      projects = "/persist/home/${user}/projects";
       # fetch wallpapers from pixiv for user
       pixiv = pkgs.writeShellApplication {
         name = "pixiv";
@@ -16,38 +23,6 @@
       };
     in
     {
-      imports = with top.config.flake.modules.nixos; [
-        gui
-        wm
-
-        programs_freecad
-        # programs_helix
-        programs_orca-slicer
-        programs_obs-studio
-        programs_path-of-building
-        programs_path-of-exile
-        programs_steam
-        programs_subtitles
-        programs_vlc
-        programs_wallfacer
-        # programs_zed-editor
-        # programs_zoom
-
-        hardware_amdgpu
-        hardware_qmk
-        # hardware_laptop
-
-        services_bittorrent
-        services_docker
-        services_syncoid
-        services_virtualisation
-
-        # specialisations_tty
-        # specialisations_niri
-        # specialisations_hyprland
-        # specialisations_mango
-      ];
-
       custom = {
         hardware = {
           monitors = [
@@ -168,7 +143,7 @@
 
       networking = lib.mkMerge [
         { hostId = "89eaa833"; } # required for zfs
-        (lib.mkIf (!isVm) {
+        (lib.mkIf (!(builtins.elem "vm" tags)) {
           interfaces.enp7s0.wakeOnLan.enable = true;
           # open ports for devices on the local network
           firewall.extraCommands = /* sh */ ''

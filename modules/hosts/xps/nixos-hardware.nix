@@ -1,7 +1,8 @@
-{ inputs, ... }:
 {
-  flake.modules.nixos.host_xps =
-    { lib, ... }:
+  hosts = [ "xps" ];
+
+  config =
+    { inputs, lib, ... }:
     # manually use config from nixos-hardware as broadcom-sta is marked as insecure
     # copied from https://github.com/NixOS/nixos-hardware/blob/master/dell/xps/13-9343/default.nix
     # omitting broadcom-sta

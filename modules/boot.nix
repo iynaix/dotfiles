@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -16,11 +15,11 @@
         };
     in
     {
-      packages.distro-grub-themes-nixos = pkgs.callPackage drv { };
+      distro-grub-themes-nixos = pkgs.callPackage drv { };
     };
 
-  flake.modules.nixos.core =
-    { pkgs, ... }:
+  config =
+    { lib, pkgs, ... }:
     {
       # Bootloader.
       boot = {

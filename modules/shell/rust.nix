@@ -1,9 +1,9 @@
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     {
       # runs rust using the direnv of specified directory
-      packages.direnv-cargo-run = pkgs.writeShellApplication {
+      direnv-cargo-run = pkgs.writeShellApplication {
         name = "direnv-cargo-run";
         runtimeInputs = [ pkgs.direnv ];
         text = ''
@@ -22,12 +22,17 @@
       };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      libCustom,
+      pkgs,
+      ...
+    }:
     let
       xdgDataHome = config.hj.xdg.data.directory;
       # cargo will be provided via the nix-shell
-      crb = pkgs.custom.writeShellApplicationCompletions {
+      crb = libCustom.writeShellApplicationCompletions {
         name = "crb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then
@@ -38,7 +43,7 @@
         '';
         completions.fish = "complete -c crb -f -a '(__cargo_bins)'";
       };
-      crrb = pkgs.custom.writeShellApplicationCompletions {
+      crrb = libCustom.writeShellApplicationCompletions {
         name = "crrb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then

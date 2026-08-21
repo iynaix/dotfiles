@@ -1,11 +1,6 @@
 {
-  inputs,
-  lib,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     let
       ignoreFile = pkgs.writeText "ripgrep-ignore" ''
         .envrc
@@ -18,7 +13,7 @@
       '';
     in
     {
-      packages.ripgrep = inputs.wrappers.lib.wrapPackage {
+      ripgrep = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.ripgrep;
         flags = {
@@ -28,8 +23,8 @@
       };
     };
 
-  flake.modules.nixos.core =
-    { pkgs, ... }:
+  config =
+    { lib, pkgs, ... }:
     {
       nixpkgs.overlays = [
         (_: _prev: {

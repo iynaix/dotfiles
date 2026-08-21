@@ -1,7 +1,12 @@
-{ lib, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    {
+      libCustom,
+      pkgs,
+      self,
+      system,
+      ...
+    }:
     let
       binariesCompletion = binaryName: {
         completions.fish = /* fish */ ''
@@ -21,47 +26,49 @@
       };
     in
     {
-      packages = {
-        fdnix = pkgs.writeShellApplication {
-          name = "fdnix";
-          runtimeInputs = [ pkgs.fd ];
-          text = /* sh */ ''fd "$@" /nix/store'';
-        };
-        # improved which for nix
-        nwhich = pkgs.custom.writeShellApplicationCompletions (
-          {
-            name = "nwhich";
-            text = /* sh */ ''readlink -f "$(which "$1")"'';
-          }
-          // binariesCompletion "nwhich"
-        );
-        cnwhich = pkgs.custom.writeShellApplicationCompletions (
-          {
-            name = "cnwhich";
-            text = /* sh */ ''cat "$(nwhich "$1")"'';
-          }
-          // binariesCompletion "cnwhich"
-        );
-        ynwhich = pkgs.custom.writeShellApplicationCompletions (
-          {
-            name = "ynwhich";
-            runtimeInputs = with pkgs; [
-              custom.nwhich
-            ];
-            text = /* sh */ ''
-              path=$(nwhich "$1")
-              yazi "''${path%/*/*}"
-            '';
-          }
-          // binariesCompletion "ynwhich"
-        );
+      fdnix = pkgs.writeShellApplication {
+        name = "fdnix";
+        runtimeInputs = [ pkgs.fd ];
+        text = /* sh */ ''fd "$@" /nix/store'';
       };
+      # improved which for nix
+      nwhich = libCustom.writeShellApplicationCompletions (
+        {
+          name = "nwhich";
+          text = /* sh */ ''readlink -f "$(which "$1")"'';
+        }
+        // binariesCompletion "nwhich"
+      );
+      cnwhich = libCustom.writeShellApplicationCompletions (
+        {
+          name = "cnwhich";
+          text = /* sh */ ''cat "$(nwhich "$1")"'';
+        }
+        // binariesCompletion "cnwhich"
+      );
+      ynwhich = libCustom.writeShellApplicationCompletions (
+        {
+          name = "ynwhich";
+          runtimeInputs = [
+            self.packages.${system}.nwhich
+          ];
+          text = /* sh */ ''
+            path=$(nwhich "$1")
+            yazi "''${path%/*/*}"
+          '';
+        }
+        // binariesCompletion "ynwhich"
+      );
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
-      inherit (config.custom.constants) dots projects;
       homeDir = config.hj.directory;
       xdg-user-dirs = {
         # xdg user dirs
@@ -89,7 +96,7 @@
     {
       environment = {
         shellAliases = {
-          dots = "cd ${dots}";
+          dots = "cd ${config.hj.directory}/projects/dotfiles";
           coinfc = "pj coinfc";
         };
 
@@ -155,14 +162,14 @@
       programs = {
         fish.shellInit = /* fish */ ''
           function pj
-            cd ${projects}
+            cd "${config.hj.directory}/projects"
             if test (count $argv) -eq 1
               cd $argv[1]
             end
           end
 
           function _pj
-              find ${projects} -maxdepth 1 -type d -exec basename {} \;
+              find "${config.hj.directory}/projects" -maxdepth 1 -type d -exec basename {} \;
           end
           complete -c pj -f -a "(_pj)"
         '';

@@ -154,8 +154,8 @@ let
             };
             systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
             users.users.root.openssh.authorizedKeys.keyFiles = [
-              ../../id_rsa.pub
-              ../../id_ed25519.pub
+              ./modules/id_rsa.pub
+              ./modules/id_ed25519.pub
             ];
 
             # quality of life
@@ -195,9 +195,7 @@ let
     };
 in
 {
-  flake.nixosConfigurations = {
-    kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
-    minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal-combined";
-    cosmic-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-cosmic";
-  };
+  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
+  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal-combined";
+  cosmic-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-cosmic";
 }

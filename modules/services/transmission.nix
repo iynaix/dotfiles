@@ -1,10 +1,17 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.services_bittorrent =
-    { config, pkgs, ... }:
+  hosts = [ "desktop" ];
+
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      user,
+      ...
+    }:
     let
-      inherit (config.custom.constants) projects user;
       persistHome = "/persist${config.hj.directory}";
+      projectsDir = "${persistHome}/projects";
       downloadDir = "/media/IRONWOLF22/Downloads";
       pendingDir = "${downloadDir}/pending";
       # process downloaded files
@@ -12,8 +19,8 @@
         name = "renamer";
         runtimeInputs = [ pkgs.custom.direnv-cargo-run ];
         text = /* sh */ ''
-          pushd ${projects}/renamer > /dev/null
-          direnv-cargo-run "${projects}/renamer" "$@"
+          pushd ${projectsDir}/renamer > /dev/null
+          direnv-cargo-run "${projectsDir}/renamer" "$@"
           popd > /dev/null
         '';
       };

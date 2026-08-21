@@ -1,4 +1,3 @@
-{ self, ... }:
 let
   drv =
     {
@@ -32,11 +31,11 @@ let
     );
 in
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     {
-      packages.exiled-exchange-2 = pkgs.callPackage drv {
-        sources = self.libCustom.nvFetcherSources pkgs;
+      exiled-exchange-2 = pkgs.callPackage drv {
+        sources = libCustom.nvFetcherSources pkgs;
       };
     };
 }

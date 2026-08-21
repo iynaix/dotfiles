@@ -1,5 +1,5 @@
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -39,6 +39,6 @@
         };
     in
     {
-      packages.mpv-cut = pkgs.callPackage drv { };
+      mpv-cut = pkgs.callPackage drv { };
     };
 }

@@ -1,5 +1,8 @@
 {
-  flake.modules.nixos.programs_zed-editor =
+  enabled = false;
+  tags = [ "gui" ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.zed-editor ];

@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.programs_vlc =
+  hosts = [ "desktop" ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.vlc ];

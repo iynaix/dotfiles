@@ -129,6 +129,9 @@ source = "wallpaper"
 builtin_ids = [ "btop", "cava", "kitty", "hyprland", "mango", "niri" ]
 community_ids = [ "yazi", "zathura" ]
 
+[wallpaper]
+transition_on_startup = true
+
 [widget.battery]
 color = "primary"
 icon_color = "primary"

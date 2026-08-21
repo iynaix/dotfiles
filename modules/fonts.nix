@@ -1,37 +1,33 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
-  flake.modules.nixos.core =
-    { pkgs, ... }:
-    {
-      options.custom = {
-        fonts = {
-          regular = lib.mkOption {
-            type = lib.types.str;
-            default = "Geist";
-            description = "The font to use for regular text";
-          };
-          monospace = lib.mkOption {
-            type = lib.types.str;
-            default = "JetBrainsMono Nerd Font";
-            description = "The font to use for monospace text";
-          };
-        };
+  options.custom = {
+    fonts = {
+      regular = lib.mkOption {
+        type = lib.types.str;
+        default = "Geist";
+        description = "The font to use for regular text";
       };
-
-      config = {
-        # setup fonts for other distros, run "fc-cache -f" to refresh fonts
-        fonts.fontconfig.enable = true;
-
-        fonts = {
-          enableDefaultPackages = true;
-
-          packages = with pkgs; [
-            noto-fonts
-            noto-fonts-cjk-sans
-            noto-fonts-color-emoji
-            nerd-fonts.jetbrains-mono
-          ];
-        };
+      monospace = lib.mkOption {
+        type = lib.types.str;
+        default = "JetBrainsMono Nerd Font";
+        description = "The font to use for monospace text";
       };
     };
+  };
+
+  config = {
+    # setup fonts for other distros, run "fc-cache -f" to refresh fonts
+    fonts.fontconfig.enable = true;
+
+    fonts = {
+      enableDefaultPackages = true;
+
+      packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-color-emoji
+        nerd-fonts.jetbrains-mono
+      ];
+    };
+  };
 }

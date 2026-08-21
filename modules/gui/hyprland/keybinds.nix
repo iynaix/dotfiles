@@ -1,6 +1,8 @@
-{ lib, ... }: {
-  flake.modules.nixos.wm =
-    { config, ... }:
+{
+  tags = [ "wm" ];
+
+  config =
+    { config, lib, ... }:
     {
       custom.programs.hyprland.settings =
         # handle shared keybinds across WMs

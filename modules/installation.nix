@@ -1,5 +1,5 @@
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";

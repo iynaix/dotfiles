@@ -1,9 +1,17 @@
-{ inputs, lib, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      inputs,
+      lib,
+      pkgs,
+      system,
+      ...
+    }:
     let
-      focal = inputs.focal.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      focal = inputs.focal.packages.${system}.default;
     in
     {
       environment.systemPackages = [

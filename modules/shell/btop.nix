@@ -1,8 +1,3 @@
-{
-  inputs,
-  lib,
-  ...
-}:
 let
   baseBtopConf = {
     color_theme = "TTY";
@@ -21,21 +16,25 @@ let
   };
 in
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     {
       # expose generic btop package without disks set
-      packages.btop = inputs.wrappers.wrappers.btop.wrap {
+      btop = inputs.wrappers.wrappers.btop.wrap {
         inherit pkgs;
         settings = baseBtopConf;
       };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
-    let
-      inherit (config.custom.constants) host;
-    in
+  config =
+    {
+      config,
+      host,
+      inputs,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       options.custom = {
         programs.btop = {

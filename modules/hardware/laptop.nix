@@ -1,12 +1,7 @@
-top: {
-  flake.modules.nixos.hardware_laptop = {
-    imports = with top.config.flake.modules.nixos; [
-      hardware_backlight
-      hardware_bluetooth
-      hardware_keyd
-      hardware_wifi
-    ];
+{
+  hosts = [ "laptop" ];
 
+  config = {
     # scrolling is nice for laptop with a smaller screen
     services.displayManager.defaultSession = "niri";
 

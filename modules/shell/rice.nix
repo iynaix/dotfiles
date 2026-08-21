@@ -1,45 +1,27 @@
-{ inputs, ... }:
 {
-  flake.modules.nixos.core =
-    { pkgs, ... }:
-    {
-      environment = {
-        systemPackages = with pkgs; [
-          asciiquarium
-          cbonsai
-          cmatrix
-          fastfetch
-          nitch
-          pipes-rs
-          scope-tui
-          tenki
-          terminal-colors
-          inputs.wfetch.packages.${pkgs.stdenv.hostPlatform.system}.default
-        ];
+  inputs,
+  pkgs,
+  system,
+  ...
+}:
+{
+  environment = {
+    systemPackages = with pkgs; [
+      asciiquarium
+      cbonsai
+      cmatrix
+      fastfetch
+      nitch
+      pipes-rs
+      scope-tui
+      tenki
+      terminal-colors
+      inputs.wfetch.packages.${system}.default
+    ];
 
-        shellAliases = {
-          neofetch = "fastfetch --config neofetch";
-          wwfetch = "wfetch --wallpaper";
-        };
-      };
+    shellAliases = {
+      neofetch = "fastfetch --config neofetch";
+      wwfetch = "wfetch --wallpaper";
     };
-
-  flake.modules.nixos.gui =
-    { config, pkgs, ... }:
-    {
-      environment.systemPackages = [
-        pkgs.imagemagick
-      ];
-
-      custom.programs = {
-        noctalia.colors = {
-          wfetch = {
-            # dummy values so noctalia doesn't complain
-            input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
-            output_path = "/dev/null";
-            post_hook = "bash -c 'pgrep -f .wfetch-wrapped >/dev/null && pkill -SIGUSR2 .wfetch-wrapped || true'";
-          };
-        };
-      };
-    };
+  };
 }

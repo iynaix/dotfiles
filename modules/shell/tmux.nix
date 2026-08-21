@@ -1,13 +1,13 @@
 {
-  inputs,
-  lib,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
     {
-      packages.tmux = inputs.wrappers.wrappers.tmux.wrap {
+      inputs,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      tmux = inputs.wrappers.wrappers.tmux.wrap {
         inherit pkgs;
         sourceSensible = true; # tmux sensible plugin
         prefix = "C-Space";
@@ -72,7 +72,7 @@
       };
     };
 
-  flake.modules.nixos.core =
+  config =
     { pkgs, ... }:
     {
       nixpkgs.overlays = [

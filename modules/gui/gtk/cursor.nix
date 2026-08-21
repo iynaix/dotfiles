@@ -1,7 +1,13 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.core =
-    { pkgs, ... }:
+  tags = [ "gui" ];
+
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       options.custom = {
         gtk = {
@@ -26,28 +32,27 @@
           };
         };
       };
-    };
 
-  flake.modules.nixos.gui =
-    { config, ... }:
-    let
-      gtkCursor = config.custom.gtk.cursor;
-    in
-    {
-      environment = {
-        sessionVariables = {
-          XCURSOR_SIZE = gtkCursor.size;
-          XCURSOR_THEME = gtkCursor.name;
+      config =
+        let
+          gtkCursor = config.custom.gtk.cursor;
+        in
+        {
+          environment = {
+            sessionVariables = {
+              XCURSOR_SIZE = gtkCursor.size;
+              XCURSOR_THEME = gtkCursor.name;
+            };
+
+            systemPackages = [
+              gtkCursor.package
+            ];
+          };
+
+          # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
+          hj.xdg.data.files = {
+            "icons/${gtkCursor.name}".source = "${gtkCursor.package}/share/icons/${gtkCursor.name}";
+          };
         };
-
-        systemPackages = [
-          gtkCursor.package
-        ];
-      };
-
-      # Add cursor icon link to $XDG_DATA_HOME/icons as well for redundancy.
-      hj.xdg.data.files = {
-        "icons/${gtkCursor.name}".source = "${gtkCursor.package}/share/icons/${gtkCursor.name}";
-      };
     };
 }

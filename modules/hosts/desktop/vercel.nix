@@ -1,13 +1,15 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.host_desktop =
+  hosts = [ "desktop" ];
+
+  config =
     {
       config,
+      lib,
       pkgs,
+      user,
       ...
     }:
     let
-      inherit (config.custom.constants) user;
       vercel-backup = pkgs.writeShellApplication {
         name = "vercel-backup";
         runtimeInputs = [ pkgs.postgresql_15 ];

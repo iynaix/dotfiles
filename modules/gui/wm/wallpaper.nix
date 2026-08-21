@@ -1,7 +1,13 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     lib.mkMerge [
       {
         environment = {

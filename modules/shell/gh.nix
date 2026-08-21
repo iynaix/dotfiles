@@ -1,52 +1,52 @@
-{ inputs, lib, ... }:
 {
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
-    let
-      inherit (config.custom.constants) user;
-    in
-    {
-      # setup auth token for gh
-      sops.secrets.github_token.owner = user;
+  config,
+  inputs,
+  lib,
+  pkgs,
+  user,
+  ...
+}:
+{
+  # setup auth token for gh
+  sops.secrets.github_token.owner = user;
 
-      nixpkgs.overlays = [
-        (_: prev: {
-          # wrap gh to set GITHUB_TOKEN
-          gh = inputs.wrappers.lib.wrapPackage {
-            pkgs = prev;
-            package = prev.gh;
-            env.GH_CONFIG_DIR = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
-            runShell = [
-              /* sh */ ''
-                GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
-                export GITHUB_TOKEN
-              ''
-            ];
-          };
-        })
-      ];
-
-      # needed for github authentication for private repos
-      # adapted from home-manager:
-      # https://github.com/nix-community/home-manager/blob/142acd7a7d9eb7f0bb647f053b4ddfd01fdfbf1d/modules/programs/gh.nix#L191
-      programs.git.config = {
-        credential =
-          [
-            "https://github.com"
-            "https://gist.github.com"
-          ]
-          |> map (
-            host:
-            lib.nameValuePair host {
-              helper = [
-                ""
-                "${lib.getExe pkgs.gh} auth git-credential"
-              ];
-            }
-          )
-          |> lib.listToAttrs;
+  nixpkgs.overlays = [
+    (_: prev: {
+      # wrap gh to set GITHUB_TOKEN
+      gh = inputs.wrappers.lib.wrapPackage {
+        pkgs = prev;
+        package = prev.gh;
+        env.GH_CONFIG_DIR = pkgs.writeTextDir "/config.yml" (lib.strings.toJSON { version = 1; });
+        runShell = [
+          /* sh */ ''
+            GITHUB_TOKEN=$(cat "${config.sops.secrets.github_token.path}")
+            export GITHUB_TOKEN
+          ''
+        ];
       };
+    })
+  ];
 
-      environment.systemPackages = [ pkgs.gh ]; # overlay-ed above
-    };
+  # needed for github authentication for private repos
+  # adapted from home-manager:
+  # https://github.com/nix-community/home-manager/blob/142acd7a7d9eb7f0bb647f053b4ddfd01fdfbf1d/modules/programs/gh.nix#L191
+  programs.git.config = {
+    credential =
+      [
+        "https://github.com"
+        "https://gist.github.com"
+      ]
+      |> map (
+        host:
+        lib.nameValuePair host {
+          helper = [
+            ""
+            "${lib.getExe pkgs.gh} auth git-credential"
+          ];
+        }
+      )
+      |> lib.listToAttrs;
+  };
+
+  environment.systemPackages = [ pkgs.gh ]; # overlay-ed above
 }

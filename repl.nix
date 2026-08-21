@@ -36,6 +36,7 @@ in
     lib
     user
     ;
+  libCustom = import ./lib.nix { inherit lib; };
   self = flake;
 
   # default host

@@ -1,9 +1,10 @@
-{ inputs, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  enabled = false;
+
+  packages =
+    { inputs, pkgs, ... }:
     {
-      packages.helix = inputs.wrappers.wrappers.helix.wrap {
+      helix = inputs.wrappers.wrappers.helix.wrap {
         inherit pkgs;
         package = pkgs.helix;
         settings = {
@@ -12,7 +13,7 @@
       };
     };
 
-  flake.modules.nixos.programs_helix =
+  config =
     { pkgs, ... }:
     {
       nixpkgs.overlays = [

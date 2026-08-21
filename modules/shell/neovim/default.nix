@@ -1,13 +1,8 @@
 {
-  inputs,
-  lib,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     {
-      packages.neovim-iynaix = pkgs.callPackage (
+      neovim-iynaix = pkgs.callPackage (
         {
           dots ? null,
           host ? "desktop",
@@ -23,12 +18,18 @@
       ) { };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      host,
+      lib,
+      pkgs,
+      ...
+    }:
     let
-      inherit (config.custom.constants) dots host;
       customNeovim = pkgs.custom.neovim-iynaix.override {
-        inherit dots host;
+        inherit host;
+        dots = "${config.hj.directory}/projects/dotfiles";
       };
     in
     {

@@ -1,9 +1,8 @@
 {
-  flake.modules.nixos.services_syncoid =
-    { config, ... }:
-    let
-      inherit (config.custom.constants) user;
-    in
+  hosts = [ "desktop" ];
+
+  config =
+    { config, user, ... }:
     {
       # allow syncoid to ssh into NAS
       users.users = {

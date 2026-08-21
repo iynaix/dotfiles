@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.hardware_backlight =
+  tags = [ "laptop" ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [

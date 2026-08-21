@@ -1,5 +1,10 @@
 {
-  flake.modules.nixos.hardware_amdgpu =
+  hosts = [
+    "desktop"
+    "framework"
+  ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [

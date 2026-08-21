@@ -1,5 +1,5 @@
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -56,6 +56,6 @@
         };
     in
     {
-      packages.dotfiles-rs = pkgs.callPackage drv { };
+      dotfiles-rs = pkgs.callPackage drv { };
     };
 }

@@ -1,14 +1,15 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.services_bittorrent =
+  hosts = [ "desktop" ];
+
+  config =
     {
       config,
+      lib,
       pkgs,
-
+      user,
       ...
     }:
     let
-      inherit (config.custom.constants) user;
       sonarr-ical-sync = pkgs.writeShellApplication {
         name = "sonarr-ical-sync";
         runtimeInputs = with pkgs; [

@@ -1,7 +1,6 @@
-{ self, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     let
       drv =
         {
@@ -31,8 +30,8 @@
         );
     in
     {
-      packages.mpv-deletefile = pkgs.callPackage drv {
-        sources = self.libCustom.nvFetcherSources pkgs;
+      mpv-deletefile = pkgs.callPackage drv {
+        sources = libCustom.nvFetcherSources pkgs;
       };
     };
 }

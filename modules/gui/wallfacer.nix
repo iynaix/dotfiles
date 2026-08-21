@@ -1,6 +1,13 @@
 {
-  flake.modules.nixos.programs_wallfacer =
-    { config, pkgs, ... }:
+  hosts = [ "desktop" ];
+
+  config =
+    {
+      config,
+      libCustom,
+      pkgs,
+      ...
+    }:
     let
       tomlFormat = pkgs.formats.toml { };
       wallpapers_dir = "${config.hj.directory}/Pictures/Wallpapers";
@@ -44,10 +51,10 @@
         ];
         wallpaper_command = "wallpaper $1";
       };
-      wallfacer = pkgs.custom.writeShellApplicationCompletions {
+      wallfacer = libCustom.writeShellApplicationCompletions {
         name = "wallfacer";
         text = /* sh */ ''
-          direnv-cargo-run "${config.custom.constants.projects}/wallfacer" "$@"
+          direnv-cargo-run "${config.hj.directory}/projects/wallfacer" "$@"
         '';
         # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
         completions.fish = /* fish */ ''

@@ -1,9 +1,3 @@
-{
-  inputs,
-  lib,
-  self,
-  ...
-}:
 let
   mkFormat =
     height: "bestvideo[height<=?${toString height}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best";
@@ -21,21 +15,32 @@ let
   };
 in
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    {
+      inputs,
+      lib,
+      libCustom,
+      pkgs,
+      ...
+    }:
     let
-      source = (self.libCustom.nvFetcherSources pkgs).yt-dlp;
+      source = (libCustom.nvFetcherSources pkgs).yt-dlp;
     in
     {
-      packages.yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {
+      yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {
         inherit pkgs;
         package = lib.mkForce (pkgs.yt-dlp.overrideAttrs source);
         settings = baseYtdlpSettings;
       };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      inputs,
+      pkgs,
+      ...
+    }:
     {
       options.custom = {
         programs.yt-dlp = {

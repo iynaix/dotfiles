@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.host_desktop =
+  hosts = [ "desktop" ];
+
+  config =
     { config, lib, ... }:
     let
       hgst10 = "/media/HGST10";

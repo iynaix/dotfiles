@@ -1,8 +1,17 @@
-{ inputs, ... }: {
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  user,
+  ...
+}:
+{
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
+
+  config =
     let
-      inherit (config.custom.constants) user;
       # script to bootstrap a new install
       install-remote-secrets = pkgs.writeShellApplication {
         name = "install-remote-secrets";
@@ -41,10 +50,6 @@
       };
     in
     {
-      imports = [
-        inputs.sops-nix.nixosModules.sops
-      ];
-
       sops = {
         # to edit secrets file, run "sops modules/hosts/secrets.json"
         defaultSopsFile = ./hosts/secrets.json;

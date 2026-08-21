@@ -1,7 +1,8 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.plasma =
-    { pkgs, ... }:
+  hosts = [ "vm" ]; # 3d acceleration is slow af in a VM, so use plasma instead
+
+  config =
+    { lib, pkgs, ... }:
     {
       services = {
         desktopManager.plasma6.enable = true;

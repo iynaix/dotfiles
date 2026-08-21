@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.programs_steam =
+  hosts = [ "desktop" ];
+
+  config =
     { config, pkgs, ... }:
     {
       programs.steam = {

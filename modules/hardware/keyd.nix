@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.hardware_keyd = {
+  tags = [ "laptop" ];
+
+  config = {
     services.keyd = {
       enable = true;
       keyboards.default = {

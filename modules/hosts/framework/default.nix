@@ -1,40 +1,9 @@
-{ lib, ... }@top:
 {
-  flake.modules.nixos.host_framework =
-    { pkgs, ... }:
+  hosts = [ "framework" ];
+
+  config =
+    { lib, pkgs, ... }:
     {
-      imports = with top.config.flake.modules.nixos; [
-        gui
-        wm
-
-        programs_freecad
-        # programs_helix
-        # programs_orca-slicer
-        # programs_obs-studio
-        programs_path-of-building
-        # programs_path-of-exile
-        # programs_steam
-        # programs_subtitles
-        # programs_vlc
-        programs_wallfacer
-        programs_zed-editor
-        # programs_zoom
-
-        hardware_amdgpu
-        # hardware_qmk
-        hardware_laptop
-
-        # services_bittorrent
-        services_docker
-        # services_syncoid
-        services_virtualisation
-
-        # specialisations_tty
-        # specialisations_niri
-        # specialisations_hyprland
-        # specialisations_mango
-      ];
-
       custom = {
         hardware = {
           monitors = [

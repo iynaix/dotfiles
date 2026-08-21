@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -37,15 +36,22 @@
         };
     in
     {
-      packages.tokyo-night-kvantum = pkgs.callPackage drv { };
+      tokyo-night-kvantum = pkgs.callPackage drv { };
     };
 
-  flake.modules.nixos.gui =
+  tags = [ "gui" ];
+
+  config =
     # make qt use a dark theme, adapted from:
     # https://github.com/fufexan/dotfiles/blob/main/home/programs/qt.nix
     # also see:
     # https://discourse.nixos.org/t/struggling-to-configure-gtk-qt-theme-on-laptop/42268/
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       environment = {
         sessionVariables = {

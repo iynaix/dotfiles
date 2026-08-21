@@ -1,13 +1,21 @@
-{ lib, self, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      host,
+      lib,
+      libCustom,
+      tags,
+      ...
+    }:
     let
       toLua = lib.generators.toLua { };
-      inherit (config.custom.constants) host isVm;
       hasHdr = lib.any (d: d.hdr) config.custom.hardware.monitors;
       gap = if host == "desktop" then 8 else 4;
       strut = gap + 12;
+      isVm = builtins.elem "vm" tags;
     in
     {
       custom.programs.hyprland = {
@@ -17,85 +25,86 @@
             local mod = "${if isVm then "ALT" else "SUPER"}"
           '')
 
-          /* lua */ ''
+          /* lua */
+          ''
             hl.config({
-            	animations = {
-            		enabled = ${lib.boolToString (!isVm)},
-            	},
+                animations = {
+                    enabled = ${lib.boolToString (!isVm)},
+                },
 
-            	binds = {
-            		workspace_back_and_forth = true,
-            	},
+                binds = {
+                    workspace_back_and_forth = true,
+                },
 
-            	debug = {
-            		disable_logs = false,
-            	},
+                debug = {
+                    disable_logs = false,
+                },
 
-            	decoration = {
-            		rounding = 4,
-            		blur = {
+                decoration = {
+                    rounding = 4,
+                    blur = {
                   enabled = ${lib.boolToString (!isVm)},
-            			new_optimizations = true,
-            			passes = 3,
-            			size = 2,
-            		},
-            		shadow = {
+                        new_optimizations = true,
+                        passes = 3,
+                        size = 2,
+                    },
+                    shadow = {
                   enabled = ${lib.boolToString (!isVm)},
-            			color = "rgba(1a1a1aee)",
-            			range = 4,
-            			render_power = 3,
-            		},
-            	},
+                        color = "rgba(1a1a1aee)",
+                        range = 4,
+                        render_power = 3,
+                    },
+                },
 
-            	dwindle = {
-            		preserve_split = true,
-            	},
+                dwindle = {
+                    preserve_split = true,
+                },
 
-            	ecosystem = {
-            		no_donation_nag = true,
-            		no_update_news = true,
-            	},
+                ecosystem = {
+                    no_donation_nag = true,
+                    no_update_news = true,
+                },
 
-            	general = {
-            		border_size = 2,
-            		gaps_in = 4,
-            		gaps_out = { top = ${toString gap}, right = ${toString strut}, bottom = ${toString gap}, left = ${toString strut} },
-            		layout = "scrolling",
-            	},
+                general = {
+                    border_size = 2,
+                    gaps_in = 4,
+                    gaps_out = { top = ${toString gap}, right = ${toString strut}, bottom = ${toString gap}, left = ${toString strut} },
+                    layout = "scrolling",
+                },
 
-            	input = {
-            		follow_mouse = 1,
-            		kb_layout = "us",
-            		touchpad = {
-            			disable_while_typing = true,
-            			natural_scroll = false,
-            		},
-            	},
+                input = {
+                    follow_mouse = 1,
+                    kb_layout = "us",
+                    touchpad = {
+                        disable_while_typing = true,
+                        natural_scroll = false,
+                    },
+                },
 
-            	master = {
-            		mfact = 0.5,
-            		new_on_active = "after",
-            		orientation = "left",
-            		smart_resizing = true,
-            	},
+                master = {
+                    mfact = 0.5,
+                    new_on_active = "after",
+                    orientation = "left",
+                    smart_resizing = true,
+                },
 
-            	misc = {
-            		disable_hyprland_logo = true,
-            		disable_splash_rendering = true,
-            		enable_swallow = false,
-            		initial_workspace_tracking = 0,
-            		mouse_move_enables_dpms = true,
-            		swallow_regex = "^([Kk]itty|[Ww]ezterm|[Gg]hostty)$",
-            	},
+                misc = {
+                    disable_hyprland_logo = true,
+                    disable_splash_rendering = true,
+                    enable_swallow = false,
+                    initial_workspace_tracking = 0,
+                    mouse_move_enables_dpms = true,
+                    swallow_regex = "^([Kk]itty|[Ww]ezterm|[Gg]hostty)$",
+                },
 
-            	render = {
-            		cm_enabled = ${lib.boolToString hasHdr},
-            		cm_auto_hdr = 2,
-            	},
+                render = {
+                    cm_enabled = ${lib.boolToString hasHdr},
+                    cm_auto_hdr = 2,
+                },
 
-            	scrolling = {
-            		fullscreen_on_one_column = true,
-            	},
+                scrolling = {
+                    fullscreen_on_one_column = true,
+                },
             })
 
             -- 3 finger swipe to switch workspace
@@ -157,7 +166,7 @@
           # workspace rules
           (
             config.custom.hardware.monitors
-            |> self.libCustom.mapWorkspaces (
+            |> libCustom.mapWorkspaces (
               { monitor, workspace, ... }:
               {
                 inherit workspace;

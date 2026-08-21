@@ -1,5 +1,5 @@
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       drv =
@@ -31,6 +31,6 @@
         };
     in
     {
-      packages.mpv-subsearch = pkgs.callPackage drv { };
+      mpv-subsearch = pkgs.callPackage drv { };
     };
 }

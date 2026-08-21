@@ -1,9 +1,10 @@
-{ self, ... }:
 {
-  flake.modules.nixos.programs_path-of-exile =
-    { pkgs, ... }:
+  hosts = [ "desktop" ];
+
+  config =
+    { libCustom, pkgs, ... }:
     let
-      sources = self.libCustom.nvFetcherSources pkgs;
+      sources = libCustom.nvFetcherSources pkgs;
     in
     {
       # NOTE: POE is installed through steam

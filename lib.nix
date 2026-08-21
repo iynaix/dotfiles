@@ -1,0 +1,99 @@
+{ lib, pkgs, ... }:
+rec {
+  generators = {
+    # produces ini format strings, takes a single argument of the object
+    toQuotedINI = lib.generators.toINI {
+      mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+        mkValueString = v: if lib.isString v then "\"${v}\"" else lib.generators.mkValueStringDefault { } v;
+      };
+    };
+  };
+
+  nvFetcherSources = pkgs: (pkgs.callPackage ./_sources/generated.nix { });
+
+  # saner api for iterating through workspaces in a flat list
+  # takes a function that accepts the following attrset {workspace, key, monitor}
+  mapWorkspaces =
+    workspaceFn:
+    lib.concatMap (
+      monitor:
+      map (
+        ws:
+        let
+          workspaceArg = {
+            inherit monitor;
+            workspace = toString ws;
+            key = toString (lib.mod ws 10);
+          };
+        in
+        workspaceFn workspaceArg
+      ) monitor.workspaces
+    );
+
+  # writeShellApplication with support for completions
+  writeShellApplicationCompletions =
+    {
+      name,
+      completions ? { },
+      ...
+    }@shellArgs:
+    let
+      inherit (pkgs) writeShellApplication writeText installShellFiles;
+      # get the needed arguments for writeShellApplication
+      app = writeShellApplication (lib.intersectAttrs (lib.functionArgs writeShellApplication) shellArgs);
+      completionsStr = lib.concatMapAttrsStringSep " " (
+        shell: content:
+        lib.optionalString (builtins.elem shell [
+          "bash"
+          "zsh"
+          "fish"
+          "nushell"
+        ]) "--${shell} ${writeText "${shell}-completion" content}"
+      ) completions;
+    in
+    if completions == { } then
+      app
+    else
+      app.overrideAttrs (o: {
+        nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ installShellFiles ];
+
+        buildCommand = o.buildCommand + ''
+          installShellCompletion --cmd ${name} ${completionsStr}
+        '';
+      });
+
+  # https://discourse.nixos.org/t/nix-function-to-merge-attributes-records-recursively-and-concatenate-arrays/2030/9
+  recursiveMergeAttrs =
+    lhs: rhs:
+    lhs
+    // rhs
+    // (lib.mapAttrs (
+      name: value:
+      if (lib.hasAttr name lhs && lib.isAttrs value && lib.isAttrs lhs.${name}) then
+        recursiveMergeAttrs lhs.${name} value
+      else if (lib.hasAttr name lhs && lib.isList value && lib.isList lhs.${name}) then
+        lhs.${name} ++ value
+      else
+        value
+    ) rhs);
+
+  recursiveMergeAttrsList = lib.foldl' recursiveMergeAttrs { };
+
+  recursiveMergeAttrsAndStrings =
+    lhs: rhs:
+    lhs
+    // rhs
+    // (lib.mapAttrs (
+      name: value:
+      if (lib.hasAttr name lhs && lib.isAttrs value && lib.isAttrs lhs.${name}) then
+        recursiveMergeAttrsAndStrings lhs.${name} value
+      else if (lib.hasAttr name lhs && lib.isList value && lib.isList lhs.${name}) then
+        lhs.${name} ++ value
+      else if (lib.hasAttr name lhs && lib.isString value && lib.isString lhs.${name}) then
+        lhs.${name} + value
+      else
+        value
+    ) rhs);
+
+  recursiveMergeAttrsAndStringsList = lib.foldl' recursiveMergeAttrsAndStrings { };
+}

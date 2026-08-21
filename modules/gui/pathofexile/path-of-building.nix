@@ -1,13 +1,12 @@
-{ self, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     let
-      source = (self.libCustom.nvFetcherSources pkgs).rusty-path-of-building;
+      source = (libCustom.nvFetcherSources pkgs).rusty-path-of-building;
     in
     {
       # use latest version
-      packages.path-of-building = pkgs.rusty-path-of-building.overrideAttrs (
+      path-of-building = pkgs.rusty-path-of-building.overrideAttrs (
         source
         // {
           cargoDeps = pkgs.rustPlatform.importCargoLock {
@@ -18,7 +17,12 @@
       );
     };
 
-  flake.modules.nixos.programs_path-of-building =
+  hosts = [
+    "desktop"
+    "framework"
+  ];
+
+  config =
     { pkgs, ... }:
     {
       # covers both poe1 and poe2

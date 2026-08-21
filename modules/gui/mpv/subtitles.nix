@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     # ai subs derivation to allow overriding
     let
@@ -19,11 +18,13 @@
         };
     in
     {
-      packages.ai-subs = pkgs.callPackage aiSubsDrv { };
+      ai-subs = pkgs.callPackage aiSubsDrv { };
     };
 
-  flake.modules.nixos.programs_subtitles =
-    { pkgs, ... }:
+  hosts = [ "desktop" ];
+
+  config =
+    { lib, pkgs, ... }:
     lib.mkMerge [
       # subliminal
       {

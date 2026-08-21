@@ -1,5 +1,10 @@
 {
-  flake.modules.nixos.services_docker =
+  hosts = [
+    "desktop"
+    "framework"
+  ];
+
+  config =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.distrobox ];

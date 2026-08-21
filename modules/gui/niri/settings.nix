@@ -1,9 +1,16 @@
-{ lib, self, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      host,
+      lib,
+      libCustom,
+      pkgs,
+      ...
+    }:
     let
-      inherit (config.custom.constants) host;
       gap = if host == "desktop" then 8 else 4;
       strut = gap + 12;
     in
@@ -233,7 +240,7 @@
             # don't use the workspaces key in setting as attrset keys are unordered and it becomes 1, 10, 2, 3...
             (
               config.custom.hardware.monitors
-              |> self.libCustom.mapWorkspaces (
+              |> libCustom.mapWorkspaces (
                 {
                   workspace,
                   monitor,

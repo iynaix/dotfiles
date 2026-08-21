@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.hardware_bluetooth =
+  tags = [ "laptop" ];
+
+  config =
     { lib, pkgs, ... }:
     {
       hardware.bluetooth = {

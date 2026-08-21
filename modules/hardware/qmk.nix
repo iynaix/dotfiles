@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.hardware_qmk = {
+  hosts = [ "desktop" ];
+
+  config = {
     hardware.keyboard.qmk.enable = true;
     # via / vial can be run with nix run / nix shell
   };

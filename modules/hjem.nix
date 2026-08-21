@@ -1,15 +1,16 @@
-{ inputs, ... }:
 {
-  flake.modules.nixos.core =
-    { config, ... }:
-    let
-      inherit (config.custom.constants) user;
-    in
+  config =
+    {
+      inputs,
+      lib,
+      user,
+      ...
+    }:
     {
       imports = [
         inputs.hjem.nixosModules.default
         # alias for hjem
-        (inputs.nixpkgs.lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
+        (lib.mkAliasOptionModule [ "hj" ] [ "hjem" "users" user ])
       ];
 
       config = {

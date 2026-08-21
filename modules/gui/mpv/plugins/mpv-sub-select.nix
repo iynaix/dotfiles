@@ -1,7 +1,6 @@
-{ self, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { libCustom, pkgs, ... }:
     let
       drv =
         {
@@ -30,8 +29,8 @@
         );
     in
     {
-      packages.mpv-sub-select = pkgs.callPackage drv {
-        sources = self.libCustom.nvFetcherSources pkgs;
+      mpv-sub-select = pkgs.callPackage drv {
+        sources = libCustom.nvFetcherSources pkgs;
       };
     };
 }

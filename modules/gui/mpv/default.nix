@@ -1,12 +1,14 @@
 {
-  inputs,
-  lib,
-  self,
-  ...
-}:
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    {
+      inputs,
+      lib,
+      libCustom,
+      pkgs,
+      self,
+      system,
+      ...
+    }:
     # mpv options and settings config from home-manager:
     # https://github.com/nix-community/home-manager/blob/master/modules/programs/mpv.nix
     let
@@ -67,7 +69,7 @@
         ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
 
       # NOTE: the custom function is used to be able
-      mpvConfig = self.libCustom.recursiveMergeAttrsAndStringsList [
+      mpvConfig = libCustom.recursiveMergeAttrsAndStringsList [
         {
           "mpv.input".content = renderBindings {
             MBTN_LEFT = "cycle pause";
@@ -149,15 +151,17 @@
             write-filename-in-watch-later-config = true;
           };
 
-          scripts = with pkgs; [
-            mpvScripts.dynamic-crop
-            mpvScripts.mpris
-            mpvScripts.seekTo
-            # custom packaged scripts
-            custom.mpv-deletefile
-            custom.mpv-nextfile
-            custom.mpv-subsearch
-          ];
+          scripts =
+            (with pkgs; [
+              mpvScripts.dynamic-crop
+              mpvScripts.mpris
+              mpvScripts.seekTo
+            ])
+            ++ (with self.packages.${system}; [
+              mpv-deletefile
+              mpv-nextfile
+              mpv-subsearch
+            ]);
         }
 
         # modernz settings
@@ -207,7 +211,7 @@
         # mpv-cut settings
         {
           scripts = [
-            (pkgs.custom.mpv-cut.override {
+            (self.packages.${system}.mpv-cut.override {
               # disable bookmarks functionality
               configLua = /* lua */ ''
                 KEY_BOOKMARK_ADD = ""
@@ -218,7 +222,7 @@
 
         # sub-select settings
         {
-          scripts = [ pkgs.custom.mpv-sub-select ];
+          scripts = [ self.packages.${system}.mpv-sub-select ];
 
           configDir."script-opts/sub-select.json".content = lib.strings.toJSON [
             {
@@ -346,14 +350,16 @@
       ];
     in
     {
-      packages.mpv = inputs.wrappers.wrappers.mpv.wrap {
+      mpv = inputs.wrappers.wrappers.mpv.wrap {
         inherit pkgs;
         package = pkgs.mpv.override { inherit (mpvConfig) scripts; };
         inherit (mpvConfig) "mpv.conf" "mpv.input" configDir;
       };
     };
 
-  flake.modules.nixos.gui =
+  tags = [ "gui" ];
+
+  config =
     { pkgs, ... }:
     {
       custom.programs = {

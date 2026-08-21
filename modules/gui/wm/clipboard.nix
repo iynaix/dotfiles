@@ -1,7 +1,8 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.wm =
-    { pkgs, ... }:
+  tags = [ "wm" ];
+
+  config =
+    { lib, pkgs, ... }:
     let
       extraOptionsStr = lib.escapeShellArgs [
         "-max-dedupe-search"

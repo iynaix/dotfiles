@@ -1,7 +1,13 @@
-{ lib, self, ... }:
 {
-  flake.modules.nixos.wm =
-    { config, ... }:
+  tags = [ "wm" ];
+
+  config =
+    {
+      config,
+      lib,
+      libCustom,
+      ...
+    }:
     let
       inherit (config.custom.hardware) monitors;
     in
@@ -151,7 +157,7 @@
             # named workspace setup, dynamic workspaces are urgh
             // lib.mergeAttrsList (
               lib.flatten (
-                (self.libCustom.mapWorkspaces (
+                (libCustom.mapWorkspaces (
                   { workspace, key, ... }:
                   [
                     {

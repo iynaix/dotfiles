@@ -1,6 +1,8 @@
 # additional settings for mango
 {
-  flake.modules.nixos.wm = {
+  tags = [ "wm" ];
+
+  config = {
     custom.programs = {
       # More option see https://github.com/DreamMaoMao/mango/wiki/
       mango.settings = {

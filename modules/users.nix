@@ -1,62 +1,60 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.core =
-    { config, ... }:
-    let
-      inherit (config.custom.constants) user;
-    in
+  config,
+  lib,
+  user,
+  ...
+}:
+{
+  # silence warning about setting multiple user password options
+  # https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990
+  options = {
+    warnings = lib.mkOption {
+      apply = lib.filter (
+        w: !(lib.hasInfix "If multiple of these password options are set at the same time" w)
+      );
+    };
+  };
+
+  config = lib.mkMerge [
     {
-      # silence warning about setting multiple user password options
-      # https://github.com/NixOS/nixpkgs/pull/287506#issuecomment-1950958990
-      options = {
-        warnings = lib.mkOption {
-          apply = lib.filter (
-            w: !(lib.hasInfix "If multiple of these password options are set at the same time" w)
-          );
+      users = {
+        mutableUsers = false; # set to true if *NOT* using impermanence
+        # setup users with persistent passwords
+        # https://reddit.com/r/NixOS/comments/o1er2p/tmpfs_as_root_but_without_hardcoding_your/h22f1b9/
+        # create a password with for root and $user with:
+        # read -s -p "" PASSWORD && mkpasswd -m sha-512 "$PASSWORD" | sudo tee /persist/etc/shadow/root
+        users = {
+          root = {
+            initialPassword = "password";
+            hashedPasswordFile = "/persist/etc/shadow/root";
+          };
+          ${user} = {
+            isNormalUser = true;
+            initialPassword = "password";
+            hashedPasswordFile = "/persist/etc/shadow/${user}";
+            extraGroups = [
+              "networkmanager"
+              "wheel"
+            ];
+          };
         };
       };
+    }
 
-      config = lib.mkMerge [
-        {
-          users = {
-            mutableUsers = false; # set to true if *NOT* using impermanence
-            # setup users with persistent passwords
-            # https://reddit.com/r/NixOS/comments/o1er2p/tmpfs_as_root_but_without_hardcoding_your/h22f1b9/
-            # create a password with for root and $user with:
-            # read -s -p "" PASSWORD && mkpasswd -m sha-512 "$PASSWORD" | sudo tee /persist/etc/shadow/root
-            users = {
-              root = {
-                initialPassword = "password";
-                hashedPasswordFile = "/persist/etc/shadow/root";
-              };
-              ${user} = {
-                isNormalUser = true;
-                initialPassword = "password";
-                hashedPasswordFile = "/persist/etc/shadow/${user}";
-                extraGroups = [
-                  "networkmanager"
-                  "wheel"
-                ];
-              };
-            };
-          };
-        }
+    # use sops for user passwords if enabled
+    {
+      # https://github.com/Mic92/sops-nix?tab=readme-ov-file#setting-a-users-password
+      sops.secrets = {
+        rp.neededForUsers = true;
+        up.neededForUsers = true;
+      };
 
-        # use sops for user passwords if enabled
-        {
-          # https://github.com/Mic92/sops-nix?tab=readme-ov-file#setting-a-users-password
-          sops.secrets = {
-            rp.neededForUsers = true;
-            up.neededForUsers = true;
-          };
-
-          # create a password with for root and $user with:
-          # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
-          users.users = {
-            root.hashedPasswordFile = lib.mkForce config.sops.secrets.rp.path;
-            ${user}.hashedPasswordFile = lib.mkForce config.sops.secrets.up.path;
-          };
-        }
-      ];
-    };
+      # create a password with for root and $user with:
+      # mkpasswd -m sha-512 'PASSWORD' and place in secrets.json under the appropriate key
+      users.users = {
+        root.hashedPasswordFile = lib.mkForce config.sops.secrets.rp.path;
+        ${user}.hashedPasswordFile = lib.mkForce config.sops.secrets.up.path;
+      };
+    }
+  ];
 }

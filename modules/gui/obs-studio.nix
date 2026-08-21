@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.programs_obs-studio = {
+  hosts = [ "desktop" ];
+
+  config = {
     programs.obs-studio.enable = true;
 
     custom.persist = {

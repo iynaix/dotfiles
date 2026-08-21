@@ -1,10 +1,14 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.gui =
-    { config, pkgs, ... }:
-    let
-      inherit (config.custom.constants) host projects dots;
-    in
+  tags = [ "gui" ];
+
+  config =
+    {
+      config,
+      host,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       environment.systemPackages = with pkgs; [
         file-roller
@@ -88,9 +92,9 @@
 
         gtk.bookmarks = [
           "${config.hj.directory}/Downloads"
-          projects
-          dots
-          "${projects}/nixpkgs"
+          "${config.hj.directory}/projects"
+          "${config.hj.directory}/projects/dotfiles"
+          "${config.hj.directory}/projects/nixpkgs"
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]

@@ -1,36 +1,32 @@
 {
-  inputs,
-  ...
-}:
-let
-  baseZathuraConf = {
-    mappings = {
-      "D" = "toggle_page_mode";
-      "J" = "zoom out";
-      "K" = "zoom in";
-      "R" = "rotate";
-      "d" = "scroll half-down";
-      "i" = "recolor";
-      "p" = "print";
-      "r" = "reload";
-      "u" = "scroll half-up";
-    };
-    settings = {
-      "adjust-open" = "best-fit";
-      "recolor" = true;
-      "statusbar-h-padding" = 0;
-      "statusbar-v-padding" = 0;
-    };
-  };
-in
-{
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     {
-      packages.zathura = inputs.wrappers.wrappers.zathura.wrap ({ inherit pkgs; } // baseZathuraConf);
+      zathura = inputs.wrappers.wrappers.zathura.wrap {
+        inherit pkgs;
+        mappings = {
+          "D" = "toggle_page_mode";
+          "J" = "zoom out";
+          "K" = "zoom in";
+          "R" = "rotate";
+          "d" = "scroll half-down";
+          "i" = "recolor";
+          "p" = "print";
+          "r" = "reload";
+          "u" = "scroll half-up";
+        };
+        settings = {
+          "adjust-open" = "best-fit";
+          "recolor" = true;
+          "statusbar-h-padding" = 0;
+          "statusbar-v-padding" = 0;
+        };
+      };
     };
 
-  flake.modules.nixos.gui =
+  tags = [ "gui" ];
+
+  config =
     { config, pkgs, ... }:
     let
       noctaliaColors = "${config.hj.xdg.config.directory}/zathura/noctaliarc";
@@ -38,14 +34,11 @@ in
     {
       nixpkgs.overlays = [
         (_: _prev: {
-          zathura = pkgs.custom.zathura.wrap (
-            baseZathuraConf
-            // {
-              extraSettings = ''
-                include "${noctaliaColors}"
-              '';
-            }
-          );
+          zathura = pkgs.custom.zathura.wrap {
+            extraSettings = ''
+              include "${noctaliaColors}"
+            '';
+          };
         })
       ];
 

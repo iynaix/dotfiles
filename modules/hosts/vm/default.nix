@@ -1,36 +1,9 @@
-{ lib, ... }@top:
 {
-  flake.modules.nixos.host_vm =
-    { pkgs, ... }:
+  hosts = [ "vm" ];
+
+  config =
+    { lib, pkgs, ... }:
     {
-      imports = with top.config.flake.modules.nixos; [
-        gui
-        wm
-        plasma
-
-        # programs_freecad
-        # programs_helix
-        # programs_orca-slicer
-        # programs_obs-studio
-        # programs_path-of-building
-        # programs_path-of-exile
-        # programs_steam
-        # programs_subtitles
-        # programs_vlc
-        # programs_wallfacer
-        # programs_zed-editor
-        # programs_zoom
-
-        # programs_amdgpu
-        # programs_qmk
-        # programs_laptop
-
-        # services_bittorrent
-        # services_docker
-        # services_syncoid
-        # services_virtualisation
-      ];
-
       custom = {
         hardware = {
           monitors = [

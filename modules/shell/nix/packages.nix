@@ -1,6 +1,5 @@
-{ inputs, lib, ... }:
 {
-  perSystem =
+  packages =
     { pkgs, ... }:
     let
       nattr = pkgs.writeShellApplication {
@@ -40,102 +39,108 @@
         };
     in
     {
-      packages = {
-        inherit nattr;
-        ynattr = pkgs.callPackage ynattrDrv { };
+      inherit nattr;
+      ynattr = pkgs.callPackage ynattrDrv { };
 
-        # creates a file with the symlink contents and renames the original symlink to .orig
-        nsymlink = pkgs.writeShellApplication {
-          name = "nsymlink";
-          text = /* sh */ ''
-            if [ "$#" -eq 0 ]; then
-                echo "No file(s) specified."
-                exit 1
+      # creates a file with the symlink contents and renames the original symlink to .orig
+      nsymlink = pkgs.writeShellApplication {
+        name = "nsymlink";
+        text = /* sh */ ''
+          if [ "$#" -eq 0 ]; then
+              echo "No file(s) specified."
+              exit 1
+          fi
+
+          for file in "$@"; do
+            if [[ "$file" == *.bak ]]; then
+                continue
             fi
 
-            for file in "$@"; do
-              if [[ "$file" == *.bak ]]; then
-                  continue
+            if [ -L "$file" ]; then
+                mv "$file" "$file.bak"
+                cp -L "$file.bak" "$file"
+                chmod +w "$file"
+
+            # regular file, reverse the process
+            elif [ -f "$file" ] && [ -L "$file.bak" ]; then
+                mv "$file.bak" "$file"
+            fi
+          done
+        '';
+      };
+
+      # tui for searching nix packages or options
+      ntv = pkgs.writeShellApplication {
+        name = "ntv";
+        runtimeInputs = with pkgs; [
+          pkgs.fzf
+          nix-search-tv
+        ];
+        # prevent IFD, thanks @Michael-C-Buckley
+        text = /* sh */ ''exec "${pkgs.nix-search-tv.src}/nixpkgs.sh" "$@"'';
+      };
+
+      nlocate-lib = pkgs.writeShellApplication {
+        name = "nlocate-lib";
+        runtimeInputs = with pkgs; [
+          ripgrep
+          nix-index
+        ];
+        text = /* sh */ ''
+          nix-locate -- "lib/$1" | rg -v '^\('
+        '';
+      };
+
+      # what depends on the given package in the current nixos install?
+      ndepends = pkgs.writeShellApplication {
+        name = "ndepends";
+        text = /* sh */ ''
+          if [ "$#" -eq 0 ]; then
+              echo "No package(s) provided."
+              exit 1
+          fi
+
+          # use path if given, otherwise assume it is a package
+          get_path() {
+              if [[ "$1" == /* ]]; then
+                  echo "$1"
+              else
+                  nix eval --raw "nixpkgs#$1.outPath"
               fi
+          }
 
-              if [ -L "$file" ]; then
-                  mv "$file" "$file.bak"
-                  cp -L "$file.bak" "$file"
-                  chmod +w "$file"
+          parent="/run/current-system"
+          child="$(get_path "$1")"
 
-              # regular file, reverse the process
-              elif [ -f "$file" ] && [ -L "$file.bak" ]; then
-                  mv "$file.bak" "$file"
-              fi
-            done
-          '';
-        };
+          if [ "$#" -eq 2 ]; then
+              parent="$(get_path "$1")"
+              child="$(get_path "$2")"
+          fi
 
-        # tui for searching nix packages or options
-        ntv = pkgs.writeShellApplication {
-          name = "ntv";
-          runtimeInputs = with pkgs; [
-            pkgs.fzf
-            nix-search-tv
-          ];
-          # prevent IFD, thanks @Michael-C-Buckley
-          text = /* sh */ ''exec "${pkgs.nix-search-tv.src}/nixpkgs.sh" "$@"'';
-        };
-
-        nlocate-lib = pkgs.writeShellApplication {
-          name = "nlocate-lib";
-          runtimeInputs = with pkgs; [
-            ripgrep
-            nix-index
-          ];
-          text = /* sh */ ''
-            nix-locate -- "lib/$1" | rg -v '^\('
-          '';
-        };
-
-        # what depends on the given package in the current nixos install?
-        ndepends = pkgs.writeShellApplication {
-          name = "ndepends";
-          text = /* sh */ ''
-            if [ "$#" -eq 0 ]; then
-                echo "No package(s) provided."
-                exit 1
-            fi
-
-            # use path if given, otherwise assume it is a package
-            get_path() {
-                if [[ "$1" == /* ]]; then
-                    echo "$1"
-                else
-                    nix eval --raw "nixpkgs#$1.outPath"
-                fi
-            }
-
-            parent="/run/current-system"
-            child="$(get_path "$1")"
-
-            if [ "$#" -eq 2 ]; then
-                parent="$(get_path "$1")"
-                child="$(get_path "$2")"
-            fi
-
-            # echo then run the command
-            cmd="nix why-depends --precise \"$parent\" \"$child\""
-            echo "$cmd" >&2
-            eval "$cmd"
-          '';
-        };
+          # echo then run the command
+          cmd="nix why-depends --precise \"$parent\" \"$child\""
+          echo "$cmd" >&2
+          eval "$cmd"
+        '';
       };
     };
 
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  config =
+    {
+      config,
+      inputs,
+      host,
+      lib,
+      libCustom,
+      pkgs,
+      ...
+    }:
     let
       tomlFormat = pkgs.formats.toml { };
-      inherit (config.custom.constants) dots host;
+      dots = "${config.hj.directory}/projects/dotfiles";
 
       # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
-      ngeneration = pkgs.custom.writeShellApplicationCompletions {
+      ngeneration = libCustom.writeShellApplicationCompletions {
         name = "ngeneration";
         text = /* sh */ ''
           curr=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
@@ -363,7 +368,7 @@
       };
 
       # build iso images
-      nbuild-iso = pkgs.custom.writeShellApplicationCompletions {
+      nbuild-iso = libCustom.writeShellApplicationCompletions {
         name = "nbuild-iso";
         runtimeInputs = [ pkgs.nixos-generators ];
         text = /* sh */ ''

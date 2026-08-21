@@ -1,7 +1,13 @@
-{ lib, ... }:
 {
-  flake.modules.nixos.core =
-    { config, pkgs, ... }:
+  tags = [ "gui" ];
+
+  config =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       options.custom = {
         # type referenced from nixpkgs:
@@ -50,86 +56,85 @@
 
         };
       };
-    };
 
-  flake.modules.nixos.gui =
-    { config, ... }:
-    let
-      gtkCfg = config.custom.gtk;
-      toIni = lib.generators.toINI {
-        mkKeyValue =
-          key: value:
-          let
-            value' = if lib.isBool value then lib.boolToString value else toString value;
-          in
-          "${lib.escape [ "=" ] key}=${value'}";
-      };
-      gtkIni = toIni {
-        Settings = {
-          gtk-theme-name = gtkCfg.theme.name;
-          gtk-icon-theme-name = config.custom.gtk.iconTheme.name;
-          gtk-font-name = "${gtkCfg.font.name} 10";
-          gtk-application-prefer-dark-theme = 1;
-          gtk-error-bell = 0;
-        };
-      };
-    in
-    {
-      environment = {
-        etc = {
-          "xdg/gtk-3.0/settings.ini".text = gtkIni;
-          "xdg/gtk-4.0/settings.ini".text = gtkIni;
-          "xdg/gtk-2.0/gtkrc".text = ''
-            gtk-font-name = "${gtkCfg.font.name} 10";
-            gtk-icon-theme-name = "${config.custom.gtk.iconTheme.name}";
-            gtk-theme-name = "${gtkCfg.theme.name}";
-          '';
-        };
+      config =
+        let
+          gtkCfg = config.custom.gtk;
+          toIni = lib.generators.toINI {
+            mkKeyValue =
+              key: value:
+              let
+                value' = if lib.isBool value then lib.boolToString value else toString value;
+              in
+              "${lib.escape [ "=" ] key}=${value'}";
+          };
+          gtkIni = toIni {
+            Settings = {
+              gtk-theme-name = gtkCfg.theme.name;
+              gtk-icon-theme-name = config.custom.gtk.iconTheme.name;
+              gtk-font-name = "${gtkCfg.font.name} 10";
+              gtk-application-prefer-dark-theme = 1;
+              gtk-error-bell = 0;
+            };
+          };
+        in
+        {
+          environment = {
+            etc = {
+              "xdg/gtk-3.0/settings.ini".text = gtkIni;
+              "xdg/gtk-4.0/settings.ini".text = gtkIni;
+              "xdg/gtk-2.0/gtkrc".text = ''
+                gtk-font-name = "${gtkCfg.font.name} 10";
+                gtk-icon-theme-name = "${config.custom.gtk.iconTheme.name}";
+                gtk-theme-name = "${gtkCfg.theme.name}";
+              '';
+            };
 
-        sessionVariables = {
-          GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
-        };
-      };
+            sessionVariables = {
+              GTK2_RC_FILES = "/etc/xdg/gtk-2.0/gtkrc";
+            };
+          };
 
-      fonts.packages = [
-        gtkCfg.font.package
-      ];
+          fonts.packages = [
+            gtkCfg.font.package
+          ];
 
-      programs.dconf = {
-        enable = true;
+          programs.dconf = {
+            enable = true;
 
-        # custom option, the default nesting is horrendous
-        profiles.user.databases = [
-          {
-            settings = lib.mkMerge [
+            # custom option, the default nesting is horrendous
+            profiles.user.databases = [
               {
-                # disable dconf first use warning
-                "ca/desrt/dconf-editor" = {
-                  show-warning = false;
-                };
-                # gtk related settings
-                "org/gnome/desktop/interface" = {
-                  color-scheme = "prefer-dark"; # set dark theme for gtk 4
-                  cursor-theme = gtkCfg.cursor.name;
-                  cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
-                  font-name = "${gtkCfg.font.name} 10";
-                  gtk-theme = gtkCfg.theme.name;
-                  icon-theme = gtkCfg.iconTheme.name;
-                  # disable middle click paste
-                  gtk-enable-primary-paste = false;
-                };
+                settings = lib.mkMerge [
+                  {
+                    # disable dconf first use warning
+                    "ca/desrt/dconf-editor" = {
+                      show-warning = false;
+                    };
+                    # gtk related settings
+                    "org/gnome/desktop/interface" = {
+                      color-scheme = "prefer-dark"; # set dark theme for gtk 4
+                      cursor-theme = gtkCfg.cursor.name;
+                      cursor-size = lib.gvariant.mkUint32 gtkCfg.cursor.size;
+                      font-name = "${gtkCfg.font.name} 10";
+                      gtk-theme = gtkCfg.theme.name;
+                      icon-theme = gtkCfg.iconTheme.name;
+                      # disable middle click paste
+                      gtk-enable-primary-paste = false;
+                    };
+                  }
+                  config.custom.dconf.settings
+                ];
               }
-              config.custom.dconf.settings
             ];
-          }
-        ];
-      };
+          };
 
-      hj.xdg = {
-        # use per user settings
-        config.files."gtk-3.0/bookmarks".text = lib.concatMapStringsSep "\n" (
-          b: "file://${b}"
-        ) gtkCfg.bookmarks;
-      };
+          hj.xdg = {
+            # use per user settings
+            config.files."gtk-3.0/bookmarks".text = lib.concatMapStringsSep "\n" (
+              b: "file://${b}"
+            ) gtkCfg.bookmarks;
+          };
+        };
     };
 }

@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.gui =
+  tags = [ "gui" ];
+
+  config =
     { pkgs, ... }:
     let
       vscodium' = pkgs.vscode-with-extensions.override {

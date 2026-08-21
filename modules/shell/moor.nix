@@ -1,9 +1,8 @@
-{ inputs, lib, ... }:
 {
-  perSystem =
-    { pkgs, ... }:
+  packages =
+    { inputs, pkgs, ... }:
     {
-      packages.moor = inputs.wrappers.lib.wrapPackage {
+      moor = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.moor;
         flags = {
@@ -18,8 +17,8 @@
       };
     };
 
-  flake.modules.nixos.core =
-    { pkgs, ... }:
+  config =
+    { lib, pkgs, ... }:
     {
       nixpkgs.overlays = [
         (_: _prev: {

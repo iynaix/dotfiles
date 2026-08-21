@@ -1,6 +1,8 @@
-{ lib, ... }: {
-  flake.modules.nixos.wm =
-    { config, ... }:
+{
+  tags = [ "wm" ];
+
+  config =
+    { config, lib, ... }:
     let
       inherit (config.custom.hardware) monitors;
       # widgets for each monitor are with hardcoded coordinates for each monitor :(
