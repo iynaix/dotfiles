@@ -1,17 +1,5 @@
-{
-  inputs,
-  lib,
-  self,
-  ...
-}:
+{ lib, ... }:
 let
-  systems = [
-    "x86_64-linux"
-    "aarch64-linux"
-    "x86_64-darwin"
-    "aarch64-darwin"
-  ];
-
   recursivelyImport =
     path:
     let
@@ -40,9 +28,24 @@ let
   matchesHost =
     module: hostInfo:
     let
-      hosts = module.hosts or null;
-      tags = module.tags or null;
+      # silently allow host and tag attributes instead of quietly failing
+      host = if module ? host then [ module.host ] else null;
+      hosts = module.hosts or host;
+
+      tag = if module ? tag then [ module.tag ] else null;
+      tags = module.tags or tag;
+
+      validTags = module.validTags or null;
+      invalidTags =
+        if (tags == null || validTags == null) then
+          [ ]
+        else
+          builtins.filter (t: !(lib.elem t validTags)) tags;
     in
+    assert lib.assertMsg (
+      invalidTags == [ ]
+    ) "Module contains invalid tags: ${toString invalidTags}. Allowed tags are: ${toString validTags}";
+
     if hosts == null && tags == null then
       true
     else
@@ -50,73 +53,45 @@ let
       || (tags != null && lib.any (t: lib.elem t hostInfo.tags) tags);
 in
 {
-  inherit systems recursivelyImport;
-
-  # provide package for each system
-  forAllSystems =
-    f:
-    inputs.nixpkgs.lib.genAttrs systems (
-      system:
-      f (
-        import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        }
-      )
-    );
+  inherit recursivelyImport;
 
   mkHost =
-    name: info:
+    name: args:
     let
-      hostInfo = info // {
+      hostInfo = args // {
         inherit name;
-        tags = info.tags or [ ];
+        system = args.system or "x86_64-linux";
+        tags = args.tags or [ ];
       };
-      applicable = builtins.filter (m: (m.enabled or true) && matchesHost m hostInfo) (
-        loadModules ./modules
+      filteredModules = builtins.filter (m: (m.enabled or true) && matchesHost m hostInfo) (
+        lib.concatMap loadModules (args.modules or [ ])
       );
     in
-    lib.nixosSystem rec {
+    lib.nixosSystem {
       inherit (hostInfo) system;
-      specialArgs = {
-        inherit
-          inputs
-          self
-          system
-          ;
+      specialArgs = (hostInfo.specialArgs or { }) // {
+        inherit (hostInfo) system tags;
         host = name;
-        inherit (hostInfo) tags;
-        libCustom = import ./lib.nix {
-          inherit lib;
-          pkgs = inputs.nixpkgs.legacyPackages.${system};
-        };
-        user = "iynaix";
-      }
-      // (hostInfo.specialArgs or { });
-      modules = builtins.filter (c: c != null) (map (m: m.config or null) applicable);
+      };
+      modules = builtins.filter (c: c != null) (map (m: m.config or null) filteredModules);
     };
 
-  addTags = info: extraTags: (info // { tags = (info.tags or [ ]) ++ extraTags; });
-
   mkPackages =
-    pkgs:
+    pkgs: modules: packagesArgs:
     lib.foldl' (
       acc: m:
       acc
       // (
         if m ? packages then
-          m.packages {
-            inherit
-              inputs
-              lib
-              pkgs
-              self
-              ;
-            inherit (pkgs.stdenv.hostPlatform) system;
-            libCustom = import ./lib.nix { inherit lib pkgs; };
-          }
+          m.packages (
+            {
+              inherit pkgs;
+              inherit (pkgs.stdenv.hostPlatform) system;
+            }
+            // packagesArgs
+          )
         else
           { }
       )
-    ) { } (loadModules ./modules);
+    ) { } (lib.concatMap loadModules modules);
 }

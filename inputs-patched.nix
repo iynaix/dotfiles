@@ -27,13 +27,6 @@ patcher.patch unpatchedInputs {
     # expose options used to build each wrapped package
     ./patches/nix-wrappers-expose-options.patch
 
-    # fix fish abbreviation generation, command default
-    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/583
-    (patcher.fetchurl {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/compare/c0988332083951d97f808212554dfef7456c6a91~1..3eaadc1bf0dac4b0e70ac638022dc13cff980b41.patch";
-      hash = "sha256-mlAnlW45vJ4YmiD4IS1ehWC8k/S02DBsLUZ0TTJ/fRQ=";
-    })
-
     # reload mango config after rebuild
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/577
     (patcher.fetchpatch {

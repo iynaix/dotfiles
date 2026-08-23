@@ -12,6 +12,10 @@ This config is intended to be used with NixOS.
 - Hyprland / niri with noctalia shell
 - Dynamic colorschemes with noctalia shell
 
+## Modules
+
+This nixos configuration uses a custom module system, more details can be found in the [modules readme](./modules.md).
+
 ## How to Install
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.
 

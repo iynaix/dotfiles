@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 rec {
   generators = {
     # produces ini format strings, takes a single argument of the object
@@ -32,6 +32,7 @@ rec {
 
   # writeShellApplication with support for completions
   writeShellApplicationCompletions =
+    pkgs:
     {
       name,
       completions ? { },

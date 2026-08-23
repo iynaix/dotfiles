@@ -140,7 +140,7 @@
       dots = "${config.hj.directory}/projects/dotfiles";
 
       # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
-      ngeneration = libCustom.writeShellApplicationCompletions {
+      ngeneration = libCustom.writeShellApplicationCompletions pkgs {
         name = "ngeneration";
         text = /* sh */ ''
           curr=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
@@ -368,7 +368,7 @@
       };
 
       # build iso images
-      nbuild-iso = libCustom.writeShellApplicationCompletions {
+      nbuild-iso = libCustom.writeShellApplicationCompletions pkgs {
         name = "nbuild-iso";
         runtimeInputs = [ pkgs.nixos-generators ];
         text = /* sh */ ''

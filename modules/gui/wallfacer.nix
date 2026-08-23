@@ -51,7 +51,7 @@
         ];
         wallpaper_command = "wallpaper $1";
       };
-      wallfacer = libCustom.writeShellApplicationCompletions {
+      wallfacer = libCustom.writeShellApplicationCompletions pkgs {
         name = "wallfacer";
         text = /* sh */ ''
           direnv-cargo-run "${config.hj.directory}/projects/wallfacer" "$@"

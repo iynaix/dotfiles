@@ -32,7 +32,7 @@
     let
       xdgDataHome = config.hj.xdg.data.directory;
       # cargo will be provided via the nix-shell
-      crb = libCustom.writeShellApplicationCompletions {
+      crb = libCustom.writeShellApplicationCompletions pkgs {
         name = "crb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then
@@ -43,7 +43,7 @@
         '';
         completions.fish = "complete -c crb -f -a '(__cargo_bins)'";
       };
-      crrb = libCustom.writeShellApplicationCompletions {
+      crrb = libCustom.writeShellApplicationCompletions pkgs {
         name = "crrb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then

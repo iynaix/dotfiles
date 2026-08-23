@@ -32,21 +32,21 @@
         text = /* sh */ ''fd "$@" /nix/store'';
       };
       # improved which for nix
-      nwhich = libCustom.writeShellApplicationCompletions (
+      nwhich = libCustom.writeShellApplicationCompletions pkgs (
         {
           name = "nwhich";
           text = /* sh */ ''readlink -f "$(which "$1")"'';
         }
         // binariesCompletion "nwhich"
       );
-      cnwhich = libCustom.writeShellApplicationCompletions (
+      cnwhich = libCustom.writeShellApplicationCompletions pkgs (
         {
           name = "cnwhich";
           text = /* sh */ ''cat "$(nwhich "$1")"'';
         }
         // binariesCompletion "cnwhich"
       );
-      ynwhich = libCustom.writeShellApplicationCompletions (
+      ynwhich = libCustom.writeShellApplicationCompletions pkgs (
         {
           name = "ynwhich";
           runtimeInputs = [
