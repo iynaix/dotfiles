@@ -20,7 +20,7 @@
       # provide package for each system
       forAllSystems =
         f:
-        inputs.nixpkgs.lib.genAttrs systems (
+        lib.genAttrs systems (
           system:
           f (
             import inputs.nixpkgs {

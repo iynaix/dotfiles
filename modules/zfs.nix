@@ -1,7 +1,6 @@
 # NOTE: zfs datasets are created via install.sh
 {
   config,
-  lib,
   pkgs,
   tags,
   ...
@@ -9,27 +8,9 @@
 {
   boot = {
     kernelPackages =
-      assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
-        "zfs patch for kernel is no longer needed";
+      # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
+      #   "zfs patch for kernel is no longer needed";
       pkgs.linuxPackages_xanmod_latest;
-    # lock xanmod version
-    # kernelPackages =
-    # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.2")
-    #   "zfs 2.4.2 supports kernel 7.0 or greater";
-    #   pkgs.linuxPackagesFor (
-    #     pkgs.linux_xanmod_latest.override {
-    #       argsOverride = rec {
-    #         version = "6.10.11";
-    #         modDirVersion = lib.versions.pad 3 "${version}-xanmod1";
-    #         src = pkgs.fetchFromGitHub {
-    #           owner = "xanmod";
-    #           repo = "linux";
-    #           rev = modDirVersion;
-    #           hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
-    #         };
-    #       };
-    #     }
-    #   );
     zfs = {
       devNodes =
         if builtins.elem "vm" tags then
@@ -40,10 +21,7 @@
         else
           "/dev/disk/by-partuuid";
 
-      package =
-        assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
-          "zfs patch for kernel is no longer needed";
-        pkgs.zfs_unstable;
+      package = pkgs.zfs_unstable;
 
       forceImportRoot = false;
     };

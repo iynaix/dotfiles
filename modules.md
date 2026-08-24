@@ -67,9 +67,9 @@ Each host is then created with the `mkHost` function with the following argument
 
 Packages can be created with the `mkPackages` function with the following arguments:
 
-`pkgs` the nixpkgs package set
-`modules` the list of modules or directories where packages are defined
-`packagesArgs` the arguments that will be passed to the `packages` function of each module, the following arguments will also be provided:
+1. `pkgs` the nixpkgs package set
+2. `modules` the list of modules or directories where packages are defined
+3. `packagesArgs` the arguments that will be passed to the `packages` function of each module, the following arguments will also be provided:
     - `pkgs` the nixpkgs package set
     - `system` shorthand for `pkgs.stdenv.hostPlatform.system`
 

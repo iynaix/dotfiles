@@ -17,10 +17,6 @@ patcher.patch unpatchedInputs {
       url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
       hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
     })
-
-    # build zfs for linux 7.1, no issues according to a core dev
-    # https://github.com/openzfs/zfs/issues/18760#issuecomment-4919127088
-    ./patches/zfs_unstable-linux-7_1.patch
   ];
 
   wrappers = [
