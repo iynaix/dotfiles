@@ -1,9 +1,8 @@
 ## Motivation
 
-I liked the standardized module format that flake-parts offered, along with being able to freely move files around with libraries like [import-tree](https://github.com/denful/import-tree) or similar. I also liked being able to defined a wrapped package to be exposed in flake.packages as well as the config around that package in a single file.
+I liked the standardized module format that flake-parts offered, along with being able to freely move files around with libraries like [import-tree](https://github.com/denful/import-tree) or similar. I also liked being able to define a wrapped package to be exposed in flake.packages and the config around that package within a single file.
 
-However, I did not like the amount of boilerplate of flake-parts or having to come up with arbitrary names for modules that ultimately only housed a single application for a single host and then
-assembling lists of these modules for each host.
+However, I did not like the amount of boilerplate of flake-parts or having to come up with arbitrary names for modules that ultimately only housed a single application for a single host, and then assembling lists of these modules for each host.
 
 So I decided to reinvent the wheel, and write the module system I wanted to use, heavily inspired by [nosh](https://codeberg.org/poacher/nosh).
 
@@ -19,6 +18,8 @@ Each module within `modules/` is an attrset with the following attrs:
 4. `packages ? null` optionally defines packages to be exposed in the flake's `packages`
 5. `config ? {}` defines the configuration for the module
 
+If both `tags` and `hosts` are provided, the conditions will be **OR**-ed.
+
 ```nix
 {
     enabled = true;
@@ -27,7 +28,7 @@ Each module within `modules/` is an attrset with the following attrs:
     hosts = [ "laptop" ];
 
     packages = { pkgs, ... }: {
-        # packages
+        # packages for flake.packages
     };
 
     config = { /* specialArgs */ }: {
@@ -48,7 +49,8 @@ Each host is then created with the `mkHost` function with the following argument
     - `host` the name of the host
     - `tags` the tags of the host
     - `system` the system passed to `nixosSystem` (ain't nobody got time to type `pkgs.stdenv.hostPlatform.system`)
-4. `modules ? []` optionally defines a list of modules or directories the will be imported
+4. `modules ? []` optionally defines a list of modules or directories the will be imported. 
+   Directories or files beginning with '_' will be excluded, e.g. `_firefox/*` or `_firefox.nix`
 
 ```nix
 {
@@ -68,7 +70,8 @@ Each host is then created with the `mkHost` function with the following argument
 Packages can be created with the `mkPackages` function with the following arguments:
 
 1. `pkgs` the nixpkgs package set
-2. `modules` the list of modules or directories where packages are defined
+2. `modules ? []` optionally defines a list of modules or directories the will be imported.
+   Directories or files beginning with '_' will be excluded, e.g. `_firefox/*` or `_firefox.nix`
 3. `packagesArgs` the arguments that will be passed to the `packages` function of each module, the following arguments will also be provided:
     - `pkgs` the nixpkgs package set
     - `system` shorthand for `pkgs.stdenv.hostPlatform.system`

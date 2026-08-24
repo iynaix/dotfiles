@@ -15,7 +15,7 @@
 
     # create symlink to dotfiles from /etc/nixos
     custom.symlinks = {
-      "/etc/nixos" = "${config.hj.directory}/projects/dotfiles";
+      "/etc/nixos" = "/persist${config.hj.directory}/projects/dotfiles";
     };
 
     # create symlinks

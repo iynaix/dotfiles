@@ -209,7 +209,7 @@
               # git maintenance for large repos
               # https://blog.gitbutler.com/git-tips-2-new-stuff-in-git/#git-maintenance
               maintenance = {
-                repo = "${config.hj.directory}/projects/nixpkgs";
+                repo = "/persist${config.hj.directory}/projects/nixpkgs";
               };
             };
           };

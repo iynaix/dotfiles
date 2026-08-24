@@ -96,7 +96,7 @@
     {
       environment = {
         shellAliases = {
-          dots = "cd ${config.hj.directory}/projects/dotfiles";
+          dots = "cd /persist${config.hj.directory}/projects/dotfiles";
           coinfc = "pj coinfc";
         };
 
@@ -162,14 +162,14 @@
       programs = {
         fish.shellInit = /* fish */ ''
           function pj
-            cd "${config.hj.directory}/projects"
+            cd "/persist${config.hj.directory}/projects"
             if test (count $argv) -eq 1
               cd $argv[1]
             end
           end
 
           function _pj
-              find "${config.hj.directory}/projects" -maxdepth 1 -type d -exec basename {} \;
+              find "/persist${config.hj.directory}/projects" -maxdepth 1 -type d -exec basename {} \;
           end
           complete -c pj -f -a "(_pj)"
         '';

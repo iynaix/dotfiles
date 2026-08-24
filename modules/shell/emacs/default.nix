@@ -33,7 +33,7 @@ in
   environment = {
     sessionVariables = {
       PATH = [ "$HOME/.config/emacs/bin" ];
-      DOOMDIR = "${config.hj.directory}/projects/dotfiles/modules/shell/emacs/doom";
+      DOOMDIR = "/persist${config.hj.directory}/projects/dotfiles/modules/shell/emacs/doom";
     };
 
     systemPackages = [

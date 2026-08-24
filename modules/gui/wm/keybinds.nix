@@ -51,9 +51,9 @@
               emacsExec "(projectile-discover-projects-in-search-path) (projectile-switch-project)";
 
             "Mod+period".spawn =
-              emacsExec ''(projectile-find-file-in-directory "${config.hj.directory}/projects")'';
+              emacsExec ''(projectile-find-file-in-directory "/persist${config.hj.directory}/projects")'';
             "Mod+Shift+period".spawn =
-              emacsExec ''(projectile-find-file-in-directory "${config.hj.directory}/projects/nixpkgs")'';
+              emacsExec ''(projectile-find-file-in-directory "/persist${config.hj.directory}/projects/nixpkgs")'';
 
             "Ctrl+Alt+Delete".spawn = "noctalia msg panel-toggle session";
 

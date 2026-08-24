@@ -63,7 +63,7 @@
       ...
     }:
     let
-      dots = "${config.hj.directory}/projects/dotfiles";
+      dots = "/persist${config.hj.directory}/projects/dotfiles";
 
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw = pkgs.custom.nsw.override {

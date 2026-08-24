@@ -40,7 +40,7 @@
           enable = true;
           extraArgs = "--keep-since 5d --keep 5";
         };
-        flake = "${config.hj.directory}/projects/dotfiles";
+        flake = "/persist${config.hj.directory}/projects/dotfiles";
       };
 
       nix-index.enable = true;

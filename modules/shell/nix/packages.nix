@@ -137,7 +137,7 @@
     }:
     let
       tomlFormat = pkgs.formats.toml { };
-      dots = "${config.hj.directory}/projects/dotfiles";
+      dots = "/persist${config.hj.directory}/projects/dotfiles";
 
       # outputs the current nixos generation or sets the  given generation or delta, e.g. -1 as default to boot
       ngeneration = libCustom.writeShellApplicationCompletions pkgs {

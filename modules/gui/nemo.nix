@@ -92,9 +92,9 @@
 
         gtk.bookmarks = [
           "${config.hj.directory}/Downloads"
-          "${config.hj.directory}/projects"
-          "${config.hj.directory}/projects/dotfiles"
-          "${config.hj.directory}/projects/nixpkgs"
+          "/persist${config.hj.directory}/projects"
+          "/persist${config.hj.directory}/projects/dotfiles"
+          "/persist${config.hj.directory}/projects/nixpkgs"
           "${config.hj.directory}/Documents"
           "${config.hj.directory}/Pictures/Wallpapers"
         ]

@@ -29,7 +29,7 @@
     let
       customNeovim = pkgs.custom.neovim-iynaix.override {
         inherit host;
-        dots = "${config.hj.directory}/projects/dotfiles";
+        dots = "/persist${config.hj.directory}/projects/dotfiles";
       };
     in
     {
