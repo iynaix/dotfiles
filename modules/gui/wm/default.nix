@@ -38,6 +38,8 @@
                   niri-config
               elif [ "$XDG_CURRENT_DESKTOP" == "mango" ]; then
                   mango-config
+              elif [ "$XDG_CURRENT_DESKTOP" == "umbriel" ]; then
+                  umbriel-config
               fi
             '';
           };
@@ -49,8 +51,7 @@
         services.displayManager = {
           autoLogin.user = user;
 
-          # scrolling is nicer for laptop with a smaller screen
-          defaultSession = lib.mkDefault "niri";
+          defaultSession = lib.mkDefault "umbriel";
 
           ly = {
             enable = true;

@@ -23,19 +23,11 @@ patcher.patch unpatchedInputs {
     # expose options used to build each wrapped package
     ./patches/nix-wrappers-expose-options.patch
 
-    # reload mango config after rebuild
-    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/577
-    (patcher.fetchpatch {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/bfb0227977e1f5d77ed0ded496951fc317d7ed7e.patch";
-      hash = "sha256-FsntoBr32EXmBdHvICisRMcWMzxqTXYCyviyFHDbYPg=";
-    })
-
     # hyprland module
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
     (patcher.fetchpatch {
       url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa67e918488fedaec413316a8e3db8040a632e3a.patch";
       hash = "sha256-muNSLW2wCF0k/PbcfgRElxC1uY3YWwL8LqrwGorjeGk=";
     })
-
   ];
 }

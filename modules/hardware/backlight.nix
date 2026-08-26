@@ -10,7 +10,7 @@
 
       custom = {
         wm.binds = {
-          "XF86MonBrightnessDown" = _: {
+          "XF86MonBrightnessDown" = {
             spawn = "brightnessctl set 5%-";
             hyprlandArgs = {
               locked = true;
@@ -19,7 +19,7 @@
               allow-when-locked = true;
             };
           };
-          "XF86MonBrightnessUp" = _: {
+          "XF86MonBrightnessUp" = {
             spawn = "brightnessctl set +5%";
             hyprlandArgs = {
               locked = true;

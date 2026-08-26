@@ -64,9 +64,11 @@
             "$mod, o, toggleoverview"
           ]
           ++
+
             # tag keybinds, switch to monitor first before switching tag
-            lib.flatten (
-              (libCustom.mapWorkspaces (
+            (
+              config.custom.hardware.monitors
+              |> libCustom.mapWorkspaces (
                 {
                   monitor,
                   workspace,
@@ -83,8 +85,8 @@
                   # Move active window to a workspace with $mod + SHIFT + [0-9]
                   "$mod+SHIFT, ${key}, spawn, mango-move-to-workspace ${monitor.name} ${wksp}"
                 ]
-              ))
-                config.custom.hardware.monitors
+              )
+              |> lib.flatten
             );
       };
     };

@@ -126,7 +126,7 @@ variant = "default"
 source = "wallpaper"
 
 [theme.templates]
-builtin_ids = [ "btop", "cava", "kitty", "hyprland", "mango", "niri" ]
+builtin_ids = [ "btop", "cava", "kitty", "hyprland", "mango", "niri", "umbriel" ]
 community_ids = [ "yazi", "zathura" ]
 
 [wallpaper]
@@ -162,5 +162,5 @@ enabled = true
 label_source = "name"
 font_family = "Liberation Sans"
 font_weight = 700
-labels_only_when_occupied = true
+labels_only_when_occupied = false
 pill_scale = 0.8

@@ -37,9 +37,6 @@
               )
             )
             // {
-              # show hotkey overlay
-              # "Mod+Shift+Slash".show-hotkey-overlay = _: {};
-
               "Mod+BackSpace" = _: {
                 props = {
                   repeat = false;
@@ -155,21 +152,21 @@
               "Mod+WheelScrollLeft".focus-column-left-or-last = _: { };
             }
             # named workspace setup, dynamic workspaces are urgh
-            // lib.mergeAttrsList (
-              lib.flatten (
-                (libCustom.mapWorkspaces (
-                  { workspace, key, ... }:
-                  [
-                    {
-                      # Switch workspaces with mainMod + [0-9]
-                      "Mod+${key}".focus-workspace = toString workspace;
-                      # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                      "Mod+Shift+${key}".move-window-to-workspace = toString workspace;
-                    }
-                  ]
-                ))
-                  monitors
+            // (
+              monitors
+              |> libCustom.mapWorkspaces (
+                { workspace, key, ... }:
+                [
+                  {
+                    # Switch workspaces with mainMod + [0-9]
+                    "Mod+${key}".focus-workspace = toString workspace;
+                    # Move active window to a workspace with mainMod + SHIFT + [0-9]
+                    "Mod+Shift+${key}".move-window-to-workspace = toString workspace;
+                  }
+                ]
               )
+              |> lib.flatten
+              |> lib.mergeAttrsList
             );
         };
       };

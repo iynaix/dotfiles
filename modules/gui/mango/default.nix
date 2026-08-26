@@ -34,8 +34,8 @@
                   # adds niri inspired atstartup rule:
                   # https://github.com/mangowm/mango/pull/654
                   (pkgs.fetchurl {
-                    url = "https://github.com/mangowm/mango/commit/46a5d4445b1e5f4e27a340f47ec31a55ca922ba9.patch";
-                    hash = "sha256-flyNWQN+AREpzsG9rh5ndlNYISYLI/gKdmGXgYpdshQ=";
+                    url = "https://github.com/mangowm/mango/commit/606c1b075147b0ad032346f3442ae305abcedec1.patch";
+                    hash = "sha256-9xZYo+6g8eyWZUkrGI2Z8hlH0HSr2Fgl2Cs307pMr2c=";
                   })
                 ];
               }

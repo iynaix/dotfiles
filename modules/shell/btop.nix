@@ -38,7 +38,6 @@ in
     {
       options.custom = {
         programs.btop = {
-          # use the option from the niri wrapper module
           inherit (inputs.wrappers.wrappers.btop.wrapperOptions) settings;
 
           # convenience option to add disks to btop

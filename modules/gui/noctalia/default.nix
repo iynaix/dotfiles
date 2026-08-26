@@ -17,50 +17,30 @@
       config,
       lib,
       pkgs,
-      tags,
       ...
     }:
     let
       tomlFormat = pkgs.formats.toml { };
 
-      noctalia-start = pkgs.writeShellApplication {
-        name = "noctalia-start";
-        runtimeInputs = [
-          pkgs.noctalia
-          config.custom.programs.dotfiles-rs
-        ];
-        text = /* sh */ ''
-          noctalia &
-          sleep 3
-          # hide on laptop screens to save space
-          ${lib.optionalString (builtins.elem "laptop" tags) "noctalia msg bar-hide"}
-          wallpaper
-        '';
-      };
+      # noctalia-start = pkgs.writeShellApplication {
+      #   name = "noctalia-start";
+      #   runtimeInputs = [
+      #     pkgs.noctalia
+      #     config.custom.programs.dotfiles-rs
+      #   ];
+      #   text = /* sh */ ''
+      #     noctalia &
+      #     sleep 3
+      #     # hide on laptop screens to save space
+      #     ${lib.optionalString (builtins.elem "laptop" tags) "noctalia msg bar-hide"}
+      #     wallpaper
+      #   '';
+      # };
+
       noctalia-reload = pkgs.writeShellApplication {
         name = "noctalia-reload";
         text = /* sh */ ''
-          killall noctalia || true
-          killall .noctalia-wrapper || true
-          # prevent "already running" error
-          sleep 0.2
-          noctalia &
-        '';
-      };
-      # removes all settings set by the gui
-      noctalia-clean = pkgs.writeShellApplication {
-        name = "noctalia-clean";
-        runtimeInputs = [
-          pkgs.jq
-          pkgs.yj
-          noctalia-reload
-        ];
-        text = /* sh */ ''
-          yj -tj <"$XDG_STATE_HOME/noctalia/settings.toml" | jq '
-            with_entries(
-              select(.key == "config_version" or .key == "wallpaper")
-            )
-          ' | yj -jt
+          systemctl restart noctalia
         '';
       };
     in
@@ -101,15 +81,19 @@
           })
         ];
 
+        programs.noctalia = {
+          enable = true;
+          package = pkgs.noctalia; # overlay-ed above
+          systemd.enable = true;
+        };
+
         environment.systemPackages = [
-          pkgs.noctalia # overlay-ed above
           noctalia-reload
-          noctalia-clean
         ];
 
         hj.xdg = {
           config.files = {
-            "noctalia/config.toml".source = ./settings.toml;
+            "noctalia/config.toml".source = ./noctalia.toml;
             "noctalia/host.toml" = {
               generator = tomlFormat.generate "host.toml";
               value = config.custom.programs.noctalia.settings;
@@ -124,13 +108,6 @@
         };
 
         custom = {
-          # start noctalia after the WM is ready
-          wm.startup = lib.mkBefore [
-            {
-              spawn = lib.getExe noctalia-start;
-            }
-          ];
-
           programs = {
             hyprland.settings = /* lua */ ''
               hl.layer_rule({
@@ -164,6 +141,15 @@
                 }
               ];
             };
+
+            umbriel.settings.layer_rule = [
+              {
+                match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$";
+                blur = true;
+                blur_ignore_alpha = 0.5;
+                blur_optimized = false;
+              }
+            ];
 
             # base control center shortcuts across all hosts
             noctalia.settings = {
