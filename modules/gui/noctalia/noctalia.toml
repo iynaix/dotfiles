@@ -158,6 +158,7 @@ scroll_up = "volume-up 1"
 
 [widget.workspaces]
 enabled = true
+empty_color = "tertiary"
 label_source = "name"
 font_family = "Liberation Sans"
 font_weight = 700

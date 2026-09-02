@@ -19,6 +19,17 @@
         };
       };
 
+      custom.programs = {
+        umbriel.settings = {
+          # seems to be required, if not steam errors with a "unable to open a connection to X" error
+          # https://docs.noctalia.dev/umbriel/outputs/?section=hdr#hdr
+          environment = {
+            PROTON_ENABLE_WAYLAND = "1";
+            DXVK_HDR = "1";
+          };
+        };
+      };
+
       custom.persist = {
         home.directories = [
           ".local/share/applications" # desktop files from steam

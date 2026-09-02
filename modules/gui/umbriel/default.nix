@@ -54,8 +54,6 @@
               include.files = [
                 # use nix generated host.toml first
                 "${config.hj.xdg.config.directory}/umbriel/host.toml"
-                # TODO: temporarily use the config.toml from this directory
-                "/persist${config.hj.directory}/projects/dotfiles/modules/gui/umbriel/umbriel.toml"
                 # use noctalia colors
                 "${config.hj.xdg.config.directory}/umbriel/noctalia.toml"
               ];
@@ -75,10 +73,7 @@
         custom.programs = {
           print-config = {
             umbriel = /* sh */ ''
-              cat "${config.hj.xdg.config.directory}/umbriel/host.toml" \
-                "/persist${config.hj.directory}/projects/dotfiles/modules/gui/umbriel/umbriel.toml" \
-                "${config.hj.xdg.config.directory}/umbriel/noctalia.toml" | \
-                moor --lang toml
+              cat "${config.hj.xdg.config.directory}/umbriel/host.toml" "${config.hj.xdg.config.directory}/umbriel/noctalia.toml" | moor --lang toml
             '';
           };
         };
