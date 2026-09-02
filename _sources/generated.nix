@@ -30,17 +30,6 @@
       sha256 = "sha256-k3CjrF45s7SizRof/X9eOnPKwkOB9c1AvBSmjj7ROIM=";
     };
   };
-  mango = {
-    pname = "mango";
-    version = "0.16.2";
-    src = fetchFromGitHub {
-      owner = "mangowm";
-      repo = "mango";
-      rev = "0.16.2";
-      fetchSubmodules = false;
-      sha256 = "sha256-od6lK1KOquakP/GD17fGEm1ck5EMZa/s+jhmvGrRFzk=";
-    };
-  };
   mpv-deletefile = {
     pname = "mpv-deletefile";
     version = "62f4bb313c6cb6366672e78dea940e9da8fec84a";

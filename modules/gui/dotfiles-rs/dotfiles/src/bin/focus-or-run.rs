@@ -1,8 +1,17 @@
+use std::process::Stdio;
+
 use clap::Parser;
-use common::is_hyprland;
+use common::{is_hyprland, is_umbriel};
 use dotfiles::cli::FocusOrRunArgs;
 use execute::Execute;
 use hyprland::{data::Clients, shared::HyprData};
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+pub struct UmbrielWindows {
+    pub id: String,
+    pub title: String,
+}
 
 fn main() {
     let args = FocusOrRunArgs::parse();
@@ -27,30 +36,25 @@ fn main() {
         }
     }
 
-    /* TODO: umbriel
     if is_umbriel() {
-        let mut socket = Socket::connect().expect("failed to connect to niri socket");
-
-        let Ok(Response::Windows(windows)) = socket
-            .send(Request::Windows)
-            .expect("failed to send Windows")
-        else {
-            panic!("invalid reply for Windows");
-        };
+        let umbriel_cmd = execute::command_args!("umbriel", "windows", "--json")
+            .stdout(Stdio::piped())
+            .execute_output()
+            .expect("failed to run umbriel workspaces");
+        let umbriel_json =
+            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel workspaces");
+        let windows: Vec<UmbrielWindows> =
+            serde_json::from_str(&umbriel_json).expect("failed to parse json");
 
         for win in windows {
-            if let Some(title) = win.title
-                && title.contains(&args.title)
-            {
-                socket
-                    .send(Request::Action(Action::FocusWindow { id: win.id }))
-                    .expect("failed to send FocusWindow")
-                    .ok();
+            if win.title.contains(&args.title) {
+                execute::command_args!("umbriel", "msg", format!("window-focus-warp:{}", win.id))
+                    .execute_output()
+                    .expect("failed to focus window");
                 return;
             }
         }
     }
-    */
 
     std::process::Command::new("sh")
         .arg("-c")

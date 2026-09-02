@@ -11,14 +11,8 @@ use itertools::Itertools;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct UmbrielWorkspace {
-    pub active: bool,
     pub focused: bool,
-    pub id: String,
-    pub index: i64,
-    pub layout: String,
-    pub name: String,
     pub output: String,
 }
 
@@ -88,19 +82,17 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
     }
 
     if is_umbriel() {
-        // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
-        // so it doesn't resize on initial spawn via a keybind
         let mut cmd = execute::command_args!(
             "pqiv",
             "--shuffle",
-            // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
+            // disable fullscreen on umbriel as using the GDK wayland backend breaks fullscreen scaling
             "--bind-key",
             "f { nop() }",
             "--window-title",
             umbriel_window_title()
         );
 
-        // cmd.env("GDK_BACKEND", "wayland");
+        cmd.env("GDK_BACKEND", "wayland");
 
         if has_filters {
             let images = filter_images(wallpaper::dir()).collect_vec();
@@ -151,13 +143,14 @@ pub fn show_history(args: &WallpaperFilterArgs) {
     if is_umbriel() {
         execute::command_args!(
             "pqiv",
-            // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
+            // disable fullscreen on umbriel as using the GDK wayland backend breaks fullscreen scaling
             "--bind-key",
             "f { nop() }",
             "--window-title",
             umbriel_window_title()
         )
         .args(history)
+        .env("GDK_BACKEND", "wayland")
         .execute()
         .expect("failed to execute pqiv");
     }

@@ -27,9 +27,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "4e42650d06172b925d85b134fb924ae6d109cf60",
-    "narHash": "sha256-bPALsjeEJYajQN+jXK3vT0TSxyCF+LwShJgUNarN+go=",
-    "lastModified": 1788216404
+    "rev": "54b97adc2233b9a0dee9270994187134dd90d553",
+    "narHash": "sha256-lH+2bftFjZSlTq12a5HN+HPAfIhqCDnXCiUtrDa4iZw=",
+    "lastModified": 1788268212
   },
   "nix-index-database": {
     "type": "github",
@@ -55,9 +55,9 @@
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.8639.c5c4a43b0e80/nixexprs.tar.xz",
-    "rev": "c5c4a43b0e8056328ec4529f735cabdb8f1942bb",
-    "narHash": "sha256-SYbFPw4Je7tTpsl5qPqmmxPWuQyA9AGddCDieY5QG5A="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.8772.5dfba6236110/nixexprs.tar.xz",
+    "rev": "5dfba6236110080a54247d6460bc2ff5dda939cc",
+    "narHash": "sha256-v5c4scCRMmrQEh3UDsKtnI9JTehKl0hTSYDMxe2G14k="
   },
   "nvf": {
     "type": "github",
@@ -95,9 +95,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "729e7eb521c2207dd562ca1284bc0fbf9aecd270",
-    "narHash": "sha256-eTEgrUJ1ywm0wQcqG+8AqLC+prds9loid0SX4Ncz61E=",
-    "lastModified": 1788233991,
+    "rev": "c2d8b9c1a5e6c3d75a58ba039958de6f1506647e",
+    "narHash": "sha256-6lLcMut5Pwv/xI8KKCi0pl1PcNXsT1V5ZRNFJCH9eNk=",
+    "lastModified": 1788312836,
     "submodules": true
   },
   "wfetch": {
