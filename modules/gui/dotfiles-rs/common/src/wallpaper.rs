@@ -23,7 +23,7 @@ where
 {
     dir.as_ref()
         .read_dir()
-        .unwrap_or_else(|_| panic!("could not read {:?}", &dir))
+        .unwrap_or_else(|_| panic!("could not read {dir:?}"))
         .flatten()
         .filter_map(|entry| {
             let path = entry.path();

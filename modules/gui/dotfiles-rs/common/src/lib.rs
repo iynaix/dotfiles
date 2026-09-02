@@ -8,7 +8,6 @@ use std::{
     time::{Duration, SystemTime},
 };
 
-pub mod niri;
 pub mod nixjson;
 pub mod rofi;
 pub mod wallpaper;
@@ -152,10 +151,6 @@ pub fn debounce(interval: Duration, debounce_fn: impl FnOnce()) {
 
 pub fn is_hyprland() -> bool {
     std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "Hyprland"
-}
-
-pub fn is_niri() -> bool {
-    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "niri"
 }
 
 pub fn is_umbriel() -> bool {

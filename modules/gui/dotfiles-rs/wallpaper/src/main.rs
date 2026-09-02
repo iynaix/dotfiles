@@ -52,7 +52,7 @@ fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
             } else {
                 std::fs::canonicalize(image_or_dir)
                     .unwrap_or_else(|_| {
-                        panic!("{} is not a valid image / command", &image_or_dir.display())
+                        panic!("{} is not a valid image / command", image_or_dir.display())
                     })
                     .to_str()
                     .unwrap_or_else(|| {

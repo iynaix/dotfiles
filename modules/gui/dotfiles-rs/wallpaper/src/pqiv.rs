@@ -1,12 +1,11 @@
 use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
 use common::{
-    is_hyprland, is_niri,
+    is_hyprland,
     wallpaper::{self, filter_images},
 };
 use execute::Execute;
 use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
-use niri_ipc::{Request, Response, socket::Socket};
 
 fn pqiv_hyprland_float_rule() -> String {
     const TARGET_PERCENT: f64 = 0.3;
@@ -25,7 +24,8 @@ fn pqiv_hyprland_float_rule() -> String {
     )
 }
 
-fn niri_window_title() -> String {
+/* TODO: umbriel
+fn umbriel_window_title() -> String {
     // append monitor name to title so relevant window-rule can match it
     let Ok(Response::FocusedOutput(Some(curr_mon))) = Socket::connect()
         .expect("failed to connect to niri socket")
@@ -37,6 +37,7 @@ fn niri_window_title() -> String {
 
     format!("wallpaper-selector-{}", curr_mon.name)
 }
+*/
 
 #[allow(clippy::module_name_repetitions)]
 pub fn show_pqiv(args: &WallpaperFilterArgs) {
@@ -67,7 +68,8 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
             .expect("failed to execute pqiv");
     }
 
-    if is_niri() {
+    /* TODO: umbriel
+    if is_umbriel() {
         // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
         // so it doesn't resize on initial spawn via a keybind
         let mut cmd = execute::command_args!(
@@ -77,7 +79,7 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
             "--bind-key",
             "f { nop() }",
             "--window-title",
-            niri_window_title()
+            umbriel_window_title()
         );
 
         cmd.env("GDK_BACKEND", "wayland");
@@ -91,6 +93,7 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
 
         cmd.execute().expect("failed to execute pqiv");
     }
+    */
 }
 
 pub fn show_history(args: &WallpaperFilterArgs) {
@@ -128,17 +131,19 @@ pub fn show_history(args: &WallpaperFilterArgs) {
             .expect("failed to execute pqiv");
     }
 
-    if is_niri() {
+    /* TODO: umbriel
+    if is_umbriel() {
         execute::command_args!(
             "pqiv",
             // disable fullscreen on niri as using the GDK wayland backend breaks fullscreen scaling
             "--bind-key",
             "f { nop() }",
             "--window-title",
-            niri_window_title()
+            umbriel_window_title()
         )
         .args(history)
         .execute()
         .expect("failed to execute pqiv");
     }
+    */
 }

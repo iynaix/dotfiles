@@ -34,8 +34,6 @@
             wm = /* sh */ ''
               if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
                   hyprland-config
-              elif [ "$XDG_CURRENT_DESKTOP" == "niri" ]; then
-                  niri-config
               elif [ "$XDG_CURRENT_DESKTOP" == "umbriel" ]; then
                   umbriel-config
               fi

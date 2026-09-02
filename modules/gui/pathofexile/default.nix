@@ -44,30 +44,6 @@
           hl.window_rule({ match = { title = "Exiled Exchange 2" }, tag = "+apt" })
           hl.window_rule({ match = { tag = "apt" }, float = true, no_blur = true, no_shadow = true, border_size = 0 })
         '';
-
-        niri.settings.window-rules = [
-          # poe1 / poe2
-          {
-            matches = [
-              { title = "^Path of Exile( 2)?$"; }
-              { app-id = "^steam_app_(238960|2694490)$"; }
-            ];
-
-            open-on-workspace = "5";
-            open-fullscreen = true;
-          }
-
-          # Trade Tools (Awakened PoE Trade / Exiled Exchange 2)
-          {
-            matches = [
-              { title = "^Awakened PoE Trade$"; }
-              { title = "^Exiled Exchange 2$"; }
-            ];
-
-            open-floating = true;
-            open-focused = true;
-          }
-        ];
       };
 
       custom.persist = {

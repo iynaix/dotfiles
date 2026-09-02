@@ -9,7 +9,7 @@ This config is intended to be used with NixOS.
 - Automatic ZFS snapshots with rotation
 - Flexible NixOS config via feature flags
 - sops-nix for managing secrets
-- Hyprland / niri with noctalia shell
+- Umbriel with noctalia shell
 - Dynamic colorschemes with noctalia shell
 
 ## Modules

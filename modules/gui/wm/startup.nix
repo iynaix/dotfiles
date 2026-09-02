@@ -41,9 +41,9 @@
                     description = "lib.Optional workspace to start program on";
                     default = null;
                   };
-                  niriArgs = lib.mkOption {
+                  umbrielArgs = lib.mkOption {
                     type = lib.types.attrs;
-                    description = "Extra arguments for niri window rules";
+                    description = "Extra arguments for umbriel window rules";
                     default = { };
                   };
                   hyprlandArgs = lib.mkOption {
@@ -113,9 +113,6 @@
                 app-id = "emacs";
                 spawn = "uwsm app -- emacsclient -c";
                 workspace = 2;
-                niriArgs = {
-                  open-maximized = true;
-                };
               }
 
               # file manager
@@ -131,22 +128,14 @@
                 app-id = "${config.custom.programs.terminal.app-id}-vertical";
                 spawn = "uwsm app -- ${termExe} --class=${app-id}";
                 workspace = 7;
-                niriArgs = {
-                  open-maximized = true;
-                };
               }
 
               # discord and other chats
-              # does not currently work on niri, using raw regexes fixes it
-              # https://github.com/BirdeeHub/nix-wrapper-modules/pull/581
               rec {
                 app-id = "helium";
                 title = ".*(Discord|WhatsApp|Flood).*";
                 spawn = "uwsm app -- helium-chat";
                 workspace = 9;
-                niriArgs = {
-                  open-maximized = true;
-                };
                 hyprlandArgs = {
                   initial_title = title;
                 };

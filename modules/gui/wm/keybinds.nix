@@ -18,9 +18,9 @@
                   type = lib.types.attrs;
                   description = "Additional args to be used by hyprland";
                 };
-                niriArgs = lib.mkOption {
+                umbrielArgs = lib.mkOption {
                   type = lib.types.attrs;
-                  description = "Additional args to be used by niri";
+                  description = "Additional args to be used by umbriel";
                 };
               };
             }
@@ -42,9 +42,8 @@
             "Mod+E".spawn = "nemo ${config.hj.directory}/Downloads";
             "Mod+Shift+E".spawn = termExec "yazi ${config.hj.directory}/Downloads";
 
-            # background process to workaround a race condition that causes helium to only open sometimes on niri
-            "Mod+W".spawn = "helium --profile-directory=Default &";
-            "Mod+Shift+W".spawn = "helium --profile-directory=Default --incognito &";
+            "Mod+W".spawn = "helium --profile-directory=Default";
+            "Mod+Shift+W".spawn = "helium --profile-directory=Default --incognito";
 
             "Mod+V".spawn = "emacsclient -c";
             "Mod+Shift+V".spawn =
@@ -82,7 +81,7 @@
               hyprlandArgs = {
                 locked = true;
               };
-              niriArgs = {
+              umbrielArgs = {
                 allow-when-locked = true;
               };
             };
@@ -91,7 +90,7 @@
               hyprlandArgs = {
                 locked = true;
               };
-              niriArgs = {
+              umbrielArgs = {
                 allow-when-locked = true;
               };
             };
@@ -100,7 +99,7 @@
               hyprlandArgs = {
                 locked = true;
               };
-              niriArgs = {
+              umbrielArgs = {
                 allow-when-locked = true;
               };
             };

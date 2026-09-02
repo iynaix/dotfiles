@@ -15,7 +15,7 @@
             hyprlandArgs = {
               locked = true;
             };
-            niriArgs = {
+            umbrielArgs = {
               allow-when-locked = true;
             };
           };
@@ -24,7 +24,7 @@
             hyprlandArgs = {
               locked = true;
             };
-            niriArgs = {
+            umbrielArgs = {
               allow-when-locked = true;
             };
           };

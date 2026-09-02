@@ -121,7 +121,7 @@ fn monitor_dimensions_from_name(mon_name: &str) -> (u32, u32) {
     let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
     let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json).expect("failed to parse json");
 
-    let dimensions = monitors
+    monitors
         .iter()
         .find(|mon| mon.name == mon_name)
         .and_then(|mon| {
@@ -136,8 +136,7 @@ fn monitor_dimensions_from_name(mon_name: &str) -> (u32, u32) {
         .unwrap_or_else(|| {
             eprintln!("Invalid monitor identifier {mon_name}");
             std::process::exit(1);
-        });
-    dimensions
+        })
 }
 
 /// uses crop info from wallpaper xmp metadata

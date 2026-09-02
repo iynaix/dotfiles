@@ -1,4 +1,4 @@
-use common::{is_hyprland, is_niri};
+use common::is_hyprland;
 use execute::Execute;
 
 fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
@@ -50,100 +50,9 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn niri_pip() -> Result<(), Box<dyn std::error::Error>> {
-    use niri_ipc::{
-        Action, LogicalOutput, Output, PositionChange, Request, Response, SizeChange,
-        socket::Socket,
-    };
-
-    let mut socket = Socket::connect().expect("failed to connect to niri socket");
-
-    let curr_mon = match socket
-        .send(Request::FocusedOutput)
-        .expect("failed to send FocusedOutput request to niri")
-    {
-        Ok(Response::FocusedOutput(Some(curr_mon))) => curr_mon,
-        Ok(Response::FocusedOutput(_)) => {
-            eprintln!("No focused output found.");
-            std::process::exit(0);
-        }
-        _ => panic!("invalid reply for FocusedOutput"),
-    };
-
-    let Output {
-        logical:
-            Some(LogicalOutput {
-                width: curr_width,
-                height: curr_height,
-                ..
-            }),
-        ..
-    } = curr_mon
-    else {
-        panic!("Focused output is disabled!");
-    };
-
-    // figure out dimensions of target window with aspect ratio 16:9
-    let target_w = 0.2 * f64::from(curr_width.max(curr_height)); // use monitor width even on vertical monitors
-    let target_h = target_w / 16.0 * 9.0;
-
-    // toggle fake fullscreen?
-
-    // toggle floating
-    socket
-        .send(Request::Action(Action::ToggleWindowFloating { id: None }))
-        .expect("failed to send ToggleWindowFloating")?;
-
-    let active = match socket
-        .send(Request::FocusedWindow)
-        .expect("failed to send FocusedWindow request to niri")
-    {
-        Ok(Response::FocusedWindow(Some(active))) => active,
-        Ok(Response::FocusedWindow(None)) => {
-            eprintln!("No active window found.");
-            std::process::exit(0);
-        }
-        _ => panic!("invalid reply for FocusedWindow"),
-    };
-
-    if active.is_floating {
-        const PADDING: f64 = 30.0; // target distance from corner of screen
-
-        socket
-            .send(Request::Action(Action::SetWindowWidth {
-                id: None,
-                change: SizeChange::SetFixed(target_w as i32),
-            }))
-            .expect("failed to send SetWindowWidth")?;
-        socket
-            .send(Request::Action(Action::SetWindowHeight {
-                id: None,
-                change: SizeChange::SetFixed(target_h as i32),
-            }))
-            .expect("failed to send SetWindowHeight")?;
-
-        let final_x = f64::from(curr_width) - PADDING - target_w;
-        let final_y = f64::from(curr_height) - PADDING - target_h;
-
-        socket
-            .send(Request::Action(Action::MoveFloatingWindow {
-                id: None,
-                x: PositionChange::SetFixed(final_x),
-                y: PositionChange::SetFixed(final_y),
-            }))
-            .expect("failed to send MoveFloatingWindow")?;
-    }
-
-    Ok(())
-}
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if is_hyprland() {
         hyprland_pip()?;
-    }
-
-    if is_niri() {
-        niri_pip()?;
     }
 
     Ok(())

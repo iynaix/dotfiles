@@ -44,17 +44,6 @@
           "Mod+Ctrl+backslash".spawn = "focal image --area selection --ocr";
           "Alt+backslash".spawn = "focal video --rofi";
         };
-
-        programs.niri.settings.binds = {
-          # use the built in niri screenshot
-          "Mod+backslash" = lib.mkForce {
-            screenshot = _: {
-              props = {
-                show-pointer = false;
-              };
-            };
-          };
-        };
       };
     };
 }

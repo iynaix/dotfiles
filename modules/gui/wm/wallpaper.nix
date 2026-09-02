@@ -3,7 +3,6 @@
 
   config =
     {
-      config,
       lib,
       pkgs,
       ...
@@ -17,23 +16,26 @@
         };
 
         # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
-        custom.programs.niri = {
-          settings.window-rules = map (
-            mon:
-            let
-              targetPercent = 0.3;
-              width = builtins.floor (builtins.div (targetPercent * (lib.max mon.width mon.height)) mon.scale);
-              # 16:9 ratio
-              height = builtins.floor (width / 16.0 * 9.0);
-            in
-            {
-              matches = [ { title = "^wallpaper-selector-${mon.name}$"; } ];
-              default-column-width.fixed = width;
-              default-window-height.fixed = height;
-              open-floating = true;
-            }
-          ) config.custom.hardware.monitors;
-        };
+        /*
+          TODO: umbriel
+          custom.programs.umbriel = {
+            settings.window-rules = map (
+              mon:
+              let
+                targetPercent = 0.3;
+                width = builtins.floor (builtins.div (targetPercent * (lib.max mon.width mon.height)) mon.scale);
+                # 16:9 ratio
+                height = builtins.floor (width / 16.0 * 9.0);
+              in
+              {
+                matches = [ { title = "^wallpaper-selector-${mon.name}$"; } ];
+                default-column-width.fixed = width;
+                default-window-height.fixed = height;
+                open-floating = true;
+              }
+            ) config.custom.hardware.monitors;
+          };
+        */
 
         custom.persist = {
           home = {

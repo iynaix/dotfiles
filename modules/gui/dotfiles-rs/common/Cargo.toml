@@ -19,7 +19,6 @@ hex.workspace = true
 hyprland.workspace = true
 image.workspace = true
 itertools.workspace = true
-niri-ipc.workspace = true
 rayon.workspace = true
 regex.workspace = true
 rexiv2.workspace = true

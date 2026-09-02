@@ -16,7 +16,6 @@ execute.workspace = true
 fastrand.workspace = true
 hyprland.workspace = true
 itertools.workspace = true
-niri-ipc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 wallust_themes = "1.1.0"

@@ -56,12 +56,6 @@
               hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("${lib.getExe lock}"), { locked = true })
             '';
 
-            niri.settings.switch-events = {
-              lid-open = {
-                spawn = lib.getExe lock;
-              };
-            };
-
             umbriel.settings.events = {
               lid_open = lib.getExe lock;
             };

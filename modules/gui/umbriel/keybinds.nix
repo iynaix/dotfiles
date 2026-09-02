@@ -19,7 +19,7 @@
                 {
                   action = "spawn:${args.spawn}";
                 }
-                // lib.optionalAttrs (args.niriArgs.allow-when-locked or false) { "allow_when_locked" = true; }
+                // lib.optionalAttrs (args.umbrielArgs.allow-when-locked or false) { "allow_when_locked" = true; }
               )
             )
             // {
@@ -89,8 +89,6 @@
 
               "Mod+R" = "window-cycle-width";
               "Mod+Shift+R" = "window-cycle-height";
-              # TODO: niri workspace resize equivalent?
-              # "Mod+Ctrl+R" = "spawn:${lib.getExe' config.custom.programs.dotfiles-rs "umbriel-resize-workspace"}";
 
               "Mod+Z" = "window-toggle-maximize";
               "Mod+F" = "window-toggle-fullscreen";

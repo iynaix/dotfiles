@@ -31,7 +31,7 @@ sidebar_section = "none"
 enabled = false
 
 [idle]
-behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+behavior_order = ["lock", "screen-off", "lock-and-suspend"]
 
 [location]
 auto_locate = true
@@ -64,7 +64,6 @@ media = false
 [shell]
 avatar_path = "/home/iynaix/.face"
 font_family = "Geist Medium"
-niri_overview_type_to_launch_enabled = true
 password_style = "random"
 polkit_agent = true
 
@@ -126,8 +125,8 @@ variant = "default"
 source = "wallpaper"
 
 [theme.templates]
-builtin_ids = [ "btop", "cava", "kitty", "hyprland", "niri", "umbriel" ]
-community_ids = [ "yazi", "zathura" ]
+builtin_ids = ["btop", "cava", "kitty", "hyprland", "umbriel"]
+community_ids = ["yazi", "zathura"]
 
 [wallpaper]
 transition_on_startup = true

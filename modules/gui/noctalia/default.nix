@@ -122,26 +122,6 @@
               })
             '';
 
-            niri.settings = {
-              layer-rules = [
-                # use blurred overview for noctalia
-                {
-                  matches = [ { namespace = "^noctalia-backdrop"; } ];
-                  place-within-backdrop = true;
-                }
-
-                # Disable xray on all our surfaces so it looks more realistic.
-                # Noctalia publishes blur regions automatically when ext-background-effects is available.
-                {
-                  matches = [ { namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"; } ];
-                  background-effect = {
-                    xray = false;
-                    # blur =false;
-                  };
-                }
-              ];
-            };
-
             umbriel.settings.layer_rule = [
               {
                 match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$";

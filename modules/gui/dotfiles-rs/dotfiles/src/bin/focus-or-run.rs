@@ -1,9 +1,8 @@
 use clap::Parser;
-use common::{is_hyprland, is_niri};
+use common::is_hyprland;
 use dotfiles::cli::FocusOrRunArgs;
 use execute::Execute;
 use hyprland::{data::Clients, shared::HyprData};
-use niri_ipc::{Action, Request, Response, socket::Socket};
 
 fn main() {
     let args = FocusOrRunArgs::parse();
@@ -28,7 +27,8 @@ fn main() {
         }
     }
 
-    if is_niri() {
+    /* TODO: umbriel
+    if is_umbriel() {
         let mut socket = Socket::connect().expect("failed to connect to niri socket");
 
         let Ok(Response::Windows(windows)) = socket
@@ -50,6 +50,7 @@ fn main() {
             }
         }
     }
+    */
 
     std::process::Command::new("sh")
         .arg("-c")

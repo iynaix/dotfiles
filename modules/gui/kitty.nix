@@ -108,16 +108,6 @@
                   "${config.hj.xdg.config.directory}/kitty/themes/noctalia.conf" | \
                   moor --lang ini'';
           };
-
-          niri.settings.window-rules = [
-            {
-              matches = [ { app-id = "^kitty"; } ];
-
-              background-effect = {
-                blur = true;
-              };
-            }
-          ];
         };
       };
     };

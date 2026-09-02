@@ -1,13 +1,12 @@
 use clap::Parser;
-use common::{is_hyprland, is_niri};
+use common::is_hyprland;
 use dotfiles::cli::EmacsLauncherArgs;
 use execute::Execute;
 use hyprland::{data::Clients, shared::HyprData};
-use niri_ipc::{Action, Request, Response, socket::Socket};
 use std::process::Command;
 
 fn execute_emacs_command(elisp: &str) -> Result<(), String> {
-    let cmd = format!(r#"(progn (select-frame-set-input-focus (selected-frame)) {elisp})"#);
+    let cmd = format!(r"(progn (select-frame-set-input-focus (selected-frame)) {elisp})");
 
     println!("{cmd}");
 
@@ -43,28 +42,6 @@ fn main() -> Result<(), String> {
                 )
                 .execute()
                 .expect("failed to focus window");
-            }
-        }
-    }
-
-    if is_niri() {
-        let mut socket = Socket::connect().expect("failed to connect to niri socket");
-
-        let Ok(Response::Windows(windows)) = socket
-            .send(Request::Windows)
-            .expect("failed to send Windows")
-        else {
-            panic!("invalid reply for Windows");
-        };
-
-        for win in windows {
-            if let Some(title) = win.title
-                && title.contains("Emacs")
-            {
-                socket
-                    .send(Request::Action(Action::FocusWindow { id: win.id }))
-                    .expect("failed to send FocusWindow")
-                    .ok();
             }
         }
     }

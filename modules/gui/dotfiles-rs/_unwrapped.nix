@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    # enable for niri-ipc git
-    # allowBuiltinFetchGit = true;
   };
 
   # create files for shell autocomplete
@@ -35,7 +33,6 @@ rustPlatform.buildRustPackage {
     let
       binsWithCompletions = [
         "hypr-monitors"
-        "niri-resize-workspace"
         "wm-same-class"
       ];
     in
