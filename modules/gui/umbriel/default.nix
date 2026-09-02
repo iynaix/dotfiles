@@ -7,6 +7,7 @@
       inputs,
       lib,
       pkgs,
+      system,
       ...
     }:
     let
@@ -38,6 +39,7 @@
       config = {
         programs.umbriel = {
           enable = true;
+          package = inputs.umbriel.packages.${system}.default;
         };
 
         hj.xdg.config.files = {

@@ -1,11 +1,26 @@
+use std::process::Stdio;
+
 use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
 use common::{
-    is_hyprland,
+    is_hyprland, is_umbriel,
     wallpaper::{self, filter_images},
 };
 use execute::Execute;
 use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UmbrielWorkspace {
+    pub active: bool,
+    pub focused: bool,
+    pub id: String,
+    pub index: i64,
+    pub layout: String,
+    pub name: String,
+    pub output: String,
+}
 
 fn pqiv_hyprland_float_rule() -> String {
     const TARGET_PERCENT: f64 = 0.3;
@@ -24,20 +39,24 @@ fn pqiv_hyprland_float_rule() -> String {
     )
 }
 
-/* TODO: umbriel
 fn umbriel_window_title() -> String {
-    // append monitor name to title so relevant window-rule can match it
-    let Ok(Response::FocusedOutput(Some(curr_mon))) = Socket::connect()
-        .expect("failed to connect to niri socket")
-        .send(Request::FocusedOutput)
-        .expect("failed to send FocusedOutput request to niri")
-    else {
-        panic!("Failed to get focused output from niri");
-    };
+    let umbriel_cmd = execute::command_args!("umbriel", "workspaces", "--json")
+        .stdout(Stdio::piped())
+        .execute_output()
+        .expect("failed to run umbriel workspaces");
+    let umbriel_json =
+        String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel workspaces");
+    let wksps: Vec<UmbrielWorkspace> =
+        serde_json::from_str(&umbriel_json).expect("failed to parse json");
 
-    format!("wallpaper-selector-{}", curr_mon.name)
+    for w in &wksps {
+        if w.focused {
+            return format!("wallpaper-selector-{}", w.output);
+        }
+    }
+
+    String::new()
 }
-*/
 
 #[allow(clippy::module_name_repetitions)]
 pub fn show_pqiv(args: &WallpaperFilterArgs) {
@@ -68,7 +87,6 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
             .expect("failed to execute pqiv");
     }
 
-    /* TODO: umbriel
     if is_umbriel() {
         // NOTE: niri uses a custom version of pqiv that forces a GDK wayland backend
         // so it doesn't resize on initial spawn via a keybind
@@ -82,7 +100,7 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
             umbriel_window_title()
         );
 
-        cmd.env("GDK_BACKEND", "wayland");
+        // cmd.env("GDK_BACKEND", "wayland");
 
         if has_filters {
             let images = filter_images(wallpaper::dir()).collect_vec();
@@ -93,7 +111,6 @@ pub fn show_pqiv(args: &WallpaperFilterArgs) {
 
         cmd.execute().expect("failed to execute pqiv");
     }
-    */
 }
 
 pub fn show_history(args: &WallpaperFilterArgs) {
@@ -131,7 +148,6 @@ pub fn show_history(args: &WallpaperFilterArgs) {
             .expect("failed to execute pqiv");
     }
 
-    /* TODO: umbriel
     if is_umbriel() {
         execute::command_args!(
             "pqiv",
@@ -145,5 +161,4 @@ pub fn show_history(args: &WallpaperFilterArgs) {
         .execute()
         .expect("failed to execute pqiv");
     }
-    */
 }
