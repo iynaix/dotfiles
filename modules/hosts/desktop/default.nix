@@ -30,7 +30,6 @@
               name = "DP-1";
               width = 3440;
               height = 1440;
-              # niri / mango wants this to be exact down to the decimals
               refreshRate = "174.963";
               vrr = false;
               x = 1440;

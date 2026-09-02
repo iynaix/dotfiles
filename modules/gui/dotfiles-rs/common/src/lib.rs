@@ -158,8 +158,8 @@ pub fn is_niri() -> bool {
     std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "niri"
 }
 
-pub fn is_mango() -> bool {
-    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "mango"
+pub fn is_umbriel() -> bool {
+    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "umbriel"
 }
 
 pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {

@@ -36,8 +36,6 @@
                   hyprland-config
               elif [ "$XDG_CURRENT_DESKTOP" == "niri" ]; then
                   niri-config
-              elif [ "$XDG_CURRENT_DESKTOP" == "mango" ]; then
-                  mango-config
               elif [ "$XDG_CURRENT_DESKTOP" == "umbriel" ]; then
                   umbriel-config
               fi

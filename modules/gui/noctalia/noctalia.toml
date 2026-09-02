@@ -126,7 +126,7 @@ variant = "default"
 source = "wallpaper"
 
 [theme.templates]
-builtin_ids = [ "btop", "cava", "kitty", "hyprland", "mango", "niri", "umbriel" ]
+builtin_ids = [ "btop", "cava", "kitty", "hyprland", "niri", "umbriel" ]
 community_ids = [ "yazi", "zathura" ]
 
 [wallpaper]

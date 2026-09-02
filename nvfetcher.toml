@@ -20,11 +20,6 @@ fetch.url = "https://github.com/imputnet/helium-linux/releases/download/$ver/hel
 # src.git = "https://github.com/YaLTeR/niri"
 # fetch.github = "YaLTeR/niri"
 
-[mango]
-# src.git = "https://github.com/mangowm/mango"
-src.github_tag = "mangowm/mango"
-fetch.github = "mangowm/mango"
-
 [mpv-deletefile]
 src.git = "https://github.com/zenyd/mpv-scripts"
 fetch.github = "zenyd/mpv-scripts"

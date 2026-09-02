@@ -62,8 +62,6 @@
               };
             };
 
-            mango.settings.bind = [ "$mod+SHIFT+CTRL, x, spawn, ${lib.getExe lock}" ];
-
             umbriel.settings.events = {
               lid_open = lib.getExe lock;
             };
