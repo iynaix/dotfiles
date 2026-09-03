@@ -27,9 +27,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "54b97adc2233b9a0dee9270994187134dd90d553",
-    "narHash": "sha256-lH+2bftFjZSlTq12a5HN+HPAfIhqCDnXCiUtrDa4iZw=",
-    "lastModified": 1788268212
+    "rev": "3b4f89710be333597964b200267b838d90a27345",
+    "narHash": "sha256-otp4KsBFsbZUBd0Mu0T+fmXNfh4egi9dpAPqTdQAmgo=",
+    "lastModified": 1788334086
   },
   "nix-index-database": {
     "type": "github",
@@ -43,9 +43,9 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "dc3f0cfde2050172abf6c3cdb684f735c15a57c5",
-    "narHash": "sha256-cmOd3iGoE140M2GidgQMQbyxHZ4dT7C0QZq2+CrXQyA=",
-    "lastModified": 1788044418
+    "rev": "44d95795ee2d475b3d687325e26dcf4ca9104557",
+    "narHash": "sha256-3jBEq8avfzlrsY4UpW4d5TOmm7ocseZfnitEJhqauyc=",
+    "lastModified": 1788335262
   },
   "nixpkgs": {
     "type": "tarball",
@@ -79,9 +79,9 @@
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "a8627b21b9107c5711c96b84f32a9a4b3d45295f",
-    "narHash": "sha256-gkig4nPi1CWc4Z50GBsjE4ygSE7hMpl/TwID2an2Cck=",
-    "lastModified": 1786629091
+    "rev": "fbf759290e0cb0a98dfc813a4eb7d53ad1dacb57",
+    "narHash": "sha256-gkSH8VUtCo6hnysNmb9DbTuDepH2t5pv+QWjP75xKAk=",
+    "lastModified": 1788337237
   },
   "systems": {
     "type": "github",
@@ -95,9 +95,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "c2d8b9c1a5e6c3d75a58ba039958de6f1506647e",
-    "narHash": "sha256-6lLcMut5Pwv/xI8KKCi0pl1PcNXsT1V5ZRNFJCH9eNk=",
-    "lastModified": 1788312836,
+    "rev": "28c5d23ca9fa5421747a47efbfd63bab2fa8533f",
+    "narHash": "sha256-Yi9Zs+WvQPrqVr18A5ApLzqcJJThQJ1OXW0Hr+Tjyws=",
+    "lastModified": 1788350278,
     "submodules": true
   },
   "wfetch": {

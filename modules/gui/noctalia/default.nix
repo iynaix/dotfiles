@@ -2,7 +2,8 @@
   packages =
     { pkgs, ... }:
     {
-      # TODO: wrapper for noctalia v5
+      # TODO: wrapper for noctalia v5 using the upstream PR?
+      # https://github.com/BirdeeHub/nix-wrapper-modules
       noctalia = pkgs.noctalia.overrideAttrs (o: {
         patches = (o.patches or [ ]) ++ [
           ./face-aware-crop.patch
@@ -21,21 +22,6 @@
     }:
     let
       tomlFormat = pkgs.formats.toml { };
-
-      # noctalia-start = pkgs.writeShellApplication {
-      #   name = "noctalia-start";
-      #   runtimeInputs = [
-      #     pkgs.noctalia
-      #     config.custom.programs.dotfiles-rs
-      #   ];
-      #   text = /* sh */ ''
-      #     noctalia &
-      #     sleep 3
-      #     # hide on laptop screens to save space
-      #     ${lib.optionalString (builtins.elem "laptop" tags) "noctalia msg bar-hide"}
-      #     wallpaper
-      #   '';
-      # };
 
       noctalia-reload = pkgs.writeShellApplication {
         name = "noctalia-reload";

@@ -61,7 +61,6 @@
             aptArgs = {
               default_floating = true;
               blur = false;
-              shadow = false;
             };
           in
           {
