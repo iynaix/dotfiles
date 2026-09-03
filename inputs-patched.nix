@@ -11,6 +11,9 @@ let
 in
 patcher.patch unpatchedInputs {
   nixpkgs = [
+    # always allow unfree, i dgaf
+    ./patches/allow_unfree.patch
+
     # awakened poe trade command line args
     # https://github.com/NixOS/nixpkgs/pull/496108
     (patcher.fetchpatch {
