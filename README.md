@@ -1,7 +1,5 @@
 # Iynaix's NixOS Config
 
-This config is intended to be used with NixOS.
-
 ## Features
 
 - Multiple NixOS configurations, including desktop, laptops and VM
@@ -14,7 +12,7 @@ This config is intended to be used with NixOS.
 
 ## Modules
 
-This nixos configuration uses a custom module system, more details can be found in the [modules readme](./modules.md).
+This NixOS configuration uses [lamina](https://github.com/iynaix/lamina) to compose modules and reduce boilerplate.
 
 ## How to Install
 Run the following commands from a terminal on a NixOS live iso / from a tty on the minimal iso.

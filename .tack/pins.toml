@@ -68,3 +68,6 @@ url = "github:iynaix/focal"
 [inputs.umbriel]
 url = "github:noctalia-dev/umbriel"
 submodules = true
+
+[inputs.lamina]
+url = "github:iynaix/lamina"

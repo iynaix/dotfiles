@@ -23,6 +23,14 @@
     "narHash": "sha256-UrAlku7KST0DT+j1bdVGYI8tCz23PWL88uGMer3IZ2U=",
     "lastModified": 1787500880
   },
+  "lamina": {
+    "type": "github",
+    "owner": "iynaix",
+    "repo": "lamina",
+    "rev": "e8350b379d7bfc576ae05637bd5cb7ab81664851",
+    "narHash": "sha256-iCUfON1jUY2fW/K6WWxKZHTjwm1Wz/J2atXnl8LCLfI=",
+    "lastModified": 1788435619
+  },
   "multiverse": {
     "type": "github",
     "owner": "fzakaria",

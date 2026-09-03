@@ -4,9 +4,7 @@
     let
       inputs = import ./inputs-patched.nix args;
       inherit (inputs.nixpkgs) lib;
-
-      flakeLib = import ./flake-lib.nix { inherit inputs lib self; };
-      inherit (flakeLib) mkHost mkPackages;
+      inherit (inputs.lamina.lib) mkHost mkPackages;
 
       systems = [
         "x86_64-linux"
@@ -30,6 +28,7 @@
 
       mkHostInfo = tags: {
         inherit tags;
+        inherit (lib) nixosSystem;
         modules = [ ./modules ];
         specialArgs = {
           inherit inputs self;
