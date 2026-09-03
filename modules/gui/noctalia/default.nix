@@ -7,6 +7,12 @@
       noctalia = pkgs.noctalia.overrideAttrs (o: {
         patches = (o.patches or [ ]) ++ [
           ./face-aware-crop.patch
+
+          # fix umbriel template
+          (pkgs.fetchpatch {
+            url = "https://github.com/noctalia-dev/noctalia/commit/c5f5ab26111c665aab04b0c4f686a14c86ae0f72.patch";
+            hash = "sha256-Fte8YiYg/zVYptUGyQIuQNZeBXpZ91htxiKPav9NEEc=";
+          })
         ];
       });
     };

@@ -32,16 +32,18 @@
               '';
             };
           in
-
           {
             description = "Changes the wallpaper on boot";
             unitConfig = {
               After = [ "noctalia.service" ];
-              Wants = [ "noctalia.service" ];
+              Requires = [ "noctalia.service" ];
             };
             serviceConfig = {
               ExecStart = lib.getExe wallpaper-init;
-              Restart = "always";
+              ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 3";
+              RestartSec = 1;
+              Restart = "on-failure";
+              Type = "oneshot";
             };
             wantedBy = [ "noctalia.service" ];
           };

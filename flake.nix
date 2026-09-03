@@ -1,6 +1,4 @@
 {
-  description = "iynaix's dotfiles";
-
   outputs =
     { self, ... }@args:
     let

@@ -72,9 +72,7 @@
 
         custom.programs = {
           print-config = {
-            umbriel = /* sh */ ''
-              cat "${config.hj.xdg.config.directory}/umbriel/host.toml" "${config.hj.xdg.config.directory}/umbriel/noctalia.toml" | moor --lang toml
-            '';
+            umbriel = /* sh */ ''moor "${config.hj.xdg.config.directory}/umbriel/host.toml"'';
           };
         };
       };

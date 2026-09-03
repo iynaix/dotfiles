@@ -105,7 +105,6 @@
             kitty = /* sh */ ''
               cat "${pkgs.kitty.configuration.constructFiles.kittyConfig.outPath}" \
                   "${config.hj.xdg.config.directory}/kitty/kitty.conf" \
-                  "${config.hj.xdg.config.directory}/kitty/themes/noctalia.conf" | \
                   moor --lang ini'';
           };
         };

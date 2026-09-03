@@ -38,11 +38,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-k3CjrF45s7SizRof/X9eOnPKwkOB9c1AvBSmjj7ROIM=",
+            "sha256": "sha256-z0OoKmW49F/2F3mxjZlyJsTY45keyZJAj4pjoGBjBO8=",
             "type": "url",
-            "url": "https://github.com/imputnet/helium-linux/releases/download/0.16.3.1/helium-0.16.3.1-x86_64.AppImage"
+            "url": "https://github.com/imputnet/helium-linux/releases/download/0.16.4.1/helium-0.16.4.1-x86_64.AppImage"
         },
-        "version": "0.16.3.1"
+        "version": "0.16.4.1"
     },
     "mpv-deletefile": {
         "cargoLock": null,

@@ -178,8 +178,12 @@
                   softness = 10; # 0-200, 0 = hard edge
                   offset_x = 2; # -200 to 200
                   offset_y = 2;
-                  color = "#0000007F";
                 };
+              };
+
+              colors = {
+                backdrop = "#00000000";
+                shadow = "#0000007F";
               };
 
               overview = {

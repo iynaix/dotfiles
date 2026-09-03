@@ -59,7 +59,7 @@
 
         custom.programs.print-config = {
           hyprland = /* sh */ ''
-            cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" "${config.hj.xdg.config.directory}/hypr/noctalia.lua" | \
+            cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" | \
               ${lib.getExe pkgs.stylua} --indent-type Spaces --indent-width 2 - | \
               moor --lang lua'';
         };

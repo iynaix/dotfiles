@@ -28,15 +28,12 @@
 
   config =
     { config, pkgs, ... }:
-    let
-      noctaliaColors = "${config.hj.xdg.config.directory}/zathura/noctaliarc";
-    in
     {
       nixpkgs.overlays = [
         (_: _prev: {
           zathura = pkgs.custom.zathura.wrap {
             extraSettings = ''
-              include "${noctaliaColors}"
+              include "${config.hj.xdg.config.directory}/zathura/noctaliarc"
             '';
           };
         })
@@ -51,7 +48,7 @@
       };
 
       custom.programs.print-config = {
-        zathura = /* sh */ ''cat "${pkgs.zathura.configuration.constructFiles.renderedRc.outPath}" "${noctaliaColors}" | moor'';
+        zathura = /* sh */ ''moor "${pkgs.zathura.configuration.constructFiles.renderedRc.outPath}"'';
       };
     };
 }
