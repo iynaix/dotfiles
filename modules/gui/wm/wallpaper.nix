@@ -26,6 +26,10 @@
                 config.custom.programs.dotfiles-rs
               ];
               text = /* sh */ ''
+                while ! noctalia msg status >/dev/null 2>&1; do
+                  ${lib.getExe' pkgs.coreutils "sleep"} 0.5
+                done
+
                 # hide on laptop screens to save space
                 ${lib.optionalString (builtins.elem "laptop" tags) "noctalia msg bar-hide"}
                 wallpaper
@@ -40,7 +44,6 @@
             };
             serviceConfig = {
               ExecStart = lib.getExe wallpaper-init;
-              ExecStartPre = "${lib.getExe' pkgs.coreutils "sleep"} 3";
               RestartSec = 1;
               Restart = "on-failure";
               Type = "oneshot";

@@ -67,8 +67,8 @@
             window_rule =
               # poe1 / poe2
               [
-                ({ match.title = "Path of Exile( 2)?"; } // poeArgs)
-                ({ match.title = "steam_app_(238960|2694490)"; } // poeArgs)
+                ({ match.title = "^Path of Exile( 2)?$"; } // poeArgs)
+                ({ match.title = "^steam_app_(238960|2694490)$"; } // poeArgs)
               ]
               # woke poe1 / poe2 trade
               ++ [

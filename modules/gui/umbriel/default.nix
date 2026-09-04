@@ -46,6 +46,7 @@
           "umbriel/host.toml" = {
             generator = tomlFormat.generate "umbriel-host.toml";
             value = config.custom.programs.umbriel.settings;
+            type = "copy";
           };
 
           "umbriel/config.toml" = {
