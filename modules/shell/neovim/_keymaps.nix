@@ -1,4 +1,3 @@
-_:
 let
   mkKeymap = mode: key: action: { inherit mode key action; };
   mkKeymapWithOpts =

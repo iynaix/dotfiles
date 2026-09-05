@@ -59,10 +59,6 @@
           };
         };
 
-        custom.programs.print-config = {
-          ly = /* sh */ ''moor "/etc/ly/config.ini"'';
-        };
-
         # block other ttys from autologin when bypassed from lockscreen
         services.getty.autologinUser = lib.mkIf (!config.custom.lock.enable) user;
       }

@@ -16,18 +16,18 @@
   };
   exiled-exchange-2 = {
     pname = "exiled-exchange-2";
-    version = "0.15.8";
+    version = "0.16.3";
     src = fetchurl {
-      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.15.8/Exiled-Exchange-2-0.15.8.AppImage";
-      sha256 = "sha256-xmEvKJkRFJokzOa/6qRqT4+QKfnfjIoAfqP+oDqyxH8=";
+      url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.16.3/Exiled-Exchange-2-0.16.3.AppImage";
+      sha256 = "sha256-aAHFELdlL7cccpzAW9ROHF1hZDAnQGTLLtDonS0CT2Q=";
     };
   };
   helium = {
     pname = "helium";
-    version = "0.16.4.1";
+    version = "0.16.5.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.16.4.1/helium-0.16.4.1-x86_64.AppImage";
-      sha256 = "sha256-z0OoKmW49F/2F3mxjZlyJsTY45keyZJAj4pjoGBjBO8=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.16.5.1/helium-0.16.5.1-x86_64.AppImage";
+      sha256 = "sha256-N6+wwg46ufsbCqEJv/WpTWDCnI3tnFt58cG6TsGxXew=";
     };
   };
   mpv-deletefile = {

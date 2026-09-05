@@ -42,26 +42,37 @@
           package = inputs.umbriel.packages.${system}.default;
         };
 
-        hj.xdg.config.files = {
-          "umbriel/host.toml" = {
-            generator = tomlFormat.generate "umbriel-host.toml";
-            value = config.custom.programs.umbriel.settings;
-            type = "copy";
-          };
-
-          "umbriel/config.toml" = {
-            generator = tomlFormat.generate "umbriel-config.toml";
-            value = {
-              include.files = [
-                # use nix generated host.toml first
-                "${config.hj.xdg.config.directory}/umbriel/host.toml"
-                # use noctalia colors
-                "${config.hj.xdg.config.directory}/umbriel/noctalia.toml"
-              ];
+        hj.xdg.config.files =
+          let
+            hostToml = tomlFormat.generate "umbriel-host.toml" config.custom.programs.umbriel.settings;
+          in
+          {
+            "umbriel/host.toml" = {
+              source = pkgs.runCommand "umbriel-host-toml" { } ''
+                ${lib.getExe config.programs.umbriel.package} validate -c ${hostToml}
+                cp ${hostToml} $out
+              '';
+              type = "copy";
             };
-            type = "copy";
+
+            "umbriel/config.toml" = {
+              generator = tomlFormat.generate "umbriel-config.toml";
+              value = {
+                include = {
+                  files = [
+                    # use nix generated host.toml first
+                    "${config.hj.xdg.config.directory}/umbriel/host.toml"
+                  ];
+
+                  optional.files = [
+                    # use noctalia colors
+                    "${config.hj.xdg.config.directory}/umbriel/noctalia.toml"
+                  ];
+                };
+              };
+              type = "copy";
+            };
           };
-        };
 
         xdg.portal = {
           config = {

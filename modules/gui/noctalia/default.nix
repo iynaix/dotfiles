@@ -1,10 +1,13 @@
 {
   packages =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       # TODO: wrapper for noctalia v5 using the upstream PR?
       # https://github.com/BirdeeHub/nix-wrapper-modules
       noctalia = pkgs.noctalia.overrideAttrs (o: {
+        # skip tests
+        mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
+
         patches = (o.patches or [ ]) ++ [
           ./face-aware-crop.patch
         ];

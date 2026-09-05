@@ -38,9 +38,13 @@
           ++ config.custom.wm.startup
           ++
             # focus default workspace for each monitor
-            (map (mon: {
-              spawn = "hyprctl dispatch hl.dsp.focus({ workspace = ${toString mon.defaultWorkspace} })";
-            }) (lib.reverseList config.custom.hardware.monitors))
+            (
+              config.custom.hardware.monitors
+              |> lib.reverseList
+              |> map (mon: {
+                spawn = "hyprctl dispatch hl.dsp.focus({ workspace = ${toString mon.defaultWorkspace} })";
+              })
+            )
         )
         |> map mkStartupCmd
         |> lib.concatLines;
