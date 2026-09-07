@@ -14,6 +14,12 @@ patcher.patch unpatchedInputs {
     # always allow unfree, i dgaf
     ./patches/allow_unfree.patch
 
+    # support autologin for noctalia-greeter
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/efce10b438db50b736279887822d84ff8a7cc162.patch";
+      hash = "sha256-vxmpZ+p14zUY7EY/xVaDQxv+IHK/MynsXXpc8nWC/5Q=";
+    })
+
     # awakened poe trade command line args
     # https://github.com/NixOS/nixpkgs/pull/496108
     (patcher.fetchpatch {

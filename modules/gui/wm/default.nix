@@ -48,15 +48,6 @@
           autoLogin.user = user;
 
           defaultSession = lib.mkDefault "umbriel";
-
-          ly = {
-            enable = true;
-            settings = {
-              bigclock = "en";
-              save = false; # don't use previous successful session
-              session_log = "${config.hj.xdg.data.directory}/ly-session.log";
-            };
-          };
         };
 
         # block other ttys from autologin when bypassed from lockscreen

@@ -11,7 +11,7 @@
             specialisation.current = "tty";
           };
 
-          services.displayManager.ly.enable = lib.mkForce false;
+          services.displayManager.noctalia-greeter.enable = lib.mkForce false;
         };
       };
     };

@@ -67,6 +67,9 @@ font_family = "Geist Medium"
 password_style = "random"
 polkit_agent = true
 
+[shell.greeter_sync]
+auto_sync = true
+
 [shell.launcher]
 categories = false
 sort_by_usage = false
