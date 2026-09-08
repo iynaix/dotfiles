@@ -11,7 +11,7 @@
           dconf,
           procps,
           czkawka,
-          pqiv,
+          swayimg,
           rsync,
           rclip,
           wlr-randr,
@@ -42,7 +42,7 @@
                       rclip
                       rsync
                       wlr-randr
-                      pqiv
+                      swayimg
                     ]
                     ++ extraPackages
                   )

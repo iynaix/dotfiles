@@ -59,7 +59,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let lua_dispatch = format!(r#"hl.dsp.focus({{ window = "address:{target}" }})"#);
         execute::command_args!("hyprctl", "dispatch", lua_dispatch)
             .execute()
-            .expect("failed to execute pqiv");
+            .expect("failed to execute hl.dsp.focus");
     }
 
     Ok(())

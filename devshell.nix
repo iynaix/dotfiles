@@ -30,22 +30,17 @@ let
         esac
     done
 
-    CARGO_CMD="cargo run --manifest-path \"modules/gui/dotfiles-rs/Cargo.toml\" $RELEASE_FLAG"
-
-    if [[ -n "$FEATURES_FLAG" ]]; then
-        CARGO_CMD="$CARGO_CMD $FEATURES_FLAG"
-    fi
-
-    # Add --bin with the binary name and remaining arguments
-    CARGO_CMD="$CARGO_CMD --bin $BINARY_NAME"
-
-    # Add remaining arguments if any
+    CARGO_ARGS=(cargo run --manifest-path "modules/gui/dotfiles-rs/Cargo.toml")
+    [[ -n "$RELEASE_FLAG" ]] && CARGO_ARGS+=("$RELEASE_FLAG")
+    [[ ''${#FEATURES[@]} -gt 0 ]] && CARGO_ARGS+=("''${FEATURES[@]}")
+    CARGO_ARGS+=(--bin "$BINARY_NAME")
     if [[ ''${#REST_ARGS[@]} -gt 0 ]]; then
-        CARGO_CMD="$CARGO_CMD -- ''${REST_ARGS[*]}"
+        CARGO_ARGS+=(--)
+        CARGO_ARGS+=("''${REST_ARGS[@]}")
     fi
 
-    echo "$CARGO_CMD"
-    eval "$CARGO_CMD"
+    echo "''${CARGO_ARGS[@]}"
+    "''${CARGO_ARGS[@]}"
   '';
 in
 pkgs.mkShell {

@@ -64,8 +64,8 @@ pub struct SearchArgs {
     )]
     pub top: u32,
 
-    #[arg(name = "QUERY", trailing_var_arg = true, help = "Search query")]
-    pub query: Vec<String>,
+    #[arg(name = "QUERY", help = "Search query")]
+    pub query: String,
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]
@@ -127,13 +127,13 @@ pub enum WallpaperSubcommand {
     #[command(name = "reload", about = "Reloads the current wallpaper", visible_aliases = ["refresh"])]
     Reload,
 
-    #[command(name = "history", about = "Show wallpaper history selector with pqiv")]
+    #[command(name = "history", about = "Show wallpaper history selector")]
     History(WallpaperFilterArgs),
 
     #[command(
         name = "select",
-        visible_aliases = ["selector", "rofi", "pqiv"],
-        about = "Show wallpaper selector with pqiv"
+        visible_aliases = ["selector"],
+        about = "Show wallpaper selector"
     )]
     Select(WallpaperFilterArgs),
 

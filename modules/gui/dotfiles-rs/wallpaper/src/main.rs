@@ -15,8 +15,8 @@ mod cli;
 mod crop;
 mod dedupe;
 mod metadata;
-pub mod pqiv;
 mod search;
+pub mod swayimg;
 mod wallfacer;
 
 fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
@@ -199,8 +199,8 @@ fn main() {
             WallpaperSubcommand::Rm => {
                 wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
             }
-            WallpaperSubcommand::History(args) => pqiv::show_history(&args),
-            WallpaperSubcommand::Select(args) => pqiv::show_pqiv(&args),
+            WallpaperSubcommand::History(args) => swayimg::show_history(&args),
+            WallpaperSubcommand::Select(args) => swayimg::show_swayimg(&args),
             WallpaperSubcommand::Dedupe => dedupe::dedupe(),
             WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
             WallpaperSubcommand::Add(args) => wallfacer::add(args),

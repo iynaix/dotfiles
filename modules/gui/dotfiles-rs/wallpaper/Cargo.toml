@@ -25,11 +25,11 @@ rexiv2.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 rayon.workspace = true
-toml = "1.1.2"
-whoami = "2.1.2"
+toml = "1.1.5"
+whoami = "2.1.3"
 
 [build-dependencies]
 clap.workspace = true
 clap_complete.workspace = true
-clap_mangen = "0.3.0"
+clap_mangen = "0.3.3"
 serde.workspace = true

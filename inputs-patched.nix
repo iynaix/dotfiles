@@ -20,6 +20,12 @@ patcher.patch unpatchedInputs {
       hash = "sha256-vxmpZ+p14zUY7EY/xVaDQxv+IHK/MynsXXpc8nWC/5Q=";
     })
 
+    # swayimg 5.6
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/6f7a42550ab818811302a4ce21efb94c06543239.patch";
+      hash = "sha256-Gsa1O4KPuXeJjz7CCJH1tjzsdRBTMYk1rOFBAZYDr4A=";
+    })
+
     # awakened poe trade command line args
     # https://github.com/NixOS/nixpkgs/pull/496108
     (patcher.fetchpatch {
