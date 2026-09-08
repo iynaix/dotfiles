@@ -12,15 +12,17 @@ in
 patcher.patch unpatchedInputs {
   nixpkgs = [
     # always allow unfree, i dgaf
-    ./patches/allow_unfree.patch
+    ./patches/allow-unfree.patch
 
     # support autologin for noctalia-greeter
+    # https://github.com/NixOS/nixpkgs/pull/560780
     (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/efce10b438db50b736279887822d84ff8a7cc162.patch";
-      hash = "sha256-vxmpZ+p14zUY7EY/xVaDQxv+IHK/MynsXXpc8nWC/5Q=";
+      url = "https://github.com/NixOS/nixpkgs/commit/0fa542d22aa91fa81c3b638e5350dafe6eb872f1.patch";
+      hash = "sha256-4uvVEpN8Mckc8zibc+ExhFPNuL67vKJEVC2BUfbUodg=";
     })
 
     # swayimg 5.6
+    # https://github.com/NixOS/nixpkgs/pull/561142
     (patcher.fetchpatch {
       url = "https://github.com/NixOS/nixpkgs/commit/6f7a42550ab818811302a4ce21efb94c06543239.patch";
       hash = "sha256-Gsa1O4KPuXeJjz7CCJH1tjzsdRBTMYk1rOFBAZYDr4A=";

@@ -10,6 +10,7 @@ use std::{
 
 pub mod nixjson;
 pub mod rofi;
+pub mod umbriel;
 pub mod wallpaper;
 
 pub const MIN_ULTRAWIDE_RATIO: f64 = (21.0_f64 / 9.0).min(3440.0 / 1440.0).min(3840.0 / 1600.0);

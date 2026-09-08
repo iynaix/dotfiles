@@ -1,38 +1,12 @@
-use std::process::Stdio;
-
 use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
 use common::{
     is_hyprland, is_umbriel,
+    umbriel::UmbrielMonitor,
     wallpaper::{self, filter_images},
 };
 use execute::Execute;
 use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-pub struct UmbrielMonitor {
-    pub enabled: bool,
-    pub name: String,
-    pub modes: Vec<UmbrielMonitorMode>,
-    pub scale: f32,
-    pub transform: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct UmbrielMonitorMode {
-    pub current: bool,
-    pub height: i32,
-    pub width: i32,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct UmbrielWorkspace {
-    pub index: i32,
-    pub active: bool,
-    pub focused: bool,
-    pub output: String,
-}
 
 fn target_window_size() -> Option<(u32, u32)> {
     const TARGET_PERCENT: f64 = 0.3;
@@ -46,40 +20,11 @@ fn target_window_size() -> Option<(u32, u32)> {
     }
 
     if is_umbriel() {
-        let umbriel_cmd = execute::command_args!("umbriel", "workspaces", "--json")
-            .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to run umbriel workspaces");
-        let umbriel_json =
-            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel workspaces");
-        let wksps: Vec<UmbrielWorkspace> =
-            serde_json::from_str(&umbriel_json).expect("failed to parse json");
-
-        if let Some(curr_mode) = wksps
-            .iter()
-            .find_map(|wksp| {
-                if !wksp.focused {
-                    return None;
-                }
-
-                return Some(wksp.output.clone());
-            })
-            .and_then(|mon_name| {
-                let umbriel_cmd = execute::command_args!("umbriel", "outputs", "--json")
-                    .stdout(Stdio::piped())
-                    .execute_output()
-                    .expect("failed to run umbriel workspaces");
-                let umbriel_json = String::from_utf8(umbriel_cmd.stdout)
-                    .expect("invalid utf8 from umbriel workspaces");
-                let mons: Vec<UmbrielMonitor> =
-                    serde_json::from_str(&umbriel_json).expect("failed to parse json");
-
-                mons.into_iter()
-                    .find(|mon| mon.name == mon_name)
-                    .and_then(|mon| mon.modes.into_iter().find(|mode| mode.current))
-            })
+        if let Some(mode) = UmbrielMonitor::focused()
+            .as_ref()
+            .and_then(|mon| mon.current_mode())
         {
-            width = f64::from(curr_mode.width) * TARGET_PERCENT;
+            width = f64::from(mode.width) * TARGET_PERCENT;
         }
     }
 

@@ -37,9 +37,9 @@
             description = "Package to use for the terminal";
           };
 
-          app-id = lib.mkOption {
+          app_id = lib.mkOption {
             type = lib.types.str;
-            description = "app-id (wm class) for the terminal";
+            description = "app_id (wm class) for the terminal";
           };
 
           desktop = lib.mkOption {
@@ -91,7 +91,7 @@
 
         custom.programs = {
           terminal = {
-            app-id = "kitty";
+            app_id = "kitty";
             desktop = "kitty.desktop";
           };
 

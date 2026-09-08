@@ -30,12 +30,12 @@
               config.custom.wm.startup
               |> map (startup: {
                 general.autostart = [ startup.spawn ];
-                window_rule = lib.optional (startup.app-id != null || startup.title != null) (
+                window_rule = lib.optional (startup.app_id != null || startup.title != null) (
                   libCustom.recursiveMergeAttrsList [
                     { match.at_startup = true; }
                     # lookup workspace number and output from workspace
                     startupArgsByWorkspace.${toString startup.workspace}
-                    (lib.optionalAttrs (startup.app-id != null) { match.app_id = startup.app-id; })
+                    (lib.optionalAttrs (startup.app_id != null) { match.app_id = startup.app_id; })
                     (lib.optionalAttrs (startup.title != null) { match.title = startup.title; })
                   ]
                 );

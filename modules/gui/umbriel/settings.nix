@@ -15,7 +15,7 @@
         umbriel.settings =
           let
             gap = if host == "desktop" then 8 else 4;
-            strut = gap + 12;
+            strut = gap + 8;
           in
           {
             output =
@@ -40,6 +40,7 @@
                     transform = "${lib.optionalString flipped "flipped-"}${
                       if rotation == "0" then "normal" else rotation
                     }";
+                    workspace_axis = if (d.transform == 1 || d.transform == 3) then "horizontal" else "vertical";
                     workspaces = map toString d.workspaces;
                   };
                 }
@@ -55,15 +56,12 @@
                 workspace = [
                   {
                     name = toString w;
-                    # layout.scrolling.direction = "vertical";
-                    layout.mode = "dwindle";
-
-                    # struts are unnecessary for dwindle
+                    layout.mode = "scrolling";
                     layout.struts = {
                       left = 0;
                       right = 0;
-                      top = 0;
-                      bottom = 0;
+                      top = strut;
+                      bottom = strut;
                     };
                   }
                 ];
@@ -218,8 +216,7 @@
                 scrolling = {
                   default_width_fraction = 0.5; # remove to let clients choose their initial width
                   center_underfull_strip = true; # center the strip whenever it is narrower than the viewport
-                  center_focused = false; # always center the focused column
-                  expand_single_column = true; # fill lone column to viewport width
+                  center_focused = "never"; # always center the focused column
                 };
 
                 dwindle = {
@@ -303,8 +300,8 @@
                 };
               };
 
-              # Blur all windows
               window_rule = [
+                # blur all windows
                 {
                   blur = true;
                   blur_optimized = true;
@@ -328,14 +325,11 @@
                     anchor = "bottom_right";
                   };
                 }
-                # Size a float as fractions of the usable area instead of pixels, so the rule
-                # suits any monitor. default_size wins on both axes when it is also set.
-                # {
-                #   match.app_id = "^org[.]example[.]Utility$";
-                #   default_floating = true;
-                #   default_width = 0.5;           # initial width as a fraction of the usable area
-                #   default_height = 0.6;          # initial height as a fraction of the usable area
-                # }
+                # open single applications maximized
+                {
+                  match.is_alone = true;
+                  default_maximize = true;
+                }
               ];
             };
       };

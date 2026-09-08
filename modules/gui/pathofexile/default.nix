@@ -1,29 +1,26 @@
 {
   hosts = [ "desktop" ];
 
+  packages =
+    { libCustom, pkgs, ... }:
+    {
+      awakened-poe-trade =
+        (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
+          (libCustom.nvFetcherSources pkgs).awakened-poe-trade;
+    };
+
   config =
     {
       config,
       lib,
-      libCustom,
       pkgs,
       ...
     }:
-    let
-      sources = libCustom.nvFetcherSources pkgs;
-    in
     {
       # NOTE: POE is installed through steam
       environment.systemPackages = [
-        # don't expose in perSystem as it requires a patched nixpkgs
-        ((pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
-          sources.awakened-poe-trade
-        )
-        (
-          (pkgs.custom.exiled-exchange-2.override { commandLineArgs = [ "--ozone-platform=x11" ]; })
-          .overrideAttrs
-          sources.exiled-exchange-2
-        )
+        pkgs.custom.awakened-poe-trade
+        pkgs.custom.exiled-exchange-2
       ];
 
       # helium extensions

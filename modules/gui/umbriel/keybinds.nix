@@ -71,9 +71,9 @@
               "Alt+Tab" = "window-focus-next";
               "Alt+SHIFT+Tab" = "window-focus-last";
 
-              # TODO: cycle between windows of the same class
-              # "CTRL+ALT+Tab" = "spawn:wm-same-class next";
-              # "CTRL+ALT+SHIFT+Tab" = "spawn:wm-same-class prev";
+              # cycle between windows of the same class
+              "CTRL+ALT+Tab" = "spawn:wm-same-class next";
+              "CTRL+ALT+SHIFT+Tab" = "spawn:wm-same-class prev";
 
               # Switches focus between the current and the previous workspace.
               "Mod+Tab" = "workspace-focus-last";
@@ -102,8 +102,8 @@
               # mouse bindings
 
               # having Mod + Scroll up / Down is impossible to control with trackball, so require Shift for workspaces
-              "Mod+Shift+WheelDown" = "window-focus-or-workspace-down"; # cooldown-ms = 150;
-              "Mod+Shift+WheelUp" = "window-focus-or-workspace-up"; # cooldown-ms = 150;
+              "Mod+Shift+WheelDown" = "window-focus-or-workspace-down";
+              "Mod+Shift+WheelUp" = "window-focus-or-workspace-up";
 
               "Mod+WheelRight" = "window-focus-or-output-right";
               "Mod+WheelLeft" = "window-focus-or-output-left";

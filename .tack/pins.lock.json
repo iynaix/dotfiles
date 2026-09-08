@@ -35,9 +35,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "5fed5dc8b395225a076ceca9cb451854f9566af5",
-    "narHash": "sha256-KlSFUGJSBAokxSuAHCNZv4I1FODpJC2EpsTfMVVRXpg=",
-    "lastModified": 1788672845
+    "rev": "26bd2dc9c2248d95e78937d19fc777d0c7074d4d",
+    "narHash": "sha256-VTm+aGI28jJ+6rblr9cMtgnx5igF0AzC056iwutEDo8=",
+    "lastModified": 1788912443
   },
   "nix-index-database": {
     "type": "github",
@@ -51,29 +51,29 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "44d95795ee2d475b3d687325e26dcf4ca9104557",
-    "narHash": "sha256-3jBEq8avfzlrsY4UpW4d5TOmm7ocseZfnitEJhqauyc=",
-    "lastModified": 1788335262
+    "rev": "62173785b9a18c78b4a15aca2623d02bceb9d077",
+    "narHash": "sha256-MhPMOFV4pVkygWEbQ8t1De/uQ9cWF1u++tRe2L5tG48=",
+    "lastModified": 1788860136
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1068089.c043004d1c69/nixexprs.tar.xz",
-    "rev": "c043004d1c6985732bcc1cbc5a9c9aecbbb4e0f0",
-    "narHash": "sha256-PRK1fSEiAcO29DkUoOlsVLGYRK3h1YKVr+qQJB0VcYQ="
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1069856.d6524aaca2ff/nixexprs.tar.xz",
+    "rev": "d6524aaca2ff07876657ae2b323f24be4874944b",
+    "narHash": "sha256-151taSq/21cxagiIu7hyMVl68+FbHfwBP4lh6TB6KOM="
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9173.6713828a351e/nixexprs.tar.xz",
-    "rev": "6713828a351efa628b025a1adf7f43cbf8597513",
-    "narHash": "sha256-ahDTmIBX7dGq9GgQWH0m1uEIoJhGInEpNvKVLc1j47U="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9334.93108a538f07/nixexprs.tar.xz",
+    "rev": "93108a538f079596c9a16c72cf03e9322782b6dd",
+    "narHash": "sha256-HpUcFydtAyJ4v+HhQYitv0hXM/sAld/boLdsnSRiRPs="
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "5e4f212f8720c17fdd06f5c57591f251aff67453",
-    "narHash": "sha256-ozY1uUiOLXt3KLpUQwu8Y1DG+lKa53Gke7NW9gvUu3I=",
-    "lastModified": 1788494938
+    "rev": "4771b6b78c203c090799ca6984d73c54e77228d6",
+    "narHash": "sha256-PEcPDc5QRRlzYYGQuGuh7OMMLZ1TC5hLHt3whFBRSS0=",
+    "lastModified": 1788873411
   },
   "preservation": {
     "type": "github",
@@ -103,9 +103,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "7a448abe550ecbebba7f0ae90e4d96a820fc592e",
-    "narHash": "sha256-aSCEP5qa5EEAuDkde+kIJnsJwrOGVu/+JeBdvULemcY=",
-    "lastModified": 1788738236,
+    "rev": "33d8ed95581de1dbdd9f842026131643b85a1b03",
+    "narHash": "sha256-BjKkbmvBcLtSEaDmrRRKHr62ALv/f/DJoekRC47PwZA=",
+    "lastModified": 1788913724,
     "submodules": true
   },
   "wfetch": {
@@ -120,8 +120,8 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "7cdab92c8392910a64dfe90933448f54ee18fb22",
-    "narHash": "sha256-sObhprEmDGi619oKrMABttOxynff4D7+qHJTYRkCVMI=",
-    "lastModified": 1788673063
+    "rev": "f57daa2c7c7e7af7382fbaab9a330bc39c6fd30c",
+    "narHash": "sha256-3mM/4Nv4rKU17EiYOhRt0AWp0IbV5gFLlogh7yNZUwU=",
+    "lastModified": 1788891837
   }
 }

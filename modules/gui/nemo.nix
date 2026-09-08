@@ -30,7 +30,7 @@
         # fix mimetype associations
         mime.defaultApplications = {
           "inode/directory" = "nemo.desktop";
-          # wtf zathura / pqiv registers themselves to open archives
+          # wtf zathura registers themselves to open archives
           "application/zip" = "org.gnome.FileRoller.desktop";
           "application/vnd.rar" = "org.gnome.FileRoller.desktop";
           "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";

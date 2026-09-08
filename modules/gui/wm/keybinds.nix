@@ -71,7 +71,7 @@
             # picture in picture mode
             "Mod+P".spawn = "wm-pip";
 
-            "Mod+Apostrophe".spawn = "wallpaper rofi";
+            "Mod+Apostrophe".spawn = "wallpaper select";
             # "Mod+Shift+Apostrophe".spawn = "rofi-wallust-theme";
             "Alt+Apostrophe".spawn = "wallpaper history";
 

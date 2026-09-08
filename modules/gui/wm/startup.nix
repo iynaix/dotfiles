@@ -18,9 +18,9 @@
               lib.types.str
               (lib.types.submodule {
                 options = {
-                  app-id = lib.mkOption {
+                  app_id = lib.mkOption {
                     type = lib.types.nullOr lib.types.str;
-                    description = "The app-id (class) of the program to start";
+                    description = "The app_id (class) of the program to start";
                     default = null;
                   };
                   enable = lib.mkEnableOption "Rule" // {
@@ -97,27 +97,27 @@
           custom = {
             wm.startup = [
               {
-                app-id = "helium";
+                app_id = "helium";
                 spawn = "uwsm app -- helium --profile-directory=Default";
                 workspace = 1;
               }
 
               {
-                app-id = "helium";
+                app_id = "helium";
                 spawn = "uwsm app -- helium --profile-directory=Default --incognito";
                 workspace = 1;
               }
 
               # emacs
               {
-                app-id = "emacs";
+                app_id = "emacs";
                 spawn = "uwsm app -- emacsclient -c";
                 workspace = 2;
               }
 
               # file manager
               {
-                app-id = "nemo";
+                app_id = "nemo";
                 # NOTE: nemo seems ignore --class and --name flags?
                 spawn = "nemo";
                 workspace = 4;
@@ -125,14 +125,14 @@
 
               # terminal
               rec {
-                app-id = "${config.custom.programs.terminal.app-id}-vertical";
-                spawn = "uwsm app -- ${termExe} --class=${app-id}";
+                app_id = "${config.custom.programs.terminal.app_id}-vertical";
+                spawn = "uwsm app -- ${termExe} --class=${app_id}";
                 workspace = 7;
               }
 
               # discord and other chats
               rec {
-                app-id = "helium";
+                app_id = "helium";
                 title = ".*(Discord|WhatsApp|Flood).*";
                 spawn = "uwsm app -- helium-chat";
                 workspace = 9;
@@ -144,14 +144,14 @@
               # download related
               rec {
                 enable = host == "desktop";
-                app-id = "${config.custom.programs.terminal.app-id}-dl";
-                spawn = "uwsm app -- ${termExe} --class=${app-id}";
+                app_id = "${config.custom.programs.terminal.app_id}-dl";
+                spawn = "uwsm app -- ${termExe} --class=${app_id}";
                 workspace = 8;
               }
               rec {
                 enable = host == "desktop";
-                app-id = "${config.custom.programs.terminal.app-id}-yt.txt";
-                spawn = "uwsm app -- ${termExe} --class=${app-id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
+                app_id = "${config.custom.programs.terminal.app_id}-yt.txt";
+                spawn = "uwsm app -- ${termExe} --class=${app_id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
                 workspace = 8;
               }
             ];
