@@ -27,8 +27,6 @@
           extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
         };
 
-        hj.files.".face".source = ../../avatar.png;
-
         custom = {
           programs.print-config = {
             wm = /* sh */ ''

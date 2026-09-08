@@ -62,7 +62,6 @@ position = "top_right"
 media = false
 
 [shell]
-avatar_path = "/home/iynaix/.face"
 font_family = "Geist Medium"
 password_style = "random"
 polkit_agent = true
