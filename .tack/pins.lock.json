@@ -35,9 +35,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "26bd2dc9c2248d95e78937d19fc777d0c7074d4d",
-    "narHash": "sha256-VTm+aGI28jJ+6rblr9cMtgnx5igF0AzC056iwutEDo8=",
-    "lastModified": 1788912443
+    "rev": "34539055f87f6750bd980fb389043fe45fbc2e10",
+    "narHash": "sha256-dYUavt6XgbiUhHRCWSoWAGsLRuIVUQEgkf9kB9i49Hc=",
+    "lastModified": 1788943366
   },
   "nix-index-database": {
     "type": "github",
@@ -51,9 +51,9 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "62173785b9a18c78b4a15aca2623d02bceb9d077",
-    "narHash": "sha256-MhPMOFV4pVkygWEbQ8t1De/uQ9cWF1u++tRe2L5tG48=",
-    "lastModified": 1788860136
+    "rev": "83bbc895120516d6e86885a188c04beced6535d9",
+    "narHash": "sha256-CLoJCCRi9sogsyGXYn8rOCWBLKAntfKUB9Rli/YXgEY=",
+    "lastModified": 1788942796
   },
   "nixpkgs": {
     "type": "tarball",
@@ -63,9 +63,9 @@
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9334.93108a538f07/nixexprs.tar.xz",
-    "rev": "93108a538f079596c9a16c72cf03e9322782b6dd",
-    "narHash": "sha256-HpUcFydtAyJ4v+HhQYitv0hXM/sAld/boLdsnSRiRPs="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9440.6aefcda9401b/nixexprs.tar.xz",
+    "rev": "6aefcda9401be8acc2b74244fb3b37520ea1f0a8",
+    "narHash": "sha256-JLopN/XSodSsJIZ7v7tEjpPZ+QXc883s3HoUIxHD8Io="
   },
   "nvf": {
     "type": "github",
@@ -87,9 +87,9 @@
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "fbf759290e0cb0a98dfc813a4eb7d53ad1dacb57",
-    "narHash": "sha256-gkSH8VUtCo6hnysNmb9DbTuDepH2t5pv+QWjP75xKAk=",
-    "lastModified": 1788337237
+    "rev": "13616fff713a9f94055c66f15687ebdc17a335df",
+    "narHash": "sha256-4GuMPW90JSxXWDPUB9M+1m7fYbe3H0apOd86/zBQ2Kw=",
+    "lastModified": 1788914643
   },
   "systems": {
     "type": "github",
@@ -103,9 +103,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "33d8ed95581de1dbdd9f842026131643b85a1b03",
-    "narHash": "sha256-BjKkbmvBcLtSEaDmrRRKHr62ALv/f/DJoekRC47PwZA=",
-    "lastModified": 1788913724,
+    "rev": "3efacb3640a9859c7711e7ddd0b157c143b45f9c",
+    "narHash": "sha256-4EG3k/dkuHskBMhus+3sv+uUptC3Qcg1Sop9bfngk78=",
+    "lastModified": 1789007073,
     "submodules": true
   },
   "wfetch": {
@@ -120,8 +120,8 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "f57daa2c7c7e7af7382fbaab9a330bc39c6fd30c",
-    "narHash": "sha256-3mM/4Nv4rKU17EiYOhRt0AWp0IbV5gFLlogh7yNZUwU=",
-    "lastModified": 1788891837
+    "rev": "1db3c116a6aa61823f8d8f3c47c306846428fc54",
+    "narHash": "sha256-7xWS16u13YGlRNKWaAPzRbEyh4OLOXJe31k7h4AnXNU=",
+    "lastModified": 1788981141
   }
 }

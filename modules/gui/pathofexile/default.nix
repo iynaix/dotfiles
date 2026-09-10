@@ -11,8 +11,6 @@
 
   config =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
@@ -51,9 +49,8 @@
         umbriel.settings =
           let
             poeArgs = {
-              default_output = (lib.head config.custom.hardware.monitors).name;
               default_fullscreen = true;
-              default_workspace = 5;
+              default_workspace = "5";
             };
             aptArgs = {
               default_floating = true;
