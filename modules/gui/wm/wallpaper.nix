@@ -3,10 +3,8 @@
 
   config =
     {
-      config,
       lib,
       pkgs,
-      tags,
       ...
     }:
     lib.mkMerge [
@@ -16,40 +14,6 @@
             nomacs
           ];
         };
-
-        systemd.user.services.wallpaper =
-          let
-            wallpaper-init = pkgs.writeShellApplication {
-              name = "wallpaper-init";
-              runtimeInputs = [
-                config.programs.noctalia.package
-                config.custom.programs.dotfiles-rs
-              ];
-              text = /* sh */ ''
-                while ! noctalia msg status >/dev/null 2>&1; do
-                  ${lib.getExe' pkgs.coreutils "sleep"} 0.5
-                done
-
-                # hide on laptop screens to save space
-                ${lib.optionalString (builtins.elem "laptop" tags) "noctalia msg bar-hide"}
-                wallpaper
-              '';
-            };
-          in
-          {
-            description = "Changes the wallpaper on boot";
-            unitConfig = {
-              After = [ "noctalia.service" ];
-              Requires = [ "noctalia.service" ];
-            };
-            serviceConfig = {
-              ExecStart = lib.getExe wallpaper-init;
-              RestartSec = 1;
-              Restart = "on-failure";
-              Type = "oneshot";
-            };
-            wantedBy = [ "noctalia.service" ];
-          };
 
         # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
         custom.programs = {

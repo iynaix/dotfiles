@@ -21,6 +21,7 @@
       config,
       lib,
       pkgs,
+      tags,
       ...
     }:
     let
@@ -74,6 +75,13 @@
           enable = true;
           package = pkgs.noctalia; # overlay-ed above
           systemd.enable = true;
+        };
+
+        systemd.user.services.noctalia = {
+          serviceConfig = {
+            # hide the bar on laptop screens for more space
+            ExecStartPost = lib.mkIf (builtins.elem "laptop" tags) "${lib.getExe config.programs.noctalia.package} msg bar-hide";
+          };
         };
 
         environment.systemPackages = [

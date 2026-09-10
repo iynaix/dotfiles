@@ -56,7 +56,6 @@
                 workspace = [
                   {
                     name = toString w;
-                    layout.mode = "scrolling";
                     layout.struts = {
                       left = 0;
                       right = 0;

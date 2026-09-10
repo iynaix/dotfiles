@@ -10,16 +10,6 @@
       pkgs,
       ...
     }:
-    let
-      # NOTE: hyprland wrapper module has not been merged upstream:
-      # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
-      hyprland' = inputs.wrappers.wrappers.hyprland.wrap rec {
-        inherit pkgs;
-        package = pkgs.hyprland;
-        inherit (package) passthru;
-        configFile = config.custom.programs.hyprland.settings;
-      };
-    in
     {
       options.custom = {
         programs.hyprland = {
@@ -53,13 +43,20 @@
 
         programs.hyprland = {
           enable = true;
-          package = hyprland';
+          # NOTE: hyprland wrapper module has not been merged upstream:
+          # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
+          package = inputs.wrappers.wrappers.hyprland.wrap rec {
+            inherit pkgs;
+            package = pkgs.hyprland;
+            inherit (package) passthru;
+            configFile = config.custom.programs.hyprland.settings;
+          };
           withUWSM = true;
         };
 
         custom.programs.print-config = {
           hyprland = /* sh */ ''
-            cat "${hyprland'.configuration.constructFiles.generatedConfig.outPath}" | \
+            cat "${config.programs.hyprland.package.configuration.constructFiles.userConfig.outPath}" | \
               ${lib.getExe pkgs.stylua} --indent-type Spaces --indent-width 2 - | \
               moor --lang lua'';
         };

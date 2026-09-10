@@ -131,7 +131,12 @@ builtin_ids = ["btop", "cava", "kitty", "hyprland", "umbriel"]
 community_ids = ["yazi", "zathura"]
 
 [wallpaper]
+directory = "/home/iynaix/Pictures/Wallpapers"
 transition_on_startup = true
+
+[wallpaper.automation]
+enabled = true
+interval_seconds = 86400
 
 [widget.battery]
 color = "primary"

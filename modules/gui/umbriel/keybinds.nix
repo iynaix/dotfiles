@@ -117,9 +117,9 @@
                   [
                     {
                       # Switch workspaces with mainMod + [0-9]
-                      "Mod+${key}" = "workspace-switch:${toString workspace}";
+                      "Mod+${key}" = ''workspace-switch:"${toString workspace}"'';
                       # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                      "Mod+Shift+${key}" = "window-move-to-workspace:${toString workspace}";
+                      "Mod+Shift+${key}" = ''window-move-to-workspace:"${toString workspace}"'';
                     }
                   ]
                 )
