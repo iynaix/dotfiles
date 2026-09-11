@@ -24,10 +24,10 @@
   };
   helium = {
     pname = "helium";
-    version = "0.16.6.1";
+    version = "0.17.0.1";
     src = fetchurl {
-      url = "https://github.com/imputnet/helium-linux/releases/download/0.16.6.1/helium-0.16.6.1-x86_64.AppImage";
-      sha256 = "sha256-T29e5QpXsFYADvSsNcti2LXqLaCUjB5mLYEnHtpxO/Q=";
+      url = "https://github.com/imputnet/helium-linux/releases/download/0.17.0.1/helium-0.17.0.1-x86_64.AppImage";
+      sha256 = "sha256-JmqdEwoXP/2GGAMS2gjAq7G2oWFuyUTr5ouMDhSOcHY=";
     };
   };
   mpv-deletefile = {

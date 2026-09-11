@@ -84,6 +84,6 @@ pkgs.mkShell {
     pre-commit
     # deps for building rust utilities
     glib
-    gexiv2 # for reading metadata
+    gexiv2_0_10 # for reading metadata
   ];
 }

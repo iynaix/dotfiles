@@ -88,8 +88,9 @@ pub fn show_history(args: &WallpaperFilterArgs) {
         "swayimg",
         "--appid",
         "wallpaper-selector",
+        // show images in the given order
         "--execute",
-        "swayimg.imagelist.order = \"random\""
+        "swayimg.imagelist.order = \"none\""
     );
 
     if let Some((w, h)) = target_window_size() {

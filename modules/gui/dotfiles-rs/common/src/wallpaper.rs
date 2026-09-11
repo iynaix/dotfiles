@@ -1,3 +1,4 @@
+use execute::Execute;
 use itertools::Itertools;
 use rexiv2::Metadata;
 
@@ -5,6 +6,7 @@ use crate::{full_path, nixjson::NixJson};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
+    process::Stdio,
 };
 
 pub fn dir() -> PathBuf {
@@ -12,9 +14,14 @@ pub fn dir() -> PathBuf {
 }
 
 pub fn current() -> Option<String> {
-    dirs::runtime_dir()
-        .map(|runtime_dir| runtime_dir.join("current_wallpaper"))
-        .and_then(|runtime_file| std::fs::read_to_string(runtime_file).ok())
+    let cmd = execute::command_args!("noctalia", "msg", "wallpaper-get")
+        .stdout(Stdio::piped())
+        .execute_output()
+        .ok()?;
+
+    String::from_utf8(cmd.stdout)
+        .ok()
+        .map(|s| s.trim().to_string())
 }
 
 pub fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
@@ -51,15 +58,6 @@ where
         .to_str()
         .expect("could not convert wallpaper path to str")
         .to_string();
-
-    // write current wallpaper to $XDG_RUNTIME_DIR/current_wallpaper
-    std::fs::write(
-        dirs::runtime_dir()
-            .expect("could not get $XDG_RUNTIME_DIR")
-            .join("current_wallpaper"),
-        &wallpaper,
-    )
-    .ok();
 
     execute::command_args!("noctalia", "msg", "wallpaper-set")
         .arg(&wallpaper)

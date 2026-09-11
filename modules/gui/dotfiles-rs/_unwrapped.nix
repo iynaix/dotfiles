@@ -4,7 +4,7 @@
   makeWrapper,
   pkg-config,
   glib,
-  gexiv2,
+  gexiv2_0_10,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     glib
-    gexiv2 # for reading metadata
+    gexiv2_0_10 # for reading metadata
   ];
 
   postInstall =

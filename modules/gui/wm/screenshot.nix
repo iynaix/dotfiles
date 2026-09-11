@@ -39,9 +39,10 @@
 
       custom = {
         wm.binds = {
-          "Mod+backslash".spawn = "focal image --area selection --no-notify --no-save --no-rounded-windows";
-          "Mod+Shift+backslash".spawn = "focal image --rofi";
-          "Mod+Ctrl+backslash".spawn = "focal image --area selection --ocr";
+          "Mod+backslash".spawn =
+            "focal image --noctalia --area selection --no-notify --no-save --no-rounded-windows";
+          "Mod+Shift+backslash".spawn = "focal image --noctalia --rofi";
+          "Mod+Ctrl+backslash".spawn = "focal image --noctalia --area selection --ocr";
           "Alt+backslash".spawn = "focal video --rofi";
         };
       };

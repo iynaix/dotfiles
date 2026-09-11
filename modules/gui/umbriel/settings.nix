@@ -292,7 +292,7 @@
                 };
 
                 focus = {
-                  follows_mouse = false;
+                  follows_mouse = true;
                   # Refuse hover focus when revealing the window would scroll further than this,
                   # measured in viewport widths (1.0 = one full screen). Omit for no limit.
                   # follows_mouse_max_scroll = 0.5

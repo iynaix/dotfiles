@@ -31,9 +31,14 @@ pub fn search(args: SearchArgs) {
         .execute_stdout_lines()
         .unwrap_or_default();
 
-    execute::command_args!("swayimg")
-        .args(all_results)
-        .args(rclip_results)
-        .execute_output()
-        .expect("failed to run swayimg");
+    execute::command_args!(
+        "swayimg",
+        // show images in the given order
+        "--execute",
+        "swayimg.imagelist.order = \"none\""
+    )
+    .args(all_results)
+    .args(rclip_results)
+    .execute_output()
+    .expect("failed to run swayimg");
 }

@@ -30,7 +30,7 @@
       noctalia-reload = pkgs.writeShellApplication {
         name = "noctalia-reload";
         text = /* sh */ ''
-          systemctl restart noctalia
+          systemctl restart --user noctalia
         '';
       };
     in
@@ -78,6 +78,10 @@
         };
 
         systemd.user.services.noctalia = {
+          environment = {
+            # fix launcher icons
+            QT_QPA_PLATFORMTHEME = "gtk3";
+          };
           serviceConfig = {
             # hide the bar on laptop screens for more space
             ExecStartPost = lib.mkIf (builtins.elem "laptop" tags) "${lib.getExe config.programs.noctalia.package} msg bar-hide";

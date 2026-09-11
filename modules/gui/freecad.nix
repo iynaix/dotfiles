@@ -2,10 +2,15 @@
   hosts = [ "desktop" ];
 
   config =
-    { pkgs, ... }:
+    {
+      inputs,
+      system,
+      ...
+    }:
     {
       environment.systemPackages = [
-        pkgs.freecad-wayland
+        # pkgs.freecad-wayland
+        (inputs.multiverse.multiverse.${system}.at "8ce4ef6cb6f8").freecad-wayland
       ];
 
       custom.persist = {

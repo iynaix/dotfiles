@@ -50,14 +50,5 @@
           });
         '';
       };
-
-      custom.persist = {
-        root = {
-          directories = [
-            # greeter wallpaper and settings synced from noctalia
-            "/var/lib/noctalia-greeter"
-          ];
-        };
-      };
     };
 }

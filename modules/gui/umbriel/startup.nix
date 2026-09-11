@@ -23,6 +23,7 @@
                   }
                   (lib.optionalAttrs (startup.app_id != null) { match.app_id = startup.app_id; })
                   (lib.optionalAttrs (startup.title != null) { match.title = startup.title; })
+                  startup.umbrielArgs
                 ]
               );
             })
