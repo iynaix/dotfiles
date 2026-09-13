@@ -76,7 +76,7 @@
 
       if not vim.g.has_gui then
         if vim.g.has_ui then
-          vim.o.termguicolors = false
+          vim.o.termguicolors= false
           vim.cmd.colorscheme('default')
         end
         return

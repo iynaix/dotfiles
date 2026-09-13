@@ -15,7 +15,6 @@
       pipes-rs
       scope-tui
       tenki
-      terminal-colors
       inputs.wfetch.packages.${system}.default
     ];
 

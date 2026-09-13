@@ -8,7 +8,6 @@
           callPackage,
           stdenv,
           makeWrapper,
-          dconf,
           procps,
           czkawka,
           swayimg,
@@ -37,7 +36,6 @@
                   lib.makeBinPath (
                     [
                       czkawka
-                      dconf
                       procps
                       rclip
                       rsync

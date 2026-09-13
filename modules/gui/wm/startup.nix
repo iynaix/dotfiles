@@ -139,9 +139,6 @@
                 hyprlandArgs = {
                   initial_title = title;
                 };
-                umbrielArgs = {
-                  default_maximize = true;
-                };
               }
 
               # download related

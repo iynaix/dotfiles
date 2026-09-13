@@ -71,6 +71,7 @@ auto_sync = true
 
 [shell.launcher]
 categories = false
+show_app_origin_indicator = false
 sort_by_usage = false
 
 [shell.launcher.providers.session]
@@ -83,10 +84,12 @@ session_position = "center"
 transparency_mode = "glass"
 
 [shell.screenshot]
+annotate = true
 confirm_region = true
 directory = "/home/iynaix/Pictures/Screenshots"
 filename_pattern = "%Y-%m-%dT%H:%M:%S%z"
-remember_last_region = true
+remember_last_region = false
+skip_annotate_on_copy_save = true
 
 [[shell.session.actions]]
 action = "shutdown"
@@ -125,6 +128,7 @@ variant = "default"
 
 [theme]
 source = "wallpaper"
+wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
 builtin_ids = ["btop", "cava", "kitty", "hyprland", "umbriel"]

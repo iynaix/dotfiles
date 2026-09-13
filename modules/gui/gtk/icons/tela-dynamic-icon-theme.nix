@@ -32,6 +32,7 @@
           name = "tela-dynamic-icon-theme";
           runtimeInputs = [
             pkgs.dconf
+            pkgs.gtk3
           ];
           text = /* sh */ ''
             if [[ -z "''${1:-}" ]]; then
@@ -62,6 +63,7 @@
             mkdir -p "$HOME/.local/share/icons"
             ln -sfn "$THEME_DIR" "$HOME/.local/share/icons/$THEME_NAME"
             dconf write "/org/gnome/desktop/interface/icon-theme" "'$THEME_NAME'"
+            gtk-update-icon-cache -f -t "$THEME_DIR"
           '';
         };
     };
@@ -115,7 +117,7 @@
         ];
 
         # set dynamic icon theme with noctalia
-        custom.programs.noctalia.colors = {
+        custom.programs.noctalia.user-templates = {
           "gtk-icon-theme" = {
             post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
             # dummy values so noctalia doesn't complain

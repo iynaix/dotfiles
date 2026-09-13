@@ -158,6 +158,7 @@
                 outer_border_width = 0; # 0-100
                 corner_radius = 10; # 0-100, radius of the final decorated outer edge
                 drag_opacity = 0.75;
+                opaque_fullscreen = false;
 
                 blur = {
                   enabled = true;
@@ -327,7 +328,7 @@
                 # open single applications maximized
                 {
                   match.is_alone = true;
-                  default_maximize = true;
+                  default_maximize_to_edges = true;
                 }
               ];
             };

@@ -33,7 +33,7 @@
         };
       };
 
-      # sync with noctalia's settings, password prompt will continue until noctalia-greeter v1.5.0
+      # sync with noctalia's settings
       # https://docs.noctalia.dev/greeter/sync/?section=nixos#nixos
       security.polkit = {
         enablePkexecWrapper = true;

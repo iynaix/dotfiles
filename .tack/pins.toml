@@ -27,10 +27,10 @@ flake-parts = "flake-parts"
 
 # channel urls are faster and more reliable than github -.-
 [inputs.nixpkgs]
-url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
+url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
 
 [inputs.nixpkgs-stable]
-url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.xz"
+url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
 
 [inputs.multiverse]
 url = "github:fzakaria/nixpkgs-multiverse"

@@ -1,17 +1,31 @@
 {
   packages =
-    { lib, pkgs, ... }:
     {
-      # TODO: wrapper for noctalia v5 using the upstream PR?
-      # https://github.com/BirdeeHub/nix-wrapper-modules
-      noctalia = pkgs.noctalia.overrideAttrs (o: {
-        # skip tests
-        mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
+      inputs,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      noctalia = inputs.wrappers.wrappers.noctalia.wrap {
+        inherit pkgs;
+        package = pkgs.noctalia.overrideAttrs (o: {
+          src = pkgs.fetchFromGitHub {
+            owner = "noctalia-dev";
+            repo = "noctalia";
+            rev = "2856ec3b1b384f243770240261a11831de51a923";
+            hash = "sha256-n5lAaFSofJDpBrzRks4H9moBNAOAyQ0GMnlYWSQl8uo=";
+          };
 
-        patches = (o.patches or [ ]) ++ [
-          ./face-aware-crop.patch
-        ];
-      });
+          # skip tests
+          mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
+
+          patches = (o.patches or [ ]) ++ [
+            ./face-aware-crop.patch
+          ];
+        });
+        settings = builtins.fromTOML (builtins.readFile ./noctalia.toml);
+      };
     };
 
   tags = [ "wm" ];
@@ -19,6 +33,7 @@
   config =
     {
       config,
+      inputs,
       lib,
       pkgs,
       tags,
@@ -37,28 +52,15 @@
     {
       options.custom = {
         programs.noctalia = {
-          colors = lib.mkOption {
-            inherit (tomlFormat) type;
-            default = { };
-            description = ''
-              TOML config for noctalia, similar to https://iniox.github.io/#matugen/configuration for
-              available options
-            '';
-          };
+          inherit (inputs.wrappers.wrappers.noctalia.wrapperOptions) settings;
 
-          settings = lib.mkOption {
+          user-templates = lib.mkOption {
             inherit (tomlFormat) type;
             default = { };
-            example = lib.literalExpression ''
-              control_center.shortcuts = [
-                  { type = "wifi"; }
-                  { type = "bluetooth"; }
-                  { type = "caffeine"; }
-                  { type = "notification"; }
-              ];
-            '';
             description = ''
-              Configuration for noctalia, this will be added as a separate `host.toml` file
+              TOML config for noctalia user templates, see
+              https://docs.noctalia.dev/noctalia/theming/app-theming/?section=user-templates#user-templates
+              for available options
             '';
           };
         };
@@ -67,7 +69,12 @@
       config = {
         nixpkgs.overlays = [
           (_: _prev: {
-            inherit (pkgs.custom) noctalia;
+            noctalia = pkgs.custom.noctalia.wrap {
+              settings = lib.mkMerge [
+                config.custom.programs.noctalia.settings
+                { theme.templates.user = config.custom.programs.noctalia.user-templates; }
+              ];
+            };
           })
         ];
 
@@ -79,7 +86,7 @@
 
         systemd.user.services.noctalia = {
           environment = {
-            # fix launcher icons
+            # fix launcher icons?
             QT_QPA_PLATFORMTHEME = "gtk3";
           };
           serviceConfig = {
@@ -92,22 +99,6 @@
           noctalia-reload
           pkgs.wlr-randr
         ];
-
-        hj.xdg = {
-          config.files = {
-            "noctalia/config.toml".source = ./noctalia.toml;
-            "noctalia/host.toml" = {
-              generator = tomlFormat.generate "host.toml";
-              value = config.custom.programs.noctalia.settings;
-            };
-            "noctalia/user-templates.toml" = {
-              generator = tomlFormat.generate "user-template.toml";
-              value = {
-                theme.templates.user = config.custom.programs.noctalia.colors;
-              };
-            };
-          };
-        };
 
         custom = {
           programs = {
@@ -142,7 +133,7 @@
             };
 
             print-config = {
-              noctalia = /* sh */ ''cat ${config.hj.xdg.config.directory}/noctalia/* "${config.hj.xdg.state.directory}/noctalia/settings.toml" | moor --lang toml'';
+              noctalia = /* sh */ ''cat ${config.programs.noctalia.package.configuration.constructFiles.settings.outPath} "${config.hj.xdg.state.directory}/noctalia/settings.toml" | moor --lang toml'';
             };
           };
 

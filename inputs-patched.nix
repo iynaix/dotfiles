@@ -43,8 +43,24 @@ patcher.patch unpatchedInputs {
     # hyprland module
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
     (patcher.fetchpatch {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/fa67e918488fedaec413316a8e3db8040a632e3a.patch";
-      hash = "sha256-muNSLW2wCF0k/PbcfgRElxC1uY3YWwL8LqrwGorjeGk=";
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/94794a07e384edb6ee4506be4d8a731d73c8eafc.patch";
+      hash = "sha256-SLmLyhJ1rA4A3EMHJxqDBlgE32k8NUHRINNkWvuDxMw=";
+    })
+
+    # noctalia module
+    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/598
+    (patcher.fetchpatch {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/8dc6e5fa91c39033b6a8613b2ba5cfcc72728792.patch";
+      hash = "sha256-Lo/wvbqEv5DoFQ/FwqXTTUn+Bfck/V6M3EfRG5jdTrY=";
+    })
+  ];
+
+  umbriel = [
+    # add opaque_fullscreen option
+    # https://github.com/noctalia-dev/umbriel/pull/242
+    (patcher.fetchpatch {
+      url = "https://github.com/noctalia-dev/umbriel/compare/bb9ed295194480de3004ee4ff61e0811c5250420~1..9e8752d0bb388ab9c2026a100cec59ee9af77fee.patch";
+      hash = "sha256-GsQ6al1ZUtzOwW1ES8nF9E6OrQXtFwiN2NjIm/zW5jM=";
     })
   ];
 }
