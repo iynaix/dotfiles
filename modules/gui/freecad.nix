@@ -3,14 +3,12 @@
 
   config =
     {
-      inputs,
-      system,
+      pkgs,
       ...
     }:
     {
       environment.systemPackages = [
-        # pkgs.freecad-wayland
-        (inputs.multiverse.multiverse.${system}.at "8ce4ef6cb6f8").freecad-wayland
+        pkgs.freecad-wayland
       ];
 
       custom.persist = {

@@ -199,7 +199,7 @@
                 mode = "scrolling"; # "scrolling", "dwindle", or "master"
                 # Inspect every workspace's effective mode with `umbriel workspaces --json`.
                 inherit gap;
-                width_presets = [
+                extent_presets = [
                   0.33333
                   0.5
                   0.66667
@@ -214,7 +214,7 @@
                 };
 
                 scrolling = {
-                  default_width_fraction = 0.5; # remove to let clients choose their initial width
+                  default_extent_fraction = 0.5; # remove to let clients choose their initial width
                   center_underfull_strip = true; # center the strip whenever it is narrower than the viewport
                   center_focused = "never"; # always center the focused column
                 };
@@ -309,10 +309,10 @@
                 {
                   match.app_id = "^dev.noctalia.UmbrielSharePicker$";
                   default_floating = true;
-                  default_size = [
-                    800
-                    600
-                  ];
+                  default_floating_size_px = {
+                    width = 800;
+                    height = 600;
+                  };
                 }
                 # Browsers do not expose a semantic PiP role or control global window position.
                 {

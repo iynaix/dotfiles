@@ -8,6 +8,7 @@
       ...
     }:
     {
+      # NOTE: using patches to the nixos module for autologin, default session and noctalia sync
       services.displayManager = {
         noctalia-greeter = {
           enable = true;
@@ -26,29 +27,13 @@
               scheme_selector_position = "hidden"; # using synced settings from noctalia, unnecessary
             };
 
-            session.default = config.services.displayManager.defaultSession;
             user.default = user;
             idle.timeout = 60;
           };
-        };
-      };
 
-      # sync with noctalia's settings
-      # https://docs.noctalia.dev/greeter/sync/?section=nixos#nixos
-      security.polkit = {
-        enablePkexecWrapper = true;
-        extraConfig = /* js */ ''
-          polkit.addRule(function(action, subject) {
-            var allowedUsers = ["${user}"];
-            if (action.id == "org.noctalia.greeter.sync-appearance" &&
-                action.lookup("program") == "${config.services.displayManager.noctalia-greeter.package}/bin/noctalia-greeter-apply-appearance" &&
-                action.lookup("user") == "root" &&
-                subject.local && subject.active &&
-                allowedUsers.indexOf(subject.user) >= 0) {
-              return polkit.Result.YES;
-            }
-          });
-        '';
+          # sync with noctalia wallpaper and colors
+          passwordlessSyncUsers = [ user ];
+        };
       };
     };
 }

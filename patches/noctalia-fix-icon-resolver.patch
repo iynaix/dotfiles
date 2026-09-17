@@ -1,0 +1,22 @@
+diff --git a/pkgs/by-name/no/noctalia/package.nix b/pkgs/by-name/no/noctalia/package.nix
+index 44956da4b8ff..2d9554d27321 100644
+--- a/pkgs/by-name/no/noctalia/package.nix
++++ b/pkgs/by-name/no/noctalia/package.nix
+@@ -50,6 +50,7 @@
+ 
+   # runtime
+   gitMinimal,
++  gsettings-desktop-schemas,
+ }:
+ 
+ stdenv.mkDerivation (finalAttrs: {
+@@ -128,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
+   # plugins are installed by cloning their repos
+   postFixup = ''
+     wrapProgram $out/bin/noctalia \
+-      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]}
++      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]} \
++      --suffix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+   '';
+ 
+   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

@@ -14,7 +14,24 @@ patcher.patch unpatchedInputs {
     # always allow unfree, i dgaf
     ./patches/allow-unfree.patch
 
-    # support autologin for noctalia-greeter
+    # fix noctalia icon resolver because XDG_DATA_DIRS is not properly set
+    ./patches/noctalia-fix-icon-resolver.patch
+
+    # nixos/noctalia-greeter: add passwordlessSyncUsers option
+    # https://github.com/NixOS/nixpkgs/pull/563958
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/79b249f686716776d8fcbbd7802dd62e6b65caa8.patch";
+      hash = "sha256-8Dwdy9i0FYd8G0gAWNgoOB403zsr8pS+OPqtXtX78Do=";
+    })
+
+    # nixos/noctalia-greeter: support services.displayManager.defaultSession
+    # https://github.com/NixOS/nixpkgs/pull/560749
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/ad0260f3890976460e317f352b97a3ed98c7a59d.patch";
+      hash = "sha256-lkfMfQfeSCi/+fLo4hNdNN7eyh1cZS5pXB6cRjqH/Uo=";
+    })
+
+    # nixos/noctalia-greeter: support autologin
     # https://github.com/NixOS/nixpkgs/pull/560780
     (patcher.fetchpatch {
       url = "https://github.com/NixOS/nixpkgs/commit/0fa542d22aa91fa81c3b638e5350dafe6eb872f1.patch";
@@ -28,11 +45,20 @@ patcher.patch unpatchedInputs {
       hash = "sha256-Gsa1O4KPuXeJjz7CCJH1tjzsdRBTMYk1rOFBAZYDr4A=";
     })
 
-    # awakened poe trade command line args
+    # awakened-poe-trade: add commandLineArgs
     # https://github.com/NixOS/nixpkgs/pull/496108
     (patcher.fetchpatch {
       url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
       hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
+    })
+  ];
+
+  sops-nix = [
+    # fix go 1.25 EOL
+    # https://github.com/Mic92/sops-nix/pull/984
+    (patcher.fetchpatch {
+      url = "https://github.com/Mic92/sops-nix/commit/81630c5d814c38e6bf7b23888b53d8dad595e228.patch";
+      hash = "sha256-j/mrIzTyZyURzOSleAPatxY3AqgRHeFmZNzvpsl0OT8=";
     })
   ];
 

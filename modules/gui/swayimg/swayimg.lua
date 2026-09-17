@@ -2,6 +2,7 @@ swayimg.mode = "viewer"
 swayimg.decoration = false
 
 swayimg.text.visible = false -- hide info box
+swayimg.text.timeout = 86400 -- never hide the text
 swayimg.text.size = 14
 swayimg.text.color = 0xffffffff
 swayimg.text.background = 0x00000000

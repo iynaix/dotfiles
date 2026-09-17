@@ -56,7 +56,7 @@
 
               # generate the 2x icon symlinks
               for dir in 16 22 24 32 scalable;
-                do ln -sr "$THEME_DIR/$dir" "$THEME_DIR/$dir@2x";
+                do cp -r "$THEME_DIR/$dir" "$THEME_DIR/$dir@2x";
               done
             fi
 

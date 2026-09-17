@@ -20,7 +20,7 @@
 
     shellAliases = {
       neofetch = "fastfetch --config neofetch";
-      wwfetch = "wfetch --wallpaper";
+      wwfetch = "wfetch --wallpaper --image-size 270";
     };
   };
 }

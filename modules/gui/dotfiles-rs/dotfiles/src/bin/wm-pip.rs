@@ -80,14 +80,21 @@ fn umbriel_pip() -> Result<(), Box<dyn std::error::Error>> {
         let win_w = f64::from(focused.w);
         let win_h = f64::from(focused.h);
 
-        // let w_frac = target_w / win_w * (if target_w > win_w { -1.0 } else { 1.0 });
-        // let h_frac = target_h / win_h * (if target_h > win_h { -1.0 } else { 1.0 });
-
         let w_frac = target_w / win_w;
         let h_frac = target_h / win_h;
 
-        command_args!("umbriel", "msg", format!("window-set-width:{w_frac}")).execute()?;
-        command_args!("umbriel", "msg", format!("window-set-height:{h_frac}")).execute()?;
+        command_args!(
+            "umbriel",
+            "msg",
+            format!("window-set-primary-extent:{w_frac}")
+        )
+        .execute()?;
+        command_args!(
+            "umbriel",
+            "msg",
+            format!("window-set-secondary-extent:{h_frac}")
+        )
+        .execute()?;
 
         let mon_bottom = mon.position.y + mon_h;
         let mon_right = mon.position.x + mon_w;

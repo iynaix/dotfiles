@@ -87,8 +87,8 @@
               "Mod+BracketLeft" = "window-consume-or-expel-left";
               "Mod+BracketRight" = "window-consume-or-expel-right";
 
-              "Mod+R" = "window-cycle-width";
-              "Mod+Shift+R" = "window-cycle-height";
+              "Mod+R" = "window-cycle-primary-extent";
+              "Mod+Shift+R" = "window-cycle-secondary-extent";
 
               "Mod+Z" = "window-toggle-maximize";
               "Mod+F" = "window-toggle-fullscreen";
