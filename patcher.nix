@@ -11,7 +11,7 @@
   lib,
   fetchpatch,
   fetchurl,
-  applyPatches,
+  stdenvNoCC,
   ...
 }:
 let
@@ -51,6 +51,48 @@ let
     in
     result;
 
+  # speed up applyPatches, see:
+  # https://github.com/gepbird/nixpkgs-patcher/pull/26
+  applyPatchesFast =
+    {
+      name,
+      src,
+      patches,
+    }:
+    stdenvNoCC.mkDerivation {
+      inherit name src patches;
+
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+
+      phases = [
+        "unpackPhase"
+        "patchPhase"
+        "installPhase"
+      ];
+
+      unpackPhase = ''
+        runHook preUnpack
+
+        mkdir -p "$out"
+        ls -A "$src" | xargs -P "$NIX_BUILD_CORES" -I@ sh -c '
+            if [ -d "$0/$1" ] && [ ! -L "$0/$1" ]; then
+              mkdir -p "$2/$1"
+              (cd "$0/$1" && tar --hard-dereference -cf - .) | (cd "$2/$1" && tar xf -)
+            else
+              mkdir -p "$(dirname "$2/$1")"
+              cp -a "$0/$1" "$2/$1"
+            fi' "$src" @ "$out"
+        chmod -R u+w "$out"
+        cd "$out"
+
+        runHook postUnpack
+      '';
+
+      # unpackPhase already put the tree at its final location.
+      installPhase = "true";
+    };
+
   patchInputs =
     {
       unpatchedInputs,
@@ -75,7 +117,7 @@ let
       unpatchedInput
     else
       importFlake {
-        src = applyPatches {
+        src = applyPatchesFast {
           name = "${name}-patched";
           inherit patches;
           # use builtins.path to handle local `url = path:/PATH` format
