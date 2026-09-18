@@ -11,7 +11,9 @@
 
         # copy everything that is not "@2x", can be generated later
         src="${pkgs.tela-icon-theme}/share/icons/Tela-blue-dark/"
-        find "$src" -maxdepth 1 -mindepth 1 ! -name '*@2x' -print0 | xargs -0 -I{} cp -rL {} "$out/"
+        # exit code 23 is for partial transfer because of broken symlinks
+        ${lib.getExe pkgs.rsync} -rL --chmod=Du+w,Fu+w --ignore-errors --exclude='/*@2x' "$src"/ "$out"/ \
+            || [ $? -eq 23 ]
 
         # replace video icon color so it can be dynamic
         chmod -R +w "$out"
@@ -25,7 +27,6 @@
       '';
     in
     {
-      # inherit tela-template;
       tela-dynamic-icon-theme =
         # just replace all instances of tela blue
         pkgs.writeShellApplication {

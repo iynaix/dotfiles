@@ -84,69 +84,80 @@
               };
 
               animation = {
-                enabled = true;
-                duration_ms = 250; # 1-10000
-                curve = "easeout";
+                enabled = true; # Master animation switch
+                duration_ms = 250; # Shared duration, 1-10000 ms
+                curve = "easeout"; # Built-in or registered bezier/spring curve name
+                # A spring curve such as "spring:1,1000" (damping, stiffness) sets its own length from its physics and
+                # ignores duration_ms: raise stiffness for a faster settle, lower damping below 1 for overshoot.
 
+                # Window opening animation
                 windows_in = {
                   enabled = true;
-                  duration_ms = 150;
-                  curve = "easeout";
-                  style = "popin"; # popin, zoom, slide, fade, none
-                  scale = 0.85; # 0.1-1.0, used by popin
+                  curve = "spring:1,1900"; # 278 ms critically damped settle
+                  style = "popin"; # popin, zoom, slide, fade, or none
+                  scale = 0.85; # Popin start scale, 0.1-1.0
+                  # shader = "shaders/reveal.glsl";      # Replaces the built-in opening style
                 };
 
+                # Window closing animation
                 windows_out = {
                   enabled = true;
-                  duration_ms = 150;
-                  curve = "easeout";
-                  style = "fade"; # fade, slide
+                  curve = "spring:1,900"; # 403 ms critically damped settle
+                  style = "fade"; # fade, slide, popin, or zoom
+                  scale = 0.8; # Popin end scale, 0.1-1.0
+                  # shader = "shaders/reveal.glsl";
                 };
 
+                # Window movement, resizing, layout changes, maximize and restore, and visible
+                # scratchpad resizing
                 windows_move = {
-                  enabled = true; # window move, resize, and floating maximize transitions
-                  duration_ms = 250;
-                  curve = "snappy";
+                  enabled = true;
+                  curve = "spring:1,4400"; # 183 ms critically damped settle
+                  # shader = "shaders/squash.glsl";      # Subtle compression and settle during move/resize
                 };
 
+                # Workspace switching
                 workspaces = {
                   enabled = true;
-                  duration_ms = 250;
-                  curve = "easeout";
+                  curve = "spring:1,800"; # 428 ms critically damped settle
                 };
 
+                # Entering and leaving overview
                 overview = {
                   enabled = true;
-                  duration_ms = 250;
-                  curve = "easeout";
+                  curve = "spring:1,800"; # 428 ms critically damped settle
+                  # Filmstrip movement from wheel, keyboard, and touchpad navigation
+                  workspace_curve = "spring:1,1000";
                 };
 
+                # Scratchpad show, hide, and backdrop
                 scratchpad = {
-                  enabled = false;
-                  duration_ms = 250;
-                  curve = "easeout";
-                  dim = 0.5; # 0.0-1.0
-                  blur = false;
-                  scale = 0.0; # 0 preserves the window geometry
-                  maximize = false;
-                  fullscreen = false;
+                  enabled = true;
+                  curve = "spring:1,800"; # 428 ms critically damped settle
+                  dim = 0.8; # Backdrop dim amount, 0.0-1.0
+                  blur = false; # Requires appearance.blur.enabled
+                  scale = 0.0; # 0 keeps geometry; 0.1-1.0 centers and scales
+                  maximize = false; # Maximize to usable-area edges while shown
+                  fullscreen = false; # Make the scratchpad window fullscreen while shown
                 };
 
+                # Focus border color
                 border = {
-                  enabled = false;
-                  duration_ms = 250;
-                  curve = "easeout";
+                  enabled = true;
+                  curve = "spring:1,600"; # 494 ms critically damped settle
                 };
 
+                # Unfocused window opacity
                 dim_unfocused = {
                   enabled = false;
                   duration_ms = 250;
                   curve = "easeout";
-                  dim = 0.0; # 0.0-1.0
+                  dim = 0.0; # 0 disables dimming; maximum is 1.0
                 };
 
+                # Layer-shell surface mapping and unmapping
                 layers = {
-                  enabled = false;
+                  enabled = true;
                   duration_ms = 250;
                   curve = "easeout";
                 };
@@ -257,7 +268,7 @@
 
                 touchpad = {
                   tap = true; # enabled by default; false disables tap-to-click
-                  # natural_scroll = true
+                  natural_scroll = false;
                   # accel_profile = "adaptive"    # "flat", "adaptive", or "custom <step> <points...>"
                   # sensitivity = 0.5             # pointer speed, -1.0 to 1.0
                   # scroll_factor = 1.5           # touchpad scroll speed, 0.1 to 10.0

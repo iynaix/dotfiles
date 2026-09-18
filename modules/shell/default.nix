@@ -116,7 +116,6 @@
             (lib.hiPrio procps) # for uptime
             sd # better sed
             trash-cli
-            ugrep # grep, with boolean query patterns, e.g. ug --files -e "A" --and "B"
             xdg-utils
           ])
           ++ (with pkgs.custom; [

@@ -10,6 +10,7 @@
 {
   lib,
   fetchpatch,
+  fetchpatch2,
   fetchurl,
   stdenvNoCC,
   ...
@@ -131,7 +132,7 @@ let
       };
 in
 {
-  inherit fetchpatch fetchurl;
+  inherit fetchpatch fetchpatch2 fetchurl;
 
   patch =
     unpatchedInputs: patchesByInputName:

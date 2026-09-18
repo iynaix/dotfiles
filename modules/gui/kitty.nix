@@ -4,6 +4,9 @@
     {
       kitty = inputs.wrappers.wrappers.kitty.wrap {
         inherit pkgs;
+        flags = {
+          "--single-instance" = true;
+        };
         settings = {
           enable_audio_bell = false;
           copy_on_select = "clipboard";

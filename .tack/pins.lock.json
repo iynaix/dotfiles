@@ -19,9 +19,9 @@
     "type": "github",
     "owner": "feel-co",
     "repo": "hjem",
-    "rev": "e5e30b4320a8cbcd6cdfc65f044763669a8f0363",
-    "narHash": "sha256-0nvWuRbgL4GEKpR8Y4wsB3kmsVgyd0cW8kLHc2BqlTc=",
-    "lastModified": 1789234255
+    "rev": "cef02450f2c18a7e2b9297ea8d366f9a597254f7",
+    "narHash": "sha256-tycoVCB2KSVdy9ERT1lJGHdP9Hf4FHanaEY25hUxylw=",
+    "lastModified": 1790081753
   },
   "lamina": {
     "type": "github",
@@ -35,45 +35,45 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "b780524b47fbe8b9ae8605a761a8fe9ad1a8e48b",
-    "narHash": "sha256-77w6/8smBVoIGOMdRyq3G7RnujIS7h5B4wMGVhTIKf0=",
-    "lastModified": 1789596272
+    "rev": "a9890af724fed3ab6e3e02513d3aee5a23d4af86",
+    "narHash": "sha256-CflIeElc3re/Z4IJJrfM0jn+uIISHkQzwVvoxuFsqf4=",
+    "lastModified": 1790088158
   },
   "nix-index-database": {
     "type": "github",
     "owner": "nix-community",
     "repo": "nix-index-database",
-    "rev": "a74e173407559083a412ea89a1cc58ea389c3b65",
-    "narHash": "sha256-xVstyCdg0DpzjyrEacm72VJAIP9DMhfWJdPDzhWxHuo=",
-    "lastModified": 1789286446
+    "rev": "9ad722673ab3b3f91f02135e53775825b240b869",
+    "narHash": "sha256-Dkg4VKPmDPqTwaiw2WH5br73tXoL1qrOO0xJnR4TlcA=",
+    "lastModified": 1789892076
   },
   "nixos-hardware": {
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "c9b56a2497c22c90884388ba476900cbe45de808",
-    "narHash": "sha256-Jd7AoNhd9EkvS1YqjwdwncTMFT/YMxmYYI2GsyEBVCo=",
-    "lastModified": 1789583720
+    "rev": "9ebcb7766700d7e006d9505247bd7ce0426f4232",
+    "narHash": "sha256-FIRXajv1pPZ+l6On6ekkmcQ6le0Zi0ncRUoR3nB0vKA=",
+    "lastModified": 1789978172
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1074753.b1b875982b17/nixexprs.tar.zst",
-    "rev": "b1b875982b17dabde9b4a37f3e229e74913e6db3",
-    "narHash": "sha256-vWkSk5bbfTqdtMoSgD9FshACO8JCvXTFi+3cqEp0mH0="
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1077996.6774f7bc2537/nixexprs.tar.zst",
+    "rev": "6774f7bc253789b113a4f39285dc0fa100abeacc",
+    "narHash": "sha256-OJe62m8gZx4xEAQnMcqH1u31/uu4Xf0q2ykAEHZfgrg="
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9904.4c7870105e7f/nixexprs.tar.zst",
-    "rev": "4c7870105e7f1fdf9c48688c8d7efc21abf0688a",
-    "narHash": "sha256-BGtBoaZNpOPDEBLTiWNFdYppnDjGhwrUq5/P15QwrrM="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.10402.1e8bc658fc98/nixexprs.tar.zst",
+    "rev": "1e8bc658fc985ef27ccd66d107d767b32bb7ef98",
+    "narHash": "sha256-GiMDMZpYQ2eK3OFtqj/yXpRZwqfu6JfG5WWrUHWyF8M="
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "cdc7e7aaa7eb521bba1b38f54c3228d52cc31703",
-    "narHash": "sha256-umec9LKkWjK89Yx4XpvQStkgfKvhK7GjVf5m21bjzKU=",
-    "lastModified": 1789510188
+    "rev": "85bf39cd0409ad8a7fa5b3ad0d29e89e9da97a0e",
+    "narHash": "sha256-6GDssza3F+ukpUujSuTL50vW5AHaoG+4vjsDgWqRyeQ=",
+    "lastModified": 1789854559
   },
   "preservation": {
     "type": "github",
@@ -87,9 +87,9 @@
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "13616fff713a9f94055c66f15687ebdc17a335df",
-    "narHash": "sha256-4GuMPW90JSxXWDPUB9M+1m7fYbe3H0apOd86/zBQ2Kw=",
-    "lastModified": 1788914643
+    "rev": "7214124c20c1542c90deb54af50e2f53ae02711f",
+    "narHash": "sha256-GKwH3zpy7tartuJMG0Rv/xUsdetG1QLmTVv8UKgJLmA=",
+    "lastModified": 1789890976
   },
   "systems": {
     "type": "github",
@@ -103,9 +103,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "bc95a27c665ece7cea4aea18a09fc531e85f7537",
-    "narHash": "sha256-59Ed3cSq+99U36bs/bneU5S9Diq+9WrqcejwOiskYX4=",
-    "lastModified": 1789603438,
+    "rev": "8932fafce4e12ffaf60730764b19d02d0bd52bb8",
+    "narHash": "sha256-WkqYIXFzrANUtSsRFwKMc7y3VvNkNdtfReyCWFdRv8g=",
+    "lastModified": 1790120964,
     "submodules": true
   },
   "wfetch": {

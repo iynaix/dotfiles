@@ -18,7 +18,7 @@
         nil
         nix-init
         nix-output-monitor
-        nix-tree
+        nix-graph
         nix-update
         nixd
         nixfmt-rs

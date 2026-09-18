@@ -27,6 +27,12 @@ end
 -- Viewer Mode
 ----------------------
 
+swayimg.on_redrawn(function()
+    if swayimg.mode == "viewer" then
+        swayimg.viewer.set_fix_scale("fit")
+    end
+end)
+
 swayimg.viewer.on_key("t", function()
     swayimg.mode = "gallery"
 end)

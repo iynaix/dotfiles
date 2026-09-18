@@ -72,14 +72,14 @@ fi
 
 if [ "$showProgress" = true ]; then
     # use remote sudo only uses sudo during the switch to the new generation
-    nixos-rebuild "$nhCommand" --use-remote-sudo --flake ".#$hostname" "${specialisationArgs[@]}" "${restArgs[@]}"
+    nixos-rebuild "$nhCommand" --flake ".#$hostname" ${specialisationArgs[*]@Q} ${restArgs[*]@Q}
 else
-    nh os "$nhCommand" --hostname "$hostname" "${specialisationArgs[@]}" "${nhArgs[@]}" "$dots" -- "${restArgs[@]}"
+    nh os "$nhCommand" --hostname "$hostname" ${specialisationArgs[*]@Q} ${nhArgs[*]@Q} "$dots" -- ${restArgs[*]@Q}
 fi
 
 if [ $? -eq 0 ]; then
     if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
-        currentGeneration=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
+        currentGeneration=$(nh os info | grep -m 1 current | awk '{print $1}')
         echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
     fi
 fi
