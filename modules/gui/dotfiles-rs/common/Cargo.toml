@@ -21,6 +21,6 @@ image.workspace = true
 itertools.workspace = true
 rayon.workspace = true
 regex.workspace = true
-rexiv2.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+xmpkit.workspace = true

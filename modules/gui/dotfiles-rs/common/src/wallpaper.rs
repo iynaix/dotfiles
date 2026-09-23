@@ -1,6 +1,6 @@
 use execute::Execute;
 use itertools::Itertools;
-use rexiv2::Metadata;
+use xmpkit::{XmpFile, XmpValue};
 
 use crate::{full_path, nixjson::NixJson};
 use std::{
@@ -132,7 +132,7 @@ impl TryFrom<&str> for Geometry {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct WallInfo {
     pub path: PathBuf,
     pub faces: Vec<Geometry>,
@@ -144,46 +144,52 @@ impl WallInfo {
     where
         P: AsRef<Path> + std::fmt::Debug,
     {
-        let meta = Metadata::new_from_path(img.as_ref()).expect("could not init new metadata");
+        let wallfacer_ns = "http://example.com/wallfacer/";
 
-        let mut faces = Vec::new();
-        let mut crops = HashMap::new();
+        let mut fp = XmpFile::new();
+        fp.open(&img).expect("failed to open image");
 
-        for tag in meta.get_xmp_tags().expect("unable to read xmp tags") {
-            match tag.as_str() {
-                "Xmp.wallfacer.faces" => {
-                    let face_str = meta.get_tag_string(&tag).expect("could not get faces tag");
-
-                    // empty faces are written as "[]" as rexiv2 seems to return the value of
-                    // the next Xmp field, which is wrong
-                    if face_str != "[]" {
-                        faces = face_str
-                            .split(',')
-                            .map(|face| {
-                                face.try_into().unwrap_or_else(|_| {
-                                    panic!("could not convert face {face} into string")
-                                })
-                            })
-                            .collect();
-                    }
-                }
-                tag if tag.starts_with("Xmp.wallfacer.crop.") => {
-                    let aspect = tag
-                        .strip_prefix("Xmp.wallfacer.crop.")
-                        .expect("could not strip crop prefix");
-                    let geom = meta.get_tag_string(tag).expect("could not get crop tag");
-
-                    crops.insert(aspect.to_string(), geom);
-                }
-                _ => {}
-            }
-        }
-
-        Self {
+        let mut ret = Self {
             path: img.as_ref().to_path_buf(),
-            faces,
-            geometries: crops,
+            ..Default::default()
+        };
+
+        if let Some(xmp) = fp.get_xmp() {
+            if let Some(XmpValue::Array(faces)) = xmp.get_property(wallfacer_ns, "faces") {
+                ret.faces = faces
+                    .iter()
+                    .map(|face| {
+                        face.as_str()
+                            .expect("could not convert face to str")
+                            .try_into()
+                            .unwrap_or_else(|_| panic!("could not convert face {face} into string"))
+                    })
+                    .collect();
+            }
+
+            if let Some(XmpValue::Structure(crops)) = xmp.get_property("wallfacer", "crops") {
+                ret.geometries = crops
+                    .iter()
+                    .map(|(aspect, geom)| {
+                        let aspect = aspect
+                            .strip_prefix(&format!("{wallfacer_ns}:"))
+                            .expect("cannot strip prefix")
+                            .to_string();
+
+                        let geom = geom
+                            .as_str()
+                            .expect("could not convert crop to str")
+                            .to_string();
+
+                        (aspect, geom)
+                    })
+                    .collect();
+            }
+        } else {
+            panic!("unable to read xmp metadata for {img:?}");
         }
+
+        ret
     }
 
     pub fn get_geometry(&self, width: u32, height: u32) -> Option<Geometry> {

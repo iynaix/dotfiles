@@ -39,6 +39,11 @@
             resolution = "3440x1440";
           }
           {
+            name = "5k2k";
+            description = "Ultrawide 39 inch";
+            resolution = "5120x2160";
+          }
+          {
             name = "Vert";
             description = "Vertical 1440p";
             resolution = "1440x2560";

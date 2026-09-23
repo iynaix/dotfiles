@@ -3,8 +3,6 @@
   installShellFiles,
   makeWrapper,
   pkg-config,
-  glib,
-  gexiv2_0_10,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage {
@@ -22,11 +20,6 @@ rustPlatform.buildRustPackage {
     installShellFiles
     makeWrapper
     pkg-config
-  ];
-
-  buildInputs = [
-    glib
-    gexiv2_0_10 # for reading metadata
   ];
 
   postInstall =

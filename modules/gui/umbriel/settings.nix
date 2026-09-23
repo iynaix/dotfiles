@@ -157,7 +157,7 @@
 
                 # Layer-shell surface mapping and unmapping
                 layers = {
-                  enabled = true;
+                  enabled = false;
                   duration_ms = 250;
                   curve = "easeout";
                 };
