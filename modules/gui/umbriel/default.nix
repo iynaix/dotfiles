@@ -85,6 +85,8 @@
                   optional.files = [
                     # use noctalia colors
                     "${config.hj.xdg.config.directory}/umbriel/noctalia.toml"
+                    # dynamic cursor
+                    "${config.hj.xdg.config.directory}/umbriel/cursor.toml"
                   ];
                 };
               };
