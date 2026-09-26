@@ -339,7 +339,7 @@
                 # open single applications maximized
                 {
                   match.is_alone = true;
-                  default_maximize_to_edges = true;
+                  default_maximize = true;
                 }
               ];
             };

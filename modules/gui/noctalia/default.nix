@@ -13,8 +13,8 @@
           src = pkgs.fetchFromGitHub {
             owner = "noctalia-dev";
             repo = "noctalia";
-            rev = "2856ec3b1b384f243770240261a11831de51a923";
-            hash = "sha256-n5lAaFSofJDpBrzRks4H9moBNAOAyQ0GMnlYWSQl8uo=";
+            rev = "0433e3f8517ffc615906f6a17ac824724353aefb";
+            hash = "sha256-gfqQVe9f9vSdCaof+t4f+ucV82Eg0lfLa0W39hwgwgQ=";
           };
 
           # skip tests
@@ -120,12 +120,42 @@
               }
             ];
 
-            # base control center shortcuts across all hosts
             noctalia.settings = {
+              # base control center shortcuts across all hosts
               control_center.shortcuts = [
                 { type = "caffeine"; } # idle inhibit
                 { type = "notification"; } # DND
               ];
+
+              # creating centralized pill shaped bar
+              bar.default = {
+                concave_edge_corners = false;
+                radius_top_left = 0;
+                radius_top_right = 0;
+                radius_bottom_left = 30;
+                radius_bottom_right = 30;
+                monitor =
+                  config.custom.hardware.monitors
+                  |> map (
+                    d:
+                    let
+                      target_width = 600;
+                      normalized_width = builtins.div (if d.isVertical then d.height else d.width) d.scale;
+                    in
+                    {
+                      inherit (d) name;
+                      value = {
+                        start = [
+                          "control-center"
+                          "workspaces"
+                        ];
+                        center = [ ];
+                        margin_ends = builtins.div (normalized_width - target_width) 2;
+                      };
+                    }
+                  )
+                  |> lib.listToAttrs;
+              };
             };
 
             print-config = {

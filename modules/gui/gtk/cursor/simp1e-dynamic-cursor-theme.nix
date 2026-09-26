@@ -18,9 +18,10 @@
           if [ ! -d "$out" ]; then
             cp -r --no-preserve=mode ${pkgs.simp1e-cursors.src} $out
             chmod -R u+w $out
+            rm $out/src/color_schemes/*.txt
+            rm $out/src/templates/left.svg
           fi
 
-          rm $out/src/color_schemes/*.txt
           cp "/tmp/Simp1e-Noctalia.txt" "$out/src/color_schemes/Simp1e-Noctalia.txt"
 
           HOME=/tmp sh $out/build.sh --sizes="$2"
