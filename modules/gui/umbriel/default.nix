@@ -67,7 +67,7 @@
           {
             "umbriel/host.toml" = {
               source = pkgs.runCommand "umbriel-host-toml" { } ''
-                ${lib.getExe config.programs.umbriel.package} validate -c ${hostToml}
+                ${lib.getExe config.programs.umbriel.package} config validate -c ${hostToml}
                 cp ${hostToml} $out
               '';
               type = "copy";

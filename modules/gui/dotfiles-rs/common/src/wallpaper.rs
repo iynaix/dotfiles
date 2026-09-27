@@ -194,7 +194,7 @@ impl WallInfo {
     }
 }
 
-pub fn history() -> Result<Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)>> {
+pub fn history() -> Result<Vec<(PathBuf, jiff::Zoned)>> {
     let Ok(history_csv) = std::fs::File::open(full_path("~/Pictures/wallpapers_history.csv"))
     else {
         return Ok(Vec::new());
@@ -222,11 +222,13 @@ pub fn history() -> Result<Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)>
                 return None;
             }
 
-            chrono::DateTime::parse_from_rfc3339(dt_str)
+            jiff::fmt::strtime::parse("%Y-%m-%dT%H:%M:%S%:z", dt_str)
+                .ok()?
+                .to_zoned()
                 .ok()
                 .map(|dt| (dir().join(fname), dt))
         })
-        .sorted_by_key(|(_, dt)| *dt)
+        .sorted_by_key(|(_, dt)| dt.clone())
         .rev()
         .collect_vec();
 

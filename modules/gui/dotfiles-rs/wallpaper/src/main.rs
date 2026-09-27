@@ -84,7 +84,7 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) -> Result<()> {
     let mut history: Vec<(_, _)> = wallpaper::history()?.into_iter().collect();
     // insert or update timestamp if wallpaper wasn't the last 3 shown
     if history.iter().take(3).all(|(path, _)| path != &wallpaper) {
-        history.insert(0, (wallpaper, chrono::Local::now().into()));
+        history.insert(0, (wallpaper, jiff::Zoned::now()));
     }
     // dedup by path, wallpaper writes an entry for each monitor
     history.dedup_by(|a, b| a.0 == b.0);
@@ -104,7 +104,7 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) -> Result<()> {
 
         let row = [
             filename,
-            &dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+            &format!("{:.0}", dt.timestamp().display_with_offset(dt.offset())),
         ];
 
         wtr.write_record(row)?;

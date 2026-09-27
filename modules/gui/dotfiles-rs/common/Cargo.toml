@@ -7,7 +7,6 @@ edition.workspace = true
 workspace = true
 
 [dependencies]
-chrono.workspace = true
 clap.workspace = true
 clap_complete.workspace = true
 color-eyre.workspace = true
@@ -20,6 +19,7 @@ hex.workspace = true
 hyprland.workspace = true
 image.workspace = true
 itertools.workspace = true
+jiff.workspace = true
 rayon.workspace = true
 regex.workspace = true
 serde.workspace = true

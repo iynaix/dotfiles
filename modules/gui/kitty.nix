@@ -4,18 +4,16 @@
     {
       kitty = inputs.wrappers.wrappers.kitty.wrap {
         inherit pkgs;
-        flags = {
-          "--single-instance" = true;
-        };
+        themeFile = "tokyo_night_night";
         settings = {
-          enable_audio_bell = false;
-          copy_on_select = "clipboard";
-          scrollback_lines = 10000;
-          update_check_interval = 0;
-          window_padding_width = 12;
-          tab_bar_edge = "top";
           background_opacity = 0.90;
           confirm_os_window_close = 0;
+          copy_on_select = "clipboard";
+          enable_audio_bell = false;
+          scrollback_lines = 10000;
+          tab_bar_edge = "top";
+          update_check_interval = 0;
+          window_padding_width = 12;
         };
       };
     };
@@ -62,12 +60,13 @@
         nixpkgs.overlays = [
           (_: _prev: {
             kitty = pkgs.custom.kitty.wrap {
-              themeFile = "tokyo_night_night";
+              flags = {
+                "--single-instance" = true;
+              };
               font = {
                 name = config.custom.fonts.monospace;
                 size = 10;
               };
-
               settings = config.custom.programs.kitty.settings;
               # enable ligatures
               extraConfig = ''

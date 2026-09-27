@@ -119,9 +119,31 @@
 ;; Lsp mode settings
 (setq lsp-enable-symbol-highlighting nil)
 
-;; Do not watch files in nixpkgs for performance reasons
+;; (add-hook 'flycheck-mode-hook #'flycheck-annotate-mode)
+;; (setq flycheck-annotate-current-line-style 'below
+;;       flycheck-annotate-other-lines-style 'sideline)
+
 (after! lsp-mode
+  ;; Do not watch files in nixpkgs for performance reasons
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]nixpkgs[/\\\\]"))
+
+;; Use clippy for rust
+(after! rustic
+  (setq rustic-lsp-server 'rust-analyzer)
+  (setq rustic-lsp-check-command "clippy")
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+
+;; Save open buffers automatically after lsp rename
+;; https://emacs.stackexchange.com/a/68951
+(add-hook 'lsp-after-apply-edits-hook
+          (lambda (operation)
+            (when (eq operation 'rename)
+              (save-buffer))))
+
+;; Treat underscore as part of a word
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (modify-syntax-entry ?_ "w")))
 
 ;; Use nixd
 (let ((dotfiles-path (concat (getenv "XDG_PROJECTS_DIR") "/dotfiles/")))

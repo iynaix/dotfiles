@@ -40,7 +40,7 @@
                     transform = "${lib.optionalString flipped "flipped-"}${
                       if rotation == "0" then "normal" else rotation
                     }";
-                    workspace_axis = if (d.transform == 1 || d.transform == 3) then "horizontal" else "vertical";
+                    workspace_axis = if d.isVertical then "horizontal" else "vertical";
                     workspaces = map toString d.workspaces;
                   };
                 }
@@ -51,7 +51,7 @@
             # setup vertical monitors if any
             (
               config.custom.hardware.monitors
-              |> lib.concatMap (d: if d.transform == 1 || d.transform == 3 then d.workspaces else [ ])
+              |> lib.concatMap (d: if d.isVertical then d.workspaces else [ ])
               |> map (w: {
                 workspace = [
                   {
@@ -115,6 +115,11 @@
                   curve = "spring:1,4400"; # 183 ms critically damped settle
                   # shader = "shaders/squash.glsl";      # Subtle compression and settle during move/resize
                 };
+
+                # Wobbly Windows
+                # windows_drag = {
+                #   physics = true;
+                # };
 
                 # Workspace switching
                 workspaces = {

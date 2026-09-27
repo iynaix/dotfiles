@@ -67,21 +67,18 @@
     #   programmingWordlist.enable = true;
     # };
 
+    diagnostics = {
+      enable = true;
+      config = {
+        virtual_lines = {
+          current_line = true;
+        };
+        virtual_text = true;
+      };
+    };
+
     # autocmds
     luaConfigPost = /* lua */ ''
-      -- use default colorscheme in tty
-      -- https://github.com/catppuccin/nvim/issues/588#issuecomment-2272877967
-      vim.g.has_ui = #vim.api.nvim_list_uis() > 0
-      vim.g.has_gui = vim.g.has_ui and (vim.env.DISPLAY ~= nil or vim.env.WAYLAND_DISPLAY ~= nil)
-
-      if not vim.g.has_gui then
-        if vim.g.has_ui then
-          vim.o.termguicolors= false
-          vim.cmd.colorscheme('default')
-        end
-        return
-      end
-
       -- remove trailing whitespace on save
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*",
@@ -102,6 +99,34 @@
       vim.api.nvim_create_autocmd("InsertLeave", {
         pattern = "*",
         command = "set number relativenumber",
+      })
+
+      -- reload with direnv when opening file
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "DirenvLoaded",
+        callback = function()
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_loaded(buf)
+              and vim.bo[buf].buftype == ""
+              and vim.bo[buf].filetype == "rust"
+            then
+              vim.api.nvim_exec_autocmds("FileType", { buffer = buf })
+            end
+          end
+        end,
+      })
+
+      -- fix kitty color when entering neovim
+      vim.api.nvim_create_autocmd({ "UIEnter", "ColorScheme" }, {
+        callback = function()
+          local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+          if not normal.bg then return end
+          io.write(string.format("\027]11;#%06x\027\\", normal.bg))
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("UILeave", {
+        callback = function() io.write("\027]111\027\\") end,
       })
     '';
 
@@ -169,10 +194,19 @@
       trouble.enable = true;
       # lspSignature?
       # mappings?
-      servers.nixd = {
-        settings.options = lib.mkIf (dots != null) {
-          nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
-          nixpkgs.expr = "(import \"${dots}/.tack\").nixpkgs";
+      servers = {
+        nixd = {
+          settings.options = lib.mkIf (dots != null) {
+            nixos.expr = "(builtins.getFlake \"${dots}\").nixosConfigurations.${host}.options";
+            nixpkgs.expr = "(import \"${dots}/.tack\").nixpkgs";
+          };
+        };
+        rust-analyzer = {
+          settings.rust-analyzer = {
+            check = {
+              command = "clippy";
+            };
+          };
         };
       };
     };
@@ -186,7 +220,6 @@
     #   openOnSetup = false;
     # };
     git.enable = true;
-    # enable dashboard?
     lazy.enable = true;
     notes.todo-comments.enable = true;
     projects.project-nvim.enable = true;
