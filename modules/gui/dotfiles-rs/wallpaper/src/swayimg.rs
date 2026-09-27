@@ -1,4 +1,5 @@
 use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
+use color_eyre::eyre::Result;
 use common::{
     is_hyprland, is_umbriel,
     umbriel::UmbrielMonitor,
@@ -10,35 +11,28 @@ use itertools::Itertools;
 
 fn target_window_size() -> Option<(u32, u32)> {
     const TARGET_PERCENT: f64 = 0.3;
-    let mut width = 0.0;
-
-    if is_hyprland() {
-        let mon = hyprland::data::Monitor::get_active().expect("could not get active monitor");
+    let width = if is_hyprland() {
+        let mon = hyprland::data::Monitor::get_active().ok()?;
 
         // handle vertical monitor
-        width = f64::from(mon.width.max(mon.height)) * TARGET_PERCENT;
-    }
-
-    if is_umbriel() {
-        if let Some(mode) = UmbrielMonitor::focused()
-            .as_ref()
-            .and_then(|mon| mon.current_mode())
-        {
-            width = f64::from(mode.width) * TARGET_PERCENT;
-        }
-    }
-
-    if width == 0.0 {
+        f64::from(mon.width.max(mon.height)) * TARGET_PERCENT
+    } else if is_umbriel()
+        && let Some(mode) = UmbrielMonitor::focused()
+            .ok()
+            .and_then(|mon| UmbrielMonitor::current_mode(&mon))
+    {
+        f64::from(mode.width) * TARGET_PERCENT
+    } else {
         return None;
-    }
+    };
 
     // target 16: 9 aspect ratio
     let height = width / 16.0 * 9.0;
-    return Some((width as u32, height as u32));
+    Some((width as u32, height as u32))
 }
 
 #[allow(clippy::module_name_repetitions)]
-pub fn show_swayimg(args: &WallpaperFilterArgs) {
+pub fn show_swayimg(args: &WallpaperFilterArgs) -> Result<()> {
     let has_filters =
         args.no_faces || args.single_face || args.multiple_faces || args.faces.is_some();
 
@@ -61,11 +55,13 @@ pub fn show_swayimg(args: &WallpaperFilterArgs) {
         cmd.arg(wallpaper::dir())
     };
 
-    cmd.execute().expect("failed to execute swayimg");
+    cmd.execute()?;
+
+    Ok(())
 }
 
-pub fn show_history(args: &WallpaperFilterArgs) {
-    let history = wallpaper::history();
+pub fn show_history(args: &WallpaperFilterArgs) -> Result<()> {
+    let history = wallpaper::history()?;
     let history = history
         .iter()
         .skip(1) // skip the current wallpaper
@@ -97,5 +93,7 @@ pub fn show_history(args: &WallpaperFilterArgs) {
         cmd.arg("--size").arg(format!("{w},{h}"));
     }
 
-    cmd.args(history).execute().expect("failed to execute pqiv");
+    cmd.args(history).execute()?;
+
+    Ok(())
 }

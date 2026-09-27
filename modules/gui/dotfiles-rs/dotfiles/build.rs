@@ -1,11 +1,12 @@
 use clap::CommandFactory;
 use clap_mangen::Man;
+use color_eyre::eyre::Result;
 use std::{env, fs, path::PathBuf};
 
 #[path = "src/cli.rs"]
 mod cli;
 
-fn generate_man_pages() -> Result<(), Box<dyn std::error::Error>> {
+fn generate_man_pages() -> Result<()> {
     let man_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target/man");
 
     fs::create_dir_all(&man_dir)?;

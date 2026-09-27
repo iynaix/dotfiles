@@ -1,6 +1,6 @@
+use color_eyre::eyre::{OptionExt, Result};
 use execute::Execute;
 use serde::Deserialize;
-
 use std::process::Stdio;
 
 use common::wallpaper::{Geometry, WallInfo};
@@ -87,9 +87,9 @@ fn crop_geometry(
         return default_crop;
     };
 
-    let closest = wall_info
-        .get_geometry(closest_w, closest_h)
-        .expect("failed to get closest geometry");
+    let Some(closest) = wall_info.get_geometry(closest_w, closest_h) else {
+        return default_crop;
+    };
 
     // same width, translate y
     if (closest.w - default_crop.w).abs() < f64::EPSILON {
@@ -113,13 +113,12 @@ fn crop_geometry(
     default_crop
 }
 
-fn monitor_dimensions_from_name(mon_name: &str) -> (u32, u32) {
+fn monitor_dimensions_from_name(mon_name: &str) -> Result<(u32, u32)> {
     let wlr_cmd = execute::command_args!("wlr-randr", "--json")
         .stdout(Stdio::piped())
-        .execute_output()
-        .expect("failed to run wlr-randr");
-    let wlr_json = String::from_utf8(wlr_cmd.stdout).expect("invalid utf8 from wlr-randr");
-    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json).expect("failed to parse json");
+        .execute_output()?;
+    let wlr_json = String::from_utf8(wlr_cmd.stdout)?;
+    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json)?;
 
     monitors
         .iter()
@@ -133,58 +132,50 @@ fn monitor_dimensions_from_name(mon_name: &str) -> (u32, u32) {
                 }
             })
         })
-        .unwrap_or_else(|| {
-            eprintln!("Invalid monitor identifier {mon_name}");
-            std::process::exit(1);
-        })
+        .ok_or_eyre("Invalid monitor name")
 }
 
 /// uses crop info from wallpaper xmp metadata
-pub fn crop(args: &CropArgs) {
+pub fn crop(args: &CropArgs) -> Result<()> {
     let (mon_w, mon_h) = if let Some(size) = &args.size {
         parse_aspect(size)
     } else if let Some(monitor) = &args.monitor {
-        monitor_dimensions_from_name(monitor)
+        monitor_dimensions_from_name(monitor)?
     } else {
         eprintln!("Either --size / --monitor are required.");
         std::process::exit(1);
     };
 
-    let wall_info = WallInfo::new_from_file(&args.input);
-
-    let img = ImageReader::open(&args.input)
-        .expect("could not open image")
-        .decode()
-        .expect("could not decode image")
-        .to_rgb8();
+    let wall_info = WallInfo::from_path(&args.input)?;
+    let img = ImageReader::open(&args.input)?.decode()?.to_rgb8();
 
     let (img_w, img_h) = img.dimensions();
     let geom = crop_geometry(&wall_info, f64::from(img_w), f64::from(img_h), mon_w, mon_h);
 
     // convert to rgb8 pixel type
-    let src = Image::from_vec_u8(img_w, img_h, img.into_raw(), PixelType::U8x3)
-        .expect("Failed to create source image view");
+    let src = Image::from_vec_u8(img_w, img_h, img.into_raw(), PixelType::U8x3)?;
 
     let mut dest = Image::new(mon_w, mon_h, PixelType::U8x3);
-    Resizer::new()
-        .resize(
-            &src,
-            &mut dest,
-            &ResizeOptions::new()
-                .resize_alg(ResizeAlg::Convolution(FilterType::Lanczos3))
-                .use_alpha(false)
-                .crop(geom.x, geom.y, geom.w, geom.h),
-        )
-        .expect("failed to resize image");
+    Resizer::new().resize(
+        &src,
+        &mut dest,
+        &ResizeOptions::new()
+            .resize_alg(ResizeAlg::Convolution(FilterType::Lanczos3))
+            .use_alpha(false)
+            .crop(geom.x, geom.y, geom.w, geom.h),
+    )?;
 
-    let mut result_buf = std::io::BufWriter::new(
-        std::fs::File::create(&args.output).expect("could not create file"),
-    );
+    let mut result_buf = std::io::BufWriter::new(std::fs::File::create(&args.output)?);
 
-    PngEncoder::new(&mut result_buf)
-        .write_image(dest.buffer(), mon_w, mon_h, image::ColorType::Rgb8.into())
-        .expect("failed to save png");
+    PngEncoder::new(&mut result_buf).write_image(
+        dest.buffer(),
+        mon_w,
+        mon_h,
+        image::ColorType::Rgb8.into(),
+    )?;
 
     // save to history
-    write_wallpaper_history(args.input.clone());
+    write_wallpaper_history(args.input.clone())?;
+
+    Ok(())
 }

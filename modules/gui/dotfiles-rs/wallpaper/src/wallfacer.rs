@@ -1,4 +1,5 @@
 use crate::cli::{AddArgs, EditArgs};
+use color_eyre::eyre::Result;
 use common::{full_path, wallpaper};
 use std::{
     path::PathBuf,
@@ -10,13 +11,9 @@ struct Wallfacer {
 }
 
 impl Wallfacer {
-    pub fn new() -> Self {
+    pub fn try_new() -> Result<Self> {
         let wallfacer_dir = full_path("~/projects/wallfacer");
-        let wallfacer_dir = PathBuf::from("/persist").join(
-            wallfacer_dir
-                .strip_prefix("/")
-                .expect("could not strip prefix from wallfacer directory"),
-        );
+        let wallfacer_dir = PathBuf::from("/persist").join(wallfacer_dir.strip_prefix("/")?);
 
         let mut cmd = Command::new("direnv");
 
@@ -36,7 +33,7 @@ impl Wallfacer {
             .arg(wallfacer_dir.join("Cargo.toml"))
             .arg("--");
 
-        Self { command: cmd }
+        Ok(Self { command: cmd })
     }
 
     pub fn arg<S: AsRef<std::ffi::OsStr>>(mut self, arg: S) -> Self {
@@ -53,55 +50,52 @@ impl Wallfacer {
         self
     }
 
-    pub fn run(&mut self) -> std::process::Child {
-        self.command
+    pub fn run(&mut self) -> Result<std::process::Child> {
+        Ok(self
+            .command
             .stdout(Stdio::inherit())
             .stderr(Stdio::inherit())
-            .spawn()
-            .expect("could not spawn wallfacer")
+            .spawn()?)
     }
 }
 
-pub fn edit(args: EditArgs) {
-    let image = args.file.unwrap_or_else(|| {
-        wallpaper::current()
-            .expect("failed to get current wallpaper")
-            .into()
-    });
+pub fn edit(args: EditArgs) -> Result<()> {
+    let image = args.file.unwrap_or(wallpaper::current()?.into());
 
-    let wallfacer = Wallfacer::new();
-    wallfacer
-        .arg("gui")
-        .arg(&image)
-        .run()
-        .wait()
-        .expect("wallfacer gui failed");
+    let wallfacer = Wallfacer::try_new()?;
+    wallfacer.arg("gui").arg(&image).run()?.wait()?;
 
     // reload the wallpaper
-    wallpaper::set(&image);
+    wallpaper::set(&image)?;
+
+    Ok(())
 }
 
-pub fn add(args: AddArgs) {
+pub fn add(args: AddArgs) -> Result<()> {
     let mut image_or_dir = args
         .image_or_dir
         .unwrap_or_else(|| full_path("~/Pictures/wallpapers_in"));
 
     let mut rest_args = args.rest.clone();
     if !args.rest.is_empty() {
-        let last = args.rest.last().expect("no arguments provided");
+        let last = args.rest.last().unwrap_or_else(|| {
+            eprintln!("No arguments provided");
+            std::process::exit(1);
+        });
         if PathBuf::from(last).exists() {
             image_or_dir = last.into();
             rest_args.pop();
         }
     }
 
-    Wallfacer::new()
+    Wallfacer::try_new()?
         .arg("add")
         .arg("--format")
         .arg("webp")
         .args(rest_args)
         .arg(image_or_dir)
-        .run()
-        .wait()
-        .expect("wallfacer add failed");
+        .run()?
+        .wait()?;
+
+    Ok(())
 }

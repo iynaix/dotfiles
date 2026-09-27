@@ -1,6 +1,7 @@
 use clap::{CommandFactory, Parser};
 use clap_complete::{Shell, generate};
 use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
+use color_eyre::eyre::{OptionExt, Result};
 use common::{
     full_path,
     wallpaper::{self, WallInfo},
@@ -19,14 +20,12 @@ mod search;
 pub mod swayimg;
 mod wallfacer;
 
-fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
+fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> Result<String> {
     match image_or_dir {
         // use stdin instead
         Some(p) if p == "-" => {
             let mut buf = Vec::new();
-            std::io::stdin()
-                .read_to_end(&mut buf)
-                .expect("unable to read stdin");
+            std::io::stdin().read_to_end(&mut buf)?;
 
             // valid image, write stdin to a file
             if let Ok(format) = image::guess_format(&buf) {
@@ -34,71 +33,55 @@ fn get_random_wallpaper(image_or_dir: Option<&PathBuf>) -> String {
                 let ext = format.extensions_str()[0];
 
                 let output = format!("/tmp/__wall__{}.{ext}", fastrand::u32(10000..));
-                std::fs::write(&output, &buf).expect("could not write stdin to file");
-                output
+                std::fs::write(&output, &buf)?;
+                Ok(output)
             } else {
-                String::from_utf8(buf)
-                    .ok()
-                    .and_then(|s| std::fs::canonicalize(s.trim()).ok())
-                    .map_or_else(
-                        || panic!("unable to parse stdin"),
-                        |p| p.to_string_lossy().to_string(),
-                    )
+                let s = String::from_utf8(buf)?;
+                let path = std::fs::canonicalize(s.trim());
+                Ok(path?.to_string_lossy().to_string())
             }
         }
         Some(image_or_dir) => {
             if image_or_dir.is_dir() {
-                wallpaper::random_from_dir(image_or_dir)
+                Ok(wallpaper::random_from_dir(image_or_dir))
             } else {
-                std::fs::canonicalize(image_or_dir)
-                    .unwrap_or_else(|_| {
-                        panic!("{} is not a valid image / command", image_or_dir.display())
-                    })
-                    .to_str()
-                    .unwrap_or_else(|| {
-                        panic!("could not convert {} to str", image_or_dir.display())
-                    })
-                    .to_string()
+                Ok(std::fs::canonicalize(image_or_dir)?
+                    .to_string_lossy()
+                    .to_string())
             }
         }
-        None => wallpaper::random_from_dir(wallpaper::dir()),
+        None => Ok(wallpaper::random_from_dir(wallpaper::dir())),
     }
 }
 
-fn wallpaper_rm(wallpaper: &str) {
-    let current = wallpaper::current().unwrap_or_else(|| {
-        eprintln!("Failed to get current wallpaper");
-        std::process::exit(1)
-    });
+fn wallpaper_rm(wallpaper: &str) -> Result<()> {
+    let current = wallpaper::current()?;
 
     print!("Delete {current}? (y/N): ");
-    std::io::stdout().flush().expect("could not flush stdout");
+    std::io::stdout().flush()?;
 
     let mut input = String::new();
-    std::io::stdin()
-        .read_line(&mut input)
-        .expect("could not read stdin");
+    std::io::stdin().read_line(&mut input)?;
 
     if input.trim().eq_ignore_ascii_case("y") {
         // load next wallpaper
-        wallpaper::set(wallpaper);
+        wallpaper::set(wallpaper)?;
 
-        write_wallpaper_history(PathBuf::from(wallpaper));
+        write_wallpaper_history(PathBuf::from(wallpaper))?;
 
-        std::fs::remove_file(&current).unwrap_or_else(|_| {
-            eprintln!("Error deleting {current}");
-            std::process::exit(1);
-        });
+        std::fs::remove_file(&current)?;
     }
+
+    Ok(())
 }
 
-pub fn write_wallpaper_history(wallpaper: PathBuf) {
+pub fn write_wallpaper_history(wallpaper: PathBuf) -> Result<()> {
     // not a wallpaper from the wallpapers dir
     if wallpaper.parent() != Some(&wallpaper::dir()) {
-        return;
+        return Ok(());
     }
 
-    let mut history: Vec<(_, _)> = wallpaper::history().into_iter().collect();
+    let mut history: Vec<(_, _)> = wallpaper::history()?.into_iter().collect();
     // insert or update timestamp if wallpaper wasn't the last 3 shown
     if history.iter().take(3).all(|(path, _)| path != &wallpaper) {
         history.insert(0, (wallpaper, chrono::Local::now().into()));
@@ -108,9 +91,7 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) {
 
     // update the history csv
     let history_csv = full_path("~/Pictures/wallpapers_history.csv");
-    let writer = std::io::BufWriter::new(
-        std::fs::File::create(history_csv).expect("could not create wallpapers_history.csv"),
-    );
+    let writer = std::io::BufWriter::new(std::fs::File::create(history_csv)?);
     let mut wtr = csv::WriterBuilder::new()
         .has_headers(false)
         .from_writer(writer);
@@ -118,19 +99,19 @@ pub fn write_wallpaper_history(wallpaper: PathBuf) {
     for (path, dt) in &history {
         let filename = path
             .file_name()
-            .expect("could not get timestamp filename")
-            .to_str()
-            .expect("could not convert filename to str");
+            .and_then(|p| p.to_str())
+            .ok_or_eyre("Could not get filename")?;
 
         let row = [
             filename,
             &dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
         ];
 
-        wtr.write_record(row)
-            .unwrap_or_else(|_| panic!("could not write {row:?}"));
+        wtr.write_record(row)?;
     }
-    wtr.flush().expect("could not flush wallpapers_history.csv");
+    wtr.flush()?;
+
+    Ok(())
 }
 
 pub fn filter_images_by_faces<P>(
@@ -143,7 +124,12 @@ where
     images
         .iter()
         .filter(|img| {
-            let faces = WallInfo::new_from_file(img.as_ref()).faces.len();
+            let faces = WallInfo::from_path(img.as_ref())
+                .unwrap_or_else(|e| {
+                    panic!("Error reading WallInfo for {}: {e}", img.as_ref().display())
+                })
+                .faces
+                .len();
 
             if face_args.no_faces && faces != 0 {
                 return false;
@@ -159,15 +145,10 @@ where
 
             true
         })
-        .map(|img| {
-            img.as_ref()
-                .to_str()
-                .expect("could not convert path to str")
-                .to_string()
-        })
+        .filter_map(|img| Some(img.as_ref().to_str()?.to_string()))
 }
 
-fn main() {
+fn main() -> Result<()> {
     let args = WallpaperArgs::parse();
 
     let is_reload = args.reload || args.command == Some(WallpaperSubcommand::Reload);
@@ -189,46 +170,50 @@ fn main() {
                     }
                 }
             }
-            WallpaperSubcommand::Current => println!(
-                "{}",
-                wallpaper::current().unwrap_or_else(|| {
+            WallpaperSubcommand::Current => wallpaper::current().map_or_else(
+                |_| {
                     eprintln!("Failed to get current wallpaper");
                     std::process::exit(1)
-                })
+                },
+                |wall| println!("{wall}"),
             ),
             WallpaperSubcommand::Rm => {
-                wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref()));
+                wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref())?)?;
             }
-            WallpaperSubcommand::History(args) => swayimg::show_history(&args),
-            WallpaperSubcommand::Select(args) => swayimg::show_swayimg(&args),
-            WallpaperSubcommand::Dedupe => dedupe::dedupe(),
-            WallpaperSubcommand::Edit(args) => wallfacer::edit(args),
-            WallpaperSubcommand::Add(args) => wallfacer::add(args),
-            WallpaperSubcommand::Search(args) => search::search(args),
-            WallpaperSubcommand::Backup(args) => backup::backup(args),
-            WallpaperSubcommand::Remote(args) => backup::remote(args),
-            WallpaperSubcommand::Crop(args) => crop::crop(&args),
-            WallpaperSubcommand::Metadata(args) => metadata::metadata(args),
+            WallpaperSubcommand::History(args) => swayimg::show_history(&args)?,
+            WallpaperSubcommand::Select(args) => swayimg::show_swayimg(&args)?,
+            WallpaperSubcommand::Dedupe => dedupe::dedupe()?,
+            WallpaperSubcommand::Edit(args) => wallfacer::edit(args)?,
+            WallpaperSubcommand::Add(args) => wallfacer::add(args)?,
+            WallpaperSubcommand::Search(args) => search::search(args)?,
+            WallpaperSubcommand::Backup(args) => backup::backup(args)?,
+            WallpaperSubcommand::Remote(args) => backup::remote(args)?,
+            WallpaperSubcommand::Crop(args) => crop::crop(&args)?,
+            WallpaperSubcommand::Metadata(args) => {
+                metadata::metadata(args)?;
+            }
             WallpaperSubcommand::Reload => {} // handled later
         }
-        return;
+        return Ok(());
     }
 
     let wallpaper = if is_reload {
-        wallpaper::current().expect("no current wallpaper set")
+        wallpaper::current()?
     } else {
-        get_random_wallpaper(args.image_or_dir.as_ref())
+        get_random_wallpaper(args.image_or_dir.as_ref())?
     };
 
     if !args.skip_wallpaper {
         if is_reload {
-            wallpaper::reload();
+            wallpaper::reload()?;
         } else {
-            wallpaper::set(&wallpaper);
+            wallpaper::set(&wallpaper)?;
         }
 
         if !is_reload && !args.skip_history {
-            write_wallpaper_history(PathBuf::from(wallpaper));
+            write_wallpaper_history(PathBuf::from(wallpaper))?;
         }
     }
+
+    Ok(())
 }

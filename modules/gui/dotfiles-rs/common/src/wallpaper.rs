@@ -1,3 +1,4 @@
+use color_eyre::eyre::Result;
 use execute::Execute;
 use itertools::Itertools;
 use xmpkit::{XmpFile, XmpValue};
@@ -13,15 +14,12 @@ pub fn dir() -> PathBuf {
     full_path("~/Pictures/Wallpapers")
 }
 
-pub fn current() -> Option<String> {
+pub fn current() -> Result<String> {
     let cmd = execute::command_args!("noctalia", "msg", "wallpaper-get")
         .stdout(Stdio::piped())
-        .execute_output()
-        .ok()?;
+        .execute_output()?;
 
-    String::from_utf8(cmd.stdout)
-        .ok()
-        .map(|s| s.trim().to_string())
+    Ok(String::from_utf8(cmd.stdout).map(|s| s.trim().to_string())?)
 }
 
 pub fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
@@ -36,12 +34,9 @@ where
             let path = entry.path();
             if path.is_file()
                 && let Some(ext) = path.extension()
+                && matches!(ext.to_str(), Some("jpg" | "jpeg" | "png" | "webp"))
             {
-                return matches!(ext.to_str(), Some("jpg" | "jpeg" | "png" | "webp")).then(|| {
-                    path.to_str()
-                        .expect("could not convert path to str")
-                        .to_string()
-                });
+                return Some(path.to_str()?.to_string());
             }
 
             None
@@ -49,31 +44,25 @@ where
 }
 
 /// sets the wallpaper for all monitors
-pub fn set<P>(wallpaper: P)
+pub fn set<P>(wallpaper: P) -> Result<()>
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
-    let wallpaper = wallpaper
-        .as_ref()
-        .to_str()
-        .expect("could not convert wallpaper path to str")
-        .to_string();
-
     execute::command_args!("noctalia", "msg", "wallpaper-set")
-        .arg(&wallpaper)
-        .spawn()
-        .unwrap_or_else(|_| panic!("failed to set wallpaper: {wallpaper}"))
-        .wait()
-        .expect("failed to wait for noctalia wallpaper set");
+        .arg(wallpaper.as_ref())
+        .spawn()?
+        .wait()?;
+
+    Ok(())
 }
 
 /// reloads the wallpaper
-pub fn reload() {
+pub fn reload() -> Result<()> {
     // reload noctalia
-    let child = execute::command_args!("noctalia-reload")
-        .spawn()
-        .expect("failed to reload noctalia");
+    let child = execute::command_args!("noctalia-reload").spawn()?;
     drop(child); // don't wait
+
+    Ok(())
 }
 
 pub fn random_from_dir<P>(dir: P) -> String
@@ -140,14 +129,14 @@ pub struct WallInfo {
 }
 
 impl WallInfo {
-    pub fn new_from_file<P>(img: P) -> Self
+    pub fn from_path<P>(img: P) -> Result<Self>
     where
         P: AsRef<Path> + std::fmt::Debug,
     {
         let wallfacer_ns = "http://example.com/wallfacer/";
 
         let mut fp = XmpFile::new();
-        fp.open(&img).expect("failed to open image");
+        fp.open(&img)?;
 
         let mut ret = Self {
             path: img.as_ref().to_path_buf(),
@@ -158,30 +147,21 @@ impl WallInfo {
             if let Some(XmpValue::Array(faces)) = xmp.get_property(wallfacer_ns, "faces") {
                 ret.faces = faces
                     .iter()
-                    .map(|face| {
-                        face.as_str()
-                            .expect("could not convert face to str")
-                            .try_into()
-                            .unwrap_or_else(|_| panic!("could not convert face {face} into string"))
-                    })
+                    .filter_map(|face| face.as_str()?.try_into().ok())
                     .collect();
             }
 
             if let Some(XmpValue::Structure(crops)) = xmp.get_property("wallfacer", "crops") {
                 ret.geometries = crops
                     .iter()
-                    .map(|(aspect, geom)| {
+                    .filter_map(|(aspect, geom)| {
                         let aspect = aspect
-                            .strip_prefix(&format!("{wallfacer_ns}:"))
-                            .expect("cannot strip prefix")
+                            .strip_prefix(&format!("{wallfacer_ns}:"))?
                             .to_string();
 
-                        let geom = geom
-                            .as_str()
-                            .expect("could not convert crop to str")
-                            .to_string();
+                        let geom = geom.as_str()?.to_string();
 
-                        (aspect, geom)
+                        Some((aspect, geom))
                     })
                     .collect();
             }
@@ -189,7 +169,7 @@ impl WallInfo {
             panic!("unable to read xmp metadata for {img:?}");
         }
 
-        ret
+        Ok(ret)
     }
 
     pub fn get_geometry(&self, width: u32, height: u32) -> Option<Geometry> {
@@ -214,15 +194,14 @@ impl WallInfo {
     }
 }
 
-pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
+pub fn history() -> Result<Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)>> {
     let Ok(history_csv) = std::fs::File::open(full_path("~/Pictures/wallpapers_history.csv"))
     else {
-        return Vec::new();
+        return Ok(Vec::new());
     };
 
     let images: HashSet<String> = dir()
-        .read_dir()
-        .expect("unable to read wallpapers dir")
+        .read_dir()?
         .flatten()
         .map(|entry| entry.file_name().to_string_lossy().to_string())
         .collect();
@@ -231,7 +210,8 @@ pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
         .has_headers(false)
         .from_reader(std::io::BufReader::new(history_csv));
 
-    rdr.records()
+    let ret = rdr
+        .records()
         .flatten()
         .filter_map(|row| {
             let (Some(fname), Some(dt_str)) = (row.get(0), row.get(1)) else {
@@ -248,5 +228,7 @@ pub fn history() -> Vec<(PathBuf, chrono::DateTime<chrono::FixedOffset>)> {
         })
         .sorted_by_key(|(_, dt)| *dt)
         .rev()
-        .collect_vec()
+        .collect_vec();
+
+    Ok(ret)
 }

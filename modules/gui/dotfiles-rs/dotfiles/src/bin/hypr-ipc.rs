@@ -1,3 +1,4 @@
+use color_eyre::eyre::Result;
 use common::{is_hyprland, nixjson::NixJson};
 use dotfiles::{cli::WmMonitorArgs, monitors::hypr_monitors};
 use hyprland::{
@@ -10,27 +11,19 @@ use itertools::Itertools;
 
 /// returns the monitor and if the workspace currently exists
 fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
-    let monitors = hyprland::data::Monitors::get().expect("could not get monitors");
-    let mon_name = if let Some(wksp) = Workspaces::get()
-        .expect("could not get workspaces")
-        .iter()
-        .find(|w| w.name == wksp_name)
+    let monitors = hyprland::data::Monitors::get().ok()?;
+    let mon_name = if let Some(wksp) = Workspaces::get().ok()?.iter().find(|w| w.name == wksp_name)
     {
         wksp.monitor.clone()
     } else {
         // workspace is empty and doesn't exist yet, search workspace rules for the monitor
-        let wksp_rules = WorkspaceRules::get().expect("could not get workspace rules");
+        let wksp_rules = WorkspaceRules::get().ok()?;
 
         let rule_monitor = wksp_rules
             .iter()
-            .find_map(|rule| {
-                (rule.workspace_string == wksp_name).then(|| {
-                    rule.monitor
-                        .as_ref()
-                        .expect("no monitor found for workspace rule")
-                })
-            })
-            .expect("no rule found for monitor");
+            .find(|rule| rule.workspace_string == wksp_name)?
+            .monitor
+            .as_ref()?;
 
         rule_monitor.clone()
     };
@@ -39,18 +32,20 @@ fn monitor_for_workspace(wksp_name: &str) -> Option<Monitor> {
 }
 
 /// set random split ratio to prevent oled burn in
-fn set_split_ratio(nstack: bool, split_ratio: f32) {
+fn set_split_ratio(nstack: bool, split_ratio: f32) -> Result<()> {
     let keyword_path = if nstack {
         "plugin:nstack:layout:mfact"
     } else {
         "master:mfact"
     };
 
-    Keyword::set(keyword_path, split_ratio.to_string()).expect("unable to set mfact");
+    Keyword::set(keyword_path, split_ratio.to_string())?;
+
+    Ok(())
 }
 
 /// sets split ratio if there are 2 windows
-fn split_for_workspace(wksp_name: &str, nstack: bool) {
+fn split_for_workspace(wksp_name: &str, nstack: bool) -> Result<()> {
     let wksp = &wksp_name.replace(" silent", "");
 
     // check if oled
@@ -58,11 +53,11 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
         .as_ref()
         .is_none_or(|mon| !mon.description.contains("AW3423DW"))
     {
-        return;
+        return Ok(());
     }
 
     let wksp_id: i32 = wksp.parse().unwrap_or_default();
-    let clients = Clients::get().expect("could not get clients");
+    let clients = Clients::get()?;
     let clients = clients
         .iter()
         .filter(|c| c.workspace.id == wksp_id)
@@ -70,7 +65,7 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
 
     // floating window, don't do anything
     if clients.iter().any(|c| c.floating) {
-        return;
+        return Ok(());
     }
 
     let num_windows = clients.len();
@@ -82,13 +77,13 @@ fn split_for_workspace(wksp_name: &str, nstack: bool) {
         0.5
     };
 
-    set_split_ratio(nstack, split_ratio);
+    set_split_ratio(nstack, split_ratio)
 }
 
 fn main() -> hyprland::Result<()> {
     // no-op if not hyprland
     if !is_hyprland() {
-        std::process::exit(0);
+        return Ok(());
     }
 
     let is_desktop = NixJson::load().host == "desktop";
@@ -99,49 +94,27 @@ fn main() -> hyprland::Result<()> {
     // only care about dynamic split ratios for oled
     if is_desktop {
         listener.add_window_opened_handler(move |data| {
-            // TODO: cannot resize tiled windows?
-            /*
-            if ev_args[2] == "mpv" {
-                if let Some(win) = Client::by_id(&ev_args[0]) {
-                    let (mon, _) = Monitor::by_workspace(&ev_args[1]);
-
-                    let (win_w, win_h) = win.size;
-                    let is_full_width = mon.width - win_w < 60;
-                    let is_full_height = mon.height - win_h < 60;
-
-                    // single window, ignore
-                    if is_full_width {
-                        continue;
-                    }
-
-                    if is_full_height {
-                        // resize width to fit 16:9 aspect ratio
-                        let new_width = win_h * 16 / 9 - win_w;
-                        let resize_params = format!("{new_width} {win_h}");
-
-                        hypr(["focuswindow", &win.address]);
-                        hypr(["resizeactive", &resize_params]);
-                    }
-                }
+            if let Err(e) = split_for_workspace(&data.workspace_name, nstack) {
+                eprintln!("Window opened error: {e}");
             }
-            */
-
-            split_for_workspace(&data.workspace_name, nstack);
         });
 
         listener.add_window_moved_handler(move |data| {
-            if let WorkspaceType::Regular(wksp) = data.workspace_name {
-                split_for_workspace(&wksp, nstack);
+            if let WorkspaceType::Regular(wksp) = data.workspace_name
+                && let Err(e) = split_for_workspace(&wksp, nstack)
+            {
+                eprintln!("Window moved error: {e}");
             }
         });
 
         listener.add_window_closed_handler(move |address| {
-            if let Some(wksp_id) = Clients::get()
-                .expect("could not get clients")
-                .iter()
-                .find_map(|c| (c.address == address).then_some(c.workspace.id))
+            if let Ok(clients) = Clients::get()
+                && let Some(wksp_id) = clients
+                    .iter()
+                    .find_map(|c| (c.address == address).then_some(c.workspace.id))
+                && let Err(e) = split_for_workspace(&wksp_id.to_string(), nstack)
             {
-                split_for_workspace(&wksp_id.to_string(), nstack);
+                eprintln!("Window closed error: {e}");
             }
         });
     }
@@ -150,19 +123,25 @@ fn main() -> hyprland::Result<()> {
         // single monitor in config; is laptop
         if NixJson::load().monitors.len() == 1 {
             // --rofi
-            hypr_monitors(WmMonitorArgs {
+            if let Err(e) = hypr_monitors(WmMonitorArgs {
                 rofi: Some(mon.name),
                 ..Default::default()
-            });
+            }) {
+                eprintln!("Monitor added error: {e}");
+            }
         } else {
             // desktop, redistribute workspaces
-            hypr_monitors(WmMonitorArgs::default());
+            if let Err(e) = hypr_monitors(WmMonitorArgs::default()) {
+                eprintln!("Monitor added error: {e}");
+            }
         }
     });
 
     listener.add_monitor_removed_handler(|_mon| {
         // redistribute workspaces
-        hypr_monitors(WmMonitorArgs::default());
+        if let Err(e) = hypr_monitors(WmMonitorArgs::default()) {
+            eprintln!("Monitor removed error: {e}");
+        }
     });
 
     listener.start_listener()

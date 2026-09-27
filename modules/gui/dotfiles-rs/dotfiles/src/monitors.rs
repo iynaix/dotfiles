@@ -1,13 +1,14 @@
 use execute::Execute;
-use std::{collections::HashMap, time::Duration};
+use std::collections::HashMap;
 
 use crate::{
     cli::{MonitorExtend, WmMonitorArgs},
     generate_completions,
 };
 use clap::CommandFactory;
+use color_eyre::eyre::Result;
 use common::{
-    WorkspacesByMonitor, debounce, is_hyprland,
+    WorkspacesByMonitor, is_hyprland,
     nixjson::{NixJson, NixMonitor},
     rearranged_workspaces,
     rofi::Rofi,
@@ -16,27 +17,27 @@ use common::{
 use itertools::Itertools;
 
 /// mirrors the current display onto the new display
-fn mirror_monitors(new_mon: &str) {
+fn mirror_monitors(new_mon: &str) -> Result<()> {
     let nix_monitors = NixJson::load().monitors;
 
-    let primary = nix_monitors.first().expect("no primary monitor found");
+    if let Some(primary) = nix_monitors.first() {
+        // mirror the primary to the new one
+        hyprland::keyword::Keyword::set(
+            "monitor",
+            format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
+        )?;
+    }
 
-    // mirror the primary to the new one
-    hyprland::keyword::Keyword::set(
-        "monitor",
-        format!("{},preferred,auto,1,mirror,{}", primary.name, new_mon),
-    )
-    .expect("unable to mirror displays");
+    Ok(())
 }
 
-fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
+fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) -> Result<()> {
     let nix_info_monitors = NixJson::load().monitors;
 
     for (mon_name, wksps) in workspaces {
-        let nix_info_mon = nix_info_monitors
-            .iter()
-            .find(|mon| mon.name == *mon_name)
-            .expect("could not find nix monitor");
+        let Some(nix_info_mon) = nix_info_monitors.iter().find(|mon| mon.name == *mon_name) else {
+            return Ok(());
+        };
 
         for wksp in wksps {
             {
@@ -44,24 +45,24 @@ fn move_workspaces_to_monitors(workspaces: &WorkspacesByMonitor) {
                 let lua_dispatch = format!(
                     r#"hl.dsp.workspace.move({{ workspace = "{wksp}", monitor = "{mon_name}" }})"#
                 );
-                execute::command_args!("hyprctl", "dispatch", lua_dispatch)
-                    .execute()
-                    .ok();
+                execute::command_args!("hyprctl", "dispatch", lua_dispatch).execute()?;
 
-                hyprland::keyword::Keyword::set("workspace", nix_info_mon.layoutopts(*wksp)).ok();
+                hyprland::keyword::Keyword::set("workspace", nix_info_mon.layoutopts(*wksp))?;
             }
         }
     }
+
+    Ok(())
 }
 
 /// distribute the workspaces evenly across all monitors
 pub fn distribute_workspaces(
     extend_type: &MonitorExtend,
     nix_monitors: &[NixMonitor],
-) -> WorkspacesByMonitor {
+) -> Result<WorkspacesByMonitor> {
     use hyprland::shared::HyprData;
 
-    let all_monitors = hyprland::data::Monitors::get().expect("could not get monitors");
+    let all_monitors = hyprland::data::Monitors::get()?;
     let all_monitors = all_monitors
         .iter()
         // put the nix_monitors first
@@ -79,7 +80,7 @@ pub fn distribute_workspaces(
 
     let workspaces: Vec<i32> = (1..=10).collect();
     let mut start = 0;
-    all_monitors
+    let ret = all_monitors
         .iter()
         .enumerate()
         .map(|(i, mon)| {
@@ -91,17 +92,20 @@ pub fn distribute_workspaces(
 
             (mon.name.clone(), wksps.to_vec())
         })
-        .collect()
+        .collect();
+
+    Ok(ret)
 }
 
-pub fn hypr_monitors(args: WmMonitorArgs) {
+pub fn hypr_monitors(args: WmMonitorArgs) -> Result<()> {
     // print shell completions
     if let Some(shell) = args.generate {
-        return generate_completions("wm-monitors", &mut WmMonitorArgs::command(), &shell);
+        generate_completions("wm-monitors", &mut WmMonitorArgs::command(), &shell);
+        return Ok(());
     }
 
     if !is_hyprland() {
-        std::process::exit(0);
+        return Ok(());
     }
 
     let mut mirror = args.mirror;
@@ -114,7 +118,7 @@ pub fn hypr_monitors(args: WmMonitorArgs) {
         let (sel, _) = Rofi::new(&choices)
             .arg("-lines")
             .arg(choices.len().to_string())
-            .run();
+            .run()?;
 
         match sel.as_str() {
             "Extend as Primary" => {
@@ -126,39 +130,32 @@ pub fn hypr_monitors(args: WmMonitorArgs) {
             "Mirror" => {
                 mirror = Some(new_mon);
             }
-            _ => {
-                eprintln!("No selection made, exiting...");
-                std::process::exit(1);
-            }
+            _ => return Ok(()),
         }
     }
 
     // --mirror
     if let Some(new_mon) = mirror {
-        mirror_monitors(&new_mon);
+        mirror_monitors(&new_mon)?;
     }
 
     // distribute workspaces per monitor
     let nix_monitors = NixJson::load().monitors;
     let workspaces = if let Some(extend) = extend_type {
         // --extend
-        distribute_workspaces(&extend, &nix_monitors)
+        distribute_workspaces(&extend, &nix_monitors)?
     } else {
         use hyprland::shared::HyprData;
-        let active_workspaces: HashMap<_, _> = hyprland::data::Monitors::get()
-            .expect("could not get monitors")
+        let active_workspaces: HashMap<_, _> = hyprland::data::Monitors::get()?
             .iter()
             .map(|mon| (mon.name.clone(), mon.active_workspace.id))
             .collect();
 
-        rearranged_workspaces(&nix_monitors, &active_workspaces)
+        rearranged_workspaces(&nix_monitors, &active_workspaces)?
     };
 
-    move_workspaces_to_monitors(&workspaces);
+    move_workspaces_to_monitors(&workspaces)?;
 
     // reload wallpaper
-    debounce(Duration::from_secs(5), || {
-        std::thread::sleep(Duration::from_secs(3));
-        wallpaper::reload();
-    });
+    wallpaper::reload()
 }

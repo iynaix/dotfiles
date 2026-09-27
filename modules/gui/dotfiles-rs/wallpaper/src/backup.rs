@@ -1,9 +1,10 @@
 use crate::cli::{BackupArgs, RemoteArgs};
+use color_eyre::eyre::{OptionExt, Result};
 use common::{full_path, wallpaper};
 use execute::Execute;
 use std::{path::Path, process::Stdio};
 
-pub fn backup(args: BackupArgs) {
+pub fn backup(args: BackupArgs) -> Result<()> {
     let target = args.target.unwrap_or_else(|| full_path("/media/HGST10"));
 
     execute::command_args!(
@@ -16,30 +17,24 @@ pub fn backup(args: BackupArgs) {
     )
     .stdout(Stdio::inherit())
     .stderr(Stdio::inherit())
-    .execute_output()
-    .expect("failed to backup wallpapers");
+    .execute_output()?;
 
     // backup wallpaper history
     std::fs::copy(
         full_path("~/Pictures/wallpapers_history.csv"),
         target.join("wallpapers_history.csv"),
-    )
-    .expect("failed to backup wallpaper history");
+    )?;
 
     // update rclip database
     execute::command_args!("rclip", "--filepath-only", "cat")
         .current_dir(wallpaper::dir())
         .stdout(Stdio::null())
-        .execute_output()
-        // don't care about it erroring out
-        .expect("failed to update rclip database");
+        .execute_output()?;
+
+    Ok(())
 }
 
-fn rsync(
-    path: &Path,
-    user: &str,
-    remote_host: &str,
-) -> Result<std::process::Output, std::io::Error> {
+fn rsync(path: &Path, user: &str, remote_host: &str) -> Result<()> {
     // NOTE: trailing slash is important
     let path_str = format!("{}/", path.display());
 
@@ -48,22 +43,26 @@ fn rsync(
         .stderr(Stdio::inherit())
         .arg(&path_str)
         .arg(format!("{user}@{remote_host}:{path_str}"))
-        .execute_output()
+        .execute_output()?;
+
+    Ok(())
 }
 
-pub fn remote(args: RemoteArgs) {
-    let user = whoami::username().expect("failed to get username");
+pub fn remote(args: RemoteArgs) -> Result<()> {
+    let user = whoami::username()?;
     let remote_host = args.hostname.unwrap_or_else(|| "framework".to_string());
 
     // backup to default location before syncing with remote
-    backup(BackupArgs { target: None });
+    backup(BackupArgs { target: None })?;
 
     // sync wallpapers
-    rsync(&wallpaper::dir(), &user, &remote_host).expect("failed to sync wallpapers");
+    rsync(&wallpaper::dir(), &user, &remote_host)?;
 
     // sync rclip database
     let rclip_db = dirs::data_dir()
-        .expect("unable to get $XDG_DATA_HOME")
+        .ok_or_eyre("unable to get $XDG_DATA_HOME")?
         .join("rclip");
-    rsync(&rclip_db, &user, &remote_host).expect("failed to sync rclip database");
+    rsync(&rclip_db, &user, &remote_host)?;
+
+    Ok(())
 }

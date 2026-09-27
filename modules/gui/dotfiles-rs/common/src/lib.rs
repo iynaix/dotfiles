@@ -1,3 +1,4 @@
+use color_eyre::eyre::{OptionExt, Result};
 use execute::Execute;
 use nixjson::NixMonitor;
 
@@ -5,7 +6,6 @@ use std::{
     collections::HashMap,
     path::{Path, PathBuf},
     process::{Command, Stdio},
-    time::{Duration, SystemTime},
 };
 
 pub mod nixjson;
@@ -13,21 +13,16 @@ pub mod rofi;
 pub mod umbriel;
 pub mod wallpaper;
 
-pub const MIN_ULTRAWIDE_RATIO: f64 = (21.0_f64 / 9.0).min(3440.0 / 1440.0).min(3840.0 / 1600.0);
-
 pub fn full_path<P>(p: P) -> PathBuf
 where
-    P: AsRef<Path> + std::fmt::Debug,
+    P: AsRef<std::path::Path>,
 {
-    let p = p
-        .as_ref()
-        .to_str()
-        .unwrap_or_else(|| panic!("invalid path: {p:?}"));
+    let path = p.as_ref();
 
-    match p.strip_prefix("~/") {
-        Some(p) => dirs::home_dir().expect("invalid home directory").join(p),
-        None => PathBuf::from(p),
-    }
+    path.to_str()
+        .and_then(|p| p.strip_prefix("~/"))
+        .and_then(|p| dirs::home_dir().map(|d| d.join(p)))
+        .unwrap_or_else(|| PathBuf::from(path))
 }
 
 fn command_output_to_lines(output: &[u8]) -> Vec<String> {
@@ -58,16 +53,11 @@ impl CommandUtf8 for Command {
     }
 }
 
-pub fn filename<P>(path: P) -> String
+pub fn filename<P>(path: P) -> Option<String>
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
-    path.as_ref()
-        .file_name()
-        .unwrap_or_else(|| panic!("could not get filename: {path:?}"))
-        .to_str()
-        .unwrap_or_else(|| panic!("could not convert filename to str: {path:?}"))
-        .to_string()
+    Some(path.as_ref().file_name()?.to_str()?.to_string())
 }
 
 pub mod json {
@@ -96,90 +86,12 @@ pub mod json {
     }
 }
 
-#[macro_export]
-macro_rules! log {
-    ($($arg:tt)*) => {
-        {
-            use std::io::Write;
-            let log_fname = if cfg!(debug_assertions) {
-                "/tmp/wm-ipc-debug.log"
-            } else {
-                "/tmp/wm-ipc.log"
-            };
-            let mut log_file = std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(log_fname)
-                .expect("could not open log file");
-
-            println!($($arg)*);
-            writeln!(log_file, $($arg)*).unwrap_or_else(|_| panic!("could not write to {log_fname}"));
-            log_file.flush().unwrap_or_else(|_| panic!("could not flush {log_fname}"));
-        }
-    };
-}
-
-pub fn debounce(interval: Duration, debounce_fn: impl FnOnce()) {
-    let lock_file = dirs::runtime_dir()
-        .expect("unable to get runtime dir")
-        .join("wallpaper.lock");
-
-    if lock_file.exists() {
-        let metadata =
-            std::fs::metadata(&lock_file).expect("unable to get wallpaper.lock metadata");
-        let last_run_time = metadata
-            .modified()
-            .expect("unable to get wallpaper.lock mtime");
-        let current_time = SystemTime::now();
-
-        if let Ok(elapsed) = current_time.duration_since(last_run_time)
-            && elapsed < interval
-        {
-            let wait_time = interval.saturating_sub(elapsed);
-            eprintln!(
-                "Script was run too recently. Please wait {} seconds.",
-                wait_time.as_secs_f64()
-            );
-            std::process::exit(1);
-        }
-    }
-
-    // update lock file with current time
-    std::fs::File::create(lock_file).expect("unable to create wallpaper.lock");
-
-    debounce_fn();
-}
-
 pub fn is_hyprland() -> bool {
     std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "Hyprland"
 }
 
 pub fn is_umbriel() -> bool {
     std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "umbriel"
-}
-
-pub fn kill_wrapped_process(unwrapped_name: &str, signal: &str) {
-    let wrapped_name = format!(".{unwrapped_name}-wrapped");
-
-    // kill the wrapped process
-    let wrapped_processes = Command::new("pkill")
-        .arg("--echo")
-        .arg("--signal")
-        .arg(signal)
-        .arg("--exact")
-        .arg(wrapped_name)
-        .execute_stdout_lines()
-        .expect("could not get wrapped process");
-
-    if !wrapped_processes.is_empty() {
-        Command::new("pkill")
-            .arg("--signal")
-            .arg(signal)
-            .arg("--exact")
-            .arg(unwrapped_name)
-            .output()
-            .unwrap_or_else(|_| panic!("failed to kill {unwrapped_name}"));
-    }
 }
 
 /// swaps the dimensions if the monitor is vertical
@@ -197,16 +109,8 @@ pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;
 pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
     nix_monitors: &[NixMonitor],
     active_workspaces: &HashMap<String, i32, S>,
-) -> WorkspacesByMonitor {
+) -> Result<WorkspacesByMonitor> {
     let mut workspaces_by_mon: WorkspacesByMonitor = HashMap::new();
-
-    // not active, add to the monitor with the least workspaces
-    let least_workspaces_mon = nix_monitors
-        .iter()
-        // only monitors that are still active
-        .filter(|mon| active_workspaces.contains_key(&mon.name))
-        .min_by_key(|mon| mon.workspaces.len())
-        .expect("no monitors were found");
 
     for mon in nix_monitors {
         if active_workspaces.get(&mon.name).is_some() {
@@ -216,6 +120,14 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
                 .or_default()
                 .extend(&mon.workspaces);
         } else {
+            // not active, add to the monitor with the least workspaces
+            let least_workspaces_mon = nix_monitors
+                .iter()
+                // only monitors that are still active
+                .filter(|mon| active_workspaces.contains_key(&mon.name))
+                .min_by_key(|mon| mon.workspaces.len())
+                .ok_or_eyre("No monitors were found")?;
+
             workspaces_by_mon
                 .entry(least_workspaces_mon.name.clone())
                 .or_default()
@@ -227,7 +139,7 @@ pub fn rearranged_workspaces<S: ::std::hash::BuildHasher>(
         wksps.sort_unstable();
     }
 
-    workspaces_by_mon
+    Ok(workspaces_by_mon)
 }
 
 #[cfg(test)]
@@ -235,7 +147,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_rearranged_workspace_remove_monitors() {
+    fn test_rearranged_workspace_remove_monitors() -> Result<()> {
         let by_workspace_name = |wksps_by_mon: &WorkspacesByMonitor| -> HashMap<String, Vec<i32>> {
             wksps_by_mon
                 .iter()
@@ -283,7 +195,10 @@ mod tests {
 
         // sanity check, should be a noop
         assert_eq!(
-            by_workspace_name(&rearranged_workspaces(&nix_monitors, &remove_monitors(&[]))),
+            by_workspace_name(&rearranged_workspaces(
+                &nix_monitors,
+                &remove_monitors(&[])
+            )?),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7]),
@@ -297,7 +212,7 @@ mod tests {
             by_workspace_name(&rearranged_workspaces(
                 &nix_monitors,
                 &remove_monitors(&["FWVERT"])
-            )),
+            )?),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7]),
@@ -310,7 +225,7 @@ mod tests {
             by_workspace_name(&rearranged_workspaces(
                 &nix_monitors,
                 &remove_monitors(&["FWVERT", "PP"])
-            )),
+            )?),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("VERT".to_string(), vec![6, 7, 8, 9, 10]),
@@ -322,7 +237,7 @@ mod tests {
             by_workspace_name(&rearranged_workspaces(
                 &nix_monitors,
                 &remove_monitors(&["FWVERT", "PP", "VERT"])
-            )),
+            )?),
             HashMap::from([("UW".to_string(), vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),]),
             "VERT, PP, FWVERT removed"
         );
@@ -331,7 +246,7 @@ mod tests {
             by_workspace_name(&rearranged_workspaces(
                 &nix_monitors,
                 &remove_monitors(&["VERT"])
-            )),
+            )?),
             HashMap::from([
                 ("UW".to_string(), vec![1, 2, 3, 4, 5]),
                 ("PP".to_string(), vec![6, 7, 9]),
@@ -339,5 +254,7 @@ mod tests {
             ]),
             "VERT removed"
         );
+
+        Ok(())
     }
 }

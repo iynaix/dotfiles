@@ -1,3 +1,4 @@
+use color_eyre::eyre::Result;
 use execute::Execute;
 use std::{path::PathBuf, process::Stdio};
 
@@ -6,7 +7,7 @@ use common::{
     wallpaper::{self, filter_images},
 };
 
-pub fn dedupe() {
+pub fn dedupe() -> Result<()> {
     let walls_in = full_path("~/Pictures/wallpapers_in");
 
     // if the files exist both in walls in and wallpapers, i probably forgot to remove them
@@ -28,6 +29,7 @@ pub fn dedupe() {
 
     cmd.stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
-        .execute_output()
-        .expect("failed to execute czkawka");
+        .execute_output()?;
+
+    Ok(())
 }

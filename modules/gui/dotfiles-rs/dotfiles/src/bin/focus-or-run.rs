@@ -1,11 +1,11 @@
-use std::process::Stdio;
-
 use clap::Parser;
+use color_eyre::eyre::Result;
 use common::{is_hyprland, is_umbriel};
 use dotfiles::cli::FocusOrRunArgs;
 use execute::Execute;
 use hyprland::{data::Clients, shared::HyprData};
 use serde::Deserialize;
+use std::process::Stdio;
 
 #[derive(Debug, Deserialize)]
 pub struct UmbrielWindows {
@@ -13,11 +13,11 @@ pub struct UmbrielWindows {
     pub title: String,
 }
 
-fn main() {
+fn main() -> Result<()> {
     let args = FocusOrRunArgs::parse();
 
     if is_hyprland() {
-        let clients = Clients::get().expect("could not get clients");
+        let clients = Clients::get()?;
 
         for client in clients {
             if client.title.contains(&args.title) {
@@ -29,9 +29,8 @@ fn main() {
                         client.address
                     )
                 )
-                .execute()
-                .expect("failed to focus window");
-                return;
+                .execute()?;
+                return Ok(());
             }
         }
     }
@@ -39,19 +38,15 @@ fn main() {
     if is_umbriel() {
         let umbriel_cmd = execute::command_args!("umbriel", "windows", "--json")
             .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to run umbriel workspaces");
-        let umbriel_json =
-            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel workspaces");
-        let windows: Vec<UmbrielWindows> =
-            serde_json::from_str(&umbriel_json).expect("failed to parse json");
+            .execute_output()?;
+        let umbriel_json = String::from_utf8(umbriel_cmd.stdout)?;
+        let windows: Vec<UmbrielWindows> = serde_json::from_str(&umbriel_json)?;
 
         for win in windows {
             if win.title.contains(&args.title) {
                 execute::command_args!("umbriel", "msg", format!("window-focus-warp:{}", win.id))
-                    .execute_output()
-                    .expect("failed to focus window");
-                return;
+                    .execute_output()?;
+                return Ok(());
             }
         }
     }
@@ -59,6 +54,7 @@ fn main() {
     std::process::Command::new("sh")
         .arg("-c")
         .arg(args.command)
-        .status()
-        .expect("failed to execute command");
+        .status()?;
+
+    Ok(())
 }

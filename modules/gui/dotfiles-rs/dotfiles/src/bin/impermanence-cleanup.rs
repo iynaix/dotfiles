@@ -1,9 +1,10 @@
+use color_eyre::eyre::{OptionExt, Result};
 use std::{
     io::{BufRead, BufReader},
     path::{Path, PathBuf},
 };
 
-fn walk_persist(dir: &Path, persist_paths: &[String]) -> std::io::Result<()> {
+fn walk_persist(dir: &Path, persist_paths: &[String]) -> Result<()> {
     for entry in std::fs::read_dir(dir)? {
         let path = entry?.path();
         let path_str = path.display().to_string();
@@ -32,18 +33,17 @@ fn walk_persist(dir: &Path, persist_paths: &[String]) -> std::io::Result<()> {
     Ok(())
 }
 
-fn main() {
+fn main() -> Result<()> {
     let impermanence_txt = dirs::state_dir()
-        .expect("unable to get $XDG_STATE_HOME")
+        .ok_or_eyre("could not get XDG_STATE_DIR")?
         .join("impermanence.txt");
 
-    let fp = std::fs::File::open(impermanence_txt).expect("unable to open impermanence.txt");
+    let fp = std::fs::File::open(impermanence_txt)?;
     let persist_paths: Vec<_> = BufReader::new(fp).lines().map_while(Result::ok).collect();
 
     for root in ["/persist", "/cache"] {
-        walk_persist(&PathBuf::from(root), &persist_paths).unwrap_or_else(|e| {
-            eprintln!("An error has occurred: {e}");
-            std::process::exit(1);
-        });
+        walk_persist(&PathBuf::from(root), &persist_paths)?;
     }
+
+    Ok(())
 }

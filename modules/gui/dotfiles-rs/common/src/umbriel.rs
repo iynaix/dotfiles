@@ -1,7 +1,7 @@
-use std::process::Stdio;
-
+use color_eyre::eyre::{OptionExt, Result};
 use execute::{Execute, command_args};
 use serde::Deserialize;
+use std::process::Stdio;
 
 #[derive(Debug, Deserialize)]
 pub struct UmbrielMonitor {
@@ -49,40 +49,45 @@ pub struct UmbrielWindow {
 }
 
 impl UmbrielWorkspace {
-    pub fn all() -> Vec<Self> {
+    pub fn all() -> Result<Vec<Self>> {
         let umbriel_cmd = execute::command_args!("umbriel", "workspaces", "--json")
             .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to run umbriel workspaces");
-        let umbriel_json =
-            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel workspaces");
+            .execute_output()?;
+        let umbriel_json = String::from_utf8(umbriel_cmd.stdout)?;
 
-        serde_json::from_str(&umbriel_json).expect("failed to parse json")
+        Ok(serde_json::from_str(&umbriel_json)?)
     }
 
-    pub fn focused() -> Option<Self> {
-        Self::all().into_iter().find(|wksp| wksp.focused)
+    pub fn focused() -> Result<Self> {
+        Self::all()?
+            .into_iter()
+            .find(|wksp| wksp.focused)
+            .ok_or_eyre("No focused workspace")
     }
 }
 
 impl UmbrielMonitor {
-    pub fn all() -> Vec<Self> {
+    pub fn all() -> Result<Vec<Self>> {
         let umbriel_cmd = command_args!("umbriel", "outputs", "--json")
             .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to run umbriel outputs");
-        let umbriel_json =
-            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel outputs");
+            .execute_output()?;
+        let umbriel_json = String::from_utf8(umbriel_cmd.stdout)?;
 
-        serde_json::from_str(&umbriel_json).expect("failed to parse json")
+        Ok(serde_json::from_str(&umbriel_json)?)
     }
 
-    pub fn focused() -> Option<Self> {
+    pub fn focused() -> Result<Self> {
         // get focused workspace, then get focused monitor from there
-        UmbrielWorkspace::all()
+        UmbrielWorkspace::all()?
             .into_iter()
             .find(|wksp| wksp.focused)
-            .and_then(|wksp| Self::all().into_iter().find(|mon| mon.name == wksp.output))
+            .and_then(|wksp| {
+                Self::all()
+                    .ok()?
+                    .into_iter()
+                    .find(|mon| mon.name == wksp.output)
+            })
+            .ok_or_eyre("No focused monitor")
     }
 
     pub fn current_mode(&self) -> Option<UmbrielMonitorMode> {
@@ -95,21 +100,20 @@ impl UmbrielMonitor {
 }
 
 impl UmbrielWindow {
-    pub fn all() -> Vec<Self> {
+    pub fn all() -> Result<Vec<Self>> {
         let umbriel_cmd = command_args!("umbriel", "windows", "--json")
             .stdout(Stdio::piped())
-            .execute_output()
-            .expect("failed to run umbriel windows");
-        let umbriel_json =
-            String::from_utf8(umbriel_cmd.stdout).expect("invalid utf8 from umbriel windows");
+            .execute_output()?;
+        let umbriel_json = String::from_utf8(umbriel_cmd.stdout)?;
 
-        serde_json::from_str(&umbriel_json).expect("failed to parse json")
+        Ok(serde_json::from_str(&umbriel_json)?)
     }
 
-    pub fn focused() -> Option<Self> {
+    pub fn focused() -> Result<Self> {
         // get focused workspace, then get focused monitor from there
-        UmbrielWindow::all()
+        Self::all()?
             .into_iter()
             .find(|win| win.focused && win.active)
+            .ok_or_eyre("No focused window")
     }
 }

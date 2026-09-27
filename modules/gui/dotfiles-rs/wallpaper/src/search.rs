@@ -1,4 +1,5 @@
 use crate::cli::SearchArgs;
+use color_eyre::eyre::Result;
 use common::{
     CommandUtf8, filename,
     wallpaper::{self, filter_images},
@@ -6,13 +7,18 @@ use common::{
 use execute::Execute;
 use std::process::Stdio;
 
-pub fn search(args: SearchArgs) {
+pub fn search(args: SearchArgs) -> Result<()> {
     let wall_dir = wallpaper::dir();
 
-    let all_results = if args.query.contains(" ") {
+    let all_results = if args.query.contains(' ') {
         let lower_query = args.query.to_lowercase();
         filter_images(&wall_dir)
-            .filter(|path| filename(path).to_lowercase().contains(&lower_query))
+            .filter_map(|path| {
+                filename(&path)?
+                    .to_lowercase()
+                    .contains(&lower_query)
+                    .then_some(path)
+            })
             .collect()
     } else {
         Vec::new()
@@ -39,6 +45,7 @@ pub fn search(args: SearchArgs) {
     )
     .args(all_results)
     .args(rclip_results)
-    .execute_output()
-    .expect("failed to run swayimg");
+    .execute_output()?;
+
+    Ok(())
 }

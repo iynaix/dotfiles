@@ -1,17 +1,20 @@
+use color_eyre::eyre::{OptionExt, Result};
 use common::{
     is_hyprland,
     umbriel::{UmbrielMonitor, UmbrielWindow},
 };
 use execute::{Execute, command_args};
 
-fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
+fn hyprland_pip() -> Result<()> {
     use common::vertical_dimensions;
     use hyprland::{
         data::{Client, Monitor},
         shared::{HyprDataActive, HyprDataActiveOptional},
     };
 
-    let focused = Client::get_active()?.expect("no active window");
+    let Some(focused) = Client::get_active()? else {
+        return Ok(());
+    };
     let mon = Monitor::get_active()?;
 
     // figure out dimensions of target window with aspect ratio 16:9
@@ -36,7 +39,9 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
         let lua_dispatch = format!("hl.dsp.window.resize({{ x = {target_w}, y = {target_h} }})");
         execute::command_args!("hyprctl", "dispatch", lua_dispatch).execute()?;
 
-        let activewindow = Client::get_active()?.expect("no active window");
+        let Some(activewindow) = Client::get_active()? else {
+            return Ok(());
+        };
 
         let (curr_width, curr_height) = vertical_dimensions(&mon);
         let mon_bottom = mon.y as u32 + curr_height;
@@ -55,10 +60,10 @@ fn hyprland_pip() -> Result<(), Box<dyn std::error::Error>> {
 
 // TODO: umbriel actions cannot currently position a floating window
 #[allow(unused)]
-fn umbriel_pip() -> Result<(), Box<dyn std::error::Error>> {
-    let focused = UmbrielWindow::focused().ok_or("No focused window")?;
-    let mon = UmbrielMonitor::focused().ok_or("No focused monitor")?;
-    let mode = mon.current_mode().ok_or("No current monitor mode")?;
+fn umbriel_pip() -> Result<()> {
+    let focused = UmbrielWindow::focused()?;
+    let mon = UmbrielMonitor::focused()?;
+    let mode = mon.current_mode().ok_or_eyre("No current monitor mode")?;
 
     // use monitor width even on vertical monitors
     let (mon_w, mon_h) = if mon.is_vertical() {
@@ -112,7 +117,7 @@ fn umbriel_pip() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<()> {
     if is_hyprland() {
         hyprland_pip()?;
     }

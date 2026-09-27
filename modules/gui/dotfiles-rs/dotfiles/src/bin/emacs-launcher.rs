@@ -1,34 +1,29 @@
 use clap::Parser;
+use color_eyre::eyre::Result;
 use common::is_hyprland;
 use dotfiles::cli::EmacsLauncherArgs;
 use execute::Execute;
 use hyprland::{data::Clients, shared::HyprData};
 use std::process::Command;
 
-fn execute_emacs_command(elisp: &str) -> Result<(), String> {
+fn execute_emacs_command(elisp: &str) -> Result<()> {
     let cmd = format!(r"(progn (select-frame-set-input-focus (selected-frame)) {elisp})");
 
     println!("{cmd}");
 
     Command::new("emacsclient")
         .args(["-n", "-e", &cmd])
-        .status()
-        .map_err(|e| e.to_string())
-        .and_then(|status| {
-            if status.success() {
-                Ok(())
-            } else {
-                Err(format!("emacsclient exited with status {status}"))
-            }
-        })
+        .status()?;
+
+    Ok(())
 }
 
-fn main() -> Result<(), String> {
+fn main() -> Result<()> {
     let args = EmacsLauncherArgs::parse();
 
     // switch to emacs window
     if is_hyprland() {
-        let clients = Clients::get().expect("could not get clients");
+        let clients = Clients::get()?;
 
         for client in clients {
             if client.class.contains("Emacs") {
@@ -40,8 +35,7 @@ fn main() -> Result<(), String> {
                         client.address
                     )
                 )
-                .execute()
-                .expect("failed to focus window");
+                .execute()?;
             }
         }
     }
