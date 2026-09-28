@@ -8,7 +8,7 @@
       ...
     }:
     {
-      # NOTE: using patches to the nixos module for autologin, default session and noctalia sync
+      # NOTE: using patches to the nixos module for autologin, default session
       services.displayManager = {
         noctalia-greeter = {
           enable = true;

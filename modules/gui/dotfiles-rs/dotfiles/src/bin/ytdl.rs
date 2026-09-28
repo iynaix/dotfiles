@@ -53,10 +53,12 @@ fn main() -> Result<()> {
 
     // download with embedded subs
     cmd.args([
+        // "--sleep-subtitles",
+        // "3",
         "--write-auto-sub",
         "--embed-subs",
         "--sub-lang",
-        "en.*",
+        "en-orig",
         "--convert-subs",
         "srt",
     ]);

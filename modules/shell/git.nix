@@ -89,7 +89,6 @@
             gcaam = "git add --all && git commit --amend";
             gcam = "git commit --amend";
             gco = "git checkout";
-            gclone-shallow = "git clone --depth 1";
             gcp = "git cherry-pick";
             gdiff = "git diff --no-ext-diff";
             gg = "git status -s -b && echo && git log | head -n 1";
@@ -105,6 +104,7 @@
             gr = "cd (git rev-parse --show-toplevel)"; # cd back to root
             grh = "git reset --hard";
             gri = "git rebase --interactive";
+            gshallow = "git clone --depth 1";
             gsub = "git submodule update --init --recursive";
             # access github page for the repo we are currently in
             github = "open (git remote -v | grep github.com | grep fetch | head -1 | awk '{print $2}' | sed 's/git:/http:/git')";

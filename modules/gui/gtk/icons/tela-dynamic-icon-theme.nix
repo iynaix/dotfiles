@@ -31,9 +31,10 @@
         # just replace all instances of tela blue
         pkgs.writeShellApplication {
           name = "tela-dynamic-icon-theme";
-          runtimeInputs = [
-            pkgs.dconf
-            pkgs.gtk3
+          runtimeInputs = with pkgs; [
+            dconf
+            gtk3
+            lndir
           ];
           text = /* sh */ ''
             if [[ -z "''${1:-}" ]]; then
@@ -49,16 +50,24 @@
             # rm -rf "$THEME_DIR"
 
             if [[ ! -d "$THEME_DIR" ]]; then
-              cp -r ${tela-template} "$THEME_DIR"
-              chmod -R +w "$THEME_DIR"
+                mkdir -p "$THEME_DIR"
+                lndir "${tela-template}" "$THEME_DIR"
 
-              # replace only for the files in replacements.txt
-              xargs -d '\n' -a "$THEME_DIR/replacements.txt" -I {} sed -i "s/#5677fc/$1/g" "$THEME_DIR/{}"
+                # write the replaced color for each file in replacements.txt
+                while IFS= read -r file; do
+                    [ -z "$file" ] && continue
+                    src="${tela-template}/$file"
+                    dst="$THEME_DIR/$file"
 
-              # generate the 2x icon symlinks
-              for dir in 16 22 24 32 scalable;
-                do cp -r "$THEME_DIR/$dir" "$THEME_DIR/$dir@2x";
-              done
+                    rm -f "$dst"
+
+                    sed "s/#5677fc/$1/g" "$src" > "$dst"
+                done <"$THEME_DIR/replacements.txt"
+
+                # generate the 2x icon symlinks
+                for dir in 16 22 24 32 scalable;
+                  do ln -sr "$THEME_DIR/$dir" "$THEME_DIR/$dir@2x";
+                done
             fi
 
             mkdir -p "$HOME/.local/share/icons"

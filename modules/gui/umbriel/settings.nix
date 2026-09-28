@@ -71,7 +71,7 @@
             # general umbriel settings
             {
               general = {
-                mod_key = if (builtins.elem "vm" tags) then "Alt" else "Super"; # Mod in keybinds; defaults to Super (Alt when nested)
+                mod_key = lib.mkIf (builtins.elem "vm" tags) "Alt";
                 xwayland = true; # requires restart to change
                 show_cheatsheet = false;
                 focus_on_activate = true; # unsolicited requests cannot add focus; trusted launches may still focus
@@ -344,7 +344,8 @@
                 # open single applications maximized
                 {
                   match.is_alone = true;
-                  default_maximize = true;
+                  default_maximize = config.custom.programs.noctalia.minibar;
+                  default_maximize_to_edges = !config.custom.programs.noctalia.minibar;
                 }
               ];
             };

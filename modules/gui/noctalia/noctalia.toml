@@ -1,3 +1,6 @@
+[audio]
+enable_sounds = false
+
 [backdrop]
 enabled = true
 

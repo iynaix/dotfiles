@@ -10,14 +10,7 @@
       noctalia = inputs.wrappers.wrappers.noctalia.wrap {
         inherit pkgs;
         package = pkgs.noctalia.overrideAttrs (o: {
-          src = pkgs.fetchFromGitHub {
-            owner = "noctalia-dev";
-            repo = "noctalia";
-            rev = "0433e3f8517ffc615906f6a17ac824724353aefb";
-            hash = "sha256-gfqQVe9f9vSdCaof+t4f+ucV82Eg0lfLa0W39hwgwgQ=";
-          };
-
-          # skip tests
+          # skip building tests
           mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
 
           patches = (o.patches or [ ]) ++ [
@@ -62,6 +55,10 @@
               https://docs.noctalia.dev/noctalia/theming/app-theming/?section=user-templates#user-templates
               for available options
             '';
+          };
+
+          minibar = lib.mkEnableOption "Alternate centralized minibar rice" // {
+            default = true;
           };
         };
       };
@@ -126,8 +123,14 @@
                 { type = "caffeine"; } # idle inhibit
                 { type = "notification"; } # DND
               ];
+            }
+            # creating centralized pill shaped bar
+            // (lib.optionalAttrs config.custom.programs.noctalia.minibar {
+              shell.panel = {
+                control_center_placement = "floating";
+                control_center_position = "top_center";
+              };
 
-              # creating centralized pill shaped bar
               bar.default = {
                 concave_edge_corners = false;
                 radius_top_left = 0;
@@ -156,7 +159,7 @@
                   )
                   |> lib.listToAttrs;
               };
-            };
+            });
 
             print-config = {
               noctalia = /* sh */ ''cat ${config.programs.noctalia.package.configuration.constructFiles.settings.outPath} "${config.hj.xdg.state.directory}/noctalia/settings.toml" | moor --lang toml'';

@@ -42,19 +42,20 @@
           package = inputs.umbriel.packages.${system}.default.override {
             # awakened-poe-trade and exiled-exchange-2 don't work because xwayland-satellite doesn't implement X11 overlays (override_redirect):
             # https://github.com/Supreeeme/xwayland-satellite/issues/429
-            xwayland-satellite = pkgs.xwayland-satellite.overrideAttrs (_o: rec {
+            xwayland-satellite = pkgs.xwayland-satellite.overrideAttrs (o: rec {
               # https://github.com/niri-wm/niri/discussions/3986#discussioncomment-16848571
               # NOTE: this patch was vibe coded
-              src = pkgs.fetchFromGitHub {
-                owner = "iynaix";
-                repo = "xwayland-satellite";
-                rev = "fcfa43dded63b9a22046424bfbb7fc6cedc35f61";
-                hash = "sha256-+hmzK4yZYvHhMvEKxxfhOLufQkbQK0O0f2PEyTLuTig=";
-              };
+              patches = (o.patches or [ ]) ++ [
+                (pkgs.fetchpatch {
+                  url = "https://github.com/iynaix/xwayland-satellite/commit/fcfa43dded63b9a22046424bfbb7fc6cedc35f61.patch";
+                  hash = "sha256-eV66yKSUxTUtwNr4HuEco/k+xiQehBfrLtqjI+PCf1I=";
+                })
+              ];
 
-              cargoDeps = pkgs.rustPlatform.importCargoLock {
-                lockFile = "${src}/Cargo.lock";
-                allowBuiltinFetchGit = true;
+              cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+                inherit (o) src;
+                inherit patches;
+                hash = "sha256-63/e8BMfkOqdR2B9+00GpMPor5Vt5PUx4pxjlqfao2s=";
               };
             });
           };

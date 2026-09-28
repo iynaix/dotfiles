@@ -46,7 +46,7 @@
             "Mod+Shift+W".spawn = "helium --profile-directory=Default --incognito";
 
             "Mod+V".spawn = "emacsclient -c";
-            "Mod+Shift+V".spawn = termExec "neovim";
+            "Mod+Shift+V".spawn = termExec "nvim";
 
             "Mod+period".spawn =
               emacsExec ''(projectile-find-file-in-directory "/persist${config.hj.directory}/projects")'';
