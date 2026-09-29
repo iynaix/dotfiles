@@ -2390,7 +2390,6 @@ dependencies = [
  "serde_json",
  "toml",
  "whoami",
- "xmpkit",
 ]
 
 [[package]]

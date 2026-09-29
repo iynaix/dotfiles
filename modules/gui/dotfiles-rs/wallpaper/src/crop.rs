@@ -8,7 +8,7 @@ use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer
 use image::{ImageEncoder, ImageReader, codecs::png::PngEncoder};
 use itertools::Itertools;
 
-use crate::{cli::CropArgs, metadata::aspect_ratio, write_wallpaper_history};
+use crate::{cli::CropArgs, write_wallpaper_history};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -72,16 +72,16 @@ fn crop_geometry(
     let Some((closest_w, closest_h)) = wall_info
         .geometries
         .keys()
+        .map(|key| parse_aspect(key))
         .min_by(|aspect1, aspect2| {
-            let diff1 = (aspect_ratio(aspect1) - target_aspect).abs();
-            let diff2 = (aspect_ratio(aspect2) - target_aspect).abs();
+            let diff1 = ((f64::from(aspect1.0) / f64::from(aspect1.1)) - target_aspect).abs();
+            let diff2 = ((f64::from(aspect2.0) / f64::from(aspect2.1)) - target_aspect).abs();
 
             // ignore if aspect ratio already exists in config
             diff1
                 .partial_cmp(&diff2)
                 .unwrap_or(std::cmp::Ordering::Equal)
         })
-        .map(|aspect| parse_aspect(aspect))
     else {
         // no geometries
         return default_crop;

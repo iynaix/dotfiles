@@ -27,7 +27,6 @@ serde_json.workspace = true
 rayon.workspace = true
 toml = "1.1.6"
 whoami = "2.1.3"
-xmpkit.workspace = true
 
 [build-dependencies]
 clap.workspace = true

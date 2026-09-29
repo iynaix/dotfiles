@@ -1,4 +1,4 @@
-use color_eyre::eyre::Result;
+use color_eyre::eyre::{Result, eyre};
 use execute::Execute;
 use itertools::Itertools;
 use xmpkit::{XmpFile, XmpValue};
@@ -99,6 +99,12 @@ pub struct Geometry {
     pub y: f64,
 }
 
+impl std::fmt::Display for Geometry {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}x{}+{}+{}", self.w, self.h, self.x, self.y)
+    }
+}
+
 impl TryFrom<&str> for Geometry {
     type Error = Box<dyn std::error::Error>;
 
@@ -126,6 +132,7 @@ pub struct WallInfo {
     pub path: PathBuf,
     pub faces: Vec<Geometry>,
     pub geometries: HashMap<String, String>,
+    pub scale: Option<u32>,
 }
 
 impl WallInfo {
@@ -144,29 +151,28 @@ impl WallInfo {
         };
 
         if let Some(xmp) = fp.get_xmp() {
-            if let Some(XmpValue::Array(faces)) = xmp.get_property(wallfacer_ns, "faces") {
-                ret.faces = faces
-                    .iter()
-                    .filter_map(|face| face.as_str()?.try_into().ok())
-                    .collect();
-            }
+            for prop in xmp.all_properties() {
+                if prop.namespace_uri != wallfacer_ns {
+                    continue;
+                }
 
-            if let Some(XmpValue::Structure(crops)) = xmp.get_property("wallfacer", "crops") {
-                ret.geometries = crops
-                    .iter()
-                    .filter_map(|(aspect, geom)| {
-                        let aspect = aspect
-                            .strip_prefix(&format!("{wallfacer_ns}:"))?
-                            .to_string();
-
-                        let geom = geom.as_str()?.to_string();
-
-                        Some((aspect, geom))
-                    })
-                    .collect();
+                if prop.name == "scale" {
+                    ret.scale = prop.value.as_int().map(|scale| scale as u32);
+                } else if let Some(aspect) = prop.name.strip_prefix("crop_")
+                    && let XmpValue::String(geom) = prop.value
+                {
+                    ret.geometries.insert(aspect.to_string(), geom);
+                } else if prop.name.starts_with("faces")
+                    && let XmpValue::Array(faces) = prop.value
+                {
+                    ret.faces = faces
+                        .iter()
+                        .filter_map(|face| face.as_str()?.try_into().ok())
+                        .collect();
+                }
             }
         } else {
-            panic!("unable to read xmp metadata for {img:?}");
+            return Err(eyre!("Unable to read xmp metadata for {img:?}"));
         }
 
         Ok(ret)
