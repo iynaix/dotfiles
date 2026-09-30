@@ -35,9 +35,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "7f14c10bf60376f830f07465be74b1059015b453",
-    "narHash": "sha256-hvCSSn0+vTN6wEKfi1FcQfW4gM0syOgT11g0efYE854=",
-    "lastModified": 1790621019
+    "rev": "35a0086e18927ccffe28ab7076986fa1bc87b6ac",
+    "narHash": "sha256-TCK6JcLvvOD/X1tmnN4cPrlEzbPSNwzf0maWMzyly9c=",
+    "lastModified": 1790703929
   },
   "nix-index-database": {
     "type": "github",
@@ -51,9 +51,9 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "30d48a0ec6035f8140d0125af274f0de95f1e9b5",
-    "narHash": "sha256-mZGHLGi217oLIwzDM4PNRZeCNa6g2WBXURyXbNMFs7Y=",
-    "lastModified": 1790321948
+    "rev": "06f9ecaea5f64b6ff61cf42cb32f21621c4fa14a",
+    "narHash": "sha256-XwFt1uLyaBCQU1/nUeGqeBnqNXPVgGRnz20YVYdmF6Y=",
+    "lastModified": 1790722812
   },
   "nixpkgs": {
     "type": "tarball",
@@ -63,9 +63,9 @@
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.10769.cf5e76507c6e/nixexprs.tar.zst",
-    "rev": "cf5e76507c6e23b59f7e0ffcc7baa2a39ddd8442",
-    "narHash": "sha256-hzJtu90JIQXnmgxKeP23CAx86G4L+dcQ+GHB1JK04qA="
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.10882.7fc6f2c20af0/nixexprs.tar.zst",
+    "rev": "7fc6f2c20af09cdcaf48b92ec3121860139ec668",
+    "narHash": "sha256-6AXgcEB8kiYLV1aewneIGmpljLLQcd2Xo/gmDYxvKYc="
   },
   "nvf": {
     "type": "github",
@@ -103,18 +103,18 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "2482c642b8bacdec70f6bb476b9a85897f1a77e5",
-    "narHash": "sha256-vqqbVRXyQB4clQVkdDpPFWcSgfIDqapmZmrLAPE6/3E=",
-    "lastModified": 1790639894,
+    "rev": "8e3fe9cd173383e94eb999be8d4e37ad03fcc3f9",
+    "narHash": "sha256-xxvhWKGm7TBjvg5ArGWMhlRJkn+CrliAXmzA9M2efPI=",
+    "lastModified": 1790732648,
     "submodules": true
   },
   "wfetch": {
     "type": "github",
     "owner": "iynaix",
     "repo": "wfetch",
-    "rev": "bdf6800d7e778fa8b5cc5c13d4364a9b62a210e4",
-    "narHash": "sha256-LWbmEu4IjrD3+5LMT+bfAHuNt64kfru7RwB0u82UZY8=",
-    "lastModified": 1790506386
+    "rev": "fe70d3a2f94ebbdafbda83ce7d7d4b06e66ad515",
+    "narHash": "sha256-tvJpUe4C/+WatJ2h2Uu42f3Xw0sGb3WuiDyLcUXQF0o=",
+    "lastModified": 1790686204
   },
   "wrappers": {
     "type": "github",

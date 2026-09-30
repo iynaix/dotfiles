@@ -14,10 +14,6 @@
                   type = lib.types.str;
                   description = "Command to execute";
                 };
-                hyprlandArgs = lib.mkOption {
-                  type = lib.types.attrs;
-                  description = "Additional args to be used by hyprland";
-                };
                 umbrielArgs = lib.mkOption {
                   type = lib.types.attrs;
                   description = "Additional args to be used by umbriel";
@@ -77,27 +73,18 @@
             # audio buttons
             "XF86AudioLowerVolume" = {
               spawn = "pamixer -d 5";
-              hyprlandArgs = {
-                locked = true;
-              };
               umbrielArgs = {
                 allow-when-locked = true;
               };
             };
             "XF86AudioRaiseVolume" = {
               spawn = "pamixer -i 5";
-              hyprlandArgs = {
-                locked = true;
-              };
               umbrielArgs = {
                 allow-when-locked = true;
               };
             };
             "XF86AudioMute" = {
               spawn = "pamixer -t";
-              hyprlandArgs = {
-                locked = true;
-              };
               umbrielArgs = {
                 allow-when-locked = true;
               };

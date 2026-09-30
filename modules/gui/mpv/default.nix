@@ -362,15 +362,6 @@
   config =
     { pkgs, ... }:
     {
-      custom.programs = {
-        hyprland.settings = /* lua */ ''
-          -- do not idle while watching videos
-          hl.window_rule({ match = { class = "mpv" }, idle_inhibit = "focus" })
-          -- fix mpv-dynamic-crop unmaximizing the window
-          hl.window_rule({ match = { class = "mpv" }, suppress_event = "maximize" })
-        '';
-      };
-
       nixpkgs.overlays = [
         (_: _prev: {
           mpv = pkgs.custom.mpv;

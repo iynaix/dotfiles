@@ -1,22 +1,16 @@
 use crate::{cli::WallpaperFilterArgs, filter_images_by_faces};
 use color_eyre::eyre::Result;
 use common::{
-    is_hyprland, is_umbriel,
+    is_umbriel,
     umbriel::UmbrielMonitor,
     wallpaper::{self, filter_images},
 };
 use execute::Execute;
-use hyprland::shared::HyprDataActive;
 use itertools::Itertools;
 
 fn target_window_size() -> Option<(u32, u32)> {
     const TARGET_PERCENT: f64 = 0.3;
-    let width = if is_hyprland() {
-        let mon = hyprland::data::Monitor::get_active().ok()?;
-
-        // handle vertical monitor
-        f64::from(mon.width.max(mon.height)) * TARGET_PERCENT
-    } else if is_umbriel()
+    let width = if is_umbriel()
         && let Some(mode) = UmbrielMonitor::focused()
             .ok()
             .and_then(|mon| UmbrielMonitor::current_mode(&mon))

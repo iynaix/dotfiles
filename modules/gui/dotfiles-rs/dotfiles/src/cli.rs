@@ -16,7 +16,7 @@ pub enum MonitorExtend {
 
 #[derive(Parser, Debug, Default)]
 #[command(name = "wm-monitors", about = "Re-arranges workspaces to monitor")]
-/// Utilities for working with adding or removing monitors in hyprland
+/// Utilities for working with adding or removing monitors
 /// Without arguments, it redistributes the workspaces across all monitors
 pub struct WmMonitorArgs {
     #[arg(

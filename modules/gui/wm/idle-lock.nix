@@ -49,13 +49,6 @@
               };
             };
 
-            # handle laptop lid on the WMs
-            hyprland.settings = /* lua */ ''
-              hl.bind(mod .. " + SHIFT + CTRL + x", hl.dsp.exec_cmd("${lib.getExe lock}"))
-
-              hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("${lib.getExe lock}"), { locked = true })
-            '';
-
             umbriel.settings.events = {
               lid_open = lib.getExe lock;
             };

@@ -17,7 +17,6 @@ execute.workspace = true
 fast_image_resize.workspace = true
 fastrand.workspace = true
 hex.workspace = true
-hyprland.workspace = true
 image.workspace = true
 itertools.workspace = true
 jiff.workspace = true

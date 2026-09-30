@@ -1,7 +1,7 @@
 use clap::{CommandFactory, Parser};
 use color_eyre::eyre::{OptionExt, Result};
 use common::{
-    is_hyprland, is_umbriel,
+    is_umbriel,
     umbriel::{UmbrielMonitor, UmbrielWindow},
 };
 use dotfiles::{
@@ -9,10 +9,6 @@ use dotfiles::{
     generate_completions,
 };
 use execute::Execute;
-use hyprland::{
-    data::{Client, Clients},
-    shared::{HyprData, HyprDataActiveOptional},
-};
 use itertools::Itertools;
 
 // gets the target window given the direction
@@ -41,28 +37,6 @@ fn main() -> Result<()> {
         eprintln!("No direction specified. Use 'next' or 'prev'.");
         std::process::exit(1);
     };
-
-    if is_hyprland() {
-        let focused = Client::get_active()?.ok_or_eyre("No focused window.")?;
-        let windows = Clients::get()?;
-        let matching_windows = windows
-            .iter()
-            .filter(|client| client.class == focused.class)
-            // sort by workspace then coordinates
-            .sorted_by_key(|client| (client.workspace.id, client.at))
-            .map(|client| &client.address)
-            .collect_vec();
-
-        let active_idx = matching_windows
-            .iter()
-            .position(|&addr| addr == &focused.address)
-            .ok_or_eyre("focused window not found")?;
-
-        let target = target_window(active_idx, &matching_windows, &direction);
-
-        let lua_dispatch = format!(r#"hl.dsp.focus({{ window = "address:{target}" }})"#);
-        execute::command_args!("hyprctl", "dispatch", lua_dispatch).execute()?;
-    }
 
     if is_umbriel() {
         let focused = UmbrielWindow::focused()?;

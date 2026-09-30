@@ -1,9 +1,8 @@
 use clap::Parser;
 use color_eyre::eyre::Result;
-use common::is_hyprland;
+use common::{is_umbriel, umbriel::UmbrielWindow};
 use dotfiles::cli::EmacsLauncherArgs;
 use execute::Execute;
-use hyprland::{data::Clients, shared::HyprData};
 use std::process::Command;
 
 fn execute_emacs_command(elisp: &str) -> Result<()> {
@@ -22,20 +21,11 @@ fn main() -> Result<()> {
     let args = EmacsLauncherArgs::parse();
 
     // switch to emacs window
-    if is_hyprland() {
-        let clients = Clients::get()?;
-
-        for client in clients {
-            if client.class.contains("Emacs") {
-                execute::command_args!(
-                    "hyprctl",
-                    "dispatch",
-                    format!(
-                        r#"hl.dsp.focus({{ window = "address:{}" }})"#,
-                        client.address
-                    )
-                )
-                .execute()?;
+    if is_umbriel() {
+        for win in UmbrielWindow::all()? {
+            if win.app_id == "emacs" {
+                execute::command_args!("umbriel", "msg", format!("window-focus:{}", win.id))
+                    .execute()?;
             }
         }
     }

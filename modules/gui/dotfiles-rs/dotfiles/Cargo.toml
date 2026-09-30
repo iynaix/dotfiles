@@ -14,7 +14,6 @@ common.workspace = true
 dirs.workspace = true
 execute.workspace = true
 fastrand.workspace = true
-hyprland.workspace = true
 itertools.workspace = true
 jiff.workspace = true
 serde.workspace = true

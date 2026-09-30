@@ -2,7 +2,7 @@ use clap_complete::{Shell, generate};
 use cli::ShellCompletion;
 
 pub mod cli;
-pub mod monitors;
+// pub mod monitors;
 
 pub fn generate_completions(
     progname: &str,

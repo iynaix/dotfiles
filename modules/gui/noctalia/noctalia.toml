@@ -136,7 +136,7 @@ source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
-builtin_ids = ["btop", "cava", "kitty", "hyprland", "umbriel"]
+builtin_ids = ["btop", "cava", "kitty", "umbriel"]
 community_ids = ["yazi", "zathura"]
 
 [wallpaper]

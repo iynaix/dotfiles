@@ -43,13 +43,6 @@ patcher.patch unpatchedInputs {
     # expose options used to build each wrapped package
     ./patches/nix-wrappers-expose-options.patch
 
-    # hyprland module
-    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/567
-    (patcher.fetchpatch {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/94794a07e384edb6ee4506be4d8a731d73c8eafc.patch";
-      hash = "sha256-SLmLyhJ1rA4A3EMHJxqDBlgE32k8NUHRINNkWvuDxMw=";
-    })
-
     # noctalia module
     # https://github.com/BirdeeHub/nix-wrapper-modules/pull/598
     (patcher.fetchpatch {

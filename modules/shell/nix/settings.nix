@@ -55,14 +55,11 @@
 
     nix =
       let
-        flakes = lib.filterAttrs (_: input: lib.isType "flake" input) inputs;
-        nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes;
         registry = lib.mapAttrs (_: flake: { inherit flake; }) (removeAttrs inputs [ "__functor" ]);
       in
       {
         channel.enable = false;
         # required for nix-shell -p to work
-        inherit nixPath;
         # package = pkgs.lixPackageSets.latest.lix;
         package = pkgs.nixVersions.latest;
         registry = registry // {
@@ -96,8 +93,10 @@
           # re-evaluate on every rebuild instead of "cached failure of attribute" error
           # eval-cache = false;
           flake-registry = ""; # don't use the global flake registry, define everything explicitly
-          # required to be set, for some reason nix.nixPath does not write to nix.conf
-          nix-path = nixPath;
+          nix-path =
+            inputs
+            |> lib.filterAttrs (_: input: lib.isType "flake" input)
+            |> lib.mapAttrsToList (n: _: "${n}=flake:${n}");
           warn-dirty = false;
           # removes ~/.nix-profile and ~/.nix-defexpr
           use-xdg-base-directories = true;
@@ -128,14 +127,15 @@
 
     # never going to read html docs locally
     documentation = {
-      enable = true;
-      doc.enable = true;
+      enable = false;
+      doc.enable = false;
       man = {
-        enable = true;
+        enable = false;
         # enable man-db cache for fish to be able to find manpages
         # https://discourse.nixos.org/t/fish-shell-and-manual-page-completion-nixos-home-manager/15661
-        cache.enable = true;
+        cache.enable = false;
       };
+      nixos.enable = false;
       dev.enable = false;
     };
 

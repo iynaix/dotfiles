@@ -52,7 +52,7 @@ repo="${repo:-github:iynaix/dotfiles}"
 
 # qol for iynaix os
 if [[ $repo == "github:iynaix/dotfiles" ]]; then
-    hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
+    hosts=("desktop" "framework" "xps" "vm" "vm")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do

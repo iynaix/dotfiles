@@ -17,10 +17,6 @@
 
         # add separate window rules to set dimensions for each monitor for wallpaper selector, this is so ugly :(
         custom.programs = {
-          hyprland.settings = /* lua */ ''
-            hl.window_rule({ match = { class = "wallpaper-selector" }, float = true, center = true })
-          '';
-
           umbriel = {
             settings.window_rule = [
               {

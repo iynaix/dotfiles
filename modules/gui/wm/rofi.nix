@@ -129,12 +129,6 @@
 
       # add blur for rofi shutdown
       custom.programs = {
-        hyprland.settings = /* lua */ ''
-          hl.layer_rule({ match = { namespace = "rofi" }, blur = true, dim_around = true, ignore_alpha = 0 })
-          -- force center rofi on monitor
-          hl.window_rule({ match = { class = "Rofi" }, float = true, center = true, rounding = 12, dim_around = true })
-        '';
-
         noctalia.user-templates = {
           # default launcher
           "rofi.rasi" = {

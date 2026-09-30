@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage {
   postInstall =
     let
       binsWithCompletions = [
-        "hypr-monitors"
         "wm-same-class"
       ];
     in

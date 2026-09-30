@@ -26,18 +26,6 @@
           };
           extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
         };
-
-        custom = {
-          programs.print-config = {
-            wm = /* sh */ ''
-              if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
-                  hyprland-config
-              elif [ "$XDG_CURRENT_DESKTOP" == "umbriel" ]; then
-                  umbriel-config
-              fi
-            '';
-          };
-        };
       }
 
       # autologin

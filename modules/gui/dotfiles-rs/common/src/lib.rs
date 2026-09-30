@@ -86,21 +86,8 @@ pub mod json {
     }
 }
 
-pub fn is_hyprland() -> bool {
-    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "Hyprland"
-}
-
 pub fn is_umbriel() -> bool {
     std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default() == "umbriel"
-}
-
-/// swaps the dimensions if the monitor is vertical
-pub fn vertical_dimensions(mon: &hyprland::data::Monitor) -> (u32, u32) {
-    if mon.transform as u8 % 2 == 1 {
-        (mon.height.into(), mon.width.into())
-    } else {
-        (mon.width.into(), mon.height.into())
-    }
 }
 
 pub type WorkspacesByMonitor = HashMap<String, Vec<i32>>;

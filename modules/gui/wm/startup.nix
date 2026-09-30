@@ -46,11 +46,6 @@
                     description = "Extra arguments for umbriel window rules";
                     default = { };
                   };
-                  hyprlandArgs = lib.mkOption {
-                    type = lib.types.attrs;
-                    description = "Extra arguments for hyprland window rules";
-                    default = { };
-                  };
                 };
               })
             ]
@@ -136,9 +131,6 @@
                 title = ".*(Discord|WhatsApp|Flood).*";
                 spawn = "uwsm app -- helium-chat";
                 workspace = 9;
-                hyprlandArgs = {
-                  initial_title = title;
-                };
               }
 
               # download related

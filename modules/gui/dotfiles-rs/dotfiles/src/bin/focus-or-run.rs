@@ -1,9 +1,8 @@
 use clap::Parser;
 use color_eyre::eyre::Result;
-use common::{is_hyprland, is_umbriel};
+use common::is_umbriel;
 use dotfiles::cli::FocusOrRunArgs;
 use execute::Execute;
-use hyprland::{data::Clients, shared::HyprData};
 use serde::Deserialize;
 use std::process::Stdio;
 
@@ -15,25 +14,6 @@ pub struct UmbrielWindows {
 
 fn main() -> Result<()> {
     let args = FocusOrRunArgs::parse();
-
-    if is_hyprland() {
-        let clients = Clients::get()?;
-
-        for client in clients {
-            if client.title.contains(&args.title) {
-                execute::command_args!(
-                    "hyprctl",
-                    "dispatch",
-                    format!(
-                        r#"hl.dsp.focus({{ window = "address:{}" }})"#,
-                        client.address
-                    )
-                )
-                .execute()?;
-                return Ok(());
-            }
-        }
-    }
 
     if is_umbriel() {
         let umbriel_cmd = execute::command_args!("umbriel", "windows", "--json")
