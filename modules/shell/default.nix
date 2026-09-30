@@ -66,10 +66,11 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     let
-      homeDir = config.hj.directory;
+      homeDir = "/persist/home/${user}";
       xdg-user-dirs = {
         # xdg user dirs
         XDG_DESKTOP_DIR = "${homeDir}/Desktop";
@@ -96,7 +97,7 @@
     {
       environment = {
         shellAliases = {
-          dots = "cd /persist${config.hj.directory}/projects/dotfiles";
+          dots = "cd /persist/home/${user}/projects/dotfiles";
           coinfc = "pj coinfc";
         };
 
@@ -141,7 +142,7 @@
           XDG_STATE_HOME = config.hj.xdg.state.directory;
 
           # stop libX11 from polluting $HOME with .compose-cache
-          XCOMPOSECACHE = "${config.hj.xdg.cache.directory}/xcompose";
+          XCOMPOSECACHE = "/home/${user}/.cache/xcompose";
         }
         // xdg-user-dirs;
       };
@@ -161,14 +162,14 @@
       programs = {
         fish.shellInit = /* fish */ ''
           function pj
-            cd "/persist${config.hj.directory}/projects"
+            cd "/persist/home/${user}/projects"
             if test (count $argv) -eq 1
               cd $argv[1]
             end
           end
 
           function _pj
-              find "/persist${config.hj.directory}/projects" -maxdepth 1 -type d -exec basename {} \;
+              find "/persist/home/${user}/projects" -maxdepth 1 -type d -exec basename {} \;
           end
           complete -c pj -f -a "(_pj)"
         '';

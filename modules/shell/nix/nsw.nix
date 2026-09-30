@@ -60,10 +60,11 @@
       host,
       lib,
       pkgs,
+      user,
       ...
     }:
     let
-      dots = "/persist${config.hj.directory}/projects/dotfiles";
+      dots = "/persist/home/${user}/projects/dotfiles";
 
       # nixos-rebuild switch, use different package for home-manager standalone
       nsw = pkgs.custom.nsw.override {

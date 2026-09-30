@@ -8,6 +8,7 @@
       lib,
       pkgs,
       system,
+      user,
       ...
     }:
     let
@@ -61,14 +62,14 @@
                 include = {
                   files = [
                     # use nix generated host.toml first
-                    "${config.hj.xdg.config.directory}/umbriel/host.toml"
+                    "/home/${user}/.config/umbriel/host.toml"
                   ];
 
                   optional.files = [
                     # use noctalia colors
-                    "${config.hj.xdg.config.directory}/umbriel/noctalia.toml"
+                    "/home/${user}/.config/umbriel/noctalia.toml"
                     # dynamic cursor
-                    "${config.hj.xdg.config.directory}/umbriel/cursor.toml"
+                    "/home/${user}/.config/umbriel/cursor.toml"
                   ];
                 };
               };
@@ -90,7 +91,7 @@
 
         custom.programs = {
           print-config = {
-            umbriel = /* sh */ ''moor "${config.hj.xdg.config.directory}/umbriel/host.toml"'';
+            umbriel = /* sh */ ''moor "/home/${user}/.config/umbriel/host.toml"'';
           };
         };
       };

@@ -27,13 +27,13 @@
   tags = [ "gui" ];
 
   config =
-    { config, pkgs, ... }:
+    { pkgs, user, ... }:
     {
       nixpkgs.overlays = [
         (_: _prev: {
           zathura = pkgs.custom.zathura.wrap {
             extraSettings = ''
-              include "${config.hj.xdg.config.directory}/zathura/noctaliarc"
+              include "/home/${user}/.config/zathura/noctaliarc"
             '';
           };
         })

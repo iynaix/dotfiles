@@ -50,6 +50,7 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -93,7 +94,7 @@
                 };
               }
             );
-            output_path = "${config.hj.xdg.config.directory}/${filename}";
+            output_path = "/home/${user}/.config/${filename}";
           };
         in
         {

@@ -2,7 +2,7 @@
   hosts = [ "desktop" ];
 
   config =
-    { config, pkgs, ... }:
+    { pkgs, user, ... }:
     {
       programs.steam = {
         enable = true;
@@ -10,7 +10,7 @@
         # https://github.com/ValveSoftware/steam-for-linux/issues/1890#issuecomment-2367103614
         package = pkgs.steam.override {
           extraBwrapArgs = [
-            "--bind /persist/${config.hj.directory} $HOME"
+            "--bind /persist//home/${user} $HOME"
             "--unsetenv XDG_CACHE_HOME"
             "--unsetenv XDG_CONFIG_HOME"
             "--unsetenv XDG_DATA_HOME"

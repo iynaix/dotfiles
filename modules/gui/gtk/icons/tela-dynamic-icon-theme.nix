@@ -85,6 +85,7 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -131,7 +132,7 @@
           "gtk-icon-theme" = {
             post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
             # dummy values so noctalia doesn't complain
-            input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+            input_path = "/home/${user}/.config/user-dirs.conf";
             output_path = "/dev/null";
           };
         };

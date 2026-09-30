@@ -26,6 +26,7 @@
       inputs,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -75,7 +76,7 @@
                 font_features JetBrainsMonoNF-Italic +zero
                 font_features JetBrainsMonoNF-BoldItalic +zero
 
-                include ${config.hj.xdg.config.directory}/kitty/kitty.conf
+                include /home/${user}/.config/kitty/kitty.conf
               '';
             };
           })
@@ -106,7 +107,7 @@
           print-config = {
             kitty = /* sh */ ''
               cat "${pkgs.kitty.configuration.constructFiles.kittyConfig.outPath}" \
-                  "${config.hj.xdg.config.directory}/kitty/kitty.conf" \
+                  "/home/${user}/.config/kitty/kitty.conf" \
                   moor --lang ini'';
           };
         };

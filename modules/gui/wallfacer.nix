@@ -3,14 +3,14 @@
 
   config =
     {
-      config,
       libCustom,
       pkgs,
+      user,
       ...
     }:
     let
       tomlFormat = pkgs.formats.toml { };
-      wallpapers_dir = "${config.hj.directory}/Pictures/Wallpapers";
+      wallpapers_dir = "/home/${user}/Pictures/Wallpapers";
       wallfacerConf = tomlFormat.generate "wallfacer.toml" {
         wallpapers_path = wallpapers_dir;
         min_width = 5120; # 5k2k width
@@ -59,7 +59,7 @@
       wallfacer = libCustom.writeShellApplicationCompletions pkgs {
         name = "wallfacer";
         text = /* sh */ ''
-          direnv-cargo-run "/persist${config.hj.directory}/projects/wallfacer" "$@"
+          direnv-cargo-run "/persist/home/${user}/projects/wallfacer" "$@"
         '';
         # completion for wallpaper gui, bash completion isn't helpful as there are 1000s of images
         completions.fish = /* fish */ ''

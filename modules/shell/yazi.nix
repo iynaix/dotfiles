@@ -209,7 +209,7 @@
     };
 
   config =
-    { config, pkgs, ... }:
+    { pkgs, user, ... }:
     {
       # shell integrations
       programs = {
@@ -237,7 +237,7 @@
             };
 
             flavors = {
-              noctalia = "${config.hj.xdg.config.directory}/yazi/flavors/noctalia.yazi";
+              noctalia = "/home/${user}/.config/yazi/flavors/noctalia.yazi";
             };
           };
         })

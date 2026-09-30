@@ -97,6 +97,7 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -128,7 +129,7 @@
           "gtk-theme" = {
             post_hook = ''${lib.getExe pkgs.custom.tokyonight-dynamic-gtk-theme} "{{ colors.primary.default.hex }}" "{{ colors.on_primary.default.hex | set_alpha 0.8 }}"'';
             # dummy values so noctalia doesn't complain
-            input_path = "${config.hj.xdg.config.directory}/user-dirs.conf";
+            input_path = "/home/${user}/.config/user-dirs.conf";
             output_path = "/dev/null";
           };
         };

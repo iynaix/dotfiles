@@ -2,7 +2,7 @@
   hosts = [ "desktop" ];
 
   config =
-    { config, lib, ... }:
+    { lib, user, ... }:
     let
       hgst10 = "/media/HGST10";
       ironwolf22 = "/media/IRONWOLF22";
@@ -22,8 +22,8 @@
       custom = {
         # symlinks from hdds
         symlinks = {
-          "${config.hj.directory}/Downloads" = "${ironwolf22}/Downloads";
-          "${config.hj.directory}/Videos" = hgst10;
+          "/home/${user}/Downloads" = "${ironwolf22}/Downloads";
+          "/home/${user}/Videos" = hgst10;
         };
 
         # add btop monitoring for extra hdds

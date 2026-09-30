@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   user,
   ...
@@ -59,7 +58,7 @@
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       environment.variables = {
-        GNUPGHOME = "${config.hj.xdg.data.directory}/.gnupg";
+        GNUPGHOME = "/home/${user}/.local/share/.gnupg";
       };
 
       programs.gnupg.agent = {

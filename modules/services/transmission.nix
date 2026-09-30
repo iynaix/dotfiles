@@ -10,7 +10,7 @@
       ...
     }:
     let
-      persistHome = "/persist${config.hj.directory}";
+      persistHome = "/persist/home/${user}";
       projectsDir = "${persistHome}/projects";
       downloadDir = "/media/IRONWOLF22/Downloads";
       pendingDir = "${downloadDir}/pending";

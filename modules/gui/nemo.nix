@@ -7,6 +7,7 @@
       host,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -91,15 +92,15 @@
         };
 
         gtk.bookmarks = [
-          "${config.hj.directory}/Downloads"
-          "/persist${config.hj.directory}/projects"
-          "/persist${config.hj.directory}/projects/dotfiles"
-          "/persist${config.hj.directory}/projects/nixpkgs"
-          "${config.hj.directory}/Documents"
-          "${config.hj.directory}/Pictures/Wallpapers"
+          "/home/${user}/Downloads"
+          "/persist/home/${user}/projects"
+          "/persist/home/${user}/projects/dotfiles"
+          "/persist/home/${user}/projects/nixpkgs"
+          "/home/${user}/Documents"
+          "/home/${user}/Pictures/Wallpapers"
         ]
         ++ lib.optionals (host == "desktop") [
-          "${config.hj.directory}/Pictures/wallpapers_in Walls In"
+          "/home/${user}/Pictures/wallpapers_in Walls In"
         ]
         ++ [
           "/persist Persist"

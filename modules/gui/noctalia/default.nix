@@ -30,6 +30,7 @@
       lib,
       pkgs,
       tags,
+      user,
       ...
     }:
     let
@@ -84,7 +85,13 @@
         systemd.user.services.noctalia = {
           serviceConfig = {
             # hide the bar on laptop screens for more space
-            ExecStartPost = lib.mkIf (builtins.elem "laptop" tags) "${lib.getExe config.programs.noctalia.package} msg bar-hide";
+            ExecStartPost = lib.mkIf (builtins.elem "laptop" tags) ''
+              while ! noctalia msg status >/dev/null 2>&1; do
+                ${lib.getExe' pkgs.coreutils "sleep"} 0.5
+              done
+
+              "${lib.getExe config.programs.noctalia.package} msg bar-hide"
+            '';
           };
         };
 
@@ -149,7 +156,7 @@
             });
 
             print-config = {
-              noctalia = /* sh */ ''cat ${config.programs.noctalia.package.configuration.constructFiles.settings.outPath} "${config.hj.xdg.state.directory}/noctalia/settings.toml" | moor --lang toml'';
+              noctalia = /* sh */ ''cat ${config.programs.noctalia.package.configuration.constructFiles.settings.outPath} "/home/${user}/.local/state/noctalia/settings.toml" | moor --lang toml'';
             };
           };
 

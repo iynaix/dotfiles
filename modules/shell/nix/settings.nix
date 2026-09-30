@@ -40,7 +40,7 @@
           enable = true;
           extraArgs = "--keep-since 5d --keep 5";
         };
-        flake = "/persist${config.hj.directory}/projects/dotfiles";
+        flake = "/persist/home/${user}/projects/dotfiles";
       };
 
       nix-index.enable = true;
@@ -156,7 +156,7 @@
 
     systemd.tmpfiles.rules = [
       # cleanup nixpkgs-review cache on boot
-      "D! ${config.hj.xdg.cache.directory}/nixpkgs-review 1755 ${user} users 5d"
+      "D! /home/${user}/.cache/nixpkgs-review 1755 ${user} users 5d"
       # cleanup channels so nix stops complaining
       "D! /nix/var/nix/profiles/per-user/root 1755 root root 1d"
     ];

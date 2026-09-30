@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  user,
   ...
 }:
 {
@@ -19,7 +20,7 @@
 
     # create symlink to dotfiles from /etc/nixos
     custom.symlinks = {
-      "/etc/nixos" = "/persist${config.hj.directory}/projects/dotfiles";
+      "/etc/nixos" = "/persist/home/${user}/projects/dotfiles";
     };
 
     # create symlinks

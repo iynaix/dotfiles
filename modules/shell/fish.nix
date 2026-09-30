@@ -159,7 +159,7 @@
         # use abbrs instead of aliases
         shellAliases = lib.mkForce { };
         shellAbbrs = config.environment.shellAliases // {
-          ehistory = ''nvim "${config.hj.xdg.data.directory}/fish/fish_history"'';
+          ehistory = ''nvim "/home/${user}/.local/share/fish/fish_history"'';
         };
       };
 

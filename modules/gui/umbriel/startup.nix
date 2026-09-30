@@ -7,6 +7,7 @@
       host,
       lib,
       pkgs,
+      user,
       ...
     }:
     let
@@ -15,7 +16,7 @@
         runtimeInputs = [ pkgs.custom.helium ];
         # specify xdg-data-dir directly to force launch a separate instance, if not it just reuses the "Default" session
         text = /* sh */ ''
-          helium --profile-directory=Chat --xdg-data-dir=${config.hj.xdg.cache.directory}/net.imput.helium/Chat
+          helium --profile-directory=Chat --xdg-data-dir=/home/${user}/.cache/net.imput.helium/Chat
         '';
       };
       startup = [
@@ -71,7 +72,7 @@
         })
         (lib.optionalAttrs (host == "desktop") rec {
           match.app_id = "${config.custom.programs.terminal.app_id}-yt.txt";
-          spawn = "kitty --class=${match.app_id} -e nvim ${config.hj.directory}/Desktop/yt.txt";
+          spawn = "kitty --class=${match.app_id} -e nvim /home/${user}/Desktop/yt.txt";
           workspace = 8;
         })
       ];

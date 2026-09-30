@@ -18,7 +18,7 @@
         runtimeInputs = [ pkgs.rsync ];
         text =
           let
-            persistHome = "/persist${config.hj.directory}";
+            persistHome = "/persist/home/${user}";
             copy = src: ''rsync -aP --mkpath "${persistHome}/${src}" "$user@$remote:$target/${src}"'';
           in
           /* sh */ ''
@@ -60,8 +60,8 @@
         gnupg.sshKeyPaths = [ ];
         age = {
           # NOTE: paths from persist are used so they exist before impermanence kicks in
-          sshKeyPaths = [ "/persist${config.hj.directory}/.ssh/id_ed25519" ];
-          keyFile = "/persist${config.hj.directory}/.config/sops/age/keys.txt";
+          sshKeyPaths = [ "/persist/home/${user}/.ssh/id_ed25519" ];
+          keyFile = "/persist/home/${user}/.config/sops/age/keys.txt";
           # This will generate a new key if the key specified above does not exist
           generateKey = false;
         };

@@ -24,13 +24,12 @@
 
   config =
     {
-      config,
       libCustom,
       pkgs,
+      user,
       ...
     }:
     let
-      xdgDataHome = config.hj.xdg.data.directory;
       # cargo will be provided via the nix-shell
       crb = libCustom.writeShellApplicationCompletions pkgs {
         name = "crb";
@@ -59,9 +58,9 @@
       environment = {
         # use centralized cargo cache
         sessionVariables = rec {
-          CARGO_HOME = "/cache${xdgDataHome}/.cargo";
+          CARGO_HOME = "/cache/home/${user}/.local/share/.cargo";
           CARGO_TARGET_DIR = "${CARGO_HOME}/target";
-          RUSTUP_HOME = "/cache${xdgDataHome}/.rustup";
+          RUSTUP_HOME = "/cache/home/${user}/.rustup";
         };
 
         systemPackages = [

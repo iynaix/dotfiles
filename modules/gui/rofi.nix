@@ -48,8 +48,8 @@
 
   config =
     {
-      config,
       pkgs,
+      user,
       ...
     }:
     let
@@ -118,7 +118,7 @@
             xoffset: 0;
             yoffset: 0;
           }
-          @theme "${config.hj.xdg.config.directory}/rofi/rofi.rasi"
+          @theme "/home/${user}/.config/rofi/rofi.rasi"
         '';
         type = "copy";
       };
@@ -136,7 +136,7 @@
               inputbar { background-color: transparent; }
               element normal.normal { background-color: transparent; }
             '';
-            output_path = "${config.hj.xdg.config.directory}/rofi/rofi.rasi";
+            output_path = "/home/${user}/.config/rofi/rofi.rasi";
           };
 
           # generic single column rofi menu
@@ -146,7 +146,7 @@
               prompt { enabled: false; }
               textbox-prompt-colon { enabled: false; }
             '';
-            output_path = "${config.hj.xdg.config.directory}/rofi/rofi-menu.rasi";
+            output_path = "/home/${user}/.config/rofi/rofi-menu.rasi";
           };
 
           "rofi-menu-noinput.rasi" = {
@@ -166,7 +166,7 @@
                 text-color:                  @foreground;
               }
             '';
-            output_path = "${config.hj.xdg.config.directory}/rofi/rofi-menu-noinput.rasi";
+            output_path = "/home/${user}/.config/rofi/rofi-menu-noinput.rasi";
           };
         };
       };

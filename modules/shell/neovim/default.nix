@@ -20,16 +20,16 @@
 
   config =
     {
-      config,
       host,
       lib,
       pkgs,
+      user,
       ...
     }:
     let
       customNeovim = pkgs.custom.neovim-iynaix.override {
         inherit host;
-        dots = "/persist${config.hj.directory}/projects/dotfiles";
+        dots = "/persist/home/${user}/projects/dotfiles";
       };
     in
     {

@@ -1,10 +1,15 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   doom-install = pkgs.writeShellApplication {
     name = "doom-install";
     runtimeInputs = [ config.programs.git.package ];
     text = ''
-      EMACS="${config.hj.xdg.config.directory}/emacs"
+      EMACS="/home/${user}/.config/emacs"
 
       if [ ! -f "$EMACS/bin/doom" ]; then
         git clone https://github.com/hlissner/doom-emacs.git $EMACS
@@ -33,7 +38,7 @@ in
   environment = {
     sessionVariables = {
       PATH = [ "$HOME/.config/emacs/bin" ];
-      DOOMDIR = "/persist${config.hj.directory}/projects/dotfiles/modules/shell/emacs/doom";
+      DOOMDIR = "/persist/home/${user}/projects/dotfiles/modules/shell/emacs/doom";
     };
 
     systemPackages = [
