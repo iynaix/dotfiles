@@ -85,13 +85,25 @@
         systemd.user.services.noctalia = {
           serviceConfig = {
             # hide the bar on laptop screens for more space
-            ExecStartPost = lib.mkIf (builtins.elem "laptop" tags) ''
-              while ! noctalia msg status >/dev/null 2>&1; do
-                ${lib.getExe' pkgs.coreutils "sleep"} 0.5
-              done
+            ExecStartPost =
+              let
+                noctalia-post-init = pkgs.writeShellApplication {
+                  name = "noctalia-post-init";
+                  runtimeInputs = [
+                    config.programs.noctalia.package
+                    pkgs.coreutils
+                  ];
+                  text = ''
 
-              "${lib.getExe config.programs.noctalia.package} msg bar-hide"
-            '';
+                    while ! noctalia msg status >/dev/null 2>&1; do
+                    ${lib.getExe' pkgs.coreutils "sleep"} 0.5
+                    done
+
+                    noctalia msg bar-hide
+                  '';
+                };
+              in
+              lib.mkIf (builtins.elem "laptop" tags) (lib.getExe noctalia-post-init);
           };
         };
 

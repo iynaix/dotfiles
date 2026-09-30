@@ -85,7 +85,6 @@
       config,
       lib,
       pkgs,
-      user,
       ...
     }:
     {
@@ -131,8 +130,6 @@
         custom.programs.noctalia.user-templates = {
           "gtk-icon-theme" = {
             post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
-            # dummy values so noctalia doesn't complain
-            input_path = "/home/${user}/.config/user-dirs.conf";
             output_path = "/dev/null";
           };
         };

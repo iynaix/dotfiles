@@ -63,19 +63,19 @@
           spawn = "helium-chat";
           workspace = 9;
         }
-
+      ]
+      ++
         # download related
-        (lib.optionalAttrs (host == "desktop") rec {
+        (lib.optional (host == "desktop") rec {
           match.app_id = "${config.custom.programs.terminal.app_id}-dl";
           spawn = "kitty --class=${match.app_id}";
           workspace = 8;
         })
-        (lib.optionalAttrs (host == "desktop") rec {
-          match.app_id = "${config.custom.programs.terminal.app_id}-yt.txt";
-          spawn = "kitty --class=${match.app_id} -e nvim /home/${user}/Desktop/yt.txt";
-          workspace = 8;
-        })
-      ];
+      ++ (lib.optional (host == "desktop") rec {
+        match.app_id = "${config.custom.programs.terminal.app_id}-yt.txt";
+        spawn = "kitty --class=${match.app_id} -e nvim /home/${user}/Desktop/yt.txt";
+        workspace = 8;
+      });
     in
     {
       # add desktop entry for helium-chat as well
@@ -94,7 +94,6 @@
         umbriel.settings = lib.mkMerge (
           (
             startup
-            |> lib.filter (s: s != { })
             |> map (s: {
               general.autostart = [ s.spawn ];
               window_rule = [
