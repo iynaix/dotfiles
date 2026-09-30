@@ -12,16 +12,63 @@
       custom.programs = {
         umbriel.settings = {
           keybinds =
-            (
-              config.custom.wm.binds
-              |> lib.mapAttrs (
-                _: args:
-                {
-                  action = "spawn:${args.spawn}";
-                }
-                // lib.optionalAttrs (args.umbrielArgs.allow-when-locked or false) { "allow_when_locked" = true; }
-              )
-            )
+            let
+              termExec = cmd: "spawn:kitty ${cmd}";
+              emacsExec = elisp: "spawn:emacs-launcher '${elisp}'";
+            in
+            # shared keybinds
+            {
+              "Mod+Return" = "spawn:kitty";
+              "Mod+Shift+Return" = "spawn:noctalia msg panel-toggle launcher";
+
+              "Mod+E" = "spawn:nemo ${config.hj.directory}/Downloads";
+              "Mod+Shift+E" = "spawn:${termExec "yazi ${config.hj.directory}/Downloads"}";
+
+              "Mod+W" = "spawn:helium --profile-directory=Default";
+              "Mod+Shift+W" = "spawn:helium --profile-directory=Default --incognito";
+
+              "Mod+V" = "spawn:emacsclient -c";
+              "Mod+Shift+V" = termExec "nvim";
+
+              "Mod+period" =
+                emacsExec ''(projectile-find-file-in-directory "/persist${config.hj.directory}/projects")'';
+              "Mod+Shift+period" =
+                emacsExec ''(projectile-find-file-in-directory "/persist${config.hj.directory}/projects/nixpkgs")'';
+
+              "Ctrl+Alt+Delete" = "spawn:noctalia msg panel-toggle session";
+
+              # toggle the bar
+              "Mod+A" = "spawn:noctalia msg bar-toggle";
+
+              # restart noctalia
+              "Mod+Shift+A" = "spawn:noctalia-reload";
+
+              # clipboard history
+              "Mod+Ctrl+V" = "spawn:noctalia msg panel-toggle clipboard";
+
+              # notification history
+              "Mod+N" = "spawn:noctalia msg panel-toggle control-center notifications";
+
+              # picture in picture mode
+              # "Mod+P"= "spawn:wm-pip";
+
+              "Mod+Apostrophe" = "spawn:wallpaper select";
+              "Alt+Apostrophe" = "spawn:wallpaper history";
+
+              # audio buttons
+              "XF86AudioLowerVolume" = {
+                action = "spawn:pamixer -d 5";
+                allow_when_locked = true;
+              };
+              "XF86AudioRaiseVolume" = {
+                action = "spawn:pamixer -i 5";
+                allow_when_locked = true;
+              };
+              "XF86AudioMute" = {
+                action = "spawn:pamixer -t";
+                allow_when_locked = true;
+              };
+            }
             // {
               "Mod+BackSpace" = {
                 action = "window-close";
@@ -79,7 +126,7 @@
               "Mod+Tab" = "workspace-focus-last";
 
               # TODO: picture in picture mode
-              "Mod+P" = "spawn:wm-pip";
+              # "Mod+P" = "spawn:wm-pip";
 
               # The following binds move the focused window in and out of a column.
               # If the window is alone, they will consume it into the nearby column to the side.

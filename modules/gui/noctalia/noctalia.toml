@@ -34,7 +34,7 @@ sidebar_section = "none"
 enabled = false
 
 [idle]
-behavior_order = ["lock", "screen-off", "lock-and-suspend"]
+behavior_order = ["idle-behavior", "lock-and-suspend"]
 
 [location]
 auto_locate = true
@@ -130,6 +130,10 @@ countdown_seconds = 0.0
 enabled = true
 shortcut = "4"
 variant = "default"
+
+[shell.window_switcher]
+mru = true
+style = "compact"
 
 [theme]
 source = "wallpaper"

@@ -38,12 +38,12 @@
       };
 
       custom = {
-        wm.binds = {
-          "Mod+backslash".spawn =
-            "focal image --noctalia --area selection --no-notify --no-save --no-rounded-windows";
-          "Mod+Shift+backslash".spawn = "focal image --noctalia --rofi";
-          "Mod+Ctrl+backslash".spawn = "focal image --noctalia --area selection --ocr";
-          "Alt+backslash".spawn = "focal video --rofi";
+        programs.umbriel.settings.keybinds = {
+          "Mod+backslash" =
+            "spawn:focal image --noctalia --area selection --no-notify --no-save --no-rounded-windows";
+          "Mod+Shift+backslash" = "spawn:focal image --noctalia --rofi";
+          "Mod+Ctrl+backslash" = "spawn:focal image --noctalia --area selection --ocr";
+          "Alt+backslash" = "spawn:focal video --rofi";
         };
       };
     };

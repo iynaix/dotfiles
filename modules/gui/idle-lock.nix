@@ -36,27 +36,30 @@
           programs = {
             # disable suspend and lockscreen if host doesn't lock
             noctalia.settings = {
-              idle.behavior.lock-and-suspend = {
-                action = "lock_and_suspend";
-                enabled = config.custom.lock.enable;
-                timeout = 5 * 60.0;
-              };
-
-              idle.behavior.screen-off = {
-                action = "lock_and_screen_off";
+              idle.behavior.idle-behavior = {
+                action = "screen_off";
                 enabled = true;
                 timeout = 5 * 60.0;
               };
+
+              idle.behavior.lock-and-suspend = {
+                action = "lock_and_suspend";
+                enabled = config.custom.lock.enable;
+                timeout = 5 * 60.0 + 10.0;
+              };
+
             };
 
-            umbriel.settings.events = {
-              lid_open = lib.getExe lock;
-            };
-          };
+            umbriel.settings = {
+              # manual lock keybind
+              keybinds = {
+                "Mod+Shift+Ctrl+x" = "spawn:${lib.getExe lock}";
+              };
 
-          # manual lock keybind
-          wm.binds = {
-            "Mod+Shift+Ctrl+x".spawn = lib.getExe lock;
+              events = {
+                lid_open = lib.getExe lock;
+              };
+            };
           };
         };
       };

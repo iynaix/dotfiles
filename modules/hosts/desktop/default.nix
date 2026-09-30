@@ -104,13 +104,6 @@
             ];
           };
         };
-
-        # disable networkmanager software wifi switch on startup, so noctalia doesn't toggle it back on when syncing state
-        wm.startup = [
-          {
-            spawn = "nmcli radio wifi off";
-          }
-        ];
       };
 
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;

@@ -19,18 +19,25 @@
       };
 
       config = {
-        environment.systemPackages = [
-          # run gparted with all the permissions crap fixed, I don't want it permanently installed
-          (pkgs.writeShellApplication {
-            name = "gparted";
-            # fix Authorization required, but no authorization protocol specified error
-            # fix gparted "cannot open display: :0" error
-            # respectively
-            text = /* sh */ ''
-              nix-shell -p xhost gparted --command "xhost si:localuser:root && xhost +local:${user} && sudo gparted"
-            '';
-          })
-        ];
+        environment = {
+          sessionVariables = {
+            NIXOS_OZONE_WL = "1";
+            QT_QPA_PLATFORM = "wayland";
+          };
+
+          systemPackages = [
+            # run gparted with all the permissions crap fixed, I don't want it permanently installed
+            (pkgs.writeShellApplication {
+              name = "gparted";
+              # fix Authorization required, but no authorization protocol specified error
+              # fix gparted "cannot open display: :0" error
+              # respectively
+              text = /* sh */ ''
+                nix-shell -p xhost gparted --command "xhost si:localuser:root && xhost +local:${user} && sudo gparted"
+              '';
+            })
+          ];
+        };
 
         hj.xdg.state.files = {
           # misc information for nix

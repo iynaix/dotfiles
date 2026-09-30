@@ -4,12 +4,20 @@
   config =
     {
       config,
+      lib,
       user,
       ...
     }:
     {
+      # block other ttys from autologin when bypassed from lockscreen
+      services.getty.autologinUser = lib.mkIf (!config.custom.lock.enable) user;
+
       # NOTE: using patches to the nixos module for autologin, default session
       services.displayManager = {
+        autoLogin.user = user;
+
+        defaultSession = lib.mkDefault "umbriel";
+
         noctalia-greeter = {
           enable = true;
 

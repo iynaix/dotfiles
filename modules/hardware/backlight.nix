@@ -9,18 +9,14 @@
       ];
 
       custom = {
-        wm.binds = {
+        programs.umbriel.settings.keybinds = {
           "XF86MonBrightnessDown" = {
-            spawn = "brightnessctl set 5%-";
-            umbrielArgs = {
-              allow-when-locked = true;
-            };
+            action = "spawn:brightnessctl set 5%-";
+            allow_when_locked = true;
           };
           "XF86MonBrightnessUp" = {
-            spawn = "brightnessctl set +5%";
-            umbrielArgs = {
-              allow-when-locked = true;
-            };
+            action = "spawn:brightnessctl set +5%";
+            allow_when_locked = true;
           };
         };
       };

@@ -78,10 +78,14 @@
 
         xdg.portal = {
           config = {
+            common.default = [ "gnome" ];
+            obs.default = [ "gnome" ];
             umbriel = {
               "org.freedesktop.impl.portal.FileChooser" = "gtk";
             };
           };
+
+          extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
         };
 
         custom.programs = {

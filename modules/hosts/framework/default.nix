@@ -34,14 +34,12 @@
           btop.settings = {
             custom_gpu_name0 = "AMD Radeon 780M";
           };
-        };
 
-        # don't blind me on startup
-        wm.startup = [
-          {
-            spawn = "${lib.getExe pkgs.brightnessctl} s 20%";
-          }
-        ];
+          umbriel.settings = {
+            # don't blind me on startup
+            general.autostart = [ "${lib.getExe pkgs.brightnessctl} s 20%" ];
+          };
+        };
       };
 
       networking.hostId = "abb4d116"; # required for zfs
