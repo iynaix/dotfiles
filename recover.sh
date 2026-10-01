@@ -85,6 +85,7 @@ else
 fi
 
 # mark zroot as clean
+sudo umount -R /mnt
 sudo zpool export zroot
 
 echo "Installation complete. It is now safe to reboot."
