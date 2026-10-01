@@ -1,6 +1,6 @@
 {
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     let
       drv =
         {
@@ -30,7 +30,7 @@
     in
     {
       mpv-sub-select = pkgs.callPackage drv {
-        sources = libCustom.nvFetcherSources pkgs;
+        sources = lib.custom.nvFetcherSources pkgs;
       };
     };
 }

@@ -1,8 +1,8 @@
 {
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     let
-      source = (libCustom.nvFetcherSources pkgs).rusty-path-of-building;
+      source = (lib.custom.nvFetcherSources pkgs).rusty-path-of-building;
     in
     {
       # use latest version

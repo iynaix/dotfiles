@@ -7,3 +7,4 @@ target
 .direnv
 .vscode
 *.qcow2
+*.rej

@@ -6,7 +6,6 @@
       config,
       host,
       lib,
-      libCustom,
       tags,
       ...
     }:
@@ -65,7 +64,7 @@
                   }
                 ];
               })
-              |> libCustom.recursiveMergeAttrsList
+              |> lib.custom.recursiveMergeAttrsList
             )
           //
             # general umbriel settings

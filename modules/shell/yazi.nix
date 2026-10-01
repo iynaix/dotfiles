@@ -3,11 +3,11 @@
     {
       inputs,
       pkgs,
-      libCustom,
+      lib,
       ...
     }:
     let
-      baseYaziConf = libCustom.recursiveMergeAttrsList [
+      baseYaziConf = lib.custom.recursiveMergeAttrsList [
         {
           plugins = { inherit (pkgs.yaziPlugins) full-border git; };
 

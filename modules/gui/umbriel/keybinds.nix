@@ -5,7 +5,6 @@
     {
       config,
       lib,
-      libCustom,
       user,
       ...
     }:
@@ -159,7 +158,7 @@
               # keybinds for workspace switch / move
               (
                 config.custom.hardware.monitors
-                |> libCustom.mapWorkspaces (
+                |> lib.custom.mapWorkspaces (
                   { workspace, key, ... }:
                   [
                     {

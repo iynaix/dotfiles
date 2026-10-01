@@ -19,12 +19,11 @@ in
     {
       inputs,
       lib,
-      libCustom,
       pkgs,
       ...
     }:
     let
-      source = (libCustom.nvFetcherSources pkgs).yt-dlp;
+      source = (lib.custom.nvFetcherSources pkgs).yt-dlp;
     in
     {
       yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {

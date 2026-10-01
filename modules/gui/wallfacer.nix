@@ -3,7 +3,7 @@
 
   config =
     {
-      libCustom,
+      lib,
       pkgs,
       user,
       ...
@@ -56,7 +56,7 @@
         ];
         wallpaper_command = "wallpaper $1";
       };
-      wallfacer = libCustom.writeShellApplicationCompletions pkgs {
+      wallfacer = lib.custom.writeShellApplicationCompletions pkgs {
         name = "wallfacer";
         text = /* sh */ ''
           direnv-cargo-run "/persist/home/${user}/projects/wallfacer" "$@"

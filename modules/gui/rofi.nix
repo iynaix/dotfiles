@@ -1,6 +1,6 @@
 {
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     let
       drv =
         {
@@ -40,7 +40,7 @@
     in
     {
       rofi-themes = pkgs.callPackage drv {
-        sources = libCustom.nvFetcherSources pkgs;
+        sources = lib.custom.nvFetcherSources pkgs;
       };
     };
 

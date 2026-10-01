@@ -117,7 +117,7 @@
 
   config =
     {
-      libCustom,
+      lib,
       pkgs,
       user,
       ...
@@ -145,7 +145,7 @@
         '';
       };
       # delete a remote branch
-      grd = libCustom.writeShellApplicationCompletions pkgs {
+      grd = lib.custom.writeShellApplicationCompletions pkgs {
         name = "grd";
         text = /* sh */ ''
           git branch -D "$1" || true

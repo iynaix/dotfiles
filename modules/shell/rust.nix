@@ -24,14 +24,14 @@
 
   config =
     {
-      libCustom,
+      lib,
       pkgs,
       user,
       ...
     }:
     let
       # cargo will be provided via the nix-shell
-      crb = libCustom.writeShellApplicationCompletions pkgs {
+      crb = lib.custom.writeShellApplicationCompletions pkgs {
         name = "crb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then
@@ -42,7 +42,7 @@
         '';
         completions.fish = "complete -c crb -f -a '(__cargo_bins)'";
       };
-      crrb = libCustom.writeShellApplicationCompletions pkgs {
+      crrb = lib.custom.writeShellApplicationCompletions pkgs {
         name = "crrb";
         text = /* sh */ ''
           if [ $# -eq 0 ]; then

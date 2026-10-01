@@ -32,10 +32,10 @@ let
 in
 {
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       exiled-exchange-2 = pkgs.callPackage drv {
-        sources = libCustom.nvFetcherSources pkgs;
+        sources = lib.custom.nvFetcherSources pkgs;
       };
     };
 }

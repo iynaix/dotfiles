@@ -3,7 +3,6 @@
     {
       inputs,
       lib,
-      libCustom,
       pkgs,
       self,
       system,
@@ -69,7 +68,7 @@
         ''no-osd change-list glsl-shaders set "${shaderList shaders}"; show-text "${description}"'';
 
       # NOTE: the custom function is used to be able
-      mpvConfig = libCustom.recursiveMergeAttrsAndStringsList [
+      mpvConfig = lib.custom.recursiveMergeAttrsAndStringsList [
         {
           "mpv.input".content = renderBindings {
             MBTN_LEFT = "cycle pause";

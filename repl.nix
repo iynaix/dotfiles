@@ -33,10 +33,11 @@ in
     flake
     host
     inputs
-    lib
     user
     ;
-  libCustom = import ./lib.nix { inherit lib; };
+  lib = lib // {
+    custom = import ./lib.nix { inherit lib; };
+  };
   self = flake;
 
   # default host

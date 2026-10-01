@@ -2,11 +2,11 @@
   hosts = [ "desktop" ];
 
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       awakened-poe-trade =
         (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
-          (libCustom.nvFetcherSources pkgs).awakened-poe-trade;
+          (lib.custom.nvFetcherSources pkgs).awakened-poe-trade;
     };
 
   config =

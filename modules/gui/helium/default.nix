@@ -1,9 +1,9 @@
 {
   packages =
-    { libCustom, pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       helium = pkgs.callPackage ./_package.nix {
-        sources = libCustom.nvFetcherSources pkgs;
+        sources = lib.custom.nvFetcherSources pkgs;
         flags = [
           "--restore-last-session"
           "--hide-crash-restore-bubble"

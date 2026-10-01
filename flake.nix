@@ -32,7 +32,9 @@
         modules = [ ./modules ];
         specialArgs = {
           inherit inputs self;
-          libCustom = import ./lib.nix { inherit lib; };
+          lib = lib // {
+            custom = import ./lib.nix { inherit lib; };
+          };
           user = "iynaix";
         };
         validTags = [
@@ -101,10 +103,11 @@
         mkPackages pkgs [ ./modules ] {
           inherit
             inputs
-            lib
             self
             ;
-          libCustom = import ./lib.nix { inherit lib pkgs; };
+          lib = lib // {
+            custom = import ./lib.nix { inherit lib; };
+          };
         }
       );
     };
