@@ -85,6 +85,7 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -129,6 +130,8 @@
         # set dynamic icon theme with noctalia
         custom.programs.noctalia.user-templates = {
           "gtk-icon-theme" = {
+            # dummy values so noctalia doesn't complain
+            input_path = "/home/${user}/.config/user-dirs.conf";
             post_hook = ''${lib.getExe pkgs.custom.tela-dynamic-icon-theme} "{{ colors.primary.default.hex }}"'';
             output_path = "/dev/null";
           };

@@ -10,12 +10,12 @@ use itertools::Itertools;
 
 fn target_window_size() -> Option<(u32, u32)> {
     const TARGET_PERCENT: f64 = 0.3;
+
     let width = if is_umbriel()
-        && let Some(mode) = UmbrielMonitor::focused()
-            .ok()
-            .and_then(|mon| UmbrielMonitor::current_mode(&mon))
+        && let Ok(mon) = UmbrielMonitor::focused()
+        && let Some(mode) = UmbrielMonitor::current_mode(&mon)
     {
-        f64::from(mode.width) * TARGET_PERCENT
+        f64::from(mode.width) * 1.0 / f64::from(mon.scale) * TARGET_PERCENT
     } else {
         return None;
     };

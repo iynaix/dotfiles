@@ -97,6 +97,7 @@
       config,
       lib,
       pkgs,
+      user,
       ...
     }:
     {
@@ -126,6 +127,8 @@
         # set dynamic icon theme with noctalia
         custom.programs.noctalia.user-templates = {
           "gtk-theme" = {
+            # dummy values so noctalia doesn't complain
+            input_path = "/home/${user}/.config/user-dirs.conf";
             post_hook = ''${lib.getExe pkgs.custom.tokyonight-dynamic-gtk-theme} "{{ colors.primary.default.hex }}" "{{ colors.on_primary.default.hex | set_alpha 0.8 }}"'';
             output_path = "/dev/null";
           };
