@@ -1,4 +1,21 @@
 {
+  "$declared": {
+    "focal": "github:iynaix/focal",
+    "hjem": "github:feel-co/hjem",
+    "lamina": "github:iynaix/lamina",
+    "multiverse": "github:fzakaria/nixpkgs-multiverse",
+    "nix-index-database": "github:nix-community/nix-index-database",
+    "nixos-hardware": "github:NixOS/nixos-hardware",
+    "nixpkgs": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
+    "nixpkgs-stable": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
+    "nvf": "github:notashelf/nvf",
+    "preservation": "github:nix-community/preservation",
+    "sops-nix": "github:Mic92/sops-nix",
+    "systems": "github:nix-systems/default",
+    "umbriel": "github:noctalia-dev/umbriel",
+    "wfetch": "github:iynaix/wfetch",
+    "wrappers": "github:BirdeeHub/nix-wrapper-modules"
+  },
   "flake-parts": {
     "type": "github",
     "owner": "hercules-ci",
@@ -35,9 +52,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "756d93dc6b266f3816b1f86e7b8ee835b5a980ea",
-    "narHash": "sha256-HuZmcjTgB0xyYwpdDejrUEeD9x8DhUfSpnyeXbncZaQ=",
-    "lastModified": 1790814271
+    "rev": "8f07f377a18010d881fed01a31f237353bd9c6f5",
+    "narHash": "sha256-cVdlllmbey6AiPNyG1iFaNp/46mxEj7qcb7HHbRGq50=",
+    "lastModified": 1790912175
   },
   "nix-index-database": {
     "type": "github",
@@ -57,15 +74,46 @@
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1082427.b4fd65b198c5/nixexprs.tar.zst",
-    "rev": "b4fd65b198c599cbe814fcb9f42d25d021595ec9",
-    "narHash": "sha256-VyUI5WA3WdOB9kjb04A0pxE6XTWC6cG95ZkoPSv58F0="
+    "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
+    "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
+    "narHash": "sha256-VBA0QerzzmL+4wxgtwiCdiLwLpJg2/9xOxhgO3BRJQA=",
+    "patched": {
+      "path": "/nix/store/6p82zn9x3il6mqbm0y0yj6lzipnmzm3m-source",
+      "narHash": "sha256-VRLB9sEs12aDP/KHMQjzQcYnsZWtPJm/JxrVucuJFao=",
+      "lastModified": 315532800,
+      "patches": [
+        {
+          "source": "patches/nixpkgs/allow-unfree.patch",
+          "file": "patches/nixpkgs/allow-unfree.patch",
+          "sha256": "666d3dde6c9838c7ceb075a39680f4778b2efef10195cc9ab0f2dd4be0d8823f"
+        },
+        {
+          "source": "patches/nixpkgs/noctalia-fix-icon-resolver.patch",
+          "file": "patches/nixpkgs/noctalia-fix-icon-resolver.patch",
+          "sha256": "b9aaa2a34ffbd2e772b0016416d265077ce1cf45f16ac5442412d442c2afea7b"
+        },
+        {
+          "source": "https://github.com/NixOS/nixpkgs/pull/560780",
+          "url": "https://github.com/NixOS/nixpkgs/pull/560780",
+          "file": "patches/nixpkgs/pr-560780.patch",
+          "sha256": "1e6960b41bbb2b77a2cac67f21755378f0346b30bf85117f381b2da4b6c8c484",
+          "head": "477a86df848b03eef447a06f0fd505ed2f10375d"
+        },
+        {
+          "source": "https://github.com/NixOS/nixpkgs/pull/496108",
+          "url": "https://github.com/NixOS/nixpkgs/pull/496108",
+          "file": "patches/nixpkgs/pr-496108.patch",
+          "sha256": "d69d46a09487a91377badc71afd9bafedd63aaafabb78a5018dcf6ac3e9fd75b",
+          "head": "6c5320b6dc61a42e1e66575ca3512c4fe5ddf4a7"
+        }
+      ]
+    }
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.10927.78e9c786dc08/nixexprs.tar.zst",
-    "rev": "78e9c786dc08cd4f3420c2395cd977206a9b1da2",
-    "narHash": "sha256-neiwVQVB0ONcopw7wbiinq1vYtMOTjTLuEueGF9Ex1Y="
+    "url": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
+    "rev": "774debe7a0d1b496e35677ad955a1011c6ff74f3",
+    "narHash": "sha256-S5MjznoY0gbQbcANPLz5RYjg+5/WQmFRgNbHcP+ydcg="
   },
   "nvf": {
     "type": "github",
@@ -103,9 +151,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "2ca61fbb73cda569b6e91097cef753d36bdb6c74",
-    "narHash": "sha256-nYEoeBphPzQHE8KsLqIjbOsMSHEPkpCsn60xOOd52EA=",
-    "lastModified": 1790818230,
+    "rev": "ec677ac89d423a148b220d74fc779c05bb7a9883",
+    "narHash": "sha256-l3Wc76KowxtScqFhdtxPdtvcHGwcpl04I025CV72oGw=",
+    "lastModified": 1790904743,
     "submodules": true
   },
   "wfetch": {
@@ -122,6 +170,30 @@
     "repo": "nix-wrapper-modules",
     "rev": "1db3c116a6aa61823f8d8f3c47c306846428fc54",
     "narHash": "sha256-7xWS16u13YGlRNKWaAPzRbEyh4OLOXJe31k7h4AnXNU=",
-    "lastModified": 1788981141
+    "lastModified": 1788981141,
+    "patched": {
+      "path": "/nix/store/5pvrqpamcxyw7i6739r90wa38zdh4q6k-source",
+      "narHash": "sha256-EK5+nezwHCBszrAR+CeyJRbI6LcIHOTvNC2bWenFTXM=",
+      "lastModified": 1788981141,
+      "patches": [
+        {
+          "source": "patches/wrappers/nix-wrappers-expose-options.patch",
+          "file": "patches/wrappers/nix-wrappers-expose-options.patch",
+          "sha256": "ff671c51a905208d39a4749654015cfa066860a0117660d252652c000da3139b"
+        },
+        {
+          "source": "patches/wrappers/noctalia-module.patch",
+          "file": "patches/wrappers/noctalia-module.patch",
+          "sha256": "f2edcfaaea13ef3e491b6c0c4f52773e9bac7a09834feee5586e87bfb7adfd23"
+        },
+        {
+          "source": "https://github.com/nix-community/nix-wrapper-modules/pull/586",
+          "url": "https://github.com/nix-community/nix-wrapper-modules/pull/586",
+          "file": "patches/wrappers/pr-586.patch",
+          "sha256": "15906e6455445cbbbe14d5748cbf17aeb0fb3cc3ad5b2b14a48fe5f40c1d62e6",
+          "head": "8b1070e628c42503d6d074f516156c98096dec22"
+        }
+      ]
+    }
   }
 }

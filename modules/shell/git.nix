@@ -140,6 +140,11 @@
       gbc = pkgs.writeShellApplication {
         name = "gbc";
         text = /* sh */ ''
+          if [ "$#" -eq 0 ]; then
+              echo "No branch specified."
+              exit 1
+          fi
+
           git branch "$1"
           git checkout "$1"
         '';
@@ -148,6 +153,11 @@
       grd = lib.custom.writeShellApplicationCompletions pkgs {
         name = "grd";
         text = /* sh */ ''
+          if [ "$#" -eq 0 ]; then
+              echo "No branch specified."
+              exit 1
+          fi
+
           git branch -D "$1" || true
           git push origin --delete "$1"
         '';
@@ -165,7 +175,14 @@
       # 2nd argument is target path and subsequent arguments are passed through
       grg = pkgs.writeShellApplication {
         name = "grg";
-        text = /* sh */ ''git log -S "$1" -- "''${2:-.}" "$*[2,-1]"'';
+        text = /* sh */ ''
+          if [ "$#" -eq 0 ]; then
+              echo "No query specified."
+              exit 1
+          fi
+
+          git log -S "$1" -- "''${2:-.}" "$*[2,-1]"
+        '';
       };
       # syncs with upstream
       gsync = pkgs.writeShellApplication {

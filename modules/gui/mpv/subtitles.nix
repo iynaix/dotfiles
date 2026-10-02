@@ -21,7 +21,7 @@
       ai-subs = pkgs.callPackage aiSubsDrv { };
     };
 
-  enabled = false;
+  enabled = true;
   hosts = [ "desktop" ];
 
   config =

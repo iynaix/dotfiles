@@ -55,7 +55,10 @@
 
     nix =
       let
-        registry = lib.mapAttrs (_: flake: { inherit flake; }) (removeAttrs inputs [ "__functor" ]);
+        flake-inputs = lib.filterAttrs (
+          name: input: !(lib.hasPrefix "_" name) && !(lib.isString input) && (lib.isType "flake" input)
+        ) inputs;
+        registry = lib.mapAttrs (_: flake: { inherit flake; }) flake-inputs;
       in
       {
         channel.enable = false;
@@ -93,10 +96,7 @@
           # re-evaluate on every rebuild instead of "cached failure of attribute" error
           # eval-cache = false;
           flake-registry = ""; # don't use the global flake registry, define everything explicitly
-          nix-path =
-            inputs
-            |> lib.filterAttrs (_: input: lib.isType "flake" input)
-            |> lib.mapAttrsToList (n: _: "${n}=flake:${n}");
+          nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flake-inputs;
           warn-dirty = false;
           # removes ~/.nix-profile and ~/.nix-defexpr
           use-xdg-base-directories = true;
@@ -143,13 +143,6 @@
     services.envfs.enable = true;
 
     system = {
-      # better nixos generation label
-      # https://reddit.com/r/NixOS/comments/16t2njf/small_trick_for_people_using_nixos_with_flakes/k2d0sxx/
-      nixos.label = lib.concatStringsSep "-" (
-        (lib.sort (x: y: x < y) config.system.nixos.tags)
-        ++ [ "${config.system.nixos.version}.${self.sourceInfo.shortRev or "dirty"}" ]
-      );
-
       # make a symlink of flake within the generation (e.g. /run/current-system/src)
       systemBuilderCommands = "ln -s ${self.sourceInfo.outPath} $out/src";
     };

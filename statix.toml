@@ -1,1 +1,2 @@
+ignore = [".tack/default.nix", "generated.nix"]
 disabled = ["repeated_keys"]

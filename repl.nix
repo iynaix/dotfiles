@@ -8,7 +8,7 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  inputs = import ./inputs-patched.nix { };
+  inputs = (import ./.tack) { };
   inherit (inputs.nixpkgs) lib;
 in
 (
@@ -35,7 +35,7 @@ in
     inputs
     user
     ;
-  lib = lib // {
+  lib = inputs.nixpkgs.lib // {
     custom = import ./lib.nix { inherit lib; };
   };
   self = flake;
