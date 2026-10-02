@@ -29,7 +29,6 @@
             description = "Tokyo Night Kvantum theme";
             homepage = "https://github.com/0xsch1zo/Kvantum-Tokyo-Night";
             license = lib.licenses.gpl3Only;
-            maintainers = with lib.maintainers; [ iynaix ];
             mainProgram = "kvantum-tokyo-night";
             platforms = lib.platforms.all;
           };

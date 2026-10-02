@@ -9,8 +9,6 @@ rec {
     };
   };
 
-  nvFetcherSources = pkgs: (pkgs.callPackage ./_sources/generated.nix { });
-
   # saner api for iterating through workspaces in a flat list
   # takes a function that accepts the following attrset {workspace, key, monitor}
   mapWorkspaces =

@@ -50,6 +50,5 @@ rustPlatform.buildRustPackage {
     description = "Utilities for iynaix's dotfiles";
     homepage = "https://github.com/iynaix/dotfiles";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.iynaix ];
   };
 }

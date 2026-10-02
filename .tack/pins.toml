@@ -83,11 +83,14 @@ url = "github:nix-community/nix-index-database"
 [inputs.nvf]
 url = "github:notashelf/nvf"
 
-[inputs.wfetch]
-url = "github:iynaix/wfetch"
+[inputs.helium]
+url = "github:amaanq/helium-flake"
 
 [inputs.focal]
 url = "github:iynaix/focal"
+
+[inputs.wfetch]
+url = "github:iynaix/wfetch"
 
 [inputs.umbriel]
 url = "github:noctalia-dev/umbriel"
@@ -95,3 +98,25 @@ submodules = true
 
 [inputs.lamina]
 url = "github:iynaix/lamina"
+
+[inputs.rusty-path-of-building]
+url = "github:meehl/rusty-path-of-building"
+type = "fetch"
+group = "source"
+
+[inputs.yt-dlp]
+url = "github:yt-dlp/yt-dlp"
+type = "fetch"
+group = "source"
+
+[inputs.awakened-poe-trade]
+url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage"
+type = "fixed"
+tag = "v{version}"
+group = "binary"
+
+[inputs.exiled-exchange-2]
+url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage"
+type = "fixed"
+tag = "v{version}"
+group = "binary"

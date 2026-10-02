@@ -1,6 +1,9 @@
 {
   "$declared": {
+    "awakened-poe-trade": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage",
+    "exiled-exchange-2": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage",
     "focal": "github:iynaix/focal",
+    "helium": "github:amaanq/helium-flake",
     "hjem": "github:feel-co/hjem",
     "lamina": "github:iynaix/lamina",
     "multiverse": "github:fzakaria/nixpkgs-multiverse",
@@ -10,11 +13,27 @@
     "nixpkgs-stable": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
     "nvf": "github:notashelf/nvf",
     "preservation": "github:nix-community/preservation",
+    "rusty-path-of-building": "github:meehl/rusty-path-of-building",
     "sops-nix": "github:Mic92/sops-nix",
     "systems": "github:nix-systems/default",
     "umbriel": "github:noctalia-dev/umbriel",
     "wfetch": "github:iynaix/wfetch",
-    "wrappers": "github:BirdeeHub/nix-wrapper-modules"
+    "wrappers": "github:BirdeeHub/nix-wrapper-modules",
+    "yt-dlp": "github:yt-dlp/yt-dlp"
+  },
+  "awakened-poe-trade": {
+    "type": "fixed",
+    "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.29.108/Awakened-PoE-Trade-3.29.108.AppImage",
+    "sha256": "sha256-DIksV61mC0E2ZPztWK+WnMqR9KXwLMWQpc7hajaymyE=",
+    "unpack": "file",
+    "tag": "v3.29.108"
+  },
+  "exiled-exchange-2": {
+    "type": "fixed",
+    "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.16.3/Exiled-Exchange-2-0.16.3.AppImage",
+    "sha256": "sha256-aAHFELdlL7cccpzAW9ROHF1hZDAnQGTLLtDonS0CT2Q=",
+    "unpack": "file",
+    "tag": "v0.16.3"
   },
   "flake-parts": {
     "type": "github",
@@ -31,6 +50,14 @@
     "rev": "3917fbaff589171395c0bd1825e37e851b329895",
     "narHash": "sha256-gnvBWOT+/3DEEs/jLqiWl1S8W7c8i6rDG0VfyFqa5gY=",
     "lastModified": 1789100955
+  },
+  "helium": {
+    "type": "github",
+    "owner": "amaanq",
+    "repo": "helium-flake",
+    "rev": "fa670d821a8b1dcbf653256e48a9387285b02748",
+    "narHash": "sha256-DElBT51c3oIxydiC/8KNScp8S/U0WV46ZnWclvb61iw=",
+    "lastModified": 1790829646
   },
   "hjem": {
     "type": "github",
@@ -131,6 +158,14 @@
     "narHash": "sha256-mMI9IanU+Xw+pVogD2oT0I2kTmvz2Un/Apc5+CwUpEY=",
     "lastModified": 1757436102
   },
+  "rusty-path-of-building": {
+    "type": "github",
+    "owner": "meehl",
+    "repo": "rusty-path-of-building",
+    "rev": "ae9c59d132ed9be45894ebb70d2d9cbb70ce3bc1",
+    "narHash": "sha256-6aExRtkxKOX7ZDe1mgSKFBkHoD6tdlmUPsdSI/u6MvM=",
+    "lastModified": 1789720408
+  },
   "sops-nix": {
     "type": "github",
     "owner": "Mic92",
@@ -195,5 +230,13 @@
         }
       ]
     }
+  },
+  "yt-dlp": {
+    "type": "github",
+    "owner": "yt-dlp",
+    "repo": "yt-dlp",
+    "rev": "51bab8a0116f4d8004c315706d809782607d5847",
+    "narHash": "sha256-tvUxhhEUG5PMvQ+EWt3RXze5Ii//52tBUqCBQsBLzHU=",
+    "lastModified": 1790546953
   }
 }

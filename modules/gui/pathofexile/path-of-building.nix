@@ -1,20 +1,19 @@
 {
   packages =
-    { lib, pkgs, ... }:
-    let
-      source = (lib.custom.nvFetcherSources pkgs).rusty-path-of-building;
-    in
+    {
+      inputs,
+      pkgs,
+      ...
+    }:
     {
       # use latest version
-      path-of-building = pkgs.rusty-path-of-building.overrideAttrs (
-        source
-        // {
-          cargoDeps = pkgs.rustPlatform.importCargoLock {
-            lockFile = source.src + "/Cargo.lock";
-            allowBuiltinFetchGit = true;
-          };
-        }
-      );
+      path-of-building = pkgs.rusty-path-of-building.overrideAttrs (_o: rec {
+        src = inputs.rusty-path-of-building;
+        cargoDeps = pkgs.rustPlatform.importCargoLock {
+          lockFile = "${src}/Cargo.lock";
+          allowBuiltinFetchGit = true;
+        };
+      });
     };
 
   hosts = [

@@ -1,13 +1,13 @@
 {
   packages =
-    { lib, pkgs, ... }:
     {
-      helium = pkgs.callPackage ./_package.nix {
-        sources = lib.custom.nvFetcherSources pkgs;
-        flags = [
-          "--restore-last-session"
-          "--hide-crash-restore-bubble"
-        ];
+      inputs,
+      system,
+      ...
+    }:
+    {
+      helium = inputs.helium.packages.${system}.helium.override {
+        commandLineArgs = "--restore-last-session --hide-crash-restore-bubble";
       };
     };
 

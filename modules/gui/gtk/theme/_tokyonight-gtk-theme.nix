@@ -117,7 +117,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       description = "GTK theme based on the Tokyo Night colour palette";
       homepage = "https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme";
       license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [ iynaix ];
       platforms = lib.platforms.unix;
     };
   }

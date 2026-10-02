@@ -23,7 +23,6 @@
         nixd
         nixfmt-rs
         nixpkgs-review
-        nvfetcher
       ];
 
       shellAliases = {
@@ -93,8 +92,6 @@
         };
         optimise.automatic = true;
         settings = {
-          # re-evaluate on every rebuild instead of "cached failure of attribute" error
-          # eval-cache = false;
           flake-registry = ""; # don't use the global flake registry, define everything explicitly
           nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flake-inputs;
           warn-dirty = false;

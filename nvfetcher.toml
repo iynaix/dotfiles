@@ -28,10 +28,13 @@ fetch.github = "CogentRedTester/mpv-sub-select"
 src.git = "https://github.com/adi1090x/rofi"
 fetch.github = "adi1090x/rofi"
 
-[yazi-time-travel]
-src.git = "https://github.com/iynaix/time-travel.yazi"
-fetch.github = "iynaix/time-travel.yazi"
+# TODO
 
-[yt-dlp]
-src.github_tag = "yt-dlp/yt-dlp"
-fetch.github = "yt-dlp/yt-dlp"
+inline
+    subselect
+    deletefile
+    rofi-themes
+
+
+
+tack add --fetch rusty-path-of-building github:meehl/rusty-path-of-building

@@ -22,13 +22,10 @@ in
       pkgs,
       ...
     }:
-    let
-      source = (lib.custom.nvFetcherSources pkgs).yt-dlp;
-    in
     {
       yt-dlp = inputs.wrappers.wrappers.yt-dlp.wrap {
         inherit pkgs;
-        package = lib.mkForce (pkgs.yt-dlp.overrideAttrs source);
+        package = lib.mkForce (pkgs.yt-dlp.overrideAttrs { src = inputs.yt-dlp; });
         settings = baseYtdlpSettings;
       };
     };

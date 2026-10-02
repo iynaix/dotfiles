@@ -1,41 +1,46 @@
-let
-  drv =
+{
+  packages =
     {
-      sources,
-      lib,
-      appimageTools,
-      commandLineArgs ? [ ],
+      inputs,
+      pkgs,
       ...
     }:
     let
-      source = sources.exiled-exchange-2;
-      appimageContents = appimageTools.extract {
-        inherit (source) pname version src;
-      };
-    in
-    appimageTools.wrapType2 (
-      source
-      // {
-        extraInstallCommands = ''
-          install -m 444 -D ${appimageContents}/exiled-exchange-2.desktop $out/share/applications/${source.pname}.desktop
-          substituteInPlace $out/share/applications/${source.pname}.desktop \
-            --replace "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 ${lib.escapeShellArgs commandLineArgs} %U"
+      drv =
+        {
+          lib,
+          appimageTools,
+          commandLineArgs ? [ ],
+          ...
+        }:
+        let
+          pname = "exiled-exchange-2";
+          appimageContents = appimageTools.extract {
+            inherit pname;
+            version = inputs._meta.${pname}.tag;
+            src = inputs.${pname};
+          };
+        in
+        appimageTools.wrapType2 {
+          # name = pname;
+          inherit pname;
+          version = inputs._meta.${pname}.tag;
+          src = inputs.${pname};
 
-          install -m 444 -D ${appimageContents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${source.pname}.png
-        '';
+          extraInstallCommands = ''
+            install -m 444 -D ${appimageContents}/exiled-exchange-2.desktop $out/share/applications/${pname}.desktop
+            substituteInPlace $out/share/applications/${pname}.desktop \
+              --replace "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 ${lib.escapeShellArgs commandLineArgs} %U"
 
-        meta = {
-          platforms = [ "x86_64-linux" ];
+            install -m 444 -D ${appimageContents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+          '';
+
+          meta = {
+            platforms = [ "x86_64-linux" ];
+          };
         };
-      }
-    );
-in
-{
-  packages =
-    { lib, pkgs, ... }:
+    in
     {
-      exiled-exchange-2 = pkgs.callPackage drv {
-        sources = lib.custom.nvFetcherSources pkgs;
-      };
+      exiled-exchange-2 = pkgs.callPackage drv { };
     };
 }

@@ -45,7 +45,6 @@
           meta = {
             description = "nh wrapper";
             license = lib.licenses.mit;
-            maintainers = [ lib.maintainers.iynaix ];
             platforms = lib.platforms.linux;
           };
         };
@@ -94,34 +93,16 @@
         runtimeInputs = [ nsw ];
         text = /* sh */ ''nsw boot "$@"'';
       };
-      # nixos-rebuild dry-run
-      # update all nvfetcher overlays and packages
-      nv-update = pkgs.writeShellApplication {
-        name = "nv-update";
-        runtimeInputs = [ pkgs.nvfetcher ];
-        text = /* sh */ ''
-          pushd ${dots} > /dev/null
-          if [ "$#" -eq 0 ]; then
-            nvfetcher --keep-old
-          else
-            nvfetcher --keep-old --filter "$1"
-          fi
-          popd > /dev/null
-        '';
-      };
       # update via nix flake
       upd8 = pkgs.writeShellApplication {
         name = "upd8";
         runtimeInputs = [
           config.programs.tack.package
-          pkgs.nvfetcher
           nsw
-          nv-update
         ];
         text = /* sh */ ''
           pushd ${dots} > /dev/null
           tack update
-          nv-update
           nsw "$@"
           popd > /dev/null
         '';
@@ -148,7 +129,6 @@
         nsb
         nsw
         nst
-        nv-update
         upd8
       ]
       ++ lib.optionals (host == "desktop") [ nsw-remote ];

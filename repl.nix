@@ -38,6 +38,7 @@ in
   lib = inputs.nixpkgs.lib // {
     custom = import ./lib.nix { inherit lib; };
   };
+  inherit (pkgs.stdenv.hostPlatform) system;
   self = flake;
 
   # default host

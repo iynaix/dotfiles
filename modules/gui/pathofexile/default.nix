@@ -2,18 +2,19 @@
   hosts = [ "desktop" ];
 
   packages =
-    { lib, pkgs, ... }:
     {
-      awakened-poe-trade =
-        (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
-          (lib.custom.nvFetcherSources pkgs).awakened-poe-trade;
-    };
-
-  config =
-    {
+      inputs,
       pkgs,
       ...
     }:
+    {
+      awakened-poe-trade =
+        (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
+          { src = inputs.awakened-poe-trade; };
+    };
+
+  config =
+    { pkgs, ... }:
     {
       # NOTE: POE is installed through steam
       environment.systemPackages = [
