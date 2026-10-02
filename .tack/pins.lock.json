@@ -11,6 +11,7 @@
     "nixos-hardware": "github:NixOS/nixos-hardware",
     "nixpkgs": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
     "nixpkgs-stable": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
+    "nixpkgs-unpatched": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
     "nvf": "github:notashelf/nvf",
     "preservation": "github:nix-community/preservation",
     "rusty-path-of-building": "github:meehl/rusty-path-of-building",
@@ -141,6 +142,12 @@
     "url": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
     "rev": "774debe7a0d1b496e35677ad955a1011c6ff74f3",
     "narHash": "sha256-S5MjznoY0gbQbcANPLz5RYjg+5/WQmFRgNbHcP+ydcg="
+  },
+  "nixpkgs-unpatched": {
+    "type": "tarball",
+    "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
+    "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
+    "narHash": "sha256-VBA0QerzzmL+4wxgtwiCdiLwLpJg2/9xOxhgO3BRJQA="
   },
   "nvf": {
     "type": "github",

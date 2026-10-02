@@ -1,24 +1,14 @@
 {
   hosts = [ "desktop" ];
 
-  packages =
-    {
-      inputs,
-      pkgs,
-      ...
-    }:
-    {
-      awakened-poe-trade =
-        (pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
-          { src = inputs.awakened-poe-trade; };
-    };
-
   config =
-    { pkgs, ... }:
+    { inputs, pkgs, ... }:
     {
       # NOTE: POE is installed through steam
       environment.systemPackages = [
-        pkgs.custom.awakened-poe-trade
+        ((pkgs.awakened-poe-trade.override { commandLineArgs = [ "--ozone-platform=x11" ]; }).overrideAttrs
+          { src = inputs.awakened-poe-trade; }
+        )
         pkgs.custom.exiled-exchange-2
       ];
 

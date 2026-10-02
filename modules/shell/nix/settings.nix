@@ -61,7 +61,6 @@
       in
       {
         channel.enable = false;
-        # required for nix-shell -p to work
         # package = pkgs.lixPackageSets.latest.lix;
         package = pkgs.nixVersions.latest;
         registry = registry // {

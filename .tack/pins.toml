@@ -42,6 +42,9 @@ patches = [
     "https://github.com/NixOS/nixpkgs/pull/496108",
 ]
 
+[inputs.nixpkgs-unpatched]
+url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
+
 [inputs.nixpkgs-stable]
 url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
 

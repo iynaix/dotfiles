@@ -17,11 +17,11 @@
 
       # provide package for each system
       forAllSystems =
-        f:
+        nixpkgs-input: f:
         lib.genAttrs systems (
           system:
           f (
-            import inputs.nixpkgs {
+            import nixpkgs-input {
               inherit system;
               config.allowUnfree = true;
             }
@@ -94,21 +94,22 @@
       # build with nbuild-iso
       // (import ./isos.nix { inherit inputs lib self; });
 
-      devShells = forAllSystems (pkgs: {
+      devShells = forAllSystems inputs.nixpkgs (pkgs: {
         default = import ./devshell.nix { inherit pkgs; };
       });
 
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-rs);
+      formatter = forAllSystems inputs.nixpkgs (pkgs: pkgs.nixfmt-rs);
 
-      packages = forAllSystems (
+      # use unpatched nixpkgs so packages can be "nix run"
+      packages = forAllSystems inputs.nixpkgs-unpatched (
         pkgs:
         mkPackages pkgs [ ./modules ] {
           inherit
             inputs
             self
             ;
-          lib = lib // {
-            custom = import ./lib.nix { inherit lib; };
+          lib = inputs.nixpkgs-patched.lib // {
+            custom = import ./lib.nix { inherit (inputs.nixpkgs-patched) lib; };
           };
         }
       );
