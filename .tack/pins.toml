@@ -32,9 +32,6 @@ patches = [
     # always allow unfree, i dgaf
     "patches/nixpkgs/allow-unfree.patch",
 
-    # fix noctalia icon resolver because XDG_DATA_DIRS is not properly set
-    "patches/nixpkgs/noctalia-fix-icon-resolver.patch",
-
     # nixos/noctalia-greeter: support autologin
     "https://github.com/NixOS/nixpkgs/pull/560780",
 
@@ -83,8 +80,8 @@ url = "github:nix-community/nix-index-database"
 [inputs.nvf]
 url = "github:notashelf/nvf"
 
-[inputs.helium]
-url = "github:amaanq/helium-flake"
+[inputs.tack]
+url = "github:manic-systems/tack"
 
 [inputs.focal]
 url = "github:iynaix/focal"
@@ -119,4 +116,10 @@ group = "binary"
 url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage"
 type = "fixed"
 tag = "v{version}"
+group = "binary"
+
+[inputs.helium]
+url = "https://github.com/imputnet/helium-linux/releases/download/{version}/helium-{version}-x86_64.AppImage"
+type = "fixed"
+tag = "{version}"
 group = "binary"

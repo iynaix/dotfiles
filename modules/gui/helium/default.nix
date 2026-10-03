@@ -2,12 +2,18 @@
   packages =
     {
       inputs,
-      system,
+      pkgs,
       ...
     }:
     {
-      helium = inputs.helium.packages.${system}.helium.override {
-        commandLineArgs = "--restore-last-session --hide-crash-restore-bubble";
+      helium = pkgs.callPackage ./_package.nix {
+        version = inputs._meta.helium.tag;
+        src = inputs.helium;
+
+        flags = [
+          "--restore-last-session"
+          "--hide-crash-restore-bubble"
+        ];
       };
     };
 

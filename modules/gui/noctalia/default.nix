@@ -16,6 +16,13 @@
           patches = (o.patches or [ ]) ++ [
             ./face-aware-crop.patch
           ];
+
+          nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.wrapGAppsHook3 ];
+
+          buildInputs = o.buildInputs ++ [
+            pkgs.dconf
+            pkgs.gsettings-desktop-schemas
+          ];
         });
         settings = builtins.fromTOML (builtins.readFile ./noctalia.toml);
       };

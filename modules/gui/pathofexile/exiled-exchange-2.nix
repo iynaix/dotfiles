@@ -22,7 +22,6 @@
           };
         in
         appimageTools.wrapType2 {
-          # name = pname;
           inherit pname;
           version = inputs._meta.${pname}.tag;
           src = inputs.${pname};

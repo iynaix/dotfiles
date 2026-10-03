@@ -3,7 +3,7 @@
     "awakened-poe-trade": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage",
     "exiled-exchange-2": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage",
     "focal": "github:iynaix/focal",
-    "helium": "github:amaanq/helium-flake",
+    "helium": "https://github.com/imputnet/helium-linux/releases/download/{version}/helium-{version}-x86_64.AppImage",
     "hjem": "github:feel-co/hjem",
     "lamina": "github:iynaix/lamina",
     "multiverse": "github:fzakaria/nixpkgs-multiverse",
@@ -16,6 +16,7 @@
     "rusty-path-of-building": "github:meehl/rusty-path-of-building",
     "sops-nix": "github:Mic92/sops-nix",
     "systems": "github:nix-systems/default",
+    "tack": "github:manic-systems/tack",
     "umbriel": "github:noctalia-dev/umbriel",
     "wfetch": "github:iynaix/wfetch",
     "wrappers": "github:BirdeeHub/nix-wrapper-modules",
@@ -52,12 +53,11 @@
     "lastModified": 1789100955
   },
   "helium": {
-    "type": "github",
-    "owner": "amaanq",
-    "repo": "helium-flake",
-    "rev": "fa670d821a8b1dcbf653256e48a9387285b02748",
-    "narHash": "sha256-DElBT51c3oIxydiC/8KNScp8S/U0WV46ZnWclvb61iw=",
-    "lastModified": 1790829646
+    "type": "fixed",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.18.3.1/helium-0.18.3.1-x86_64.AppImage",
+    "sha256": "sha256-xDrhTCq3FVWz/kC9Al3wBPcLxHlalhoaOlaXn6G4uYA=",
+    "unpack": "file",
+    "tag": "0.18.3.1"
   },
   "hjem": {
     "type": "github",
@@ -79,9 +79,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "8f07f377a18010d881fed01a31f237353bd9c6f5",
-    "narHash": "sha256-cVdlllmbey6AiPNyG1iFaNp/46mxEj7qcb7HHbRGq50=",
-    "lastModified": 1790912175
+    "rev": "2e5edc7ef5ebd398589e9fec7865c10370f05671",
+    "narHash": "sha256-Gu+QKVKuj3PTWTgc55xmT63CK3CCaY/H1O+jYRlIgYE=",
+    "lastModified": 1790967710
   },
   "nix-index-database": {
     "type": "github",
@@ -95,9 +95,9 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "06f9ecaea5f64b6ff61cf42cb32f21621c4fa14a",
-    "narHash": "sha256-XwFt1uLyaBCQU1/nUeGqeBnqNXPVgGRnz20YVYdmF6Y=",
-    "lastModified": 1790722812
+    "rev": "0953bb1a609df63013176e3463393f8df993d3ef",
+    "narHash": "sha256-fDMYyzY1lI5b8RuCMrvoaIgTeRwNnTG4dNk1ucROlQE=",
+    "lastModified": 1790948122
   },
   "nixpkgs": {
     "type": "tarball",
@@ -105,19 +105,14 @@
     "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
     "narHash": "sha256-VBA0QerzzmL+4wxgtwiCdiLwLpJg2/9xOxhgO3BRJQA=",
     "patched": {
-      "path": "/nix/store/6p82zn9x3il6mqbm0y0yj6lzipnmzm3m-source",
-      "narHash": "sha256-VRLB9sEs12aDP/KHMQjzQcYnsZWtPJm/JxrVucuJFao=",
+      "path": "/nix/store/xrixbljryyd8w4xgz8vgcncinqw39r2s-source",
+      "narHash": "sha256-cx7/Qi6HUP6ZESYKBM73ADOQKC7gb2uxpDs7ohIGXQ0=",
       "lastModified": 315532800,
       "patches": [
         {
           "source": "patches/nixpkgs/allow-unfree.patch",
           "file": "patches/nixpkgs/allow-unfree.patch",
           "sha256": "666d3dde6c9838c7ceb075a39680f4778b2efef10195cc9ab0f2dd4be0d8823f"
-        },
-        {
-          "source": "patches/nixpkgs/noctalia-fix-icon-resolver.patch",
-          "file": "patches/nixpkgs/noctalia-fix-icon-resolver.patch",
-          "sha256": "b9aaa2a34ffbd2e772b0016416d265077ce1cf45f16ac5442412d442c2afea7b"
         },
         {
           "source": "https://github.com/NixOS/nixpkgs/pull/560780",
@@ -182,13 +177,21 @@
     "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
     "lastModified": 1681028828
   },
+  "tack": {
+    "type": "github",
+    "owner": "manic-systems",
+    "repo": "tack",
+    "rev": "b1fc7d5d34a43931ef1206aa635c20d4c3e3e386",
+    "narHash": "sha256-5q5nsALiZTavGBtJP/YWe1RMPCDf5PL4JO0NY85sUNw=",
+    "lastModified": 1790979535
+  },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "ec677ac89d423a148b220d74fc779c05bb7a9883",
-    "narHash": "sha256-l3Wc76KowxtScqFhdtxPdtvcHGwcpl04I025CV72oGw=",
-    "lastModified": 1790904743,
+    "rev": "1265718192279ada0baee3cdc2498d08fa52bee6",
+    "narHash": "sha256-wludujGFP4ATqcjNYhXBV5IusmE6cQ5YvpWT/bgtnTU=",
+    "lastModified": 1790953396,
     "submodules": true
   },
   "wfetch": {
