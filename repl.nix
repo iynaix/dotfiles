@@ -8,7 +8,7 @@
 let
   user = "iynaix";
   flake = builtins.getFlake (toString ./.);
-  inputs = (import ./.tack) { };
+  inputs = import ./inputs-patched.nix { };
   inherit (inputs.nixpkgs) lib;
 in
 (

@@ -67,9 +67,9 @@ fn wallpaper_rm(wallpaper: &str) -> Result<()> {
         // load next wallpaper
         wallpaper::set(wallpaper)?;
 
-        write_wallpaper_history(PathBuf::from(wallpaper))?;
+        // write_wallpaper_history(PathBuf::from(wallpaper))?;
 
-        std::fs::remove_file(&current)?;
+        // std::fs::remove_file(&current)?;
     }
 
     Ok(())
