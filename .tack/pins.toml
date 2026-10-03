@@ -28,16 +28,6 @@ flake-parts = "flake-parts"
 # channel urls are faster and more reliable than github -.-
 [inputs.nixpkgs]
 url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
-patches = [
-    # always allow unfree, i dgaf
-    "patches/nixpkgs/allow-unfree.patch",
-
-    # nixos/noctalia-greeter: support autologin
-    "https://github.com/NixOS/nixpkgs/pull/560780",
-
-    # awakened-poe-trade: add commandLineArgs
-    "https://github.com/NixOS/nixpkgs/pull/496108",
-]
 
 [inputs.nixpkgs-stable]
 url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
@@ -53,17 +43,6 @@ url = "github:feel-co/hjem"
 
 [inputs.wrappers]
 url = "github:BirdeeHub/nix-wrapper-modules"
-patches = [
-    # expose options used to build each wrapped package
-    "patches/wrappers/nix-wrappers-expose-options.patch",
-
-    # noctalia module
-    # https://github.com/BirdeeHub/nix-wrapper-modules/pull/598 (local patch due to merge conflict in maintainers.nix)
-    "patches/wrappers/noctalia-module.patch",
-
-    # feat(wrapperModules.yazi): support init.lua
-    "https://github.com/nix-community/nix-wrapper-modules/pull/586",
-]
 
 [inputs.nixos-hardware]
 url = "github:NixOS/nixos-hardware"

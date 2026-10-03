@@ -50,8 +50,8 @@ where
 {
     execute::command_args!("noctalia", "msg", "wallpaper-set")
         .arg(wallpaper.as_ref())
-        .spawn()?
-        .wait()?;
+        .stdin(Stdio::null())
+        .status()?;
 
     Ok(())
 }

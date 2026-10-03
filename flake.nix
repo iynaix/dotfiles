@@ -2,9 +2,7 @@
   outputs =
     { self, ... }@args:
     let
-      inputs = (import ./.tack) {
-        overrides = args.tackOverrides or { };
-      };
+      inputs = import ./inputs-patched.nix args;
       inherit (inputs.nixpkgs) lib;
       inherit (inputs.lamina.lib) mkHost mkPackages;
 
