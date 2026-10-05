@@ -11,15 +11,10 @@
         {
           plugins = { inherit (pkgs.yaziPlugins) full-border git; };
 
-          constructFiles = {
-            init = {
-              relPath = "yazi-config/init.lua";
-              content = /* lua */ ''
-                require("full-border"):setup({ type = ui.Border.ROUNDED })
-                require("git"):setup()
-              '';
-            };
-          };
+          initLua = /* lua */ ''
+            require("full-border"):setup({ type = ui.Border.ROUNDED })
+            require("git"):setup()
+          '';
 
           settings = {
             yazi = {

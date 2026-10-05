@@ -101,7 +101,6 @@
                     pkgs.coreutils
                   ];
                   text = ''
-
                     while ! noctalia msg status >/dev/null 2>&1; do
                     ${lib.getExe' pkgs.coreutils "sleep"} 0.5
                     done

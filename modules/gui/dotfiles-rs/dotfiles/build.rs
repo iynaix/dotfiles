@@ -15,7 +15,6 @@ fn generate_man_pages() -> Result<()> {
     for cmd in [
         cli::WmMonitorArgs::command(),
         cli::WmSameClassArgs::command(),
-        cli::RofiMpvArgs::command(),
     ] {
         let mut buffer = Vec::default();
 

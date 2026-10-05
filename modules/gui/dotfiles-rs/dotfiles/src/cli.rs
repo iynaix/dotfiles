@@ -75,25 +75,6 @@ pub enum RofiMpvMedia {
 }
 
 #[derive(Parser, Debug)]
-#[command(
-    name = "rofi-media",
-    about = "Plays the next episode of anime or tv shows"
-)]
-pub struct RofiMpvArgs {
-    #[arg(value_enum)]
-    pub media: Option<RofiMpvMedia>,
-
-    #[arg(
-        long,
-        value_enum,
-        help = "Type of shell completion to generate",
-        hide = true,
-        exclusive = true
-    )]
-    pub generate: Option<ShellCompletion>,
-}
-
-#[derive(Parser, Debug)]
 #[command(name = "focus-or-run", about = "Focus window or run command")]
 pub struct FocusOrRunArgs {
     #[arg(

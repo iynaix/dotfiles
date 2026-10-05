@@ -39,5 +39,12 @@ patcher.patch unpatchedInputs {
       url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/8dc6e5fa91c39033b6a8613b2ba5cfcc72728792.patch";
       hash = "sha256-Lo/wvbqEv5DoFQ/FwqXTTUn+Bfck/V6M3EfRG5jdTrY=";
     })
+
+    # feat(wrapperModules.yazi): support init.lua
+    # https://github.com/nix-community/nix-wrapper-modules/pull/586
+    (patcher.fetchpatch {
+      url = "https://github.com/BirdeeHub/nix-wrapper-modules/compare/a9d3c33448accadc558cdbb3c7814e37d1e96537~1..8b1070e628c42503d6d074f516156c98096dec22.patch";
+      hash = "sha256-trMtTZyx6Bi44c+FpWo/rGeyEpX3JouQIQ8eEBhWn30=";
+    })
   ];
 }
