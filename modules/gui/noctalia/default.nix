@@ -7,25 +7,33 @@
       ...
     }:
     {
-      noctalia = inputs.wrappers.wrappers.noctalia.wrap {
-        inherit pkgs;
-        package = pkgs.noctalia.overrideAttrs (o: {
-          # skip building tests
-          mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
+      noctalia = inputs.wrappers.wrappers.noctalia.wrap (
+        { config, ... }: {
+          inherit pkgs;
+          package = pkgs.noctalia.overrideAttrs (o: {
+            # skip building tests
+            mesonFlags = (o.mesonFlags or [ ]) ++ [ (lib.mesonEnable "tests" false) ];
 
-          patches = (o.patches or [ ]) ++ [
-            ./face-aware-crop.patch
-          ];
+            patches = (o.patches or [ ]) ++ [
+              ./face-aware-crop.patch
+            ];
 
-          nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.wrapGAppsHook3 ];
+            nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.wrapGAppsHook3 ];
 
-          buildInputs = o.buildInputs ++ [
-            pkgs.dconf
-            pkgs.gsettings-desktop-schemas
-          ];
-        });
-        settings = builtins.fromTOML (builtins.readFile ./noctalia.toml);
-      };
+            buildInputs = o.buildInputs ++ [
+              pkgs.dconf
+              pkgs.gsettings-desktop-schemas
+            ];
+          });
+          settings = builtins.fromTOML (builtins.readFile ./noctalia.toml);
+
+          drv.installPhase = ''
+            runHook preInstall
+            ${lib.getExe config.package} config validate "${config.constructFiles.settings.path}"
+            runHook postInstall
+          '';
+        }
+      );
     };
 
   tags = [ "wm" ];

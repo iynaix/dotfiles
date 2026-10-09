@@ -13,26 +13,15 @@
     }:
     let
       tomlFormat = pkgs.formats.toml { };
+      umbrielWrapper = import ./_wrapper.nix { inherit inputs; };
     in
     {
-      # TODO: use package from nixpkgs when more stable?
-      imports = [ inputs.umbriel.nixosModules.default ];
-
       options.custom = {
         programs.umbriel = {
           settings = lib.mkOption {
             inherit (tomlFormat) type;
             default = { };
-            example = lib.literalExpression ''
-              animation = {
-                enabled = true;
-                duration_ms = 150;
-                curve = "easeout";
-              };
-            '';
-            description = ''
-              Configuration for umbriel, this will be prepended to the umbriel includes
-            '';
+            description = "Configuration for umbriel";
           };
         };
       };
@@ -40,42 +29,19 @@
       config = {
         programs.umbriel = {
           enable = true;
-          package = inputs.umbriel.packages.${system}.default;
-        };
+          package = umbrielWrapper.wrap {
+            inherit pkgs;
+            package = inputs.umbriel.packages.${system}.default;
+            inherit (config.custom.programs.umbriel) settings;
 
-        hj.xdg.config.files =
-          let
-            hostToml = tomlFormat.generate "umbriel-host.toml" config.custom.programs.umbriel.settings;
-          in
-          {
-            "umbriel/host.toml" = {
-              source = pkgs.runCommand "umbriel-host-toml" { } ''
-                ${lib.getExe config.programs.umbriel.package} config validate -c ${hostToml}
-                cp ${hostToml} $out
-              '';
-              type = "copy";
-            };
-
-            "umbriel/config.toml" = {
-              generator = tomlFormat.generate "umbriel-config.toml";
-              value = {
-                include = {
-                  files = [
-                    # use nix generated host.toml first
-                    "/home/${user}/.config/umbriel/host.toml"
-                  ];
-
-                  optional.files = [
-                    # use noctalia colors
-                    "/home/${user}/.config/umbriel/noctalia.toml"
-                    # dynamic cursor
-                    "/home/${user}/.config/umbriel/cursor.toml"
-                  ];
-                };
-              };
-              type = "copy";
-            };
+            includeOptional = [
+              # use noctalia colors
+              "/home/${user}/.config/umbriel/noctalia.toml"
+              # dynamic cursor
+              "/home/${user}/.config/umbriel/cursor.toml"
+            ];
           };
+        };
 
         xdg.portal = {
           config = {
@@ -91,7 +57,11 @@
 
         custom.programs = {
           print-config = {
-            umbriel = /* sh */ ''moor "/home/${user}/.config/umbriel/host.toml"'';
+            umbriel =
+              let
+                inherit (config.programs.umbriel.package.configuration.constructFiles) generatedConfig userConfig;
+              in
+              /* sh */ ''cat "${generatedConfig.outPath}" "${userConfig.outPath}" | moor --lang toml'';
           };
         };
       };
