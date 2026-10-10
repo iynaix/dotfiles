@@ -14,12 +14,34 @@
     };
 
   config =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       # NOTE: POE is installed through steam
       environment.systemPackages = [
         pkgs.custom.awakened-poe-trade
         pkgs.custom.exiled-exchange-2
+        (lib.hiPrio (
+          pkgs.makeDesktopItem {
+            name = "path-of-exile";
+            desktopName = "Path of Exile";
+            exec = "env DISPLAY=:0 steam steam://rungameid/238960";
+            icon = "steam_icon_238960";
+            terminal = false;
+            type = "Application";
+            categories = [ "Game" ];
+          }
+        ))
+        (lib.hiPrio (
+          pkgs.makeDesktopItem {
+            name = "path-of-exile-2";
+            desktopName = "Path of Exile 2";
+            exec = "env DISPLAY=:0 steam steam://rungameid/2694490";
+            icon = "steam_icon_2694490";
+            terminal = false;
+            type = "Application";
+            categories = [ "Game" ];
+          }
+        ))
       ];
 
       # helium extensions

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # tack-managed resolver. delete this line to take ownership; tack will leave it alone afterwards.
-# tack-resolver: patched tag signedBy
+# tack-resolver: patched tag version signedBy
 
 let
   inherit (builtins)
@@ -49,6 +49,27 @@ let
     "path"
     "indirect"
   ];
+
+  # fetchTree's lastModifiedDate, YYYYMMDDHHMMSS in UTC
+  formatEpoch =
+    secs:
+    let
+      days = secs / 86400;
+      daySecs = secs - days * 86400;
+      shifted = days + 719468;
+      era = shifted / 146097;
+      dayOfEra = shifted - era * 146097;
+      yearOfEra = (dayOfEra - dayOfEra / 1460 + dayOfEra / 36524 - dayOfEra / 146096) / 365;
+      dayOfYear = dayOfEra - (365 * yearOfEra + yearOfEra / 4 - yearOfEra / 100);
+      marchMonth = (5 * dayOfYear + 2) / 153;
+      day = dayOfYear - (153 * marchMonth + 2) / 5 + 1;
+      month = if marchMonth < 10 then marchMonth + 3 else marchMonth - 9;
+      year = yearOfEra + era * 400 + (if month <= 2 then 1 else 0);
+      pad = n: if n < 10 then "0${toString n}" else toString n;
+    in
+    "${toString year}${pad month}${pad day}${pad (daySecs / 3600)}${
+      pad (daySecs / 60 - daySecs / 3600 * 60)
+    }${pad (daySecs - daySecs / 60 * 60)}";
 
   fetchTreeAttrs = {
     type = null;
@@ -165,15 +186,36 @@ let
         else
           let
             node = lock.${name};
+            type = node.type or "";
           in
-          if (node.type or "") == "path" then
+          if type == "path" then
             {
               outPath = if substring 0 1 node.path == "/" then node.path else resolverDir + ("/" + node.path);
               lastModified = node.lastModified or 0;
             }
             // (if node ? narHash then { inherit (node) narHash; } else { })
-          else if !(elem (node.type or "") knownTypes) then
-            throw "tack: unknown lock type '${node.type or "?"}' for pin '${name}'"
+          # a cold fetcher cache makes fetchTree re-unpack a locked tarball into the
+          # git cache even when its store path exists, fetchTarball checks the store first
+          else if type == "tarball" && node ? narHash && node ? lastModified then
+            {
+              outPath = fetchTarball {
+                inherit (node) url;
+                sha256 = node.narHash;
+              };
+              inherit (node) narHash lastModified;
+              lastModifiedDate = formatEpoch node.lastModified;
+            }
+            // (
+              if node ? rev then
+                {
+                  inherit (node) rev;
+                  shortRev = substring 0 7 node.rev;
+                }
+              else
+                { }
+            )
+          else if !(elem type knownTypes) then
+            throw "tack: unknown lock type '${type}' for pin '${name}'"
           else
             fetchTree (intersectAttrs fetchTreeAttrs node);
 
@@ -253,6 +295,7 @@ let
           "repo"
           "host"
           "tag"
+          "version"
           "rev"
           "narHash"
           "lastModified"
@@ -262,6 +305,7 @@ let
           "repo"
           "host"
           "tag"
+          "version"
           "rev"
           "narHash"
           "lastModified"
@@ -270,6 +314,7 @@ let
           "url"
           "ref"
           "tag"
+          "version"
           "rev"
           "narHash"
           "lastModified"
@@ -289,6 +334,7 @@ let
         fixed = [
           "url"
           "tag"
+          "version"
           "sha256"
           "unpack"
         ];

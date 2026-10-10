@@ -7,7 +7,7 @@
     }:
     {
       helium = pkgs.callPackage ./_package.nix {
-        version = inputs._meta.helium.tag;
+        inherit (inputs._meta.helium) version;
         src = inputs.helium;
 
         flags = [

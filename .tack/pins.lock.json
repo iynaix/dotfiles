@@ -27,14 +27,16 @@
     "url": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v3.29.108/Awakened-PoE-Trade-3.29.108.AppImage",
     "sha256": "sha256-DIksV61mC0E2ZPztWK+WnMqR9KXwLMWQpc7hajaymyE=",
     "unpack": "file",
-    "tag": "v3.29.108"
+    "tag": "v3.29.108",
+    "version": "3.29.108"
   },
   "exiled-exchange-2": {
     "type": "fixed",
     "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.16.3/Exiled-Exchange-2-0.16.3.AppImage",
     "sha256": "sha256-aAHFELdlL7cccpzAW9ROHF1hZDAnQGTLLtDonS0CT2Q=",
     "unpack": "file",
-    "tag": "v0.16.3"
+    "tag": "v0.16.3",
+    "version": "0.16.3"
   },
   "flake-parts": {
     "type": "github",
@@ -57,7 +59,8 @@
     "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.2.1/helium-0.19.2.1-x86_64.AppImage",
     "sha256": "sha256-oEVQo8fHC9rTrNOkQw7ajSr8C/cXOpxYpAP+q5UXCH8=",
     "unpack": "file",
-    "tag": "0.19.2.1"
+    "tag": "0.19.2.1",
+    "version": "0.19.2.1"
   },
   "hjem": {
     "type": "github",
@@ -115,9 +118,9 @@
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "01d245e20e19c9e283fce3b0db8719c2a6bba5f5",
-    "narHash": "sha256-9rIjqnq43mKaiUCv0DBe8H0HFZQue0fADosuJxemoaU=",
-    "lastModified": 1791488733
+    "rev": "9723961413fcd7268f73e27c0277a6da307bbce7",
+    "narHash": "sha256-lKqmYifuU1gWhtmcgalvsk62zitc71fPX6wx9f6VX24=",
+    "lastModified": 1791602170
   },
   "preservation": {
     "type": "github",
@@ -155,17 +158,17 @@
     "type": "github",
     "owner": "manic-systems",
     "repo": "tack",
-    "rev": "4a8b68df58488b311840eb0244c75b4857871789",
-    "narHash": "sha256-ST/08SMwfjtXeP/+72GJYVFkO2xT6PDU5ofh9Gh9IJ8=",
-    "lastModified": 1791058919
+    "rev": "5957ec0bd3df490a06dab467337152ae75977585",
+    "narHash": "sha256-dkuO01AoiMwzwY5DtEPDRyQYKjD3RRPZ8evLLYfEeY4=",
+    "lastModified": 1791612427
   },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "e587585338539186ec7e3105fcf6683c3f7adc0c",
-    "narHash": "sha256-k4yRoQHMav+RMYMt1yxNXnvlGIdyrFrtLx+GsdAlyNo=",
-    "lastModified": 1791581795,
+    "rev": "21456686a8f21f82a0675cad658ffbeed35269b6",
+    "narHash": "sha256-1APDnsTQsvoMLm040tC9l7q4zmRZXn261JQmCxwE/MY=",
+    "lastModified": 1791603474,
     "submodules": true
   },
   "wfetch": {

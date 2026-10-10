@@ -17,13 +17,13 @@
           pname = "exiled-exchange-2";
           appimageContents = appimageTools.extract {
             inherit pname;
-            version = inputs._meta.${pname}.tag;
+            inherit (inputs._meta.${pname}) version;
             src = inputs.${pname};
           };
         in
         appimageTools.wrapType2 {
           inherit pname;
-          version = inputs._meta.${pname}.tag;
+          inherit (inputs._meta.${pname}) version;
           src = inputs.${pname};
 
           extraInstallCommands = ''
