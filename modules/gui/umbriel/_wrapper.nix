@@ -129,6 +129,18 @@ inputs.wrappers.lib.wrapModule (
       runHook postInstall
     '';
 
+    config.binName = "umbriel-wrapped";
+
+    # patch the systemd service to ExecStart the wrapper, don't patch the other files
+    # as the cli ignores all other args if "-c CONFIG_PATH" is provided
+    config.buildCommand.patchService = {
+      after = [ "symlinkScript" ];
+      data = ''
+        substituteInPlace $out/share/systemd/user/umbriel.service \
+          --replace-fail "ExecStart=${placeholder config.outputName}/bin/umbriel" "ExecStart=${placeholder config.outputName}/bin/umbriel-wrapped"
+      '';
+    };
+
     # User supplied settings are written to a separate file before being included in a
     # minimal wrapper file with just includes.
     # This is so files in includeOptional are able to override settings within the

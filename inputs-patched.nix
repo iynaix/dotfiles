@@ -27,6 +27,13 @@ patcher.patch unpatchedInputs {
       url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
       hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
     })
+
+    # typescript-language-server: fix pnpm hash
+    # https://github.com/NixOS/nixpkgs/pull/572951
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/ac7b1aaed03db4b794502641cdeed685ed777889.patch";
+      hash = "sha256-aQG98PUp2WsbI7ZKuTPcjCibCIKb2ldl75Tbl58+i8A=";
+    })
   ];
 
   wrappers = [
@@ -38,13 +45,6 @@ patcher.patch unpatchedInputs {
     (patcher.fetchpatch {
       url = "https://github.com/BirdeeHub/nix-wrapper-modules/commit/8dc6e5fa91c39033b6a8613b2ba5cfcc72728792.patch";
       hash = "sha256-Lo/wvbqEv5DoFQ/FwqXTTUn+Bfck/V6M3EfRG5jdTrY=";
-    })
-
-    # feat(wrapperModules.yazi): support init.lua
-    # https://github.com/nix-community/nix-wrapper-modules/pull/586
-    (patcher.fetchpatch {
-      url = "https://github.com/BirdeeHub/nix-wrapper-modules/compare/a9d3c33448accadc558cdbb3c7814e37d1e96537~1..8b1070e628c42503d6d074f516156c98096dec22.patch";
-      hash = "sha256-trMtTZyx6Bi44c+FpWo/rGeyEpX3JouQIQ8eEBhWn30=";
     })
   ];
 }

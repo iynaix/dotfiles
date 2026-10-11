@@ -1,4 +1,5 @@
 {
+  enabled = true;
   hosts = [ "desktop" ];
 
   config =

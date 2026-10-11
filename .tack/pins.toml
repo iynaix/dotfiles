@@ -41,6 +41,9 @@ url = "github:nix-systems/default"
 [inputs.hjem]
 url = "github:feel-co/hjem"
 
+[inputs.wrappers-upstream]
+url = "github:BirdeeHub/nix-wrapper-modules"
+
 [inputs.wrappers]
 url = "github:BirdeeHub/nix-wrapper-modules"
 
