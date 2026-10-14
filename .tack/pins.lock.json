@@ -51,9 +51,9 @@
     "type": "github",
     "owner": "iynaix",
     "repo": "focal",
-    "rev": "3917fbaff589171395c0bd1825e37e851b329895",
-    "narHash": "sha256-gnvBWOT+/3DEEs/jLqiWl1S8W7c8i6rDG0VfyFqa5gY=",
-    "lastModified": 1789100955
+    "rev": "c85ea45d0491c3c0413ad02267f54cdea1fec0ed",
+    "narHash": "sha256-X5jLQ6UEtplms9Q196e8daHily2Or4qZKDbymDT8Rv4=",
+    "lastModified": 1791958385
   },
   "helium": {
     "type": "fixed",

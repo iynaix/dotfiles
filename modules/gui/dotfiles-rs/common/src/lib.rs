@@ -9,7 +9,7 @@ use std::{
 };
 
 pub mod nixjson;
-pub mod rofi;
+pub mod noctalia_dmenu;
 pub mod umbriel;
 pub mod wallpaper;
 

@@ -29,9 +29,9 @@ pub struct WmMonitorArgs {
     #[arg(long, name = "MONITOR", action, help = "Mirrors the primary monitor")]
     pub mirror: Option<String>,
 
-    // show rofi menu for selecting monitor
-    #[arg(long, action, help = "Show rofi menu for monitor options")]
-    pub rofi: Option<String>,
+    // show menu for selecting monitor
+    #[arg(long, action, help = "Show menu for monitor options")]
+    pub menu: Option<String>,
 
     #[arg(
         long,
