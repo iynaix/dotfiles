@@ -25,7 +25,7 @@
               pkgs.gsettings-desktop-schemas
             ];
           });
-          settings = builtins.fromTOML (builtins.readFile ./noctalia.toml);
+          settings = fromTOML (builtins.readFile ./noctalia.toml);
 
           drv.installPhase = ''
             runHook preInstall
@@ -49,8 +49,6 @@
       ...
     }:
     let
-      tomlFormat = pkgs.formats.toml { };
-
       noctalia-reload = pkgs.writeShellApplication {
         name = "noctalia-reload";
         text = /* sh */ ''
@@ -62,16 +60,6 @@
       options.custom = {
         programs.noctalia = {
           inherit (inputs.wrappers.wrappers.noctalia.wrapperOptions) settings;
-
-          user-templates = lib.mkOption {
-            inherit (tomlFormat) type;
-            default = { };
-            description = ''
-              TOML config for noctalia user templates, see
-              https://docs.noctalia.dev/noctalia/theming/app-theming/?section=user-templates#user-templates
-              for available options
-            '';
-          };
 
           minibar = lib.mkEnableOption "Alternate centralized minibar rice" // {
             default = true;

@@ -6,11 +6,16 @@
       config,
       lib,
       pkgs,
+      tags,
       user,
       ...
     }:
     {
       options.custom = {
+        lock.enable = lib.mkEnableOption "screen locking of host" // {
+          default = builtins.elem "laptop" tags;
+        };
+
         nixJson = lib.mkOption {
           type = lib.types.submodule { freeformType = (pkgs.formats.json { }).type; };
           default = { };

@@ -51,17 +51,17 @@
     "type": "github",
     "owner": "iynaix",
     "repo": "focal",
-    "rev": "c85ea45d0491c3c0413ad02267f54cdea1fec0ed",
-    "narHash": "sha256-X5jLQ6UEtplms9Q196e8daHily2Or4qZKDbymDT8Rv4=",
-    "lastModified": 1791958385
+    "rev": "f19fa252c3c49db62dc5577936bf62c2b57f61b6",
+    "narHash": "sha256-dabqfjfcMkSMcUhFPcYYUrWwUmsuwl/0hWYzSKQnJyE=",
+    "lastModified": 1791964242
   },
   "helium": {
     "type": "fixed",
-    "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.2.1/helium-0.19.2.1-x86_64.AppImage",
-    "sha256": "sha256-oEVQo8fHC9rTrNOkQw7ajSr8C/cXOpxYpAP+q5UXCH8=",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.3.1/helium-0.19.3.1-x86_64.AppImage",
+    "sha256": "sha256-Rg5tKlyG0DkhYkItGyF6NmMb2DD40h5WUYyWAgl5eQY=",
     "unpack": "file",
-    "tag": "0.19.2.1",
-    "version": "0.19.2.1"
+    "tag": "0.19.3.1",
+    "version": "0.19.3.1"
   },
   "hjem": {
     "type": "github",
@@ -83,9 +83,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "acabf7666dbd3896a7db4f145bcbc90ed6dc01aa",
-    "narHash": "sha256-bUnuHCRgwH8+SfXktsLXtdPtcALEmEAEOT7Jk9y940s=",
-    "lastModified": 1791882132
+    "rev": "34e0ee10043ece20f6355e9c58d83d403c8ea0fc",
+    "narHash": "sha256-4d8+EEeZRQK6km9y7QE4KWI4dSY7iGzabQSpZDvPdL0=",
+    "lastModified": 1792070559
   },
   "nix-index-database": {
     "type": "github",
@@ -105,17 +105,17 @@
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1090327.7fd4004d0511/nixexprs.tar.zst?rev=7fd4004d0511991fff3a0524856a9be09e28c5f0&lastModified=1791734076",
-    "rev": "7fd4004d0511991fff3a0524856a9be09e28c5f0",
-    "narHash": "sha256-0dNcyVeoD61zhucIpt5BAQ+ytd6JzF641Z+A9bgltLo=",
-    "lastModified": 315532800
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1092090.55bfb4d7437b/nixexprs.tar.zst?rev=55bfb4d7437bd4e09ab7cba58a43bd68eb310044&lastModified=1791956154",
+    "rev": "55bfb4d7437bd4e09ab7cba58a43bd68eb310044",
+    "narHash": "sha256-gJX2+xcImvxBCI3bp7zXKLUX2AwsdTxMgJ1UX/5Hm/o=",
+    "lastModified": 1791956154
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.11767.7993f34ee47e/nixexprs.tar.zst?rev=7993f34ee47e28a3d607a525aadc6c94b73be728&lastModified=1791765022",
-    "rev": "7993f34ee47e28a3d607a525aadc6c94b73be728",
-    "narHash": "sha256-TnALPKp8o/dtUYgE243iQMbRP4183ZPhWu33FD05k/4=",
-    "lastModified": 315532800
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.11829.a033e66ab94a/nixexprs.tar.zst?rev=a033e66ab94a6bedf2c3d58d93a36319d3cbbbaf&lastModified=1791883866",
+    "rev": "a033e66ab94a6bedf2c3d58d93a36319d3cbbbaf",
+    "narHash": "sha256-MdqpFMXQX2Vz1KgQ516wgEo4eiFzm3rEMyE3Qh4wyLA=",
+    "lastModified": 1791883866
   },
   "nvf": {
     "type": "github",
@@ -137,17 +137,17 @@
     "type": "github",
     "owner": "meehl",
     "repo": "rusty-path-of-building",
-    "rev": "ae9c59d132ed9be45894ebb70d2d9cbb70ce3bc1",
-    "narHash": "sha256-6aExRtkxKOX7ZDe1mgSKFBkHoD6tdlmUPsdSI/u6MvM=",
-    "lastModified": 1789720408
+    "rev": "36d26977547f0199db7cabc323fd8c09c8e96bc0",
+    "narHash": "sha256-eqTicxArSHi+sd/QsoRWnRMkHrgBTEPelGfNt7enERE=",
+    "lastModified": 1792099883
   },
   "sops-nix": {
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "ee48786c6f9160d2c1a084aac841f68195b8420c",
-    "narHash": "sha256-mVD4XIc5JkqMW2K04IkFUzHgHmyJZlzw5ktfgMDCbKU=",
-    "lastModified": 1791710405
+    "rev": "44931708c62937c2b1bf7953902989fa5bb9ee1b",
+    "narHash": "sha256-YU1LjDe1o2Ymg5zEiCHbmMXLkDCtxHQRiVqZ3nC5GGk=",
+    "lastModified": 1792056300
   },
   "systems": {
     "type": "github",
@@ -161,17 +161,17 @@
     "type": "github",
     "owner": "manic-systems",
     "repo": "tack",
-    "rev": "47a8edf4a7b3728300f308a6b6111213acbb3164",
-    "narHash": "sha256-E9cCqGahMkI/g+GUGwQ2ubdHVLStfPzMrvogYGU0IV4=",
-    "lastModified": 1791931591
+    "rev": "d785e637b7f6d0694a53951588c484f32397335e",
+    "narHash": "sha256-q3o87E0s55Z09YVhFJtws2Dvv1IRCoGxOOtomZsJEXA=",
+    "lastModified": 1792090744
   },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "833a1ed9b3574f1c1c000df9cdd32417efac8911",
-    "narHash": "sha256-YSjQ4RDiYVZkbcdffxwD0y7JxmC8DGfIyGiH1EFVoho=",
-    "lastModified": 1791930007,
+    "rev": "297a787801e3b933cfa871521a4b586a98caef7f",
+    "narHash": "sha256-ZuQc2usFxFicR15coJY1YZK4pq8Jg1TJbpuMSWWThVo=",
+    "lastModified": 1792067303,
     "submodules": true
   },
   "wfetch": {
@@ -186,17 +186,17 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "74aaee6e989833345d2c67dc3090ffe8eb2a4dfa",
-    "narHash": "sha256-xnL4ZqUe2j/SYTAHQ8999+Ke5Xg7P+NKgdvXlRNLN24=",
-    "lastModified": 1791927952
+    "rev": "42eb384cead6d47987132ebf27ac4fe6c9625164",
+    "narHash": "sha256-DXz+cIXzesoI/PIpmXz++oecML6PgM8s5TwFTFioULs=",
+    "lastModified": 1792099834
   },
   "wrappers-upstream": {
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "74aaee6e989833345d2c67dc3090ffe8eb2a4dfa",
-    "narHash": "sha256-xnL4ZqUe2j/SYTAHQ8999+Ke5Xg7P+NKgdvXlRNLN24=",
-    "lastModified": 1791927952
+    "rev": "42eb384cead6d47987132ebf27ac4fe6c9625164",
+    "narHash": "sha256-DXz+cIXzesoI/PIpmXz++oecML6PgM8s5TwFTFioULs=",
+    "lastModified": 1792099834
   },
   "yt-dlp": {
     "type": "github",

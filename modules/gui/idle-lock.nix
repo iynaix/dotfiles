@@ -6,7 +6,6 @@
       config,
       lib,
       pkgs,
-      tags,
       ...
     }:
     let
@@ -20,45 +19,38 @@
       };
     in
     {
-      options.custom = {
-        lock.enable = lib.mkEnableOption "screen locking of host" // {
-          default = builtins.elem "laptop" tags;
-        };
-      };
+      # NOTE: lock option is defined in gui/default.nix
+      environment.systemPackages = [
+        lock
+      ];
 
-      config = {
-        environment.systemPackages = [
-          lock
-        ];
-
-        # lock on idle
-        custom = {
-          programs = {
-            # disable suspend and lockscreen if host doesn't lock
-            noctalia.settings = {
-              idle.behavior.idle-behavior = {
-                action = "screen_off";
-                enabled = true;
-                timeout = 5 * 60.0;
-              };
-
-              idle.behavior.lock-and-suspend = {
-                action = "lock_and_suspend";
-                enabled = config.custom.lock.enable;
-                timeout = 5 * 60.0 + 10.0;
-              };
-
+      # lock on idle
+      custom = {
+        programs = {
+          # disable suspend and lockscreen if host doesn't lock
+          noctalia.settings = {
+            idle.behavior.idle-behavior = {
+              action = "screen_off";
+              enabled = true;
+              timeout = 5 * 60.0;
             };
 
-            umbriel.settings = {
-              # manual lock keybind
-              keybinds = {
-                "Mod+Shift+Ctrl+x" = "spawn:${lib.getExe lock}";
-              };
+            idle.behavior.lock-and-suspend = {
+              action = "lock_and_suspend";
+              enabled = config.custom.lock.enable;
+              timeout = 5 * 60.0 + 10.0;
+            };
 
-              events = {
-                lid_open = lib.getExe lock;
-              };
+          };
+
+          umbriel.settings = {
+            # manual lock keybind
+            keybinds = {
+              "Mod+Shift+Ctrl+x" = "spawn:${lib.getExe lock}";
+            };
+
+            events = {
+              lid_open = lib.getExe lock;
             };
           };
         };

@@ -16,6 +16,8 @@
       umbrielWrapper = import ./_wrapper.nix { inherit inputs; };
     in
     {
+      imports = [ inputs.umbriel.nixosModules.default ];
+
       options.custom = {
         programs.umbriel = {
           settings = lib.mkOption {

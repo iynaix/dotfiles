@@ -10,6 +10,9 @@ let
   patcher = unpatchedInputs.nixpkgs.legacyPackages.x86_64-linux.callPackage ./patcher.nix { };
 in
 patcher.patch unpatchedInputs {
+  # for multiple commits:
+  # https://github.com/USER/REPO/compare/EARLIER_OR_TOP_COMMIT~1..LATEST_OR_BOTTOM_COMMIT.patch
+
   nixpkgs = [
     # always allow unfree, i dgaf
     ./patches/allow-unfree.patch
@@ -26,13 +29,6 @@ patcher.patch unpatchedInputs {
     (patcher.fetchpatch {
       url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
       hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
-    })
-
-    # typescript-language-server: fix pnpm hash
-    # https://github.com/NixOS/nixpkgs/pull/572951
-    (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/ac7b1aaed03db4b794502641cdeed685ed777889.patch";
-      hash = "sha256-aQG98PUp2WsbI7ZKuTPcjCibCIKb2ldl75Tbl58+i8A=";
     })
   ];
 

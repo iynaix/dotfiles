@@ -120,12 +120,7 @@
         # browsing forwards and backwards in time through snapshots
         # https://github.com/iynaix/time-travel.yazi
         {
-          plugins.time-travel = pkgs.fetchFromGitHub {
-            owner = "iynaix";
-            repo = "time-travel.yazi";
-            rev = "aaec6e26e525bd146354a5137ec40f1f23257a4e";
-            hash = "sha256-/+KiuGUox763dMQvHl1l3+Ci3vL8NwRuKNu9pi3gjyE=";
-          };
+          plugins = { inherit (pkgs.yaziPlugins) time-travel; };
 
           settings = {
             keymap.mgr.prepend_keymap = [
@@ -152,6 +147,14 @@
                 ];
                 run = "plugin time-travel exit";
                 desc = "Exit browsing snapshots";
+              }
+              {
+                on = [
+                  "z"
+                  "s"
+                ];
+                run = "plugin time-travel select";
+                desc = "Select a snapshot";
               }
             ];
           };

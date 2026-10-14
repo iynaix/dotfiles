@@ -33,11 +33,11 @@
         }
 
         # emacs
-        {
-          match.app_id = "emacs";
-          spawn = "emacsclient -c";
-          workspace = 2;
-        }
+        # {
+        #   match.app_id = "emacs";
+        #   spawn = "emacsclient -c";
+        #   workspace = 2;
+        # }
 
         # file manager
         {
