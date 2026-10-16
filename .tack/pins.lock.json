@@ -20,7 +20,6 @@
     "umbriel": "github:noctalia-dev/umbriel",
     "wfetch": "github:iynaix/wfetch",
     "wrappers": "github:BirdeeHub/nix-wrapper-modules",
-    "wrappers-upstream": "github:BirdeeHub/nix-wrapper-modules",
     "yt-dlp": "github:yt-dlp/yt-dlp"
   },
   "awakened-poe-trade": {
@@ -57,19 +56,19 @@
   },
   "helium": {
     "type": "fixed",
-    "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.3.1/helium-0.19.3.1-x86_64.AppImage",
-    "sha256": "sha256-Rg5tKlyG0DkhYkItGyF6NmMb2DD40h5WUYyWAgl5eQY=",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.4.1/helium-0.19.4.1-x86_64.AppImage",
+    "sha256": "sha256-Wy2zkrPth/JKqESTYFnWisqYvCBUjqqg3s+jwoCioKc=",
     "unpack": "file",
-    "tag": "0.19.3.1",
-    "version": "0.19.3.1"
+    "tag": "0.19.4.1",
+    "version": "0.19.4.1"
   },
   "hjem": {
     "type": "github",
     "owner": "feel-co",
     "repo": "hjem",
-    "rev": "6b2cc57463bbbac3d7c61206ab365a2c928861a4",
-    "narHash": "sha256-Q5hGcKBaqz1L0neSRDfQgQPBKmSCkV1N5YBRwp+RtUc=",
-    "lastModified": 1791807571
+    "rev": "7fec35f695f1d8784d2485be6871f85dc0d0f522",
+    "narHash": "sha256-E3vrGA6k5Suh2NDP18PO+HTaL5zCQMfGW5toKoVqcQ8=",
+    "lastModified": 1792374494
   },
   "lamina": {
     "type": "github",
@@ -83,17 +82,17 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "34e0ee10043ece20f6355e9c58d83d403c8ea0fc",
-    "narHash": "sha256-4d8+EEeZRQK6km9y7QE4KWI4dSY7iGzabQSpZDvPdL0=",
-    "lastModified": 1792070559
+    "rev": "7869694141a277deae44808b0d14ecf8c952b749",
+    "narHash": "sha256-NZjNPuDmudrJ2QjzhXQmLZpf6unuKPfp6UmzgK3FawA=",
+    "lastModified": 1792371142
   },
   "nix-index-database": {
     "type": "github",
     "owner": "nix-community",
     "repo": "nix-index-database",
-    "rev": "9a2dd40780eeab8543aa97c59c26f11267025616",
-    "narHash": "sha256-LpIhxnuO0tYeZ4k7BbNMxsPs2zJpB4hWXO1jdhUuE7Q=",
-    "lastModified": 1791711434
+    "rev": "1b4d1758fa6053c5d6284254a793134fa602fbff",
+    "narHash": "sha256-2DAEMk8YkV8OF6N2uw9jQ016cYoNkcgnq50AShwWxNw=",
+    "lastModified": 1792309949
   },
   "nixos-hardware": {
     "type": "github",
@@ -105,25 +104,25 @@
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1092090.55bfb4d7437b/nixexprs.tar.zst?rev=55bfb4d7437bd4e09ab7cba58a43bd68eb310044&lastModified=1791956154",
-    "rev": "55bfb4d7437bd4e09ab7cba58a43bd68eb310044",
-    "narHash": "sha256-gJX2+xcImvxBCI3bp7zXKLUX2AwsdTxMgJ1UX/5Hm/o=",
-    "lastModified": 1791956154
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1093333.fe13242281a6/nixexprs.tar.zst?rev=fe13242281a67641c0102cdb1087f0ebe586c7df&lastModified=1792094642",
+    "rev": "fe13242281a67641c0102cdb1087f0ebe586c7df",
+    "narHash": "sha256-LPFRbrCWWyNsdQLO3SX1B/5UMkFK0hfe7bZR6lENvpc=",
+    "lastModified": 1792094642
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.11829.a033e66ab94a/nixexprs.tar.zst?rev=a033e66ab94a6bedf2c3d58d93a36319d3cbbbaf&lastModified=1791883866",
-    "rev": "a033e66ab94a6bedf2c3d58d93a36319d3cbbbaf",
-    "narHash": "sha256-MdqpFMXQX2Vz1KgQ516wgEo4eiFzm3rEMyE3Qh4wyLA=",
-    "lastModified": 1791883866
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12192.8ce73368d1ef/nixexprs.tar.zst?rev=8ce73368d1efd4d657e9064d29b144a52046b4e8&lastModified=1792295010",
+    "rev": "8ce73368d1efd4d657e9064d29b144a52046b4e8",
+    "narHash": "sha256-fgbb+lnywgXIYBCe0u3OxyebrCN1z8kfFhXH1dyv93A=",
+    "lastModified": 1792295010
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "969775ccc2830a70119ba8720a4cf250490a1f56",
-    "narHash": "sha256-f6n9FW5Ke2VnhlrIgycPXSbfguAzsiUlUeIyK4j6hCw=",
-    "lastModified": 1791915337
+    "rev": "a736b60b1e2019931168979951c94dc46e342957",
+    "narHash": "sha256-XD64JVLV8iE4lR+W5gkTweEaT+SBwOrSy0+le2WgITI=",
+    "lastModified": 1792175215
   },
   "preservation": {
     "type": "github",
@@ -137,9 +136,11 @@
     "type": "github",
     "owner": "meehl",
     "repo": "rusty-path-of-building",
-    "rev": "36d26977547f0199db7cabc323fd8c09c8e96bc0",
-    "narHash": "sha256-eqTicxArSHi+sd/QsoRWnRMkHrgBTEPelGfNt7enERE=",
-    "lastModified": 1792099883
+    "rev": "6b6098d3319dd9645532b77dcbca9322cd3966af",
+    "narHash": "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=",
+    "lastModified": 1780060163,
+    "tag": "v0.2.18",
+    "version": "0.2.18"
   },
   "sops-nix": {
     "type": "github",
@@ -169,9 +170,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "297a787801e3b933cfa871521a4b586a98caef7f",
-    "narHash": "sha256-ZuQc2usFxFicR15coJY1YZK4pq8Jg1TJbpuMSWWThVo=",
-    "lastModified": 1792067303,
+    "rev": "d5fb770413242f9502d7e3678cf0c5880de1bd6f",
+    "narHash": "sha256-xgxyi3UspRjRKIS62lGES4bPdH8/KRIOmNXgEavVjaM=",
+    "lastModified": 1792367905,
     "submodules": true
   },
   "wfetch": {
@@ -186,24 +187,18 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "42eb384cead6d47987132ebf27ac4fe6c9625164",
-    "narHash": "sha256-DXz+cIXzesoI/PIpmXz++oecML6PgM8s5TwFTFioULs=",
-    "lastModified": 1792099834
-  },
-  "wrappers-upstream": {
-    "type": "github",
-    "owner": "BirdeeHub",
-    "repo": "nix-wrapper-modules",
-    "rev": "42eb384cead6d47987132ebf27ac4fe6c9625164",
-    "narHash": "sha256-DXz+cIXzesoI/PIpmXz++oecML6PgM8s5TwFTFioULs=",
-    "lastModified": 1792099834
+    "rev": "6bc32f5cc67ee0f1bfb246c47b4b2c53ba1bc014",
+    "narHash": "sha256-J3sKT3dVyCXlblkgzWc41cUZ4ezZbR5XZzfvETkAH78=",
+    "lastModified": 1792152791
   },
   "yt-dlp": {
     "type": "github",
     "owner": "yt-dlp",
     "repo": "yt-dlp",
-    "rev": "897341241f2bfb2439fe0367f4c7c9ccd29a3828",
-    "narHash": "sha256-BiCa0iQA4jLZxBxOxGpcuCXH13cSt+2iOFqCeLlwI3k=",
-    "lastModified": 1791666952
+    "rev": "3a08beaf031ab68f966401ead017ac81fe8486cf",
+    "narHash": "sha256-BM5ZeGTmHq+1xH6G/zsuCtjLgYgfRA11ya0zIHK5p4g=",
+    "lastModified": 1787182285,
+    "tag": "2026.08.19",
+    "version": "2026.08.19"
   }
 }

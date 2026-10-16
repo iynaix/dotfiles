@@ -1,12 +1,7 @@
 # NOTE: file is not named inputs.nix as that causes tack to ignore the .tack directory!
 
-args:
+unpatchedInputs:
 let
-  # inputs from tack
-  unpatchedInputs = (import ./.tack) {
-    overrides = args.tackOverrides or { };
-  };
-
   patcher = unpatchedInputs.nixpkgs.legacyPackages.x86_64-linux.callPackage ./patcher.nix { };
 in
 patcher.patch unpatchedInputs {

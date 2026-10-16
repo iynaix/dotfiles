@@ -23,41 +23,42 @@ fn umbriel_pip() -> Result<()> {
     let target_w = 0.2 * f64::from(mon_w);
     let target_h = target_w / 16.0 * 9.0;
 
-    command_args!("umbriel", "msg", "window-toggle-floating").execute()?;
-    command_args!("umbriel", "msg", "window-toggle-pinned").execute()?;
-
     if !focused.floating {
+        command_args!("umbriel", "msg", "window-toggle-floating").execute()?;
+
         const PADDING: i32 = 30; // target distance from corner of screen
 
         let win_w = f64::from(focused.w);
         let win_h = f64::from(focused.h);
 
-        let w_frac = target_w / win_w;
-        let h_frac = target_h / win_h;
+        let delta_w = -(1.0 - target_w / win_w);
+        let delta_h = -(1.0 - target_h / win_h);
 
         command_args!(
             "umbriel",
             "msg",
-            format!("window-set-primary-extent:{w_frac}")
+            // format!("window-set-primary-extent:{delta_w}")
+            format!("window-modify-width-right:{}", delta_w)
         )
         .execute()?;
+
         command_args!(
             "umbriel",
             "msg",
-            format!("window-set-secondary-extent:{h_frac}")
+            // format!("window-set-secondary-extent:{delta_h}")
+            format!("window-modify-height-down:{}", delta_h)
         )
         .execute()?;
 
-        let mon_bottom = mon.position.y + mon_h;
-        let mon_right = mon.position.x + mon_w;
-
-        /*
-        let delta_x = mon_right - PADDING - target_w as i32 - activewindow.at.0 as u32;
-        let delta_y = mon_bottom - PADDING - target_h as i32 - activewindow.at.1 as u32;
-
-        let lua_dispatch =
-            format!("hl.dsp.window.move({{ relative = true, x = {delta_x}, y = {delta_y} }})");
-        */
+        command_args!(
+            "umbriel",
+            "msg",
+            format!(
+                "window-move-to:bottom_right/{PADDING}/{PADDING}/{}",
+                focused.id
+            )
+        )
+        .execute()?;
     }
 
     Ok(())

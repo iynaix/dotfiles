@@ -78,11 +78,13 @@ url = "github:iynaix/lamina"
 [inputs.rusty-path-of-building]
 url = "github:meehl/rusty-path-of-building"
 type = "fetch"
+tag = "v{version}"
 group = "source"
 
 [inputs.yt-dlp]
 url = "github:yt-dlp/yt-dlp"
 type = "fetch"
+tag = "{version}"
 group = "source"
 
 [inputs.awakened-poe-trade]

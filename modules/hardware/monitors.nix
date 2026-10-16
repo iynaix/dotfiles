@@ -53,6 +53,8 @@
                 type = lib.types.nonEmptyListOf lib.types.int;
                 description = "List of workspace numbers";
               };
+
+              # computed properties
               defaultWorkspace = lib.mkOption {
                 type = lib.types.enum config.workspaces;
                 default = lib.elemAt config.workspaces 0;

@@ -35,7 +35,7 @@
                       d.y
                     ];
                     vrr = if d.vrr then "always" else "disabled";
-                    hdr = if d.hdr then "fullscreen" else "off";
+                    hdr = if d.hdr then "on" else "off";
                     transform = "${lib.optionalString flipped "flipped-"}${
                       if rotation == "0" then "normal" else rotation
                     }";

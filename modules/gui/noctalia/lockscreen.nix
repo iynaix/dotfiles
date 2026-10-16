@@ -75,10 +75,12 @@
                 background_radius = 32.0;
                 input_opacity = 1.0;
                 input_radius = 0.0;
+                layout = "regular";
                 show_caps_lock = true;
                 show_keyboard_layout = false;
                 show_login_button = false;
                 show_media = false;
+                show_password_reveal = false;
                 show_session_buttons = false;
                 show_unlock_hint = false;
                 show_weather = false;

@@ -65,7 +65,11 @@
         # package = pkgs.lixPackageSets.latest.lix;
         package = pkgs.nixVersions.latest;
         registry = registry // {
-          n = registry.nixpkgs;
+          # use the unpatched nixpkgs for `nix run` etc for speed
+          nixpkgs = lib.mkForce {
+            flake = ((import ../../../.tack) { }).nixpkgs;
+          };
+
           master = {
             from = {
               type = "indirect";
