@@ -17,6 +17,10 @@
             "--unsetenv XDG_STATE_HOME"
           ];
         };
+
+        extraCompatPackages = with pkgs; [
+          proton-ge-bin
+        ];
       };
 
       custom.persist = {

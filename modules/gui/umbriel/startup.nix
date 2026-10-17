@@ -32,13 +32,6 @@
           workspace = 1;
         }
 
-        # emacs
-        # {
-        #   match.app_id = "emacs";
-        #   spawn = "emacsclient -c";
-        #   workspace = 2;
-        # }
-
         # file manager
         {
           match.app_id = "nemo";
@@ -60,7 +53,7 @@
             app_id = "helium";
             title = ".*(Discord|WhatsApp|Flood).*";
           };
-          spawn = "helium-chat";
+          spawn = "helium-chat && sleep 1 && umbriel windows --json > ~/Downloads/umbriel-windows.json";
           workspace = 9;
         }
       ]

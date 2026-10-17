@@ -104,6 +104,10 @@
             ];
           };
         };
+
+        ai = {
+          qwen_27b.enable = true;
+        };
       };
 
       boot.zfs.requestEncryptionCredentials = lib.mkForce false;
