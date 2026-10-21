@@ -15,29 +15,24 @@
         }:
         let
           pname = "exiled-exchange-2";
-          appimageContents = appimageTools.extract {
-            inherit pname;
-            inherit (inputs._meta.${pname}) version;
-            src = inputs.${pname};
-          };
         in
-        appimageTools.wrapType2 {
+        appimageTools.wrapType2 (finalAttrs: {
           inherit pname;
           inherit (inputs._meta.${pname}) version;
           src = inputs.${pname};
 
           extraInstallCommands = ''
-            install -m 444 -D ${appimageContents}/exiled-exchange-2.desktop $out/share/applications/${pname}.desktop
+            install -m 444 -D ${finalAttrs.contents}/exiled-exchange-2.desktop $out/share/applications/${pname}.desktop
             substituteInPlace $out/share/applications/${pname}.desktop \
               --replace "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 ${lib.escapeShellArgs commandLineArgs} %U"
 
-            install -m 444 -D ${appimageContents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+            install -m 444 -D ${finalAttrs.contents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${pname}.png
           '';
 
           meta = {
             platforms = [ "x86_64-linux" ];
           };
-        };
+        });
     in
     {
       exiled-exchange-2 = pkgs.callPackage drv { };

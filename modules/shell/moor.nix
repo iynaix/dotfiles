@@ -6,7 +6,6 @@
         inherit pkgs;
         package = pkgs.moor;
         flags = {
-          "--quit-if-one-screen" = true;
           "--no-linenumbers" = true;
           "--statusbar" = "bold";
           "-terminal-fg" = true;

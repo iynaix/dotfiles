@@ -48,14 +48,6 @@
       user,
       ...
     }:
-    let
-      noctalia-reload = pkgs.writeShellApplication {
-        name = "noctalia-reload";
-        text = /* sh */ ''
-          systemctl restart --user noctalia
-        '';
-      };
-    in
     {
       options.custom = {
         programs.noctalia = {
@@ -110,7 +102,6 @@
         };
 
         environment.systemPackages = [
-          noctalia-reload
           pkgs.wlr-randr
         ];
 

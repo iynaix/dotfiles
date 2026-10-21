@@ -3,6 +3,8 @@
     {
       inputs,
       lib,
+      pkgs,
+      system,
       user,
       ...
     }:
@@ -14,6 +16,12 @@
       ];
 
       config = {
+        environment.systemPackages =
+          assert lib.assertMsg (!(pkgs ? "hjem")) "hjem package is now in nixpkgs";
+          [
+            inputs.hjem.packages.${system}.hjem
+          ];
+
         hjem = {
           # thanks for not fucking wasting my time
           clobberByDefault = true;

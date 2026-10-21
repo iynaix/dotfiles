@@ -1,16 +1,27 @@
 {
   packages =
-    { inputs, pkgs, ... }:
+    {
+      inputs,
+      lib,
+      pkgs,
+      self,
+      system,
+      ...
+    }:
     {
       kitty = inputs.wrappers.wrappers.kitty.wrap {
         inherit pkgs;
         themeFile = "tokyo_night_night";
+        mouseBindings = {
+          "ctrl+left" = "triplepress ungrabbed mouse_show_command_output";
+        };
         settings = {
           background_opacity = 0.90;
           confirm_os_window_close = 0;
           copy_on_select = "clipboard";
           enable_audio_bell = false;
           scrollback_lines = 10000;
+          scrollback_pager = lib.getExe self.packages.${system}.moor;
           tab_bar_edge = "top";
           update_check_interval = 0;
           window_padding_width = 12;

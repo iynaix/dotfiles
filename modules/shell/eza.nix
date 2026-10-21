@@ -1,6 +1,7 @@
 {
   packages =
     { inputs, pkgs, ... }:
+    # not using eza wrapper module as it only supports theme, not flags
     rec {
       eza = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;

@@ -37,7 +37,7 @@
               "Mod+A" = "spawn:noctalia msg bar-toggle";
 
               # restart noctalia
-              "Mod+Shift+A" = "spawn:noctalia-reload";
+              "Mod+Shift+A" = "spawn:systemctl restart --user noctalia";
 
               # clipboard history
               "Mod+Ctrl+V" = "spawn:noctalia msg panel-toggle clipboard";

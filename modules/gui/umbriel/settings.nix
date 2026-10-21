@@ -140,9 +140,6 @@
                   curve = "spring:1,800"; # 428 ms critically damped settle
                   dim = 0.8; # Backdrop dim amount, 0.0-1.0
                   blur = false; # Requires appearance.blur.enabled
-                  scale = 0.0; # 0 keeps geometry; 0.1-1.0 centers and scales
-                  maximize = false; # Maximize to usable-area edges while shown
-                  fullscreen = false; # Make the scratchpad window fullscreen while shown
                 };
 
                 # Focus border color

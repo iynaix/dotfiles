@@ -58,11 +58,7 @@ where
 
 /// reloads the wallpaper
 pub fn reload() -> Result<()> {
-    // reload noctalia
-    let child = execute::command_args!("noctalia-reload").spawn()?;
-    drop(child); // don't wait
-
-    Ok(())
+    set(current()?)
 }
 
 pub fn random_from_dir<P>(dir: P) -> String

@@ -56,19 +56,19 @@
   },
   "helium": {
     "type": "fixed",
-    "url": "https://github.com/imputnet/helium-linux/releases/download/0.19.4.1/helium-0.19.4.1-x86_64.AppImage",
-    "sha256": "sha256-Wy2zkrPth/JKqESTYFnWisqYvCBUjqqg3s+jwoCioKc=",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.20.1.1/helium-0.20.1.1-x86_64.AppImage",
+    "sha256": "sha256-1LeJsl0KmuEsdmceRE6Khe3Pgo4EGcZ40YxB+xrDAw4=",
     "unpack": "file",
-    "tag": "0.19.4.1",
-    "version": "0.19.4.1"
+    "tag": "0.20.1.1",
+    "version": "0.20.1.1"
   },
   "hjem": {
     "type": "github",
     "owner": "feel-co",
     "repo": "hjem",
-    "rev": "7fec35f695f1d8784d2485be6871f85dc0d0f522",
-    "narHash": "sha256-E3vrGA6k5Suh2NDP18PO+HTaL5zCQMfGW5toKoVqcQ8=",
-    "lastModified": 1792374494
+    "rev": "4cd448d5b3220b8bbccdb6e7e8185b515f63a776",
+    "narHash": "sha256-xj1hq1P05Lekx9tAtyJGSMFw8Z5oK4jh+n7Qr0Q1m5k=",
+    "lastModified": 1792547720
   },
   "lamina": {
     "type": "github",
@@ -82,9 +82,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "21c55ce47bb42a84d10b0d0df8ac4f741921786f",
-    "narHash": "sha256-M4lCxhCPLSAz+YjHFSvWA62PLy4Qa+vUMbbxcGeuBTk=",
-    "lastModified": 1792452131
+    "rev": "fc07d2842f0462aba0e2c2ba2b7f52782b6a06d6",
+    "narHash": "sha256-+9oblMASi167OD33MZ70Do5WKYlcTjEkBSr+Q38oDIk=",
+    "lastModified": 1792735308
   },
   "nix-index-database": {
     "type": "github",
@@ -98,31 +98,31 @@
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "60a624466c08787ee8303393b7d4752d1826f14f",
-    "narHash": "sha256-BYhx89XJltnRyQeuDKHVL5eSqbbfAcOKuDts7QRsrxQ=",
-    "lastModified": 1791721963
+    "rev": "1b418b8f203e49a92f250f8babdd19af1b6f7a7f",
+    "narHash": "sha256-2UBK0jdmPANGaeAIoVOZY+hSPB2Gy13ZuZeSxP3vF8k=",
+    "lastModified": 1792697326
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1095516.09063bd1f2b3/nixexprs.tar.zst?rev=09063bd1f2b36fd9fd793c36dfade7bd40a93dfc&lastModified=1792210252",
-    "rev": "09063bd1f2b36fd9fd793c36dfade7bd40a93dfc",
-    "narHash": "sha256-EFOYkCb5ZNtbPx1NInawzi4y/6JRdHia0ag0CbJoMNY=",
-    "lastModified": 1792210252
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1097682.02c087f3fe67/nixexprs.tar.zst?rev=02c087f3fe673c9e317f206a627cb6b910336dbe&lastModified=1792502884",
+    "rev": "02c087f3fe673c9e317f206a627cb6b910336dbe",
+    "narHash": "sha256-ij8QUxzTOHovLrNOxVRx+RAhGQFOMsJbji0veiatH5k=",
+    "lastModified": 1792502884
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12250.f3a73bcf5d1c/nixexprs.tar.zst?rev=f3a73bcf5d1c5b75a66cf35a48957e30d41d647a&lastModified=1792422028",
-    "rev": "f3a73bcf5d1c5b75a66cf35a48957e30d41d647a",
-    "narHash": "sha256-9vaC514eu0ogJHxt6A0qQLtdfqHA15OnBVEstArd2NY=",
-    "lastModified": 1792422028
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12400.da6dc0e7b260/nixexprs.tar.zst?rev=da6dc0e7b26060f2f71ce3ef7088fb56ee44fa36&lastModified=1792615934",
+    "rev": "da6dc0e7b26060f2f71ce3ef7088fb56ee44fa36",
+    "narHash": "sha256-q1ku4ygV7tdmv5Q9QYwhVDsNMZRJcRYjVczoX5+XWBo=",
+    "lastModified": 1792615934
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "1d1a8c826837858404292e9336977f0d9131fb9b",
-    "narHash": "sha256-tQPke0OIaFboQjxQPJL7a+pNzH1ZH1qQif046uo9Rf4=",
-    "lastModified": 1792450766
+    "rev": "460f51dc7bb72a81c0a7bd8d6e30cf9c9663f6c3",
+    "narHash": "sha256-WDx8oYbMf9Ej5q5MQjMNiNuHY8lHutbL/io6ygDDJOA=",
+    "lastModified": 1792790258
   },
   "preservation": {
     "type": "github",
@@ -136,19 +136,19 @@
     "type": "github",
     "owner": "meehl",
     "repo": "rusty-path-of-building",
-    "rev": "6b6098d3319dd9645532b77dcbca9322cd3966af",
-    "narHash": "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=",
-    "lastModified": 1780060163,
-    "tag": "v0.2.18",
-    "version": "0.2.18"
+    "rev": "098c967206d03cde54172dcf37a36218589fa5e7",
+    "narHash": "sha256-hi3hNoD21d60wjY8H/T9bvBLNhpq2+r0q4EzVRhicpA=",
+    "lastModified": 1792765409,
+    "tag": "v0.3.3",
+    "version": "0.3.3"
   },
   "sops-nix": {
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "44931708c62937c2b1bf7953902989fa5bb9ee1b",
-    "narHash": "sha256-YU1LjDe1o2Ymg5zEiCHbmMXLkDCtxHQRiVqZ3nC5GGk=",
-    "lastModified": 1792056300
+    "rev": "e80b8b733d8452a751a25d0063abc9683b6c8185",
+    "narHash": "sha256-4ChDjNgJM5uKwTuecLHxGlafAtoyKo5a7ip23J5IG3M=",
+    "lastModified": 1792655475
   },
   "systems": {
     "type": "github",
@@ -162,17 +162,17 @@
     "type": "github",
     "owner": "manic-systems",
     "repo": "tack",
-    "rev": "8573f1f1bda4aa467fa341b33f6004661833c022",
-    "narHash": "sha256-wwkmmsr5u8MknxrF9ZdIN90wk09weXCaVQp8aeWdYaE=",
-    "lastModified": 1792416927
+    "rev": "f7cce4f7e53c9482661b158824522fefef2d7920",
+    "narHash": "sha256-vOIIx/QU6xEjMZTMZM8GNNXS/p4Idvw8V09KT5zNwTI=",
+    "lastModified": 1792630541
   },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "ca7df83262e10a95c8ab56f285349c432d647a02",
-    "narHash": "sha256-AnZ+lCUmgGvPFDM6a00XV3JojOMi6KL3G8ddsA94Zv4=",
-    "lastModified": 1792455338,
+    "rev": "185b559ca6bb2be7af0a28e2c75455d6f926552b",
+    "narHash": "sha256-ZKLoajTq+TLWOUvZvr6WU7IpvJDkLDHwv+9xnTxlPbY=",
+    "lastModified": 1792787471,
     "submodules": true
   },
   "wfetch": {
@@ -187,18 +187,18 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "a47eb4c736e3ff1ca95637d99672a39a7f7bd35c",
-    "narHash": "sha256-JdP4Csa9nONRva//83Kq9pEvTws2nYBTaJ3CCZHInf0=",
-    "lastModified": 1792414780
+    "rev": "e40208b34e08f764e6b972eb0ee919706e960eb2",
+    "narHash": "sha256-rasFTcWJo7CdUaCFcxcDTnMWlY6WxZo/X6EsbEqgIpM=",
+    "lastModified": 1792532408
   },
   "yt-dlp": {
     "type": "github",
     "owner": "yt-dlp",
     "repo": "yt-dlp",
-    "rev": "3a08beaf031ab68f966401ead017ac81fe8486cf",
-    "narHash": "sha256-BM5ZeGTmHq+1xH6G/zsuCtjLgYgfRA11ya0zIHK5p4g=",
-    "lastModified": 1787182285,
-    "tag": "2026.08.19",
-    "version": "2026.08.19"
+    "rev": "6ccd977303412151ee23352c6257dd658ffc1987",
+    "narHash": "sha256-C6BQufq7GWquNpvAZGDShvRg7JqC9KdlpM800Yjw6mg=",
+    "lastModified": 1792618581,
+    "tag": "2026.10.21",
+    "version": "2026.10.21"
   }
 }

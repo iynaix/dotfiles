@@ -9,28 +9,24 @@ let
 in
 lib.mkIf cfg.qwen_27b.enable {
   custom.ai.modelsPreset = {
-    # https://huggingface.co/ukisai/Swift-1.5-Qwen3.8-27B-GSQ-RCO-GGUF
-    # https://www.reddit.com/r/LocalLLM/comments/1x14c5u/success_with_qwen38_27b_gsqrcoiq3_s_on_16gb_vram/
+    # https://augmentedmind.substack.com/p/the-16gb-threshold
     "Qwen3.8_27B_GSQ-RCO-IQ3_S" = {
-      hf-repo = "ukisai/Swift-1.5-Qwen3.8-27B-GSQ-RCO-GGUF";
-      hf-file = "Swift-1.5-Qwen3.8-27B-GSQ-RCO-IQ3_S-mtp.gguf";
+      hf-repo = "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF";
+      hf-file = "Qwen3.8-27B-GSQ-RCO-IQ3_S-mtp.gguf";
       alias = "Qwen3.8_27B_GSQ-RCO-IQ3_S";
 
-      ctx-size = 131072;
-      n-gpu-layers = "all";
-      reasoning-effort = "medium";
-      reasoning-format = "deepseek";
-      reasoning-preserve = true;
+      ctx-size = 65536;
+      n-gpu-layers = 99;
+      spec-type = "draft-mtp";
+      spec-draft-n-max = 2;
       cache-type-k = "q4_0";
       cache-type-v = "q4_0";
-      jinja = true;
-      batch-size = 512;
-      ubatch-size = 512;
       flash-attn = "on";
-      threads = 6;
-      threads-batch = 6;
-      parallel = 1;
-      no-mmproj = true;
+      jinja = true;
+      temp = "1.0";
+      top-p = "0.95";
+      top-k = "20";
+      min-p = "0.00";
     };
   };
 

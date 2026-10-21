@@ -41,6 +41,8 @@
               "/home/${user}/.config/umbriel/noctalia.toml"
               # dynamic cursor
               "/home/${user}/.config/umbriel/cursor.toml"
+              # dynamic monitors on plug / unplug
+              "/home/${user}/.config/umbriel/monitors.toml"
             ];
           };
         };

@@ -51,9 +51,12 @@
         {
           match = {
             app_id = "helium";
-            title = ".*(Discord|WhatsApp|Flood).*";
+            title = [
+              ".*(Discord|WhatsApp|Flood).*"
+              "^Untitled"
+            ];
           };
-          spawn = "helium-chat && sleep 1 && umbriel windows --json > ~/Downloads/umbriel-windows.json";
+          spawn = "helium-chat";
           workspace = 9;
         }
       ]

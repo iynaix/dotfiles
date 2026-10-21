@@ -8,11 +8,8 @@
 }:
 let
   pname = "helium";
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
 in
-appimageTools.wrapType2 {
+appimageTools.wrapType2 (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,10 +19,10 @@ appimageTools.wrapType2 {
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.concatMapStringsSep " \\\n" (f: "--add-flags \"${f}\"") flags}
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+    install -m 444 -D ${finalAttrs.contents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   # pass through files from the root fs
@@ -45,4 +42,4 @@ appimageTools.wrapType2 {
       "aarch64-linux"
     ];
   };
-}
+})
