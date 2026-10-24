@@ -20,8 +20,6 @@ appimageTools.wrapType2 (finalAttrs: {
         ${lib.concatMapStringsSep " \\\n" (f: "--add-flags \"${f}\"") flags}
 
     install -m 444 -D ${finalAttrs.contents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 

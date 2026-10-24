@@ -19,13 +19,6 @@ patcher.patch unpatchedInputs {
       hash = "sha256-GeCd7EPZwvP79tc9Ss2hD/WIOfq/7XSo27WLn/z+2HQ=";
     })
 
-    # awakened-poe-trade: add commandLineArgs
-    # https://github.com/NixOS/nixpkgs/pull/496108
-    (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/7cc9882513f2cc5bd3355abd74ade48b5db6d5e4.patch";
-      hash = "sha256-BMXkKvxWUsHtkDETt2v1m0MWzN2I5VVHy5m8yDUIKP4=";
-    })
-
     # rclip: 4.0.1 -> 4.0.4
     # https://github.com/NixOS/nixpkgs/pull/576179
     (patcher.fetchpatch {

@@ -1,4 +1,6 @@
 {
+  hosts = [ "desktop" ];
+
   packages =
     {
       inputs,
@@ -10,7 +12,7 @@
         {
           lib,
           appimageTools,
-          commandLineArgs ? [ ],
+          commandLineArgs ? [ "--ozone-platform=x11" ],
           ...
         }:
         let
@@ -24,17 +26,42 @@
           extraInstallCommands = ''
             install -m 444 -D ${finalAttrs.contents}/exiled-exchange-2.desktop $out/share/applications/${pname}.desktop
             substituteInPlace $out/share/applications/${pname}.desktop \
-              --replace "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 ${lib.escapeShellArgs commandLineArgs} %U"
+              --replace-fail "Exec=AppRun --sandbox %U" "Exec=exiled-exchange-2 ${lib.escapeShellArgs commandLineArgs} %U"
 
             install -m 444 -D ${finalAttrs.contents}/exiled-exchange-2.png $out/share/icons/hicolor/128x128/apps/${pname}.png
           '';
 
           meta = {
             platforms = [ "x86_64-linux" ];
+            mainProgram = "exiled-exchange-2";
           };
         });
     in
     {
       exiled-exchange-2 = pkgs.callPackage drv { };
     };
+
+  config = { pkgs, ... }: {
+    environment.systemPackages = [
+      pkgs.custom.exiled-exchange-2
+    ];
+
+    custom.programs = {
+      umbriel.settings = {
+        window_rule = [
+          {
+            match.title = "Exiled Exchange 2";
+            default_floating = true;
+            blur = false;
+          }
+        ];
+      };
+    };
+
+    custom.persist = {
+      home.directories = [
+        ".config/exiled-exchange-2"
+      ];
+    };
+  };
 }

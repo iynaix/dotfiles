@@ -99,6 +99,12 @@ type = "fixed"
 tag = "v{version}"
 group = "binary"
 
+[inputs.scalpel]
+url = "https://github.com/scalpelpoe/scalpel/releases/download/v{version}/Scalpel.AppImage"
+type = "fixed"
+tag = "v{version}"
+group = "binary"
+
 [inputs.helium]
 url = "https://github.com/imputnet/helium-linux/releases/download/{version}/helium-{version}-x86_64.AppImage"
 type = "fixed"
