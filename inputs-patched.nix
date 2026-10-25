@@ -18,20 +18,6 @@ patcher.patch unpatchedInputs {
       url = "https://github.com/NixOS/nixpkgs/commit/477a86df848b03eef447a06f0fd505ed2f10375d.patch";
       hash = "sha256-GeCd7EPZwvP79tc9Ss2hD/WIOfq/7XSo27WLn/z+2HQ=";
     })
-
-    # rclip: 4.0.1 -> 4.0.4
-    # https://github.com/NixOS/nixpkgs/pull/576179
-    (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/6288fe6eafef879d0b5817146d66ca9a6bda704c.patch";
-      hash = "sha256-gSkEFEsawR9YQuqSRqFuHB/LAJAS3cCYj+BA3Da22Jk=";
-    })
-
-    # rusty-path-of-building: 0.2.18 -> 0.3.1
-    # https://github.com/NixOS/nixpkgs/pull/577137
-    (patcher.fetchpatch {
-      url = "https://github.com/NixOS/nixpkgs/commit/0a1795b061a1104f1fdb21adab172cb95712e4ff.patch";
-      hash = "sha256-OM0XMhEj32lyedVMJGnAdaoW+TZpsEJ8iBMZw31FZ2A=";
-    })
   ];
 
   wrappers = [

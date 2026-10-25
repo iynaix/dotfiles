@@ -12,24 +12,18 @@
 
   config =
     {
-      lib,
       pkgs,
       ...
     }:
+    let
+      swayimg' = pkgs.custom.swayimg.wrap {
+        # additional settings that reference local filepaths or applications that aren't installed by default
+        settings = builtins.readFile ./extra.lua;
+      };
+    in
     {
-      nixpkgs.overlays = [
-        (_: prev: {
-          swayimg = pkgs.custom.swayimg.wrap {
-            pkgs = lib.mkForce prev;
-            # additional settings that reference local filepaths or applications that aren't installed by default
-            settings = builtins.readFile ./extra.lua;
-          };
-        })
-      ];
-
-      environment.systemPackages = with pkgs; [
-        swayimg # overlay-ed above
-        nomacs
+      environment.systemPackages = [
+        swayimg'
       ];
 
       xdg.mime.defaultApplications = {
@@ -40,15 +34,7 @@
       };
 
       custom.programs.print-config = {
-        swayimg = /* sh */ ''moor --lang lua "${pkgs.swayimg.configuration.constructFiles.generatedConfig.outPath}"'';
-      };
-
-      custom.persist = {
-        home = {
-          directories = [
-            ".config/nomacs"
-          ];
-        };
+        swayimg = /* sh */ ''moor --lang lua "${swayimg'.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

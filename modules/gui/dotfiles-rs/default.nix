@@ -17,7 +17,7 @@
         custom.programs = {
           dotfiles-rs = pkgs.custom.dotfiles-rs.override {
             inherit (pkgs) swayimg;
-            extraPackages = [ pkgs.noctalia ];
+            extraPackages = [ config.programs.noctalia.package ];
           };
         };
 

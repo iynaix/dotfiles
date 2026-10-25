@@ -233,17 +233,9 @@
         };
       };
 
-      nixpkgs.overlays = [
-        (_: _prev: {
-          # NOTE: git is not overwritten here as it will cause infinite recursion:
-          # https://birdeehub.github.io/nix-wrapper-modules/wrapperModules/git.html#overview
-          inherit (pkgs.custom) difftastic;
-        })
-      ];
-
       # extra git functions
       environment.systemPackages = [
-        pkgs.difftastic # overlay-ed above
+        pkgs.custom.difftastic
         gmain
         gbc
         grd

@@ -65,8 +65,7 @@ pub fn edit(args: EditArgs) -> Result<()> {
     let wallfacer = Wallfacer::try_new()?;
     wallfacer.arg("gui").arg(&image).run()?.wait()?;
 
-    // reload the wallpaper
-    wallpaper::set(&image)?;
+    wallpaper::reload()?;
 
     Ok(())
 }

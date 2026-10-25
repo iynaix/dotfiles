@@ -146,16 +146,11 @@
       ...
     }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          fish = pkgs.custom.fish;
-        })
-      ];
-
-      users.users.${user}.shell = pkgs.fish; # overlay-ed above
+      users.users.${user}.shell = pkgs.custom.fish; # overlay-ed above
 
       programs.fish = {
         enable = true;
+        package = pkgs.custom.fish;
         # use abbrs instead of aliases
         shellAliases = lib.mkForce { };
         shellAbbrs = config.environment.shellAliases // {
@@ -170,7 +165,7 @@
       };
 
       custom.programs.print-config = {
-        fish = /* sh */ "moor ${pkgs.fish.configuration.constructFiles.generatedConfig.outPath}";
+        fish = /* sh */ "moor ${pkgs.custom.fish.configuration.constructFiles.generatedConfig.outPath}";
       };
 
       custom.persist = {

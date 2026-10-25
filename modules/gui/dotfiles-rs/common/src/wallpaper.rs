@@ -58,6 +58,7 @@ where
 
 /// reloads the wallpaper
 pub fn reload() -> Result<()> {
+    set("color:#000000")?;
     set(current()?)
 }
 

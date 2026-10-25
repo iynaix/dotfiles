@@ -16,6 +16,8 @@
 
             patches = (o.patches or [ ]) ++ [
               ./face-aware-crop.patch
+              # prevent warning about ~/.config/umbriel/config.toml not existing
+              ./umbriel-template-no-apply.patch
             ];
 
             nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.wrapGAppsHook3 ];
@@ -53,27 +55,19 @@
         programs.noctalia = {
           inherit (inputs.wrappers.wrappers.noctalia.wrapperOptions) settings;
 
-          minibar = lib.mkEnableOption "Alternate centralized minibar rice" // {
-            default = true;
-          };
+          minibar = lib.mkEnableOption "Alternate centralized minibar rice";
         };
       };
 
       config = {
-        nixpkgs.overlays = [
-          (_: _prev: {
-            noctalia = pkgs.custom.noctalia.wrap {
-              settings = lib.mkMerge [
-                config.custom.programs.noctalia.settings
-                { theme.templates.user = config.custom.programs.noctalia.user-templates; }
-              ];
-            };
-          })
-        ];
-
         programs.noctalia = {
           enable = true;
-          package = pkgs.noctalia; # overlay-ed above
+          package = pkgs.custom.noctalia.wrap {
+            settings = lib.mkMerge [
+              config.custom.programs.noctalia.settings
+              { theme.templates.user = config.custom.programs.noctalia.user-templates; }
+            ];
+          };
           systemd.enable = true;
         };
 

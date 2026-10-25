@@ -1,0 +1,13 @@
+diff --git a/assets/templates/builtin.toml b/assets/templates/builtin.toml
+index 0c0e8875f..ee5cffd91 100644
+--- a/assets/templates/builtin.toml
++++ b/assets/templates/builtin.toml
+@@ -213,8 +213,6 @@ undo_hook = "bash '{{ config_dir }}/sway/undo.sh'"
+ [templates.umbriel]
+ input_path = "./umbriel/umbriel.toml"
+ output_path = "$XDG_CONFIG_HOME/umbriel/noctalia.toml"
+-post_hook = "bash '{{ config_dir }}/umbriel/apply.sh'"
+-undo_hook = "bash '{{ config_dir }}/umbriel/undo.sh'"
+ 
+ [templates.wezterm]
+ input_path = "./wezterm/wezterm.toml"

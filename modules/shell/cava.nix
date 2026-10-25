@@ -117,16 +117,10 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          inherit (pkgs.custom) cava;
-        })
-      ];
-
-      environment.systemPackages = [ pkgs.cava ];
+      environment.systemPackages = [ pkgs.custom.cava ];
 
       custom.programs.print-config = {
-        cava = /* sh */ ''moor --lang ini "${pkgs.cava.configuration.constructFiles.generatedConfig.outPath}"'';
+        cava = /* sh */ ''moor --lang ini "${pkgs.custom.cava.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

@@ -65,7 +65,6 @@
     let
       dots = "/persist/home/${user}/projects/dotfiles";
 
-      # nixos-rebuild switch, use different package for home-manager standalone
       nsw = pkgs.custom.nsw.override {
         name = "nsw";
         inherit dots host;

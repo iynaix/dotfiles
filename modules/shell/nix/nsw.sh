@@ -7,7 +7,6 @@ nhArgs=()
 restArgs=()
 hostnameOverride="$hostname"
 nhCommand="switch"
-showProgress=false
 
 while (( "$#" )); do
     case "$1" in
@@ -37,8 +36,9 @@ while (( "$#" )); do
         nhArgs+=("$1")
         shift
         ;;
-    --progress)
-        showProgress=true
+    # unknown flags go to nh (before --)
+    -*)
+        nhArgs+=("$1")
         shift
         ;;
     switch|boot|test|build)
@@ -70,12 +70,19 @@ if [ -n "$specialisation" ]; then
    specialisationArgs=("--specialisation" "$specialisation")
 fi
 
-if [ "$showProgress" = true ]; then
-    # use remote sudo only uses sudo during the switch to the new generation
-    nixos-rebuild "$nhCommand" --flake ".#$hostname" ${specialisationArgs[*]@Q} ${restArgs[*]@Q}
-else
-    nh os "$nhCommand" --hostname "$hostname" ${specialisationArgs[*]@Q} ${nhArgs[*]@Q} "$dots" -- ${restArgs[*]@Q}
-fi
+cmd=(
+    nh os "$nhCommand"
+    --hostname "$hostname"
+    "${specialisationArgs[@]}"
+    "${nhArgs[@]}"
+    "$dots"
+    --
+    "${restArgs[@]}"
+)
+
+printf '%q ' "${cmd[@]}"; echo
+
+"${cmd[@]}"
 
 if [ $? -eq 0 ]; then
     if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then

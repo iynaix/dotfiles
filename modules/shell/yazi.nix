@@ -208,6 +208,21 @@
 
   config =
     { pkgs, user, ... }:
+    let
+      # set dynamic flavor from noctalia
+      yazi' = pkgs.custom.yazi.wrap {
+        settings = {
+          theme.flavor = {
+            dark = "noctalia";
+            light = "noctalia";
+          };
+        };
+
+        flavors = {
+          noctalia = "/home/${user}/.config/yazi/flavors/noctalia.yazi";
+        };
+      };
+    in
     {
       # shell integrations
       programs = {
@@ -223,27 +238,9 @@
         '';
       };
 
-      nixpkgs.overlays = [
-        (_: _prev: {
-          # set dynamic flavor from noctalia
-          yazi = pkgs.custom.yazi.wrap {
-            settings = {
-              theme.flavor = {
-                dark = "noctalia";
-                light = "noctalia";
-              };
-            };
-
-            flavors = {
-              noctalia = "/home/${user}/.config/yazi/flavors/noctalia.yazi";
-            };
-          };
-        })
-      ];
-
       custom.programs.print-config =
         let
-          yaziDir = dirOf pkgs.yazi.configuration.constructFiles.yazi;
+          yaziDir = dirOf yazi'.configuration.constructFiles.yazi;
         in
         {
           yazi = /* sh */ ''cat "${yaziDir}/yazi.toml" "${yaziDir}/theme.toml" "${yaziDir}/keymap.toml" | moor --lang toml'';

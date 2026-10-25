@@ -47,19 +47,13 @@
   config =
     { lib, pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          bat = pkgs.custom.bat;
-        })
-      ];
-
-      environment.systemPackages = [
-        pkgs.bat # overlay-ed above
-        pkgs.custom.batman
+      environment.systemPackages = with pkgs.custom; [
+        bat
+        batman
       ];
 
       custom.programs.print-config = {
-        bat = /* sh */ ''moor --lang sh "${lib.getExe pkgs.bat}"'';
+        bat = /* sh */ ''moor --lang sh "${lib.getExe pkgs.custom.bat}"'';
       };
     };
 }

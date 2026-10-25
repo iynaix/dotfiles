@@ -68,60 +68,58 @@
         };
       };
 
-      config = {
-        nixpkgs.overlays = [
-          (_: _prev: {
-            kitty = pkgs.custom.kitty.wrap {
-              flags = {
-                "--single-instance" = true;
-              };
-              font = {
-                name = config.custom.fonts.monospace;
-                size = 10;
-              };
-              settings = config.custom.programs.kitty.settings;
-              # enable ligatures
-              extraConfig = ''
-                font_features JetBrainsMonoNF-Regular +zero
-                font_features JetBrainsMonoNF-Bold +zero
-                font_features JetBrainsMonoNF-Italic +zero
-                font_features JetBrainsMonoNF-BoldItalic +zero
-
-                include /home/${user}/.config/kitty/kitty.conf
-              '';
+      config =
+        let
+          kitty' = pkgs.custom.kitty.wrap {
+            flags = {
+              "--single-instance" = true;
             };
-          })
-        ];
+            font = {
+              name = config.custom.fonts.monospace;
+              size = 10;
+            };
+            settings = config.custom.programs.kitty.settings;
+            # enable ligatures
+            extraConfig = ''
+              font_features JetBrainsMonoNF-Regular +zero
+              font_features JetBrainsMonoNF-Bold +zero
+              font_features JetBrainsMonoNF-Italic +zero
+              font_features JetBrainsMonoNF-BoldItalic +zero
 
-        environment = {
-          systemPackages = [
-            pkgs.kitty # overlay-ed above
-          ];
+              include /home/${user}/.config/kitty/kitty.conf
+            '';
+          };
+        in
+        {
+          environment = {
+            systemPackages = [
+              kitty'
+            ];
 
-          shellAliases = {
-            ssh = "kitten ssh --kitten=color_scheme=Dracula";
+            shellAliases = {
+              ssh = "kitten ssh --kitten=color_scheme=Dracula";
+            };
+          };
+
+          custom.programs = {
+            terminal = {
+              app_id = "kitty";
+              desktop = "kitty.desktop";
+            };
+
+            kitty.settings = {
+              bold_font = "JetBrainsMono Nerd Font Bold";
+              italic_font = "JetBrainsMono Nerd Font Italic";
+              bold_italic_font = "JetBrainsMono Nerd Font Bold Italic";
+            };
+
+            print-config = {
+              kitty = /* sh */ ''
+                cat "${kitty'.configuration.constructFiles.kittyConfig.outPath}" \
+                    "/home/${user}/.config/kitty/kitty.conf" \
+                    moor --lang ini'';
+            };
           };
         };
-
-        custom.programs = {
-          terminal = {
-            app_id = "kitty";
-            desktop = "kitty.desktop";
-          };
-
-          kitty.settings = {
-            bold_font = "JetBrainsMono Nerd Font Bold";
-            italic_font = "JetBrainsMono Nerd Font Italic";
-            bold_italic_font = "JetBrainsMono Nerd Font Bold Italic";
-          };
-
-          print-config = {
-            kitty = /* sh */ ''
-              cat "${pkgs.kitty.configuration.constructFiles.kittyConfig.outPath}" \
-                  "/home/${user}/.config/kitty/kitty.conf" \
-                  moor --lang ini'';
-          };
-        };
-      };
     };
 }

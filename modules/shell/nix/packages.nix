@@ -396,50 +396,41 @@
             sort -ui <<< "${lib.concatLines allPkgs}";
           '';
       };
+
+      nix-init' = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.nix-init;
+        flags = {
+          "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
+        };
+      };
+      nixpkgs-review' = pkgs.nixpkgs-review.override { withNom = true; };
     in
     {
-      nixpkgs.overlays = [
-        (_: prev: {
-          inherit (pkgs.custom) statix;
-          nix-init = inputs.wrappers.lib.wrapPackage {
-            pkgs = prev;
-            package = prev.nix-init;
-            flags = {
-              "--config" = tomlFormat.generate "config.toml" { maintainers = [ "iynaix" ]; };
-            };
-          };
-          nixpkgs-review = prev.nixpkgs-review.override { withNom = true; };
-        })
-      ];
-
-      environment.systemPackages =
-        with pkgs;
-        [
-          nix-init # overlay-ed above
-          nixpkgs-review # overlay-ed above
-        ]
-        ++ [
-          nfu
-          ngeneration
-          ngc
-          nrepl
-          nb
-          nb-dependents
-          nr
-          nixpkgs-commits
-          nbuild-iso
-          nix-eval-time
-          nix-eval-flamegraph
-          pkgs-list
-        ]
-        ++ (with pkgs.custom; [
-          nattr
-          ynattr
-          nsymlink
-          ntv
-          nlocate-lib
-          ndepends
-        ]);
+      environment.systemPackages = [
+        nix-init'
+        nixpkgs-review'
+        nfu
+        ngeneration
+        ngc
+        nrepl
+        nb
+        nb-dependents
+        nr
+        nixpkgs-commits
+        nbuild-iso
+        nix-eval-time
+        nix-eval-flamegraph
+        pkgs-list
+      ]
+      ++ (with pkgs.custom; [
+        nattr
+        ynattr
+        nsymlink
+        ntv
+        nlocate-lib
+        ndepends
+      ]);
 
       custom.persist = {
         home = {

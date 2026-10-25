@@ -28,6 +28,7 @@ enabled = true
 type = "google"
 
 [control_center]
+show_avatar_border = false
 sidebar_section = "none"
 
 [desktop_widgets]
@@ -67,9 +68,11 @@ media = false
 
 [shell]
 font_family = "Geist Medium"
+input_borders = false
 password_style = "random"
 polkit_agent = true
 show_close_buttons = false
+umbriel_overview_close_on_launch_enbled = true
 umbriel_overview_type_to_launch_enabled = true
 
 [shell.greeter_sync]
@@ -140,7 +143,7 @@ style = "compact"
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "m3-tonal-spot"
+wallpaper_scheme = "m3-content"
 
 [theme.templates]
 builtin_ids = ["btop", "cava", "kitty", "umbriel"]

@@ -28,19 +28,16 @@
 
   config =
     { pkgs, user, ... }:
+    let
+      zathura' = pkgs.custom.zathura.wrap {
+        extraSettings = ''
+          include "/home/${user}/.config/zathura/noctaliarc"
+        '';
+      };
+    in
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          zathura = pkgs.custom.zathura.wrap {
-            extraSettings = ''
-              include "/home/${user}/.config/zathura/noctaliarc"
-            '';
-          };
-        })
-      ];
-
       environment.systemPackages = [
-        pkgs.zathura # overlay-ed above
+        zathura'
       ];
 
       xdg.mime.defaultApplications = {
@@ -48,7 +45,7 @@
       };
 
       custom.programs.print-config = {
-        zathura = /* sh */ ''moor "${pkgs.zathura.configuration.constructFiles.renderedRc.outPath}"'';
+        zathura = /* sh */ ''moor "${zathura'.configuration.constructFiles.renderedRc.outPath}"'';
       };
     };
 }

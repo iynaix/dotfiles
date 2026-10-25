@@ -22,18 +22,12 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          inherit (pkgs.custom) ripgrep;
-        })
-      ];
-
       environment.systemPackages = [
-        pkgs.ripgrep # overlay-ed above
+        pkgs.custom.ripgrep
       ];
 
       custom.programs.print-config = rec {
-        rg = /* sh */ "moor ${pkgs.ripgrep.configuration.constructFiles.renderedSettings.outPath}";
+        rg = /* sh */ "moor ${pkgs.custom.ripgrep.configuration.constructFiles.renderedSettings.outPath}";
         ripgrep = rg;
       };
     };

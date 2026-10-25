@@ -75,18 +75,13 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          tmux = pkgs.custom.tmux;
-        })
-      ];
-
-      environment.systemPackages = [
-        pkgs.tmux # overlay-ed above
-      ];
+      programs.tmux = {
+        enable = true;
+        package = pkgs.custom.tmux;
+      };
 
       custom.programs.print-config = {
-        tmux = /* sh */ ''moor "${pkgs.tmux.configuration.constructFiles.generatedConfig.outPath}"'';
+        tmux = /* sh */ ''moor "${pkgs.custom.tmux.configuration.constructFiles.generatedConfig.outPath}"'';
       };
     };
 }

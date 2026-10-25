@@ -1,28 +1,24 @@
 { inputs, pkgs, ... }:
-{
-  nixpkgs.overlays = [
-    (_: prev: {
-      # doesn't make sense to expose with user details
-      jujutsu = inputs.wrappers.wrappers.jujutsu.wrap {
-        pkgs = prev;
-        settings = {
-          user = {
-            name = "iynaix";
-            email = "iynaix@gmail.com";
-          };
-          template-aliases = {
-            "format_short_id(id)" = "id.shortest()";
-          };
-        };
+let
+  jujutsu' = inputs.wrappers.wrappers.jujutsu.wrap {
+    inherit pkgs;
+    settings = {
+      user = {
+        name = "iynaix";
+        email = "iynaix@gmail.com";
       };
-    })
-  ];
-
+      template-aliases = {
+        "format_short_id(id)" = "id.shortest()";
+      };
+    };
+  };
+in
+{
   environment.systemPackages = [
-    pkgs.jujutsu # overlay-ed above
+    jujutsu'
   ];
 
   custom.programs.print-config = {
-    jj = /* sh */ ''moor --lang toml "${pkgs.jujutsu.configuration.constructFiles.generatedConfig.outPath}"'';
+    jj = /* sh */ ''moor --lang toml "${jujutsu'.configuration.constructFiles.generatedConfig.outPath}"'';
   };
 }

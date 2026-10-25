@@ -30,14 +30,8 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          inherit (pkgs.custom) orca-slicer;
-        })
-      ];
-
       environment.systemPackages = [
-        pkgs.orca-slicer # overlay-ed above
+        pkgs.custom.orca-slicer
       ];
 
       xdg = {

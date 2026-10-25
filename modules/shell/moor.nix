@@ -19,11 +19,7 @@
   config =
     { lib, pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          moor = pkgs.custom.moor;
-        })
-      ];
+      # moor installed via fish
 
       environment = {
         variables = {

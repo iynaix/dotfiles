@@ -79,16 +79,9 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          inherit (pkgs.custom) starship;
-        })
-      ];
-
       # NOTE: starship is initialized in the fish wrapper
-
       custom.programs.print-config = {
-        starship = /* sh */ "moor ${pkgs.starship.configuration.constructFiles."starship.toml"}";
+        starship = /* sh */ "moor ${pkgs.custom.starship.configuration.constructFiles."starship.toml"}";
       };
     };
 }

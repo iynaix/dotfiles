@@ -18,11 +18,13 @@
           defaultNetwork.settings.dns_enabled = true;
         };
 
-        containers.storage.settings = {
-          storage = {
-            driver = "zfs";
-            graphroot = "/var/lib/containers/storage";
-            runroot = "/run/containers/storage";
+        containers.storage = {
+          rootful.settings = {
+            storage = {
+              driver = "zfs";
+              graphroot = "/var/lib/containers/storage";
+              runroot = "/run/containers/storage";
+            };
           };
         };
       };

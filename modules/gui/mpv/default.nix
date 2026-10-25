@@ -361,20 +361,14 @@
   config =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [
-        (_: _prev: {
-          mpv = pkgs.custom.mpv;
-        })
-      ];
-
       environment.systemPackages = with pkgs; [
         ffmpeg
-        mpv # overlay-ed above
+        custom.mpv
       ];
 
       custom.programs.print-config =
         let
-          mpvDir = dirOf pkgs.mpv.configuration.constructFiles.generatedConfig;
+          mpvDir = dirOf pkgs.custom.mpv.configuration.constructFiles.generatedConfig;
         in
         {
           mpv = /* sh */ ''cat "${mpvDir}/mpv.conf" "${mpvDir}/input.conf" "${mpvDir}/script-opts/"*.conf | moor'';
