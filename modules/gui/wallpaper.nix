@@ -11,6 +11,7 @@
       {
         environment = {
           systemPackages = with pkgs; [
+            czkawka
             nomacs
           ];
         };

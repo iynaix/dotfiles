@@ -115,6 +115,8 @@
             killall
             procs # better ps
             (lib.hiPrio procps) # for uptime
+            ps_mem
+            rsync
             sd # better sed
             trash-cli
             xdg-utils
