@@ -35,6 +35,28 @@ in
       pkgs,
       ...
     }:
+    let
+      btop' = pkgs.custom.btop.wrap {
+        package = pkgs.btop.override {
+          rocmSupport = host == "desktop" || host == "framework";
+        };
+        settings = lib.mkForce (
+          baseBtopConf
+          // {
+            color_theme = "noctalia";
+            disks_filter = lib.concatStringsSep " " (
+              [
+                "/"
+                "/boot"
+                "/persist"
+              ]
+              ++ config.custom.programs.btop.disks
+            );
+          }
+          // config.custom.programs.btop.settings
+        );
+      };
+    in
     {
       options.custom = {
         programs.btop = {
@@ -50,38 +72,12 @@ in
       };
 
       config = {
-        nixpkgs.overlays = [
-          (_: prev: {
-            # overlay so that security wrappers for xps can pick it up
-            btop = pkgs.custom.btop.wrap {
-              package = prev.btop.override {
-                rocmSupport = host == "desktop" || host == "framework";
-              };
-              settings = lib.mkForce (
-                baseBtopConf
-                // {
-                  color_theme = "noctalia";
-                  disks_filter = lib.concatStringsSep " " (
-                    [
-                      "/"
-                      "/boot"
-                      "/persist"
-                    ]
-                    ++ config.custom.programs.btop.disks
-                  );
-                }
-                // config.custom.programs.btop.settings
-              );
-            };
-          })
-        ];
-
         environment.systemPackages = [
-          pkgs.btop # overlay-ed above
+          btop'
         ];
 
         custom.programs.print-config = {
-          btop = /* sh */ ''moor --lang ini "${pkgs.btop.configuration.constructFiles.generatedConfig.outPath}"'';
+          btop = /* sh */ ''moor --lang ini "${btop'.configuration.constructFiles.generatedConfig.outPath}"'';
         };
       };
     };

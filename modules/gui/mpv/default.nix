@@ -116,6 +116,7 @@
             save-position-on-quit = true;
             force-seekable = true;
             cursor-autohide = 100;
+            window-dragging = false;
 
             vo = "gpu-next";
             gpu-api = "vulkan";
