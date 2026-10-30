@@ -24,9 +24,9 @@ fn umbriel_pip() -> Result<()> {
     let target_h = target_w / 16.0 * 9.0;
 
     if !focused.floating {
-        command_args!("umbriel", "msg", "window-toggle-floating").execute()?;
-
         const PADDING: i32 = 30; // target distance from corner of screen
+
+        command_args!("umbriel", "msg", "window-toggle-floating").execute()?;
 
         let win_w = f64::from(focused.w);
         let win_h = f64::from(focused.h);
@@ -38,7 +38,8 @@ fn umbriel_pip() -> Result<()> {
             "umbriel",
             "msg",
             // format!("window-set-primary-extent:{delta_w}")
-            format!("window-modify-width-right:{}", delta_w)
+            "window-modify-width-right",
+            delta_w.to_string()
         )
         .execute()?;
 
@@ -46,17 +47,20 @@ fn umbriel_pip() -> Result<()> {
             "umbriel",
             "msg",
             // format!("window-set-secondary-extent:{delta_h}")
-            format!("window-modify-height-down:{}", delta_h)
+            "window-modify-height-down",
+            delta_h.to_string()
         )
         .execute()?;
 
         command_args!(
             "umbriel",
             "msg",
-            format!(
-                "window-move-to:bottom_right/{PADDING}/{PADDING}/{}",
-                focused.id
-            )
+            "window-move-to",
+            "bottom_right",
+            PADDING.to_string(),
+            PADDING.to_string(),
+            "--window",
+            focused.id
         )
         .execute()?;
     }

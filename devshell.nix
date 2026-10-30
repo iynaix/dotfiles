@@ -44,27 +44,22 @@ let
   '';
 in
 pkgs.mkShell {
-  packages =
-    with pkgs;
-    [
-      age
-      sops
-      cachix
-      deadnix
-      statix
-      nil
-      nixd
-      nixfmt-rs
-      pre-commit
-      cargo-edit
-      crb
-      (pkgs.writeShellScriptBin "crrb" /* sh */ ''
-        crb "$1" --release "''${@:2}"
-      '')
-    ]
-    ++ [
-      wlr-randr # used to get display info
-    ];
+  packages = with pkgs; [
+    age
+    sops
+    cachix
+    deadnix
+    statix
+    nil
+    nixd
+    nixfmt-rs
+    pre-commit
+    cargo-edit
+    crb
+    (pkgs.writeShellScriptBin "crrb" /* sh */ ''
+      crb "$1" --release "''${@:2}"
+    '')
+  ];
 
   env = {
     # Required by rust-analyzer

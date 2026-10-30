@@ -95,10 +95,6 @@
           };
         };
 
-        environment.systemPackages = [
-          pkgs.wlr-randr
-        ];
-
         custom = {
           programs = {
             umbriel.settings.layer_rule = [

@@ -73,8 +73,7 @@ fn main() -> Result<()> {
 
         let target = target_window(active_idx, &matching_windows, &direction);
 
-        execute::command_args!("umbriel", "msg", format!("window-focus-warp:{target}"))
-            .execute()?;
+        execute::command_args!("umbriel", "msg", "window-focus-warp", target).execute()?;
     }
 
     Ok(())

@@ -108,7 +108,7 @@
               general.autostart =
                 config.custom.hardware.monitors
                 |> lib.reverseList
-                |> map (mon: ''umbriel msg workspace-switch:"${toString mon.defaultWorkspace}"'');
+                |> map (mon: "umbriel msg workspace-switch --name ${toString mon.defaultWorkspace}");
             }
           ]
         );

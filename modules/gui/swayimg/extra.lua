@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 local home = os.getenv("HOME")
 
 swayimg.viewer.on_key("c", function()

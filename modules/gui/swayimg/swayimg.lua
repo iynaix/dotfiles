@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 swayimg.mode = "viewer"
 swayimg.decoration = false
 
@@ -42,12 +44,12 @@ swayimg.viewer.on_key("Right", function()
     swayimg.viewer.open("next")
 end)
 
-swayimg.viewer.on_key("Up", function() end) -- nop
+swayimg.viewer.on_key("Up", function() end)   -- nop
 swayimg.viewer.on_key("Down", function() end) -- nop
 
 -- info bar
 swayimg.viewer.on_key("i", function()
-    swayimg.text.visible = !swayimg.text.visible
+    swayimg.text.visible = ! swayimg.text.visible
 end)
 
 -- change background to be able to see black / white bars for cropping

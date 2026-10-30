@@ -13,55 +13,55 @@
         umbriel.settings = {
           keybinds =
             let
-              termExec = cmd: "spawn:kitty ${cmd}";
+              termExec = cmd: "spawn kitty ${cmd}";
             in
             # shared keybinds
             {
-              "Mod+Return" = "spawn:kitty";
-              "Mod+Shift+Return" = "spawn:noctalia msg panel-toggle launcher";
+              "Mod+Return" = "spawn kitty";
+              "Mod+Shift+Return" = "spawn noctalia msg panel-toggle launcher";
 
-              "Mod+E" = "spawn:nemo /home/${user}/Downloads";
-              "Mod+Shift+E" = "spawn:${termExec "yazi /home/${user}/Downloads"}";
+              "Mod+E" = "spawn nemo /home/${user}/Downloads";
+              "Mod+Shift+E" = "spawn ${termExec "yazi /home/${user}/Downloads"}";
 
-              "Mod+W" = "spawn:helium --profile-directory=Default";
-              "Mod+Shift+W" = "spawn:helium --profile-directory=Default --incognito";
+              "Mod+W" = "spawn helium --profile-directory=Default";
+              "Mod+Shift+W" = "spawn helium --profile-directory=Default --incognito";
 
-              "Mod+V" = "spawn:zeditor";
+              "Mod+V" = "spawn zeditor";
               "Mod+Shift+V" = termExec "nvim";
 
-              "Mod+period" = ''spawn:zeditor "/persist/home/${user}/projects/dotfiles"'';
+              "Mod+period" = ''spawn zeditor "/persist/home/${user}/projects/dotfiles"'';
 
-              "Ctrl+Alt+Delete" = "spawn:noctalia msg panel-toggle session";
+              "Ctrl+Alt+Delete" = "spawn noctalia msg panel-toggle session";
 
               # toggle the bar
-              "Mod+A" = "spawn:noctalia msg bar-toggle";
+              "Mod+A" = "spawn noctalia msg bar-toggle";
 
               # restart noctalia
-              "Mod+Shift+A" = "spawn:systemctl restart --user noctalia";
+              "Mod+Shift+A" = "spawn systemctl restart --user noctalia";
 
               # clipboard history
-              "Mod+Ctrl+V" = "spawn:noctalia msg panel-toggle clipboard";
+              "Mod+Ctrl+V" = "spawn noctalia msg panel-toggle clipboard";
 
               # notification history
-              "Mod+N" = "spawn:noctalia msg panel-toggle control-center notifications";
+              "Mod+N" = "spawn noctalia msg panel-toggle control-center notifications";
 
               # picture in picture mode
-              # "Mod+P"= "spawn:wm-pip";
+              # "Mod+P"= "spawn wm-pip";
 
-              "Mod+Apostrophe" = "spawn:wallpaper select";
-              "Alt+Apostrophe" = "spawn:wallpaper history";
+              "Mod+Apostrophe" = "spawn wallpaper select";
+              "Alt+Apostrophe" = "spawn wallpaper history";
 
               # audio buttons
               "XF86AudioLowerVolume" = {
-                action = "spawn:pamixer -d 5";
+                action = "spawn pamixer -d 5";
                 allow_when_locked = true;
               };
               "XF86AudioRaiseVolume" = {
-                action = "spawn:pamixer -i 5";
+                action = "spawn pamixer -i 5";
                 allow_when_locked = true;
               };
               "XF86AudioMute" = {
-                action = "spawn:pamixer -t";
+                action = "spawn pamixer -t";
                 allow_when_locked = true;
               };
             }
@@ -115,14 +115,14 @@
               "Alt+SHIFT+Tab" = "window-focus-last";
 
               # cycle between windows of the same class
-              "CTRL+ALT+Tab" = "spawn:wm-same-class next";
-              "CTRL+ALT+SHIFT+Tab" = "spawn:wm-same-class prev";
+              "CTRL+ALT+Tab" = "spawn wm-same-class next";
+              "CTRL+ALT+SHIFT+Tab" = "spawn wm-same-class prev";
 
               # Switches focus between the current and the previous workspace.
               "Mod+Tab" = "workspace-focus-last";
 
               # TODO: picture in picture mode
-              # "Mod+P" = "spawn:wm-pip";
+              # "Mod+P" = "spawn wm-pip";
 
               # The following binds move the focused window in and out of a column.
               # If the window is alone, they will consume it into the nearby column to the side.
@@ -160,9 +160,9 @@
                   [
                     {
                       # Switch workspaces with mainMod + [0-9]
-                      "Mod+${key}" = ''workspace-switch:"${toString workspace}"'';
+                      "Mod+${key}" = "workspace-switch --name ${toString workspace}";
                       # Move active window to a workspace with mainMod + SHIFT + [0-9]
-                      "Mod+Shift+${key}" = ''window-move-to-workspace:"${toString workspace}"'';
+                      "Mod+Shift+${key}" = "window-move-to-workspace --name ${toString workspace}";
                     }
                   ]
                 )

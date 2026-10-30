@@ -46,7 +46,7 @@
           umbriel.settings = {
             # manual lock keybind
             keybinds = {
-              "Mod+Shift+Ctrl+x" = "spawn:${lib.getExe lock}";
+              "Mod+Shift+Ctrl+x" = "spawn ${lib.getExe lock}";
             };
 
             events = {

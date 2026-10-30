@@ -24,7 +24,7 @@ fn main() -> Result<()> {
 
         for win in windows {
             if win.title.contains(&args.title) {
-                execute::command_args!("umbriel", "msg", format!("window-focus-warp:{}", win.id))
+                execute::command_args!("umbriel", "msg", "window-focus-warp", win.id)
                     .execute_output()?;
                 return Ok(());
             }

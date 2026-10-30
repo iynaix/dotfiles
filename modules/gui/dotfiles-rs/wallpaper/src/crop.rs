@@ -1,30 +1,14 @@
 use color_eyre::eyre::{OptionExt, Result};
-use execute::Execute;
-use serde::Deserialize;
-use std::process::Stdio;
 
-use common::wallpaper::{Geometry, WallInfo};
+use common::{
+    umbriel::UmbrielMonitor,
+    wallpaper::{Geometry, WallInfo},
+};
 use fast_image_resize::{FilterType, PixelType, ResizeAlg, ResizeOptions, Resizer, images::Image};
 use image::{ImageEncoder, ImageReader, codecs::png::PngEncoder};
 use itertools::Itertools;
 
 use crate::{cli::CropArgs, write_wallpaper_history};
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct WlrMonitor {
-    pub name: String,
-    pub modes: Vec<WlrMode>,
-    pub transform: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct WlrMode {
-    pub width: u32,
-    pub height: u32,
-    pub current: bool,
-}
 
 /// parse an aspect ratio, e.g. 9x16
 fn parse_aspect(aspect: &str) -> (u32, u32) {
@@ -113,26 +97,22 @@ fn crop_geometry(
     default_crop
 }
 
-fn monitor_dimensions_from_name(mon_name: &str) -> Result<(u32, u32)> {
-    let wlr_cmd = execute::command_args!("wlr-randr", "--json")
-        .stdout(Stdio::piped())
-        .execute_output()?;
-    let wlr_json = String::from_utf8(wlr_cmd.stdout)?;
-    let monitors: Vec<WlrMonitor> = serde_json::from_str(&wlr_json)?;
-
-    monitors
+pub fn monitor_dimensions_from_name(mon_name: &str) -> Result<(u32, u32)> {
+    UmbrielMonitor::all()?
         .iter()
         .find(|mon| mon.name == mon_name)
         .and_then(|mon| {
-            mon.modes.iter().find(|mode| mode.current).map(|mode| {
-                if mon.transform.contains("90") || mon.transform.contains("270") {
-                    (mode.height, mode.width)
-                } else {
-                    (mode.width, mode.height)
-                }
-            })
+            let mode = mon.current_mode()?;
+            let mon_w = mode.width.cast_unsigned();
+            let mon_h = mode.height.cast_unsigned();
+
+            if mon.is_vertical() {
+                Some((mon_h, mon_w))
+            } else {
+                Some((mon_w, mon_h))
+            }
         })
-        .ok_or_eyre("Invalid monitor name")
+        .ok_or_eyre("Unable to get monitor dimensions")
 }
 
 /// uses crop info from wallpaper xmp metadata
