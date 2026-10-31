@@ -119,7 +119,7 @@ pub enum WallpaperSubcommand {
     Generate(GenerateArgs),
 
     #[command(name = "current", about = "Prints the path of the current wallpaper")]
-    Current,
+    Current(WallpaperCurrentArgs),
 
     #[command(name = "rm", about = "Deletes the current wallpaper", visible_aliases = ["remove", "delete", "yeet"])]
     Rm,
@@ -186,6 +186,12 @@ pub enum WallpaperSubcommand {
         about = "Prints metadata for the current wallpaper / image"
     )]
     Metadata(MetadataArgs),
+}
+
+#[derive(Args, Debug, PartialEq, Eq)]
+pub struct WallpaperCurrentArgs {
+    #[arg(long, action, help = "Show url for current wallpaper")]
+    pub url: bool,
 }
 
 #[derive(Args, Debug, PartialEq, Eq)]

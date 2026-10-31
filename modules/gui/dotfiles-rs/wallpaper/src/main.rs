@@ -4,7 +4,7 @@ use cli::{ShellCompletion, WallpaperArgs, WallpaperSubcommand};
 use color_eyre::eyre::{OptionExt, Result};
 use common::{
     full_path,
-    wallpaper::{self, WallInfo},
+    wallpaper::{self, WallInfo, wallpaper_url},
 };
 use std::{
     io::{Read, Write},
@@ -170,13 +170,24 @@ fn main() -> Result<()> {
                     }
                 }
             }
-            WallpaperSubcommand::Current => wallpaper::current().map_or_else(
-                |_| {
+            WallpaperSubcommand::Current(args) => {
+                if let Ok(wall) = wallpaper::current() {
+                    if args.url {
+                        wallpaper_url(&wall).map_or_else(
+                            || {
+                                eprintln!("Unknown url");
+                                std::process::exit(0);
+                            },
+                            |url| {
+                                println!("{url}");
+                            },
+                        );
+                    }
+                } else {
                     eprintln!("Failed to get current wallpaper");
-                    std::process::exit(1)
-                },
-                |wall| println!("{wall}"),
-            ),
+                    std::process::exit(1);
+                }
+            }
             WallpaperSubcommand::Rm => {
                 wallpaper_rm(&get_random_wallpaper(args.image_or_dir.as_ref())?)?;
             }

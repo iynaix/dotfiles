@@ -1,6 +1,7 @@
 use color_eyre::eyre::{Result, eyre};
 use execute::Execute;
 use itertools::Itertools;
+use regex::Regex;
 use xmpkit::{XmpFile, XmpValue};
 
 use crate::{full_path, nixjson::NixJson};
@@ -20,6 +21,27 @@ pub fn current() -> Result<String> {
         .execute_output()?;
 
     Ok(String::from_utf8(cmd.stdout).map(|s| s.trim().to_string())?)
+}
+
+pub fn wallpaper_url(wall: &str) -> Option<String> {
+    let pixiv_re = Regex::new(r"(\d+)_p(\d+)\.").ok()?;
+    if let Some(captures) = pixiv_re.captures(wall)
+        && let Some(illust_id) = captures.get(1)
+    {
+        return Some(format!(
+            "https://www.pixiv.net/en/artworks/{}",
+            illust_id.as_str()
+        ));
+    }
+
+    let wallhaven_re = Regex::new(r"wallhaven-([[:alnum:]]+)\.").ok()?;
+    if let Some(captures) = wallhaven_re.captures(wall)
+        && let Some(wallhaven_id) = captures.get(1)
+    {
+        return Some(format!("https://wallhaven.cc/w/{}", wallhaven_id.as_str()));
+    }
+
+    None
 }
 
 pub fn filter_images<P>(dir: P) -> impl Iterator<Item = String>
