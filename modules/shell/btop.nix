@@ -37,6 +37,7 @@ in
     }:
     let
       btop' = pkgs.custom.btop.wrap {
+        wrapperImplementation = "binary"; # xps needs an elf for the security wrapper
         package = pkgs.btop.override {
           rocmSupport = host == "desktop" || host == "framework";
         };
@@ -60,7 +61,7 @@ in
     {
       options.custom = {
         programs.btop = {
-          inherit (inputs.wrappers.wrappers.btop.wrapperOptions) settings;
+          inherit (inputs.wrappers.wrappers.btop.wrapperOptions) package settings;
 
           # convenience option to add disks to btop
           disks = lib.mkOption {
@@ -72,6 +73,8 @@ in
       };
 
       config = {
+        custom.programs.btop.package = btop';
+
         environment.systemPackages = [
           btop'
         ];

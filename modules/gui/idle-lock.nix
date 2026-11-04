@@ -14,7 +14,12 @@
         runtimeInputs = [ config.programs.noctalia.package ];
         text = /* sh */ ''
           ${lib.optionalString config.custom.lock.enable "noctalia msg session lock-and-suspend"}
-          noctalia msg dpms-off
+          # sometimes noctalia msg dpms-off can fail, call umbriel directly
+          if [ "$XDG_CURRENT_DESKTOP" == "umbriel" ]; then
+            umbriel msg dpms-off
+          else
+            noctalia msg dpms-off
+          fi
         '';
       };
     in

@@ -2,7 +2,7 @@
   hosts = [ "xps" ];
 
   config =
-    { lib, pkgs, ... }:
+    { config, lib, ... }:
     {
       custom = {
         hardware = {
@@ -52,7 +52,7 @@
           group = "wheel";
           owner = "root";
           permissions = "0750";
-          source = lib.getExe pkgs.btop;
+          source = lib.getExe config.custom.programs.btop.package;
         };
       };
     };

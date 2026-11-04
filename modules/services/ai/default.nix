@@ -53,7 +53,7 @@
       config = {
         custom.persist = lib.mkIf config.custom.ai.qwen_27b.enable {
           root.cache.directories = [
-            "var/lib/llama-models"
+            "/var/lib/llama-models"
           ];
         };
       };

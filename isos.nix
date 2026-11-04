@@ -48,9 +48,6 @@ let
                       "sh <(curl -L ${repo_url}/main/recover.sh)";
                   })
                 ]
-                ++ lib.optionals (lib.hasInfix "plasma" isoPath) [
-                  self.packages.${pkgs.stdenv.hostPlatform.system}.kitty
-                ]
                 ++ (with self.packages.${pkgs.stdenv.hostPlatform.system}; [
                   # custom packages
                   bat
@@ -84,36 +81,6 @@ let
                 neovim = "nvim";
                 v = "nvim";
               };
-
-              # set dark theme for kde, adapted from plasma-manager
-              etc."xdg/autostart/plasma-dark-mode.desktop" = {
-                source = pkgs.makeDesktopItem {
-                  name = "plasma-dark-mode";
-                  desktopName = "Plasma Dark Mode";
-                  exec = pkgs.writeShellScript "plasma-dark-mode" ''
-                    plasma-apply-lookandfeel -a org.kde.breezedark.desktop
-                    plasma-apply-desktoptheme breeze-dark
-                  '';
-                  extraConfig = {
-                    "X-KDE-autostart-condition" = "ksmserver";
-                  };
-                };
-              };
-            };
-
-            systemd.user.services.init-plasma-darkmode = lib.mkIf (lib.hasInfix "plasma" isoPath) {
-              description = "Apply Breeze Dark theme on Plasma startup";
-              wantedBy = [ "graphical-session.target" ];
-              partOf = [ "graphical-session.target" ];
-
-              # Ensure plasma-apply tools are available in the path
-              path = [ pkgs.kdePackages.plasma-workspace ];
-
-              script = ''
-                sleep 2
-                plasma-apply-lookandfeel -a org.kde.breezedark.desktop
-                plasma-apply-desktoptheme breeze-dark
-              '';
             };
 
             # use nmtui instead of wpa_supplicant for minimal iso
@@ -191,6 +158,39 @@ let
             };
           }
         )
+
+        # for the plasma iso
+        (lib.mkIf (lib.hasInfix "plasma" isoPath) (
+          { pkgs, ... }: {
+            environment.systemPackages = [
+              self.packages.${pkgs.stdenv.hostPlatform.system}.kitty
+            ];
+
+            etc = {
+              # disable kwallet
+              "kwalletrc".text = ''
+                [Wallet]
+                Enabled=false
+                First Use=false
+              '';
+            };
+
+            systemd.user.services.init-plasma-darkmode = lib.mkIf (lib.hasInfix "plasma" isoPath) {
+              description = "Apply Breeze Dark theme on Plasma startup";
+              wantedBy = [ "graphical-session.target" ];
+              partOf = [ "graphical-session.target" ];
+
+              # Ensure plasma-apply tools are available in the path
+              path = [ pkgs.kdePackages.plasma-workspace ];
+
+              script = ''
+                sleep 2
+                plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+                plasma-apply-desktoptheme breeze-dark
+              '';
+            };
+          }
+        ))
       ];
     };
 in

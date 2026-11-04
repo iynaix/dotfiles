@@ -4,6 +4,8 @@
   config =
     {
       inputs,
+      lib,
+      pkgs,
       system,
       ...
     }:
@@ -11,9 +13,9 @@
       focal = inputs.focal.packages.${system}.default;
     in
     {
-      environment.systemPackages = [
-        focal
-      ];
+      environment.systemPackages =
+        assert lib.assertMsg (lib.versionOlder pkgs.mango.version "0.18.5") "mango ipc outputs rotation";
+        [ focal ];
 
       custom = {
         programs.umbriel.settings.keybinds = {

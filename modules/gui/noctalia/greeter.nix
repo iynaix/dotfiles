@@ -35,6 +35,11 @@
               scheme_selector_position = "hidden"; # using synced settings from noctalia, unnecessary
             };
 
+            clock = {
+              time_font_size = 48 * 3;
+              date_font_size = 14 * 3;
+            };
+
             user.default = user;
             idle.timeout = 60;
           };

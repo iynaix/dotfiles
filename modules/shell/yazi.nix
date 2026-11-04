@@ -12,7 +12,7 @@
           plugins = { inherit (pkgs.yaziPlugins) full-border git; };
 
           initLua = /* lua */ ''
-            require("full-border"):setup({ type = ui.Border.ROUNDED })
+            require("full-border"):setup { set = "rounded", }
             require("git"):setup()
           '';
 

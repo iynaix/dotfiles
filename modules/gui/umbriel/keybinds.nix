@@ -30,6 +30,7 @@
               "Mod+Shift+V" = termExec "nvim";
 
               "Mod+period" = ''spawn zeditor "/persist/home/${user}/projects/dotfiles"'';
+              "Mod+Shift+period" = ''spawn zeditor "/persist/home/${user}/projects/nixpkgs"'';
 
               "Ctrl+Alt+Delete" = "spawn noctalia msg panel-toggle session";
 

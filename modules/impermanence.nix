@@ -197,7 +197,10 @@ in
           ++ map (getFilePath "/cache") (persistCacheCfg.files ++ persistCacheCfg.users.${user}.files);
       in
       {
-        impermanence = ''sort -ui <<< "${lib.concatLines (allDirectories ++ allFiles)}" | moor'';
+        # sort and remove blank lines
+        impermanence = ''grep -v '^$' <<< "${
+          lib.concatLines (allDirectories ++ allFiles)
+        }" | sort -ui | moor'';
       };
   };
 }

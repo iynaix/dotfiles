@@ -44,6 +44,9 @@
           ];
         };
 
+        # saves approx 700 mb
+        services.speechd.enable = false;
+
         hj.xdg.state.files = {
           # misc information for nix
           "nix.json" = {
