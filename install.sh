@@ -39,7 +39,7 @@ Introduction
 # ZFS "fileSystems" declarations can be referenced from modules/zfs.nix
 # ZFS also requires the following options to be set within host config:
 #   networking.hostId (can be generated using: head -c 8 /etc/machine-id)
-#   zfs.devNodes
+#   boot.zfs.devNodes
 #       "/dev/disk/by-id" for Intel CPUs
 #       "/dev/disk/by-partuuid" for AMD CPUs / within VMs
 # impermanence setup can be referenced from modules/impermanence.nix
@@ -113,7 +113,7 @@ if [[ $do_format == "n" ]]; then
 fi
 
 echo "Creating partitions"
-sudo blkdiscard -f "$DISK"
+sudo wipefs -a "$DISK"
 sudo sgdisk --clear "$DISK"
 
 sudo sgdisk -n3:1M:+1G -t3:EF00 "$DISK"
@@ -239,5 +239,10 @@ if [[ $repo == "github:iynaix/dotfiles" ]]; then
     IP_ADDR=$(ifconfig | awk '/inet / && !/127.0.0.1/ {print $2; exit}')
     echo "The IP address of this host is $IP_ADDR"
 fi
+
+echo "Exporting pool"
+sudo umount -R /mnt
+sudo swapoff "$SWAPDISK"
+sudo zpool export zroot
 
 echo "Installation complete. It is now safe to reboot."
