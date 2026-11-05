@@ -1,20 +1,3 @@
-let
-  baseBtopConf = {
-    color_theme = "TTY";
-    theme_background = false;
-    cpu_single_graph = true;
-    # base_10_sizes = true;
-    show_gpu_info = "Off"; # don't show gpu info in cpu box
-    show_disks = true;
-    show_swap = true;
-    swap_disk = false;
-    use_fstab = false;
-    only_physical = false;
-    zfs_arc_cached = true;
-    shown_boxes = "cpu mem net proc gpu0";
-    gpu_mirror_graph = false;
-  };
-in
 {
   packages =
     { inputs, pkgs, ... }:
@@ -22,7 +5,21 @@ in
       # expose generic btop package without disks set
       btop = inputs.wrappers.wrappers.btop.wrap {
         inherit pkgs;
-        settings = baseBtopConf;
+        settings = {
+          color_theme = "TTY";
+          theme_background = false;
+          cpu_single_graph = true;
+          # base_10_sizes = true;
+          show_gpu_info = "Off"; # don't show gpu info in cpu box
+          show_disks = true;
+          show_swap = true;
+          swap_disk = false;
+          use_fstab = false;
+          only_physical = false;
+          zfs_arc_cached = true;
+          shown_boxes = "cpu mem net proc gpu0";
+          gpu_mirror_graph = false;
+        };
       };
     };
 
@@ -33,6 +30,7 @@ in
       inputs,
       lib,
       pkgs,
+      user,
       ...
     }:
     let
@@ -41,21 +39,21 @@ in
         package = pkgs.btop.override {
           rocmSupport = host == "desktop" || host == "framework";
         };
-        settings = lib.mkForce (
-          baseBtopConf
-          // {
-            color_theme = "noctalia";
-            disks_filter = lib.concatStringsSep " " (
-              [
-                "/"
-                "/boot"
-                "/persist"
-              ]
-              ++ config.custom.programs.btop.disks
-            );
-          }
-          // config.custom.programs.btop.settings
-        );
+        flags = {
+          "--themes-dir" = "/home/${user}/.config/btop/themes";
+        };
+        settings = {
+          color_theme = lib.mkForce "noctalia";
+          disks_filter = lib.concatStringsSep " " (
+            [
+              "/"
+              "/boot"
+              "/persist"
+            ]
+            ++ config.custom.programs.btop.disks
+          );
+        }
+        // config.custom.programs.btop.settings;
       };
     in
     {

@@ -41,6 +41,7 @@
                 nix-shell -p xhost gparted --command "xhost si:localuser:root && xhost +local:${user} && sudo gparted"
               '';
             })
+            pkgs.wl-clipboard
           ];
         };
 

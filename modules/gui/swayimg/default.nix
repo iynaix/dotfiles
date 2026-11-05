@@ -31,6 +31,7 @@
         "image/gif" = "swayimg.desktop";
         "image/webp" = "swayimg.desktop";
         "image/png" = "swayimg.desktop";
+        "image/svg+xml" = "swayimg.desktop";
       };
 
       custom.programs.print-config = {

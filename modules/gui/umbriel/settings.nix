@@ -253,7 +253,8 @@
               # layout.dwindle.preserve_split = true
 
               input = {
-                middle_click_paste = true; # primary-selection clipboard, applies on reload
+                middle_click_paste = false; # primary-selection clipboard, applies on reload
+                client_window_drag = false;
 
                 keyboard = {
                   # ASCII keybind fallback uses only layouts listed for this keyboard; a single

@@ -6,7 +6,7 @@
   rustPlatform,
 }:
 rustPlatform.buildRustPackage {
-  pname = "dotfiles-rs-unwrapped";
+  pname = "dotfiles-rs";
   version = "0.9.0";
 
   src = ./.;

@@ -1,5 +1,4 @@
 {
-  enabled = true;
   tags = [ "gui" ];
 
   config =

@@ -56,11 +56,7 @@ pub fn show_swayimg(args: &WallpaperFilterArgs) -> Result<()> {
 
 pub fn show_history(args: &WallpaperFilterArgs) -> Result<()> {
     let history = wallpaper::history()?;
-    let history = history
-        .iter()
-        .skip(1) // skip the current wallpaper
-        .map(|(path, _)| path)
-        .collect_vec();
+    let history = history.iter().map(|(path, _)| path).collect_vec();
 
     let has_filters =
         args.no_faces || args.single_face || args.multiple_faces || args.faces.is_some();
@@ -80,7 +76,13 @@ pub fn show_history(args: &WallpaperFilterArgs) -> Result<()> {
         "wallpaper-selector",
         // show images in the given order
         "--execute",
-        "swayimg.imagelist.order = \"none\""
+        // skip the current wallpaper, but can still navigate back to it
+        r#"
+        swayimg.imagelist.order = "none"
+        swayimg.on_initialized(function()
+            swayimg.viewer.open("next")
+        end)
+        "#
     );
 
     if let Some((w, h)) = target_window_size() {

@@ -6,6 +6,7 @@ use common::{
     full_path,
     wallpaper::{self, WallInfo, wallpaper_url},
 };
+use execute::Execute;
 use std::{
     io::{Read, Write},
     path::{Path, PathBuf},
@@ -173,15 +174,16 @@ fn main() -> Result<()> {
             WallpaperSubcommand::Current(args) => {
                 if let Ok(wall) = wallpaper::current() {
                     if args.url {
-                        wallpaper_url(&wall).map_or_else(
-                            || {
-                                eprintln!("Unknown url");
-                                std::process::exit(0);
-                            },
-                            |url| {
-                                println!("{url}");
-                            },
-                        );
+                        if let Some(url) = wallpaper_url(&wall) {
+                            // copy to clipboard
+                            execute::command!("wl-copy").arg(&url).execute()?;
+                            println!("{url}");
+                        } else {
+                            eprintln!("Unknown url");
+                            std::process::exit(0);
+                        }
+                    } else {
+                        println!("{wall}");
                     }
                 } else {
                     eprintln!("Failed to get current wallpaper");

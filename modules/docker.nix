@@ -31,8 +31,16 @@
 
       # store docker images on zroot/cache
       custom.persist = {
+        root.cache = {
+          directories = [
+            # podman downloads image here
+            "/var/tmp"
+          ];
+        };
         home.cache = {
-          directories = [ ".local/share/containers" ];
+          directories = [
+            ".local/share/containers"
+          ];
         };
       };
     };

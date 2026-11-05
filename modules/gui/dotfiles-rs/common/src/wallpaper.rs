@@ -80,8 +80,9 @@ where
 
 /// reloads the wallpaper
 pub fn reload() -> Result<()> {
+    let curr = current()?;
     set("color:#000000")?;
-    set(current()?)
+    set(curr)
 }
 
 pub fn random_from_dir<P>(dir: P) -> String
