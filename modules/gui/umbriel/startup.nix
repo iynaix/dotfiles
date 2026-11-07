@@ -52,7 +52,7 @@
           match = {
             app_id = "helium";
             title = [
-              ".*(Discord|WhatsApp|Flood).*"
+              ".*([Dd]iscord|[Ww]hatsApp|[Ff]lood).*"
               "^Untitled"
             ];
           };
