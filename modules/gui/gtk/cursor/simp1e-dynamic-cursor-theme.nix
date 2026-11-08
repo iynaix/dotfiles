@@ -33,10 +33,7 @@
           dconf write "/org/gnome/desktop/interface/cursor-theme" "'$THEME_NAME'"
 
           # update umbriel with cursor
-          cat << EOF > "$XDG_CONFIG_HOME/umbriel/cursor.toml"
-          [input.cursor]
-          theme = "$THEME_NAME"
-          EOF
+          umbriel config input.cursor.theme "$THEME_NAME"
         '';
       };
     };

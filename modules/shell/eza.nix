@@ -26,7 +26,7 @@
         };
       };
       eza-tree = pkgs.writeShellApplication {
-        name = "tree";
+        name = "etree";
         runtimeInputs = [ eza ];
         text = /* sh */ ''
           # Get all arguments except the last one
@@ -53,6 +53,8 @@
     {
       # eza is installed via wrapped fish
       environment = {
+        systemPackages = [ pkgs.tree ];
+
         shellAliases = {
           t = "tree";
         };

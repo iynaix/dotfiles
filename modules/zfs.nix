@@ -1,6 +1,7 @@
 # NOTE: zfs datasets are created via install.sh
 {
   config,
+  lib,
   pkgs,
   tags,
   ...
@@ -8,9 +9,10 @@
 {
   boot = {
     kernelPackages =
-      # assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.4")
-      #   "zfs patch for kernel is no longer needed";
-      pkgs.linuxPackages_xanmod_latest;
+      assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.5")
+        "zfs patch for kernel is no longer needed";
+      # (inputs.multiverse.multiverse.${system}.at "f9a75f41be3a74eab55d3a7679d34ad6cc0da977");
+      pkgs.linuxPackages_xanmod;
     zfs = {
       devNodes =
         if builtins.elem "vm" tags then

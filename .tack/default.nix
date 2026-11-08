@@ -814,7 +814,13 @@ let
           );
           fetched = if type == "indirect" then intersectAttrs lockedFields (fetchPin name) else { };
         in
-        (metaDefaults.${type} or { }) // intersectAttrs fields entry // fetched // { inherit type; };
+        (metaDefaults.${type} or { })
+        // intersectAttrs fields entry
+        // fetched
+        // intersectAttrs { group = null; } (declared.${name} or { })
+        // {
+          inherit type;
+        };
 
       resolveFollowMeta = mapAttrs (_: target: selfMeta.${target} or { type = "upstream"; });
 

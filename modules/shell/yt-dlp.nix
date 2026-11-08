@@ -50,7 +50,7 @@ in
             yt = "yt-dlp";
             yt1080 = ''ytdl --format "${mkFormat 1080}"'';
             ytaudio = "ytdl --audio-format mp3 --extract-audio";
-            ytsubonly = "ytdl --skip-download --write-subs";
+            ytsubonly = "ytdl --no-download-archive --skip-download --write-subs";
             ytplaylist = "ytdl --output '%(playlist_index)d - %(title)s.%(ext)s'";
           };
 

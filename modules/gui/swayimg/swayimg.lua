@@ -80,10 +80,19 @@ swayimg.viewer.on_key("s", function()
     end
 end)
 
+-- copy image path
 swayimg.viewer.on_key("y", function()
     local img = swayimg.viewer.get_image()
     if img then
         run(string.format("wl-copy %q", img.path))
+    end
+end)
+
+-- copy image data
+swayimg.viewer.on_key("Y", function()
+    local img = swayimg.viewer.get_image()
+    if img then
+        run(string.format("wl-copy < %q", img.path))
     end
 end)
 
