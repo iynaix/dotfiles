@@ -1,7 +1,14 @@
 {
   config =
-    { lib, ... }:
     {
+      inputs,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      imports = [ inputs.bootvine.nixosModules.default ];
+
       boot = {
         # always allow booting from usb
         initrd.availableKernelModules = [ "uas" ];
@@ -26,6 +33,11 @@
 
       # faster boot times
       systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+
+      # bootvine
+      services.bootvine.enable =
+        assert lib.assertMsg (!(pkgs ? "bootvine")) "bootvine package is now in nixpkgs";
+        true;
 
       # reduce journald logs
       services.journald.settings.Journal.SystemMaxUse = "50M";

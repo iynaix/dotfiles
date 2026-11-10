@@ -62,6 +62,9 @@ url = "github:notashelf/nvf"
 [inputs.tack]
 url = "github:manic-systems/tack"
 
+[inputs.bootvine]
+url = "git+https://codeberg.org/wvhulle/bootvine.git"
+
 [inputs.focal]
 url = "github:iynaix/focal"
 

@@ -1,6 +1,7 @@
 {
   "$declared": {
     "awakened-poe-trade": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage",
+    "bootvine": "git+https://codeberg.org/wvhulle/bootvine.git",
     "exiled-exchange-2": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage",
     "focal": "github:iynaix/focal",
     "helium": "https://github.com/imputnet/helium-linux/releases/download/{version}/helium-{version}-x86_64.AppImage",
@@ -30,6 +31,14 @@
     "unpack": "file",
     "tag": "v3.29.108",
     "version": "3.29.108"
+  },
+  "bootvine": {
+    "type": "git",
+    "url": "https://codeberg.org/wvhulle/bootvine.git",
+    "ref": "HEAD",
+    "rev": "a7e33b453a82ecfe9e98d060008b3b20b6924f62",
+    "narHash": "sha256-aPJtMiIqt8tb+ZsgKhVH3zmGWjRRzukUzXj64X1mhpI=",
+    "lastModified": 1794257658
   },
   "exiled-exchange-2": {
     "type": "fixed",
