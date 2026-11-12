@@ -18,6 +18,12 @@ patcher.patch unpatchedInputs {
       url = "https://github.com/NixOS/nixpkgs/commit/477a86df848b03eef447a06f0fd505ed2f10375d.patch";
       hash = "sha256-GeCd7EPZwvP79tc9Ss2hD/WIOfq/7XSo27WLn/z+2HQ=";
     })
+
+    # python3Packages.pymediainfo: fix build, modernize
+    (patcher.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/pull/588048.patch";
+      hash = "sha256-i41ntDT408YPJcnJuVAz+S2+KJeWHRl/1MbN5/+RT08=";
+    })
   ];
 
   wrappers = [

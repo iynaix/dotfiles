@@ -188,5 +188,5 @@ empty_color = "tertiary"
 label_source = "name"
 font_family = "Liberation Sans"
 font_weight = 700
-labels_only_when_occupied = false
+labels_only_when_occupied = true
 pill_scale = 0.8

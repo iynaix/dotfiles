@@ -300,13 +300,13 @@
                   theme = config.custom.gtk.cursor.name;
                   size = config.custom.gtk.cursor.size;
                   hardware_cursor = true; # false forces software cursor composition
-                  follows_focus = false; # warp to windows selected by focus navigation
+                  follows_focus = true; # warp to windows selected by focus navigation
                   hide_when_typing = false; # hide after typing unless a pointer button is held
                   hide_timeout_ms = 0; # 0-3600000, 0 disables hiding
                 };
 
                 focus = {
-                  follows_mouse = true;
+                  follows_mouse = "always"; # "off", "sloppy", or "always"; always also refocuses after layout and workspace changes.
                   # Refuse hover focus when revealing the window would scroll further than this,
                   # measured in viewport widths (1.0 = one full screen). Omit for no limit.
                   # follows_mouse_max_scroll = 0.5

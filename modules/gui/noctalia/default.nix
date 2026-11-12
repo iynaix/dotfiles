@@ -78,17 +78,8 @@
               let
                 noctalia-post-init = pkgs.writeShellApplication {
                   name = "noctalia-post-init";
-                  runtimeInputs = [
-                    config.programs.noctalia.package
-                    pkgs.coreutils
-                  ];
-                  text = ''
-                    while ! noctalia msg status >/dev/null 2>&1; do
-                    ${lib.getExe' pkgs.coreutils "sleep"} 0.5
-                    done
-
-                    noctalia msg bar-hide
-                  '';
+                  runtimeInputs = [ config.programs.noctalia.package ];
+                  text = "noctalia msg bar-hide";
                 };
               in
               lib.mkIf (builtins.elem "laptop" tags) (lib.getExe noctalia-post-init);

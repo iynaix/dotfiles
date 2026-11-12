@@ -1,7 +1,6 @@
 {
   "$declared": {
     "awakened-poe-trade": "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage",
-    "bootvine": "git+https://codeberg.org/wvhulle/bootvine.git",
     "exiled-exchange-2": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage",
     "focal": "github:iynaix/focal",
     "helium": "https://github.com/imputnet/helium-linux/releases/download/{version}/helium-{version}-x86_64.AppImage",
@@ -33,14 +32,6 @@
     "tag": "v3.29.108",
     "version": "3.29.108"
   },
-  "bootvine": {
-    "type": "git",
-    "url": "https://codeberg.org/wvhulle/bootvine.git",
-    "ref": "HEAD",
-    "rev": "a7e33b453a82ecfe9e98d060008b3b20b6924f62",
-    "narHash": "sha256-aPJtMiIqt8tb+ZsgKhVH3zmGWjRRzukUzXj64X1mhpI=",
-    "lastModified": 1794257658
-  },
   "exiled-exchange-2": {
     "type": "fixed",
     "url": "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.16.3/Exiled-Exchange-2-0.16.3.AppImage",
@@ -67,19 +58,19 @@
   },
   "helium": {
     "type": "fixed",
-    "url": "https://github.com/imputnet/helium-linux/releases/download/0.21.2.1/helium-0.21.2.1-x86_64.AppImage",
-    "sha256": "sha256-IdP+SyvmN+uT/eogjWsG1/6feO6MF9gP/57SM3AsBmo=",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.21.3.1/helium-0.21.3.1-x86_64.AppImage",
+    "sha256": "sha256-qFQFlsk6RGMWBWAvO8Tu2lv/g+saOosC5NBKTIRz4p0=",
     "unpack": "file",
-    "tag": "0.21.2.1",
-    "version": "0.21.2.1"
+    "tag": "0.21.3.1",
+    "version": "0.21.3.1"
   },
   "hjem": {
     "type": "github",
     "owner": "feel-co",
     "repo": "hjem",
-    "rev": "28cec3017cc94842f919f8f294c8b7136216b79b",
-    "narHash": "sha256-tttNqwFIXsClznNv3uEltACsfBm8xIDo9bPl+BHqYZc=",
-    "lastModified": 1794190356
+    "rev": "5469a3ae3cd5cc182ddc4201a21a8de44b2c26f2",
+    "narHash": "sha256-N6aGkpxbDeisIUygDapIVX2aXZuGEK4kRmUPMhtu1zc=",
+    "lastModified": 1794572558
   },
   "lamina": {
     "type": "github",
@@ -93,47 +84,47 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "390f52c4d0f49772ef625e0f8352030e31b40a7b",
-    "narHash": "sha256-ECn+pD6FzQhSRsQ3OiPjDsQs2rZfCIoO+lNxeBZXB+U=",
-    "lastModified": 1794338321
+    "rev": "5c58c9e4e5c07baa613ecc427592dfc56248f4e4",
+    "narHash": "sha256-rNT7iIZhp5BVVwesMVd9RqGEd/A5DDf0Eb/HzoqImww=",
+    "lastModified": 1794750163
   },
   "nix-index-database": {
     "type": "github",
     "owner": "nix-community",
     "repo": "nix-index-database",
-    "rev": "af9249ca33bc2efaae5d071e4c67ddef19dcb681",
-    "narHash": "sha256-iGNtQnUZsi+v6/4NbtYr+dsmASa6GkzXtUcTpE8F3mE=",
-    "lastModified": 1794132860
+    "rev": "9bd074026d6db75b59aae8cd6071b5f2fe27a36c",
+    "narHash": "sha256-PCGNIyAydZcdUXCxEXTjrS1+wWS+k9E+ENqBkUK2Mpg=",
+    "lastModified": 1794739050
   },
   "nixos-hardware": {
     "type": "github",
     "owner": "NixOS",
     "repo": "nixos-hardware",
-    "rev": "b6ca87f78ec5bafc4b2aef7b29803dcf419266af",
-    "narHash": "sha256-4s5CRvkYX4oAJVZ+zu2bBKFH2gG2GqN6OKHEWgJr1AY=",
-    "lastModified": 1794425805
+    "rev": "eb3c90bd715f7a9a28719bb014f53d309ccb2fc8",
+    "narHash": "sha256-bUkc9dMpCFiJuuf5Efr7pnCDs5q18aA8zJah+MYZl9w=",
+    "lastModified": 1794597451
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1114946.177d0540942f/nixexprs.tar.zst?rev=177d0540942fb205af6993b1d5fa0b57799e09f8&lastModified=1794192123",
-    "rev": "177d0540942fb205af6993b1d5fa0b57799e09f8",
-    "narHash": "sha256-YOhabADcIwaWo9992egosQF3iVpvWysmZAyhbGBzinY=",
-    "lastModified": 1794192123
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1119549.d5cc68339997/nixexprs.tar.zst?rev=d5cc6833999746cffdfe0598f7bc801a57b887a9&lastModified=1794537146",
+    "rev": "d5cc6833999746cffdfe0598f7bc801a57b887a9",
+    "narHash": "sha256-bTKSclXJAmo9qdxPedTBHUGr8awPr4BrbOoOutJsYIc=",
+    "lastModified": 1794537146
   },
   "nixpkgs-stable": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.13936.ac588ef1c914/nixexprs.tar.zst?rev=ac588ef1c914865dad517b337ea0eb9694a4021c&lastModified=1794165970",
-    "rev": "ac588ef1c914865dad517b337ea0eb9694a4021c",
-    "narHash": "sha256-YqwBRaXgqn0+I8BCsZVLkzd746X/84fr1/FvZiocsYE=",
-    "lastModified": 1794165970
+    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.14234.f1e5c356f35d/nixexprs.tar.zst?rev=f1e5c356f35d07e7b71a6b5e6c9338e0b029e0c0&lastModified=1794552581",
+    "rev": "f1e5c356f35d07e7b71a6b5e6c9338e0b029e0c0",
+    "narHash": "sha256-C0bP9ShRkxihpkAiWel93+JypO7ls9usnHRtK2VLvWA=",
+    "lastModified": 1794552581
   },
   "nvf": {
     "type": "github",
     "owner": "notashelf",
     "repo": "nvf",
-    "rev": "dd06c9b6aac414bf7cd7594b27108439f5caa95b",
-    "narHash": "sha256-IjBiWJHKiuhMQ/xsdHYGbxK6AXac4TIWYM1DODRnkEk=",
-    "lastModified": 1794268150
+    "rev": "d38e36c2513337b56a3b16af268c7a3f2d33de7a",
+    "narHash": "sha256-EOYKot/+xy+p+5cd3+1EeR7nz1FevIkxC/Hs6TbndWg=",
+    "lastModified": 1794522644
   },
   "preservation": {
     "type": "github",
@@ -147,27 +138,31 @@
     "type": "github",
     "owner": "meehl",
     "repo": "rusty-path-of-building",
-    "rev": "098c967206d03cde54172dcf37a36218589fa5e7",
-    "narHash": "sha256-hi3hNoD21d60wjY8H/T9bvBLNhpq2+r0q4EzVRhicpA=",
-    "lastModified": 1792765409,
-    "tag": "v0.3.3",
-    "version": "0.3.3"
+    "rev": "08260cabd240c7c70da8522fc22e36216e410c64",
+    "narHash": "sha256-2FpiOX7JROAWbdPFwa1HaZxW+yMU8wM/Qu6ld3CDwHM=",
+    "lastModified": 1794584689,
+    "archive": {
+      "hash": "sha256-rNvzxPpuiE1YhNYEglxTqhhRV4Zs2vhlodTBXjWA9mg=",
+      "outHash": "sha256-PLst6593iVoSVK9UnHWucXTxwHsP8R2ov4fyBzFrHbM="
+    },
+    "tag": "v0.3.4",
+    "version": "0.3.4"
   },
   "scalpel": {
     "type": "fixed",
-    "url": "https://github.com/scalpelpoe/scalpel/releases/download/v1.0.5/Scalpel.AppImage",
-    "sha256": "sha256-rluRhBthCcfAuPIvcZMRm86Tyf3GOYR+blfaT2dxQx0=",
+    "url": "https://github.com/scalpelpoe/scalpel/releases/download/v1.0.6/Scalpel.AppImage",
+    "sha256": "sha256-YfCvWCrwOWCYmcXGEraleF/QNoOEsZqg70vtjspQPVQ=",
     "unpack": "file",
-    "tag": "v1.0.5",
-    "version": "1.0.5"
+    "tag": "v1.0.6",
+    "version": "1.0.6"
   },
   "sops-nix": {
     "type": "github",
     "owner": "Mic92",
     "repo": "sops-nix",
-    "rev": "fe7b4228405aeac2ce7192c2049a6e2bc8637082",
-    "narHash": "sha256-Ivif/kuD68yEOKcZZG3zSwNMFUuIgzUgeJuzcHrQy+8=",
-    "lastModified": 1794261845
+    "rev": "11e5885d241743ff0193465d533b20e754bc3ce0",
+    "narHash": "sha256-3q/hxp/flW1PnV3Dx+H3p8kHGEHJ7251BqVMNsAAB9E=",
+    "lastModified": 1794624949
   },
   "systems": {
     "type": "github",
@@ -181,17 +176,17 @@
     "type": "github",
     "owner": "manic-systems",
     "repo": "tack",
-    "rev": "1d1bbe2a27c416458be61a941a6228afea534e6e",
-    "narHash": "sha256-KXFPNN+Js56ATlxNR40ttj1Azp866HSbQMquq5zt5Dc=",
-    "lastModified": 1794445000
+    "rev": "4bb81b579e2072b02f8a7a56e9da317e6faf5407",
+    "narHash": "sha256-PSwYLv40mPN9//mGLA+5Q3YUPfS16dMTrd4BARJhCuo=",
+    "lastModified": 1794730228
   },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "0c1f125536f19dc62bcf277840bc503a1c756abf",
-    "narHash": "sha256-EzUJJXd+9w85JYbpx3uxqx76WUW4umnr5P8kGPTijUw=",
-    "lastModified": 1794436897,
+    "rev": "1bbbf155d25b2a338c7b6d52863d9f6efaf346ac",
+    "narHash": "sha256-bk3S5r5fNw43SpPKqAkIi5D5IchuUX9VHK6z2T50duE=",
+    "lastModified": 1794781900,
     "submodules": true
   },
   "wfetch": {
@@ -206,9 +201,9 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "c36fa7feb82dca492342f61da4f7bb10a48f0764",
-    "narHash": "sha256-wHdMM1K4TYrGKjzvb67RfBr57Q4w8LwxlxPd2nEWGuM=",
-    "lastModified": 1794397181
+    "rev": "18be4ae009e5da0f6b444712e1cd5ffa2dd25e24",
+    "narHash": "sha256-LK//BaOq4TIGJZGvvoFYh3OGUUMlGUjTR/OBXSgqmvc=",
+    "lastModified": 1794787945
   },
   "yt-dlp": {
     "type": "github",

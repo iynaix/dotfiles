@@ -40,11 +40,15 @@
               # restart noctalia
               "Mod+Shift+A" = "spawn systemctl restart --user noctalia";
 
+              # toggle noctalia caffeine
+              "Mod+Ctrl+A" = "spawn noctalia msg caffeine-toggle";
+
               # clipboard history
               "Mod+Ctrl+V" = "spawn noctalia msg panel-toggle clipboard";
 
               # notification history
               "Mod+N" = "spawn noctalia msg panel-toggle control-center notifications";
+              "Mod+Shift+N" = "spawn noctalia msg notification-dnd-toggle";
 
               # picture in picture mode
               # "Mod+P"= "spawn wm-pip";

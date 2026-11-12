@@ -186,9 +186,9 @@
         runtimeInputs = [ config.programs.tack.package ];
         text = /* sh */ ''
           if [ -d ".tack" ]; then
-              tack update
+              tack update "$@"
           else
-              nix flake update
+              nix flake update "$@"
           fi
         '';
       };
