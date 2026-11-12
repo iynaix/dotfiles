@@ -22,7 +22,8 @@
     "umbriel": "github:noctalia-dev/umbriel",
     "wfetch": "github:iynaix/wfetch",
     "wrappers": "github:BirdeeHub/nix-wrapper-modules",
-    "yt-dlp": "github:yt-dlp/yt-dlp"
+    "yt-dlp": "github:yt-dlp/yt-dlp",
+    "zfs_2_4_5": "github:openzfs/zfs/pull/19838/head"
   },
   "awakened-poe-trade": {
     "type": "fixed",
@@ -218,5 +219,17 @@
     "lastModified": 1793052434,
     "tag": "2026.10.26",
     "version": "2026.10.26"
+  },
+  "zfs_2_4_5": {
+    "type": "github",
+    "owner": "openzfs",
+    "repo": "zfs",
+    "rev": "8e0cdae6fa7651c13efe3b94f1000204b9ea6943",
+    "narHash": "sha256-f6bC9h5+MOWWpcuD3tgRYPC1jRDFsNJtjD8BKe7v8kc=",
+    "lastModified": 1794407883,
+    "archive": {
+      "hash": "sha256-91hS8wuxTGwzFvc7HfXVXcqr+KgY5lHKqHKwhuJr6XU=",
+      "outHash": "sha256-ls0/GL8ttFzqcoD4tojizqqsS8crAHgaRDsunl5WyzY="
+    }
   }
 }

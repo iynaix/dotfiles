@@ -1,18 +1,37 @@
 # NOTE: zfs datasets are created via install.sh
 {
   config,
+  inputs,
   lib,
   pkgs,
   tags,
   ...
 }:
+let
+  zfsOverrides = o: {
+    src = inputs.zfs_2_4_5;
+
+    prePatch = (o.prePatch or "") + ''
+      sed -i 's/^Linux-Maximum:.*/Linux-Maximum: 7.2/' META
+    '';
+
+    configureFlags = o.configureFlags ++ [ "--enable-linux-experimental" ];
+
+    meta = o.meta // {
+      broken = false;
+    };
+  };
+in
 {
   boot = {
     kernelPackages =
       assert lib.assertMsg (lib.versionOlder pkgs.zfs_unstable.version "2.4.5")
         "zfs patch for kernel is no longer needed";
-      # (inputs.multiverse.multiverse.${system}.at "f9a75f41be3a74eab55d3a7679d34ad6cc0da977");
-      pkgs.linuxPackages_xanmod;
+      pkgs.linuxPackages_xanmod_latest.extend (
+        _: super: {
+          zfs_unstable = super.zfs_unstable.overrideAttrs zfsOverrides;
+        }
+      );
     zfs = {
       devNodes =
         if builtins.elem "vm" tags then
@@ -23,7 +42,7 @@
         else
           "/dev/disk/by-partuuid";
 
-      package = pkgs.zfs_unstable;
+      package = pkgs.zfs_unstable.overrideAttrs zfsOverrides;
 
       forceImportRoot = false;
     };

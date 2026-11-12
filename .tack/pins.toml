@@ -90,6 +90,11 @@ type = "fetch"
 tag = "{version}"
 group = "source"
 
+[inputs.zfs_2_4_5]
+url = "github:openzfs/zfs/pull/19838/head"
+type = "fetch"
+group = "source"
+
 [inputs.awakened-poe-trade]
 url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage"
 type = "fixed"
