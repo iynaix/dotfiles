@@ -92,18 +92,6 @@ url = "github:openzfs/zfs/pull/19838/head"
 type = "fetch"
 group = "source"
 
-[inputs.awakened-poe-trade]
-url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v{version}/Awakened-PoE-Trade-{version}.AppImage"
-type = "fixed"
-tag = "v{version}"
-group = "binary"
-
-[inputs.exiled-exchange-2]
-url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v{version}/Exiled-Exchange-2-{version}.AppImage"
-type = "fixed"
-tag = "v{version}"
-group = "binary"
-
 [inputs.scalpel]
 url = "https://github.com/scalpelpoe/scalpel/releases/download/v{version}/Scalpel.AppImage"
 type = "fixed"

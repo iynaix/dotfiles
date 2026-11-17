@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # tack-managed resolver. delete this line to take ownership; tack will leave it alone afterwards.
-# tack-resolver: patched patchedDiff tag version signedBy groups archive defaultType
+# tack-resolver: patched patchedDiff tag version signedBy groups archive defaultType nestedGroups topFollows public
 
 let
   inherit (builtins)
@@ -41,6 +41,7 @@ let
     substring
     tail
     trace
+    warn
     ;
 
   validateInputNames =
@@ -50,10 +51,39 @@ let
     else
       value;
 
+  isPinGroup =
+    entry:
+    isAttrs entry
+    && !(entry ? url)
+    && all isAttrs (attrValues entry)
+    && any (pin: pin ? url) (attrValues entry);
+
+  flattenInputs =
+    inputs:
+    foldl' (
+      acc: name:
+      let
+        entry = inputs.${name};
+        pins =
+          if isPinGroup entry then
+            mapAttrs (
+              pin: value:
+              if value ? group then
+                throw "tack: input '${pin}' sits under [inputs.${name}], so it can't also set group"
+              else
+                value // { group = name; }
+            ) entry
+          else
+            { ${name} = entry; };
+        clashes = filter (pin: acc ? ${pin}) (attrNames pins);
+      in
+      if clashes != [ ] then throw "tack: input '${head clashes}' is defined twice" else acc // pins
+    ) { } (attrNames inputs);
+
   pinsOf =
     toml:
     mapAttrs (_: pin: if pin ? group then (toml.groups or { }).${pin.group} or { } // pin else pin) (
-      toml.inputs or { }
+      flattenInputs (toml.inputs or { })
     );
 
   knownTypes = [
@@ -129,9 +159,14 @@ let
     publicKeys = null;
   };
 
-  # fetchTarball ignores access-tokens, so prefer fetchTree when available
+  # fetchTarball ignores access-tokens, so prefer fetchTree when available, except
+  # for the public pins tack update marks
   fetchLocked =
-    { what, locked }:
+    {
+      what,
+      locked,
+      public ? false,
+    }:
     let
       type = locked.type or "";
       host = default: locked.host or default;
@@ -165,7 +200,9 @@ let
         inherit (locked) narHash;
       };
     in
-    if builtins ? fetchTree then
+    if
+      builtins ? fetchTree && !(public && archiveUrl ? ${type} && locked ? rev && locked ? narHash)
+    then
       builtins.fetchTree locked
     else if !(locked ? narHash) then
       throw "tack: ${what} has no narHash and requires builtins.fetchTree"
@@ -239,7 +276,40 @@ let
         then
           throw "tack: '_meta', '_patched' and '_nested' are reserved by tack, rename that input"
         else
-          pinsOf pins;
+          removeAttrs allPins (attrNames topFollowsRaw);
+      allPins = pinsOf pins;
+      topFollowsRaw = listToAttrs (
+        concatMap (
+          name:
+          let
+            pin = allPins.${name};
+          in
+          if !isString (pin.follows or null) then
+            [ ]
+          else if attrNames pin != [ "follows" ] then
+            throw "tack: input '${name}' follows '${pin.follows}', so it can't set any other key or sit in a group"
+          else
+            [
+              {
+                inherit name;
+                value = pin.follows;
+              }
+            ]
+        ) (attrNames allPins)
+      );
+      flattenTarget =
+        seen: target:
+        let
+          path = filter isString (split "/" target);
+          first = head path;
+        in
+        if !isString target || !(topFollowsRaw ? ${first}) then
+          target
+        else if elem first seen then
+          throw "tack: top-level follows loop through ${concatStringsSep " -> " (seen ++ [ first ])}"
+        else
+          flattenTarget (seen ++ [ first ]) (concatStringsSep "/" ([ topFollowsRaw.${first} ] ++ tail path));
+      topFollows = mapAttrs (name: flattenTarget [ name ]) topFollowsRaw;
       all_follow_raw = pins.all_follow or { };
       # tackOverrides carries this reserved entry across nested resolver boundaries
       inheritedPolicy = overrides.__tack_policy or { };
@@ -365,9 +435,12 @@ let
         else if !(elem type knownTypes) then
           throw "tack: unknown lock type '${type}' for pin '${name}'"
         else
+          # nix's fetchTree downloads a rev again even when tack update added it to
+          # the store, fetchTarball finds it there
           fetchLocked {
             what = "pin '${name}'";
             locked = intersectAttrs fetchTreeAttrs node;
+            public = node.public or false;
           };
 
       fetchPin =
@@ -384,6 +457,7 @@ let
       fetchFixed =
         { name, entry }:
         let
+          # tack update adds the file to the store under this name, see fetch_fixed_pin
           raw = derivation {
             inherit name;
             inherit (entry) url;
@@ -867,9 +941,17 @@ let
         let
           # a rule into this pin's own inputs would make that input follow itself
           prefix = name + "/";
-          intoSelf = filter (k: substring 0 (stringLength prefix) all_follow.${k} == prefix) (
-            attrNames all_follow
-          );
+          intoSelf = filter (
+            k: substring 0 (stringLength prefix) (flattenTarget [ ] all_follow.${k}) == prefix
+          ) (attrNames all_follow);
+          local = pin.follows or { };
+          sameEdge = filter (
+            k:
+            let
+              m = match "(flake|tack):(.*)" k;
+            in
+            flattenTarget [ ] local.${k} == prefix + (if m == null then k else elemAt m 1)
+          ) (if isAttrs local then attrNames local else [ ]);
         in
         {
           level = {
@@ -882,7 +964,7 @@ let
               in
               if m == null then key else elemAt m 1
             ) intoSelf;
-            local = pin.follows or { };
+            local = if isAttrs local then removeAttrs local sameEdge else local;
             localLocation = "inputs.${name}.follows";
             excluded = pin.exclude_follow or [ ];
             inherited = inheritedFollows;
@@ -957,14 +1039,23 @@ let
 
       omittedInput =
         { side, name }:
-        throw "tack: ${side} input '${name}' was omitted by omit_inputs";
+        warn "tack: ${side} input '${name}' was omitted by omit_inputs, ${name} will be null" null;
 
       # `pin/input/...` walks the inputs that pin was evaluated with, as a flake.nix follows does
       resolveFollows = mapAttrs (
         _: target:
         let
           path = filter isString (split "/" target);
-          pin = self.${head path} or (throw "tack: follows target '${head path}' is not a pin");
+          name = head path;
+          pin =
+            self.${name} or (
+              if
+                any (alias: all_follow.${alias} == name && substring 0 5 alias != "tack:") (attrNames all_follow)
+              then
+                throw "tack: all_follow target '${name}' has no lock entry; run tack update"
+              else
+                throw "tack: follows target '${name}' is not a pin"
+            );
         in
         foldl' (
           node: key:
@@ -1470,7 +1561,9 @@ let
           value = true;
         }) (attrValues all_follow)
       );
-      autoNames = filter (n: !(declared ? ${n}) && autoTargets ? ${n}) (attrNames lock);
+      autoNames = filter (n: !(declared ? ${n}) && !(topFollows ? ${n}) && autoTargets ? ${n}) (
+        attrNames lock
+      );
       autoPin =
         name:
         let
@@ -1498,10 +1591,15 @@ let
             value = autoPin name;
           }) autoNames
         )
+        // resolveFollows topFollows
         // pinOverrides;
 
       selfMeta = removeAttrs (
-        mapAttrs (name: _: pinMeta name) (removeAttrs self (attrNames pinOverrides))
+        mapAttrs (name: _: pinMeta name) (removeAttrs self (attrNames pinOverrides ++ attrNames topFollows))
+        // mapAttrs (_: target: {
+          type = "follows";
+          follows = target;
+        }) (removeAttrs topFollows (attrNames pinOverrides))
         // mapAttrs (name: _: inheritedOverrideMeta.${name} or { type = "upstream"; }) pinOverrides
       ) inheritedOmitted;
     in
