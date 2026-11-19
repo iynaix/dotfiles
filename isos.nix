@@ -5,13 +5,13 @@
   ...
 }:
 let
+  system = "x86_64-linux";
   repo_url = "https://raw.githubusercontent.com/iynaix/dotfiles";
   mkIso =
     nixpkgs: isoPath:
     # use the lib from the nixpkgs passed in, so the nixos version will be correct
     nixpkgs.lib.nixosSystem {
-      # TODO: update for different architectures?
-      system = "x86_64-linux";
+      inherit system;
 
       modules = [
         "${nixpkgs}/nixos/modules/installer/cd-dvd/${isoPath}.nix"
@@ -158,9 +158,10 @@ let
             };
           }
         )
-
+      ]
+      ++
         # for the plasma iso
-        (lib.mkIf (lib.hasInfix "plasma" isoPath) (
+        (lib.optional (lib.hasInfix "plasma" isoPath) (
           { pkgs, ... }: {
             environment.systemPackages = [
               self.packages.${pkgs.stdenv.hostPlatform.system}.kitty
@@ -190,12 +191,11 @@ let
               '';
             };
           }
-        ))
-      ];
+        ));
     };
 in
 {
-  kde-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-plasma6";
-  minimal-iso = mkIso inputs.nixpkgs-stable "installation-cd-minimal-combined";
-  cosmic-iso = mkIso inputs.nixpkgs-stable "installation-cd-graphical-calamares-cosmic";
+  kde-iso = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-plasma6";
+  minimal-iso = mkIso inputs.nixpkgs "installation-cd-minimal-combined";
+  cosmic-iso = mkIso inputs.nixpkgs "installation-cd-graphical-calamares-cosmic";
 }

@@ -8,7 +8,6 @@
     "nix-index-database": "github:nix-community/nix-index-database",
     "nixos-hardware": "github:NixOS/nixos-hardware",
     "nixpkgs": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst",
-    "nixpkgs-stable": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst",
     "nvf": "github:notashelf/nvf",
     "preservation": "github:nix-community/preservation",
     "rusty-path-of-building": "github:meehl/rusty-path-of-building",
@@ -95,13 +94,6 @@
     "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
     "narHash": "sha256-vJoAj1xon3Mhfc8FZ5uBrPyZee9Eqa05gG/taXv6iZ8=",
     "lastModified": 1794890597
-  },
-  "nixpkgs-stable": {
-    "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.14630.f68407657ad2/nixexprs.tar.zst?lastModified=1794872590&rev=f68407657ad294471eb4b2e65d193df26edf729f",
-    "rev": "f68407657ad294471eb4b2e65d193df26edf729f",
-    "narHash": "sha256-brwp4mLw1LUBC4FDrBluV5II+2lJRLl+qnpNd1wjPoo=",
-    "lastModified": 1794872590
   },
   "nvf": {
     "type": "github",

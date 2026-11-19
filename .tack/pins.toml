@@ -29,9 +29,6 @@ flake-parts = "flake-parts"
 [inputs.nixpkgs]
 url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
 
-[inputs.nixpkgs-stable]
-url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
-
 [inputs.multiverse]
 url = "github:fzakaria/nixpkgs-multiverse"
 
