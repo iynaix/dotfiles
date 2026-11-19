@@ -121,11 +121,19 @@ let
         src = applyPatchesFast {
           name = "${name}-patched";
           inherit patches;
-          # use builtins.path to handle local `url = path:/PATH` format
-          src = builtins.path {
-            path = unpatchedInput;
-            name = "source";
-          };
+          src =
+            let
+              p = unpatchedInput.outPath or unpatchedInput;
+            in
+            # use existing path if it is already in the nix store
+            if lib.isStorePath p then
+              unpatchedInput
+            else
+              # use builtins.path to handle local `url = path:/PATH` format
+              builtins.path {
+                path = unpatchedInput;
+                name = "source";
+              };
         };
         inherit (unpatchedInput) inputs;
         sourceInfo = unpatchedInput.sourceInfo or { };
