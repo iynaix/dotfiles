@@ -45,7 +45,7 @@
           let
             # poe1 / poe2 rules
             poeArgs = {
-              default_fullscreen = true;
+              # default_fullscreen = true;
               default_workspace = "5";
             };
           in

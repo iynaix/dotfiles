@@ -45,13 +45,22 @@
         "/media/HGST10" = {
           device = "zfs-hgst10-1/media";
           fsType = "zfs";
+          options = [
+            "nofail"
+            "x-systemd.automount"
+            "x-systemd.device-timeout=5s"
+          ];
         };
 
         "/media/IRONWOLF22" = {
           device = "zfs-ironwolf22-1/media";
           fsType = "zfs";
+          options = [
+            "nofail"
+            "x-systemd.automount"
+            "x-systemd.device-timeout=5s"
+          ];
         };
-
       };
     };
 }

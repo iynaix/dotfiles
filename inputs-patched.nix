@@ -23,5 +23,12 @@ patcher.patch unpatchedInputs {
   wrappers = [
     # expose options used to build each wrapped package
     ./patches/nix-wrappers-expose-options.patch
+
+    # feat(wrapperModules.umbriel): init
+    # https://github.com/nix-community/nix-wrapper-modules/pull/672
+    (patcher.fetchpatch {
+      url = "https://github.com/nix-community/nix-wrapper-modules/commit/3dba331ec372c3094d8718ff4f9b116949750fe9.patch";
+      hash = "sha256-uc4ntD11zDkkRy0V/16vJbwzwP9FvqeAGPbPFCcNIOY=";
+    })
   ];
 }

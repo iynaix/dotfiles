@@ -39,19 +39,19 @@
   },
   "helium": {
     "type": "fixed",
-    "url": "https://github.com/imputnet/helium-linux/releases/download/0.22.1.1/helium-0.22.1.1-x86_64.AppImage",
-    "sha256": "sha256-r0aE4ONRpoU03DNEOzadArw6wmM3NMl4SMinQ5vLs2c=",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.22.2.1/helium-0.22.2.1-x86_64.AppImage",
+    "sha256": "sha256-8JDIESU/1ovH64lLmCoL4iHRcB937UtT9hRkma+LrgQ=",
     "unpack": "file",
-    "tag": "0.22.1.1",
-    "version": "0.22.1.1"
+    "tag": "0.22.2.1",
+    "version": "0.22.2.1"
   },
   "hjem": {
     "type": "github",
     "owner": "feel-co",
     "repo": "hjem",
-    "rev": "4725210df40dcf3673afe21453a3b0950bc4dd58",
-    "narHash": "sha256-wTZL65urkh6P1iYBZKEnmWGwzQoLCX8ye8V9iveye9M=",
-    "lastModified": 1794970964,
+    "rev": "2a28f37d253ea3866f85eabe482c68a84fc32ed5",
+    "narHash": "sha256-IjFbnKzAkaG+tiZxwpP5CfTYVNxKKYSMioLynWAaGd0=",
+    "lastModified": 1795054265,
     "public": true
   },
   "lamina": {
@@ -66,9 +66,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "775a72ca88bb85da0d813f1f2590a2b912b7d2ad",
-    "narHash": "sha256-w2/eJdcKyrv3gTm/RMKusvtNWqOtTTI1aA8mjai4aIg=",
-    "lastModified": 1795019436,
+    "rev": "32c8cf7714f8c358b94cbd015d4ce10a0fcd44bd",
+    "narHash": "sha256-VF2vjcwDwn95SCKFV3WgUS1GLbVJxvpUoiNHL4AaY+I=",
+    "lastModified": 1795186772,
     "public": true
   },
   "nix-index-database": {
@@ -90,10 +90,10 @@
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1122823.04906337b6d5/nixexprs.tar.zst?lastModified=1794890597&rev=04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
-    "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
-    "narHash": "sha256-vJoAj1xon3Mhfc8FZ5uBrPyZee9Eqa05gG/taXv6iZ8=",
-    "lastModified": 1794890597
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1124497.0bb8272318b4/nixexprs.tar.zst?lastModified=1795085501&rev=0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
+    "rev": "0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
+    "narHash": "sha256-kqy60mdSH4GQAv3kzSeefteaiCv9arf3P+auosZrpo0=",
+    "lastModified": 1795085501
   },
   "nvf": {
     "type": "github",
@@ -116,15 +116,16 @@
     "type": "github",
     "owner": "meehl",
     "repo": "rusty-path-of-building",
-    "rev": "08260cabd240c7c70da8522fc22e36216e410c64",
-    "narHash": "sha256-2FpiOX7JROAWbdPFwa1HaZxW+yMU8wM/Qu6ld3CDwHM=",
-    "lastModified": 1794584689,
+    "rev": "67cc995f786c12a9f81275f01412d2155debfd3e",
+    "narHash": "sha256-w+mbPFus+a91wZsCxK/vlQjnwHEjTeRKJK7MRUbelTw=",
+    "lastModified": 1795166024,
     "archive": {
-      "hash": "sha256-rNvzxPpuiE1YhNYEglxTqhhRV4Zs2vhlodTBXjWA9mg=",
-      "outHash": "sha256-PLst6593iVoSVK9UnHWucXTxwHsP8R2ov4fyBzFrHbM="
+      "hash": "sha256-YstLvvsa38n6sHquN++bIqd38P9oHyhpFR8CocaSpI0=",
+      "outHash": "sha256-Q0Oq99ZrvWgIsiWBYZtTXepfH/lQVnHYmByX54A0kAQ="
     },
-    "tag": "v0.3.4",
-    "version": "0.3.4"
+    "public": true,
+    "tag": "v0.3.5",
+    "version": "0.3.5"
   },
   "scalpel": {
     "type": "fixed",
@@ -154,17 +155,18 @@
     "type": "github",
     "owner": "manic-systems",
     "repo": "tack",
-    "rev": "bad78453288bfb5d890af856fa2429979e2b944c",
-    "narHash": "sha256-Jn+PT5iYnKcttgR5Rc6oWLNxhFGzyBY3/P3sgvqcQDU=",
-    "lastModified": 1794909624
+    "rev": "1424edc27b6e6f6d4f216410e0a2cc1419d96cb7",
+    "narHash": "sha256-z7m16oDAtHsgbBX6gadOpa6pGPXNEahjwyzPC0pbLvM=",
+    "lastModified": 1795064133,
+    "public": true
   },
   "umbriel": {
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "bf3d293dc20b6bc72a0298775feb868a77393e9d",
-    "narHash": "sha256-7iZxXhHWYjB8YkJuWUSBOLQSI0sP13+UN8y/H5W7Gmg=",
-    "lastModified": 1795045510,
+    "rev": "60639b8f4dcca747296c92cfa966d88ae287dc61",
+    "narHash": "sha256-B5pggfUTXJ31GFlAcuQoABcLNMOpkyAe1ljbi1lzRyc=",
+    "lastModified": 1795213831,
     "submodules": true
   },
   "wfetch": {
@@ -179,9 +181,10 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "0e23367a94ea83bc678fb510984b369dae02bfd2",
-    "narHash": "sha256-+e+EBD7g4ErCYLjtndYDajwyZGn3P573S3y2fd90gKY=",
-    "lastModified": 1794870394
+    "rev": "c35eea2a8bbc0d59c3ba124a1a846265b47cba13",
+    "narHash": "sha256-LodH0++UunNDQKi3ujeaEWQ6FfVvrxaVxDuacjzDY4M=",
+    "lastModified": 1795211946,
+    "public": true
   },
   "yt-dlp": {
     "type": "github",
