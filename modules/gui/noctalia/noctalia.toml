@@ -9,6 +9,7 @@ background_opacity = 0.5
 capsule_thickness = 0.75
 center = ["workspaces"]
 end = ["battery", "volume", "clock"]
+layer = "auto"
 margin_edge = 0
 margin_ends = 0
 padding = 16
@@ -146,7 +147,7 @@ source = "wallpaper"
 wallpaper_scheme = "m3-content"
 
 [theme.templates]
-builtin_ids = ["btop", "cava", "kitty", "umbriel"]
+builtin_ids = ["btop", "cava", "kitty", "luciole", "umbriel"]
 community_ids = ["yazi", "zathura"]
 
 [wallpaper]
@@ -176,6 +177,7 @@ icon_color = "primary"
 
 [widget.volume]
 color = "primary"
+hide_label_when_muted = true
 
 [widget.volume.actions]
 middle = "exec toggle-speaker"

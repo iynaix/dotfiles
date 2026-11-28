@@ -86,7 +86,7 @@ printf '%q ' "${cmd[@]}"; echo
 
 if [ $? -eq 0 ]; then
     if [ "$nhCommand" = "switch" ] || [ "$nhCommand" = "boot" ]; then
-        currentGeneration=$(nh os info | grep -m 1 current | awk '{print $1}')
+        currentGeneration=$(nh os info | grep -im 1 running | awk '{print $1}')
         echo -e "Switched to Generation \033[1m$currentGeneration\033[0m"
     fi
 fi

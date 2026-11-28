@@ -2,7 +2,7 @@
   packages =
     { inputs, pkgs, ... }:
     # not using eza wrapper module as it only supports theme, not flags
-    rec {
+    {
       eza = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
         package = pkgs.eza;
@@ -25,25 +25,29 @@
           };
         };
       };
-      eza-tree = pkgs.writeShellApplication {
-        name = "etree";
-        runtimeInputs = [ eza ];
+      tree = pkgs.writeShellApplication {
+        name = "tree";
+        runtimeInputs = [ pkgs.eza ];
         text = /* sh */ ''
-          # Get all arguments except the last one
-          args=("''${@:1:$#-1}")
-
-          # Get the last argument
-          last_arg="''${!#}"
-
-          if [ -L "$last_arg" ]; then
-              set -- "''${args[@]}" "$(readlink -f "$last_arg")"
+          if [ "$#" -eq 0 ]; then
+            set -- .
           else
-              # If it's not a symlink, keep the original arguments
-              set -- "$@"
+            # Get all arguments except the last one
+            args=("''${@:1:$#-1}")
+
+            # Get the last argument
+            last_arg="''${!#}"
+
+            if [ -L "$last_arg" ]; then
+                set -- "''${args[@]}" "$(readlink -f "$last_arg")"
+            else
+                # If it's not a symlink, keep the original arguments
+                set -- "$@"
+            fi
           fi
 
           # run eza with resolved arguments
-          eza -la --git-ignore --tree --hyperlink --level 5 "$@"
+          eza -a --git-ignore --tree --hyperlink --level 5 "$@"
         '';
       };
     };
@@ -51,10 +55,8 @@
   config =
     { lib, pkgs, ... }:
     {
-      # eza is installed via wrapped fish
+      # eza and tree are installed via wrapped fish
       environment = {
-        systemPackages = [ pkgs.tree ];
-
         shellAliases = {
           t = "tree";
         };

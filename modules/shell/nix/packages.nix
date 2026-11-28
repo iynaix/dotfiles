@@ -390,10 +390,16 @@
         name = "pkgs-list";
         text =
           let
-            allPkgs = config.environment.systemPackages |> lib.filter lib.isAttrs |> map (pkg: pkg.name);
+            allPkgs =
+              config.environment.systemPackages
+              |> lib.filter lib.isDerivation
+              |> lib.filter (pkg: pkg ? "version")
+              |> lib.filter (pkg: pkg ? "pname")
+              |> map (pkg: "${pkg.pname} ${pkg.version}")
+              |> lib.uniqueStrings;
           in
           /* sh */ ''
-            sort -ui <<< "${lib.concatLines allPkgs}";
+            sort -i <<< "${lib.concatLines allPkgs}";
           '';
       };
 

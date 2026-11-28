@@ -66,9 +66,9 @@
     "type": "github",
     "owner": "fzakaria",
     "repo": "nixpkgs-multiverse",
-    "rev": "32c8cf7714f8c358b94cbd015d4ce10a0fcd44bd",
-    "narHash": "sha256-VF2vjcwDwn95SCKFV3WgUS1GLbVJxvpUoiNHL4AaY+I=",
-    "lastModified": 1795186772,
+    "rev": "c032dcd5bf297f4417cacd06daca0ff34c8f07db",
+    "narHash": "sha256-1qDUHxS2nUZGpzu11EzaUOLwlZogggk4p8zgiN7k5Lg=",
+    "lastModified": 1795292042,
     "public": true
   },
   "nix-index-database": {
@@ -90,10 +90,10 @@
   },
   "nixpkgs": {
     "type": "tarball",
-    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1124497.0bb8272318b4/nixexprs.tar.zst?lastModified=1795085501&rev=0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
-    "rev": "0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
-    "narHash": "sha256-kqy60mdSH4GQAv3kzSeefteaiCv9arf3P+auosZrpo0=",
-    "lastModified": 1795085501
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1125864.2786a2a72088/nixexprs.tar.zst?lastModified=1795234589&rev=2786a2a72088ecf32aea5b3ec52099e6a7cff78f",
+    "rev": "2786a2a72088ecf32aea5b3ec52099e6a7cff78f",
+    "narHash": "sha256-pAEASBc6wof0S58XcSEdZoQ2iFQDkCnZwH+wFLrkd1Q=",
+    "lastModified": 1795234589
   },
   "nvf": {
     "type": "github",
@@ -164,9 +164,9 @@
     "type": "git",
     "url": "https://github.com/noctalia-dev/umbriel.git",
     "ref": "HEAD",
-    "rev": "60639b8f4dcca747296c92cfa966d88ae287dc61",
-    "narHash": "sha256-B5pggfUTXJ31GFlAcuQoABcLNMOpkyAe1ljbi1lzRyc=",
-    "lastModified": 1795213831,
+    "rev": "d9b056a72597a4720356975e26667c25f7d02e41",
+    "narHash": "sha256-vIKCfgBI3ZBxdfyrw+Uz1bi2BUOUY2QWFmFfcUrN0oQ=",
+    "lastModified": 1795305146,
     "submodules": true
   },
   "wfetch": {
@@ -181,9 +181,9 @@
     "type": "github",
     "owner": "BirdeeHub",
     "repo": "nix-wrapper-modules",
-    "rev": "c35eea2a8bbc0d59c3ba124a1a846265b47cba13",
-    "narHash": "sha256-LodH0++UunNDQKi3ujeaEWQ6FfVvrxaVxDuacjzDY4M=",
-    "lastModified": 1795211946,
+    "rev": "e1e6cc3094ce733b82a0b4345c1bd3eb0776a709",
+    "narHash": "sha256-x6Xm7pweplmSNhmrdLMx1oZw8tZzhFoYKsq7f+vHpE4=",
+    "lastModified": 1795270739,
     "public": true
   },
   "yt-dlp": {

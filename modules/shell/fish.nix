@@ -31,7 +31,7 @@
           (with self.packages.${system}; [
             bat # includes batman
             eza
-            eza-tree
+            tree
             git
             moor
             neovim-iynaix

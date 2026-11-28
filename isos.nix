@@ -54,10 +54,10 @@ let
                   batman
                   btop
                   eza
-                  eza-tree
                   moor
                   neovim-iynaix
                   ripgrep
+                  tree
                   yazi
                 ]);
 

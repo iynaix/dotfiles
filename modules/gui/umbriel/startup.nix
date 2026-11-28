@@ -56,7 +56,7 @@
               "^Untitled"
             ];
           };
-          spawn = "helium-chat && sleep 1 && umbriel windows --json > ~/Downloads/umbriel-windows.json";
+          spawn = "helium-chat";
           workspace = 9;
         }
       ]
